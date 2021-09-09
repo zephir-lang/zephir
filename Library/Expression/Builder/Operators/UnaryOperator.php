@@ -41,6 +41,9 @@ class UnaryOperator extends AbstractOperator
     // y = require a
     const OPERATOR_REQUIRE = 'require';
 
+    // y = require_once a
+    const OPERATOR_REQUIRE_ONCE = 'require_once';
+
     // y = clone a
     const OPERATOR_CLONE = 'clone';
 

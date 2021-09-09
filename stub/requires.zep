@@ -48,4 +48,9 @@ class Requires
 
 		return require templatePath;
 	}
+
+	public function requireOnce(string path) -> var
+	{
+	    return require_once path;
+	}
 }

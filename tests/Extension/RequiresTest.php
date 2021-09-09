@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,10 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Requires;
+
+use function defined;
 
 final class RequiresTest extends TestCase
 {
@@ -32,9 +34,9 @@ final class RequiresTest extends TestCase
             $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-1.php')
         );
 
-        $this->assertFalse(\defined('REQUIRE_ME'));
+        $this->assertFalse(defined('REQUIRE_ME'));
         $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-2.php');
-        $this->assertTrue(\defined('REQUIRE_ME'));
+        $this->assertTrue(defined('REQUIRE_ME'));
     }
 
     /**
@@ -73,5 +75,24 @@ final class RequiresTest extends TestCase
             "I'm in",
             $this->test->requireExternal1('phar://'.__DIR__.'/../fixtures/requires/myapp.phar/index.php')
         );
+    }
+
+    public function testRequireOnce(): void
+    {
+        $this->assertSame(
+            [1, 2, 3],
+            $this->test->requireOnce(__DIR__.'/../fixtures/require-me-before-once.php')
+        );
+
+        $this->assertSame(
+            true,
+            $this->test->requireOnce(__DIR__.'/../fixtures/require-me-before-once.php')
+        );
+
+        $this->assertFalse(defined('REQUIRE_ONCE_ME'));
+        $this->test->requireOnce(__DIR__.'/../fixtures/require-me-once.php');
+        $this->assertTrue(defined('REQUIRE_ONCE_ME'));
+        $this->test->requireOnce(__DIR__.'/../fixtures/require-me-once.php');
+        $this->assertTrue(defined('REQUIRE_ONCE_ME'));
     }
 }

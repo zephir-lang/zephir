@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Added
+- Added support for `require_once` [#2253](https://github.com/zephir-lang/zephir/issues/2253)
 
 ## [0.14.0-beta.3] - 2021-08-06
 ### Fixed
