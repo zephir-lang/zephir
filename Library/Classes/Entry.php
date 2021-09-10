@@ -55,7 +55,7 @@ class Entry
     /**
      * Entry constructor.
      *
-     * @param string $className
+     * @param string             $className
      * @param CompilationContext $compilationContext
      */
     public function __construct(string $className, CompilationContext $compilationContext)
@@ -73,6 +73,7 @@ class Entry
 
     /**
      * @return string
+     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -132,7 +133,7 @@ class Entry
 
         $className = end($classNamespace);
         array_pop($classNamespace);
-        $namespace = join(self::NAMESPACE_SEPARATOR, $classNamespace);
+        $namespace = implode(self::NAMESPACE_SEPARATOR, $classNamespace);
 
         return (new ClassDefinition($namespace, $className))->getClassEntry();
     }
@@ -147,6 +148,7 @@ class Entry
      * belongs to project namespace.
      *
      * @param string $className
+     *
      * @return bool
      */
     private function isInternalClass(string $className): bool

@@ -45,7 +45,9 @@ class GeneratorTest extends TestCase
      * Modify method visibility to call protected.
      *
      * @param string $name - method name
+     *
      * @return mixed
+     *
      * @throws ReflectionException
      */
     private function getMethod(string $name)
@@ -241,10 +243,11 @@ DOC;
      * @dataProvider propertyProvider
      * @covers       \Zephir\Stubs\Generator::buildProperty
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $type
      * @param $value
      * @param string $expected
+     *
      * @throws ReflectionException
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
@@ -332,6 +335,7 @@ DOC;
      * @param string $type
      * @param $value
      * @param string $expected
+     *
      * @throws ReflectionException
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void

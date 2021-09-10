@@ -56,7 +56,7 @@ final class CompileCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $jobs = $input->hasOption('jobs') ? (int)$input->getOption('jobs') : null;
+        $jobs = $input->hasOption('jobs') ? (int) $input->getOption('jobs') : null;
 
         try {
             // TODO: Move all the stuff from the compiler

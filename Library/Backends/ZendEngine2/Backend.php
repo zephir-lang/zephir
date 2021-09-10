@@ -1069,11 +1069,11 @@ class Backend extends BaseBackend
     /**
      * Assign value to variable helper.
      *
-     * @param string                $macro
-     * @param string                $variableName
-     * @param string|null|Variable  $value
-     * @param CompilationContext    $context
-     * @param bool                  $useCodePrinter
+     * @param string               $macro
+     * @param string               $variableName
+     * @param string|Variable|null $value
+     * @param CompilationContext   $context
+     * @param bool                 $useCodePrinter
      *
      * @return string
      */

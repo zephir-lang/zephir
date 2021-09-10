@@ -68,6 +68,7 @@ class HardDisk implements FileSystemInterface
 
     /**
      * @param string $path
+     *
      * @return string
      */
     private function rightTrimPath(string $path): string
@@ -100,6 +101,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return bool
+     *
      * @throws Flysystem\FilesystemException
      */
     public function exists(string $path): bool
@@ -119,6 +121,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return bool
+     *
      * @throws Flysystem\FilesystemException
      */
     public function makeDirectory(string $path): bool
@@ -140,6 +143,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return array
+     *
      * @throws Flysystem\FilesystemException
      */
     public function file(string $path): array
@@ -155,6 +159,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return int
+     *
      * @throws Flysystem\FilesystemException
      */
     public function modificationTime(string $path): int
@@ -168,6 +173,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return string
+     *
      * @throws Flysystem\FilesystemException
      */
     public function read(string $path): string
@@ -179,6 +185,7 @@ class HardDisk implements FileSystemInterface
      * {@inheritdoc}
      *
      * @param string $path
+     *
      * @throws Flysystem\FilesystemException
      */
     public function delete(string $path)
@@ -231,6 +238,7 @@ class HardDisk implements FileSystemInterface
      * @param string $path
      *
      * @return mixed
+     *
      * @throws Flysystem\FilesystemException
      */
     public function requireFile(string $path)
@@ -262,9 +270,10 @@ class HardDisk implements FileSystemInterface
      *
      * @param string $algorithm
      * @param string $sourceFile
-     * @param bool $useCache
+     * @param bool   $useCache
      *
      * @return string
+     *
      * @throws Flysystem\FilesystemException
      */
     public function getHashFile(string $algorithm, string $sourceFile, $useCache = false): string

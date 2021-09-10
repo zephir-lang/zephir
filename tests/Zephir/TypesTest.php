@@ -24,6 +24,7 @@ final class TypesTest extends TestCase
      * Helper to build proper structure with method return types.
      *
      * @param array $returnTypesList - collactions with all return types
+     *
      * @return array
      */
     private function buildReturnTypes(array $returnTypesList): array
@@ -41,8 +42,9 @@ final class TypesTest extends TestCase
     /**
      * Builds base object definition for return type.
      *
-     * @param array $types - list of method return types
-     * @param int $mandatory - is mandatory flag
+     * @param array $types     - list of method return types
+     * @param int   $mandatory - is mandatory flag
+     *
      * @return array
      */
     private function baseReturnTypeDefinition(array $types, int $mandatory = 0): array
@@ -67,6 +69,7 @@ final class TypesTest extends TestCase
      *
      * @param array $types      - list of method return types
      * @param int   $collection - is collection flag
+     *
      * @return array
      */
     private function variableReturnTypeDefinition(array $types, int $collection = 0): array
@@ -189,7 +192,7 @@ final class TypesTest extends TestCase
     /**
      * @dataProvider typesProvider
      *
-     * @param array $returnTypes
+     * @param array  $returnTypes
      * @param string $expected
      */
     public function testShouldResolveCompatibleTypeForBaseTypes(array $returnTypes, string $expected): void
@@ -228,7 +231,7 @@ final class TypesTest extends TestCase
     /**
      * @dataProvider objectsProvider
      *
-     * @param array $returnTypes
+     * @param array  $returnTypes
      * @param string $expected
      */
     public function testShouldResolveCompatibleTypeForObjects(array $returnTypes, string $expected): void
@@ -274,7 +277,7 @@ final class TypesTest extends TestCase
     /**
      * @dataProvider collectionsProvider
      *
-     * @param array $returnTypes
+     * @param array  $returnTypes
      * @param string $expected
      */
     public function testShouldResolveCompatibleTypeForCollections(array $returnTypes, string $expected): void

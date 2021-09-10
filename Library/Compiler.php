@@ -466,6 +466,7 @@ final class Compiler
      * Returns a Zephir Constant by its name.
      *
      * @param string $name
+     *
      * @return mixed
      */
     public function getConstant(string $name)
@@ -853,7 +854,7 @@ final class Compiler
     /**
      * Compiles the extension without installing it.
      *
-     * @param bool $development
+     * @param bool     $development
      * @param int|null $jobs
      *
      * @throws Exception
@@ -1452,7 +1453,7 @@ final class Compiler
                     $headerArray[] = '"'.htmlentities($header).'"';
                 }
 
-                $phpinfo .= "\t".'php_info_print_table_header('. count($headerArray).', '.
+                $phpinfo .= "\t".'php_info_print_table_header('.count($headerArray).', '.
                     implode(', ', $headerArray).');'.PHP_EOL;
             }
 
@@ -1463,7 +1464,7 @@ final class Compiler
                         $rowArray[] = '"'.htmlentities($field).'"';
                     }
 
-                    $phpinfo .= "\t".'php_info_print_table_row('. count($rowArray).', '.
+                    $phpinfo .= "\t".'php_info_print_table_row('.count($rowArray).', '.
                         implode(', ', $rowArray).');'.PHP_EOL;
                 }
             }
@@ -2191,7 +2192,7 @@ final class Compiler
     /**
      * Process config.w32 sections.
      *
-     * @param array $sources
+     * @param array  $sources
      * @param string $project
      *
      * @return array

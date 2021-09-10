@@ -11,12 +11,13 @@
 
 namespace Zephir\Statements;
 
-use function Zephir\add_slashes;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
 use Zephir\Types;
+
+use function Zephir\add_slashes;
 
 /**
  * ReturnStatement.

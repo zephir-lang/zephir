@@ -126,6 +126,7 @@ DOC;
 
     /**
      * @dataProvider setConfigProvider
+     *
      * @param array $test
      * @param mixed $expected
      */
@@ -162,9 +163,9 @@ DOC;
     /**
      * @dataProvider defaultConfigProvider
      *
-     * @param mixed $namespace
+     * @param mixed  $namespace
      * @param string $key
-     * @param mixed $expected
+     * @param mixed  $expected
      */
     public function testShouldGetDefaultConfigParams($namespace, string $key, $expected)
     {
