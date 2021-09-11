@@ -14,7 +14,6 @@ set -eu
 php \
   -d extension=ext/modules/stub.so \
   vendor/bin/phpunit \
-  --colors=always \
   --bootstrap tests/ext-bootstrap.php \
   --testsuite Extension
 

@@ -1,3 +1,4 @@
+
 namespace Stub;
 
 class Strings

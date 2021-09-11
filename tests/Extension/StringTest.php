@@ -20,7 +20,7 @@ use function Zephir\is_windows;
 
 final class StringTest extends TestCase
 {
-    private Strings $test;
+    private ?Strings $test = null;
 
     protected function setUp(): void
     {
