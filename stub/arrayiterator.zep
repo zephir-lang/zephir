@@ -35,7 +35,7 @@ class ArrayIterator implements \Iterator
 	    let this->position++;
 	}
 
-	public function valid()
+	public function valid() -> bool
 	{
 	    return isset this->test[this->position];
 	}
