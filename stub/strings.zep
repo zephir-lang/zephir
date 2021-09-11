@@ -1,3 +1,4 @@
+
 namespace Stub;
 
 class Strings
@@ -227,5 +228,17 @@ class Strings
     protected function issue2234StrictChild(string! val = null)
     {
         return val;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1932
+     */
+    public function nullableStringReturnType(string! val = null) -> string | null
+    {
+        if (val !== null) {
+            return val;
+        }
+
+        return null;
     }
 }

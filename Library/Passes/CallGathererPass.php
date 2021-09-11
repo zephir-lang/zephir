@@ -299,6 +299,7 @@ class CallGathererPass
 
             case 'clone':
             case 'require':
+            case 'require_once':
                 $this->passExpression($expression['left']);
                 break;
 
@@ -426,6 +427,7 @@ class CallGathererPass
                     break;
 
                 case 'require':
+                case 'require_once':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }

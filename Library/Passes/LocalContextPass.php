@@ -211,6 +211,7 @@ class LocalContextPass
                         case 'concat':
                         case 'clone':
                         case 'require':
+                        case 'require_once':
                         case 'type-hint':
                         case 'minus':
                         case 'new':
@@ -415,6 +416,7 @@ class LocalContextPass
             case 'empty':
             case 'instanceof':
             case 'require':
+            case 'require_once':
             case 'clone':
             case 'likely':
             case 'unlikely'
@@ -570,6 +572,7 @@ class LocalContextPass
                 case 'scall':
                 case 'fcall':
                 case 'require':
+                case 'require_once':
                     if ('mcall' == $statement['expr']['type']) {
                         if (isset($statement['expr']['variable'])) {
                             if ('variable' == $statement['expr']['variable']['type']) {
