@@ -5,7 +5,8 @@ class ArrayIterator implements \Iterator
 	protected position = 0;
 	protected test;
 
-	public function __construct() {
+	public function __construct()
+	{
 		let this->test = [
 			"one",
 			"two",
@@ -14,23 +15,28 @@ class ArrayIterator implements \Iterator
 		let this->position = 0;
 	}
 
-	public function rewind() {
+	public function rewind() -> void
+	{
 	    let this->position = 0;
 	}
 
-	public function current() {
+	public function current()
+	{
 	    return this->test[this->position];
 	}
 
-	public function key() {
+	public function key()
+	{
 	    return this->position;
 	}
 
-	public function next() {
+	public function next() -> void
+	{
 	    let this->position++;
 	}
 
-	public function valid() {
+	public function valid()
+	{
 	    return isset this->test[this->position];
 	}
 }
