@@ -126,12 +126,12 @@ return [
      *
      * @link https://github.com/php/php-src/tree/master/ext/mysqli
      */
-    'mysqli'                                    => ['mysqli_link_class_entry', 'ext/mysqli/php_mysqli_structs'],
-    'mysqli_stmt'                               => ['mysqli_stmt_class_entry', 'ext/mysqli/php_mysqli_structs'],
-    'mysqli_result'                             => ['mysqli_result_class_entry', 'ext/mysqli/php_mysqli_structs'],
-    'mysqli_driver'                             => ['mysqli_driver_class_entry', 'ext/mysqli/php_mysqli_structs'],
-    'mysqli_warning'                            => ['mysqli_warning_class_entry', 'ext/mysqli/php_mysqli_structs'],
-    'mysqli_sql_exception'                      => ['mysqli_exception_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli'                                    => ['mysqli_link_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli_stmt'                               => ['mysqli_stmt_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli_result'                             => ['mysqli_result_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli_driver'                             => ['mysqli_driver_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli_warning'                            => ['mysqli_warning_class_entry', 'ext/mysqli/php_mysqli_structs'],
+//    'mysqli_sql_exception'                      => ['mysqli_exception_class_entry', 'ext/mysqli/php_mysqli_structs'],
 
     /**
      * OCI8
