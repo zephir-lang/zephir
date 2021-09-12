@@ -12,6 +12,25 @@
 declare(strict_types=1);
 
 /**
+ * List of Class Entries and respective headers.
+ *
+ * These Class Entries can't be detected dynamically and must be
+ * specified with exact class entry name and its header where it
+ * has been declared.
+ * Most or near all of them are from bundled PHP extensions.
+ *
+ * Full list of bundled PHP extensions can be found here:
+ * @link https://github.com/php/php-src/tree/master/ext
+ *
+ * If Class is not located in this list, or it is from an external
+ * extension, then Zephir will generate Zend C code for dynamic CE
+ * detection via full namespace class name.
+ *
+ * Example:
+ * ```
+ * Z_PARAM_OBJECT_OF_CLASS(link, zephir_get_internal_ce(SL("psr\\link\\linkinterface")))
+ * ```
+ *
  * PHP Class Name => [Zend Class Entry, header-file-path (optional)]
  */
 return [
