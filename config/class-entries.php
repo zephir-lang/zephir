@@ -35,6 +35,86 @@ declare(strict_types=1);
  */
 return [
     /**
+     * cURL
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/curl
+     */
+    'CurlHandle'                        => ['curl_ce', 'ext/curl/php_curl'],
+    'CurlShareHandle'                   => ['curl_share_ce', 'ext/curl/php_curl'],
+    'CurlMultiHandle'                   => ['curl_multi_ce', 'ext/curl/php_curl'],
+    'CURLFile'                          => ['curl_CURLFile_class', 'ext/curl/php_curl'],
+    'CURLStringFile'                    => ['curl_CURLStringFile_class', 'ext/curl/php_curl'],
+
+    /**
+     * Date
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/date
+     */
+    'DateTimeInterface'                 => ['php_date_get_interface_ce()', 'ext/date/php_date'],
+    'DateTime'                          => ['php_date_get_date_ce()', 'ext/date/php_date'],
+    'DateTimeImmutable'                 => ['php_date_get_immutable_ce()', 'ext/date/php_date'],
+    'DateTimezone'                      => ['php_date_get_timezone_ce()', 'ext/date/php_date'],
+    'DateInterval'                      => ['php_date_get_interval_ce()', 'ext/date/php_date'],
+    'DatePeriod'                        => ['php_date_get_period_ce()', 'ext/date/php_date'],
+
+    /**
+     * DOM
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/dom
+     */
+    'DOMNode'                           => ['dom_node_class_entry', 'ext/dom/xml_common'],
+
+    /**
+     * GMP
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/gmp
+     */
+    'GMP'                               => ['php_gmp_class_entry()', 'ext/gmp/php_gmp_int'],
+
+    /**
+     * Hash
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/hash
+     */
+    'HashContext'                       => ['php_hashcontext_ce', 'ext/hash/php_hash'],
+
+    /**
+     * Intl
+     *
+     * @link https://github.com/php/php-src/tree/master/ext/intl
+     */
+    'IntlException'                     => ['IntlException_ce_ptr', 'ext/intl/intl_common'],
+
+    'IntlBreakIterator'                 => ['BreakIterator_ce_ptr', 'ext/intl/breakiterator/breakiterator_class'],
+    'IntlRuleBasedBreakIterator'        => ['RuleBasedBreakIterator_ce_ptr', 'ext/intl/breakiterator/breakiterator_class'],
+
+    'IntlCalendar'                      => ['Calendar_ce_ptr', 'ext/intl/calendar/calendar_class'],
+    'IntlGregorianCalendar'             => ['GregorianCalendar_ce_ptr', 'ext/intl/calendar/calendar_class'],
+
+    'Collator'                          => ['GregorianCalendar_ce_ptr', 'ext/intl/collator/collator_class'],
+
+    'IntlIterator'                      => ['IntlIterator_ce_ptr', 'ext/intl/common/collator_enum'],
+
+    'IntlDateFormatter'                 => ['IntlDateFormatter_ce_ptr', 'ext/intl/dateformat/dateformat_class'],
+    'IntlDatePatternGenerator'          => ['IntlDatePatternGenerator_ce_ptr', 'ext/intl/dateformat/datepatterngenerator_class'],
+
+    'NumberFormatter'                   => ['NumberFormatter_ce_ptr', 'ext/intl/formatter/formatter_class'],
+
+    'Locale'                            => ['Locale_ce_ptr', 'ext/intl/locale/locale_class'],
+
+    'MessageFormatter'                  => ['MessageFormatter_ce_ptr', 'ext/intl/locale/msgformat/msgformat_class'],
+
+    'Normalizer'                        => ['Normalizer_ce_ptr', 'ext/intl/locale/normalizer/normalizer_class'],
+
+    'ResourceBundle'                    => ['ResourceBundle_ce_ptr', 'ext/intl/resourcebundle/resourcebundle_class'],
+
+    'Spoofchecker'                      => ['Spoofchecker_ce_ptr', 'ext/intl/spoofchecker/spoofchecker_class'],
+
+    'IntlTimeZone'                      => ['TimeZone_ce_ptr', 'ext/intl/timezone/timezone_class'],
+
+    'Transliterator'                    => ['Transliterator_ce_ptr', 'ext/intl/transliterator/transliterator_class'],
+
+    /**
      * SPL
      */
     'ArrayObject'                       => ['spl_ce_ArrayObject', 'ext/spl/spl_array'],
@@ -104,16 +184,6 @@ return [
      * Session
      */
     'SessionHandlerInterface'           => ['php_session_iface_entry', 'ext/session/php_session'],
-
-    /**
-     * Date
-     */
-    'DateTimeInterface'                 => ['php_date_get_interface_ce()', 'ext/date/php_date'],
-    'DateTime'                          => ['php_date_get_date_ce()', 'ext/date/php_date'],
-    'DateTimeImmutable'                 => ['php_date_get_immutable_ce()', 'ext/date/php_date'],
-    'DateTimezone'                      => ['php_date_get_timezone_ce()', 'ext/date/php_date'],
-    'DateInterval'                      => ['php_date_get_interval_ce()', 'ext/date/php_date'],
-    'DatePeriod'                        => ['php_date_get_period_ce()', 'ext/date/php_date'],
 
     /**
      * Closures
