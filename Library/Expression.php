@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -201,19 +202,6 @@ class Expression
     }
 
     /**
-     * Checks if the result of the evaluated expression is intended to be used
-     * in a string operation like "concat".
-     *
-     * @deprecated
-     *
-     * @return bool
-     */
-    public function isStringOperation()
-    {
-        return $this->stringOperation;
-    }
-
-    /**
      * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
      *
      * @param bool $evalMode
@@ -226,14 +214,14 @@ class Expression
     /**
      * Compiles foo = [].
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      */
-    public function emptyArray($expression, CompilationContext $compilationContext)
+    public function emptyArray(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -254,7 +242,7 @@ class Expression
             throw new CompilerException('Cannot use variable: '.$symbolVariable->getName().'('.$symbolVariable->getType().') to create empty array', $expression);
         }
 
-        /*
+        /**
          * Mark the variable as an 'array'
          */
         $symbolVariable->setDynamicTypes('array');
@@ -269,15 +257,14 @@ class Expression
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException|Exception
-     *
      * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): CompiledExpression
     {
         $expression = $this->expression;
         $type = $expression['type'];
-        $compilableExpression = null;
 
         switch ($type) {
             case 'null':
