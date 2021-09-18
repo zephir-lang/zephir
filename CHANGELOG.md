@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.14.0] - 2021-09-18
+### Added
+- Added support for `require_once` [#2253](https://github.com/zephir-lang/zephir/issues/2253)
+
+### Changed
+- Bumped minimal version of Zephir Parser to `1.4.1`. [#2284](https://github.com/zephir-lang/zephir/issues/2284)
+
 ## [0.14.0-beta.3] - 2021-08-06
 ### Fixed
 - Fixed class entry generation of external class [#2261](https://github.com/zephir-lang/zephir/issues/2261)
@@ -534,7 +541,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0...HEAD
+[0.14.0]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...0.14.0
 [0.14.0-beta.3]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...0.14.0-beta.3
 [0.14.0-beta.2]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2
 [0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.13.5...0.14.0-beta.1

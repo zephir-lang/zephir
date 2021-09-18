@@ -468,6 +468,7 @@ class StaticTypeInference
 
             case 'clone':
             case 'require':
+            case 'require_once':
                 return 'variable';
 
             case 'ternary':
@@ -592,6 +593,7 @@ class StaticTypeInference
                 case 'scall':
                 case 'fcall':
                 case 'require':
+                case 'require_once':
                     $this->passCall($statement['expr']);
                     break;
 

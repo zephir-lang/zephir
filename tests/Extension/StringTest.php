@@ -20,7 +20,7 @@ use function Zephir\is_windows;
 
 final class StringTest extends TestCase
 {
-    private Strings $test;
+    private ?Strings $test = null;
 
     protected function setUp(): void
     {
@@ -318,6 +318,16 @@ final class StringTest extends TestCase
 
         $this->assertSame('', $this->test->issue2186SegFaultCall());
         $this->assertSame('ok all ok', $this->test->issue2186SegFaultCall('ok'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1932
+     */
+    public function testNullableStringReturnType(): void
+    {
+        $this->assertNull($this->test->nullableStringReturnType());
+        $this->assertNull($this->test->nullableStringReturnType(null));
+        $this->assertSame('string', $this->test->nullableStringReturnType('string'));
     }
 
     public function providerHashEquals(): array

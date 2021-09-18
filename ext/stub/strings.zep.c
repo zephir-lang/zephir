@@ -1040,3 +1040,46 @@ PHP_METHOD(Stub_Strings, issue2234StrictChild)
 	RETURN_CTOR(&val);
 }
 
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1932
+ */
+PHP_METHOD(Stub_Strings, nullableStringReturnType)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *val_param = NULL;
+	zval val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &val_param);
+	if (!val_param) {
+		ZEPHIR_INIT_VAR(&val);
+	} else {
+	if (UNEXPECTED(Z_TYPE_P(val_param) != IS_STRING && Z_TYPE_P(val_param) != IS_NULL)) {
+		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'val' must be of the type string"));
+		RETURN_MM_NULL();
+	}
+	if (EXPECTED(Z_TYPE_P(val_param) == IS_STRING)) {
+		zephir_get_strval(&val, val_param);
+	} else {
+		ZEPHIR_INIT_VAR(&val);
+	}
+	}
+
+
+	if (!ZEPHIR_IS_NULL(&val)) {
+		RETURN_CTOR(&val);
+	}
+	RETURN_MM_NULL();
+}
+

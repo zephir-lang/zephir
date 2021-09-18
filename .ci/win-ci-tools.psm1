@@ -92,13 +92,11 @@ function InstallZephirParser {
             Download and install Zephir parser PHP extension
     #>
 
-    $BaseUri = "https://github.com/phalcon/php-zephir-parser/releases/download"
-    $LocalPart = "zephir_parser_${env:PHP_ARCH}_vc${env:VC_VERSION}_php${env:PHP_MINOR}"
+    $BaseUri = "https://github.com/zephir-lang/php-zephir-parser/releases/download"
+    $LocalPart = "zephir-parser-php-${env:PHP_MINOR}-${env:BUILD_TYPE}-win32-vc${env:VC_VERSION}-${env:PHP_ARCH}.zip"
 
-    $TS = Get-ThreadSafety
-
-    $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
-    $DestinationPath = "C:\Downloads\${LocalPart}${TS}_${env:PARSER_VERSION}-${env:PARSER_RELEASE}.zip"
+    $RemoteUrl = "${BaseUri}/v${env:PARSER_VERSION}/${LocalPart}"
+    $DestinationPath = "C:\Downloads\${LocalPart}"
 
     if (-not (Test-Path "${env:PHPROOT}\ext\php_zephir_parser.dll")) {
         if (-not [System.IO.File]::Exists($DestinationPath)) {

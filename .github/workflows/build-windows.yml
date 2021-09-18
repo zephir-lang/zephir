@@ -13,7 +13,7 @@ on:
       - development
 
 env:
-  PARSER_VERSION: 1.3.6
+  PARSER_VERSION: 1.4.1
   PARSER_RELEASE: 559
   PHP_SDK_VERSION: 2.2.0
   PHP_DEVPACK: C:\tools\php-devpack
@@ -67,6 +67,7 @@ jobs:
             xdebug.max_nesting_level=256
         env:
           PHPTS: ${{ matrix.build_type }}
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set Environment Variables
         run: |
@@ -119,10 +120,10 @@ jobs:
           InstallZephirParser
 
       - name: Enable Zephir Parser
-        run: Enable-PhpExtension -Extension 'Zephir Parser' -Path "${env:PHPROOT}"
+        run: Enable-PhpExtension -Extension zephir_parser -Path "${env:PHPROOT}"
 
       - name: Minimal Zephir Parser Load Test
-        run: php --ri 'Zephir Parser'
+        run: php --ri zephir_parser
 
       - name: "Setup Visual Studio Command Line for PHP SDK ${{ matrix.arch }}"
         run: .ci\vsenv.bat -arch=${{ matrix.arch }} -host_arch=${{ matrix.arch }}
@@ -148,16 +149,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Setup GitHub Token
-        shell: bash
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
-            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
-          fi
-
       - name: Install Project Dependencies
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Initialize Release Variables
         run: |
