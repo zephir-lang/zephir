@@ -97,6 +97,15 @@ class ClassMethod
     protected bool $void = false;
 
     /**
+     * Whether the variable is mixed.
+     *
+     * Only for PHP >= 8.0
+     *
+     * @var bool
+     */
+    protected bool $mixed = false;
+
+    /**
      * Whether the method is public or not.
      *
      * @var bool
@@ -276,34 +285,42 @@ class ClassMethod
         $castTypes = [];
 
         foreach ($returnType['list'] as $returnTypeItem) {
-            if (isset($returnTypeItem['cast'])) {
-                if (isset($returnTypeItem['cast']['collection'])) {
-                    continue;
-                }
+            /**
+             * We continue the loop, because it only works for PHP >= 8.0.
+             */
+            if (isset($returnTypeItem['data-type']) && $returnTypeItem['data-type'] === 'mixed') {
+                $this->mixed = true;
+            }
 
-                if (isset($returnTypeItem['collection']) && $returnTypeItem['collection']) {
-                    $types['array'] = [
-                        'type' => 'return-type-parameter',
-                        'data-type' => 'array',
-                        'mandatory' => 0,
-                        'file' => $returnTypeItem['cast']['file'],
-                        'line' => $returnTypeItem['cast']['line'],
-                        'char' => $returnTypeItem['cast']['char'],
-                    ];
-                } else {
-                    $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-                }
-            } else {
+            if (!isset($returnTypeItem['cast'])) {
                 $types[$returnTypeItem['data-type']] = $returnTypeItem;
+                continue;
+            }
+
+            if (isset($returnTypeItem['cast']['collection'])) {
+                continue;
+            }
+
+            if (isset($returnTypeItem['collection']) && $returnTypeItem['collection']) {
+                $types['array'] = [
+                    'type' => 'return-type-parameter',
+                    'data-type' => 'array',
+                    'mandatory' => 0,
+                    'file' => $returnTypeItem['cast']['file'],
+                    'line' => $returnTypeItem['cast']['line'],
+                    'char' => $returnTypeItem['cast']['char'],
+                ];
+            } else {
+                $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
             }
         }
 
-        if (count($castTypes)) {
+        if (count($castTypes) > 0) {
             $types['object'] = [];
             $this->returnClassTypes = $castTypes;
         }
 
-        if (count($types)) {
+        if (count($types) > 0) {
             $this->returnTypes = $types;
         }
     }
@@ -514,7 +531,7 @@ class ClassMethod
         return $this;
     }
 
-    public function getOptimizedMethod()
+    public function getOptimizedMethod(): ClassMethod
     {
         $optimizedName = $this->getName().'_zephir_internal_call';
         $optimizedMethod = $this->classDefinition->getMethod($optimizedName, false);
@@ -633,7 +650,7 @@ class ClassMethod
      */
     public function areReturnTypesIntCompatible(): bool
     {
-        $types = ['int', 'uint', 'char', 'uchar', 'long', 'ulong'];
+        $types = ['int', 'uint', 'char', 'uchar', 'long', 'ulong', 'mixed'];
 
         foreach ($this->returnTypes as $returnType => $definition) {
             if (in_array($returnType, $types)) {
@@ -845,6 +862,16 @@ class ClassMethod
     public function isVoid(): bool
     {
         return $this->void;
+    }
+
+    /**
+     * Checks if the methods return type is `mixed`.
+     *
+     * @return bool
+     */
+    public function isMixed(): bool
+    {
+        return $this->mixed;
     }
 
     /**
