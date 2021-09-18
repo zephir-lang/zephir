@@ -31,7 +31,7 @@ class ArgInfoDefinition
     /**
      * @var string
      */
-    private string $name = '';
+    private string $name;
 
     /**
      * @var ClassMethodParameters|null
@@ -61,18 +61,18 @@ class ArgInfoDefinition
     /**
      * ArgInfoDefinition constructor.
      *
-     * @param $name
+     * @param string $name
      * @param ClassMethod $functionLike
      * @param CodePrinter $codePrinter
      * @param CompilationContext $compilationContext
-     * @param false $returnByRef
+     * @param bool $returnByRef
      */
     public function __construct(
-        $name,
+        string $name,
         ClassMethod $functionLike,
         CodePrinter $codePrinter,
         CompilationContext $compilationContext,
-        $returnByRef = false
+        bool $returnByRef = false
     ) {
         $this->functionLike = $functionLike;
         $this->codePrinter = $codePrinter;

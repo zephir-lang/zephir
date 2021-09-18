@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Exception;
 
 final class InvalidTypeException extends CompilerException
@@ -19,7 +21,7 @@ final class InvalidTypeException extends CompilerException
      * @param string     $type
      * @param array|null $expression
      */
-    public function __construct($type, array $expression = null)
+    public function __construct(string $type, array $expression = null)
     {
         $message = sprintf(
             'Returning type: %s but this type is not compatible with return-type hints declared in the method',

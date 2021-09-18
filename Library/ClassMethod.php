@@ -650,7 +650,7 @@ class ClassMethod
      */
     public function areReturnTypesIntCompatible(): bool
     {
-        $types = ['int', 'uint', 'char', 'uchar', 'long', 'ulong', 'mixed'];
+        $types = ['int', 'uint', 'char', 'uchar', 'long', 'ulong'];
 
         foreach ($this->returnTypes as $returnType => $definition) {
             if (in_array($returnType, $types)) {
