@@ -541,7 +541,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0...HEAD
+[0.14.0]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...0.14.0
 [0.14.0-beta.3]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...0.14.0-beta.3
 [0.14.0-beta.2]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2
 [0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.13.5...0.14.0-beta.1
