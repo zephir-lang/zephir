@@ -11,7 +11,7 @@ on:
       - development
 
 env:
-  ZEPHIR_PARSER_VERSION: v1.3.8
+  ZEPHIR_PARSER_VERSION: 1.4.1
 
 jobs:
   linux:
@@ -47,7 +47,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: gmp, pdo_sqlite, psr, zip
+          extensions: gmp, pdo_sqlite, psr, zip, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
@@ -99,20 +99,6 @@ jobs:
         run: |
           sudo apt-get update --quiet --yes 1>/dev/null
           sudo apt-get install --no-install-recommends -q -y re2c
-
-      - name: Get Zephir Parser Cache Key
-        id: pcache
-        run: echo ::set-output name=key::$(echo -n ${ZEPHIR_PARSER_VERSION}_${CPUHASH})
-
-      - name: Cache Zephir Parser
-        uses: actions/cache@v1
-        with:
-          path: ~/php-zephir-parser
-          key: ${{ runner.os }}-${{ matrix.php }}-zephir-parser-${{ steps.pcache.outputs.key }}
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-zephir-parser-
-
-      - name: Install Zephir Parser
-        run: .ci/install-zephir-parser.sh
 
       - name: Get Composer Cache Directory
         id: composer-cache

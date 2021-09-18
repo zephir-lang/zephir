@@ -1,4 +1,4 @@
-FROM composer:2.0.8 as composer
+FROM composer:latest as composer
 FROM php:7.4-fpm
 
 RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
@@ -13,26 +13,10 @@ RUN apt update -y && apt install -y \
     libicu-dev \
     libgmp-dev \
     libzip-dev && \
-    pecl install psr
+    pecl install psr zephir_parser
 
 RUN docker-php-ext-install zip gmp intl mysqli && \
-    docker-php-ext-enable psr
-
-# Install Zephir parser
-RUN PHP_INI_DIR="$(dirname "$(php -i | grep /.+/conf.d/.+.ini -oE | head -n 1)")" && \
-    cd /opt && \
-    git clone -b "development" \
-            --depth 1 \
-            -q https://github.com/phalcon/php-zephir-parser \
-            php-zephir-parser && \
-    cd php-zephir-parser || exit 1 && \
-    phpize && \
-    ./configure --with-php-config="$(command -v php-config)" --enable-zephir_parser && \
-    make -j"$(getconf _NPROCESSORS_ONLN)" && \
-    sudo make install && \
-    echo 'extension="zephir_parser.so"' |\
-      sudo tee "$PHP_INI_DIR/zephir_parser.ini" && \
-    php --ri "Zephir Parser"
+    docker-php-ext-enable psr zephir_parser
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 

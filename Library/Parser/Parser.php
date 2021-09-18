@@ -9,11 +9,15 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Parser;
 
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\ParseException;
+
+use function function_exists;
 
 class Parser
 {
@@ -22,9 +26,9 @@ class Parser
      *
      * @return bool
      */
-    public function isAvailable()
+    public function isAvailable(): bool
     {
-        return \function_exists('zephir_parse_file');
+        return function_exists('zephir_parse_file');
     }
 
     /**
@@ -32,9 +36,9 @@ class Parser
      *
      * @return string|null
      */
-    public function getVersion()
+    public function getVersion(): ?string
     {
-        return phpversion('Zephir Parser') ?: null;
+        return phpversion('zephir_parser') ?: null;
     }
 
     /**
@@ -42,13 +46,13 @@ class Parser
      *
      * @param string $filePath Absolute path to the *.zep file
      *
-     * @throws IllegalStateException
+     * @return array
      * @throws InvalidArgumentException
      * @throws ParseException
      *
-     * @return array
+     * @throws IllegalStateException
      */
-    public function parse($filePath)
+    public function parse(string $filePath): array
     {
         if (!$this->isAvailable()) {
             throw new IllegalStateException("Zephir Parser extension couldn't be loaded.");
