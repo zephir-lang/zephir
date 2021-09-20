@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Added
+- Added support for `mixed` [#2276](https://github.com/zephir-lang/zephir/issues/2276)
 
 ## [0.14.0] - 2021-09-18
 ### Added
