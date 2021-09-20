@@ -115,6 +115,7 @@ class ClassMethodParameters implements Countable, Iterator, ArrayAccess
                 case 'callable':
                 case 'resource':
                 case 'variable':
+                case 'mixed':
                     $parameters[] = $isMethodInternal ? $name : '&'.$name;
                     break;
 

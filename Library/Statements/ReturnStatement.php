@@ -138,6 +138,7 @@ final class ReturnStatement extends StatementAbstract
                         break;
 
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
                             $compilationContext,
@@ -176,6 +177,7 @@ final class ReturnStatement extends StatementAbstract
                                 break;
 
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                                 break;
                         }
                         break;
@@ -221,6 +223,7 @@ final class ReturnStatement extends StatementAbstract
                     break;
 
                 case Types::T_VARIABLE:
+                case Types::T_MIXED:
                     if (!isset($symbolVariable)) {
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
@@ -256,6 +259,7 @@ final class ReturnStatement extends StatementAbstract
                             break;
 
                         case Types::T_VARIABLE:
+                        case Types::T_MIXED:
                             if ('this_ptr' == $symbolVariable->getName()) {
                                 $codePrinter->output('RETURN_THIS();');
                             } else {

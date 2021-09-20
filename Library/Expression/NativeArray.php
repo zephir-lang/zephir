@@ -152,6 +152,7 @@ class NativeArray
                     case 'string':
                     case 'variable':
                     case 'array':
+                    case 'mixed':
                         return $itemVariable;
 
                     default:

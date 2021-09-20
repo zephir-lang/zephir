@@ -1447,7 +1447,7 @@ class ClassMethod
     {
         $dataType = $this->getParamDataType($parameter);
 
-        if (in_array($dataType, ['variable', 'callable', 'object', 'resource'])) {
+        if (in_array($dataType, ['variable', 'callable', 'object', 'resource', 'mixed'])) {
             return "";
         }
 
@@ -1652,6 +1652,7 @@ class ClassMethod
                         case 'callable':
                         case 'resource':
                         case 'variable':
+                        case 'mixed':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             if ($compilationContext->backend->isZE3()) {
@@ -1878,6 +1879,7 @@ class ClassMethod
                     case 'callable':
                     case 'resource':
                     case 'variable':
+                    case 'mixed':
                         $name = $parameter['name'];
                         break;
 

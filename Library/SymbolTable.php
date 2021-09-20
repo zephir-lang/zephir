@@ -253,7 +253,7 @@ class SymbolTable
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
-        /*
+        /**
          * Validate that 'this' cannot be used in a static function
          */
         if ('this' == $name || 'this_ptr' == $name) {
@@ -262,7 +262,7 @@ class SymbolTable
             }
         }
 
-        /*
+        /**
          * Create superglobals just in time
          */
         if ($this->globalsManager->isSuperGlobal($name)) {
@@ -295,7 +295,7 @@ class SymbolTable
 
         $variable->increaseUses();
 
-        /*
+        /**
          * Analise branches to detect possible initialization of variables in conditional branches
          */
         if (!$variable->isTemporal() && !$variable->getSkipVariant()) {
@@ -306,6 +306,7 @@ class SymbolTable
                             case 'variable':
                             case 'string':
                             case 'array':
+                            case 'mixed':
                                 if (!$variable->isLocalOnly()) {
                                     $variable->setMustInitNull(true);
                                 }
@@ -380,7 +381,6 @@ class SymbolTable
                                 foreach ($branches as $branch) {
                                     $graph->addLeaf($branch);
                                 }
-                                //echo $graph->getRoot()->show();
                             } else {
                                 /*
                                  * Variable is assigned just once and it's assigned in a conditional branch

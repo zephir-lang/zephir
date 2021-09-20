@@ -12,6 +12,10 @@ PHP_METHOD(Stub_Types_MixedType, returnMixedBool);
 PHP_METHOD(Stub_Types_MixedType, returnMixedNull);
 PHP_METHOD(Stub_Types_MixedType, returnMixed74);
 PHP_METHOD(Stub_Types_MixedType, returnMultiButAlwaysMixed);
+PHP_METHOD(Stub_Types_MixedType, paramMixed);
+PHP_METHOD(Stub_Types_MixedType, paramMixedTwo);
+PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti);
+PHP_METHOD(Stub_Types_MixedType, paramAndReturnMixed);
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedobject, 0, 0, IS_MIXED, 0)
@@ -73,6 +77,29 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmultibutalwaysmixed, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_parammixed, 0, 0, 1)
+	ZEND_ARG_INFO(0, val)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_parammixedtwo, 0, 0, 2)
+	ZEND_ARG_INFO(0, val1)
+	ZEND_ARG_INFO(0, val2)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_parammixedwithmulti, 0, 0, 3)
+	ZEND_ARG_TYPE_INFO(0, intVal, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, stringVal, IS_STRING, 0)
+	ZEND_ARG_INFO(0, mixedVal)
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_paramandreturnmixed, 0, 1, IS_MIXED, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_paramandreturnmixed, 0, 1, IS_NULL, 0)
+#endif
+	ZEND_ARG_INFO(0, val)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_types_mixedtype_method_entry) {
 	PHP_ME(Stub_Types_MixedType, returnMixedObject, arginfo_stub_types_mixedtype_returnmixedobject, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Types_MixedType, returnMixedArray, arginfo_stub_types_mixedtype_returnmixedarray, ZEND_ACC_PUBLIC)
@@ -87,5 +114,9 @@ ZEPHIR_INIT_FUNCS(stub_types_mixedtype_method_entry) {
 #else
 	PHP_ME(Stub_Types_MixedType, returnMultiButAlwaysMixed, NULL, ZEND_ACC_PUBLIC)
 #endif
+	PHP_ME(Stub_Types_MixedType, paramMixed, arginfo_stub_types_mixedtype_parammixed, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Types_MixedType, paramMixedTwo, arginfo_stub_types_mixedtype_parammixedtwo, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Types_MixedType, paramMixedWithMulti, arginfo_stub_types_mixedtype_parammixedwithmulti, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Types_MixedType, paramAndReturnMixed, arginfo_stub_types_mixedtype_paramandreturnmixed, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
