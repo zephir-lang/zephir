@@ -121,7 +121,7 @@ jobs:
 
       - name: Build Test Extension (macOS)
         if: runner.os == 'macOS'
-        uses: ./.github/workflows/build-linux-ext
+        uses: ./.github/workflows/build-macos-ext
         with:
           compiler: ${{ matrix.compiler }}
           cflags: '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1'
