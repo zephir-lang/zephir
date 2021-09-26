@@ -96,7 +96,20 @@ jobs:
 
       - name: Install Project Dependencies
         run: |
+          echo "::group::Install composer dependencies"
           composer install --prefer-dist --no-interaction --no-ansi --no-progress
+          echo "::endgroup::"
 
       - name: Fast Commands Test
         run: php zephir --help
+
+      - name: Build Test Extension
+        uses: ./.github/workflows/build-linux-ext
+        with:
+          compiler: ${{ matrix.compiler }}
+          cflags: '-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
+          ldflags: '--coverage'
+
+      - name: Test Extension Info
+        run: |
+          php -d extension=./ext/modules/stub.so --ri stub
