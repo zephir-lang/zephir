@@ -38,7 +38,7 @@ jobs:
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
-  linux-tests:
+  unix-tests:
     name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
 
@@ -54,6 +54,14 @@ jobs:
             arch: 'x64'
             build_type: 'nts'
             compiler: gcc
+
+          # macOS
+          - name: macos
+            os: macos-10.15
+            php: '7.4'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: clang
 
     steps:
       - uses: actions/checkout@v2
@@ -103,12 +111,20 @@ jobs:
       - name: Fast Commands Test
         run: php zephir --help
 
-      - name: Build Test Extension
+      - name: Build Test Extension (Linux)
+        if: runner.os == 'Linux'
         uses: ./.github/workflows/build-linux-ext
         with:
           compiler: ${{ matrix.compiler }}
           cflags: '-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
           ldflags: '--coverage'
+
+      - name: Build Test Extension (macOS)
+        if: runner.os == 'macOS'
+        uses: ./.github/workflows/build-linux-ext
+        with:
+          compiler: ${{ matrix.compiler }}
+          cflags: '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1'
 
       - name: Stub Extension Info
         run: |
@@ -133,14 +149,14 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/output/clover.xml
-          flags: unittests
+          flags: unittests,${{ matrix.name }},php-${{ matrix.php }}
           name: codecov-umbrella
 
       - name: Upload build artifacts after Failure
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: debug-ext-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          name: debug-${{ matrix.name }}-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
           path: |
             ${{ github.workspace }}/*.log
             ${{ github.workspace }}/ext/
