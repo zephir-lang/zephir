@@ -135,3 +135,15 @@ jobs:
           files: ./tests/output/clover.xml
           flags: unittests
           name: codecov-umbrella
+
+      - name: Upload build artifacts after Failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-ext-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          path: |
+            ${{ github.workspace }}/*.log
+            ${{ github.workspace }}/ext/
+            !${{ github.workspace }}/ext/kernel/
+            !${{ github.workspace }}/ext/stub/
+          retention-days: 1
