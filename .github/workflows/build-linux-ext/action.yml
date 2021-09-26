@@ -38,9 +38,9 @@ runs:
       run: |
         echo "::group::Configure compiler"
         CC=${{ inputs.compiler }}
-        CFLAGS=${{ inputs.cflags }}
-        CXXFLAGS=${{ inputs.cflags }}
-        LDFLAGS=${{ inputs.ldflags }}
+        CFLAGS="${{ inputs.cflags }}"
+        CXXFLAGS="${{ inputs.cflags }}"
+        LDFLAGS="${{ inputs.ldflags }}"
 
         export CC CFLAGS CXXFLAGS LDFLAGS
         echo "::endgroup::"
