@@ -18,6 +18,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Prerequisites
+      shell: bash
       run: |
         echo "::group::Remove APT Microsoft Sources list"
         # We don't need this at all, and our
@@ -33,6 +34,7 @@ runs:
         echo "::endgroup::"
 
     - name: Compile Stub Extension
+      shell: bash
       run: |
         echo "::group::Configure compiler"
         CC=${{ inputs.compiler }}
