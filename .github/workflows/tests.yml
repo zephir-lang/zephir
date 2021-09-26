@@ -110,6 +110,28 @@ jobs:
           cflags: '-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
           ldflags: '--coverage'
 
-      - name: Test Extension Info
+      - name: Stub Extension Info
         run: |
           php -d extension=./ext/modules/stub.so --ri stub
+
+      - name: Unit Tests (Stub Extension)
+        run: |
+          php -d extension=./ext/modules/stub.so vendor/bin/phpunit \
+            --bootstrap tests/ext-bootstrap.php \
+            --testsuite Extension
+
+      - name: Unit Tests (Zephir)
+        if: always()
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --testsuite Zephir
+
+      - name: Black-box Testing
+        if: always()
+        run: cd tests/sharness && PHP=$(which php) make
+
+      - name: Upload Code Coverage Report
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./tests/output/clover.xml
+          flags: unittests
+          name: codecov-umbrella

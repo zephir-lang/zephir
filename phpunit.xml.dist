@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" backupGlobals="false"
-         bootstrap="./Library/autoload.php" colors="true" verbose="true">
-    <coverage>
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         backupGlobals="false"
+         bootstrap="./Library/autoload.php"
+         colors="true"
+         verbose="true"
+>
+    <coverage pathCoverage="true">
         <include>
             <directory suffix=".php">./Library</directory>
         </include>
         <report>
-            <clover outputFile="./tests/output/clover.xml"/>
+            <clover outputFile="tests/output/clover.xml"/>
+<!--             Uncomment to generate HTML coverage report-->
+<!--            <html outputDirectory="tests/output/html-coverage" lowUpperBound="50" highLowerBound="90"/>-->
         </report>
     </coverage>
 
@@ -27,6 +33,7 @@
         <ini name="display_errors" value="on"/>
         <ini name="display_startup_errors" value="on"/>
         <ini name="error_reporting" value="-1"/>
+        <ini name="memory_limit" value="4G"/>
 
         <const name="TESTS_PATH" value="./tests"/>
         <const name="DATA_PATH" value="./tests/Data"/>
@@ -36,6 +43,7 @@
     </php>
 
     <logging>
+        <junit outputFile="tests/output/junit.xml"/>
         <!-- log type="coverage-html" target="./tests/output/html"/-->
     </logging>
 </phpunit>
