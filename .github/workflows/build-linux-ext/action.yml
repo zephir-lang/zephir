@@ -56,7 +56,7 @@ runs:
         echo "::group::Compile stage"
         cd ./ext
         phpize
-        ./configure --enable-stub CFLAGS=${{ inputs.cflags }} CXXFLAGS=${{ inputs.cflags }} LDFLAGS=${{ inputs.ldflags }}
+        ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
         make
         make install
         echo "::endgroup::"
