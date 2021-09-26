@@ -2,6 +2,11 @@ name: tests
 
 on: [push, pull_request]
 
+env:
+  RE2C_VERSION: 2.2
+  ZEPHIR_PARSER_VERSION: 1.4.1
+  CACHE_DIR: .cache
+
 jobs:
   analyze:
     runs-on: ubuntu-18.04
@@ -23,6 +28,7 @@ jobs:
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
+      # @TODO: Apply fix from `feature/win-unix-builds
       - name: Run PHP CS Fixer
         if: always()
         run: |
@@ -32,3 +38,65 @@ jobs:
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
+  linux-tests:
+    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}"
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          # Linux
+          - name: ubuntu
+            os: ubuntu-18.04
+            php: '7.4'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: gcc
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+
+      - name: Install PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          tools: phpize, php-config
+          coverage: xdebug
+          # variables_order: https://github.com/zephir-lang/zephir/pull/1537
+          # enable_dl:       https://github.com/zephir-lang/zephir/pull/1654
+          # allow_url_fopen: https://github.com/zephir-lang/zephir/issues/1713
+          # error_reporting: https://github.com/zendframework/zend-code/issues/160
+          ini-values: >-
+            variables_order=EGPCS,
+            enable_dl=On,
+            allow_url_fopen=On,
+            error_reporting=-1,
+            memory_limit=1G,
+            date.timezone=UTC,
+            xdebug.max_nesting_level=256
+        env:
+          PHPTS: ${{ matrix.build_type }}
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Set up Composer Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Project Dependencies
+        run: |
+          composer install --prefer-dist --no-interaction --no-ansi --no-progress
+
+      - name: Fast Commands Test
+        run: php zephir --help
