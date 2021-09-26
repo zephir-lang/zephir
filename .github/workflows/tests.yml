@@ -1,0 +1,34 @@
+name: tests
+
+on: [push, pull_request]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          coverage: none
+          tools: php-cs-fixer, phpcs
+
+      - name: Run PHP_CodeSniffer
+        run: |
+          phpcs --version
+          phpcs --runtime-set ignore_warnings_on_exit true
+
+      - name: Run PHP CS Fixer
+        if: always()
+        run: |
+          php-cs-fixer --version
+          php-cs-fixer fix --diff --dry-run -v --using-cache=no || true
+
+      - name: Run Shell Check
+        if: always()
+        run: shellcheck .ci/*.sh
