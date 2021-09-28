@@ -38,6 +38,7 @@ jobs:
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
+
   unix-tests:
     name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
@@ -62,6 +63,14 @@ jobs:
             arch: 'x64'
             build_type: 'nts'
             compiler: clang
+
+          # Windows
+          - name: win32
+            os: windows-2016
+            php: '7.4'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: vc15
 
     steps:
       - uses: actions/checkout@v2
@@ -91,15 +100,11 @@ jobs:
           PHPTS: ${{ matrix.build_type }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Set up Composer Cache
+      - name: Set Up Composer Cache
         uses: actions/cache@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Project Dependencies
@@ -126,13 +131,42 @@ jobs:
           compiler: ${{ matrix.compiler }}
           cflags: '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1'
 
+      - name: Build Test Extension (Windows)
+        if: runner.os == 'Windows'
+        uses: ./.github/workflows/build-win-ext
+        with:
+          php_version: ${{ matrix.php }}
+          ts: ${{ matrix.build_type }}
+          msvc: ${{ matrix.compiler }}
+          arch: ${{ matrix.arch }}
+        env:
+          CACHE_DIR: C:\Downloads
+
+      - name: Setup Extension Path
+        run: |
+          case ${{ runner.os }} in
+            Linux*)
+              echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
+              ;;
+            macOS*)
+              echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
+              ;;
+            Windows*)
+              if [ "${{ matrix.arch" = "x64" ]; then
+                echo "STUB_EXT=./ext/Release/x64/php_stub.dll" >> $GITHUB_ENV
+              else
+                echo "STUB_EXT=./ext/Release/php_stub.dll" >> $GITHUB_ENV
+              fi
+              ;;
+          esac
+
       - name: Stub Extension Info
         run: |
-          php -d extension=./ext/modules/stub.so --ri stub
+          php -d extension=${{ env.STUB_EXT }} --ri stub
 
       - name: Unit Tests (Stub Extension)
         run: |
-          php -d extension=./ext/modules/stub.so vendor/bin/phpunit \
+          php -d extension=${{ env.STUB_EXT }} vendor/bin/phpunit \
             --bootstrap tests/ext-bootstrap.php \
             --testsuite Extension
 
