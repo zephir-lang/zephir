@@ -140,7 +140,7 @@ jobs:
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
         env:
-          CACHE_DIR: C:\Downloads
+          CACHE_DIR: 'C:\Downloads'
 
       - name: Setup Extension Path
         run: |
@@ -152,7 +152,7 @@ jobs:
               echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
               ;;
             Windows*)
-              if [ "${{ matrix.arch" = "x64" ]; then
+              if [ "${{ matrix.arch }}" = "x64" ]; then
                 echo "STUB_EXT=./ext/Release/x64/php_stub.dll" >> $GITHUB_ENV
               else
                 echo "STUB_EXT=./ext/Release/php_stub.dll" >> $GITHUB_ENV
