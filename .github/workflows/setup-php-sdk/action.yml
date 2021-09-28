@@ -1,0 +1,39 @@
+  name: 'Setup PHP SDK tool kit for Windows PHP builds'
+  description: 'Setup Windows build environment for PHP extensions builds with Microsoft Visual C++ command line'
+
+  inputs:
+    php_version:
+      description: 'PHP version to build for (e.g: 7.4, 8.0)'
+      required: true
+    ts:
+      description: 'Thread Safety'
+      required: false
+      default: 'nts'
+    msvc:
+      description: 'Microsoft Visual C++ compiler toolset prefix (e.g: vc14, vs15, vs16)'
+      required: false
+    arch:
+      description: 'Target architecture (x64, x86)'
+      required: false
+      default: 'x64'
+    install_dir:
+      description: 'Target directory for php-sdk tools installation (e.g: C:\tools)'
+      required: true
+    cache_dir:
+      description: 'Cache directory for downloads. Default: system tmp dir'
+      required: false
+      default: ''
+
+  runs:
+    using: composite
+    steps:
+      - id: setup-php-sdk
+        shell: powershell
+        run: |
+          ${{ github.action_path }}/setup-php-sdk `
+            -PhpVersion ${{ inputs.php_version }} `
+            -ThreadSafety ${{ inputs.ts }} `
+            -VC ${{ inputs.msvc }} `
+            -Arch ${{ inputs.arch }} `
+            -InstallDir ${{ inputs.install_dir }} `
+            -CacheDir ${{ inputs.cache_dir }}
