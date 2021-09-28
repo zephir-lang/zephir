@@ -1,0 +1,91 @@
+name: 'Zephir Stub PHP Extension Build'
+description: 'Build Stub extension for Windows according to various php versions.'
+inputs:
+  php_version:
+    description: 'PHP version to build for (e.g: 7.4, 8.0)'
+    required: true
+  ts:
+    description: 'Thread Safety'
+    required: false
+    default: 'nts'
+  msvc:
+    description: 'Microsoft Visual C++ compiler toolset prefix (e.g: vc14, vs15, vs16)'
+    required: true
+  arch:
+    description: 'Target architecture (x64, x86)'
+    required: false
+    default: 'x64'
+  install_dir:
+    description: 'Target directory for php-sdk tools installation (e.g: C:\tools)'
+    required: false
+    default: 'C:\tools'
+  cflags:
+    description: 'CFLAGS for MSVC compiler'
+    required: false
+    default: ''
+  ldflags:
+    description: 'LDFLAGS for Linker'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set Environment Variables
+      shell: powershell
+      run: |
+        Write-Output "PHP_VERSION=$(php -r 'echo PHP_VERSION;')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Setup Downloads Cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.CACHE_DIR }}
+        key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build-win-ext/actions.yml') }}
+        restore-keys: |
+          ${{ runner.os }}-downloads-${{ env.cache-name }}-
+          ${{ runner.os }}-downloads-
+          ${{ runner.os }}
+
+    - name: Setup Prerequisites
+      shell: powershell
+      run: |
+        echo "::group::Install dependencies"
+        mkdir ${{ env.CACHE_DIR }}\Choco
+        choco install --no-progress -y --cache-location=${{ env.CACHE_DIR }}\Choco re2c
+        echo "::endgroup::"
+
+    - name: Setup PHP SDK tool kit
+      id: setup-php-sdk
+      uses: ./.github/workflows/setup-php-sdk/action.yml
+      with:
+        php_version: ${{ inputs.php_version }}
+        ts: ${{ inputs.ts }}
+        msvc: ${{ inputs.msvc }}
+        arch: ${{ inputs.arch }}
+        install_dir: ${{ inputs.install_dir }}
+        cache_dir: ${{ env.CACHE_DIR }}
+
+    - name: Configure Developer Command Prompt for MSVC compiler
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ input.arch }}
+        toolset: ${{ inputs.msvc }}
+
+    - name: Generate C code
+      shell: powershell
+      run: php zephir generate
+
+    - name: PHPIZE
+      shell: powershell
+      working-directory: ext
+      run: phpize
+
+    - name: Configure
+      shell: powershell
+      working-directory: ext
+      run: configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+
+    - name: Compile
+      shell: powershell
+      working-directory: ext
+      run: nmake 1> ..\compile.log"
