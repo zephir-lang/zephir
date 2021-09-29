@@ -70,7 +70,6 @@ runs:
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ inputs.arch }}
-        toolset: ${{ inputs.msvc }}
 
     - name: Generate C code
       shell: powershell
