@@ -88,4 +88,4 @@ runs:
     - name: Compile
       shell: powershell
       working-directory: ext
-      run: nmake 1> ..\compile.log"
+      run: nmake 1> ..\compile.log

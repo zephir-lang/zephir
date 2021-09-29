@@ -189,15 +189,11 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: Black-box Testing
-        if: always()
+        if: always() && runner.os != 'Windows'
         shell: bash
         working-directory: tests/sharness
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            nmake
-          else
-            make -j$(getconf _NPROCESSORS_ONLN)
-          fi
+          make -j$(getconf _NPROCESSORS_ONLN)
 
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v2
