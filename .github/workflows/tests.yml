@@ -145,6 +145,7 @@ jobs:
           arch: ${{ matrix.arch }}
         env:
           CACHE_DIR: 'C:\Downloads'
+          PHP_ROOT: 'C:\php'
 
       - name: Stub Extension Info
         shell: pwsh

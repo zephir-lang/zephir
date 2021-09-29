@@ -32,11 +32,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Set Environment Variables
-      shell: powershell
-      run: |
-        Write-Output "PHP_VERSION=$(php -r 'echo PHP_VERSION;')" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
     - name: Setup Downloads Cache
       uses: actions/cache@v2
       with:
@@ -84,7 +79,8 @@ runs:
     - name: Configure
       shell: powershell
       working-directory: ext
-      run: .\configure.bat --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+      run: .\configure.bat --enable-stub --with-prefix=${{ env.PHP_ROOT }} `
+        CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
 
     - name: Zephir compile
       shell: powershell
