@@ -27,8 +27,6 @@
   runs:
     using: composite
     steps:
-      - uses: actions/checkout@v2
-
       - name: Set Up PHP SDK
         id: setup-php-sdk
         shell: powershell

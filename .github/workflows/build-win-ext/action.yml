@@ -57,7 +57,7 @@ runs:
 
     - name: Setup PHP SDK tool kit
       id: setup-php-sdk
-      uses: ./.github/workflows/setup-php-sdk/action.yml
+      uses: ./.github/workflows/setup-php-sdk
       with:
         php_version: ${{ inputs.php_version }}
         ts: ${{ inputs.ts }}
