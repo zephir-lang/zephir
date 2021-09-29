@@ -150,12 +150,14 @@ jobs:
         shell: pwsh
         env:
           WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
+          UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php -n -d extension=${{ env.WIN_STUB_EXT }} --ri stub
+          $ext = if ("${{ runner.os }}" -eq "Windows") {
+            ${{ env.WIN_STUB_EXT }}
           } else {
-            php -d extension=./ext/modules/stub.so --ri stub
+            ${{ env.UNIX_STUB_EXT }}
           }
+          php -d extension=$ext --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -164,12 +166,14 @@ jobs:
         shell: pwsh
         env:
           WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
+          UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php -d extension=${{ env.WIN_STUB_EXT }} vendor/bin/phpunit -c phpunit.ext.xml
+          $ext = if ("${{ runner.os }}" -eq "Windows") {
+            ${{ env.WIN_STUB_EXT }}
           } else {
-            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
+            ${{ env.UNIX_STUB_EXT }}
           }
+          php -d extension=$ext vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
         if: always()
