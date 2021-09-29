@@ -146,40 +146,24 @@ jobs:
         env:
           CACHE_DIR: 'C:\Downloads'
 
-      - name: Setup Extension Path
-        shell: bash
-        run: |
-          case ${{ runner.os }} in
-            Linux*)
-              echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
-              echo "PHP=$(which php)" >> $GITHUB_ENV
-              ;;
-            macOS*)
-              echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
-              echo "PHP=$(which php)" >> $GITHUB_ENV
-              ;;
-            Windows*)
-              if [ "${{ matrix.arch }}" = "x64" ]; then
-                echo "STUB_EXT=./ext/x64/Release/php_stub.dll" >> $GITHUB_ENV
-              else
-                echo "STUB_EXT=./ext/Release/php_stub.dll" >> $GITHUB_ENV
-              fi
-
-              echo "PHP=$(which php)" >> $GITHUB_ENV
-              ;;
-          esac
-
       - name: Stub Extension Info
         run: |
-          php -d extension=${{ env.STUB_EXT }} --ri stub
+          if ("${{ runner.os }}" -eq "Windows") {
+            php --ri stub
+          } else {
+            php -d extension=./ext/modules/stub.so --ri stub
+          }
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
-        shell: bash
         run: |
-          php -d extension=${{ env.STUB_EXT }} vendor/bin/phpunit -c phpunit.ext.xml
+          if ("${{ runner.os }}" -eq "Windows") {
+            php vendor/bin/phpunit -c phpunit.ext.xml
+          } else {
+            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
+          }
 
       - name: Unit Tests (Zephir)
         if: always()
