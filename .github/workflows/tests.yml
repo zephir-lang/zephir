@@ -153,9 +153,9 @@ jobs:
           UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
           $ext = if ("${{ runner.os }}" -eq "Windows") {
-            ${{ env.WIN_STUB_EXT }}
+            "${{ env.WIN_STUB_EXT }}"
           } else {
-            ${{ env.UNIX_STUB_EXT }}
+            "${{ env.UNIX_STUB_EXT }}"
           }
           php -d extension=$ext --ri stub
 
@@ -169,9 +169,9 @@ jobs:
           UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
           $ext = if ("${{ runner.os }}" -eq "Windows") {
-            ${{ env.WIN_STUB_EXT }}
+            "${{ env.WIN_STUB_EXT }}"
           } else {
-            ${{ env.UNIX_STUB_EXT }}
+            "${{ env.UNIX_STUB_EXT }}"
           }
           php -d extension=$ext vendor/bin/phpunit -c phpunit.ext.xml
 
