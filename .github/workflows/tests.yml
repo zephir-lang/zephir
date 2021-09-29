@@ -147,6 +147,7 @@ jobs:
           CACHE_DIR: 'C:\Downloads'
 
       - name: Stub Extension Info
+        shell: pwsh
         run: |
           if ("${{ runner.os }}" -eq "Windows") {
             php --ri stub
@@ -158,6 +159,7 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
+        shell: pwsh
         run: |
           if ("${{ runner.os }}" -eq "Windows") {
             php vendor/bin/phpunit -c phpunit.ext.xml
