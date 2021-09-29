@@ -190,10 +190,14 @@ jobs:
 
       - name: Black-box Testing
         if: always()
-        shell: powershell
+        shell: bash
         working-directory: tests/sharness
         run: |
-          if ( "${{ runner.os }}" -eq "Windows" ) { nmake } else { make }
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            nmake
+          else
+            make -j$(getconf _NPROCESSORS_ONLN)
+          fi
 
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v2

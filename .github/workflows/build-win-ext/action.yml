@@ -83,7 +83,7 @@ runs:
     - name: Configure
       shell: powershell
       working-directory: ext
-      run: configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+      run: .\configure.bat --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
 
     - name: Compile
       shell: powershell
