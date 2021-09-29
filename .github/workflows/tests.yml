@@ -39,7 +39,7 @@ jobs:
         if: always()
         run: shellcheck .ci/*.sh
 
-  unix-tests:
+  build-and-test:
     name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
 
@@ -160,7 +160,7 @@ jobs:
               ;;
             Windows*)
               if [ "${{ matrix.arch }}" = "x64" ]; then
-                echo "STUB_EXT=./ext/Release/x64/php_stub.dll" >> $GITHUB_ENV
+                echo "STUB_EXT=./ext/x64/Release/php_stub.dll" >> $GITHUB_ENV
               else
                 echo "STUB_EXT=./ext/Release/php_stub.dll" >> $GITHUB_ENV
               fi
@@ -213,4 +213,6 @@ jobs:
             ${{ github.workspace }}/ext/
             !${{ github.workspace }}/ext/kernel/
             !${{ github.workspace }}/ext/stub/
+            !${{ github.workspace }}/ext/Release/
+            !${{ github.workspace }}/ext/x64/Release/
           retention-days: 1

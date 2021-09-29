@@ -73,7 +73,9 @@ runs:
 
     - name: Generate C code
       shell: powershell
-      run: php zephir generate
+      run: |
+        php zephir generate
+        php zephir compile
 
     - name: PHPIZE
       shell: powershell
