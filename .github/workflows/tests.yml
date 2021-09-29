@@ -148,9 +148,11 @@ jobs:
 
       - name: Stub Extension Info
         shell: pwsh
+        env:
+          WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
         run: |
           if ("${{ runner.os }}" -eq "Windows") {
-            php --ri stub
+            php -n -d extension=${{ env.WIN_STUB_EXT }} --ri stub
           } else {
             php -d extension=./ext/modules/stub.so --ri stub
           }
@@ -160,9 +162,11 @@ jobs:
 
       - name: Unit Tests (Stub Extension)
         shell: pwsh
+        env:
+          WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
         run: |
           if ("${{ runner.os }}" -eq "Windows") {
-            php vendor/bin/phpunit -c phpunit.ext.xml
+            php -d extension=${{ env.WIN_STUB_EXT }} vendor/bin/phpunit -c phpunit.ext.xml
           } else {
             php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
           }
