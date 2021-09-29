@@ -193,7 +193,7 @@ jobs:
         shell: powershell
         working-directory: tests/sharness
         run: |
-          if ( ${{ runner.os }} -match 'Windows' ) { nmake } else { make }
+          if ( "${{ runner.os }}" -eq "Windows" ) { nmake } else { make }
 
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v2

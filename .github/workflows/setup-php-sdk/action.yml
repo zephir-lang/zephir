@@ -27,7 +27,10 @@
   runs:
     using: composite
     steps:
-      - id: setup-php-sdk
+      - uses: actions/checkout@v2
+
+      - name: Set Up PHP SDK
+        id: setup-php-sdk
         shell: powershell
         run: |
           ${{ github.action_path }}/setup-php-sdk `
