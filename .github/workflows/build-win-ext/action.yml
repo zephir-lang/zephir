@@ -75,7 +75,6 @@ runs:
       shell: powershell
       run: |
         php zephir generate
-        php zephir compile
 
     - name: PHPIZE
       shell: powershell
@@ -86,6 +85,10 @@ runs:
       shell: powershell
       working-directory: ext
       run: .\configure.bat --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+
+    - name: Zephir compile
+      shell: powershell
+      run: php zephir compile
 
     - name: Compile
       shell: powershell
