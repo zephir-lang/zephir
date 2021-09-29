@@ -1,5 +1,6 @@
 name: 'Zephir Stub PHP Extension Build'
 description: 'Build Stub extension for Windows according to various php versions.'
+
 inputs:
   php_version:
     description: 'PHP version to build for (e.g: 7.4, 8.0)'
@@ -68,7 +69,7 @@ runs:
     - name: Configure Developer Command Prompt for MSVC compiler
       uses: ilammy/msvc-dev-cmd@v1
       with:
-        arch: ${{ input.arch }}
+        arch: ${{ inputs.arch }}
         toolset: ${{ inputs.msvc }}
 
     - name: Generate C code

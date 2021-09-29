@@ -100,10 +100,14 @@ jobs:
           PHPTS: ${{ matrix.build_type }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Set Up Composer Cache
         uses: actions/cache@v2
         with:
-          path: vendor
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
@@ -143,13 +147,16 @@ jobs:
           CACHE_DIR: 'C:\Downloads'
 
       - name: Setup Extension Path
+        shell: bash
         run: |
           case ${{ runner.os }} in
             Linux*)
               echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
+              echo "PHP=$(which php)" >> $GITHUB_ENV
               ;;
             macOS*)
               echo "STUB_EXT=./ext/modules/stub.so" >> $GITHUB_ENV
+              echo "PHP=$(which php)" >> $GITHUB_ENV
               ;;
             Windows*)
               if [ "${{ matrix.arch }}" = "x64" ]; then
@@ -157,12 +164,17 @@ jobs:
               else
                 echo "STUB_EXT=./ext/Release/php_stub.dll" >> $GITHUB_ENV
               fi
+
+              echo "PHP=$(which php)" >> $GITHUB_ENV
               ;;
           esac
 
       - name: Stub Extension Info
         run: |
           php -d extension=${{ env.STUB_EXT }} --ri stub
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
         run: |
@@ -172,11 +184,16 @@ jobs:
 
       - name: Unit Tests (Zephir)
         if: always()
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --testsuite Zephir
+        run: vendor/bin/phpunit --testsuite Zephir
+        env:
+          XDEBUG_MODE: coverage
 
       - name: Black-box Testing
         if: always()
-        run: cd tests/sharness && PHP=$(which php) make
+        shell: powershell
+        working-directory: tests/sharness
+        run: |
+          if ( ${{ runner.os }} -match 'Windows' ) { nmake } else { make }
 
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v2
