@@ -101,3 +101,8 @@ runs:
       shell: powershell
       working-directory: ext
       run: nmake 1> ..\compile.log
+
+    - name: Install Extension
+      shell: powershell
+      working-directory: ext
+      run: nmake install
