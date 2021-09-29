@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
-         backupGlobals="false"
-         bootstrap="./Library/autoload.php"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="Library/autoload.php"
          colors="true"
          verbose="true"
 >
     <coverage pathCoverage="true">
         <include>
-            <directory suffix=".php">./Library</directory>
+            <directory suffix=".php">Library</directory>
         </include>
         <report>
             <clover outputFile="tests/output/clover.xml"/>
@@ -19,10 +18,10 @@
 
     <testsuites>
         <testsuite name="Extension">
-            <directory suffix=".php">./tests/Extension</directory>
+            <directory suffix=".php">tests/Extension</directory>
         </testsuite>
         <testsuite name="Zephir">
-            <directory suffix=".php">./tests/Zephir</directory>
+            <directory suffix=".php">tests/Zephir</directory>
             <exclude>tests/Zephir/KernelTestCase.php</exclude>
         </testsuite>
     </testsuites>

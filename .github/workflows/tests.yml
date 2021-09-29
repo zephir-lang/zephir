@@ -177,10 +177,9 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
+        shell: bash
         run: |
-          php -d extension=${{ env.STUB_EXT }} vendor/bin/phpunit \
-            --bootstrap tests/ext-bootstrap.php \
-            --testsuite Extension
+          php -d extension=${{ env.STUB_EXT }} vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
         if: always()

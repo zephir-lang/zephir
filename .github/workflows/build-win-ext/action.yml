@@ -88,7 +88,14 @@ runs:
 
     - name: Zephir compile
       shell: powershell
-      run: php zephir compile
+      run: php zephir compile `
+        -Wnonexistent-function `
+        -Wnonexistent-class `
+        -Wunused-variable `
+        -Wnonexistent-constant `
+        -Wunreachable-code `
+        -Wnot-supported-magic-constant `
+        -Wnon-valid-decrement
 
     - name: Compile
       shell: powershell
