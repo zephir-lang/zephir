@@ -55,7 +55,7 @@ runs:
     - name: Setup PHP SDK tool kit
       id: setup-php-sdk
 #      uses: ./.github/workflows/setup-php-sdk
-      uses: zephir-lang/setup-php-sdk
+      uses: zephir-lang/setup-php-sdk@v1
       with:
         php_version: ${{ inputs.php_version }}
         ts: ${{ inputs.ts }}
