@@ -110,9 +110,10 @@ runs:
         $entry = cat $ini | Select-String -Pattern "^(\s+)?extension(\s+)?=(\s+)stub"
 
         if ($entry.Matches) {
-          Write-Output "INI entry 'extension=stub' is already setted at $(ini):$($entry.LineNumber)"
+          $line = $entry.LineNumber
+          Write-Output "INI entry 'extension=stub' is already setted at ${ini}:${line}"
         } else {
-          Write-Output "Append 'extension=stub' to $(ini)"
+          Write-Output "Append 'extension=stub' to ${ini}"
           "extension=stub" | Out-File -Encoding utf8 -Append $ini
         }
 
