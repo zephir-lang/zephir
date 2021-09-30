@@ -102,3 +102,22 @@ runs:
       shell: powershell
       working-directory: ext
       run: nmake install
+
+    - name: Check Stub Extension after build
+      shell: powershell
+      run: |
+        Write-Output "::group::PHP path"
+        Get-Command php
+        Write-Output "::endgroup::"
+        Write-Output "::group::PHP Extension directory"
+        dir ${{ env.PHP_ROOT }}\ext
+        Write-Output "::endgroup::"
+        Write-Output "::group::PHP ini"
+        php --ini
+        Write-Output "::endgroup::"
+        Write-Output "::group::Extensions in PHP ini"
+        php -r "echo php_ini_loaded_file();"
+        cat $(php -r "echo php_ini_loaded_file();") | Select-String -Pattern "^;?extension"
+        Write-Output "::endgroup::"
+
+
