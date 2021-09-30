@@ -103,6 +103,19 @@ runs:
       working-directory: ext
       run: nmake install
 
+    - name: Enable Stub Extension
+      shell: powershell
+      run: |
+        $ini = php -r "echo php_ini_loaded_file();"
+        $entry = cat $ini | Select-String -Pattern "^(\s+)?extension(\s+)?=(\s+)stub"
+
+        if ($entry.Matches) {
+          Write-Output "INI entry 'extension=stub' is already setted at $(ini):$($entry.LineNumber)"
+        } else {
+          Write-Output "Append 'extension=stub' to $(ini)"
+          "extension=stub" | Out-File -Encoding utf8 -Append $ini
+        }
+
     - name: Check Stub Extension after build
       shell: powershell
       run: |
@@ -117,7 +130,7 @@ runs:
         Write-Output "::endgroup::"
         Write-Output "::group::Extensions in PHP ini"
         php -r "echo php_ini_loaded_file();"
-        cat $(php -r "echo php_ini_loaded_file();") | Select-String -Pattern "^;?extension"
+        (cat $(php -r "echo php_ini_loaded_file();") | Select-String -Pattern "^;?extension(\s+)?=").Line
         Write-Output "::endgroup::"
 
 
