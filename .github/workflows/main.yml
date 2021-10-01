@@ -233,9 +233,9 @@ jobs:
           retention-days: 1
 
   release:
-    # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
 
-    # needs: [analyze, build-and-test]
+    needs: [analyze, build-and-test]
 
     name: Create Release
     runs-on: ubuntu-20.04
@@ -289,3 +289,14 @@ jobs:
         id: get-version
         run: |
           echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ steps.get-version.outputs.version }}
+          tag: ${{ steps.get-version.outputs.version }}
+          bodyFile: "./release-notes.md"
+          allowUpdates: true
+          artifacts: zephir.phar
+          artifactContentType: application/x-php
