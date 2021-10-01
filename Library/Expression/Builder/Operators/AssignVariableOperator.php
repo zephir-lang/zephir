@@ -54,8 +54,6 @@ class AssignVariableOperator extends AbstractOperator
     // >>=
     const OPERATOR_BITWISE_SHIFTRIGHT = 'bitwise-shiftright-assign';
 
-
-
     private $variable;
     private $operator = self::OPERATOR_ASSIGN;
     private $expression;

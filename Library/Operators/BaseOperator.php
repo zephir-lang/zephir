@@ -35,7 +35,7 @@ class BaseOperator
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
@@ -49,8 +49,8 @@ class BaseOperator
      * store the result. This method returns a variable that is always stored in the heap.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $init
+     * @param array              $expression
+     * @param bool               $init
      *
      * @return Variable
      */
@@ -82,8 +82,8 @@ class BaseOperator
      * store the result.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $init
+     * @param array              $expression
+     * @param bool               $init
      *
      * @return Variable
      */
@@ -132,7 +132,7 @@ class BaseOperator
      * on every iteration.
      *
      * @param CompilationContext $compilationContext
-     * @param string $type
+     * @param string             $type
      *
      * @return Variable
      */

@@ -179,15 +179,15 @@ class ClassMethod
     /**
      * ClassMethod constructor.
      *
-     * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param string $name
+     * @param ClassDefinition            $classDefinition
+     * @param array                      $visibility
+     * @param string                     $name
      * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null $statements
-     * @param string|null $docblock
-     * @param array|null $returnType
-     * @param array|null $expression
-     * @param array|null $staticVariables
+     * @param StatementsBlock|null       $statements
+     * @param string|null                $docblock
+     * @param array|null                 $returnType
+     * @param array|null                 $expression
+     * @param array|null                 $staticVariables
      */
     public function __construct(
         ClassDefinition $classDefinition,
@@ -460,6 +460,7 @@ class ClassMethod
      * allowing bypassing php userspace for internal method calls.
      *
      * @param CompilationContext $compilationContext
+     *
      * @return $this
      */
     public function setupOptimized(CompilationContext $compilationContext): self
@@ -750,13 +751,14 @@ class ClassMethod
             return '';
         }
 
-        return $this->parameters->count() .', ...';
+        return $this->parameters->count().', ...';
     }
 
     /**
      * Checks whether the method has a specific modifier.
      *
      * @param string $modifier
+     *
      * @return bool
      */
     public function hasModifier(string $modifier): bool
@@ -783,6 +785,7 @@ class ClassMethod
      * Returns the C-modifier flags.
      *
      * @throws Exception
+     *
      * @return string
      */
     public function getModifiers(): string
@@ -1049,9 +1052,11 @@ class ClassMethod
     /**
      * Assigns a default value.
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext): string
@@ -1413,7 +1418,9 @@ class ClassMethod
      *
      * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return string
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext): string
@@ -1421,7 +1428,7 @@ class ClassMethod
         $dataType = $this->getParamDataType($parameter);
 
         if (in_array($dataType, ['variable', 'callable', 'object', 'resource'])) {
-            return "";
+            return '';
         }
 
         $compilationContext->headersManager->add('kernel/operators');
@@ -1465,6 +1472,7 @@ class ClassMethod
      * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext): void
@@ -1517,6 +1525,7 @@ class ClassMethod
      * Compiles the method.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
@@ -2195,6 +2204,7 @@ class ClassMethod
      * Returns arginfo name for current method.
      *
      * @param ClassDefinition|null $classDefinition
+     *
      * @return string
      */
     public function getArgInfoName(?ClassDefinition $classDefinition = null): string
@@ -2300,9 +2310,11 @@ class ClassMethod
     /**
      * Determine Z_PARAM_*
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function detectParam(array $parameter, CompilationContext $compilationContext): string
@@ -2412,6 +2424,7 @@ class ClassMethod
      * Get data type of method's parameter
      *
      * @param array $parameter
+     *
      * @return string
      */
     private function getParamDataType(array $parameter): string

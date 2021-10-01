@@ -90,7 +90,7 @@ class CodePrinter
      * Add code to the output.
      *
      * @param string $code
-     * @param bool $appendEOL
+     * @param bool   $appendEOL
      */
     public function output(string $code, bool $appendEOL = true): void
     {
@@ -230,7 +230,7 @@ class CodePrinter
         $this->level = 0;
     }
 
-    public function duplicate(): CodePrinter
+    public function duplicate(): self
     {
         $printer = new self();
         $printer->setLevel($this->level);

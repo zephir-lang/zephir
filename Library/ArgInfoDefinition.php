@@ -62,10 +62,10 @@ class ArgInfoDefinition
      * ArgInfoDefinition constructor.
      *
      * @param $name
-     * @param ClassMethod $functionLike
-     * @param CodePrinter $codePrinter
+     * @param ClassMethod        $functionLike
+     * @param CodePrinter        $codePrinter
      * @param CompilationContext $compilationContext
-     * @param false $returnByRef
+     * @param false              $returnByRef
      */
     public function __construct(
         $name,

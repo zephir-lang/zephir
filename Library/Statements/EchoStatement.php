@@ -11,10 +11,11 @@
 
 namespace Zephir\Statements;
 
-use function Zephir\add_slashes;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+
+use function Zephir\add_slashes;
 
 /**
  * EchoStatement.

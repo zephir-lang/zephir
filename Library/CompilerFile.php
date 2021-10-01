@@ -1163,7 +1163,7 @@ final class CompilerFile implements FileInterface
      * Create returns type list.
      *
      * @param array $types
-     * @param bool $annotated
+     * @param bool  $annotated
      *
      * @return array
      */

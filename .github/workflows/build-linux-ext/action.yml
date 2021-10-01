@@ -1,0 +1,61 @@
+name: 'Zephir Stub PHP Extension Build'
+description: 'Build Stub extension for Linux according to various php versions.'
+inputs:
+  compiler:
+    description: 'compiler name'
+    required: false
+    default: 'gcc'
+  cflags:
+    description: 'CFLAGS for GCC compiler'
+    required: false
+    default: ''
+  ldflags:
+    description: 'LDFLAGS for Linker'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Prerequisites
+      shell: bash
+      run: |
+        echo "::group::Remove APT Microsoft Sources list"
+        # We don't need this at all, and our
+        # builds often fails because Microsoft
+        # servers are unstable or even offline.
+        sudo rm -f /etc/apt/sources.list.d/dotnetdev.list
+        sudo rm -f /etc/apt/sources.list.d/azure*.list
+        echo "::endgroup::"
+
+        echo "::group::Install dependencies"
+        sudo apt-get update --quiet --yes 1>/dev/null
+        sudo apt-get install --no-install-recommends -q -y re2c
+        echo "::endgroup::"
+
+    - name: Compile Stub Extension
+      shell: bash
+      run: |
+        echo "::group::Configure compiler"
+        CC=${{ inputs.compiler }}
+        CFLAGS="${{ inputs.cflags }}"
+        CXXFLAGS="${{ inputs.cflags }}"
+        LDFLAGS="${{ inputs.ldflags }}"
+
+        export CC CFLAGS CXXFLAGS LDFLAGS
+        echo "::endgroup::"
+
+        echo "::group::Init stage"
+        php zephir fullclean
+        echo "::endgroup::"
+
+        echo "::group::Generate stage"
+        php zephir generate
+        echo "::endgroup::"
+
+        echo "::group::Compile stage"
+        cd ./ext
+        phpize
+        ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+        make
+        echo "::endgroup::"
