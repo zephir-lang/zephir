@@ -225,3 +225,75 @@ jobs:
             !${{ github.workspace }}/ext/Release/
             !${{ github.workspace }}/ext/x64/Release/
           retention-days: 1
+
+  release:
+    # if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+
+    # needs: [analyze, build-and-test]
+
+    name: Create Release
+    runs-on: ubuntu-20.04
+
+    env:
+      BOX_VERSION: 3.12.2
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 5
+
+      - name: Get the release version
+        id: get-version
+        run: |
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: intl, zip, zlib
+          coverage: none
+          ini-values: memory_limit=1G, phar.readonly=0
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo ::set-output name=dir::$(composer config cache-files-dir)
+
+      - name: Setup Composer Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Setup Downloads Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.CACHE_DIR }}
+          key: ${{ runner.os }}-cache-${{ env.BOX_VERSION }}
+          restore-keys: |
+            ${{ runner.os }}-cache-
+
+      - name: Install Project Dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
+
+      - name: Install Box
+        run: |
+          if [ ! -f "./${{ env.CACHE_DIR }}/box" ]; then
+            wget \
+              "https://github.com/humbug/box/releases/download/${{ env.BOX_VERSION }}/box.phar" \
+              --quiet \
+              -O ./${{ env.CACHE_DIR }}/box
+          fi
+
+          chmod +x ./${{ env.CACHE_DIR }}/box
+          sudo mv ./${{ env.CACHE_DIR }}/box /usr/local/bin
+
+      - name: Build Zephir PHAR
+        run: .ci/build-phar.sh
+
+      - name: Geting Tag Name
+        id: get-version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
