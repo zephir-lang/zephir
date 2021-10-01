@@ -1,6 +1,8 @@
 name: Zephir CI
 
 on:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 02:00 runs only on default branch
   push:
     paths-ignore:
       - '**.md'
@@ -53,37 +55,39 @@ jobs:
     #     git commit -m "......... [ci skip]"
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
-    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}"
+    name: "PHP-${{ matrix.name }}"
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
 
       matrix:
+        # matrix names should be in next format:
+        #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - name: ubuntu-7.4-nts
+          - name: 7.4-nts-ubuntu-gcc-x64
             os: ubuntu-18.04
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: gcc
 
-          - name: ubuntu-7.4-ts
+          - name: 7.4-ts-ubuntu-gcc-x64
             os: ubuntu-18.04
             php: '7.4'
             arch: 'x64'
             build_type: 'ts'
             compiler: gcc
 
-          - name: ubuntu-8.0-nts
+          - name: 8.0-nts-ubuntu-gcc-x64
             os: ubuntu-18.04
             php: '8.0'
             arch: 'x64'
             build_type: 'nts'
             compiler: gcc
 
-          - name: ubuntu-8.0-ts
+          - name: 8.0-ts-ubuntu-gcc-x64
             os: ubuntu-18.04
             php: '8.0'
             arch: 'x64'
@@ -91,14 +95,14 @@ jobs:
             compiler: gcc
 
           # macOS
-          - name: macos-7.4
+          - name: 7.4-nts-macos-clang-x64
             os: macos-10.15
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: clang
 
-          - name: macos-8.0
+          - name: 8.0-nts-macos-clang-x64
             os: macos-10.15
             php: '8.0'
             arch: 'x64'
@@ -106,21 +110,21 @@ jobs:
             compiler: clang
 
           # Windows
-          - name: win-7.4-nts
+          - name: 7.4-nts-win2016-vc15-x64
             os: windows-2016
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: vc15
 
-          - name: win-8.0-nts
+          - name: 8.0-nts-win2019-vs16-x64
             os: windows-2019
             php: '8.0'
             arch: 'x64'
             build_type: 'nts'
             compiler: vs16
 
-          - name: win-8.0-ts
+          - name: 8.0-ts-win2019-vs16-x64
             os: windows-2019
             php: '8.0'
             arch: 'x64'
