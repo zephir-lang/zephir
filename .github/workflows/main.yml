@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
+      - './.github/workflows/nightly.yml'
   pull_request:
     branches:
       - master
