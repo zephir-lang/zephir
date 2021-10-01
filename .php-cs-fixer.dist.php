@@ -30,12 +30,16 @@ $finder = PhpCsFixer\Finder::create()
     ->exclude([
         'ext',
         'ide',
+        'config/class-entries',
         'templates/ZendEngine3',
         'templates/Api',
+        'tests/ext-bootstrap',
         'tests/fixtures',
         'tests/sharness',
     ])
-    ->notPath('#tests/fixtures/stubs/.*#');
+    ->notPath('#config/class-entries.php#')
+    ->notPath('#tests/fixtures/stubs/.*#')
+    ->notPath('#tests/ext-bootstrap.php#');
 
 $config = new PhpCsFixer\Config();
 $config
@@ -49,7 +53,14 @@ $config
         'php_unit_no_expectation_annotation' => false,
         'array_syntax' => ['syntax' => 'short'],
         'fopen_flags' => false,
-        'ordered_imports' => ['sort_algorithm' => 'alpha'],
+        'ordered_imports' => [
+            'sort_algorithm' => 'alpha',
+            'imports_order' => [
+                'class',
+                'function',
+                'const',
+            ],
+        ],
         'protected_to_private' => false,
         'phpdoc_summary' => false,
         'phpdoc_to_comment' => false,
@@ -57,6 +68,19 @@ $config
         'no_superfluous_phpdoc_tags' => false,
         'native_constant_invocation' => false,
         'native_function_invocation' => false,
+        'no_extra_blank_lines' => [
+            'tokens' => [
+                'continue',
+                'curly_brace_block',
+                'default',
+                'extra',
+                'parenthesis_brace_block',
+                'square_brace_block',
+                'switch',
+                'throw',
+                'use_trait',
+            ],
+        ],
         'single_line_throw' => false,
         'psr_autoloading' => false,
         'types_spaces' => ['space' => 'single'],
