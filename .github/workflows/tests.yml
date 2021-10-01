@@ -145,12 +145,12 @@ jobs:
           arch: ${{ matrix.arch }}
         env:
           CACHE_DIR: 'C:\Downloads'
-          PHP_ROOT: 'C:\php'
+          PHP_ROOT: 'C:\tools\php'
 
       - name: Stub Extension Info
         shell: pwsh
         env:
-          WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
+          WIN_STUB_EXT: 'C:\tools\php\ext\php_stub.dll'
           UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
           $ext = if ("${{ runner.os }}" -eq "Windows") {
@@ -166,7 +166,7 @@ jobs:
       - name: Unit Tests (Stub Extension)
         shell: pwsh
         env:
-          WIN_STUB_EXT: 'C:\php\ext\php_stub.dll'
+          WIN_STUB_EXT: 'C:\tools\php\ext\php_stub.dll'
           UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
           $ext = if ("${{ runner.os }}" -eq "Windows") {
