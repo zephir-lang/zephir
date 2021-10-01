@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\FileSystem;
 
 interface FileSystemInterface
@@ -64,7 +66,7 @@ interface FileSystemInterface
     /**
      * Attempts to remove recursively the temporary directory with all subdirectories and files.
      */
-    public function clean();
+    public function clean(): void;
 
     /**
      * Writes data into a temporary entry.
@@ -99,7 +101,7 @@ interface FileSystemInterface
      *
      * @return string
      */
-    public function getHashFile(string $algorithm, string $sourceFile, $useCache = false): string;
+    public function getHashFile(string $algorithm, string $sourceFile, bool $useCache = false): string;
 
     /**
      * Returns the modification time of a temporary entry.

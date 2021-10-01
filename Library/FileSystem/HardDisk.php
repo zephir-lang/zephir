@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\FileSystem;
 
-use League\Flysystem;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystemAdapter;
+use FilesystemIterator;
+use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
 use Zephir\Zephir;
@@ -27,8 +29,6 @@ use Zephir\Zephir;
  */
 class HardDisk implements FileSystemInterface
 {
-    private ?Filesystem $filesystem = null;
-
     /** @var string */
     private string $localPath;
 
@@ -92,17 +92,11 @@ class HardDisk implements FileSystemInterface
     public function initialize()
     {
         $this->initialized = true;
-        $this->filesystem = new Filesystem(new LocalFilesystemAdapter($this->basePath));
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return bool
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function exists(string $path): bool
     {
@@ -112,17 +106,12 @@ class HardDisk implements FileSystemInterface
             $path = "{$this->localPath}/{$path}";
         }
 
-        return $this->filesystem->fileExists($path);
+        return is_file($this->basePath . DIRECTORY_SEPARATOR . $path);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return bool
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function makeDirectory(string $path): bool
     {
@@ -132,83 +121,66 @@ class HardDisk implements FileSystemInterface
             $path = "{$this->localPath}/{$path}";
         }
 
-        $this->filesystem->createDirectory($path);
+        $dir = $this->basePath . DIRECTORY_SEPARATOR . $path;
+
+        if (is_dir($dir)) {
+            chmod($dir, 0755);
+
+            return true;
+        }
+
+        mkdir($this->basePath . DIRECTORY_SEPARATOR . $path, 0755);
 
         return is_dir($path);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return array
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function file(string $path): array
     {
-        $contents = $this->filesystem->read($this->localPath."/{$path}");
+        $contents = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
 
         return preg_split("/\r\n|\n|\r/", $contents);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return int
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function modificationTime(string $path): int
     {
-        return $this->filesystem->lastModified($this->localPath."/{$path}");
+        return filemtime($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
     }
 
     /**
-     * Writes data from a temporary entry.
-     *
      * @param string $path
-     *
      * @return string
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function read(string $path): string
     {
-        return $this->filesystem->read($this->localPath."/{$path}");
+        return file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function delete(string $path)
     {
-        $this->filesystem->delete($this->localPath."/{$path}");
+        unlink($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
      * @param string $data
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function write(string $path, string $data)
     {
-        $this->filesystem->write($this->localPath."/{$path}", $data);
+        file_put_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}", $data);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $command
      * @param string $descriptor
      * @param string $destination
@@ -233,13 +205,8 @@ class HardDisk implements FileSystemInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return mixed
-     *
-     * @throws Flysystem\FilesystemException
      */
     public function requireFile(string $path)
     {
@@ -247,74 +214,101 @@ class HardDisk implements FileSystemInterface
             return require "{$this->basePath}/{$this->localPath}/{$path}";
         }
 
-        $code = $this->filesystem->read($this->localPath."/{$path}");
+        $code = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
 
         return eval(str_replace('<?php ', '', $code));
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws Flysystem\FilesystemException
+     * Recursive directory clean
      */
-    public function clean()
+    public function clean(): void
     {
-        $this->filesystem->deleteDirectory($this->localPath);
+        if (!is_dir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath)) {
+            return;
+        }
+
+        $contents = $this->listDirectoryRecursively($this->basePath . DIRECTORY_SEPARATOR . $this->localPath, RecursiveIteratorIterator::CHILD_FIRST);
+
+        /** @var SplFileInfo $file */
+        foreach ($contents as $file) {
+            $this->deleteFileInfoObject($file);
+        }
+
+        unset($contents);
+
+        rmdir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * This function does not perform operations in the temporary
-     * directory but it caches the results to avoid reprocessing.
+     * directory, but it caches the results to avoid reprocessing.
      *
      * @param string $algorithm
      * @param string $sourceFile
      * @param bool   $useCache
      *
      * @return string
-     *
-     * @throws Flysystem\FilesystemException
      */
-    public function getHashFile(string $algorithm, string $sourceFile, $useCache = false): string
+    public function getHashFile(string $algorithm, string $sourceFile, bool $useCache = false): string
     {
         if (false === $useCache) {
             return hash_file($algorithm, $sourceFile);
         }
 
         $cacheFile = sprintf(
-            '%s/%s.%s',
+            '%s/%s/%s.%s',
+            $this->basePath,
             $this->localPath,
             $this->normalizePath($sourceFile),
             $algorithm
         );
 
-        if (false === $this->filesystem->fileExists($cacheFile)) {
+        if (!is_file($cacheFile)) {
             $contents = hash_file($algorithm, $sourceFile);
-            $this->filesystem->write($cacheFile, $contents);
+            file_put_contents($cacheFile, $contents);
 
             return $contents;
         }
 
-        if (filemtime($sourceFile) > $this->filesystem->lastModified($cacheFile)) {
+        if (filemtime($sourceFile) > filemtime($cacheFile)) {
             $contents = hash_file($algorithm, $sourceFile);
-            $this->filesystem->write($cacheFile, $contents);
+            file_put_contents($cacheFile, $contents);
 
             return $contents;
         }
 
-        return $this->filesystem->read($cacheFile);
+        return file_get_contents($cacheFile);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string $path
-     *
      * @return string
      */
     public function normalizePath(string $path): string
     {
         return str_replace(['\\', ':', '/'], '_', $path);
+    }
+
+    protected function deleteFileInfoObject(SplFileInfo $file): bool
+    {
+        switch ($file->getType()) {
+            case 'dir':
+                return @rmdir((string)$file->getRealPath());
+            case 'link':
+                return @unlink($file->getPathname());
+            default:
+                return @unlink((string)$file->getRealPath());
+        }
+    }
+
+    private function listDirectoryRecursively(
+        string $path,
+        int $mode = RecursiveIteratorIterator::SELF_FIRST
+    ): Generator {
+        yield from new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+            $mode
+        );
     }
 }
