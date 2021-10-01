@@ -114,7 +114,7 @@ runs:
       shell: powershell
       working-directory: ext
       run: |
-        $dllPath = if (${{ inputs.arch }} -eq 'x64') {
+        $dllPath = if ("${{ inputs.arch }}" -eq "x64") {
           "${env:GITHUB_WORKSPACE}\ext\x64\Release\php_stub.dll"
         } else {
           "${env:GITHUB_WORKSPACE}\ext\Release\php_stub.dll"
@@ -123,7 +123,7 @@ runs:
         Write-Output "DLL_PATH=${dllPath}" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
 
         Copy-Item -Path "${dllPath}" -Destination "${{ env.PHP_ROOT }}\ext\"
-        Enable-PhpExtension -Extension 'stub' -Path ${{ env.PHP_ROOT }}
+        Enable-PhpExtension -Extension 'stub' -Path "${{ env.PHP_ROOT }}"
 
     - name: Check Stub Extension after build
       shell: powershell
