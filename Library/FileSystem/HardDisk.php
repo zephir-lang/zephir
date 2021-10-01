@@ -129,7 +129,7 @@ class HardDisk implements FileSystemInterface
             return true;
         }
 
-        mkdir($this->basePath . DIRECTORY_SEPARATOR . $path, 0755);
+        mkdir($this->basePath . DIRECTORY_SEPARATOR . $path, 0755, true);
 
         return is_dir($path);
     }
