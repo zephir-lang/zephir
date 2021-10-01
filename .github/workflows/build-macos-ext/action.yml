@@ -1,0 +1,53 @@
+name: 'Zephir Stub PHP Extension Build'
+description: 'Build Stub extension for macOS according to various php versions.'
+inputs:
+  compiler:
+    description: 'compiler name'
+    required: false
+    default: 'clang'
+  cflags:
+    description: 'CFLAGS for GCC compiler'
+    required: false
+    default: ''
+  ldflags:
+    description: 'LDFLAGS for Linker'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Prerequisites
+      shell: bash
+      env:
+        HOMEBREW_NO_INSTALL_CLEANUP: 1
+      run: |
+        echo "::group::Install dependencies"
+        brew install re2c
+        echo "::endgroup::"
+
+    - name: Compile Stub Extension
+      shell: bash
+      run: |
+        echo "::group::Configure compiler"
+        CFLAGS="${{ inputs.cflags }}"
+        CXXFLAGS="${{ inputs.cflags }}"
+        LDFLAGS="${{ inputs.ldflags }}"
+
+        export CFLAGS CXXFLAGS LDFLAGS
+        echo "::endgroup::"
+
+        echo "::group::Init stage"
+        php zephir fullclean
+        echo "::endgroup::"
+
+        echo "::group::Generate stage"
+        php zephir generate
+        echo "::endgroup::"
+
+        echo "::group::Compile stage"
+        cd ./ext
+        phpize
+        ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+        make
+        echo "::endgroup::"

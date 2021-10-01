@@ -32,7 +32,9 @@ class UnlikelyOperator extends BaseOperator
      *
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
+     *
      * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression

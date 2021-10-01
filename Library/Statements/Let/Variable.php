@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements\Let;
 
-use function Zephir\add_slashes;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -19,6 +18,8 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Variable as ZephirVariable;
+
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Statements\Let\Variable.

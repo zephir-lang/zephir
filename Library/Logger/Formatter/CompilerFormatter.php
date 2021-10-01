@@ -48,6 +48,7 @@ final class CompilerFormatter extends LineFormatter
 
     /**
      * @param array $record
+     *
      * @return string
      */
     public function format(array $record): string

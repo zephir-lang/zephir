@@ -34,10 +34,11 @@ class NewInstanceTypeOperator extends BaseOperator
     /**
      * Executes the operator.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression

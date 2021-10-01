@@ -11,11 +11,12 @@
 
 namespace Zephir\Optimizers\FunctionCall;
 
-use function Zephir\add_slashes;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function Zephir\add_slashes;
 
 /**
  * MethodExistsOptimizer.

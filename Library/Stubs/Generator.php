@@ -437,6 +437,6 @@ class Generator
                 );
         }
 
-        return (string)$returnValue;
+        return (string) $returnValue;
     }
 }

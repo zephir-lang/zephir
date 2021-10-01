@@ -200,8 +200,8 @@ final class StringTest extends TestCase
      * @dataProvider providerSubstring
      *
      * @param string $input
-     * @param int $start
-     * @param int $end
+     * @param int    $start
+     * @param int    $end
      * @param string $expected
      */
     public function testSubstr(string $input, int $start, int $end, string $expected): void

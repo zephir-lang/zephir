@@ -347,7 +347,8 @@ final class Types
      *
      * @param array $types        - Return types from parser
      * @param array $allowedTypes - Allowed return types
-     * @param bool $isNullable
+     * @param bool  $isNullable
+     *
      * @return bool
      */
     private function areReturnTypesCompatible(array $types, array $allowedTypes, bool $isNullable = false): bool

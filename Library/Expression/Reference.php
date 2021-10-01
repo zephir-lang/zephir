@@ -53,7 +53,7 @@ class Reference
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
@@ -79,6 +79,7 @@ class Reference
      * @param CompilationContext $compilationContext
      *
      * @return GlobalConstant|Variable
+     *
      * @throws Exception
      */
     public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
@@ -174,10 +175,11 @@ class Reference
     /**
      * Compiles a reference to a value.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression

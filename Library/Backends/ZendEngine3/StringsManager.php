@@ -11,8 +11,9 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use function Zephir\file_put_contents_ex;
 use Zephir\StringsManager as BaseStringsManager;
+
+use function Zephir\file_put_contents_ex;
 
 /**
  * Class StringsManager.

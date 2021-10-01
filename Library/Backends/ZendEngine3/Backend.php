@@ -11,7 +11,6 @@
 
 namespace Zephir\Backends\ZendEngine3;
 
-use function Zephir\add_slashes;
 use Zephir\Backends\ZendEngine2\Backend as BackendZendEngine2;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
@@ -25,6 +24,8 @@ use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 use Zephir\Variable\Globals;
+
+use function Zephir\add_slashes;
 
 /**
  * Zephir\Backends\ZendEngine3\Backend.
@@ -531,10 +532,10 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      *
-     * @param Variable              $variable
-     * @param string|null|Variable  $value
-     * @param CompilationContext    $context
-     * @param bool                  $useCodePrinter
+     * @param Variable             $variable
+     * @param string|Variable|null $value
+     * @param CompilationContext   $context
+     * @param bool                 $useCodePrinter
      *
      * @return string
      */

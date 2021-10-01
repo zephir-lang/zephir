@@ -40,10 +40,11 @@ class TypeHintOperator extends BaseOperator
     /**
      * Performs type-hint compilation.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression

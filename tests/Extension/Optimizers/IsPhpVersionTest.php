@@ -60,6 +60,7 @@ final class IsPhpVersionTest extends TestCase
      *
      * @param mixed $version
      * @param mixed $expected
+     *
      * @throws Exception
      */
     public function testOptimizer($version, $expected): void
@@ -149,6 +150,7 @@ final class IsPhpVersionTest extends TestCase
      *
      * @param mixed $testName
      * @param mixed $version
+     *
      * @throws Exception
      */
     public function testIsPhpVersionVersionUsing701XX($testName, $version): void
@@ -175,6 +177,7 @@ final class IsPhpVersionTest extends TestCase
      *
      * @param mixed $testName
      * @param mixed $version
+     *
      * @throws Exception
      */
     public function testIsPhpVersionVersionUsing70X00($testName, $version): void
@@ -211,6 +214,7 @@ final class IsPhpVersionTest extends TestCase
 
     /**
      * @param Throwable $error
+     *
      * @throws Throwable
      */
     protected function onNotSuccessfulTest(Throwable $error): void
@@ -236,6 +240,7 @@ final class IsPhpVersionTest extends TestCase
      * @param float|int|string $version - PHP version in any format: 7, 7.1, "7.1.1"
      *
      * @return bool
+     *
      * @throws Exception
      */
     private function isPhpVersion($version): bool

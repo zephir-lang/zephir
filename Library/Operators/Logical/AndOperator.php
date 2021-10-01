@@ -29,7 +29,9 @@ class AndOperator extends LogicalBaseOperator
     /**
      * @param $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
+     *
      * @throws \Zephir\Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression

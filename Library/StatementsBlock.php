@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use Zephir\Operators\Other\RequireOnceOperator;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
