@@ -19,6 +19,8 @@ runs:
   steps:
     - name: Setup Prerequisites
       shell: bash
+      env:
+        HOMEBREW_NO_INSTALL_CLEANUP: 1
       run: |
         echo "::group::Install dependencies"
         brew install re2c

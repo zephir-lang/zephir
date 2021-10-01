@@ -55,81 +55,45 @@ jobs:
     #     git commit -m "......... [ci skip]"
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
-    name: "PHP-${{ matrix.name }}"
+    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
 
     strategy:
       fail-fast: false
 
       matrix:
+        php: ['7.4', '8.0']
+        build_type: ['ts', 'nts']
+        arch: ['x64']
+
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - name: 7.4-nts-ubuntu-gcc-x64
+          - name: ubuntu-gcc
             os: ubuntu-18.04
-            php: '7.4'
-            arch: 'x64'
-            build_type: 'nts'
-            compiler: gcc
-
-          - name: 7.4-ts-ubuntu-gcc-x64
-            os: ubuntu-18.04
-            php: '7.4'
-            arch: 'x64'
-            build_type: 'ts'
-            compiler: gcc
-
-          - name: 8.0-nts-ubuntu-gcc-x64
-            os: ubuntu-18.04
-            php: '8.0'
-            arch: 'x64'
-            build_type: 'nts'
-            compiler: gcc
-
-          - name: 8.0-ts-ubuntu-gcc-x64
-            os: ubuntu-18.04
-            php: '8.0'
-            arch: 'x64'
-            build_type: 'ts'
             compiler: gcc
 
           # macOS
-          - name: 7.4-nts-macos-clang-x64
+          - name: macos-clang
             os: macos-10.15
-            php: '7.4'
-            arch: 'x64'
-            build_type: 'nts'
-            compiler: clang
-
-          - name: 8.0-nts-macos-clang-x64
-            os: macos-10.15
-            php: '8.0'
-            arch: 'x64'
-            build_type: 'nts'
             compiler: clang
 
           # Windows
-          - name: 7.4-nts-win2016-vc15-x64
+          - name: win2016-vc15
             os: windows-2016
-            php: '7.4'
-            arch: 'x64'
-            build_type: 'nts'
             compiler: vc15
 
-          - name: 8.0-nts-win2019-vs16-x64
+          - name: win2019-vs16
             os: windows-2019
-            php: '8.0'
-            arch: 'x64'
-            build_type: 'nts'
             compiler: vs16
 
-          - name: 8.0-ts-win2019-vs16-x64
-            os: windows-2019
+        exclude:
+          - name: win2019-vs16
+            php: '7.4'
+
+          - name: win2016-vc15
             php: '8.0'
-            arch: 'x64'
-            build_type: 'ts'
-            compiler: vs16
 
     steps:
       - uses: actions/checkout@v2
