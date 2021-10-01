@@ -66,6 +66,12 @@ jobs:
         build_type: ['ts', 'nts']
         arch: ['x64']
 
+        name:
+          - ubuntu-gcc
+          - macos-clang
+          - win2016-vc15
+          - win2019-vs16
+
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
