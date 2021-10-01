@@ -47,9 +47,9 @@ class Parser
      * @param string $filePath Absolute path to the *.zep file
      *
      * @return array
+     *
      * @throws InvalidArgumentException
      * @throws ParseException
-     *
      * @throws IllegalStateException
      */
     public function parse(string $filePath): array
