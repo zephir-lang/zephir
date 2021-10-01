@@ -249,11 +249,6 @@ jobs:
         with:
           fetch-depth: 5
 
-      - name: Get the release version
-        id: get-version
-        run: |
-          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -300,6 +295,7 @@ jobs:
       - name: Build Zephir PHAR
         run: .ci/build-phar.sh
 
-      - name: Geting Tag Name
+      - name: Get the release version
         id: get-version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: |
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
