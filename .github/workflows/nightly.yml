@@ -94,3 +94,34 @@ jobs:
       - name: Stub Extension Info
         run: |
           php -d extension=./ext/modules/stub.so --ri stub
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Unit Tests (Stub Extension)
+        run: |
+          php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
+
+      - name: Unit Tests (Zephir)
+        run: vendor/bin/phpunit --testsuite Zephir
+        env:
+          XDEBUG_MODE: coverage
+
+      - name: Black-box Testing
+        working-directory: tests/sharness
+        run: |
+          make -j$(getconf _NPROCESSORS_ONLN)
+
+      - name: Upload build artifacts after Failure
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-${{ matrix.name }}-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          path: |
+            ${{ github.workspace }}/*.log
+            ${{ github.workspace }}/ext/
+            !${{ github.workspace }}/ext/kernel/
+            !${{ github.workspace }}/ext/stub/
+            !${{ github.workspace }}/ext/Release/
+            !${{ github.workspace }}/ext/x64/Release/
+          retention-days: 30
