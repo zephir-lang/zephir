@@ -49,28 +49,49 @@ jobs:
       matrix:
         include:
           # Linux
-          - name: ubuntu
+          - name: ubuntu-7.4
             os: ubuntu-18.04
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: gcc
 
+          - name: ubuntu-8.0
+            os: ubuntu-18.04
+            php: '8.0'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: gcc
+
           # macOS
-          - name: macos
+          - name: macos-7.4
             os: macos-10.15
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: clang
 
+          - name: macos-8.0
+            os: macos-10.15
+            php: '8.0'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: clang
+
           # Windows
-          - name: win32
+          - name: win-7.4
             os: windows-2016
             php: '7.4'
             arch: 'x64'
             build_type: 'nts'
             compiler: vc15
+
+          - name: win-8.0
+            os: windows-2019
+            php: '8.0'
+            arch: 'x64'
+            build_type: 'nts'
+            compiler: vs16
 
     steps:
       - uses: actions/checkout@v2
@@ -149,32 +170,24 @@ jobs:
 
       - name: Stub Extension Info
         shell: pwsh
-        env:
-          WIN_STUB_EXT: 'C:\tools\php\ext\php_stub.dll'
-          UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
-          $ext = if ("${{ runner.os }}" -eq "Windows") {
-            "${{ env.WIN_STUB_EXT }}"
+          if ("${{ runner.os }}" -eq "Windows") {
+            php  --ri stub
           } else {
-            "${{ env.UNIX_STUB_EXT }}"
+            php -d extension=./ext/modules/stub.so --ri stub
           }
-          php -d extension=$ext --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
         shell: pwsh
-        env:
-          WIN_STUB_EXT: 'C:\tools\php\ext\php_stub.dll'
-          UNIX_STUB_EXT: './ext/modules/stub.so'
         run: |
-          $ext = if ("${{ runner.os }}" -eq "Windows") {
-            "${{ env.WIN_STUB_EXT }}"
+          if ("${{ runner.os }}" -eq "Windows") {
+            php vendor/bin/phpunit -c phpunit.ext.xml
           } else {
-            "${{ env.UNIX_STUB_EXT }}"
+            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
           }
-          php -d extension=$ext vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
         if: always()
