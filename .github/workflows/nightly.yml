@@ -1,17 +1,13 @@
-name: Zephir CI
+name: Zephir Nightly
 
 on:
   schedule:
-    - cron: '0 2 * * *' # Daily at 02:00 runs only on default branch
+    - cron: '0 3 * * *' # Daily at 03:00 runs only on default branch
+  workflow_dispatch:
   push:
     paths-ignore:
       - '**.md'
       - '**.txt'
-      - './.github/workflows/nightly.yml'
-  pull_request:
-    branches:
-      - master
-      - develoment
 
 env:
   RE2C_VERSION: 2.2
@@ -19,43 +15,7 @@ env:
   CACHE_DIR: .cache
 
 jobs:
-  analyze:
-    name: Static Code Analysis
-    runs-on: ubuntu-18.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
-          coverage: none
-          tools: php-cs-fixer, phpcs
-
-      - name: Run PHP_CodeSniffer
-        run: |
-          phpcs --version
-          phpcs --runtime-set ignore_warnings_on_exit true
-
-      # @TODO: Apply fix from `feature/win-unix-builds
-      - name: Run PHP CS Fixer
-        if: always()
-        run: |
-          php-cs-fixer --version
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no || true
-
-      - name: Run Shell Check
-        if: always()
-        run: shellcheck .ci/*.sh
-
-  build-and-test:
-    # To prevent build a particular commit use
-    #     git commit -m "......... [ci skip]"
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
-
+  nightly:
     name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
 
@@ -63,47 +23,21 @@ jobs:
       fail-fast: false
 
       matrix:
-        php: ['7.4', '8.0']
-        build_type: ['ts', 'nts']
-        arch: ['x64']
-
-        name:
-          - ubuntu-gcc
-          - macos-clang
-          - win2016-vc15
-          - win2019-vs16
+        php: [ '8.1', '8.2' ]
+        build_type: [ 'ts', 'nts' ]
+        arch: [ 'x64' ]
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
           - name: ubuntu-gcc
-            os: ubuntu-18.04
+            os: ubuntu-20.04
             compiler: gcc
 
-          # macOS
-          - name: macos-clang
-            os: macos-10.15
-            compiler: clang
-
-          # Windows
-          - name: win2016-vc15
-            os: windows-2016
-            compiler: vc15
-
-          - name: win2019-vs16
-            os: windows-2019
-            compiler: vs16
-
-        exclude:
-          - name: win2019-vs16
-            php: '7.4'
-
-          - name: win2016-vc15
-            php: '8.0'
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
         with:
           fetch-depth: 5
 
@@ -151,73 +85,32 @@ jobs:
         run: php zephir --help
 
       - name: Build Test Extension (Linux)
-        if: runner.os == 'Linux'
         uses: ./.github/workflows/build-linux-ext
         with:
           compiler: ${{ matrix.compiler }}
           cflags: '-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
           ldflags: '--coverage'
 
-      - name: Build Test Extension (macOS)
-        if: runner.os == 'macOS'
-        uses: ./.github/workflows/build-macos-ext
-        with:
-          compiler: ${{ matrix.compiler }}
-          cflags: '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1'
-
-      - name: Build Test Extension (Windows)
-        if: runner.os == 'Windows'
-        uses: ./.github/workflows/build-win-ext
-        with:
-          php_version: ${{ matrix.php }}
-          ts: ${{ matrix.build_type }}
-          msvc: ${{ matrix.compiler }}
-          arch: ${{ matrix.arch }}
-        env:
-          CACHE_DIR: 'C:\Downloads'
-          PHP_ROOT: 'C:\tools\php'
-
       - name: Stub Extension Info
-        shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php  --ri stub
-          } else {
-            php -d extension=./ext/modules/stub.so --ri stub
-          }
+          php -d extension=./ext/modules/stub.so --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
-        shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php vendor/bin/phpunit -c phpunit.ext.xml
-          } else {
-            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
-          }
+          php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
-        if: always()
         run: vendor/bin/phpunit --testsuite Zephir
         env:
           XDEBUG_MODE: coverage
 
       - name: Black-box Testing
-        if: always() && runner.os != 'Windows'
-        shell: bash
         working-directory: tests/sharness
         run: |
           make -j$(getconf _NPROCESSORS_ONLN)
-
-      - name: Upload Code Coverage Report
-        uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/output/clover.xml
-          flags: unittests,${{ matrix.name }},php-${{ matrix.php }}
-          name: codecov-umbrella
 
       - name: Upload build artifacts after Failure
         if: failure()
@@ -231,4 +124,4 @@ jobs:
             !${{ github.workspace }}/ext/stub/
             !${{ github.workspace }}/ext/Release/
             !${{ github.workspace }}/ext/x64/Release/
-          retention-days: 1
+          retention-days: 30
