@@ -35,19 +35,19 @@ final class CompilerFile implements FileInterface
     use LoggerAwareTrait;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $namespace;
+    private ?string $namespace = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $className;
+    private ?string $className = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $filePath;
+    private ?string $filePath = null;
 
     /**
      * @var bool
@@ -207,48 +207,24 @@ final class CompilerFile implements FileInterface
     {
         $normalizedPath = $this->filesystem->normalizePath($this->filePath);
 
-        // TODO: JS => JSON
-        $compilePath = "{$normalizedPath}.js";
+        $compilePath = "{$normalizedPath}.json";
         $zepRealPath = realpath($this->filePath);
 
         if ($this->filesystem->exists($compilePath)) {
-            $modificationTime = $this->filesystem->modificationTime($compilePath);
-            if ($modificationTime < filemtime($zepRealPath)) {
+            if ($this->filesystem->modificationTime($compilePath) < filemtime($zepRealPath)) {
                 $this->filesystem->delete($compilePath);
-                if (false != $this->filesystem->exists($compilePath.'.php')) {
-                    $this->filesystem->delete($compilePath.'.php');
-                }
             }
         }
 
-        $ir = null;
         if (!$this->filesystem->exists($compilePath)) {
             $parser = $compiler->getParserManager()->getParser();
             $ir = $parser->parse($zepRealPath);
             $this->filesystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
+        } else {
+            $ir = json_decode($this->filesystem->read($compilePath), true);
         }
 
-        if (!$this->filesystem->exists($compilePath.'.php')) {
-            if (empty($ir)) {
-                $ir = json_decode($this->filesystem->read($compilePath), true);
-            }
-
-            $data = '<?php return '.var_export($ir, true).';';
-            $this->filesystem->write($compilePath.'.php', $data);
-        }
-
-        $contents = $this->filesystem->requireFile($compilePath.'.php');
-
-        if (!is_array($contents)) {
-            throw new IllegalStateException(
-                sprintf(
-                    'Generating the intermediate representation for the file "%s" was failed.',
-                    realpath($this->filePath)
-                )
-            );
-        }
-
-        return $contents;
+        return $ir;
     }
 
     /**
