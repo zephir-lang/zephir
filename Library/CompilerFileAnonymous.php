@@ -9,15 +9,18 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use ReflectionException;
 use Zephir\Compiler\FileInterface;
 
+use function count;
+
 /**
- * CompilerFileAnonymous.
- *
  * This class represents an anonymous file created to dump
  * the code produced by an internal closure
  */
@@ -25,33 +28,22 @@ final class CompilerFileAnonymous implements FileInterface
 {
     use LoggerAwareTrait;
 
-    /** @var CompilationContext */
-    protected $context;
-
-    /** @var string */
-    protected $namespace;
-
-    /** @var string */
-    protected $compiledFile;
-
-    /** @var bool */
-    protected $external = false;
-
-    /** @var ClassDefinition */
-    protected $classDefinition;
-
-    protected $headerCBlocks = [];
-
-    /** @var Config */
-    protected $config;
+    protected ?string $namespace = null;
+    protected ?string $compiledFile = null;
+    protected bool $external = false;
+    protected array $headerCBlocks = [];
+    protected ?CompilationContext $context = null;
+    protected ClassDefinition $classDefinition;
+    protected Config $config;
 
     /**
      * CompilerFileAnonymous constructor.
      *
      * @param ClassDefinition $classDefinition
-     * @param Config          $config
+     * @param Config $config
+     * @param CompilationContext|null $context
      */
-    public function __construct(ClassDefinition $classDefinition, Config $config, CompilationContext $context = null)
+    public function __construct(ClassDefinition $classDefinition, Config $config, ?CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
@@ -60,11 +52,9 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return ClassDefinition
      */
-    public function getClassDefinition()
+    public function getClassDefinition(): ClassDefinition
     {
         return $this->classDefinition;
     }
@@ -80,11 +70,9 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return bool
      */
-    public function isExternal()
+    public function isExternal(): bool
     {
         return $this->external;
     }
@@ -95,17 +83,18 @@ final class CompilerFileAnonymous implements FileInterface
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     private function compileClass(CompilationContext $compilationContext)
     {
         $classDefinition = $this->classDefinition;
 
-        /*
+        /**
          * Do the compilation
          */
         $classDefinition->compile($compilationContext);
 
-        $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
+        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
         $code = ''.PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
@@ -131,11 +120,11 @@ final class CompilerFileAnonymous implements FileInterface
             }
         }
 
-        if (\count($this->headerCBlocks) > 0) {
+        if (count($this->headerCBlocks) > 0) {
             $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
         }
 
-        /*
+        /**
          * Prepend the required files to the header
          */
         $compilationContext->codePrinter->preOutput($code);
@@ -162,26 +151,10 @@ final class CompilerFileAnonymous implements FileInterface
             $compilationContext->aliasManager = new AliasManager();
         }
 
-        /*
-         * Set global compiler in the compilation context
-         */
         $compilationContext->compiler = $compiler;
-
-        /*
-         * Set global config in the compilation context
-         */
         $compilationContext->config = $this->config;
-
-        /*
-         * Set global logger in the compilation context
-         */
         $compilationContext->logger = $this->logger;
-
-        /*
-         * Set global strings manager
-         */
         $compilationContext->stringsManager = $stringsManager;
-
         $compilationContext->backend = $compiler->backend;
 
         /**
@@ -214,37 +187,35 @@ final class CompilerFileAnonymous implements FileInterface
             }
         }
 
-        if ($codePrinter) {
-            /*
-             * If the file does not exists we create it for the first time
+        /**
+         * If the file does not exist we create it for the first time
+         */
+        if (!file_exists($filePath)) {
+            file_put_contents($filePath, $codePrinter->getOutput());
+            if ($compilationContext->headerPrinter) {
+                file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+            }
+        } else {
+            /**
+             * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
+             * thus avoiding unnecessary recompilations.
              */
-            if (!file_exists($filePath)) {
-                file_put_contents($filePath, $codePrinter->getOutput());
-                if ($compilationContext->headerPrinter) {
-                    file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
-                }
-            } else {
-                /**
-                 * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
-                 * thus avoiding unnecessary recompilations.
-                 */
-                $output = $codePrinter->getOutput();
-                $hash = hash_file('md5', $filePath);
-                if (md5($output) != $hash) {
-                    file_put_contents($filePath, $output);
-                }
+            $output = $codePrinter->getOutput();
+            $hash = hash_file('md5', $filePath);
+            if (md5($output) !== $hash) {
+                file_put_contents($filePath, $output);
+            }
 
-                if ($compilationContext->headerPrinter) {
-                    $output = $compilationContext->headerPrinter->getOutput();
-                    $hash = hash_file('md5', $filePathHeader);
-                    if (md5($output) != $hash) {
-                        file_put_contents($filePathHeader, $output);
-                    }
+            if ($compilationContext->headerPrinter) {
+                $output = $compilationContext->headerPrinter->getOutput();
+                $hash = hash_file('md5', $filePathHeader);
+                if (md5($output) !== $hash) {
+                    file_put_contents($filePathHeader, $output);
                 }
             }
         }
 
-        /*
+        /**
          * Add to file compiled
          */
         $this->compiledFile = $path.'.c';
