@@ -42,9 +42,9 @@ abstract class StringsManager
     /**
      * Generates the concatenation code.
      *
-     * @return array
+     * @return void
      */
-    abstract public function genConcatCode(): array;
+    abstract public function genConcatCode(): void;
 
     /**
      * Obtains the existing concatenation keys.
