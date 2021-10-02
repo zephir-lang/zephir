@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 ### Fixed
-- Fixed multi return types in stubs [#2283](https://github.com/zephir-lang/zephir/issues/2283)
+- Fixed multiple return types in stubs [#2283](https://github.com/zephir-lang/zephir/issues/2283)
 
 ## [0.14.0] - 2021-09-18
 ### Added
