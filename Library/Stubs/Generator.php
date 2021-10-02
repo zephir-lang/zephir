@@ -313,7 +313,7 @@ class Generator
         if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes()) && 1 === count($method->getReturnClassTypes())) {
+            if (array_key_exists('object', $method->getReturnTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -348,7 +348,7 @@ class Generator
             }
 
             // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1) {
+            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
                 $return = '';
             }
         } elseif ($method->isVoid()) {
