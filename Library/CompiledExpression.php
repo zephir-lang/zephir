@@ -16,10 +16,8 @@ namespace Zephir;
 use Closure;
 
 /**
- * CompiledExpression.
- *
- * This represent a compiled expression, the object can be used to check
- * if the expression type is able to be used in certain types of the application
+ * This represents a compiled expression, the object can be used to check
+ * if the expression type is able to used in certain types of the application.
  */
 class CompiledExpression implements TypeAwareInterface
 {
@@ -80,10 +78,10 @@ class CompiledExpression implements TypeAwareInterface
     {
         if ($this->code && ('true' == $this->code || true === $this->code)) {
             return '1';
-        } else {
-            if ('false' == $this->code || false === $this->code) {
-                return '0';
-            }
+        }
+
+        if ('false' === $this->code || false === $this->code) {
+            return '0';
         }
 
         return $this->code;
@@ -96,17 +94,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function isIntCompatibleType(): bool
     {
-        switch ($this->type) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-            case 'char':
-            case 'uchar':
-                return true;
-        }
-
-        return false;
+        return in_array($this->type, ['int', 'uint', 'long', 'ulong', 'char', 'uchar'], true);
     }
 
     /**
@@ -116,17 +104,12 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function isCharCompatibleType(): bool
     {
-        switch ($this->type) {
-            case 'char':
-            case 'uchar':
-                return true;
-        }
-
-        return false;
+        return in_array($this->type, ['char', 'uchar'], true);
     }
 
     /**
      * Resolves an expression
+     *
      * Some code cannot be directly pushed into the generated source
      * because it's missing some bound parts, this method resolves the missing parts
      * returning the generated code.
@@ -138,22 +121,22 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function resolve(?string $result, CompilationContext $compilationContext): string
     {
-        if ($this->code instanceof Closure) {
-            $code = $this->code;
-            if (!$result) {
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                    'variable',
-                    $compilationContext
-                );
-                $compilationContext->codePrinter->output($code($tempVariable->getName()));
-                $tempVariable->setIsInitialized(true, $compilationContext);
-
-                return $tempVariable->getName();
-            }
-
-            return $code($result);
+        if (!($this->code instanceof Closure)) {
+            return $this->code;
         }
 
-        return $this->code;
+        $code = $this->code;
+        if (!$result) {
+            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext
+            );
+            $compilationContext->codePrinter->output($code($tempVariable->getName()));
+            $tempVariable->setIsInitialized(true, $compilationContext);
+
+            return $tempVariable->getName();
+        }
+
+        return $code($result);
     }
 }

@@ -11,9 +11,6 @@
 
 namespace Zephir;
 
-/**
- * Zephir\TypeAwareInterface.
- */
 interface TypeAwareInterface
 {
     /**
@@ -21,5 +18,5 @@ interface TypeAwareInterface
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 }

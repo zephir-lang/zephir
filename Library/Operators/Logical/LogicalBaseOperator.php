@@ -20,8 +20,6 @@ use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
 
 /**
- * LogicalBaseOperator.
- *
  * This is the base operator for logical operators
  */
 class LogicalBaseOperator extends BaseOperator
@@ -127,10 +125,7 @@ class LogicalBaseOperator extends BaseOperator
                 break;
 
             case 'string':
-                switch ($right->getType()) {
-                    default:
-                        throw new CompilerException('Operation is not supported between strings', $expression);
-                }
+                throw new CompilerException('Operation is not supported between strings', $expression);
                 break;
 
             case 'variable':

@@ -11,8 +11,13 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+
+use function count;
+use function in_array;
+use function is_string;
 
 /**
  * StaticCall.
@@ -24,24 +29,18 @@ class StaticCall extends Call
     /**
      * Compiles a static method call.
      *
-     * @param Expression         $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws ReflectionException
      */
-    public function compile(Expression $expr, CompilationContext $compilationContext)
+    public function compile(Expression $expr, CompilationContext $compilationContext): CompiledExpression
     {
         $expression = $expr->getExpression();
 
         $methodName = strtolower($expression['name']);
-
-        if (isset($expression['dynamic'])) {
-            $dynamicMethod = $expression['dynamic'];
-        } else {
-            $dynamicMethod = false;
-        }
+        $dynamicMethod = $expression['dynamic'] ?? false;
 
         $symbolVariable = null;
 
@@ -90,8 +89,8 @@ class StaticCall extends Call
             $className = $expression['class'];
             $classDefinition = false;
 
-            if (!\in_array($className, ['self', 'static', 'parent'])) {
-                if (\is_string($className)) {
+            if (!in_array($className, ['self', 'static', 'parent'])) {
+                if (is_string($className)) {
                     $className = $compilationContext->getFullName($className);
                     if ($compiler->isClass($className)) {
                         $classDefinition = $compiler->getClassDefinition($className);
@@ -113,16 +112,15 @@ class StaticCall extends Call
                     }
                 }
             } else {
-                if ('parent' == $className) {
-                    $classDefinition = $compilationContext->classDefinition;
+                $classDefinition = $compilationContext->classDefinition;
+
+                if ('parent' === $className) {
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
                         throw new CompilerException('Cannot call method "'.$methodName.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $expression);
                     }
                     $currentClassDefinition = $classDefinition;
                     $classDefinition = $classDefinition->getExtendsClassDefinition();
-                } else {
-                    $classDefinition = $compilationContext->classDefinition;
                 }
             }
         }
@@ -147,10 +145,8 @@ class StaticCall extends Call
                     throw new CompilerException("Cannot call private method '".$methodName."' out of its scope", $expression);
                 }
 
-                if (!\in_array($className, ['self', 'static', 'parent'])) {
-                    if (!$method->isStatic()) {
-                        throw new CompilerException("Cannot call non-static method '".$methodName."' in a static way", $expression);
-                    }
+                if (!in_array($className, ['self', 'static', 'parent']) && !$method->isStatic()) {
+                    throw new CompilerException("Cannot call non-static method '".$methodName."' in a static way", $expression);
                 }
 
                 if (!$classDefinition->hasMethod('__callStatic')) {
@@ -158,11 +154,7 @@ class StaticCall extends Call
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */
-                        if (isset($expression['parameters'])) {
-                            $callNumberParameters = \count($expression['parameters']);
-                        } else {
-                            $callNumberParameters = 0;
-                        }
+                        $callNumberParameters = isset($expression['parameters']) ? count($expression['parameters']) : 0;
 
                         $classMethod = $classDefinition->getMethod($methodName);
                         $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
@@ -189,7 +181,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Call static methods in the same class, use the special context 'self' or special context 'static'
          * Call static methods in the 'self' context
          */
@@ -197,13 +189,13 @@ class StaticCall extends Call
             if ($dynamicClass) {
                 $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
             } else {
-                if (\in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
-                    $this->call(strtoupper($className), $methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+                if (in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
+                    $this->call(strtoupper($className), $methodName, $expression, $mustInit, $isExpecting, $compilationContext, $symbolVariable, $method ?? null);
                 } else {
                     if ('parent' == $className) {
-                        $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, isset($method) ? $method : null);
+                        $this->callParent($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $currentClassDefinition, $compilationContext, $method ?? null);
                     } else {
-                        $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, isset($method) ? $method : null);
+                        $this->callFromClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $classDefinition, $compilationContext, $method ?? null);
                     }
                 }
             }
@@ -213,36 +205,26 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
 
-        /*
+        /**
          * Transfer the return type-hint to the returned variable
          */
-        if ($isExpecting) {
-            if (isset($method)) {
-                if ($method instanceof ClassMethod) {
-                    $returnClassTypes = $method->getReturnClassTypes();
-                    if (null !== $returnClassTypes) {
-                        $symbolVariable->setDynamicTypes('object');
-                        foreach ($returnClassTypes as $classType) {
-                            $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
-                        }
-                    }
+        if ($isExpecting && isset($method) && $method instanceof ClassMethod) {
+            $symbolVariable->setDynamicTypes('object');
+            foreach ($method->getReturnClassTypes() as $classType) {
+                $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
+            }
 
-                    $returnTypes = $method->getReturnTypes();
-                    if (null !== $returnTypes) {
-                        foreach ($returnTypes as $dataType => $returnType) {
-                            $symbolVariable->setDynamicTypes($dataType);
-                        }
-                    }
-                }
+            foreach ($method->getReturnTypes() as $dataType => $returnType) {
+                $symbolVariable->setDynamicTypes($dataType);
             }
         }
 
-        /*
+        /**
          * We can mark temporary variables generated as idle here
          */
         foreach ($this->getTemporalVariables() as $tempVariable) {
@@ -259,39 +241,39 @@ class StaticCall extends Call
     /**
      * Calls static methods on the 'self/static' context.
      *
-     * @param string             $context            SELF / STATIC
-     * @param string             $methodName
-     * @param array              $expression
-     * @param Variable           $symbolVariable
-     * @param bool               $mustInit
-     * @param bool               $isExpecting
-     * @param ClassDefinition    $classDefinition
+     * @param string $context SELF / STATIC
+     * @param string $methodName
+     * @param array $expression
+     * @param Variable|null $symbolVariable
+     * @param bool $mustInit
+     * @param bool $isExpecting
      * @param CompilationContext $compilationContext
-     * @param ClassMethod        $method
+     * @param ClassMethod|null $method
      */
     protected function call(
-        $context,
-        $methodName,
+        string $context,
+        string $methodName,
         array $expression,
-        $symbolVariable,
-        $mustInit,
-        $isExpecting,
-        ClassDefinition $classDefinition,
+        bool $mustInit,
+        bool $isExpecting,
         CompilationContext $compilationContext,
-        ClassMethod $method
+        ?Variable $symbolVariable = null,
+        ?ClassMethod $method = null
     ) {
-        if (!\in_array($context, ['SELF', 'STATIC'])) {
+        if (!in_array($context, ['SELF', 'STATIC'])) {
             $context = 'SELF';
         }
 
-        /* Do not optimize static:: calls, to allow late static binding */
-        if ('SELF' == $context) {
+        /**
+         * Do not optimize static:: calls, to allow late static binding
+         */
+        if ('SELF' === $context) {
             $method = $method->getOptimizedMethod();
         }
 
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Call static methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -305,12 +287,11 @@ class StaticCall extends Call
          * Check if the  method call can have an inline cache.
          */
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null, false);
+        $cachePointer = $methodCache->get($compilationContext, $method ?? null, false);
 
-        if (isset($expression['parameters']) && \count($expression['parameters'])) {
+        $params = [];
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
         $isInternal = false;
@@ -322,7 +303,7 @@ class StaticCall extends Call
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        $paramCount = \count($params);
+        $paramCount = count($params);
         $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
         if (!$isInternal) {
             if ($isExpecting) {
@@ -350,7 +331,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -376,9 +357,8 @@ class StaticCall extends Call
     {
         $codePrinter = $compilationContext->codePrinter;
         $classCe = $classDefinition->getClassEntry($compilationContext);
-        //$className = str_replace('\\', '\\\\', $classDefinition->getCompleteName());
 
-        /*
+        /**
          * Call static methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -394,13 +374,12 @@ class StaticCall extends Call
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
         $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
 
-        if (isset($expression['parameters']) && \count($expression['parameters'])) {
+        $params = [];
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
-        if (!\count($params)) {
+        if (!count($params)) {
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_PARENT('.$classCe.', getThis(), "'.$methodName.'", '.$cachePointer.');');
@@ -422,7 +401,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -449,19 +428,14 @@ class StaticCall extends Call
         $codePrinter = $compilationContext->codePrinter;
 
         if ($classDefinition->isBundled()) {
-            //if (!$compilationContext->symbolTable->hasVariable($variableName)) {
-
             $classEntryVariable = $compilationContext->symbolTable->addTemp('zend_class_entry', $compilationContext);
             $compilationContext->backend->fetchClass($classEntryVariable, 'SL("'.str_replace('\\', '\\\\', $classDefinition->getName()).'")', false, $compilationContext);
-            //}
-
-            //$classEntryVariable = $compilationContext->symbolTable->getVariableForWrite($variableName, $compilationContext, $expression);
             $classEntry = $classEntryVariable->getName();
         } else {
             $classEntry = $classDefinition->getClassEntry($compilationContext);
         }
 
-        /*
+        /**
          * Call static methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -481,17 +455,16 @@ class StaticCall extends Call
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
         $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
 
-        if (isset($expression['parameters']) && \count($expression['parameters'])) {
+        $params = [];
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        $paramCount = \count($params);
+        $paramCount = count($params);
         $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
 
         if ($method->isInternal()) {
@@ -520,7 +493,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -544,7 +517,7 @@ class StaticCall extends Call
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Call static methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -556,10 +529,9 @@ class StaticCall extends Call
 
         $cachePointer = 'NULL, 0';
 
-        if (isset($expression['parameters']) && \count($expression['parameters'])) {
+        $params = [];
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
         /**
@@ -586,7 +558,7 @@ class StaticCall extends Call
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        if (!\count($params)) {
+        if (!count($params)) {
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC('.$classEntry.', "'.$methodName.'", '.$cachePointer.');');
@@ -608,7 +580,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -631,7 +603,7 @@ class StaticCall extends Call
     {
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Call static methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -643,10 +615,9 @@ class StaticCall extends Call
 
         $cachePointer = 'NULL, 0';
 
-        if (isset($expression['parameters']) && \count($expression['parameters'])) {
+        $params = [];
+        if (isset($expression['parameters']) && count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
-        } else {
-            $params = [];
         }
 
         /**
@@ -683,9 +654,9 @@ class StaticCall extends Call
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        if (!\count($params)) {
+        if (!count($params)) {
             if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
+                if ('return_value' === $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL('.$classEntry.', '.$methodNameVariable->getName().', '.$cachePointer.');');
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL('.$symbol.', '.$classEntry.', '.$methodNameVariable->getName().', '.$cachePointer.');');
@@ -695,7 +666,7 @@ class StaticCall extends Call
             }
         } else {
             if ($isExpecting) {
-                if ('return_value' == $symbolVariable->getName()) {
+                if ('return_value' === $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL('.$classEntry.', '.$methodNameVariable->getName().', '.$cachePointer.', '.implode(', ', $params).');');
                 } else {
                     $codePrinter->output('ZEPHIR_CALL_CE_STATIC_ZVAL('.$symbol.', '.$classEntry.', '.$methodNameVariable->getName().', '.$cachePointer.', '.implode(', ', $params).');');
@@ -705,7 +676,7 @@ class StaticCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {

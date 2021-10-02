@@ -18,8 +18,6 @@ use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
 /**
- * ClassConstant.
- *
  * Represents a class constant
  */
 class ClassConstant
