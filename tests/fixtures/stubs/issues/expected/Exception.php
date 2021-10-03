@@ -10,6 +10,7 @@ use Throwable;
 class Exception extends \Exception implements \Throwable
 {
 
+
     public function __construct()
     {
     }

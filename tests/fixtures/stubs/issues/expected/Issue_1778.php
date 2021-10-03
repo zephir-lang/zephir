@@ -18,7 +18,6 @@ use Psr\Http\Message\RequestInterface;
  */
 class Issue_1778
 {
-
     const PROPERTY_EXAMPLE = 'test_property';
 
     /**
