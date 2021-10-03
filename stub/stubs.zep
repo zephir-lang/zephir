@@ -74,4 +74,14 @@ class Stubs
 
 	    let data = array_merge(data, func_get_args());
 	}
+
+	public function testMultiReturnTypeWithMixedInDocAndEmptyInSignature1() -> array | object
+	{
+	    return [];
+	}
+
+	public function testMultiReturnTypeWithMixedInDocAndEmptyInSignature2() -> var | bool
+    {
+        return false;
+    }
 }

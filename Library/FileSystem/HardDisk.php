@@ -96,6 +96,7 @@ class HardDisk implements FileSystemInterface
 
     /**
      * @param string $path
+     *
      * @return bool
      */
     public function exists(string $path): bool
@@ -106,11 +107,12 @@ class HardDisk implements FileSystemInterface
             $path = "{$this->localPath}/{$path}";
         }
 
-        return is_file($this->basePath . DIRECTORY_SEPARATOR . $path);
+        return is_file($this->basePath.DIRECTORY_SEPARATOR.$path);
     }
 
     /**
      * @param string $path
+     *
      * @return bool
      */
     public function makeDirectory(string $path): bool
@@ -121,7 +123,7 @@ class HardDisk implements FileSystemInterface
             $path = "{$this->localPath}/{$path}";
         }
 
-        $dir = $this->basePath . DIRECTORY_SEPARATOR . $path;
+        $dir = $this->basePath.DIRECTORY_SEPARATOR.$path;
 
         if (is_dir($dir)) {
             chmod($dir, 0755);
@@ -129,38 +131,41 @@ class HardDisk implements FileSystemInterface
             return true;
         }
 
-        mkdir($this->basePath . DIRECTORY_SEPARATOR . $path, 0755, true);
+        mkdir($this->basePath.DIRECTORY_SEPARATOR.$path, 0755, true);
 
         return is_dir($path);
     }
 
     /**
      * @param string $path
+     *
      * @return array
      */
     public function file(string $path): array
     {
-        $contents = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
+        $contents = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
 
         return preg_split("/\r\n|\n|\r/", $contents);
     }
 
     /**
      * @param string $path
+     *
      * @return int
      */
     public function modificationTime(string $path): int
     {
-        return filemtime($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
+        return filemtime($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public function read(string $path): string
     {
-        return file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
+        return file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
     /**
@@ -168,7 +173,7 @@ class HardDisk implements FileSystemInterface
      */
     public function delete(string $path)
     {
-        unlink($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
+        unlink($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
     /**
@@ -177,7 +182,7 @@ class HardDisk implements FileSystemInterface
      */
     public function write(string $path, string $data)
     {
-        file_put_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}", $data);
+        file_put_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}", $data);
     }
 
     /**
@@ -206,6 +211,7 @@ class HardDisk implements FileSystemInterface
 
     /**
      * @param string $path
+     *
      * @return mixed
      */
     public function requireFile(string $path)
@@ -214,7 +220,7 @@ class HardDisk implements FileSystemInterface
             return require "{$this->basePath}/{$this->localPath}/{$path}";
         }
 
-        $code = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath."/{$path}");
+        $code = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
 
         return eval(str_replace('<?php ', '', $code));
     }
@@ -224,11 +230,11 @@ class HardDisk implements FileSystemInterface
      */
     public function clean(): void
     {
-        if (!is_dir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath)) {
+        if (!is_dir($this->basePath.DIRECTORY_SEPARATOR.$this->localPath)) {
             return;
         }
 
-        $contents = $this->listDirectoryRecursively($this->basePath . DIRECTORY_SEPARATOR . $this->localPath, RecursiveIteratorIterator::CHILD_FIRST);
+        $contents = $this->listDirectoryRecursively($this->basePath.DIRECTORY_SEPARATOR.$this->localPath, RecursiveIteratorIterator::CHILD_FIRST);
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
@@ -237,7 +243,7 @@ class HardDisk implements FileSystemInterface
 
         unset($contents);
 
-        rmdir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
+        rmdir($this->basePath.DIRECTORY_SEPARATOR.$this->localPath);
     }
 
     /**
@@ -283,6 +289,7 @@ class HardDisk implements FileSystemInterface
 
     /**
      * @param string $path
+     *
      * @return string
      */
     public function normalizePath(string $path): string
@@ -294,11 +301,11 @@ class HardDisk implements FileSystemInterface
     {
         switch ($file->getType()) {
             case 'dir':
-                return @rmdir((string)$file->getRealPath());
+                return @rmdir((string) $file->getRealPath());
             case 'link':
                 return @unlink($file->getPathname());
             default:
-                return @unlink((string)$file->getRealPath());
+                return @unlink((string) $file->getRealPath());
         }
     }
 
