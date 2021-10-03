@@ -18,7 +18,6 @@ use Psr\Http\Message\RequestInterface;
  */
 class Issue_1778
 {
-
     const PROPERTY_EXAMPLE = 'test_property';
 
     /**
@@ -30,7 +29,6 @@ class Issue_1778
      * @var array
      */
     protected $config;
-
 
     /**
      * @param \Psr\Http\Message\RequestInterface $request
@@ -49,5 +47,4 @@ class Issue_1778
     public function getVar(string $key)
     {
     }
-
 }

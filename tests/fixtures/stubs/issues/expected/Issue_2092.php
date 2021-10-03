@@ -10,6 +10,7 @@ use Stubs\Events\ManagerInterface;
 class Issue_2092
 {
 
+
     /**
      * Returns the internal event manager
      * Expects:
@@ -20,5 +21,4 @@ class Issue_2092
     public function getInternalEventsManager(): ?ManagerInterface
     {
     }
-
 }
