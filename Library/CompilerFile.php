@@ -231,6 +231,7 @@ final class CompilerFile implements FileInterface
      * Compiles the class/interface contained in the file.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -651,6 +652,7 @@ final class CompilerFile implements FileInterface
      * Check dependencies.
      *
      * @param Compiler $compiler
+     *
      * @throws ReflectionException
      */
     public function checkDependencies(Compiler $compiler)

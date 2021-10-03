@@ -39,8 +39,8 @@ final class CompilerFileAnonymous implements FileInterface
     /**
      * CompilerFileAnonymous constructor.
      *
-     * @param ClassDefinition $classDefinition
-     * @param Config $config
+     * @param ClassDefinition         $classDefinition
+     * @param Config                  $config
      * @param CompilationContext|null $context
      */
     public function __construct(ClassDefinition $classDefinition, Config $config, ?CompilationContext $context = null)

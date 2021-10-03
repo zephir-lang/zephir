@@ -29,10 +29,11 @@ class StaticCall extends Call
     /**
      * Compiles a static method call.
      *
-     * @param Expression $expr
+     * @param Expression         $expr
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext): CompiledExpression
@@ -241,14 +242,14 @@ class StaticCall extends Call
     /**
      * Calls static methods on the 'self/static' context.
      *
-     * @param string $context SELF / STATIC
-     * @param string $methodName
-     * @param array $expression
-     * @param Variable|null $symbolVariable
-     * @param bool $mustInit
-     * @param bool $isExpecting
+     * @param string             $context            SELF / STATIC
+     * @param string             $methodName
+     * @param array              $expression
+     * @param Variable|null      $symbolVariable
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param CompilationContext $compilationContext
-     * @param ClassMethod|null $method
+     * @param ClassMethod|null   $method
      */
     protected function call(
         string $context,

@@ -23,7 +23,6 @@ use Zephir\CompilerFile;
 use Zephir\Exception;
 
 use function array_key_exists;
-use function count;
 use function in_array;
 
 /**
