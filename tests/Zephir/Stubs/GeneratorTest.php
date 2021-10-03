@@ -87,7 +87,6 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
      */
     static public \$defaultPathDelimiter = null;
 
-
     /**
      * @param string \$key
      * @param int \$priority
@@ -95,7 +94,6 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
     public static function init(string \$key, int \$priority = 1)
     {
     }
-
 }
 
 DOC;
@@ -284,7 +282,7 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function constantProvider(): array
@@ -380,7 +378,7 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testShouldBuildMethod(): void

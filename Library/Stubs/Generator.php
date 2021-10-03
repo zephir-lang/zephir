@@ -185,7 +185,7 @@ class Generator
             $constants[] = $this->buildConstant($constant, $indent).PHP_EOL;
         }
 
-        $source .= implode(PHP_EOL, $constants);
+        $source .= implode(PHP_EOL, $constants).PHP_EOL;
         unset($constants);
 
         /**
