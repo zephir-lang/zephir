@@ -9,11 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
- * Class StringsManager.
- *
  * Manages the concatenation keys for the extension and the interned strings
  */
 abstract class StringsManager
@@ -23,7 +23,7 @@ abstract class StringsManager
      *
      * @var array
      */
-    protected $concatKeys = [
+    protected array $concatKeys = [
         'vv' => true,
         'vs' => true,
         'sv' => true,
@@ -34,7 +34,7 @@ abstract class StringsManager
      *
      * @param string $key
      */
-    public function addConcatKey($key)
+    public function addConcatKey(string $key)
     {
         $this->concatKeys[$key] = true;
     }
@@ -42,16 +42,16 @@ abstract class StringsManager
     /**
      * Generates the concatenation code.
      *
-     * @return array
+     * @return void
      */
-    abstract public function genConcatCode();
+    abstract public function genConcatCode(): void;
 
     /**
      * Obtains the existing concatenation keys.
      *
      * @return array
      */
-    public function getConcatKeys()
+    public function getConcatKeys(): array
     {
         return $this->concatKeys;
     }
