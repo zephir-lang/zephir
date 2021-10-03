@@ -20,5 +20,4 @@ class Issue_2092
     public function getInternalEventsManager(): ?ManagerInterface
     {
     }
-
 }

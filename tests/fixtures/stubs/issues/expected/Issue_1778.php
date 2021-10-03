@@ -31,7 +31,6 @@ class Issue_1778
      */
     protected $config;
 
-
     /**
      * @param \Psr\Http\Message\RequestInterface $request
      * @param array $config
@@ -49,5 +48,4 @@ class Issue_1778
     public function getVar(string $key)
     {
     }
-
 }

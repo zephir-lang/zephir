@@ -59,5 +59,4 @@ class Issue_2026
     public function getMixedCollectionOrArray(): array
     {
     }
-
 }

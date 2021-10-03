@@ -9,7 +9,6 @@ class Issue_1986 implements EventsManagerInterface
 
     public $eventsManager;
 
-
     /**
      * @return EventsManagerInterface
      */
@@ -27,5 +26,4 @@ class Issue_1986 implements EventsManagerInterface
     public function attach(string $eventType, $handler): void
     {
     }
-
 }
