@@ -33,19 +33,17 @@ jobs:
         with:
           php-version: '7.4'
           coverage: none
-          tools: php-cs-fixer, phpcs
+          tools: php-cs-fixer, phpcs, cs2pr
 
       - name: Run PHP_CodeSniffer
         run: |
           phpcs --version
-          phpcs --runtime-set ignore_warnings_on_exit true
+          phpcs --runtime-set ignore_warnings_on_exit true --report=checkstyle | cs2pr
 
-      # @TODO: Apply fix from `feature/win-unix-builds
       - name: Run PHP CS Fixer
         if: always()
         run: |
-          php-cs-fixer --version
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no || true
+          php-cs-fixer fix --diff --dry-run -v --using-cache=no | cs2pr
 
       - name: Run Shell Check
         if: always()
