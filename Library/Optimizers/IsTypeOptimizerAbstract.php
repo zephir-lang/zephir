@@ -9,44 +9,43 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
+
+use function count;
 
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
+     * @param array $expression
+     * @param Call $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
-     * @return bool|CompiledExpression|mixed
+     * @return CompiledExpression|null
+     * @throws Exception
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    public function optimize(array $expression, Call $call, CompilationContext $context): ?CompiledExpression
     {
-        if (!isset($expression['parameters'])) {
-            return false;
+        if (!isset($expression['parameters']) || count($expression['parameters']) !== 1) {
+            return null;
         }
 
-        if (1 != \count($expression['parameters'])) {
-            return false;
-        }
+        $resolvedParam = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression)[0];
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        if ('IS_BOOL' == $this->getType()) {
+        if ('IS_BOOL' === $this->getType()) {
             $condition = sprintf(
                 '(Z_TYPE_P(%s) == IS_TRUE || Z_TYPE_P(%s) == IS_FALSE)',
-                $resolvedParams[0],
-                $resolvedParams[0]
+                $resolvedParam,
+                $resolvedParam,
             );
         } else {
-            $condition = 'Z_TYPE_P('.$resolvedParams[0].') == '.$this->getType();
+            $condition = 'Z_TYPE_P('.$resolvedParam.') == '.$this->getType();
         }
 
         return new CompiledExpression('bool', $condition, $expression);

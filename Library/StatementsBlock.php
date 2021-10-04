@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
@@ -29,10 +30,9 @@ use Zephir\Statements\ThrowStatement;
 use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 use Zephir\Statements\WhileStatement;
+use function count;
 
 /**
- * StatementsBlock.
- *
  * This represents a single basic block in Zephir.
  * A statements block is simply a container of instructions that execute sequentially.
  */
@@ -40,7 +40,7 @@ class StatementsBlock
 {
     protected $statements;
 
-    protected $unreachable;
+    protected bool $unreachable = false;
 
     protected $debug = false;
 
@@ -95,12 +95,14 @@ class StatementsBlock
 
     /**
      * @param CompilationContext $compilationContext
-     * @param bool               $unreachable
-     * @param int                $branchType
+     * @param bool $unreachable
+     * @param int $branchType
      *
      * @return Branch
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext, $unreachable = false, $branchType = Branch::TYPE_UNKNOWN)
+    public function compile(CompilationContext $compilationContext, bool $unreachable = false, int $branchType = Branch::TYPE_UNKNOWN): Branch
     {
         $compilationContext->codePrinter->increaseLevel();
         ++$compilationContext->currentBranch;
@@ -112,7 +114,7 @@ class StatementsBlock
         $currentBranch->setType($branchType);
         $currentBranch->setUnreachable($unreachable);
 
-        /*
+        /**
          * Activate branch in the branch manager
          */
         $compilationContext->branchManager->addBranch($currentBranch);
@@ -121,7 +123,7 @@ class StatementsBlock
 
         $statements = $this->statements;
 
-        /*
+        /**
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
@@ -154,7 +156,7 @@ class StatementsBlock
                 }
             }
 
-            /*
+            /**
              * Show warnings if code is generated when the 'unreachable state' is 'on'
              */
             if (true === $this->unreachable) {
@@ -353,14 +355,14 @@ class StatementsBlock
             }
         }
 
-        /*
+        /**
          * Reference the block if it belongs to a loop
          */
         if ($this->loop) {
             array_pop($compilationContext->cycleBlocks);
         }
 
-        /*
+        /**
          * Traverses temporal variables created in a specific branch
          * marking them as idle
          */
@@ -379,7 +381,7 @@ class StatementsBlock
      *
      * @return array
      */
-    public function getStatements()
+    public function getStatements(): array
     {
         return $this->statements;
     }
@@ -389,7 +391,7 @@ class StatementsBlock
      *
      * @param array $statements
      */
-    public function setStatements(array $statements)
+    public function setStatements(array $statements): void
     {
         $this->statements = $statements;
     }
@@ -419,9 +421,9 @@ class StatementsBlock
      *
      * @return bool
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
-        return 0 == \count($this->statements);
+        return 0 === count($this->statements);
     }
 
     /**
@@ -431,11 +433,12 @@ class StatementsBlock
      *
      * @return MutateGathererPass
      */
-    public function getMutateGatherer($pass = false)
+    public function getMutateGatherer(bool $pass = false): MutateGathererPass
     {
         if (!$this->mutateGatherer) {
             $this->mutateGatherer = new MutateGathererPass();
         }
+
         if ($pass) {
             $this->mutateGatherer->pass($this);
         }
