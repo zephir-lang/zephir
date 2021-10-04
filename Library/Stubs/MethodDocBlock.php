@@ -247,16 +247,16 @@ class MethodDocBlock extends DocBlock
         }
     }
 
-    private function parseMethodParameters(ClassMethod $method)
+    private function parseMethodParameters(ClassMethod $method): void
     {
         $parameters = $method->getParameters();
         $aliasManager = $method->getClassDefinition()->getAliasManager();
 
-        if (!$parameters) {
+        if ($parameters === null) {
             return;
         }
 
-        foreach ($method->getParameters() as $parameter) {
+        foreach ($parameters as $parameter) {
             if (isset($parameter['cast'])) {
                 if ($aliasManager->isAlias($parameter['cast']['value'])) {
                     $type = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
@@ -264,14 +264,11 @@ class MethodDocBlock extends DocBlock
                     $type = $parameter['cast']['value'];
                 }
             } elseif (isset($parameter['data-type'])) {
-                if ('variable' == $parameter['data-type']) {
-                    $type = 'mixed';
-                } else {
-                    $type = $parameter['data-type'];
-                }
+                $type = 'variable' === $parameter['data-type'] ? 'mixed' : $parameter['data-type'];
             } else {
                 $type = 'mixed';
             }
+
             $this->parameters['$'.trim($parameter['name'], '$')] = [$type, ''];
         }
     }
