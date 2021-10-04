@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
-      - './.github/workflows/nightly.yml'
+      - '**/nightly.yml'
   pull_request:
     branches:
       - master
@@ -33,7 +33,7 @@ jobs:
         with:
           php-version: '7.4'
           coverage: none
-          tools: php-cs-fixer, phpcs, cs2pr
+          tools: php-cs-fixer, phpcs
 
       - name: Run PHP_CodeSniffer
         run: |
@@ -43,7 +43,7 @@ jobs:
       - name: Run PHP CS Fixer
         if: always()
         run: |
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no | cs2pr
+          php-cs-fixer fix --diff --dry-run -v --using-cache=no
 
       - name: Run Shell Check
         if: always()
