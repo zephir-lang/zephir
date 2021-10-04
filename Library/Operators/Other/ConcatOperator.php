@@ -143,7 +143,6 @@ class ConcatOperator extends BaseOperator
         $parts = array_reverse($parts);
         foreach ($parts as $part) {
             $expr = new Expression($part);
-            $expr->setStringOperation(true);
             $compiledExpr = $this->compileExpression($expr, $compilationContext, $part['type']);
 
             switch ($compiledExpr->getType()) {
