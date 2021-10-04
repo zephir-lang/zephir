@@ -100,13 +100,10 @@ class MethodDocBlock extends DocBlock
     protected function parseMethodReturnType(ClassMethod $method): void
     {
         $return = [];
-        $returnTypes = $method->getReturnTypes();
-
-        if ($returnTypes) {
-            foreach ($returnTypes as $type) {
-                if (isset($type['data-type'])) {
-                    $return[] = 'variable' == $type['data-type'] ? 'mixed' : $type['data-type'];
-                }
+        foreach ($method->getReturnTypes() as $type) {
+            if (isset($type['data-type'])) {
+                $dataType = 'variable' === $type['data-type'] ? 'mixed' : $type['data-type'];
+                $return[$dataType] = $dataType;
             }
         }
 
@@ -121,7 +118,10 @@ class MethodDocBlock extends DocBlock
             $return = array_merge($return, $returnClassTypes);
         }
 
-        // Prepare return types for Collections compatible types
+        /**
+         * Prepare return types for Collections compatible types.
+         * Only for complex types.
+         */
         $collections = [];
         if ($method->hasReturnTypesRaw()) {
             $returnClassTypes = $method->getReturnTypesRaw();
@@ -148,7 +148,7 @@ class MethodDocBlock extends DocBlock
         $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
         $returnType = $this->types->getReturnTypeAnnotation(
             $this->classMethod,
-            $processedTypes ?? array_merge($method->getReturnTypes(), $collections)
+            $processedTypes ?: array_merge($method->getReturnTypes(), $collections)
         );
 
         if (!empty($returnType)) {
@@ -247,16 +247,16 @@ class MethodDocBlock extends DocBlock
         }
     }
 
-    private function parseMethodParameters(ClassMethod $method)
+    private function parseMethodParameters(ClassMethod $method): void
     {
         $parameters = $method->getParameters();
         $aliasManager = $method->getClassDefinition()->getAliasManager();
 
-        if (!$parameters) {
+        if ($parameters === null) {
             return;
         }
 
-        foreach ($method->getParameters() as $parameter) {
+        foreach ($parameters as $parameter) {
             if (isset($parameter['cast'])) {
                 if ($aliasManager->isAlias($parameter['cast']['value'])) {
                     $type = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
@@ -264,14 +264,11 @@ class MethodDocBlock extends DocBlock
                     $type = $parameter['cast']['value'];
                 }
             } elseif (isset($parameter['data-type'])) {
-                if ('variable' == $parameter['data-type']) {
-                    $type = 'mixed';
-                } else {
-                    $type = $parameter['data-type'];
-                }
+                $type = 'variable' === $parameter['data-type'] ? 'mixed' : $parameter['data-type'];
             } else {
                 $type = 'mixed';
             }
+
             $this->parameters['$'.trim($parameter['name'], '$')] = [$type, ''];
         }
     }
