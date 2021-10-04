@@ -84,4 +84,9 @@ class Stubs
     {
         return false;
     }
+
+    public function testMultiReturnTypeWithBool() -> <Geometry> | bool
+    {
+        return false;
+    }
 }
