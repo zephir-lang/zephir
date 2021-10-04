@@ -38,7 +38,7 @@ jobs:
       - name: Run PHP_CodeSniffer
         run: |
           phpcs --version
-          phpcs --runtime-set ignore_warnings_on_exit true --report=checkstyle | cs2pr
+          phpcs --runtime-set ignore_warnings_on_exit true
 
       - name: Run PHP CS Fixer
         if: always()
