@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Globals)
@@ -60,7 +61,7 @@ PHP_METHOD(Stub_Globals, setIntValueUsingDotNotation)
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
 
-	ZEPHIR_GLOBAL(db).my_setting_2 = Z_LVAL_P(value);
+	ZEPHIR_GLOBAL(db).my_setting_2 = zval_get_long(value);
 }
 
 PHP_METHOD(Stub_Globals, setCharValue)
@@ -80,7 +81,32 @@ PHP_METHOD(Stub_Globals, setCharValue)
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
 
-	ZEPHIR_GLOBAL(my_setting_4) = (Z_TYPE_P(value) == IS_STRING ? (Z_STRLEN_P(value) ? Z_STRVAL_P(value)[0] : NULL) : Z_LVAL_P(value));
+	ZEPHIR_GLOBAL(my_setting_4) = (Z_TYPE_P(value) == IS_STRING ? (Z_STRLEN_P(value) ? Z_STRVAL_P(value)[0] : NULL) : zval_get_long(value));
+}
+
+PHP_METHOD(Stub_Globals, setStringValue)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value_param = NULL;
+	zval value;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value_param);
+	zephir_get_strval(&value, value_param);
+
+
+	ZEPHIR_GLOBAL(my_setting_5) = ZSTR_VAL(zval_get_string(&value));
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Globals, setBoolValue)
@@ -120,7 +146,7 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCacheLevel)
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
 
 
-	ZEPHIR_GLOBAL(orm).cache_level = Z_LVAL_P(value);
+	ZEPHIR_GLOBAL(orm).cache_level = zval_get_long(value);
 }
 
 /**
@@ -205,6 +231,18 @@ PHP_METHOD(Stub_Globals, getDefaultGlobals7)
 
 
 	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_4));
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getDefaultGlobals8)
+{
+	zval *this_ptr = getThis();
+
+
+
+	RETURN_STRING(ZEPHIR_GLOBAL(my_setting_5));
 }
 
 /**

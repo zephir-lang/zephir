@@ -134,10 +134,10 @@ final class InitCommand extends AbstractCommand
     /**
      * Copies the base kernel to the extension destination.
      *
-     * @param string $src
-     * @param string $dst
+     * @param string      $src
+     * @param string      $dst
      * @param string|null $pattern
-     * @param string  $callback
+     * @param string      $callback
      *
      * @return bool
      */
@@ -157,13 +157,13 @@ final class InitCommand extends AbstractCommand
 
             if ($item->isDir()) {
                 if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
-                    if (!is_dir($dst. DIRECTORY_SEPARATOR.$fileName)) {
-                        mkdir($dst. DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    if (!is_dir($dst.DIRECTORY_SEPARATOR.$fileName)) {
+                        mkdir($dst.DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dst. DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dst.DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
             } elseif ($pattern === null || 1 === preg_match($pattern, $fileName)) {
-                $path = $dst. DIRECTORY_SEPARATOR.$fileName;
+                $path = $dst.DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && $callback($pathName, $path);
             }
         }

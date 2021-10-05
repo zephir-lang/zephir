@@ -15,6 +15,9 @@ use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Expression\Builder\BuilderFactory;
+use Zephir\Expression\Builder\Operators\AssignVariableOperator;
+use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Statements\Let\ArrayIndex as LetArrayIndex;
 use Zephir\Statements\Let\ArrayIndexAppend as LetArrayIndexAppend;
 use Zephir\Statements\Let\Decr as LetDecr;
@@ -37,9 +40,6 @@ use Zephir\Statements\Let\StaticPropertyArrayIndexAppend as LetStaticPropertyArr
 use Zephir\Statements\Let\StaticPropertySub as LetStaticPropertySub;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
-use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Expression\Builder\Operators\AssignVariableOperator;
-use Zephir\Expression\Builder\Operators\BinaryOperator;
 
 /**
  * LetStatement.
@@ -268,7 +268,9 @@ class LetStatement extends StatementAbstract
 
     /**
      * @param array $assignment
+     *
      * @return array
+     *
      * @throws CompilerException
      */
     protected function replaceAssignBitwiseOnDirect(array $assignment): array
@@ -299,7 +301,7 @@ class LetStatement extends StatementAbstract
         }
 
         if ($assignment['assign-type'] !== 'variable') {
-            throw new CompilerException("Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']);
+            throw new CompilerException("Operator '".$assignment['operator']."' is not supported assign-type: ".$assignment['assign-type']);
         }
 
         $builderExpr = BuilderFactory::getInstance();
@@ -311,6 +313,7 @@ class LetStatement extends StatementAbstract
             ->build();
 
         $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
+
         return $assignment;
     }
 }

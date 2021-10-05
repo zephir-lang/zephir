@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.15.0] - 2021-10-05
+### Added
+- Added support for `string` type in php.ini [#2280](https://github.com/zephir-lang/zephir/issues/2280)
+- Added support for `mixed` [#2276](https://github.com/zephir-lang/zephir/issues/2276)
+
+### Fixed
+- Fixed multiple return types in stubs [#2283](https://github.com/zephir-lang/zephir/issues/2283)
+- Fixed `bool` return type in stubs [#2272](https://github.com/zephir-lang/zephir/issues/2272)
+
+### Changed
+- Removed `.zep` from stubs filenames [#2273](https://github.com/zephir-lang/zephir/issues/2273)
+
 ## [0.14.0] - 2021-09-18
 ### Added
 - Added support for `require_once` [#2253](https://github.com/zephir-lang/zephir/issues/2253)
@@ -541,7 +553,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.14.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.15.0...HEAD
+[0.15.0]: https://github.com/zephir-lang/zephir/compare/0.14.0...0.15.0
 [0.14.0]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...0.14.0
 [0.14.0-beta.3]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...0.14.0-beta.3
 [0.14.0-beta.2]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2

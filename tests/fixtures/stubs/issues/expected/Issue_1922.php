@@ -5,6 +5,7 @@ namespace Stubs;
 class Issue_1922
 {
 
+
     /**
      * @param string $key
      * @return mixed|null
@@ -12,5 +13,4 @@ class Issue_1922
     public function getVar(string $key)
     {
     }
-
 }

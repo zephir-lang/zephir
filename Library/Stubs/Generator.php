@@ -23,7 +23,6 @@ use Zephir\CompilerFile;
 use Zephir\Exception;
 
 use function array_key_exists;
-use function count;
 use function in_array;
 
 /**
@@ -80,7 +79,7 @@ class Generator
             $class = $file->getClassDefinition();
             $source = $this->buildClass($class, $indent, $banner);
 
-            $filename = ucfirst($class->getName()).'.zep.php';
+            $filename = ucfirst($class->getName()).'.php';
             $filePath = $path.str_ireplace(
                 $namespace,
                 '',
@@ -177,29 +176,42 @@ class Generator
 
         $source .= PHP_EOL.'{'.PHP_EOL;
 
+        /**
+         * Build Class constants
+         */
+        $constants = [];
         foreach ($class->getConstants() as $constant) {
-            $source .= $this->buildConstant($constant, $indent).PHP_EOL.PHP_EOL;
+            $constants[] = $this->buildConstant($constant, $indent).PHP_EOL;
         }
 
+        $source .= implode(PHP_EOL, $constants).PHP_EOL;
+        unset($constants);
+
+        /**
+         * Build Class properties
+         */
+        $properties = [];
         foreach ($class->getProperties() as $property) {
-            $source .= $this->buildProperty($property, $indent).PHP_EOL.PHP_EOL;
+            $properties[] = $this->buildProperty($property, $indent).PHP_EOL;
         }
 
-        $source .= PHP_EOL;
+        $source .= implode(PHP_EOL, $properties).PHP_EOL;
+        unset($properties);
 
+        /**
+         * Build Class methods
+         */
+        $methods = [];
         foreach ($class->getMethods() as $method) {
             if ($method->isInternal()) {
                 continue;
             }
 
-            $source .= $this->buildMethod(
-                $method,
-                'interface' === $class->getType(),
-                $indent
-            );
-
-            $source .= PHP_EOL.PHP_EOL;
+            $methods[] = $this->buildMethod($method, 'interface' === $class->getType(), $indent).PHP_EOL;
         }
+
+        $source .= implode(PHP_EOL, $methods);
+        unset($methods);
 
         return $source.'}'.PHP_EOL;
     }
@@ -224,7 +236,7 @@ class Generator
             $visibility = 'static '.$visibility;
         }
 
-        $source = $visibility.' $'.$property->getName();
+        $source = $indent.$visibility.' $'.$property->getName();
         $original = $property->getOriginal();
 
         if (isset($original['default'])) {
@@ -233,9 +245,7 @@ class Generator
             ]);
         }
 
-        $docBlock = new DocBlock($property->getDocBlock(), $indent);
-
-        return $docBlock."\n".$indent.$source.';';
+        return $this->fetchDocBlock($property->getDocBlock(), $indent).$source.';';
     }
 
     /**
@@ -252,9 +262,7 @@ class Generator
             'default' => $constant->getValue(),
         ]);
 
-        $docBlock = new DocBlock($constant->getDocBlock(), $indent);
-
-        return $docBlock."\n".$indent.$source.' = '.$value.';';
+        return $this->fetchDocBlock($constant->getDocBlock(), $indent).$indent.$source.' = '.$value.';';
     }
 
     /**
@@ -313,7 +321,7 @@ class Generator
         if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes()) && 1 === count($method->getReturnClassTypes())) {
+            if (array_key_exists('object', $method->getReturnTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -348,7 +356,7 @@ class Generator
             }
 
             // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1) {
+            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
                 $return = '';
             }
         } elseif ($method->isVoid()) {
@@ -368,7 +376,10 @@ class Generator
             $methodBody .= PHP_EOL.$indent.'{'.PHP_EOL.$indent.'}';
         }
 
-        return $docBlock->processMethodDocBlock().PHP_EOL.$methodBody;
+        $docs = $docBlock->processMethodDocBlock();
+        $docs = $docs ? $docs.PHP_EOL : '';
+
+        return $docs.$methodBody;
     }
 
     /**
@@ -437,6 +448,16 @@ class Generator
                 );
         }
 
-        return (string)$returnValue;
+        return (string) $returnValue;
+    }
+
+    private function fetchDocBlock(?string $docBlock, string $indent): string
+    {
+        $docBlock = (new DocBlock($docBlock, $indent))->__toString();
+        if ($docBlock) {
+            return $docBlock.PHP_EOL;
+        }
+
+        return '';
     }
 }

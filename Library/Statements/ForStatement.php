@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use function Zephir\add_slashes;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Exception\CompilerException;
@@ -21,6 +20,8 @@ use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Variable;
+
+use function Zephir\add_slashes;
 
 /**
  * ForStatement.

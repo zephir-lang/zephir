@@ -170,3 +170,31 @@ PHP_METHOD(Stub_Stubs, testVariableLength)
 	ZEPHIR_MM_RESTORE();
 }
 
+PHP_METHOD(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature1)
+{
+	zval *this_ptr = getThis();
+
+
+
+	array_init(return_value);
+	return;
+}
+
+PHP_METHOD(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature2)
+{
+	zval *this_ptr = getThis();
+
+
+
+	RETURN_BOOL(0);
+}
+
+PHP_METHOD(Stub_Stubs, testMultiReturnTypeWithBool)
+{
+	zval *this_ptr = getThis();
+
+
+
+	RETURN_BOOL(0);
+}
+

@@ -128,6 +128,7 @@ final class BitwiseTest extends TestCase
 
         /**
          * Bitwise XOR
+         *
          * @issue https://github.com/zephir-lang/zephir/issues/1581
          */
         $this->assertSame(123 ^ 321, $test->testbitwiseXor());

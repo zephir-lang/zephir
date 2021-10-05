@@ -45,7 +45,9 @@ class GeneratorTest extends TestCase
      * Modify method visibility to call protected.
      *
      * @param string $name - method name
+     *
      * @return mixed
+     *
      * @throws ReflectionException
      */
     private function getMethod(string $name)
@@ -85,7 +87,6 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
      */
     static public \$defaultPathDelimiter = null;
 
-
     /**
      * @param string \$key
      * @param int \$priority
@@ -93,7 +94,6 @@ final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsMa
     public static function init(string \$key, int \$priority = 1)
     {
     }
-
 }
 
 DOC;
@@ -241,10 +241,11 @@ DOC;
      * @dataProvider propertyProvider
      * @covers       \Zephir\Stubs\Generator::buildProperty
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $type
      * @param $value
      * @param string $expected
+     *
      * @throws ReflectionException
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
@@ -281,7 +282,7 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function constantProvider(): array
@@ -332,6 +333,7 @@ DOC;
      * @param string $type
      * @param $value
      * @param string $expected
+     *
      * @throws ReflectionException
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
@@ -376,7 +378,7 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testShouldBuildMethod(): void

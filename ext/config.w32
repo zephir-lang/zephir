@@ -38,6 +38,7 @@ if (PHP_STUB != "no") {
 	ADD_SOURCES(configure_module_dirname + "/stub/requires", "external3.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/router", "exception.zep.c route.zep.c", "stub");
 	ADD_SOURCES(configure_module_dirname + "/stub/typehinting", "testabstract.zep.c", "stub");
+	ADD_SOURCES(configure_module_dirname + "/stub/types", "mixedtype.zep.c", "stub");
   ADD_FLAG("CFLAGS_STUB", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("CFLAGS", "/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL");
   ADD_FLAG("LDFLAGS", "/LTCG");

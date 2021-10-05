@@ -1,7 +1,7 @@
 # [![Zephir][zephir logo]][web site]
 
-[![Build on Linux][actions unix]][actions link]
-[![Build on Windows][actions windows]][actions link]
+[![Build on Linux|macOS|Windows][actions main]][actions link]
+[![Nightly Builds on Linux][actions nightly]][actions link]
 [![Latest Stable Version][version badge]][packagist link]
 [![MIT License][license badge]](./LICENSE)
 
@@ -46,15 +46,17 @@ Support us with a monthly donation and help us continue our activities.
 
 Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
 
-[docs]: https://docs.zephir-lang.com
-[zephir]: https://github.com/zephir-lang/zephir
-[facebook]: https://www.facebook.com/groups/zephir.language
-[discord]: https://phalcon.link/discord
-[zephir logo]: https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
-[web site]: https://zephir-lang.com
-[actions link]: https://github.com/zephir-lang/zephir/actions
-[actions unix]: https://github.com/zephir-lang/zephir/workflows/Unix%20CI/badge.svg
-[actions windows]: https://github.com/zephir-lang/zephir/workflows/Windows%20CI/badge.svg
-[version badge]: https://poser.pugx.org/phalcon/zephir/v/stable.svg
-[packagist link]: https://packagist.org/packages/phalcon/zephir
-[license badge]: https://poser.pugx.org/phalcon/zephir/license.svg
+[docs]:             https://docs.zephir-lang.com
+[zephir]:           https://github.com/zephir-lang/zephir
+[facebook]:         https://www.facebook.com/groups/zephir.language
+[discord]:          https://phalcon.link/discord
+[zephir logo]:      https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
+[web site]:         https://zephir-lang.com
+
+[actions link]:     https://github.com/zephir-lang/zephir/actions
+[actions main]:     https://github.com/zephir-lang/zephir/actions/workflows/main.yml/badge.svg
+[actions nightly]:  https://github.com/zephir-lang/zephir/actions/workflows/nightly.yml/badge.svg
+
+[version badge]:    https://poser.pugx.org/phalcon/zephir/v/stable.svg
+[packagist link]:   https://packagist.org/packages/phalcon/zephir
+[license badge]:    https://poser.pugx.org/phalcon/zephir/license.svg

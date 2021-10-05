@@ -32,6 +32,7 @@ phpcs.xml
 phpmd.xml
 phpunit.xml
 .phpunit.result.cache
+.php-cs-fixer.cache
 
 # Build artefact
 zephir.phar

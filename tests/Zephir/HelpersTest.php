@@ -70,6 +70,7 @@ final class HelpersTest extends TestCase
 
     /**
      * @dataProvider cStringProvider
+     *
      * @param string $testString
      * @param string $expected
      */

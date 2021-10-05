@@ -36,6 +36,7 @@ class InstanceOfOperator extends BaseOperator
      * @param CompilationContext $context
      *
      * @return CompiledExpression
+     *
      * @throws Exception
      * @throws ReflectionException
      */
