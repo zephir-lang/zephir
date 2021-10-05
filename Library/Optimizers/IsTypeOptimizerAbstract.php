@@ -23,11 +23,12 @@ use function count;
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
     /**
-     * @param array $expression
-     * @param Call $call
+     * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
      *
      * @return CompiledExpression|null
+     *
      * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context): ?CompiledExpression

@@ -53,9 +53,9 @@ class Branch
     /**
      * Returns the branch's parent.
      *
-     * @return Branch
+     * @return Branch|null
      */
-    public function getParentBranch(): ?Branch
+    public function getParentBranch(): ?self
     {
         return $this->parentBranch;
     }

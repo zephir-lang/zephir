@@ -33,10 +33,11 @@ class EvalExpression
     /**
      * Skips the not operator by recursively optimizing the expression at its right.
      *
-     * @param array $expr
+     * @param array              $expr
      * @param CompilationContext $compilationContext
      *
-     * @return null|string
+     * @return string|null
+     *
      * @throws Exception
      */
     public function optimizeNot(array $expr, CompilationContext $compilationContext): ?string
@@ -64,6 +65,7 @@ class EvalExpression
      * @param CompilationContext $compilationContext
      *
      * @return bool|string
+     *
      * @throws Exception
      */
     public function optimize($exprRaw, CompilationContext $compilationContext)

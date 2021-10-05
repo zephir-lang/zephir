@@ -95,10 +95,11 @@ class StatementsBlock
 
     /**
      * @param CompilationContext $compilationContext
-     * @param bool $unreachable
-     * @param int $branchType
+     * @param bool               $unreachable
+     * @param int                $branchType
      *
      * @return Branch
+     *
      * @throws Exception
      * @throws ReflectionException
      */
