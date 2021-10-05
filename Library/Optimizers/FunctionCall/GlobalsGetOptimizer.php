@@ -34,6 +34,7 @@ class GlobalsGetOptimizer extends OptimizerAbstract
      * @param CompilationContext $context
      *
      * @return CompiledExpression|null
+     *
      * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context): ?CompiledExpression
