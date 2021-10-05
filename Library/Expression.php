@@ -189,7 +189,7 @@ class Expression
     /**
      * Compiles foo = [].
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
@@ -230,6 +230,8 @@ class Expression
      * Resolves an expression.
      *
      * @param CompilationContext $compilationContext
+     *
+     * @throws CompilerException|Exception
      *
      * @return CompiledExpression
      *

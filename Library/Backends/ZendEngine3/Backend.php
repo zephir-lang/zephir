@@ -106,7 +106,7 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      */
-    public function getTypeDefinition($type)
+    public function getTypeDefinition($type): array
     {
         switch ($type) {
             case 'zend_ulong':
@@ -155,6 +155,7 @@ class Backend extends BackendZendEngine2
             case 'variable':
             case 'array':
             case 'null':
+            case 'mixed':
                 $pointer = '*';
                 $code = 'zval';
                 break;
@@ -317,7 +318,7 @@ class Backend extends BackendZendEngine2
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object'], true);
+        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
@@ -366,6 +367,7 @@ class Backend extends BackendZendEngine2
                 case 'resource':
                 case 'callable':
                 case 'object':
+                case 'mixed':
                     $groupVariables[] = $pointer.$variable->getName();
                     break;
 
@@ -595,7 +597,7 @@ class Backend extends BackendZendEngine2
             $keyType = 'append';
         } elseif ($key instanceof CompiledExpression) {
             $typeKey = $key->getType();
-            if ('variable' == $typeKey) {
+            if ('variable' === $typeKey || 'mixed' === $typeKey) {
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
@@ -630,6 +632,7 @@ class Backend extends BackendZendEngine2
 
             case 'variable':
             case 'array':
+            case 'mixed':
                 $type = 'zval';
                 break;
         }
@@ -847,20 +850,21 @@ class Backend extends BackendZendEngine2
                 $tempVariable = new Variable('variable', $varName, $context->branchManager->getCurrentBranch());
                 $context->symbolTable->addRawVariable($tempVariable);
             }
+
             $tempVariable = $context->symbolTable->getVariableForWrite($varName, $context);
             $tempVariable->increaseUses();
-            $tempVariable->setUsed(true, null);
+            $tempVariable->setUsed(true);
+
             if ('null' == $value) {
                 $tempVariable->setDynamicTypes('null');
             } else {
                 $tempVariable->setDynamicTypes('bool');
             }
+
             $value = $this->getVariableCode($tempVariable);
         } else {
             if ($value instanceof CompiledExpression) {
-                if ('array' == $value->getType()) {
-                    $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context, null);
-                } elseif ('variable' == $value->getType()) {
+                if (in_array($value->getType(), ['array', 'variable', 'mixed'])) {
                     $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
                 } else {
                     return $value->getCode();
