@@ -524,7 +524,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	stub_globals->my_setting_2 = 10;
 	stub_globals->my_setting_3 = 15.2;
 	stub_globals->my_setting_4 = 'A';
-
+	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
 	
 }
 

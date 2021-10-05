@@ -1325,7 +1325,7 @@ final class Compiler
                     $structBuilder->addProperty($field, $global);
 
                     $isModuleGlobal = (int) !empty($global['module']);
-                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace).PHP_EOL;
+                    $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace);
                     $initEntries[] = $structBuilder->getInitEntry($field, $global, $namespace);
                 }
 
@@ -1334,8 +1334,7 @@ final class Compiler
 
             $globalCode = PHP_EOL;
             foreach ($structures as $structureName => $internalStructure) {
-                $globalCode .= "\t".'zephir_struct_'.$structureName.' '.
-                                $structureName.';'.PHP_EOL.PHP_EOL;
+                $globalCode .= "\t".'zephir_struct_'.$structureName.' '.$structureName.';'.PHP_EOL;
             }
 
             /**
@@ -1352,16 +1351,16 @@ final class Compiler
 
                 $isModuleGlobal = (int) !empty($global['module']);
                 $type = $global['type'];
-                // TODO: Add support for 'string', 'hash'
+                // TODO: Add support for 'hash'
                 // TODO: Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer
                 switch ($global['type']) {
                     case 'boolean':
                     case 'bool':
                         $type = 'zend_bool';
                         if (true === $global['default']) {
-                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 1;'.PHP_EOL;
+                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 1;';
                         } else {
-                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 0;'.PHP_EOL;
+                            $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = 0;';
                         }
                         break;
 
@@ -1369,16 +1368,16 @@ final class Compiler
                     case 'uint':
                     case 'long':
                     case 'double':
-                        $globalsDefault[$isModuleGlobal][]
-                            = "\t".$namespace.'_globals->'.$name.' = '.
-                            $global['default'].';'.PHP_EOL;
+                        $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = '.$global['default'].';';
                         break;
 
                     case 'char':
                     case 'uchar':
-                        $globalsDefault[$isModuleGlobal][]
-                            = "\t".$namespace.'_globals->'.$name.' = \''.
-                            $global['default'].'\';'.PHP_EOL;
+                        $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = \''.$global['default'].'\';';
+                        break;
+                    case 'string':
+                        $type = 'char *';
+                        $globalsDefault[$isModuleGlobal][] = "\t".$namespace.'_globals->'.$name.' = ZSTR_VAL(zend_string_init(ZEND_STRL("'.$global['default'].'"), 0));';
                         break;
                     default:
                         throw new Exception(
@@ -1386,7 +1385,7 @@ final class Compiler
                         );
                 }
 
-                $globalCode .= "\t".$type.' '.$name.';'.PHP_EOL.PHP_EOL;
+                $globalCode .= "\t".$type.' '.$name.';'.PHP_EOL;
                 $iniEntry = [];
                 if (isset($global['ini-entry'])) {
                     $iniEntry = $global['ini-entry'];
@@ -1425,8 +1424,8 @@ final class Compiler
             }
         }
 
-        $globalsDefault[0] = implode('', $globalsDefault[0]);
-        $globalsDefault[1] = implode('', $globalsDefault[1]);
+        $globalsDefault[0] = implode(PHP_EOL, $globalsDefault[0]);
+        $globalsDefault[1] = implode(PHP_EOL, $globalsDefault[1]);
 
         return [$globalCode, $globalStruct, $globalsDefault, $initEntries];
     }
