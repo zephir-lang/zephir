@@ -5,7 +5,6 @@
   "author": "Phalcon Team and contributors",
   "version": "1.0.0",
   "verbose": true,
-
   "requires": {
     "extensions": [
       "PDO",
@@ -15,27 +14,24 @@
       "json"
     ]
   },
-
   "stubs": {
     "path": "ide\/%version%\/%namespace%\/",
     "stubs-run-after-generate": false,
     "banner": "/**\n * This file is part of the Zephir.\n *\n * (c) Phalcon Team <team@zephir-lang.com>\n *\n * For the full copyright and license information, please view\n * the LICENSE file that was distributed with this source code.\n */"
   },
-
   "api": {
-    "path"  : "doc/%version%",
-    "theme" : {
-      "name":"zephir",
-      "options" :{
-        "github":"https://github.com/user/repo",
-        "analytics":null,
+    "path": "doc/%version%",
+    "theme": {
+      "name": "zephir",
+      "options": {
+        "github": "https://github.com/user/repo",
+        "analytics": null,
         "main_color": "#3E6496",
         "link_color": "#3E6496",
         "link_hover_color": "#5F9AE7"
       }
     }
   },
-
   "warnings": {
     "unused-variable": true,
     "unused-variable-external": false,
@@ -62,7 +58,6 @@
     "invalid-typeof-comparison": true,
     "conditional-initialization": true
   },
-
   "optimizations": {
     "static-type-inference": true,
     "static-type-inference-second-pass": true,
@@ -75,7 +70,6 @@
     "public-internal-methods": false,
     "public-internal-functions": true
   },
-
   "globals": {
     "my_setting_1": {
       "type": "bool",
