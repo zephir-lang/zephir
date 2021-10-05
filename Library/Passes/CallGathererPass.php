@@ -16,10 +16,8 @@ use Zephir\FunctionCall;
 use Zephir\StatementsBlock;
 
 /**
- * Zephir\Passes\CallGathererPass.
- *
  * This pass counts how many times the same function is called inside a
- * statements block. It also count how many times a method is calling
+ * statements block. It also counts how many times a method is calling
  * trying to track the possible caller.
  *
  * This pass is used by the function/method caches to explore possible
@@ -27,11 +25,11 @@ use Zephir\StatementsBlock;
  */
 class CallGathererPass
 {
-    protected $functionCalls = [];
+    protected array $functionCalls = [];
 
-    protected $methodCalls = [];
+    protected array $methodCalls = [];
 
-    protected $compilationContext;
+    protected CompilationContext $compilationContext;
 
     /**
      * CallGathererPass constructor.
@@ -48,7 +46,7 @@ class CallGathererPass
      *
      * @return CompilationContext
      */
-    public function getCompilationContext()
+    public function getCompilationContext(): CompilationContext
     {
         return $this->compilationContext;
     }
@@ -60,7 +58,7 @@ class CallGathererPass
      *
      * @return int
      */
-    public function getNumberOfFunctionCalls($funcName)
+    public function getNumberOfFunctionCalls(string $funcName): int
     {
         if (isset($this->functionCalls[$funcName])) {
             return $this->functionCalls[$funcName];
@@ -77,7 +75,7 @@ class CallGathererPass
      *
      * @return int
      */
-    public function getNumberOfMethodCalls($className, $methodName)
+    public function getNumberOfMethodCalls(string $className, string $methodName): int
     {
         if (isset($this->methodCalls[$className][$methodName])) {
             return $this->methodCalls[$className][$methodName];
@@ -91,7 +89,7 @@ class CallGathererPass
      *
      * @return array
      */
-    public function getAllMethodCalls()
+    public function getAllMethodCalls(): array
     {
         return $this->methodCalls;
     }
@@ -209,16 +207,24 @@ class CallGathererPass
                 $this->passExpression($expression['right']);
                 break;
 
-            case 'typeof':
-                $this->passExpression($expression['left']);
-                break;
-
             case 'minus':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'not':
             case 'bitwise_not':
+            case 'not':
+            case 'static-property-access':
+            case 'array-access':
+            case 'property-string-access':
+            case 'property-dynamic-access':
+            case 'property-access':
+            case 'unlikely':
+            case 'likely':
+            case 'instanceof':
+            case 'empty':
+            case 'isset':
+            case 'list':
+            case 'require_once':
+            case 'require':
+            case 'clone':
+            case 'typeof':
                 $this->passExpression($expression['left']);
                 break;
 
@@ -265,46 +271,11 @@ class CallGathererPass
                 $this->passNewType($expression);
                 break;
 
-            case 'property-access':
-            case 'property-dynamic-access':
-            case 'property-string-access':
-            case 'array-access':
-            case 'static-property-access':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'fetch':
-                $this->passExpression($expression['right']);
-                break;
-
-            case 'isset':
-            case 'empty':
-            case 'instanceof':
-            case 'likely':
-            case 'unlikely':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'list':
-                $this->passExpression($expression['left']);
-                break;
-
             case 'cast':
-                $this->passExpression($expression['right']);
-                break;
-
             case 'type-hint':
-                $this->passExpression($expression['right']);
-                break;
-
-            case 'clone':
-            case 'require':
-            case 'require_once':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'ternary':
             case 'short-ternary':
+            case 'ternary':
+            case 'fetch':
                 $this->passExpression($expression['right']);
                 break;
 
@@ -318,6 +289,16 @@ class CallGathererPass
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
+                // empty statement != empty operator
+                case 'empty':
+                case 'comment':
+                case 'cblock':
+                case 'unset':
+                case 'continue':
+                case 'break':
+                case 'declare':
+                    break;
+
                 case 'let':
                     $this->passLetStatement($statement);
                     break;
@@ -328,9 +309,6 @@ class CallGathererPass
                             $this->passExpression($expr);
                         }
                     }
-                    break;
-
-                case 'declare':
                     break;
 
                 case 'if':
@@ -362,6 +340,7 @@ class CallGathererPass
                     break;
 
                 case 'while':
+                case 'for':
                 case 'do-while':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -371,45 +350,25 @@ class CallGathererPass
                     }
                     break;
 
-                case 'for':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
-                    }
-                    if (isset($statement['statements'])) {
-                        $this->passStatementBlock($statement['statements']);
-                    }
-                    break;
-
+                case 'throw':
+                case 'require_once':
+                case 'require':
                 case 'return':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }
                     break;
 
+                case 'try-catch':
                 case 'loop':
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
                     }
                     break;
 
-                case 'try-catch':
-                    if (isset($statement['statements'])) {
-                        $this->passStatementBlock($statement['statements']);
-                    }
-                    break;
-
-                case 'throw':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
-                    }
-                    break;
-
-                case 'fetch':
-                    $this->passExpression($statement['expr']);
-                    break;
-
-                case 'mcall':
                 case 'scall':
+                case 'mcall':
+                case 'fetch':
                     $this->passExpression($statement['expr']);
                     break;
 
@@ -424,22 +383,6 @@ class CallGathererPass
                         }
                     }
                     $this->passCall($expr);
-                    break;
-
-                case 'require':
-                case 'require_once':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
-                    }
-                    break;
-
-                case 'break':
-                case 'continue':
-                case 'unset':
-                case 'cblock':
-                case 'comment':
-                // empty statement != empty operator
-                case 'empty':
                     break;
 
                 default:

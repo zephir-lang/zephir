@@ -19,5 +19,7 @@ RUN docker-php-ext-install zip gmp intl mysqli && \
     docker-php-ext-enable psr zephir_parser
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+# Bash script with helper aliases
+COPY ./.bashrc /root/.bashrc
 
 CMD ["php-fpm"]

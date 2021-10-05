@@ -51,21 +51,14 @@ ZEND_BEGIN_MODULE_GLOBALS(stub)
 
 	
 	zephir_struct_db db;
-
 	zephir_struct_orm orm;
-
 	zephir_struct_extension extension;
-
 	zend_bool my_setting_1;
-
 	zend_bool test_setting_1;
-
 	int my_setting_2;
-
 	double my_setting_3;
-
 	char my_setting_4;
-
+	char * my_setting_5;
 
 ZEND_END_MODULE_GLOBALS(stub)
 

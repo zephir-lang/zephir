@@ -140,7 +140,7 @@ class Struct
      * @see https://docs.zephir-lang.com/latest/en/globals
      *
      * @param string $name      - global-name
-     * @param array $global    - global structure (type, default...)
+     * @param array  $global    - global structure (type, default...)
      * @param string $namespace - global namespace
      *
      * @return string

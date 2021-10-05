@@ -37,7 +37,7 @@ class DocBlock
 
     /**
      * @param string|null $source Raw doc-block
-     * @param string $indent Indent, 4 spaces by default
+     * @param string      $indent Indent, 4 spaces by default
      */
     public function __construct(?string $source, string $indent = '    ')
     {

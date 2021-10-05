@@ -11,12 +11,12 @@
 
 namespace Zephir;
 
+use Zephir\Exception\InvalidArgumentException;
 use const INFO_GENERAL;
 use const PHP_INT_SIZE;
 use const PHP_OS;
 use const PHP_ZTS;
 use const SCANDIR_SORT_ASCENDING;
-use Zephir\Exception\InvalidArgumentException;
 
 /**
  * Attempts to remove recursively the directory with all subdirectories and files.

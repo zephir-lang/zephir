@@ -18,8 +18,6 @@ use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
 /**
- * ClassConstant.
- *
  * Represents a class constant
  */
 class ClassConstant
@@ -42,8 +40,8 @@ class ClassConstant
     /**
      * ClassConstant constructor.
      *
-     * @param string $name
-     * @param array  $value
+     * @param string      $name
+     * @param array       $value
      * @param string|null $docBlock
      */
     public function __construct(string $name, array $value, ?string $docBlock = null)

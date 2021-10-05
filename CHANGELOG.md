@@ -5,8 +5,16 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
-### Added
+# Added
+- Added support for `string` type in php.ini [#2280](https://github.com/zephir-lang/zephir/issues/2280)
 - Added support for `mixed` [#2276](https://github.com/zephir-lang/zephir/issues/2276)
+
+### Fixed
+- Fixed multiple return types in stubs [#2283](https://github.com/zephir-lang/zephir/issues/2283)
+- Fixed `bool` return type in stubs [#2272](https://github.com/zephir-lang/zephir/issues/2272)
+
+### Changed
+- Removed `.zep` from stubs filenames [#2273](https://github.com/zephir-lang/zephir/issues/2273)
 
 ## [0.14.0] - 2021-09-18
 ### Added

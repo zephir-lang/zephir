@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use ReflectionException;
@@ -67,31 +69,17 @@ use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 
 /**
- * Zephir\Expressions.
- *
- * Represents an expression. Most language constructs in a language are expressions
+ * Represents an expression.
+ * Most language constructs in a language are expressions.
  */
 class Expression
 {
-    protected $expression;
-
-    protected $expecting = true;
-
-    protected $readOnly = false;
-
-    protected $noisy = true;
-
-    /**
-     * @deprecated
-     *
-     * @var bool
-     */
-    protected $stringOperation = false;
-
-    /** @var Variable */
-    protected $expectingVariable;
-
-    protected $evalMode = false;
+    protected bool $noisy = true;
+    protected bool $expecting = true;
+    protected bool $readOnly = false;
+    protected bool $evalMode = false;
+    protected array $expression = [];
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Expression constructor.
@@ -108,7 +96,7 @@ class Expression
      *
      * @return array
      */
-    public function getExpression()
+    public function getExpression(): array
     {
         return $this->expression;
     }
@@ -117,10 +105,10 @@ class Expression
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -131,7 +119,7 @@ class Expression
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -141,7 +129,7 @@ class Expression
      *
      * @return bool
      */
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return $this->readOnly;
     }
@@ -152,7 +140,7 @@ class Expression
      *
      * @return bool
      */
-    public function isExpectingReturn()
+    public function isExpectingReturn(): bool
     {
         return $this->expecting;
     }
@@ -161,9 +149,9 @@ class Expression
      * Returns the variable which is expected to return the
      * result of the expression evaluation.
      *
-     * @return Variable
+     * @return Variable|null
      */
-    public function getExpectingVariable()
+    public function getExpectingVariable(): ?Variable
     {
         return $this->expectingVariable;
     }
@@ -173,7 +161,7 @@ class Expression
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -183,22 +171,9 @@ class Expression
      *
      * @return bool
      */
-    public function isNoisy()
+    public function isNoisy(): bool
     {
         return $this->noisy;
-    }
-
-    /**
-     * Sets if current operation is a string operation like "concat"
-     * thus avoiding promote numeric strings to longs.
-     *
-     * @deprecated
-     *
-     * @param bool $stringOperation
-     */
-    public function setStringOperation($stringOperation)
-    {
-        $this->stringOperation = $stringOperation;
     }
 
     /**
@@ -206,7 +181,7 @@ class Expression
      *
      * @param bool $evalMode
      */
-    public function setEvalMode($evalMode)
+    public function setEvalMode(bool $evalMode): void
     {
         $this->evalMode = $evalMode;
     }
@@ -235,7 +210,7 @@ class Expression
             $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
         }
 
-        /*
+        /**
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable() && 'array' != $symbolVariable->getType()) {
@@ -246,7 +221,6 @@ class Expression
          * Mark the variable as an 'array'
          */
         $symbolVariable->setDynamicTypes('array');
-
         $compilationContext->backend->initArray($symbolVariable, $compilationContext);
 
         return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
@@ -257,7 +231,10 @@ class Expression
      *
      * @param CompilationContext $compilationContext
      *
+     * @throws CompilerException|Exception
+     *
      * @return CompiledExpression
+     *
      * @throws Exception
      * @throws ReflectionException
      */

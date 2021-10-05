@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,10 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
-/**
- * Zephir\ArgInfoDefinition.
- */
 class ArgInfoDefinition
 {
     /**
@@ -62,10 +59,10 @@ class ArgInfoDefinition
      * ArgInfoDefinition constructor.
      *
      * @param string $name
-     * @param ClassMethod $functionLike
-     * @param CodePrinter $codePrinter
+     * @param ClassMethod        $functionLike
+     * @param CodePrinter        $codePrinter
      * @param CompilationContext $compilationContext
-     * @param bool $returnByRef
+     * @param bool               $returnByRef
      */
     public function __construct(
         string $name,

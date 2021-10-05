@@ -39,8 +39,8 @@ final class EnvTest extends TestCase
         $tester = new Env();
         $var = 'non-existing';
 
-        $this->assertSame(false, $tester->read($var));
-        $this->assertSame(false, getenv($var));
+        $this->assertFalse($tester->read($var));
+        $this->assertFalse(getenv($var));
     }
 
     public function testReadStandard(): void

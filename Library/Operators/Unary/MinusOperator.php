@@ -29,6 +29,7 @@ class MinusOperator extends BaseOperator
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression

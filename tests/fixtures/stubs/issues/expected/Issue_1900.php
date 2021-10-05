@@ -23,9 +23,7 @@ class Issue_1900 implements AliasedManagerInterface
      */
     private $collect;
 
-
     static protected $uniqueId = 0;
-
 
     /**
      * @return AliasedManagerInterface
@@ -130,5 +128,4 @@ class Issue_1900 implements AliasedManagerInterface
     public function hasListeners(string $type): AliasedManagerInterface
     {
     }
-
 }

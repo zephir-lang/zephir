@@ -172,7 +172,7 @@ class Call
     /**
      * Returns the symbol variable that must be returned by the call.
      *
-     * @param bool $useTemp
+     * @param bool                    $useTemp
      * @param CompilationContext|null $compilationContext
      *
      * @return Variable|null
@@ -191,12 +191,13 @@ class Call
     /**
      * Resolves parameters.
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $readOnly
+     * @param array              $expression
+     * @param bool               $readOnly
      *
      * @return CompiledExpression[]|null
+     *
      * @throws Exception
      */
     public function getResolvedParamsAsExpr(array $parameters, CompilationContext $compilationContext, array $expression, bool $readOnly = false): ?array
@@ -287,12 +288,13 @@ class Call
      * Resolve parameters getting aware that the target function/method could retain or change
      * the parameters.
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param null $calleeDefinition
+     * @param array              $expression
+     * @param null               $calleeDefinition
      *
      * @return array
+     *
      * @throws Exception
      */
     public function getResolvedParams(array $parameters, CompilationContext $compilationContext, array $expression, $calleeDefinition = null): array
@@ -486,11 +488,12 @@ class Call
     /**
      * Resolve parameters using zvals in the stack and without allocating memory for constants.
      *
-     * @param array $parameters
+     * @param array              $parameters
      * @param CompilationContext $compilationContext
-     * @param array $expression
+     * @param array              $expression
      *
      * @return array
+     *
      * @throws Exception
      */
     public function getReadOnlyResolvedParams(array $parameters, CompilationContext $compilationContext, array $expression): array

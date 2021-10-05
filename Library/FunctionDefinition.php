@@ -35,12 +35,12 @@ class FunctionDefinition extends ClassMethod
     /**
      * FunctionDefinition constructor.
      *
-     * @param string $namespace
-     * @param string $name
+     * @param string                     $namespace
+     * @param string                     $name
      * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null $statements
-     * @param array|null $returnType
-     * @param array|null $expression
+     * @param StatementsBlock|null       $statements
+     * @param array|null                 $returnType
+     * @param array|null                 $expression
      */
     public function __construct(
         string $namespace,
