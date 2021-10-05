@@ -58,7 +58,7 @@ class ArgInfoDefinition
     /**
      * ArgInfoDefinition constructor.
      *
-     * @param string $name
+     * @param string             $name
      * @param ClassMethod        $functionLike
      * @param CodePrinter        $codePrinter
      * @param CompilationContext $compilationContext

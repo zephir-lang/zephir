@@ -532,7 +532,7 @@ class ClassMethod
         return $this;
     }
 
-    public function getOptimizedMethod(): ClassMethod
+    public function getOptimizedMethod(): self
     {
         $optimizedName = $this->getName().'_zephir_internal_call';
         $optimizedMethod = $this->classDefinition->getMethod($optimizedName, false);

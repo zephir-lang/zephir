@@ -54,7 +54,7 @@ class Closure
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
@@ -76,10 +76,11 @@ class Closure
     /**
      * Creates a closure.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
