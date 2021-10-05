@@ -20,6 +20,11 @@ class Globals
 		globals_set("my_setting_4", value);
 	}
 
+	public function setStringValue(string value) -> void
+	{
+	    globals_set("my_setting_5", value);
+	}
+
 	public function setBoolValue(value) -> void
 	{
 		globals_set("my_setting_1", value);
@@ -87,6 +92,14 @@ class Globals
 	{
 		return globals_get("my_setting_4");
 	}
+
+	/**
+     * @return mixed
+     */
+    public function getDefaultGlobals8()
+    {
+        return globals_get("my_setting_5");
+    }
 
 	/**
 	 * @return mixed

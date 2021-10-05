@@ -95,6 +95,10 @@
       "type": "char",
       "default": "A"
     },
+    "my_setting_5": {
+      "type": "string",
+      "default": "custom_value"
+    },
     "db.my_setting_1": {
       "type": "bool",
       "default": false

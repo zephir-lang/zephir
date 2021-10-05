@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,10 +20,12 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
- * Zephir\Optimizers\FunctionCall\GlobalsSetOptimizer.
+ * `globals_set()` internal function.
  *
- * Writes values from extensions globals
+ * Writes values from extensions globals.
  */
 class GlobalsSetOptimizer extends OptimizerAbstract
 {
@@ -34,17 +38,17 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      *
      * @return CompiledExpression
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    public function optimize(array $expression, Call $call, CompilationContext $context): CompiledExpression
     {
         if (!isset($expression['parameters'])) {
             throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 !== count($expression['parameters'])) {
             throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 
-        if ('string' != $expression['parameters'][0]['parameter']['type']) {
+        if ('string' !== $expression['parameters'][0]['parameter']['type']) {
             throw new CompilerException("A string parameter is required for 'globals_set'", $expression);
         }
 
@@ -88,7 +92,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
         }
     }
 
-    private function resolveInternalAccessor($globalName)
+    private function resolveInternalAccessor(string $globalName): string
     {
         $parts = explode('.', $globalName);
 
@@ -124,7 +128,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             case 'ulong':
                 return strtr('zval_get_long(:v)', [':v' => $value]);
             case 'string':
-                return strtr('zval_get_string(:v)', [':v' => $value]);
+                return strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]);
             case 'char':
             case 'uchar':
                 return strtr(
