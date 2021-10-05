@@ -9,14 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 
-/**
- * Class OptimizerAbstract.
- */
 abstract class OptimizerAbstract
 {
     /**

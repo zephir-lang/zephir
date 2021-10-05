@@ -15,7 +15,7 @@ if (!class_exists('APCIterator', false)) {
     defined('APC_BIN_VERIFY_MD5') || define('APC_BIN_VERIFY_MD5', 1 << 0);
 
     // See: https://github.com/php/pecl-caching-apc/blob/master/apc_iterator.h
-    defined('APC_ITER_ALL') || define('APC_ITER_ALL', 0xffffffff);
+    defined('APC_ITER_ALL') || define('APC_ITER_ALL', 0xFFFFFFFF);
     defined('APC_ITER_ATIME') || define('APC_ITER_ATIME', 1 << 11);
     defined('APC_ITER_CTIME') || define('APC_ITER_CTIME', 1 << 9);
     defined('APC_ITER_DEVICE') || define('APC_ITER_DEVICE', 1 << 3);
@@ -62,6 +62,7 @@ if (!class_exists('APCIterator', false)) {
         {
         }
 
+        #[ReturnTypeWillChange]
         public function next()
         {
         }

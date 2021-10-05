@@ -57,7 +57,7 @@ class DocblockParser
      */
     private function __tryRegisterAnnotation()
     {
-        if (($this->annotationNameOpen || $this->annotationOpen) && \strlen($this->currentAnnotationStr) > 0) {
+        if (($this->annotationNameOpen || $this->annotationOpen) && $this->currentAnnotationStr !== '') {
             $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);
             $this->docblockObj->addAnnotation($annotation);
         }
@@ -156,7 +156,7 @@ class DocblockParser
 
                     if ('@' == $currentChar) {
                         $this->descriptionStr = trim($this->descriptionStr);
-                        if ($this->descriptionOpen && \strlen($this->descriptionStr) > 0) {
+                        if ($this->descriptionOpen && $this->descriptionStr !== '') {
                             $this->descriptionOpen = false;
                         }
 
@@ -184,7 +184,7 @@ class DocblockParser
                         }
                     } elseif ($this->summaryOpen) {
                         // stop summary on new line
-                        if (\strlen($this->summaryStr) > 0 && ("\n" == $currentChar || "\r" == $currentChar)) {
+                        if ($this->summaryStr !== '' && ("\n" == $currentChar || "\r" == $currentChar)) {
                             $this->summaryOpen = false;
                             $this->descriptionOpen = true;
                             $this->ignoreStar = true;

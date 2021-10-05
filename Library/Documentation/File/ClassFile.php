@@ -57,7 +57,7 @@ class ClassFile implements FileInterface
         $nsStr = '';
 
         foreach ($nsPieces as $n) {
-            if (\strlen($nsStr) > 0) {
+            if ($nsStr !== '') {
                 $nsStr .= '\\';
             }
             $nsStr .= $n;
