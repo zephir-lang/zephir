@@ -101,7 +101,6 @@ class GlobalsSetOptimizer extends OptimizerAbstract
 
     /**
      * TODO:  Add 'hash' support
-     * TODO:  Use zval_get_string, zval_get_long, zval_get_double for ZE3
      *
      * @param array  $definition
      * @param array  $expression
@@ -110,7 +109,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      *
      * @return string
      */
-    private function resolveInternalValue(array $definition, array $expression, $name, $value)
+    private function resolveInternalValue(array $definition, array $expression, string $name, string $value): string
     {
         $type = $definition['type'];
 
@@ -123,22 +122,18 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             case 'integer':
             case 'long':
             case 'ulong':
-                // TODO: Use zval_get_long when we'll drop Zend Engine 2
-                return strtr('Z_LVAL_P(:v)', [':v' => $value]);
+                return strtr('zval_get_long(:v)', [':v' => $value]);
             case 'string':
-                // TODO: Use zval_get_string when we'll drop Zend Engine 2
-                return strtr('Z_STRVAL_P(:v)', [':v' => $value]);
+                return strtr('zval_get_string(:v)', [':v' => $value]);
             case 'char':
             case 'uchar':
-                // TODO: Use zval_get_string and zval_get_long when we'll drop Zend Engine 2
                 return strtr(
-                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : Z_LVAL_P(:v))',
+                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? zval_get_string(:v)[0] : NULL) : zval_get_long(:v))',
                     [':v' => $value]
                 );
             case 'double':
             case 'float':
-                // TODO: Use zval_get_double when we'll drop Zend Engine 2
-                return strtr('Z_DVAL_P(:v)', [':v' => $value]);
+                return strtr('zval_get_double(:v)', [':v' => $value]);
             default:
                 throw new CompilerException(
                     "Unknown type '{$type}' to setting global variable '{$name}'.",
