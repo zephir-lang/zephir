@@ -128,7 +128,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             case 'char':
             case 'uchar':
                 return strtr(
-                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? zval_get_string(:v)[0] : NULL) : zval_get_long(:v))',
+                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : zval_get_long(:v))',
                     [':v' => $value]
                 );
             case 'double':
