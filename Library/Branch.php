@@ -31,7 +31,7 @@ class Branch
 
     protected int $level = -1;
     protected int $type = self::TYPE_ROOT;
-    protected bool $unreachable = false;
+    protected ?bool $unreachable = null;
     protected ?Branch $parentBranch = null;
     protected ?StatementAbstract $relatedStatement = null;
 
@@ -83,17 +83,17 @@ class Branch
     /**
      * Sets if the branch is unreachable.
      *
-     * @param bool $unreachable
+     * @param bool|null $unreachable
      */
-    public function setUnreachable(bool $unreachable): void
+    public function setUnreachable(?bool $unreachable): void
     {
         $this->unreachable = $unreachable;
     }
 
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function isUnreachable(): bool
+    public function isUnreachable(): ?bool
     {
         return $this->unreachable;
     }

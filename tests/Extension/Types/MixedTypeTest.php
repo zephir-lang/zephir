@@ -27,8 +27,8 @@ final class MixedTypeTest extends TestCase
         $this->assertSame('mixed string', $returns->returnMixedString());
         $this->assertSame(1, $returns->returnMixedInt());
         $this->assertSame(3.14, $returns->returnMixedFloat());
-        $this->assertSame(true, $returns->returnMixedBool());
-        $this->assertSame(null, $returns->returnMixedNull());
+        $this->assertTrue($returns->returnMixedBool());
+        $this->assertNull($returns->returnMixedNull());
 
         $this->assertNotNull($returns->returnMixedObject());
         $this->assertNotNull($returns->returnMixedArray());
@@ -52,8 +52,8 @@ final class MixedTypeTest extends TestCase
         $this->assertSame('mixed string', $returns->paramMixed('mixed string'));
         $this->assertSame(1, $returns->paramMixed(1));
         $this->assertSame(3.14, $returns->paramMixed(3.14));
-        $this->assertSame(true, $returns->paramMixed(true));
-        $this->assertSame(null, $returns->paramMixed(null));
+        $this->assertTrue($returns->paramMixed(true));
+        $this->assertNull($returns->paramMixed(null));
 
         $this->assertEquals([(new \stdClass()), []], $returns->paramMixedTwo((new \stdClass()), []));
         $this->assertSame([[], 'mixed string'], $returns->paramMixedTwo([], 'mixed string'));
@@ -80,7 +80,7 @@ final class MixedTypeTest extends TestCase
         $this->assertSame('mixed string', $returns->paramAndReturnMixed('mixed string'));
         $this->assertSame(1, $returns->paramAndReturnMixed(1));
         $this->assertSame(3.14, $returns->paramAndReturnMixed(3.14));
-        $this->assertSame(true, $returns->paramAndReturnMixed(true));
-        $this->assertSame(null, $returns->paramAndReturnMixed(null));
+        $this->assertTrue($returns->paramAndReturnMixed(true));
+        $this->assertNull($returns->paramAndReturnMixed(null));
     }
 }

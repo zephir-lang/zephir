@@ -26,8 +26,8 @@ use Zephir\Variable;
  */
 class EvalExpression
 {
-    protected bool $unreachable = false;
-    protected bool $unreachableElse = false;
+    protected ?bool $unreachable = null;
+    protected ?bool $unreachableElse = null;
     protected array $usedVariables = [];
 
     /**
@@ -48,8 +48,12 @@ class EvalExpression
         if ('not' == $expr['type']) {
             $conditions = $this->optimize($expr['left'], $compilationContext);
             if (false !== $conditions) {
-                $this->unreachable = !$this->unreachable;
-                $this->unreachableElse = !$this->unreachableElse;
+                if (null !== $this->unreachable) {
+                    $this->unreachable = !$this->unreachable;
+                }
+                if (null !== $this->unreachableElse) {
+                    $this->unreachableElse = !$this->unreachableElse;
+                }
 
                 return '!('.$conditions.')';
             }
@@ -223,9 +227,9 @@ class EvalExpression
     /**
      * Checks if the evaluation produce unreachable code.
      *
-     * @return bool
+     * @return bool|null
      */
-    public function isUnreachable(): bool
+    public function isUnreachable(): ?bool
     {
         return $this->unreachable;
     }
@@ -233,9 +237,9 @@ class EvalExpression
     /**
      * Checks if the evaluation not produce unreachable code.
      *
-     * @return bool
+     * @return bool|null
      */
-    public function isUnreachableElse(): bool
+    public function isUnreachableElse(): ?bool
     {
         return $this->unreachableElse;
     }
