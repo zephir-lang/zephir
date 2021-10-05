@@ -52,7 +52,7 @@ class NamespaceAccessor
             $ns = explode('\\', $class->getClassDefinition()->getNamespace());
             $actualStr = '';
             foreach ($ns as $n) {
-                if (\strlen($actualStr) > 0) {
+                if ($actualStr !== '') {
                     $previous = $byNamespace[$actualStr];
                     $actualStr .= '\\';
                     $isRoot = false;

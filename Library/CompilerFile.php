@@ -22,7 +22,6 @@ use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
 
 use function is_array;
-use function strlen;
 
 /**
  * Zephir\CompilerFile.
@@ -484,7 +483,7 @@ final class CompilerFile implements FileInterface
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'namespace':
-                    if (strlen($namespace) > 0) {
+                    if ($namespace !== '') {
                         throw new CompilerException('The namespace must be defined just one time', $topStatement);
                     }
 
