@@ -40,7 +40,7 @@ class StatementsBlock
 {
     protected $statements;
 
-    protected bool $unreachable = false;
+    protected ?bool $unreachable = null;
 
     protected $debug = false;
 
@@ -103,7 +103,7 @@ class StatementsBlock
      * @throws Exception
      * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext, bool $unreachable = false, int $branchType = Branch::TYPE_UNKNOWN): Branch
+    public function compile(CompilationContext $compilationContext, ?bool $unreachable = null, int $branchType = Branch::TYPE_UNKNOWN): Branch
     {
         $compilationContext->codePrinter->increaseLevel();
         ++$compilationContext->currentBranch;
