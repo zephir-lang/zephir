@@ -35,6 +35,11 @@ class Globals
 		globals_set("orm.cache_level", value);
 	}
 
+	public function setDefaultGlobalsOrmCachePrefix(string value) -> void
+	{
+	    globals_set("orm.cache_prefix", value);
+	}
+
 	/* Get Default Properties */
 
 	/**
@@ -108,4 +113,12 @@ class Globals
 	{
 		return globals_get("orm.cache_level");
 	}
+
+	/**
+     * @return mixed
+     */
+    public function getDefaultGlobalsOrmCachePrefix()
+    {
+        return globals_get("orm.cache_prefix");
+    }
 }

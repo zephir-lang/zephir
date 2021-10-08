@@ -149,6 +149,31 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCacheLevel)
 	ZEPHIR_GLOBAL(orm).cache_level = zval_get_long(value);
 }
 
+PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCachePrefix)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *value_param = NULL;
+	zval value;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &value_param);
+	zephir_get_strval(&value, value_param);
+
+
+	ZEPHIR_GLOBAL(orm).cache_prefix = ZSTR_VAL(zval_get_string(&value));
+	ZEPHIR_MM_RESTORE();
+}
+
 /**
  * @return mixed
  */
@@ -255,5 +280,17 @@ PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCacheLevel)
 
 
 	RETURN_LONG(ZEPHIR_GLOBAL(orm).cache_level);
+}
+
+/**
+ * @return mixed
+ */
+PHP_METHOD(Stub_Globals, getDefaultGlobalsOrmCachePrefix)
+{
+	zval *this_ptr = getThis();
+
+
+
+	RETURN_STRING(ZEPHIR_GLOBAL(orm).cache_prefix);
 }
 

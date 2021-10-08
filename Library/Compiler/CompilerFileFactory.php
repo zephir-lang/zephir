@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Compiler;
 
 use Psr\Log\LoggerInterface;
@@ -19,15 +21,12 @@ use Zephir\FileSystem\FileSystemInterface;
 
 final class CompilerFileFactory
 {
-    private $config;
-    private $filesystem;
-    private $logger;
+    private Config $config;
+    private FileSystemInterface $filesystem;
+    private LoggerInterface $logger;
 
-    public function __construct(
-        Config $config,
-        FileSystemInterface $filesystem,
-        LoggerInterface $logger
-    ) {
+    public function __construct(Config $config, FileSystemInterface $filesystem, LoggerInterface $logger)
+    {
         $this->config = $config;
         $this->filesystem = $filesystem;
         $this->logger = $logger;
@@ -43,7 +42,7 @@ final class CompilerFileFactory
      *
      * @return FileInterface
      */
-    public function create($className, $filePath)
+    public function create(string $className, string $filePath): FileInterface
     {
         $compiler = new CompilerFile($this->config, new AliasManager(), $this->filesystem);
 

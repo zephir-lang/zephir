@@ -83,6 +83,23 @@ final class GlobalsTest extends TestCase
 
         $this->test->setStringValue('Long Text without any sense...');
         $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobals8());
+
+        /**
+         * Get and set string value from globals struct.
+         */
+        $this->assertSame('prefix-string-', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('1');
+        $this->assertSame('1', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('c');
+        $this->assertSame('c', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('char');
+        $this->assertSame('char', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('Long Text without any sense...');
+        $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobalsOrmCachePrefix());
     }
 
     public function testSetBoolValueUsingInt(): void

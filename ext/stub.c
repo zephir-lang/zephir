@@ -254,6 +254,7 @@ PHP_INI_BEGIN()
 	
 	
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
+	
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
@@ -520,6 +521,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	stub_globals->db.my_setting_3 = 7.5;
 	stub_globals->orm.cache_level = 3;
 
+	stub_globals->orm.cache_prefix = ZSTR_VAL(zend_string_init(ZEND_STRL("prefix-string-"), 0));
 
 	stub_globals->my_setting_1 = 1;
 	stub_globals->test_setting_1 = 1;
