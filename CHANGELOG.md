@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fix support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
 
 ## [0.15.0] - 2021-10-05
 ### Added
