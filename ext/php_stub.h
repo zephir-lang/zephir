@@ -26,6 +26,7 @@ typedef struct _zephir_struct_db {
 typedef struct _zephir_struct_orm { 
 	int cache_level;
 	zend_bool cache_enable;
+	zend_string*  cache_prefix;
 } zephir_struct_orm;
 
 typedef struct _zephir_struct_extension { 
