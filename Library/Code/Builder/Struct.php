@@ -122,6 +122,9 @@ class Struct
             case 'bool':
                 return '';
 
+            case 'string':
+                return "\t".$namespace.'_globals->'.$this->simpleName.'.'.$name.' = ZSTR_VAL(zend_string_init(ZEND_STRL("'.$global['default'].'"), 0));';
+
             case 'int':
             case 'uint':
             case 'long':
@@ -191,6 +194,9 @@ class Struct
 
             case 'hash':
                 return 'HashTable* ';
+
+            case 'string':
+                return 'zend_string* ';
 
             case 'int':
             case 'uint':
