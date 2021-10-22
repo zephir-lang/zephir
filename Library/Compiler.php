@@ -1386,22 +1386,10 @@ final class Compiler
                 }
 
                 $globalCode .= "\t".$type.' '.$name.';'.PHP_EOL;
-                $iniEntry = [];
-                if (isset($global['ini-entry'])) {
-                    $iniEntry = $global['ini-entry'];
-                }
 
-                if (!isset($iniEntry['name'])) {
-                    $iniName = $namespace.'.'.$name;
-                } else {
-                    $iniName = $iniEntry['name'];
-                }
-
-                if (!isset($iniEntry['scope'])) {
-                    $scope = 'PHP_INI_ALL';
-                } else {
-                    $scope = $iniEntry['scope'];
-                }
+                $iniEntry = $global['ini-entry'] ?? [];
+                $iniName = $iniEntry['name'] ?? $namespace.'.'.$name;
+                $scope = $iniEntry['scope'] ?? 'PHP_INI_ALL';
 
                 switch ($global['type']) {
                     case 'boolean':
