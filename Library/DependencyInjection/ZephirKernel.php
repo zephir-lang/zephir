@@ -68,7 +68,7 @@ final class ZephirKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/../config/config.yml');
+        $loader->load(__DIR__.'/../../config/symfony/services.php');
 
         foreach ($this->extraConfigFiles as $configFile) {
             $loader->load($configFile);

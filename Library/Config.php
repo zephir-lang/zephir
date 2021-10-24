@@ -124,15 +124,13 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Factory method to create a Config instance from the $_SERVER['argv'].
      *
-     * @throws Exception
-     *
      * @return Config
      */
     public static function fromServer(): self
     {
         $config = new self();
 
-        /*
+        /**
          * Change configurations flags
          */
         if ($_SERVER['argc'] >= 2) {

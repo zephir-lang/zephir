@@ -22,6 +22,7 @@ use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
+
 use function extension_loaded;
 
 /**
