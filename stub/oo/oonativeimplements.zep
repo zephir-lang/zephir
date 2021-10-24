@@ -22,11 +22,11 @@ class OoNativeImplements implements
 
 	/* Iterator */
 
-	public function current()
+	public function current() -> mixed
 	{
 	}
 
-	public function key()
+	public function key() -> mixed
 	{
 	}
 

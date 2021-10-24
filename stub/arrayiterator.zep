@@ -20,12 +20,12 @@ class ArrayIterator implements \Iterator
 	    let this->position = 0;
 	}
 
-	public function current()
+	public function current() -> mixed
 	{
 	    return this->test[this->position];
 	}
 
-	public function key()
+	public function key() -> mixed
 	{
 	    return this->position;
 	}

@@ -12,8 +12,8 @@ class ArrayAccessObj implements \ArrayAccess
 			"three":3
 		];
 	}
-	
-	public function offsetSet(offset, value)
+
+	public function offsetSet(mixed offset, mixed value) -> void
 	{
 		if is_null(offset) {
 			let this->test[] = value;
@@ -21,18 +21,18 @@ class ArrayAccessObj implements \ArrayAccess
 			let this->test[offset] = value;
 		}
 	}
-	
-	public function offsetExists(offset)
+
+	public function offsetExists(mixed offset) -> bool
 	{
 		return isset this->test[offset];
 	}
-	
-	public function offsetUnset(offset)
+
+	public function offsetUnset(mixed offset) -> void
 	{
 		unset this->test[offset];
 	}
-	
-	public function offsetGet(offset)
+
+	public function offsetGet(mixed offset) -> mixed
 	{
 		return isset this->test[offset] ? this->test[offset] : null;
 	}
