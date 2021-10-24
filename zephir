@@ -54,7 +54,7 @@ $handlers = [
     $consoleStdOutHandler,
 ];
 
-$disk = new HardDisk($rootPath.'/.zephir');
+$disk = new HardDisk(getcwd().'/.zephir');
 
 $parser = new Parser();
 $logger = new Logger('zephir', $handlers);
