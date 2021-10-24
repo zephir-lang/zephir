@@ -9,9 +9,10 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Backends;
 
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Input\ArgvInput;
 use Zephir\BaseBackend;
 use Zephir\Config;
@@ -19,13 +20,13 @@ use Zephir\Exception\IllegalStateException;
 
 final class BackendFactory
 {
-    private $container;
-    private $kernelsPath;
-    private $templatesPath;
+    private Config $config;
+    private string $kernelsPath;
+    private string $templatesPath;
 
-    public function __construct(ContainerInterface $container, $kernelsPath, $templatesPath)
+    public function __construct(Config $config, string $kernelsPath, string $templatesPath)
     {
-        $this->container = $container;
+        $this->config = $config;
         $this->kernelsPath = $kernelsPath;
         $this->templatesPath = $templatesPath;
     }
@@ -35,7 +36,7 @@ final class BackendFactory
         $backendClassName = $this->resolveBackendClass();
 
         return new $backendClassName(
-            $this->container->get(Config::class),
+            $this->config,
             $this->kernelsPath,
             $this->templatesPath
         );
@@ -48,7 +49,7 @@ final class BackendFactory
      *
      * @return string
      */
-    private function resolveBackendClass()
+    private function resolveBackendClass(): string
     {
         $parser = new ArgvInput();
         $backend = $parser->getParameterOption('--backend', null);
@@ -59,9 +60,7 @@ final class BackendFactory
             // testing purposes and may be removed in the future.
             // You SHOULD NOT rely on this possibility.
             if (getenv('ZEPHIR_BACKEND')) {
-                $backend = $backend = getenv('ZEPHIR_BACKEND');
-            } elseif ($this->container->has('ZEPHIR_BACKEND')) {
-                $backend = $this->container->get('ZEPHIR_BACKEND');
+                $backend = getenv('ZEPHIR_BACKEND');
             }
         }
 
@@ -71,8 +70,8 @@ final class BackendFactory
 
         $className = "Zephir\\Backends\\{$backend}\\Backend";
 
-        if (!class_exists($className) || 'ZendEngine2' == $backend) {
-            throw new IllegalStateException(sprintf('Backend class "%s" doesn\'t exist.', $backend));
+        if (!class_exists($className) || 'ZendEngine2' === $backend) {
+            throw new IllegalStateException(sprintf('Backend class "%s" does not exist.', $backend));
         }
 
         return $className;
