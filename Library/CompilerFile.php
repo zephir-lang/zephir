@@ -13,6 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use ReflectionException;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
@@ -20,7 +21,7 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
 
-use function strlen;
+use function is_array;
 
 /**
  * Zephir\CompilerFile.
@@ -33,65 +34,71 @@ final class CompilerFile implements FileInterface
     use LoggerAwareTrait;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $namespace;
+    private ?string $namespace = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $className;
+    private ?string $className = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private $filePath;
+    private ?string $filePath = null;
 
     /**
      * @var bool
      */
-    private $external = false;
+    private bool $external = false;
 
     /**
      * Original internal representation (IR) of the file.
      *
-     * @var array
+     * @var array|null
      */
-    private $ir;
-
-    private $originalNode;
-
-    private $compiledFile;
+    private ?array $ir = null;
 
     /**
-     * @var ClassDefinition
+     * @var mixed
      */
-    private $classDefinition;
+    private $originalNode;
+
+    /**
+     * @var string|null
+     */
+    private ?string $compiledFile = null;
+
+    /**
+     * @var ClassDefinition|null
+     */
+    private ?ClassDefinition $classDefinition = null;
 
     /**
      * @var FunctionDefinition[]
      */
-    private $functionDefinitions = [];
+    private array $functionDefinitions = [];
 
     /**
      * @var array
      */
-    private $headerCBlocks = [];
+    private array $headerCBlocks = [];
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     /**
      * @var AliasManager
      */
-    private $aliasManager;
+    private AliasManager $aliasManager;
 
     /**
      * @var FileSystemInterface
      */
-    private $filesystem;
+    private FileSystemInterface $filesystem;
 
     /**
      * CompilerFile constructor.
@@ -114,7 +121,7 @@ final class CompilerFile implements FileInterface
     /**
      * @param string $filePath
      */
-    public function setFilePath($filePath)
+    public function setFilePath(string $filePath)
     {
         $this->filePath = $filePath;
     }
@@ -122,7 +129,7 @@ final class CompilerFile implements FileInterface
     /**
      * @param string $className
      */
-    public function setClassName($className)
+    public function setClassName(string $className)
     {
         $this->className = $className;
     }
@@ -149,17 +156,15 @@ final class CompilerFile implements FileInterface
      *
      * @param bool $external
      */
-    public function setIsExternal($external)
+    public function setIsExternal($external): void
     {
         $this->external = (bool) $external;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return bool
      */
-    public function isExternal()
+    public function isExternal(): bool
     {
         return $this->external;
     }
@@ -173,7 +178,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    public function addFunction(Compiler $compiler, FunctionDefinition $func, $statement = null)
+    public function addFunction(Compiler $compiler, FunctionDefinition $func, array $statement = [])
     {
         $compiler->addFunction($func, $statement);
         $funcName = strtolower($func->getInternalName());
@@ -183,6 +188,7 @@ final class CompilerFile implements FileInterface
                 $statement
             );
         }
+
         $this->functionDefinitions[$funcName] = $func;
     }
 
@@ -196,69 +202,41 @@ final class CompilerFile implements FileInterface
      *
      * @return array
      */
-    public function genIR(Compiler $compiler)
+    public function genIR(Compiler $compiler): array
     {
         $normalizedPath = $this->filesystem->normalizePath($this->filePath);
 
-        // TODO: JS => JSON
-        $compilePath = "{$normalizedPath}.js";
+        $compilePath = "{$normalizedPath}.json";
         $zepRealPath = realpath($this->filePath);
 
         if ($this->filesystem->exists($compilePath)) {
-            $modificationTime = $this->filesystem->modificationTime($compilePath);
-            if ($modificationTime < filemtime($zepRealPath)) {
+            if ($this->filesystem->modificationTime($compilePath) < filemtime($zepRealPath)) {
                 $this->filesystem->delete($compilePath);
-                if (false != $this->filesystem->exists($compilePath.'.php')) {
-                    $this->filesystem->delete($compilePath.'.php');
-                }
             }
         }
 
-        $ir = null;
-        if (false == $this->filesystem->exists($compilePath)) {
+        if (!$this->filesystem->exists($compilePath)) {
             $parser = $compiler->getParserManager()->getParser();
             $ir = $parser->parse($zepRealPath);
             $this->filesystem->write($compilePath, json_encode($ir, JSON_PRETTY_PRINT));
+        } else {
+            $ir = json_decode($this->filesystem->read($compilePath), true);
         }
 
-        if (false == $this->filesystem->exists($compilePath.'.php')) {
-            if (empty($ir)) {
-                $ir = json_decode($this->filesystem->read($compilePath), true);
-            }
-
-            $data = '<?php return '.var_export($ir, true).';';
-            $this->filesystem->write($compilePath.'.php', $data);
-        }
-
-        $contents = $this->filesystem->requireFile($compilePath.'.php');
-
-        if (false == \is_array($contents)) {
-            throw new IllegalStateException(
-                sprintf(
-                    'Generating the intermediate representation for the file "%s" was failed.',
-                    realpath($this->filePath)
-                )
-            );
-        }
-
-        return $contents;
+        return $ir;
     }
 
     /**
      * Compiles the class/interface contained in the file.
      *
      * @param CompilationContext $compilationContext
-     * @param string             $namespace
-     * @param array              $classStatement
+     *
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compileClass(CompilationContext $compilationContext, $namespace, $classStatement)
+    public function compileClass(CompilationContext $compilationContext): void
     {
-        $classDefinition = $this->classDefinition;
-
-        /*
-         * Do the compilation
-         */
-        $classDefinition->compile($compilationContext);
+        $this->classDefinition->compile($compilationContext);
     }
 
     /**
@@ -317,28 +295,28 @@ final class CompilerFile implements FileInterface
 
         $classDefinition->setType('interface');
 
-        if (\is_array($docblock)) {
+        if (is_array($docblock)) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
         if (isset($topStatement['definition'])) {
             $definition = $topStatement['definition'];
 
-            /*
+            /**
              * Register constants
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
                     $classConstant = new ClassConstant(
                         $constant['name'],
-                        isset($constant['default']) ? $constant['default'] : null,
-                        isset($constant['docblock']) ? $constant['docblock'] : null
+                        $constant['default'] ?? null,
+                        $constant['docblock'] ?? null
                     );
                     $classDefinition->addConstant($classConstant);
                 }
             }
 
-            /*
+            /**
              * Register methods
              */
             if (isset($definition['methods'])) {
@@ -349,8 +327,8 @@ final class CompilerFile implements FileInterface
                         $method['name'],
                         isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
                         null,
-                        isset($method['docblock']) ? $method['docblock'] : null,
-                        isset($method['return-type']) ? $method['return-type'] : null,
+                        $method['docblock'] ?? null,
+                        $method['return-type'] ?? null,
                         $method
                     );
                     $classDefinition->addMethod($classMethod, $method);
@@ -393,7 +371,7 @@ final class CompilerFile implements FileInterface
             $classDefinition->setIsFinal($topStatement['final']);
         }
 
-        if (\is_array($docblock)) {
+        if (is_array($docblock)) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
@@ -402,19 +380,19 @@ final class CompilerFile implements FileInterface
 
             if (isset($definition['properties'])) {
                 foreach ($definition['properties'] as $property) {
-                    /*
+                    /**
                      * Add property to the definition
                      */
                     $classDefinition->addProperty(new ClassProperty(
                         $classDefinition,
                         $property['visibility'],
                         $property['name'],
-                        isset($property['default']) ? $property['default'] : null,
-                        isset($property['docblock']) ? $property['docblock'] : null,
+                        $property['default'] ?? null,
+                        $property['docblock'] ?? null,
                         $property
                     ));
 
-                    /*
+                    /**
                      * Check and process shortcuts
                      */
                     if (isset($property['shortcuts'])) {
@@ -423,20 +401,20 @@ final class CompilerFile implements FileInterface
                 }
             }
 
-            /*
+            /**
              * Register constants
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
                     $classDefinition->addConstant(new ClassConstant(
                         $constant['name'],
-                        isset($constant['default']) ? $constant['default'] : null,
-                        isset($constant['docblock']) ? $constant['docblock'] : null
+                        $constant['default'] ?? null,
+                        $constant['docblock'] ?? null
                     ));
                 }
             }
 
-            /*
+            /**
              * Register methods
              */
             if (isset($definition['methods'])) {
@@ -447,8 +425,8 @@ final class CompilerFile implements FileInterface
                         $method['name'],
                         isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
                         isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
-                        isset($method['docblock']) ? $method['docblock'] : null,
-                        isset($method['return-type']) ? $method['return-type'] : null,
+                        $method['docblock'] ?? null,
+                        $method['return-type'] ?? null,
                         $method
                     ), $method);
                 }
@@ -457,12 +435,12 @@ final class CompilerFile implements FileInterface
 
         $this->classDefinition = $classDefinition;
 
-        /*
+        /**
          * Assign current class definition to the compilation context
          */
         $compilationContext->classDefinition = $classDefinition;
 
-        /*
+        /**
          * Run pre-compilation passes
          */
         $classDefinition->preCompile($compilationContext);
@@ -491,27 +469,10 @@ final class CompilerFile implements FileInterface
          * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
-
-        /*
-         * Set global compiler in the compilation context
-         */
         $compilationContext->compiler = $compiler;
-
-        /*
-         * Set global config in the compilation context
-         */
         $compilationContext->config = $this->config;
-
-        /*
-         * Set global logger in the compilation context
-         */
         $compilationContext->logger = $this->logger;
-
-        /*
-         * Alias manager
-         */
         $compilationContext->aliasManager = $this->aliasManager;
-
         $compilationContext->backend = $compiler->backend;
 
         /**
@@ -522,7 +483,7 @@ final class CompilerFile implements FileInterface
         foreach ($ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'namespace':
-                    if (strlen($namespace) > 0) {
+                    if ($namespace !== '') {
                         throw new CompilerException('The namespace must be defined just one time', $topStatement);
                     }
 
@@ -574,7 +535,7 @@ final class CompilerFile implements FileInterface
         }
 
         if (!$namespace) {
-            throw new CompilerException('A namespace is required', isset($topStatement) ? $topStatement : null);
+            throw new CompilerException('A namespace is required', $topStatement ?? null);
         }
 
         // Set namespace and flag as global, if before namespace declaration
@@ -681,7 +642,7 @@ final class CompilerFile implements FileInterface
      *
      * @return string
      */
-    public function getCompiledFile()
+    public function getCompiledFile(): string
     {
         return $this->compiledFile;
     }
@@ -690,6 +651,8 @@ final class CompilerFile implements FileInterface
      * Check dependencies.
      *
      * @param Compiler $compiler
+     *
+     * @throws ReflectionException
      */
     public function checkDependencies(Compiler $compiler)
     {
@@ -745,36 +708,32 @@ final class CompilerFile implements FileInterface
             }
         }
 
-        $implementedInterfaces = $classDefinition->getImplementedInterfaces();
-        if ($implementedInterfaces) {
-            $interfaceDefinitions = [];
-
-            foreach ($implementedInterfaces as $interface) {
-                if ($compiler->isInterface($interface)) {
-                    $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
+        $interfaceDefinitions = [];
+        foreach ($classDefinition->getImplementedInterfaces() as $interface) {
+            if ($compiler->isInterface($interface)) {
+                $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
+            } else {
+                if ($compiler->isBundledInterface($interface)) {
+                    $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
                 } else {
-                    if ($compiler->isBundledInterface($interface)) {
-                        $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
-                    } else {
-                        if ($extendedClass !== null) {
-                            $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
-                        }
-
-                        $this->logger->warning(
-                            sprintf(
-                                'Cannot locate class "%s" when extending interface "%s"',
-                                $interface,
-                                $classDefinition->getCompleteName()
-                            ),
-                            ['nonexistent-class', $this->originalNode]
-                        );
+                    if ($extendedClass !== null) {
+                        $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
                     }
+
+                    $this->logger->warning(
+                        sprintf(
+                            'Cannot locate class "%s" when extending interface "%s"',
+                            $interface,
+                            $classDefinition->getCompleteName()
+                        ),
+                        ['nonexistent-class', $this->originalNode]
+                    );
                 }
             }
+        }
 
-            if ($interfaceDefinitions) {
-                $classDefinition->setImplementedInterfaceDefinitions($interfaceDefinitions);
-            }
+        if (count($interfaceDefinitions) > 0) {
+            $classDefinition->setImplementedInterfaceDefinitions($interfaceDefinitions);
         }
     }
 
@@ -855,7 +814,7 @@ final class CompilerFile implements FileInterface
                         throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
                     $class = true;
-                    $this->compileClass($compilationContext, $this->namespace, $topStatement);
+                    $this->compileClass($compilationContext);
                     break;
 
                 case 'comment':
@@ -898,32 +857,30 @@ final class CompilerFile implements FileInterface
             }
         }
 
-        if ($codePrinter) {
+        /**
+         * If the file does not exists we create it for the first time
+         */
+        if (!file_exists($filePath)) {
+            file_put_contents($filePath, $codePrinter->getOutput());
+            if ($compilationContext->headerPrinter) {
+                file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
+            }
+        } else {
             /**
-             * If the file does not exists we create it for the first time
+             * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
+             * thus avoiding unnecessary recompilations.
              */
-            if (!file_exists($filePath)) {
-                file_put_contents($filePath, $codePrinter->getOutput());
-                if ($compilationContext->headerPrinter) {
-                    file_put_contents($filePathHeader, $compilationContext->headerPrinter->getOutput());
-                }
-            } else {
-                /**
-                 * Use md5 hash to avoid rewrite the file again and again when it hasn't changed
-                 * thus avoiding unnecessary recompilations.
-                 */
-                $output = $codePrinter->getOutput();
-                $hash = $this->filesystem->getHashFile('md5', $filePath, true);
-                if (md5($output) != $hash) {
-                    file_put_contents($filePath, $output);
-                }
+            $output = $codePrinter->getOutput();
+            $hash = $this->filesystem->getHashFile('md5', $filePath, true);
+            if (md5($output) != $hash) {
+                file_put_contents($filePath, $output);
+            }
 
-                if ($compilationContext->headerPrinter) {
-                    $output = $compilationContext->headerPrinter->getOutput();
-                    $hash = $this->filesystem->getHashFile('md5', $filePathHeader, true);
-                    if (md5($output) != $hash) {
-                        file_put_contents($filePathHeader, $output);
-                    }
+            if ($compilationContext->headerPrinter) {
+                $output = $compilationContext->headerPrinter->getOutput();
+                $hash = $this->filesystem->getHashFile('md5', $filePathHeader, true);
+                if (md5($output) != $hash) {
+                    file_put_contents($filePathHeader, $output);
                 }
             }
         }
@@ -984,7 +941,7 @@ final class CompilerFile implements FileInterface
      *
      * @return string
      */
-    public function getFilePath()
+    public function getFilePath(): string
     {
         return $this->filePath;
     }
@@ -1163,7 +1120,7 @@ final class CompilerFile implements FileInterface
      * Create returns type list.
      *
      * @param array $types
-     * @param bool $annotated
+     * @param bool  $annotated
      *
      * @return array
      */

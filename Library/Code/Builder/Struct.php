@@ -122,6 +122,9 @@ class Struct
             case 'bool':
                 return '';
 
+            case 'string':
+                return "\t".$namespace.'_globals->'.$this->simpleName.'.'.$name.' = ZSTR_VAL(zend_string_init(ZEND_STRL("'.$global['default'].'"), 0));';
+
             case 'int':
             case 'uint':
             case 'long':
@@ -140,7 +143,7 @@ class Struct
      * @see https://docs.zephir-lang.com/latest/en/globals
      *
      * @param string $name      - global-name
-     * @param array $global    - global structure (type, default...)
+     * @param array  $global    - global structure (type, default...)
      * @param string $namespace - global namespace
      *
      * @return string
@@ -168,6 +171,17 @@ class Struct
                     $namespace.
                     '_globals, '.
                     $namespace.'_globals)';
+
+            case 'string':
+                return sprintf(
+                    'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
+                    '"'.$iniName.'"',
+                    '"'.$global['default'].'"',
+                    $scope,
+                    $structName,
+                    'zend_'.$namespace.'_globals',
+                    $namespace.'_globals',
+                );
         }
 
         return '';
@@ -191,6 +205,9 @@ class Struct
 
             case 'hash':
                 return 'HashTable* ';
+
+            case 'string':
+                return 'zend_string* ';
 
             case 'int':
             case 'uint':

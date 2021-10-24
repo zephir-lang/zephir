@@ -121,7 +121,7 @@ final class AliasManagerTest extends TestCase
      * @dataProvider statementProvider
      *
      * @param array $useStatements
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testShouldCheckAliasedStatement(array $useStatements, bool $expected): void
     {
@@ -153,7 +153,7 @@ final class AliasManagerTest extends TestCase
     /**
      * @dataProvider classNameDataProvider
      *
-     * @param array $useStatements
+     * @param array  $useStatements
      * @param string $expected
      */
     public function testShouldGetAliasForClassName(array $useStatements, string $expected): void

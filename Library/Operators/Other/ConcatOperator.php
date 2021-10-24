@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use function Zephir\add_slashes;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
+use function Zephir\add_slashes;
 
 /**
  * ConcatOperator.
@@ -31,7 +31,7 @@ class ConcatOperator extends BaseOperator
     /**
      * Performs concat compilation.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
@@ -110,9 +110,9 @@ class ConcatOperator extends BaseOperator
     }
 
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
-     * @param bool $isFullString
+     * @param bool               $isFullString
      *
      * @return array
      *
@@ -143,7 +143,6 @@ class ConcatOperator extends BaseOperator
         $parts = array_reverse($parts);
         foreach ($parts as $part) {
             $expr = new Expression($part);
-            $expr->setStringOperation(true);
             $compiledExpr = $this->compileExpression($expr, $compilationContext, $part['type']);
 
             switch ($compiledExpr->getType()) {

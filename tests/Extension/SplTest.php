@@ -23,6 +23,6 @@ final class SplTest extends TestCase
      */
     public function testIssue1212(): void
     {
-        $this->assertInstanceOf(\SplFileObject::class, Spl::issue1212(__DIR__ . '/../fixtures/class-empty.php'));
+        $this->assertInstanceOf(\SplFileObject::class, Spl::issue1212(__DIR__.'/../fixtures/class-empty.php'));
     }
 }

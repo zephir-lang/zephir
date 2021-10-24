@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
+use function in_array;
+
 /**
- * AliasManager.
- *
  * Manage aliases in a file
  */
 final class AliasManager
@@ -117,7 +117,7 @@ final class AliasManager
     {
         $extractAlias = $this->implicitAlias($className);
 
-        $isClassDeclared = \in_array($className, $this->aliases);
+        $isClassDeclared = in_array($className, $this->aliases);
         $classAlias = array_flip($this->aliases)[$className] ?? null;
 
         return $isClassDeclared && $classAlias !== $extractAlias;

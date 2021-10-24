@@ -97,6 +97,15 @@ class ClassMethod
     protected bool $void = false;
 
     /**
+     * Whether the variable is mixed.
+     *
+     * Only for PHP >= 8.0
+     *
+     * @var bool
+     */
+    protected bool $mixed = false;
+
+    /**
      * Whether the method is public or not.
      *
      * @var bool
@@ -179,15 +188,15 @@ class ClassMethod
     /**
      * ClassMethod constructor.
      *
-     * @param ClassDefinition $classDefinition
-     * @param array $visibility
-     * @param string $name
+     * @param ClassDefinition            $classDefinition
+     * @param array                      $visibility
+     * @param string                     $name
      * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null $statements
-     * @param string|null $docblock
-     * @param array|null $returnType
-     * @param array|null $expression
-     * @param array|null $staticVariables
+     * @param StatementsBlock|null       $statements
+     * @param string|null                $docblock
+     * @param array|null                 $returnType
+     * @param array|null                 $expression
+     * @param array|null                 $staticVariables
      */
     public function __construct(
         ClassDefinition $classDefinition,
@@ -276,34 +285,42 @@ class ClassMethod
         $castTypes = [];
 
         foreach ($returnType['list'] as $returnTypeItem) {
-            if (isset($returnTypeItem['cast'])) {
-                if (isset($returnTypeItem['cast']['collection'])) {
-                    continue;
-                }
+            /**
+             * We continue the loop, because it only works for PHP >= 8.0.
+             */
+            if (isset($returnTypeItem['data-type']) && $returnTypeItem['data-type'] === 'mixed') {
+                $this->mixed = true;
+            }
 
-                if (isset($returnTypeItem['collection']) && $returnTypeItem['collection']) {
-                    $types['array'] = [
-                        'type' => 'return-type-parameter',
-                        'data-type' => 'array',
-                        'mandatory' => 0,
-                        'file' => $returnTypeItem['cast']['file'],
-                        'line' => $returnTypeItem['cast']['line'],
-                        'char' => $returnTypeItem['cast']['char'],
-                    ];
-                } else {
-                    $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
-                }
-            } else {
+            if (!isset($returnTypeItem['cast'])) {
                 $types[$returnTypeItem['data-type']] = $returnTypeItem;
+                continue;
+            }
+
+            if (isset($returnTypeItem['cast']['collection'])) {
+                continue;
+            }
+
+            if (isset($returnTypeItem['collection']) && $returnTypeItem['collection']) {
+                $types['array'] = [
+                    'type' => 'return-type-parameter',
+                    'data-type' => 'array',
+                    'mandatory' => 0,
+                    'file' => $returnTypeItem['cast']['file'],
+                    'line' => $returnTypeItem['cast']['line'],
+                    'char' => $returnTypeItem['cast']['char'],
+                ];
+            } else {
+                $castTypes[$returnTypeItem['cast']['value']] = $returnTypeItem['cast']['value'];
             }
         }
 
-        if (count($castTypes)) {
+        if (count($castTypes) > 0) {
             $types['object'] = [];
             $this->returnClassTypes = $castTypes;
         }
 
-        if (count($types)) {
+        if (count($types) > 0) {
             $this->returnTypes = $types;
         }
     }
@@ -460,6 +477,7 @@ class ClassMethod
      * allowing bypassing php userspace for internal method calls.
      *
      * @param CompilationContext $compilationContext
+     *
      * @return $this
      */
     public function setupOptimized(CompilationContext $compilationContext): self
@@ -514,7 +532,7 @@ class ClassMethod
         return $this;
     }
 
-    public function getOptimizedMethod()
+    public function getOptimizedMethod(): self
     {
         $optimizedName = $this->getName().'_zephir_internal_call';
         $optimizedMethod = $this->classDefinition->getMethod($optimizedName, false);
@@ -750,13 +768,14 @@ class ClassMethod
             return '';
         }
 
-        return $this->parameters->count() .', ...';
+        return $this->parameters->count().', ...';
     }
 
     /**
      * Checks whether the method has a specific modifier.
      *
      * @param string $modifier
+     *
      * @return bool
      */
     public function hasModifier(string $modifier): bool
@@ -783,6 +802,7 @@ class ClassMethod
      * Returns the C-modifier flags.
      *
      * @throws Exception
+     *
      * @return string
      */
     public function getModifiers(): string
@@ -845,6 +865,16 @@ class ClassMethod
     public function isVoid(): bool
     {
         return $this->void;
+    }
+
+    /**
+     * Checks if the methods return type is `mixed`.
+     *
+     * @return bool
+     */
+    public function isMixed(): bool
+    {
+        return $this->mixed;
     }
 
     /**
@@ -1049,9 +1079,11 @@ class ClassMethod
     /**
      * Assigns a default value.
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext): string
@@ -1413,15 +1445,17 @@ class ClassMethod
      *
      * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
+     *
      * @return string
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext): string
     {
         $dataType = $this->getParamDataType($parameter);
 
-        if (in_array($dataType, ['variable', 'callable', 'object', 'resource'])) {
-            return "";
+        if (in_array($dataType, ['variable', 'callable', 'object', 'resource', 'mixed'])) {
+            return '';
         }
 
         $compilationContext->headersManager->add('kernel/operators');
@@ -1465,6 +1499,7 @@ class ClassMethod
      * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext): void
@@ -1517,6 +1552,7 @@ class ClassMethod
      * Compiles the method.
      *
      * @param CompilationContext $compilationContext
+     *
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
@@ -1625,6 +1661,7 @@ class ClassMethod
                         case 'callable':
                         case 'resource':
                         case 'variable':
+                        case 'mixed':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             if ($compilationContext->backend->isZE3()) {
@@ -1851,6 +1888,7 @@ class ClassMethod
                     case 'callable':
                     case 'resource':
                     case 'variable':
+                    case 'mixed':
                         $name = $parameter['name'];
                         break;
 
@@ -2195,6 +2233,7 @@ class ClassMethod
      * Returns arginfo name for current method.
      *
      * @param ClassDefinition|null $classDefinition
+     *
      * @return string
      */
     public function getArgInfoName(?ClassDefinition $classDefinition = null): string
@@ -2300,9 +2339,11 @@ class ClassMethod
     /**
      * Determine Z_PARAM_*
      *
-     * @param array $parameter
+     * @param array              $parameter
      * @param CompilationContext $compilationContext
+     *
      * @return string
+     *
      * @throws Exception
      */
     public function detectParam(array $parameter, CompilationContext $compilationContext): string
@@ -2412,6 +2453,7 @@ class ClassMethod
      * Get data type of method's parameter
      *
      * @param array $parameter
+     *
      * @return string
      */
     private function getParamDataType(array $parameter): string

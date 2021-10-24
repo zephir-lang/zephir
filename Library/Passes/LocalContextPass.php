@@ -419,8 +419,8 @@ class LocalContextPass
             case 'require_once':
             case 'clone':
             case 'likely':
-            case 'unlikely'
-            /* do special pass later */:
+            case 'unlikely':
+            /* do special pass later */
             case 'ternary':
             case 'short-ternary':
                 $this->passExpression($expression['left']);

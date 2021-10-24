@@ -6,13 +6,14 @@ on:
       - '*'
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+  release:
+    name: Create Release
+    runs-on: ubuntu-20.04
+
+    env:
+      BOX_VERSION: 3.12.2
 
     steps:
-      - name: Setup Environment Variables
-        run: echo "BOX_VERSION=3.12.2" >> $GITHUB_ENV
-
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
@@ -34,7 +35,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -44,7 +45,7 @@ jobs:
       - name: Install Box
         run: |
           wget \
-            "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+            "https://github.com/humbug/box/releases/download/${{ env.BOX_VERSION }}/box.phar" \
             --quiet \
             -O ./box
 
@@ -54,20 +55,28 @@ jobs:
       - name: Build Zephir PHAR
         run: .ci/build-phar.sh
 
-      - name: Geting Tag Name
+      - name: Upload Zephir Phar
+        uses: actions/upload-artifact@v2
+        with:
+          name: zephir.phar
+          path: zephir.phar
+
+      - name: Get the release version
         id: get-version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: |
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+
+      - name: Prepare Release Notes
+        run: |
+          ./.ci/release-notes.sh ./CHANGELOG.md > ./release-notes.md
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          # This token is provided by GitHub Actions.
-          # You DO NOT need to create your own token.
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get-version.outputs.version }}
           tag: ${{ steps.get-version.outputs.version }}
-          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          # This will update existing tags if any
+          bodyFile: "./release-notes.md"
           allowUpdates: true
           artifacts: zephir.phar
           artifactContentType: application/x-php

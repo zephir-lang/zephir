@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Cache\ClassEntryCache;
@@ -18,43 +20,41 @@ use Zephir\Cache\StaticMethodCache;
 use Zephir\Passes\CallGathererPass;
 
 /**
- * CacheManager.
- *
  * Creates and manages function, method and class entries caches
  */
 class CacheManager
 {
     /**
-     * @var FunctionCache
+     * @var FunctionCache|null
      */
-    protected $functionCache;
+    protected ?FunctionCache $functionCache = null;
 
     /**
-     * @var MethodCache
+     * @var MethodCache|null
      */
-    protected $methodCache;
+    protected ?MethodCache $methodCache = null;
 
     /**
-     * @var StaticMethodCache
+     * @var StaticMethodCache|null
      */
-    protected $staticMethodCache;
+    protected ?StaticMethodCache $staticMethodCache = null;
 
     /**
-     * @var ClassEntryCache
+     * @var ClassEntryCache|null
      */
-    protected $classEntryCache;
+    protected ?ClassEntryCache $classEntryCache = null;
 
     /**
      * @var CallGathererPass|null
      */
-    protected $gatherer;
+    protected ?CallGathererPass $gatherer = null;
 
     /**
      * Sets the CallGathererPass.
      *
-     * @param CallGathererPass $gatherer
+     * @param CallGathererPass|null $gatherer
      */
-    public function setGatherer(CallGathererPass $gatherer = null)
+    public function setGatherer(?CallGathererPass $gatherer = null)
     {
         $this->gatherer = $gatherer;
     }
@@ -64,7 +64,7 @@ class CacheManager
      *
      * @return ClassEntryCache
      */
-    public function getClassEntryCache()
+    public function getClassEntryCache(): ClassEntryCache
     {
         if (!$this->classEntryCache) {
             $this->classEntryCache = new ClassEntryCache();
@@ -78,7 +78,7 @@ class CacheManager
      *
      * @return FunctionCache
      */
-    public function getFunctionCache()
+    public function getFunctionCache(): ?FunctionCache
     {
         if (!$this->functionCache) {
             $this->functionCache = new FunctionCache($this->gatherer);
@@ -92,7 +92,7 @@ class CacheManager
      *
      * @return MethodCache
      */
-    public function getMethodCache()
+    public function getMethodCache(): ?MethodCache
     {
         if (!$this->methodCache) {
             $this->methodCache = new MethodCache($this->gatherer);
@@ -106,10 +106,10 @@ class CacheManager
      *
      * @return StaticMethodCache
      */
-    public function getStaticMethodCache()
+    public function getStaticMethodCache(): ?StaticMethodCache
     {
         if (!$this->staticMethodCache) {
-            $this->staticMethodCache = new StaticMethodCache($this->gatherer);
+            $this->staticMethodCache = new StaticMethodCache();
         }
 
         return $this->staticMethodCache;

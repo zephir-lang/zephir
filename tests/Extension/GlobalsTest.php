@@ -39,6 +39,7 @@ final class GlobalsTest extends TestCase
         $this->assertSame(10, $this->test->getDefaultGlobals5());
         $this->assertSame(15.2, $this->test->getDefaultGlobals6());
         $this->assertSame(65, $this->test->getDefaultGlobals7());
+        $this->assertSame('custom_value', $this->test->getDefaultGlobals8());
     }
 
     public function testShouldSetGlobalExtensionSetting(): void
@@ -67,6 +68,38 @@ final class GlobalsTest extends TestCase
         $this->test->setCharValue(90);
 
         $this->assertSame(90, $this->test->getDefaultGlobals7());
+    }
+
+    public function testSetStringValue(): void
+    {
+        $this->test->setStringValue('1');
+        $this->assertSame('1', $this->test->getDefaultGlobals8());
+
+        $this->test->setStringValue('c');
+        $this->assertSame('c', $this->test->getDefaultGlobals8());
+
+        $this->test->setStringValue('char');
+        $this->assertSame('char', $this->test->getDefaultGlobals8());
+
+        $this->test->setStringValue('Long Text without any sense...');
+        $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobals8());
+
+        /**
+         * Get and set string value from globals struct.
+         */
+        $this->assertSame('prefix-string-', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('1');
+        $this->assertSame('1', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('c');
+        $this->assertSame('c', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('char');
+        $this->assertSame('char', $this->test->getDefaultGlobalsOrmCachePrefix());
+
+        $this->test->setDefaultGlobalsOrmCachePrefix('Long Text without any sense...');
+        $this->assertSame('Long Text without any sense...', $this->test->getDefaultGlobalsOrmCachePrefix());
     }
 
     public function testSetBoolValueUsingInt(): void

@@ -11,12 +11,15 @@
 
 namespace Zephir\Statements;
 
-use function Zephir\add_slashes;
+use ReflectionException;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
 use Zephir\Types;
+
+use function Zephir\add_slashes;
 
 /**
  * ReturnStatement.
@@ -28,9 +31,10 @@ final class ReturnStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $statement = $this->statement;
 
@@ -50,14 +54,14 @@ final class ReturnStatement extends StatementAbstract
                 );
             }
 
-            /*
+            /**
              * Use return member for properties on this
              */
             if ('property-access' == $statement['expr']['type']) {
                 if ('variable' == $statement['expr']['left']['type']) {
                     if ('this' == $statement['expr']['left']['value']) {
                         if ('variable' == $statement['expr']['right']['type']) {
-                            /*
+                            /**
                              * If the property is accessed on 'this', we check if the property does exist.
                              */
                             $property = $statement['expr']['right']['value'];
@@ -82,7 +86,7 @@ final class ReturnStatement extends StatementAbstract
                 }
             }
 
-            /*
+            /**
              * Fetches return_value and tries to return the value directly there.
              */
             $variable = $compilationContext->symbolTable->getVariable('return_value');
@@ -92,13 +96,13 @@ final class ReturnStatement extends StatementAbstract
             $expr->setReadOnly(true);
             $resolvedExpr = $expr->compile($compilationContext);
 
-            /*
+            /**
              * Here we check if the variable returns a compatible type according to its type hints
              */
             if ($currentMethod->hasReturnTypes()) {
                 switch ($resolvedExpr->getType()) {
                     case Types::T_NULL:
-                        if (false == $currentMethod->areReturnTypesNullCompatible()) {
+                        if (!$currentMethod->areReturnTypesNullCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
@@ -109,31 +113,32 @@ final class ReturnStatement extends StatementAbstract
                     case Types::T_ULONG:
                     case Types::T_CHAR:
                     case Types::T_UCHAR:
-                        if (false == $currentMethod->areReturnTypesIntCompatible()) {
+                        if (!$currentMethod->areReturnTypesIntCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
                     case Types::T_BOOL:
-                        if (false == $currentMethod->areReturnTypesBoolCompatible()) {
+                        if (!$currentMethod->areReturnTypesBoolCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
                     case Types::T_DOUBLE:
-                        if (false == $currentMethod->areReturnTypesDoubleCompatible()) {
+                        if (!$currentMethod->areReturnTypesDoubleCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
                     case Types::T_STRING:
                     case Types::T_ISTRING:
-                        if (false == $currentMethod->areReturnTypesStringCompatible()) {
+                        if (!$currentMethod->areReturnTypesStringCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
 
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
                             $compilationContext,
@@ -147,31 +152,32 @@ final class ReturnStatement extends StatementAbstract
                             case Types::T_ULONG:
                             case Types::T_CHAR:
                             case Types::T_UCHAR:
-                                if (false == $currentMethod->areReturnTypesIntCompatible()) {
+                                if (!$currentMethod->areReturnTypesIntCompatible() && !$currentMethod->isMixed()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
                             case Types::T_DOUBLE:
-                                if (false == $currentMethod->areReturnTypesDoubleCompatible()) {
+                                if (!$currentMethod->areReturnTypesDoubleCompatible() && !$currentMethod->isMixed()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
                             case Types::T_STRING:
                             case Types::T_ISTRING:
-                                if (false == $currentMethod->areReturnTypesStringCompatible()) {
+                                if (!$currentMethod->areReturnTypesStringCompatible() && !$currentMethod->isMixed()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
                             case Types::T_BOOL:
-                                if (false == $currentMethod->areReturnTypesBoolCompatible()) {
+                                if (!$currentMethod->areReturnTypesBoolCompatible() && !$currentMethod->isMixed()) {
                                     throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                                 }
                                 break;
 
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                                 break;
                         }
                         break;
@@ -217,6 +223,7 @@ final class ReturnStatement extends StatementAbstract
                     break;
 
                 case Types::T_VARIABLE:
+                case Types::T_MIXED:
                     if (!isset($symbolVariable)) {
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolvedExpr->getCode(),
@@ -252,6 +259,7 @@ final class ReturnStatement extends StatementAbstract
                             break;
 
                         case Types::T_VARIABLE:
+                        case Types::T_MIXED:
                             if ('this_ptr' == $symbolVariable->getName()) {
                                 $codePrinter->output('RETURN_THIS();');
                             } else {
@@ -314,7 +322,7 @@ final class ReturnStatement extends StatementAbstract
             return;
         }
 
-        /*
+        /**
          * Return without an expression
          */
         $codePrinter->output('RETURN_MM_NULL();');

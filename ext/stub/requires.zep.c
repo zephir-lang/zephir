@@ -229,3 +229,32 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	RETURN_CCTOR(&_7);
 }
 
+PHP_METHOD(Stub_Requires, requireOnce)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *path_param = NULL, _0;
+	zval path;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&path);
+	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(path)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &path_param);
+	zephir_get_strval(&path, path_param);
+
+
+	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
+	if (zephir_require_once_zval_ret(&_0, &path) == FAILURE) {
+		RETURN_MM_NULL();
+	}
+	RETURN_CCTOR(&_0);
+}
+

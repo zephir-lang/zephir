@@ -240,6 +240,7 @@ zend_class_entry *stub_trytest_ce;
 zend_class_entry *stub_typehinting_testabstract_ce;
 zend_class_entry *stub_typeinstances_ce;
 zend_class_entry *stub_typeoff_ce;
+zend_class_entry *stub_types_mixedtype_ce;
 zend_class_entry *stub_unknownclass_ce;
 zend_class_entry *stub_unsettest_ce;
 zend_class_entry *stub_usetest_ce;
@@ -253,9 +254,11 @@ PHP_INI_BEGIN()
 	
 	
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, NULL, my_setting_5, zend_stub_globals, stub_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(stub)
@@ -465,6 +468,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_TypeHinting_TestAbstract);
 	ZEPHIR_INIT(Stub_TypeInstances);
 	ZEPHIR_INIT(Stub_Typeoff);
+	ZEPHIR_INIT(Stub_Types_MixedType);
 	ZEPHIR_INIT(Stub_UnknownClass);
 	ZEPHIR_INIT(Stub_Unsettest);
 	ZEPHIR_INIT(Stub_UseTest);
@@ -518,13 +522,14 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	stub_globals->db.my_setting_3 = 7.5;
 	stub_globals->orm.cache_level = 3;
 
+	stub_globals->orm.cache_prefix = ZSTR_VAL(zend_string_init(ZEND_STRL("prefix-string-"), 0));
 
 	stub_globals->my_setting_1 = 1;
 	stub_globals->test_setting_1 = 1;
 	stub_globals->my_setting_2 = 10;
 	stub_globals->my_setting_3 = 15.2;
 	stub_globals->my_setting_4 = 'A';
-
+	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
 	
 }
 

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers;
 
 use Zephir\Call;
@@ -16,9 +18,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 
-/**
- * Class OptimizerAbstract.
- */
 abstract class MathOptimizer extends OptimizerAbstract
 {
     /**
@@ -47,7 +46,7 @@ abstract class MathOptimizer extends OptimizerAbstract
             return false;
         }
 
-        /*
+        /**
          * Resolve parameters as vars
          */
         $call->getResolvedParams($expression['parameters'], $context, $expression);
