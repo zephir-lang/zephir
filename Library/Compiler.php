@@ -1408,6 +1408,18 @@ final class Compiler
                         '_globals, '.
                         $namespace.'_globals)';
                         break;
+
+                    case 'string':
+                        $initEntries[] = sprintf(
+                            'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
+                            '"' . $iniName . '"',
+                            '"' . $global['default'] . '"',
+                            $scope,
+                            $name,
+                            'zend_' . $namespace . '_globals',
+                            $namespace . '_globals',
+                        );
+                        break;
                 }
             }
         }
