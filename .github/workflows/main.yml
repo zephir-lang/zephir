@@ -106,15 +106,8 @@ jobs:
             php: '8.1'
 
           # Ignore 8.1 until its release date
-          - php: '8.1'
-            name: win2016-vs16
-            build_type: 'ts'
-            arch: 'x64'
-
-          - php: '8.1'
-            name: win2016-vs16
-            build_type: 'nts'
-            arch: 'x64'
+          - name: win2019-vs16
+            php: '8.1'
 
     steps:
       - uses: actions/checkout@v2
