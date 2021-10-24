@@ -56,8 +56,6 @@ class ArgInfoDefinition
     private bool $richFormat = true;
 
     /**
-     * ArgInfoDefinition constructor.
-     *
      * @param string             $name
      * @param ClassMethod        $functionLike
      * @param CodePrinter        $codePrinter

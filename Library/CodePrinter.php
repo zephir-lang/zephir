@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir;
 
 /**
- * CodePrinter.
- *
  * Buffers code, making it look pretty
  */
 class CodePrinter

@@ -5,10 +5,12 @@ The format based on [Keep a Changelog](http://keepachangelog.com)
 and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed output of `string` type INI in globals [#2312](https://github.com/zephir-lang/zephir/issues/2312)
 
 ## [0.15.1] - 2021-10-08
 ### Fixed
-- Fix support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
+- Fixed support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
 
 ## [0.15.0] - 2021-10-05
 ### Added

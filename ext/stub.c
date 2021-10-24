@@ -254,10 +254,11 @@ PHP_INI_BEGIN()
 	
 	
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
-	
+	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, NULL, my_setting_5, zend_stub_globals, stub_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(stub)
