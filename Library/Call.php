@@ -454,6 +454,7 @@ class Call
                             break;
 
                         case 'variable':
+                        case 'mixed':
                             $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $types[] = $parameterVariable->getType();
                             $dynamicTypes = array_merge(
@@ -636,6 +637,7 @@ class Call
 
                         case 'string':
                         case 'variable':
+                        case 'mixed':
                         case 'array':
                             $params[] = $compilationContext->backend->getVariableCode($parameterVariable);
                             $dynamicTypes[] = $parameterVariable->getType();

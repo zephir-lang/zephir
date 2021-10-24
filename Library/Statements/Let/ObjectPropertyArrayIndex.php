@@ -98,6 +98,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 case 'ulong':
                 case 'long':
                 case 'variable':
+                case 'mixed':
                     break;
                 default:
                     throw new CompilerException('Variable: '.$indexVariable->getType().' cannot be used as index without cast', $statement);
@@ -171,6 +172,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
 
         switch ($indexVariable->getType()) {
             case 'variable':
+            case 'mixed':
             case 'string':
                 switch ($resolvedExpr->getType()) {
                     case 'null':
@@ -238,6 +240,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                                 break;
 
                             case 'variable':
+                            case 'mixed':
                             case 'string':
                             case 'array':
                                 $compilationContext->backend->assignArrayProperty($symbolVariable, $property, $indexVariable, $variableExpr, $compilationContext);
