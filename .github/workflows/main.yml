@@ -105,6 +105,10 @@ jobs:
           - name: win2016-vc15
             php: '8.1'
 
+          # Ignore 8.1 until its release date
+          - name: win2016-vs16
+            php: '8.1'
+
     steps:
       - uses: actions/checkout@v2
         with:
