@@ -31,8 +31,10 @@ use Zephir\Logger\Formatter\CompilerFormatter;
 use Zephir\Parser\Manager;
 use Zephir\Parser\Parser;
 
-require __DIR__ . '/Library/autoload.php';
-require __DIR__ . '/Library/bootstrap.php';
+$rootPath = realpath(dirname(__FILE__));
+
+require $rootPath.'/Library/autoload.php';
+require $rootPath.'/Library/bootstrap.php';
 
 $config = Config::fromServer();
 
@@ -52,17 +54,17 @@ $handlers = [
     $consoleStdOutHandler,
 ];
 
-$disk = new HardDisk(realpath('.').DIRECTORY_SEPARATOR.'.zephir');
+$disk = new HardDisk($rootPath.'/.zephir');
 
 $parser = new Parser();
 $logger = new Logger('zephir', $handlers);
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
-$zendBackend3 = new Backend($config, 'kernels', 'templates');
+$zendBackend3 = new Backend($config, $rootPath.'/kernels', $rootPath.'/templates');
 
 $compiler = new Compiler($config, $zendBackend3, new Manager($parser), $disk, $compilerFactory);
-$compiler->setPrototypesPath('prototypes');
-$compiler->setOptimizersPath('Library/Optimizers');
-$compiler->setTemplatesPath('templates');
+$compiler->setPrototypesPath($rootPath.'/prototypes');
+$compiler->setOptimizersPath($rootPath.'/Library/Optimizers');
+$compiler->setTemplatesPath($rootPath.'/templates');
 $compiler->setLogger($logger);
 
 $application = new Application();
