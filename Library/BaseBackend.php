@@ -90,7 +90,7 @@ abstract class BaseBackend implements FcallAwareInterface
      */
     public function getTemplateFileContents(string $filename): string
     {
-        $templatePath = rtrim((string)$this->config->get('templatepath', 'backend'), '\\/');
+        $templatePath = rtrim((string) $this->config->get('templatepath', 'backend'), '\\/');
         if (empty($templatepath)) {
             $templatePath = $this->templatesPath;
         }
