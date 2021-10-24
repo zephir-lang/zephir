@@ -34,7 +34,7 @@ final class CheckDependenciesTest extends TestCase
     {
         $logger = new TestLogger();
         $config = new Config();
-        $backend = new Backend($config, 'kernels', 'templates');;
+        $backend = new Backend($config, 'kernels', 'templates');
         $disk = new HardDisk(realpath('..').'/tests/output');
         $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
 
