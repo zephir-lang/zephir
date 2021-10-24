@@ -12,7 +12,7 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_usetest_createinstance, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_usetest_count, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_usetest_count, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_usetest_testuseclass1, 0, 0, 0)
@@ -30,11 +30,7 @@ ZEPHIR_INIT_FUNCS(stub_usetest_method_entry) {
 #else
 	PHP_ME(Stub_UseTest, createInstance, NULL, ZEND_ACC_PUBLIC)
 #endif
-#if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_UseTest, count, arginfo_stub_usetest_count, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_UseTest, count, NULL, ZEND_ACC_PUBLIC)
-#endif
 #if PHP_VERSION_ID >= 80000
 	PHP_ME(Stub_UseTest, testUseClass1, arginfo_stub_usetest_testuseclass1, ZEND_ACC_PUBLIC)
 #else

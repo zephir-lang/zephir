@@ -29,5 +29,6 @@ PHP_METHOD(Stub_InternalInterfaces, count)
 
 
 
+	RETURN_LONG(0);
 }
 

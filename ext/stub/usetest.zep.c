@@ -41,6 +41,7 @@ PHP_METHOD(Stub_UseTest, count)
 
 
 
+	RETURN_LONG(0);
 }
 
 PHP_METHOD(Stub_UseTest, testUseClass1)

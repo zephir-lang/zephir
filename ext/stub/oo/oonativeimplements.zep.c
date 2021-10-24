@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -107,19 +107,20 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, hasChildren)
 
 PHP_METHOD(Stub_Oo_OoNativeImplements, seek)
 {
-	zval *position, position_sub;
+	zval *position_param = NULL;
+	zend_long position;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&position_sub);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(position)
+		Z_PARAM_LONG(position)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(1, 0, &position);
+	zephir_fetch_params_without_memory_grow(1, 0, &position_param);
+	position = zephir_get_intval(position_param);
 
 
 }
