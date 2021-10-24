@@ -15,8 +15,6 @@ use ArrayAccess;
 use JsonSerializable;
 
 /**
- * Zephir\Config.
- *
  * Manages compiler global configuration.
  */
 class Config implements ArrayAccess, JsonSerializable
