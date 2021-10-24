@@ -171,6 +171,17 @@ class Struct
                     $namespace.
                     '_globals, '.
                     $namespace.'_globals)';
+
+            case 'string':
+                return sprintf(
+                    'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
+                    '"'.$iniName.'"',
+                    '"'.$global['default'].'"',
+                    $scope,
+                    $structName,
+                    'zend_'.$namespace.'_globals',
+                    $namespace.'_globals',
+                );
         }
 
         return '';

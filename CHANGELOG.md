@@ -6,9 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ## [Unreleased]
 
+## [0.15.2] - 2021-10-24
+### Fixed
+- Fixed output of `string` type INI in globals [#2312](https://github.com/zephir-lang/zephir/issues/2312)
+
 ## [0.15.1] - 2021-10-08
 ### Fixed
-- Fix support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
+- Fixed support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
 
 ## [0.15.0] - 2021-10-05
 ### Added
@@ -557,7 +561,8 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.15.1...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.15.2...HEAD
+[0.15.2]: https://github.com/zephir-lang/zephir/compare/0.15.1...0.15.2
 [0.15.1]: https://github.com/zephir-lang/zephir/compare/0.15.0...0.15.1
 [0.15.0]: https://github.com/zephir-lang/zephir/compare/0.14.0...0.15.0
 [0.14.0]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...0.14.0
