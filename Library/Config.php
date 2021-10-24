@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use ArrayAccess;
@@ -226,7 +228,7 @@ class Config implements ArrayAccess, JsonSerializable
      *
      * @return mixed|null
      */
-    #[ReturnTypeWillChange]
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         if (!\is_array($offset)) {
@@ -253,6 +255,7 @@ class Config implements ArrayAccess, JsonSerializable
      * @param mixed $key
      * @param mixed $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         if (!\is_array($key)) {
@@ -278,6 +281,7 @@ class Config implements ArrayAccess, JsonSerializable
      *
      * @param mixed $key
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->container[$key]);

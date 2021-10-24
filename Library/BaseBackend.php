@@ -66,7 +66,7 @@ abstract class BaseBackend implements FcallAwareInterface
      *
      * @return string
      */
-    public function getInternalKernelPath()
+    public function getInternalKernelPath(): string
     {
         return "$this->kernelsPath/{$this->name}";
     }
@@ -76,7 +76,7 @@ abstract class BaseBackend implements FcallAwareInterface
      *
      * @return string
      */
-    public function getInternalTemplatePath()
+    public function getInternalTemplatePath(): string
     {
         return "$this->templatesPath/{$this->name}";
     }
@@ -88,16 +88,14 @@ abstract class BaseBackend implements FcallAwareInterface
      *
      * @return string
      */
-    public function getTemplateFileContents($filename)
+    public function getTemplateFileContents(string $filename): string
     {
-        $templatePath = rtrim($this->config->get('templatepath', 'backend'), '\\/');
+        $templatePath = rtrim((string)$this->config->get('templatepath', 'backend'), '\\/');
         if (empty($templatepath)) {
             $templatePath = $this->templatesPath;
         }
 
-        return file_get_contents(
-            "{$templatePath}/{$this->name}/{$filename}"
-        );
+        return file_get_contents("{$templatePath}/{$this->name}/{$filename}");
     }
 
     /**
