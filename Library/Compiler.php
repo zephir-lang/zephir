@@ -269,7 +269,7 @@ final class Compiler
      * Adds a function to the function definitions.
      *
      * @param FunctionDefinition $func
-     * @param array|null $statement
+     * @param array|null         $statement
      *
      * @throws CompilerException
      */
@@ -824,7 +824,7 @@ final class Compiler
         $needConfigure |= $this->createProjectFiles($extensionName);
         $needConfigure |= $this->checkIfPhpized();
         // Bitwise returns `int` instead of `bool`.
-        $needConfigure = boolval($needConfigure);
+        $needConfigure = (bool) $needConfigure;
 
         /**
          * When a new file is added or removed we need to run configure again
@@ -977,7 +977,7 @@ final class Compiler
      * Generate a HTML API.
      *
      * @param array $options
-     * @param bool $fromGenerate
+     * @param bool  $fromGenerate
      *
      * @throws ConfigException
      * @throws Exception
@@ -1092,6 +1092,7 @@ final class Compiler
      * @param string $project
      *
      * @return bool true if we need to run configure
+     *
      * @throws Exception
      */
     public function createConfigFiles(string $project): bool
@@ -1127,8 +1128,8 @@ final class Compiler
         /**
          * Check extra-libs, extra-cflags, package-dependencies exists
          */
-        $extraLibs = (string)$this->config->get('extra-libs');
-        $extraCflags = (string)$this->config->get('extra-cflags');
+        $extraLibs = (string) $this->config->get('extra-libs');
+        $extraCflags = (string) $this->config->get('extra-cflags');
         $contentM4 = $this->generatePackageDependenciesM4($contentM4);
 
         $buildDirs = [];
@@ -1413,12 +1414,12 @@ final class Compiler
                     case 'string':
                         $initEntries[] = sprintf(
                             'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                            '"' . $iniName . '"',
-                            '"' . $global['default'] . '"',
+                            '"'.$iniName.'"',
+                            '"'.$global['default'].'"',
                             $scope,
                             $name,
-                            'zend_' . $namespace . '_globals',
-                            $namespace . '_globals',
+                            'zend_'.$namespace.'_globals',
+                            $namespace.'_globals',
                         );
                         break;
                 }
@@ -1562,6 +1563,7 @@ final class Compiler
      * @param string $project
      *
      * @return bool
+     *
      * @throws Exception
      */
     public function createProjectFiles(string $project): bool
@@ -1937,7 +1939,7 @@ final class Compiler
      */
     public static function getShortUserPath(string $path): string
     {
-        return str_replace('\\', '/', str_replace(getcwd(). DIRECTORY_SEPARATOR, '', $path));
+        return str_replace('\\', '/', str_replace(getcwd().DIRECTORY_SEPARATOR, '', $path));
     }
 
     /**
@@ -2106,13 +2108,13 @@ final class Compiler
 
             if ($item->isDir()) {
                 if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
-                    if (!is_dir($dest. DIRECTORY_SEPARATOR.$fileName)) {
-                        mkdir($dest. DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    if (!is_dir($dest.DIRECTORY_SEPARATOR.$fileName)) {
+                        mkdir($dest.DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dest. DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dest.DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
             } elseif (!$pattern || ($pattern && 1 === preg_match($pattern, $fileName))) {
-                $path = $dest. DIRECTORY_SEPARATOR.$fileName;
+                $path = $dest.DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && \call_user_func($callback, $pathName, $path);
             }
         }
@@ -2266,7 +2268,7 @@ final class Compiler
      */
     private function checkKernelFiles(): bool
     {
-        $kernelPath = 'ext'. DIRECTORY_SEPARATOR.'kernel';
+        $kernelPath = 'ext'.DIRECTORY_SEPARATOR.'kernel';
 
         if (!file_exists($kernelPath)) {
             if (!mkdir($kernelPath, 0775, true)) {

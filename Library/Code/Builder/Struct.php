@@ -175,12 +175,12 @@ class Struct
             case 'string':
                 return sprintf(
                     'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                    '"' . $iniName . '"',
-                    '"' . $global['default'] . '"',
+                    '"'.$iniName.'"',
+                    '"'.$global['default'].'"',
                     $scope,
                     $structName,
-                    'zend_' . $namespace . '_globals',
-                    $namespace . '_globals',
+                    'zend_'.$namespace.'_globals',
+                    $namespace.'_globals',
                 );
         }
 
