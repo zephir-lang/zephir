@@ -13,6 +13,7 @@ doc
 vendor
 
 # Compilation artifacts.
+*.dep
 *.gch
 *.lo
 *.la
