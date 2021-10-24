@@ -4,10 +4,6 @@ on:
   schedule:
     - cron: '0 3 * * *' # Daily at 03:00 runs only on default branch
   workflow_dispatch:
-  push:
-    paths-ignore:
-      - '**.md'
-      - '**.txt'
 
 env:
   RE2C_VERSION: 2.2

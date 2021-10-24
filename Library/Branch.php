@@ -9,43 +9,35 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Statements\StatementAbstract;
 
 /**
- * Branch.
- *
  * Represents every branch within a method
  */
 class Branch
 {
-    const TYPE_ROOT = 0;
+    public const TYPE_ROOT = 0;
+    public const TYPE_CONDITIONAL_TRUE = 1;
+    public const TYPE_CONDITIONAL_FALSE = 2;
+    public const TYPE_LOOP_INFINITE = 3;
+    public const TYPE_LOOP_CONDITIONAL = 4;
+    public const TYPE_SWITCH = 5;
+    public const TYPE_EXTERNAL = 6;
+    public const TYPE_UNKNOWN = 7;
 
-    const TYPE_CONDITIONAL_TRUE = 1;
+    protected int $level = -1;
+    protected int $type = self::TYPE_ROOT;
+    protected ?bool $unreachable = null;
+    protected ?Branch $parentBranch = null;
+    protected ?StatementAbstract $relatedStatement = null;
 
-    const TYPE_CONDITIONAL_FALSE = 2;
-
-    const TYPE_LOOP_INFINITE = 3;
-
-    const TYPE_LOOP_CONDITIONAL = 4;
-
-    const TYPE_SWITCH = 5;
-
-    const TYPE_EXTERNAL = 6;
-
-    const TYPE_UNKNOWN = 7;
-    protected $parentBranch;
-
-    protected $level = -1;
-
-    /** @var StatementAbstract|null */
-    protected $relatedStatement;
-
-    protected $type;
-
-    protected $unreachable;
-
+    /**
+     * @var mixed
+     */
     private $uniqueId;
 
     /**
@@ -53,7 +45,7 @@ class Branch
      *
      * @param Branch $parentBranch
      */
-    public function setParentBranch(self $parentBranch)
+    public function setParentBranch(self $parentBranch): void
     {
         $this->parentBranch = $parentBranch;
     }
@@ -61,9 +53,9 @@ class Branch
     /**
      * Returns the branch's parent.
      *
-     * @return Branch
+     * @return Branch|null
      */
-    public function getParentBranch()
+    public function getParentBranch(): ?self
     {
         return $this->parentBranch;
     }
@@ -73,7 +65,7 @@ class Branch
      *
      * @param int $type
      */
-    public function setType($type)
+    public function setType(int $type): void
     {
         $this->type = $type;
     }
@@ -83,7 +75,7 @@ class Branch
      *
      * @return int
      */
-    public function getType()
+    public function getType(): int
     {
         return $this->type;
     }
@@ -91,25 +83,25 @@ class Branch
     /**
      * Sets if the branch is unreachable.
      *
-     * @param bool $unreachable
+     * @param bool|null $unreachable
      */
-    public function setUnreachable($unreachable)
+    public function setUnreachable(?bool $unreachable): void
     {
         $this->unreachable = $unreachable;
     }
 
     /**
-     * @return mixed
+     * @return bool|null
      */
-    public function isUnreachable()
+    public function isUnreachable(): ?bool
     {
         return $this->unreachable;
     }
 
     /**
-     * @param $level
+     * @param int $level
      */
-    public function setLevel($level)
+    public function setLevel(int $level): void
     {
         $this->level = $level;
     }
@@ -117,7 +109,7 @@ class Branch
     /**
      * @return int
      */
-    public function getLevel()
+    public function getLevel(): int
     {
         return $this->level;
     }
@@ -141,7 +133,7 @@ class Branch
     /**
      * @param StatementAbstract $relatedStatement
      */
-    public function setRelatedStatement(StatementAbstract $relatedStatement)
+    public function setRelatedStatement(StatementAbstract $relatedStatement): void
     {
         $this->relatedStatement = $relatedStatement;
     }
@@ -149,7 +141,7 @@ class Branch
     /**
      * @return StatementAbstract|null
      */
-    public function getRelatedStatement()
+    public function getRelatedStatement(): ?StatementAbstract
     {
         return $this->relatedStatement;
     }

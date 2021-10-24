@@ -23,7 +23,6 @@ use Zephir\Exception\InvalidArgumentException;
 use function count;
 use function gettype;
 use function is_array;
-use function strlen;
 use const DIRECTORY_SEPARATOR;
 
 /**
@@ -526,7 +525,7 @@ final class ClassDefinition extends AbstractClassDefinition
             return $this->parsedDocblock;
         }
 
-        if (strlen($this->docBlock) === 0) {
+        if ($this->docBlock === '') {
             return null;
         }
 

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Backends\ZendEngine3;
 
 use Zephir\StringsManager as BaseStringsManager;
@@ -16,23 +18,10 @@ use Zephir\StringsManager as BaseStringsManager;
 use function Zephir\file_put_contents_ex;
 
 /**
- * Class StringsManager.
- *
  * Manages the concatenation keys for the extension and the interned strings
  */
 class StringsManager extends BaseStringsManager
 {
-    /**
-     * List of headers.
-     *
-     * @var array
-     */
-    protected $concatKeys = [
-        'vv' => true,
-        'vs' => true,
-        'sv' => true,
-    ];
-
     /**
      * Adds a concatenation combination to the manager.
      *
@@ -45,10 +34,8 @@ class StringsManager extends BaseStringsManager
 
     /**
      * Generates the concatenation code.
-     *
-     * @return array
      */
-    public function genConcatCode()
+    public function genConcatCode(): void
     {
         $code = '
 #ifdef HAVE_CONFIG_H
@@ -208,15 +195,5 @@ EOF;
         $contents = $pcodeh.implode(PHP_EOL, $macros).PHP_EOL.PHP_EOL.$codeh;
         file_put_contents_ex($contents, 'ext/kernel/concat.h');
         file_put_contents_ex($code, 'ext/kernel/concat.c');
-    }
-
-    /**
-     * Obtains the existing concatenation keys.
-     *
-     * @return array
-     */
-    public function getConcatKeys()
-    {
-        return $this->concatKeys;
     }
 }

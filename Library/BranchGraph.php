@@ -9,31 +9,27 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
- * BranchGraph.
- *
  * Represents a group of branch nodes
  */
 class BranchGraph
 {
-    protected $root;
+    protected ?BranchGraphNode $root = null;
 
-    protected $branchMap;
+    protected array $branchMap = [];
 
     /**
      * Adds a leaf to the branch tree.
      *
      * @param Branch $branch
      */
-    public function addLeaf(Branch $branch)
+    public function addLeaf(Branch $branch): void
     {
-        if (isset($this->branchMap[$branch->getUniqueId()])) {
-            $branchNode = $this->branchMap[$branch->getUniqueId()];
-        } else {
-            $branchNode = new BranchGraphNode($branch);
-        }
+        $branchNode = $this->branchMap[$branch->getUniqueId()] ?? new BranchGraphNode($branch);
         $branchNode->increase();
 
         $tempBranch = $branch->getParentBranch();
@@ -44,6 +40,7 @@ class BranchGraph
                 $parentBranchNode = new BranchGraphNode($tempBranch);
                 $this->branchMap[$tempBranch->getUniqueId()] = $parentBranchNode;
             }
+
             $parentBranchNode->insert($branchNode);
             $branchNode = $parentBranchNode;
             $tempBranch = $tempBranch->getParentBranch();
@@ -58,7 +55,7 @@ class BranchGraph
      *
      * @return BranchGraphNode
      */
-    public function getRoot()
+    public function getRoot(): BranchGraphNode
     {
         return $this->root;
     }

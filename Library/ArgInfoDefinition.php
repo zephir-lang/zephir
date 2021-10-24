@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,10 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
-/**
- * Zephir\ArgInfoDefinition.
- */
 class ArgInfoDefinition
 {
     /**
@@ -31,7 +28,7 @@ class ArgInfoDefinition
     /**
      * @var string
      */
-    private string $name = '';
+    private string $name;
 
     /**
      * @var ClassMethodParameters|null
@@ -59,20 +56,18 @@ class ArgInfoDefinition
     private bool $richFormat = true;
 
     /**
-     * ArgInfoDefinition constructor.
-     *
-     * @param $name
+     * @param string             $name
      * @param ClassMethod        $functionLike
      * @param CodePrinter        $codePrinter
      * @param CompilationContext $compilationContext
-     * @param false              $returnByRef
+     * @param bool               $returnByRef
      */
     public function __construct(
-        $name,
+        string $name,
         ClassMethod $functionLike,
         CodePrinter $codePrinter,
         CompilationContext $compilationContext,
-        $returnByRef = false
+        bool $returnByRef = false
     ) {
         $this->functionLike = $functionLike;
         $this->codePrinter = $codePrinter;
@@ -208,16 +203,41 @@ class ArgInfoDefinition
             return;
         }
 
-        $this->codePrinter->output(
-            sprintf(
-                'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
-                $this->name,
-                (int) $this->returnByRef,
-                $this->functionLike->getNumberOfRequiredParameters(),
-                $this->getReturnType(),
-                (int) $this->functionLike->areReturnTypesNullCompatible()
-            )
-        );
+        if ($this->functionLike->isMixed()) {
+            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_MIXED, %d)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    (int) $this->functionLike->areReturnTypesNullCompatible()
+                )
+            );
+            $this->codePrinter->output('#else');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    $this->getReturnType(),
+                    (int) $this->functionLike->areReturnTypesNullCompatible()
+                )
+            );
+            $this->codePrinter->output('#endif');
+        } else {
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    $this->getReturnType(),
+                    (int) $this->functionLike->areReturnTypesNullCompatible()
+                )
+            );
+        }
     }
 
     private function renderEnd(): void
@@ -396,6 +416,11 @@ class ArgInfoDefinition
 
     private function getReturnType(): string
     {
+        // TODO: Come back here when PHP7.4 is deprecated.
+        /*if (array_key_exists('mixed', $this->functionLike->getReturnTypes())) {
+            return 'IS_MIXED';
+        }*/
+
         if ($this->functionLike->areReturnTypesIntCompatible()) {
             return 'IS_LONG';
         }

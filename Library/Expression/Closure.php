@@ -9,21 +9,23 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
+use Zephir\ClassProperty;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\StatementsBlock;
 use Zephir\Variable;
+use function is_array;
 
 /**
- * Closure.
- *
  * Creates an anonymous function within the extension simulating a closure
  */
 class Closure
@@ -31,17 +33,17 @@ class Closure
     /**
      * @var bool
      */
-    protected $expecting = true;
+    protected bool $expecting = true;
 
     /**
      * @var bool
      */
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
     /**
-     * @var Variable
+     * @var Variable|null
      */
-    protected $expectingVariable;
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Unique closure ID.
@@ -52,10 +54,10 @@ class Closure
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -66,7 +68,7 @@ class Closure
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -77,11 +79,11 @@ class Closure
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws Exception
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
@@ -95,27 +97,22 @@ class Closure
 
         $compilationContext->compiler->addClassDefinition($compilerFile, $classDefinition);
 
+        $parameters = null;
         if (isset($expression['left'])) {
             $parameters = new ClassMethodParameters($expression['left']);
-        } else {
-            $parameters = null;
         }
 
-        if (isset($expression['right'])) {
-            $block = $expression['right'];
-        } else {
-            $block = [];
-        }
+        $block = $expression['right'] ?? [];
 
         $staticVariables = [];
-        if (isset($expression['use']) && \is_array($expression['use'])) {
+        if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
                 $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable($parameter['name']);
             }
         }
 
         foreach ($staticVariables as $var) {
-            $classDefinition->addProperty(new \Zephir\ClassProperty(
+            $classDefinition->addProperty(new ClassProperty(
                 $classDefinition,
                 ['public', 'static'],
                 $var->getName(),
@@ -153,35 +150,40 @@ class Closure
         $symbolVariable->initVariant($compilationContext);
         $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
         $compilationContext->headersManager->add('kernel/object');
+
         foreach ($staticVariables as $var) {
-            if ('variable' == $var->getType() || 'array' == $var->getType()) {
+            if (in_array($var->getType(), ['variable', 'array'])) {
                 $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $var, $compilationContext);
-            } else {
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                switch ($var->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                    case 'char':
-                    case 'uchar':
-                        $compilationContext->backend->assignLong($tempVariable, $var, $compilationContext);
-                        break;
-                    case 'double':
-                        $compilationContext->backend->assignDouble($tempVariable, $var, $compilationContext);
-                        break;
-                    case 'bool':
-                        $compilationContext->backend->assignBool($tempVariable, $var, $compilationContext);
-                        break;
-                    case 'string':
-                        $compilationContext->backend->assignString($tempVariable, $var, $compilationContext);
-                        break;
-                    default:
-                        break;
-                }
-                $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $tempVariable, $compilationContext);
+                continue;
             }
+
+            $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+
+            switch ($var->getType()) {
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                case 'char':
+                case 'uchar':
+                    $compilationContext->backend->assignLong($tempVariable, $var, $compilationContext);
+                    break;
+                case 'double':
+                    $compilationContext->backend->assignDouble($tempVariable, $var, $compilationContext);
+                    break;
+                case 'bool':
+                    $compilationContext->backend->assignBool($tempVariable, $var, $compilationContext);
+                    break;
+                case 'string':
+                    $compilationContext->backend->assignString($tempVariable, $var, $compilationContext);
+                    break;
+                default:
+                    break;
+            }
+
+            $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $tempVariable, $compilationContext);
         }
+
         ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

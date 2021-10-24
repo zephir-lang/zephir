@@ -76,47 +76,47 @@ final class Types
         $nullableType = $isNullable ? '|null' : '';
 
         if ($method->isVoid() || $isVoid) {
-            return static::T_VOID;
+            return self::T_VOID;
         }
 
         if ($isInteger) {
-            return static::T_INT.$nullableType;
+            return self::T_INT.$nullableType;
         }
 
         if ($isDouble) {
-            return static::T_FLOAT.$nullableType;
+            return self::T_FLOAT.$nullableType;
         }
 
         if ($isBool) {
-            return static::T_BOOL.$nullableType;
+            return self::T_BOOL.$nullableType;
         }
 
         if ($isString) {
-            return static::T_STRING.$nullableType;
+            return self::T_STRING.$nullableType;
         }
 
         if ($isNull && 1 === $typesCount) {
-            return static::T_NULL;
+            return self::T_NULL;
         }
 
         if ($isArray) {
-            return static::T_ARRAY;
+            return self::T_ARRAY;
         }
 
         if ($isObject) {
-            return static::T_OBJECT;
+            return self::T_OBJECT;
         }
 
         if ($isIterable) {
-            return static::T_ITERABLE;
+            return self::T_ITERABLE;
         }
 
         if ($isResource) {
-            return static::T_RESOURCE;
+            return self::T_RESOURCE;
         }
 
         if ($method->areReturnTypesCompatible() && !$isTypeHinted) {
-            return static::T_MIXED.$nullableType;
+            return self::T_MIXED.$nullableType;
         }
 
         if ($isTypeHinted && !$isBasicTypes && !$isDynamic && !$isNullable) {
@@ -125,7 +125,7 @@ final class Types
 
         if ($isTypeHinted && $isProcessedReturnType) {
             $withoutNullable = array_filter(array_keys($returnTypes), static function ($ret) {
-                if ($ret !== static::T_NULL) {
+                if ($ret !== self::T_NULL) {
                     return $ret;
                 }
             });
@@ -137,7 +137,7 @@ final class Types
             return implode('|', array_values($returnTypes));
         }
 
-        return static::T_MIXED.$nullableType;
+        return self::T_MIXED.$nullableType;
     }
 
     /**
@@ -189,7 +189,7 @@ final class Types
      */
     private function areReturnTypesBoolCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_BOOL]);
+        return $this->areReturnTypesCompatible($types, [self::T_BOOL]);
     }
 
     /**
@@ -204,8 +204,8 @@ final class Types
         return $this->areReturnTypesCompatible(
             $types,
             [
-                static::T_STRING,
-                static::T_ISTRING,
+                self::T_STRING,
+                self::T_ISTRING,
             ],
             $this->isNullable($types)
         );
@@ -220,7 +220,7 @@ final class Types
      */
     private function areReturnTypesNullCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_NULL]);
+        return $this->areReturnTypesCompatible($types, [self::T_NULL]);
     }
 
     /**
@@ -232,7 +232,7 @@ final class Types
      */
     private function areReturnTypesArrayCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_ARRAY]);
+        return $this->areReturnTypesCompatible($types, [self::T_ARRAY]);
     }
 
     /**
@@ -244,7 +244,7 @@ final class Types
      */
     private function areReturnTypesObjectCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_OBJECT]);
+        return $this->areReturnTypesCompatible($types, [self::T_OBJECT]);
     }
 
     /**
@@ -256,7 +256,7 @@ final class Types
      */
     private function areReturnTypesIterableCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_ITERABLE]);
+        return $this->areReturnTypesCompatible($types, [self::T_ITERABLE]);
     }
 
     /**
@@ -268,7 +268,7 @@ final class Types
      */
     private function areReturnTypesResourceCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_RESOURCE]);
+        return $this->areReturnTypesCompatible($types, [self::T_RESOURCE]);
     }
 
     /**
@@ -300,7 +300,7 @@ final class Types
      */
     private function areReturnTypesVoidCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_VOID]);
+        return $this->areReturnTypesCompatible($types, [self::T_VOID]);
     }
 
     /**
@@ -312,7 +312,7 @@ final class Types
      */
     private function isNumeric(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [static::T_NUMBER]);
+        return $this->areReturnTypesCompatible($types, [self::T_NUMBER]);
     }
 
     /**
@@ -324,8 +324,8 @@ final class Types
      */
     private function isNullable(array $types): bool
     {
-        return (\array_key_exists(static::T_NULL, $types)
-            || \in_array(static::T_NULL, $types))
+        return (\array_key_exists(self::T_NULL, $types)
+            || \in_array(self::T_NULL, $types))
             && 1 !== \count($types);
     }
 
@@ -356,7 +356,7 @@ final class Types
         $result = null;
 
         if ($isNullable) {
-            $allowedTypes[] = static::T_NULL;
+            $allowedTypes[] = self::T_NULL;
         }
 
         foreach ($types as $type => $data) {

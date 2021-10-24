@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - '**.md'
       - '**.txt'
-      - './.github/workflows/nightly.yml'
+      - '**/nightly.yml'
   pull_request:
     branches:
       - master
@@ -30,22 +30,22 @@ jobs:
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
+        env:
+          PHP_CS_FIXER_VERSION: 3.2.0
         with:
           php-version: '7.4'
           coverage: none
-          tools: php-cs-fixer, phpcs
+          tools: php-cs-fixer:${{ env.PHP_CS_FIXER_VERSION }}, phpcs
 
       - name: Run PHP_CodeSniffer
         run: |
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
-      # @TODO: Apply fix from `feature/win-unix-builds
       - name: Run PHP CS Fixer
         if: always()
         run: |
-          php-cs-fixer --version
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no || true
+          php-cs-fixer fix --diff --dry-run -v --using-cache=no
 
       - name: Run Shell Check
         if: always()

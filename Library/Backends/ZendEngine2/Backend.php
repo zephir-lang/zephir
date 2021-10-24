@@ -1102,12 +1102,12 @@ class Backend extends BaseBackend
         return $output;
     }
 
-    protected function returnHelper($macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null)
+    protected function returnHelper(string $macro, $value, CompilationContext $context, $useCodePrinter, $doCopy = null): string
     {
         if ($value instanceof Variable) {
             $value = $value->getName();
-        } else {
-            $value = 'RETURN_MM_STRING' == $macro ? '"'.$value.'"' : $value;
+        } elseif ($macro === 'RETURN_MM_STRING' && !preg_match('/^ZEPHIR_GLOBAL/', $value)) {
+            $value = '"'.$value.'"';
         }
 
         $copyStr = '';

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
 use Zephir\ClassDefinition;
@@ -22,8 +24,6 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\StatementsBlock;
 
 /**
- * ClosureArrow.
- *
  * Creates an anonymous function within the extension simulating a closure using the arrow syntax
  */
 class ClosureArrow extends Closure
@@ -38,7 +38,7 @@ class ClosureArrow extends Closure
      *
      * @return CompiledExpression
      */
-    public function compile(array $expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $classDefinition = new ClassDefinition(
             $compilationContext->config->get('namespace'),
