@@ -12,7 +12,7 @@
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Zephir\Backends\ZendEngine3\Backend;
+use Zephir\Backends\BackendFactory;
 use Zephir\Compiler;
 use Zephir\Config;
 use Zephir\Console\Application;
@@ -59,9 +59,10 @@ $disk = new HardDisk($rootPath.'/.zephir');
 $parser = new Parser();
 $logger = new Logger('zephir', $handlers);
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
-$zendBackend3 = new Backend($config, $rootPath.'/kernels', $rootPath.'/templates');
+$backend = (new BackendFactory($config, $rootPath.'/kernels', $rootPath.'/templates'))
+    ->createBackend();
 
-$compiler = new Compiler($config, $zendBackend3, new Manager($parser), $disk, $compilerFactory);
+$compiler = new Compiler($config, $backend, new Manager($parser), $disk, $compilerFactory);
 $compiler->setPrototypesPath($rootPath.'/prototypes');
 $compiler->setOptimizersPath($rootPath.'/Library/Optimizers');
 $compiler->setTemplatesPath($rootPath.'/templates');
@@ -74,7 +75,7 @@ $application->add(new CleanCommand($disk));
 $application->add(new CompileCommand($compiler));
 $application->add(new FullCleanCommand());
 $application->add(new GenerateCommand($compiler));
-$application->add(new InitCommand($zendBackend3, $config, $logger));
+$application->add(new InitCommand($backend, $config, $logger));
 $application->add(new InstallCommand($compiler, $config));
 $application->add(new ListCommand());
 $application->add(new StubsCommand($compiler));
