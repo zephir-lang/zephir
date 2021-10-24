@@ -63,7 +63,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        php: ['7.4', '8.0']
+        php: ['7.4', '8.0', '8.1']
         build_type: ['ts', 'nts']
         arch: ['x64']
 
@@ -101,6 +101,9 @@ jobs:
 
           - name: win2016-vc15
             php: '8.0'
+
+          - name: win2016-vc15
+            php: '8.1'
 
     steps:
       - uses: actions/checkout@v2
