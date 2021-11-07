@@ -17,12 +17,12 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
  * This is the base operator for logical operators
  */
-class LogicalBaseOperator extends BaseOperator
+class LogicalBaseOperator extends AbstractOperator
 {
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {

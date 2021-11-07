@@ -18,14 +18,12 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * Empty.
- *
  * Checks if a variable is empty string or null
  */
-class EmptyOperator extends BaseOperator
+class EmptyOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

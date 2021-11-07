@@ -13,19 +13,18 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * Unlikely.
- *
  * Adds a branch prediction hint when evaluating an expression
  */
-class UnlikelyOperator extends BaseOperator
+class UnlikelyOperator extends AbstractOperator
 {
     /**
      * Compile unlikely operator
@@ -36,6 +35,7 @@ class UnlikelyOperator extends BaseOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {

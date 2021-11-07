@@ -241,4 +241,16 @@ class Strings
 
         return null;
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2299
+     */
+    public function issue2299NullableStringCondition(string roleName = null) -> string | null
+    {
+        if null !== roleName {
+            return roleName;
+        }
+
+        return null;
+    }
 }

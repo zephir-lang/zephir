@@ -17,14 +17,12 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * Require.
- *
  * Includes a plain PHP file
  */
-class RequireOperator extends BaseOperator
+class RequireOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

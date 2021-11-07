@@ -18,14 +18,12 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * Likely.
- *
  * Adds a branch prediction hint when evaluating an expression
  */
-class LikelyOperator extends BaseOperator
+class LikelyOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

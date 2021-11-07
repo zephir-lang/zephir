@@ -19,16 +19,14 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Types;
 
 /**
- * Cast operator
- *
  * Converts a value into another of a different type
  */
-class CastOperator extends BaseOperator
+class CastOperator extends AbstractOperator
 {
     /**
      * Compiles a type cast operation.
