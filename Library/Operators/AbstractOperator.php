@@ -16,10 +16,7 @@ namespace Zephir\Operators;
 use Zephir\CompilationContext;
 use Zephir\Variable;
 
-/**
- * TODO: Make it abstract
- */
-class BaseOperator
+abstract class AbstractOperator
 {
     protected string $operator;
 
@@ -52,26 +49,28 @@ class BaseOperator
      * @param array              $expression
      * @param bool               $init
      *
-     * @return Variable
+     * @return Variable|null
      */
     public function getExpectedNonLiteral(CompilationContext $compilationContext, array $expression, bool $init = true): ?Variable
     {
-        $isExpecting = $this->expecting;
         $symbolVariable = $this->expectingVariable;
 
-        if ($isExpecting) {
-            if (\is_object($symbolVariable)) {
-                if ('variable' == $symbolVariable->getType() && !$symbolVariable->isLocalOnly()) {
-                    if (!$init) {
-                        return $symbolVariable;
-                    }
-                    $symbolVariable->initVariant($compilationContext);
-                } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+        if (!$this->expecting) {
+            return $symbolVariable;
+        }
+
+        if ($symbolVariable !== null) {
+            if ('variable' === $symbolVariable->getType() && !$symbolVariable->isLocalOnly()) {
+                if (!$init) {
+                    return $symbolVariable;
                 }
+
+                $symbolVariable->initVariant($compilationContext);
             } else {
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
             }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
         }
 
         return $symbolVariable;
@@ -89,10 +88,9 @@ class BaseOperator
      */
     public function getExpected(CompilationContext $compilationContext, array $expression, bool $init = true): ?Variable
     {
-        $isExpecting = $this->expecting;
         $symbolVariable = $this->expectingVariable;
 
-        if ($isExpecting) {
+        if ($this->expecting) {
             if (\is_object($symbolVariable)) {
                 if ('variable' === $symbolVariable->getType()) {
                     if (!$init) {
@@ -138,10 +136,9 @@ class BaseOperator
      */
     public function getExpectedComplexLiteral(CompilationContext $compilationContext, string $type = 'variable'): ?Variable
     {
-        $isExpecting = $this->expecting;
         $symbolVariable = $this->expectingVariable;
 
-        if ($isExpecting) {
+        if ($this->expecting) {
             if (\is_object($symbolVariable)) {
                 if ($symbolVariable->getType() === $type || 'return_value' === $symbolVariable->getName()) {
                     $symbolVariable->initVariant($compilationContext);

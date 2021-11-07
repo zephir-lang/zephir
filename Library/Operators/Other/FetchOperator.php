@@ -18,7 +18,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
  * FetchOperator.
@@ -26,7 +26,7 @@ use Zephir\Operators\BaseOperator;
  * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
  * without calculating the hash key twice
  */
-class FetchOperator extends BaseOperator
+class FetchOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

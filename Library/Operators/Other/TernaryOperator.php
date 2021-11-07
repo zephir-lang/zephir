@@ -15,16 +15,14 @@ namespace Zephir\Operators\Other;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Statements\LetStatement;
 
 /**
- * Ternary.
- *
  * Compiles ternary expressions
  */
-class TernaryOperator extends BaseOperator
+class TernaryOperator extends AbstractOperator
 {
     /**
      * Compile ternary operator.

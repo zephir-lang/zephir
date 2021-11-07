@@ -20,14 +20,12 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * NewTypeInstance.
- *
  * Creates a value of the specified type with parameters
  */
-class NewInstanceTypeOperator extends BaseOperator
+class NewInstanceTypeOperator extends AbstractOperator
 {
     protected bool $literalOnly = false;
 

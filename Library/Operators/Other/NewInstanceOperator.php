@@ -22,16 +22,14 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 use function Zephir\escape_class;
 
 /**
- * NewInstance.
- *
  * Creates a new instance of a class
  */
-class NewInstanceOperator extends BaseOperator
+class NewInstanceOperator extends AbstractOperator
 {
     protected bool $literalOnly = false;
 

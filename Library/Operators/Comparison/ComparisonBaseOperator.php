@@ -13,157 +13,153 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Comparison;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * BaseOperator.
- *
  * This is the base operator for comparison operators
  */
-class ComparisonBaseOperator extends BaseOperator
+class ComparisonBaseOperator extends AbstractOperator
 {
-    protected bool $literalOnly = true;
-
     protected bool $commutative = false;
 
     /**
-     * @param $expr
+     * @param array              $expr
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @return CompiledExpression|null
      *
-     * @return bool|CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function optimizeTypeOf($expr, CompilationContext $compilationContext)
+    public function optimizeTypeOf(array $expr, CompilationContext $compilationContext): ?CompiledExpression
     {
         if (!isset($expr['left'])) {
-            return false;
+            return null;
         }
 
         if (!isset($expr['right']) && !isset($expr['right']['value'])) {
-            return false;
+            return null;
         }
 
-        if ('typeof' == $expr['left']['type']) {
-            if ('string' != $expr['right']['type']) {
-                $compilationContext->logger->warning(
-                    "Possible invalid comparison for 'typeof' operator with non-string",
-                    ['invalid-typeof-comparison', $expr['right']]
-                );
+        if ('typeof' !== $expr['left']['type']) {
+            return null;
+        }
 
-                return false;
-            }
+        if ('string' !== $expr['right']['type']) {
+            $compilationContext->logger->warning(
+                "Possible invalid comparison for 'typeof' operator with non-string",
+                ['invalid-typeof-comparison', $expr['right']]
+            );
 
-            if (isset($expr['type'])) {
-                switch ($expr['type']) {
-                    case 'identical':
-                    case 'equals':
-                        $operator = '==';
-                        break;
+            return null;
+        }
 
-                    case 'not-identical':
-                    case 'not-equals':
-                        $operator = '!=';
+        switch ($expr['type']) {
+            case 'identical':
+            case 'equals':
+                $operator = '==';
+                break;
+
+            case 'not-identical':
+            case 'not-equals':
+                $operator = '!=';
+                break;
+
+            default:
+                return null;
+        }
+
+        $code = (new Expression($expr['left']['left']))->compile($compilationContext)->getCode();
+        $variableVariable = $compilationContext->symbolTable->getVariableForRead($code, $compilationContext, $expr);
+
+        if ('string' !== $expr['right']['type']) {
+            throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
+        }
+
+        $value = strtolower($expr['right']['value']);
+
+        switch ($variableVariable->getType()) {
+            case 'double':
+                switch ($value) {
+                    case 'double':
+                    case 'float':
+                        $condition = '1 '.$operator.' 1';
                         break;
 
                     default:
-                        return false;
+                        $condition = '1 '.$operator.' 0';
+                        break;
                 }
-            }
+                break;
 
-            $expression = new Expression($expr['left']['left']);
-            $condition = $expression->compile($compilationContext);
-            $variableVariable = $compilationContext->symbolTable->getVariableForRead($condition->getCode(), $compilationContext, $expr);
+            case 'int':
+            case 'integer':
+            case 'long':
+                switch ($value) {
+                    case 'int':
+                    case 'integer':
+                    case 'long':
+                        $condition = '1 '.$operator.' 1';
+                        break;
 
-            if ('string' != $expr['right']['type']) {
-                throw new CompilerException('Right expression of typeof operator must be "string" type', $expr['right']);
-            }
+                    default:
+                        $condition = '1 '.$operator.' 0';
+                        break;
+                }
+                break;
 
-            $value = strtolower($expr['right']['value']);
+            case 'bool':
+                switch ($value) {
+                    case 'bool':
+                    case 'boolean':
+                        $condition = '1 '.$operator.' 1';
+                        break;
 
-            switch ($variableVariable->getType()) {
-                case 'double':
-                    switch ($value) {
-                        case 'double':
-                        case 'float':
-                            $condition = '1 '.$operator.' 1';
-                            break;
+                    default:
+                        $condition = '1 '.$operator.' 0';
+                        break;
+                }
+                break;
 
-                        default:
-                            $condition = '1 '.$operator.' 0';
-                            break;
-                    }
-                    break;
+            case 'array':
+                switch ($value) {
+                    case 'array':
+                        $condition = '1 '.$operator.' 1';
+                        break;
 
-                case 'int':
-                case 'integer':
-                case 'long':
-                    switch ($value) {
-                        case 'int':
-                        case 'integer':
-                        case 'long':
-                            $condition = '1 '.$operator.' 1';
-                            break;
+                    default:
+                        $condition = '1 '.$operator.' 0';
+                        break;
+                }
+                break;
 
-                        default:
-                            $condition = '1 '.$operator.' 0';
-                            break;
-                    }
-                    break;
+            case 'string':
+                switch ($value) {
+                    case 'string':
+                        $condition = '1 '.$operator.' 1';
+                        break;
 
-                case 'bool':
-                    switch ($value) {
-                        case 'bool':
-                        case 'boolean':
-                            $condition = '1 '.$operator.' 1';
-                            break;
+                    default:
+                        $condition = '1 '.$operator.' 0';
+                        break;
+                }
+                break;
 
-                        default:
-                            $condition = '1 '.$operator.' 0';
-                            break;
-                    }
-                    break;
+            case 'variable':
+                $condition = $compilationContext->backend->getTypeofCondition($variableVariable, $operator, $value, $compilationContext);
+                break;
 
-                case 'array':
-                    switch ($value) {
-                        case 'array':
-                            $condition = '1 '.$operator.' 1';
-                            break;
-
-                        default:
-                            $condition = '1 '.$operator.' 0';
-                            break;
-                    }
-                    break;
-
-                case 'string':
-                    switch ($value) {
-                        case 'string':
-                            $condition = '1 '.$operator.' 1';
-                            break;
-
-                        default:
-                            $condition = '1 '.$operator.' 0';
-                            break;
-                    }
-                    break;
-
-                case 'variable':
-                    $condition = $compilationContext->backend->getTypeofCondition($variableVariable, $operator, $value, $compilationContext);
-                    break;
-
-                default:
-                    return false;
-            }
-
-            return new CompiledExpression('bool', $condition, $expr);
+            default:
+                return null;
         }
 
-        return false;
+        return new CompiledExpression('bool', $condition, $expr);
     }
 
     /**
@@ -171,11 +167,16 @@ class ComparisonBaseOperator extends BaseOperator
      *
      * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
+     * @return CompiledExpression
+     *
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
         $conditions = $this->optimizeTypeOf($expression, $compilationContext);
-        if (false !== $conditions) {
+        if (null !== $conditions) {
             return $conditions;
         }
 
@@ -227,6 +228,7 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', '0 '.$this->operator.' '.$variableRight->getName(), $expression);
 
                             case 'variable':
+                            case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $condition = $compilationContext->backend->getTypeofCondition($variableRight, $this->operator, 'null', $compilationContext);
 
@@ -549,23 +551,21 @@ class ComparisonBaseOperator extends BaseOperator
                         break;
 
                     case 'string':
+                        $compilationContext->headersManager->add('kernel/operators');
+
                         switch ($right->getType()) {
                             case 'null':
-                                $compilationContext->headersManager->add('kernel/operators');
-
                                 return new CompiledExpression('bool', $this->zvalNullOperator.'('.$variableCode.')', $expression['left']);
 
                             case 'string':
-                                $compilationContext->headersManager->add('kernel/operators');
-
                                 return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableCode.', "'.$right->getCode().'")', $expression['left']);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['left']);
+
                                 switch ($variableRight->getType()) {
                                     case 'string':
                                     case 'variable':
-                                        $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
                                         return new CompiledExpression('bool', $this->zvalOperator.'('.$variableCode.', '.$variableRight.')', $expression);
@@ -581,9 +581,10 @@ class ComparisonBaseOperator extends BaseOperator
                         break;
 
                     case 'variable':
+                        $compilationContext->headersManager->add('kernel/operators');
+
                         switch ($right->getType()) {
                             case 'null':
-                                $compilationContext->headersManager->add('kernel/operators');
                                 $condition = $compilationContext->backend->getTypeofCondition($variable, $this->operator, 'null', $compilationContext);
 
                                 return new CompiledExpression('bool', $condition, $expression['left']);
@@ -593,25 +594,18 @@ class ComparisonBaseOperator extends BaseOperator
                             case 'long':
                             case 'ulong':
                             case 'double':
-                                $compilationContext->headersManager->add('kernel/operators');
-
                                 return new CompiledExpression('bool', $this->zvalLongOperator.'('.$variableCode.', '.$right->getCode().')', $expression['left']);
 
                             case 'char':
                             case 'uchar':
-                                $compilationContext->headersManager->add('kernel/operators');
-
                                 return new CompiledExpression('bool', $this->zvalLongOperator.'('.$variableCode.', \''.$right->getCode().'\')', $expression['left']);
 
                             case 'bool':
-                                $compilationContext->headersManager->add('kernel/operators');
-                                $zvalBoolOperator = 'true' == $right->getCode() ? $this->zvalBoolTrueOperator : $this->zvalBoolFalseOperator;
+                                $zvalBoolOperator = 'true' === $right->getCode() ? $this->zvalBoolTrueOperator : $this->zvalBoolFalseOperator;
 
                                 return new CompiledExpression('bool', $zvalBoolOperator.'('.$variableCode.')', $expression['left']);
 
                             case 'string':
-                                $compilationContext->headersManager->add('kernel/operators');
-
                                 return new CompiledExpression('bool', $this->zvalStringOperator.'('.$variableCode.', "'.$right->getCode().'")', $expression['left']);
 
                             case 'variable':
@@ -621,24 +615,17 @@ class ComparisonBaseOperator extends BaseOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                        $compilationContext->headersManager->add('kernel/operators');
-
                                         return new CompiledExpression('bool', $this->zvalLongOperator.'('.$variableCode.', '.$variableRight->getName().')', $expression);
 
                                     case 'double':
-                                        $compilationContext->headersManager->add('kernel/operators');
-
                                         return new CompiledExpression('bool', $this->zvalDoubleOperator.'('.$variableCode.', '.$variableRight->getName().')', $expression);
 
                                     case 'bool':
-                                        $compilationContext->headersManager->add('kernel/operators');
-
                                         return new CompiledExpression('bool', $this->zvalBoolOperator.'('.$variableCode.', '.$variableRight->getName().')', $expression);
 
                                     case 'string':
                                     case 'variable':
                                     case 'array':
-                                        $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
                                         return new CompiledExpression('bool', $this->zvalOperator.'('.$variableCode.', '.$variableRight.')', $expression);

@@ -19,14 +19,12 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * RangeExclusive.
- *
  * Exclusive range operator
  */
-class RangeExclusiveOperator extends BaseOperator
+class RangeExclusiveOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

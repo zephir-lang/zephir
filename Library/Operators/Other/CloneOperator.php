@@ -18,14 +18,12 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * Clone.
- *
  * Clones an object into another one
  */
-class CloneOperator extends BaseOperator
+class CloneOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

@@ -17,8 +17,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * ModOperator.
- *
  * Generates an arithmetical operation according to the operands
  */
 class ModOperator extends ArithmeticalBaseOperator
