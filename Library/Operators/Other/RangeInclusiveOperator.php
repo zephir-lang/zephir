@@ -18,15 +18,13 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use Zephir\Types;
 
 /**
- * RangeInclusive.
- *
  * Inclusive range operator
  */
-class RangeInclusiveOperator extends BaseOperator
+class RangeInclusiveOperator extends AbstractOperator
 {
     /**
      * @param array              $expression

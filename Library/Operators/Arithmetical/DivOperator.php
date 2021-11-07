@@ -17,8 +17,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * DivOperator.
- *
  * Generates an arithmetical operation according to the operands
  */
 class DivOperator extends ArithmeticalBaseOperator

@@ -19,20 +19,21 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
  * This is the base operator for comparison operators
  */
-class ComparisonBaseOperator extends BaseOperator
+class ComparisonBaseOperator extends AbstractOperator
 {
     protected bool $commutative = false;
 
     /**
-     * @param array $expr
+     * @param array              $expr
      * @param CompilationContext $compilationContext
      *
-     * @return null|CompiledExpression
+     * @return CompiledExpression|null
+     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -164,9 +165,11 @@ class ComparisonBaseOperator extends BaseOperator
     /**
      * Compile the expression.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
+     *
      * @throws ReflectionException
      * @throws Exception
      */

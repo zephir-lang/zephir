@@ -19,17 +19,15 @@ use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use Zephir\Statements\IfStatement;
 
 /**
- * ShortTernary.
- *
  * a ?: b
  *
  * Compiles short ternary expressions
  */
-class ShortTernaryOperator extends BaseOperator
+class ShortTernaryOperator extends AbstractOperator
 {
     /**
      * Compile ternary operator.

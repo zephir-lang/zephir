@@ -18,12 +18,9 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
-/**
- * Zephir\Operators\Other\TypeHintOperator.
- */
-class TypeHintOperator extends BaseOperator
+class TypeHintOperator extends AbstractOperator
 {
     private bool $strict = false;
 

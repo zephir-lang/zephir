@@ -13,20 +13,19 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * TypeOf.
- *
- * Obtains the type of a dynamic variable
+ * Obtains the type of dynamic variable.
  */
-class TypeOfOperator extends BaseOperator
+class TypeOfOperator extends AbstractOperator
 {
     /**
      * @param $expression
@@ -35,6 +34,7 @@ class TypeOfOperator extends BaseOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {

@@ -15,9 +15,9 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
-class BitwiseNotOperator extends BaseOperator
+class BitwiseNotOperator extends AbstractOperator
 {
     /**
      * @param $expression

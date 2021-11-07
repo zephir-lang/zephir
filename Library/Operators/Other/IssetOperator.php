@@ -18,14 +18,12 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * IssetOperator.
- *
  * Checks if a array offset or a property is defined on a polymorphic variable
  */
-class IssetOperator extends BaseOperator
+class IssetOperator extends AbstractOperator
 {
     /**
      * Compiles an 'isset' operator.
