@@ -118,7 +118,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-1.1.0, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
