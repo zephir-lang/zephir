@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Comparison;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\BaseOperator;
@@ -169,10 +171,13 @@ class ComparisonBaseOperator extends BaseOperator
     /**
      * Compile the expression.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
+     * @return bool|CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
         $conditions = $this->optimizeTypeOf($expression, $compilationContext);
         if (false !== $conditions) {
@@ -227,6 +232,7 @@ class ComparisonBaseOperator extends BaseOperator
                                 return new CompiledExpression('bool', '0 '.$this->operator.' '.$variableRight->getName(), $expression);
 
                             case 'variable':
+                            case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $condition = $compilationContext->backend->getTypeofCondition($variableRight, $this->operator, 'null', $compilationContext);
 
