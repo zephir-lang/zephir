@@ -74,6 +74,7 @@
 #include "stub/functional.zep.h"
 #include "stub/functionexists.zep.h"
 #include "stub/functions.zep.h"
+#include "stub/generators.zep.h"
 #include "stub/geometry.zep.h"
 #include "stub/globals.zep.h"
 #include "stub/globals/env.zep.h"

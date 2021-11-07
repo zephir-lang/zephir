@@ -2,7 +2,7 @@ PHP_ARG_ENABLE(stub, whether to enable stub, [ --enable-stub   Enable Stub])
 
 if test "$PHP_STUB" = "yes"; then
 
-	
+
 
 	if ! test "x" = "x"; then
 		PHP_EVAL_LIBLINE(, STUB_SHARED_LIBADD)
@@ -79,6 +79,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/functional.zep.c
 	stub/functionexists.zep.c
 	stub/functions.zep.c
+	stub/generators.zep.c
 	stub/geometry.zep.c
 	stub/globals.zep.c
 	stub/globals/env.zep.c

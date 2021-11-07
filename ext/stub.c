@@ -110,6 +110,7 @@ zend_class_entry *stub_fortytwo_ce;
 zend_class_entry *stub_functional_ce;
 zend_class_entry *stub_functionexists_ce;
 zend_class_entry *stub_functions_ce;
+zend_class_entry *stub_generators_ce;
 zend_class_entry *stub_geometry_ce;
 zend_class_entry *stub_globals_ce;
 zend_class_entry *stub_globals_env_ce;
@@ -250,9 +251,9 @@ ZEND_DECLARE_MODULE_GLOBALS(stub)
 
 PHP_INI_BEGIN()
 	STD_PHP_INI_BOOLEAN("stub.db.my_setting_1", "0", PHP_INI_ALL, OnUpdateBool, db.my_setting_1, zend_stub_globals, stub_globals)
-	
-	
-	
+
+
+
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
@@ -338,6 +339,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_FunctionExists);
 	ZEPHIR_INIT(Stub_Functional);
 	ZEPHIR_INIT(Stub_Functions);
+	ZEPHIR_INIT(Stub_Generators);
 	ZEPHIR_INIT(Stub_Geometry);
 	ZEPHIR_INIT(Stub_Globals);
 	ZEPHIR_INIT(Stub_Globals_Env);
@@ -487,14 +489,14 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_7__closure);
 	ZEPHIR_INIT(stub_8__closure);
 	ZEPHIR_INIT(stub_9__closure);
-	
+
 	return SUCCESS;
 }
 
 #ifndef ZEPHIR_RELEASE
 static PHP_MSHUTDOWN_FUNCTION(stub)
 {
-	
+
 	zephir_deinitialize_memory();
 	UNREGISTER_INI_ENTRIES();
 	return SUCCESS;
@@ -517,7 +519,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	/* Static cache */
 	memset(stub_globals->scache, '\0', sizeof(zephir_fcall_cache_entry*) * ZEPHIR_MAX_CACHE_SLOTS);
 
-	
+
 	stub_globals->db.my_setting_2 = 100;
 	stub_globals->db.my_setting_3 = 7.5;
 	stub_globals->orm.cache_level = 3;
@@ -530,7 +532,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	stub_globals->my_setting_3 = 15.2;
 	stub_globals->my_setting_4 = 'A';
 	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
-	
+
 }
 
 /**
@@ -538,7 +540,7 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
  */
 static void php_zephir_init_module_globals(zend_stub_globals *stub_globals)
 {
-	
+
 }
 
 static PHP_RINIT_FUNCTION(stub)
@@ -551,13 +553,13 @@ static PHP_RINIT_FUNCTION(stub)
 
 		zephir_init_static_properties_Stub_Properties_StaticPropertyArray();
 		zephir_init_static_properties_Stub_SPropertyAccess();
-	
+
 	return SUCCESS;
 }
 
 static PHP_RSHUTDOWN_FUNCTION(stub)
 {
-	
+
 	zephir_deinitialize_memory();
 	return SUCCESS;
 }
@@ -603,7 +605,7 @@ static PHP_GINIT_FUNCTION(stub)
 
 static PHP_GSHUTDOWN_FUNCTION(stub)
 {
-	
+
 }
 
 PHP_FUNCTION(g_stub_zephir_global_method_test);
