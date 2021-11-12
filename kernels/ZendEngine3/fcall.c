@@ -298,24 +298,30 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 		case zephir_fcall_method:
 			if (Z_TYPE_P(func) == IS_OBJECT) {
 #if PHP_VERSION_ID >= 80000
-				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 0) == SUCCESS) {
+				if (Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 0) == SUCCESS) {
 #else
-				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
+				if (Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
 #endif
 					fcic->called_scope = fcic->calling_scope;
 					break;
 				}
 
+				if (Z_TYPE_P(this_ptr) == IS_OBJECT) {
+					fcic->calling_scope = Z_OBJCE_P(this_ptr);
+				}
+
+				return;
+			} else if (Z_TYPE_P(func) == IS_STRING) {
+				if (ce) {
+					fcic->calling_scope = ce;
+#if PHP_VERSION_ID >= 80000
+					fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
+#endif
+				}
+
 				return;
 			}
 
-#if PHP_VERSION_ID >= 80000
-			if (ce && Z_TYPE_P(func) == IS_STRING) {
-				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
-			}
-#endif
-			fcic->calling_scope = this_ptr ? Z_OBJCE_P(this_ptr) : NULL;
-			fcic->called_scope  = fcic->calling_scope;
 			break;
 
 		default:
@@ -482,10 +488,15 @@ int zephir_call_user_function(
 	return status;
 }
 
-int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint32_t func_length,
-	zephir_fcall_cache_entry **cache_entry, int cache_slot,
-	uint32_t param_count, zval **params)
-{
+int zephir_call_func_aparams(
+	zval *return_value_ptr,
+	const char *func_name,
+	uint32_t func_length,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
 	int status;
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
 
