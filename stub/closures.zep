@@ -110,7 +110,7 @@ class Closures
     {
         return preg_replace_callback(
             "/(?:[^%:!\$&\'\(\)\*\+,;=@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
-            [this, "doUrlEncode"],
+            [this, "issue2321doUrlEncode"],
             value
         );
     }
