@@ -280,6 +280,7 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 
 		case zephir_fcall_ce:
 			fcic->calling_scope = ce;
+			fcic->called_scope = ce;
 
 #if PHP_VERSION_ID >= 80000
 			if (ce && Z_TYPE_P(func) == IS_STRING) {
