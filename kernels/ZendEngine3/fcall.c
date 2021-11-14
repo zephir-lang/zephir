@@ -118,14 +118,14 @@ static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_cla
 		if (Z_TYPE_P(function) == IS_STRING) {
 			mth     = Z_STRVAL_P(function);
 			mth_len = Z_STRLEN_P(function);
-		}
-		else if (Z_TYPE_P(function) == IS_ARRAY) {
+		} else if (Z_TYPE_P(function) == IS_ARRAY) {
 			zval *method;
 			HashTable *function_hash = Z_ARRVAL_P(function);
+
 			if (
-					function_hash->nNumOfElements == 2
-				 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
-				 && Z_TYPE_P(method) == IS_STRING
+				function_hash->nNumOfElements == 2 &&
+				((method = zend_hash_index_find(function_hash, 1)) != NULL) &&
+				Z_TYPE_P(method) == IS_STRING
 			) {
 				mth     = Z_STRVAL_P(method);
 				mth_len = Z_STRLEN_P(method);
@@ -452,7 +452,8 @@ int zephir_call_user_function(
 		zval_ptr_dtor(&callable);
 	}
 
-	/* Skip caching IF:
+	/**
+	 * Skip caching IF:
 	 * call failed OR there was an exception (to be safe) OR cache key is not defined OR
 	 * fcall cache was de-initialized OR we have a slot cache
 	 */
@@ -525,10 +526,14 @@ int zephir_call_func_aparams(
 	return status;
 }
 
-int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
-	zephir_fcall_cache_entry **cache_entry, int cache_slot,
-	uint32_t param_count, zval **params)
-{
+int zephir_call_zval_func_aparams(
+	zval *return_value_ptr,
+	zval *func_name,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
 	int status;
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
 
@@ -708,8 +713,7 @@ void zephir_eval_php(zval *str, zval *retval_ptr, char *context)
 #endif
 	CG(compiler_options) = original_compiler_options;
 
-	if (new_op_array)
-	{
+	if (new_op_array) {
 		EG(no_extensions) = 1;
 		zend_try {
 			zend_execute(new_op_array, &local_retval);
