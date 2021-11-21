@@ -1316,13 +1316,13 @@ final class Compiler
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
-                if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
+                if (preg_match('/^[0-9a-zA-Z_]$/', $structureName)) {
                     throw new Exception("Struct name: '".$structureName."' contains invalid characters");
                 }
 
                 $structBuilder = new Struct('_zephir_struct_'.$structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
-                    if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
+                    if (preg_match('/^[0-9a-zA-Z_]$/', $field)) {
                         throw new Exception("Struct field name: '".$field."' contains invalid characters");
                     }
 
@@ -1345,7 +1345,7 @@ final class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-                if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
+                if (preg_match('/^[0-9a-zA-Z_]$/', $name)) {
                     throw new Exception("Extension global variable name: '".$name."' contains invalid characters");
                 }
 
@@ -2167,11 +2167,12 @@ final class Compiler
             }
 
             foreach (file($constantsSource) as $line) {
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+([0-9]+)/', $line, $matches)) {
+                if (preg_match('/^#define[ \t]+([A-Z0-9_]+)[ \t]+([0-9]+)/', $line, $matches)) {
                     $this->constants[$matches[1]] = ['int', $matches[2]];
                     continue;
                 }
-                if (preg_match('/^\#define[ \t]+([A-Z0-9\_]+)[ \t]+(\'(.){1}\')/', $line, $matches)) {
+
+                if (preg_match('/^#define[ \t]+([A-Z0-9_]+)[ \t]+(\'(.)\')/', $line, $matches)) {
                     $this->constants[$matches[1]] = ['char', $matches[3]];
                 }
             }
