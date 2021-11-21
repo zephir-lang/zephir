@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
@@ -21,15 +23,15 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
 
+use function count;
+use function dirname;
 use function is_array;
 
 /**
- * Zephir\CompilerFile.
- *
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
  */
-final class CompilerFile implements FileInterface
+final class CompilerFile extends AbstractCompilerFile implements FileInterface
 {
     use LoggerAwareTrait;
 
@@ -49,11 +51,6 @@ final class CompilerFile implements FileInterface
     private ?string $filePath = null;
 
     /**
-     * @var bool
-     */
-    private bool $external = false;
-
-    /**
      * Original internal representation (IR) of the file.
      *
      * @var array|null
@@ -64,11 +61,6 @@ final class CompilerFile implements FileInterface
      * @var mixed
      */
     private $originalNode;
-
-    /**
-     * @var string|null
-     */
-    private ?string $compiledFile = null;
 
     /**
      * @var ClassDefinition|null
@@ -135,38 +127,18 @@ final class CompilerFile implements FileInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return ClassDefinition
+     * @return ClassDefinition|null
      */
-    public function getClassDefinition()
+    public function getClassDefinition(): ?ClassDefinition
     {
         $this->classDefinition->setAliasManager($this->aliasManager);
 
         return $this->classDefinition;
     }
 
-    public function getFunctionDefinitions()
+    public function getFunctionDefinitions(): array
     {
         return $this->functionDefinitions;
-    }
-
-    /**
-     * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
-     */
-    public function setIsExternal($external): void
-    {
-        $this->external = (bool) $external;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExternal(): bool
-    {
-        return $this->external;
     }
 
     /**
@@ -244,6 +216,7 @@ final class CompilerFile implements FileInterface
      *
      * @param CompilationContext $compilationContext
      * @param FunctionDefinition $functionDefinition
+     * @throws Exception
      */
     public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
     {
@@ -269,7 +242,7 @@ final class CompilerFile implements FileInterface
      * @param CompilationContext $compilationContext
      * @param array              $topStatement
      */
-    public function compileComment(CompilationContext $compilationContext, $topStatement)
+    public function compileComment(CompilationContext $compilationContext, array $topStatement): void
     {
         $compilationContext->codePrinter->output('/'.$topStatement['value'].'/');
     }
@@ -278,10 +251,10 @@ final class CompilerFile implements FileInterface
      * Creates a definition for an interface.
      *
      * @param string $namespace
-     * @param array  $topStatement
-     * @param array  $docblock
+     * @param array $topStatement
+     * @param array|null $docblock
      */
-    public function preCompileInterface($namespace, $topStatement, $docblock)
+    public function preCompileInterface(string $namespace, array $topStatement, ?array $docblock = null)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -343,11 +316,11 @@ final class CompilerFile implements FileInterface
      * Creates a definition for a class.
      *
      * @param CompilationContext $compilationContext
-     * @param string             $namespace
-     * @param array              $topStatement
-     * @param array              $docblock
+     * @param string $namespace
+     * @param array $topStatement
+     * @param array|null $docblock
      */
-    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
+    public function preCompileClass(CompilationContext $compilationContext, string $namespace, array $topStatement, ?array $docblock = null)
     {
         $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -364,11 +337,11 @@ final class CompilerFile implements FileInterface
         }
 
         if (isset($topStatement['abstract'])) {
-            $classDefinition->setIsAbstract($topStatement['abstract']);
+            $classDefinition->setIsAbstract((bool)$topStatement['abstract']);
         }
 
         if (isset($topStatement['final'])) {
-            $classDefinition->setIsFinal($topStatement['final']);
+            $classDefinition->setIsFinal((bool)$topStatement['final']);
         }
 
         if (is_array($docblock)) {
@@ -638,16 +611,6 @@ final class CompilerFile implements FileInterface
     }
 
     /**
-     * Returns the path to the compiled file.
-     *
-     * @return string
-     */
-    public function getCompiledFile(): string
-    {
-        return $this->compiledFile;
-    }
-
-    /**
      * Check dependencies.
      *
      * @param Compiler $compiler
@@ -712,24 +675,28 @@ final class CompilerFile implements FileInterface
         foreach ($classDefinition->getImplementedInterfaces() as $interface) {
             if ($compiler->isInterface($interface)) {
                 $interfaceDefinitions[$interface] = $compiler->getClassDefinition($interface);
-            } else {
-                if ($compiler->isBundledInterface($interface)) {
-                    $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
-                } else {
-                    if ($extendedClass !== null) {
-                        $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
-                    }
 
-                    $this->logger->warning(
-                        sprintf(
-                            'Cannot locate class "%s" when extending interface "%s"',
-                            $interface,
-                            $classDefinition->getCompleteName()
-                        ),
-                        ['nonexistent-class', $this->originalNode]
-                    );
-                }
+                continue;
             }
+
+            if ($compiler->isBundledInterface($interface)) {
+                $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
+
+                continue;
+            }
+
+            if ($extendedClass !== null) {
+                $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
+            }
+
+            $this->logger->warning(
+                sprintf(
+                    'Cannot locate class "%s" when extending interface "%s"',
+                    $interface,
+                    $classDefinition->getCompleteName()
+                ),
+                ['nonexistent-class', $this->originalNode]
+            );
         }
 
         if (count($interfaceDefinitions) > 0) {
@@ -740,12 +707,13 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
+     * @param Compiler $compiler
      * @param StringsManager $stringsManager
      *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(Compiler $compiler, StringsManager $stringsManager)
+    public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
         if (!$this->ir) {
             throw new CompilerException('Unable to locate the intermediate representation of the compiled file');
@@ -843,22 +811,20 @@ final class CompilerFile implements FileInterface
 
         $classDefinition->setOriginalNode($this->originalNode);
 
-        $completeName = $classDefinition->getCompleteName();
-
-        $path = str_replace('\\', \DIRECTORY_SEPARATOR, strtolower($completeName));
+        $path = str_replace('\\', \DIRECTORY_SEPARATOR, strtolower($classDefinition->getCompleteName()));
 
         $filePath = 'ext/'.$path.'.zep.c';
         $filePathHeader = 'ext/'.$path.'.zep.h';
 
         if (strpos($path, \DIRECTORY_SEPARATOR)) {
-            $dirname = \dirname($filePath);
+            $dirname = dirname($filePath);
             if (!is_dir($dirname)) {
                 mkdir($dirname, 0755, true);
             }
         }
 
         /**
-         * If the file does not exists we create it for the first time
+         * If the file does not exist we create it for the first time
          */
         if (!file_exists($filePath)) {
             file_put_contents($filePath, $codePrinter->getOutput());
@@ -896,7 +862,7 @@ final class CompilerFile implements FileInterface
     {
         $classDefinition = $this->classDefinition;
 
-        $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
+        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
         $code = ''.PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
@@ -926,11 +892,11 @@ final class CompilerFile implements FileInterface
             }
         }
 
-        if (\count($this->headerCBlocks) > 0) {
+        if (count($this->headerCBlocks) > 0) {
             $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
         }
 
-        /*
+        /**
          * Prepend the required files to the header
          */
         $compilationContext->codePrinter->preOutput($code);
@@ -954,7 +920,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    protected function processShortcuts(array $property, ClassDefinition $classDefinition)
+    protected function processShortcuts(array $property, ClassDefinition $classDefinition): void
     {
         foreach ($property['shortcuts'] as $shortcut) {
             if ('_' == substr($property['name'], 0, 1)) {
@@ -1026,7 +992,7 @@ final class CompilerFile implements FileInterface
                                 'type' => 'parameter',
                                 'name' => $name,
                                 'const' => 0,
-                                'data-type' => 1 == \count($returnsType) ? $returnsType[0] : 'variable',
+                                'data-type' => 1 == count($returnsType) ? $returnsType[0] : 'variable',
                                 'mandatory' => 0,
                             ],
                         ]),

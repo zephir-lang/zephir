@@ -745,6 +745,7 @@ final class Compiler
         $files = [];
 
         $hash = '';
+        /** @var AbstractCompilerFile $compileFile */
         foreach ($this->files as $compileFile) {
             /**
              * Only compile classes in the local extension, ignore external classes
@@ -771,6 +772,7 @@ final class Compiler
         /**
          * Round 3.2. Compile anonymous classes
          */
+        /** @var AbstractCompilerFile $compileFile */
         foreach ($this->anonymousFiles as $compileFile) {
             $compileFile->compile($this, $this->stringManager);
             $compiledFile = $compileFile->getCompiledFile();

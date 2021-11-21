@@ -24,12 +24,11 @@ use function count;
  * This class represents an anonymous file created to dump
  * the code produced by an internal closure
  */
-final class CompilerFileAnonymous implements FileInterface
+final class CompilerFileAnonymous extends AbstractCompilerFile implements FileInterface
 {
     use LoggerAwareTrait;
 
     protected ?string $namespace = null;
-    protected ?string $compiledFile = null;
     protected bool $external = false;
     protected array $headerCBlocks = [];
     protected ?CompilationContext $context = null;
@@ -37,8 +36,6 @@ final class CompilerFileAnonymous implements FileInterface
     protected Config $config;
 
     /**
-     * CompilerFileAnonymous constructor.
-     *
      * @param ClassDefinition         $classDefinition
      * @param Config                  $config
      * @param CompilationContext|null $context
@@ -60,24 +57,6 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
-     * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
-     */
-    public function setIsExternal($external)
-    {
-        $this->external = (bool) $external;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExternal(): bool
-    {
-        return $this->external;
-    }
-
-    /**
      * Compiles the class/interface contained in the file.
      *
      * @param CompilationContext $compilationContext
@@ -96,21 +75,21 @@ final class CompilerFileAnonymous implements FileInterface
 
         $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code = ''.PHP_EOL;
+        $code = PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
         $code .= '#include "'.$separators.'ext_config.h"'.PHP_EOL;
         $code .= '#endif'.PHP_EOL;
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         $code .= '#include <php.h>'.PHP_EOL;
         $code .= '#include "'.$separators.'php_ext.h"'.PHP_EOL;
         $code .= '#include "'.$separators.'ext.h"'.PHP_EOL;
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         $code .= '#include <Zend/zend_operators.h>'.PHP_EOL;
         $code .= '#include <Zend/zend_exceptions.h>'.PHP_EOL;
         $code .= '#include <Zend/zend_interfaces.h>'.PHP_EOL;
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         $code .= '#include "kernel/main.h"'.PHP_EOL;
 
@@ -133,12 +112,13 @@ final class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
+     * @param Compiler $compiler
      * @param StringsManager $stringsManager
      *
      * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(Compiler $compiler, StringsManager $stringsManager)
+    public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
         /**
          * Compilation context stores common objects required by compilation entities.
@@ -219,16 +199,6 @@ final class CompilerFileAnonymous implements FileInterface
          * Add to file compiled
          */
         $this->compiledFile = $path.'.c';
-    }
-
-    /**
-     * Returns the path to the compiled file.
-     *
-     * @return string
-     */
-    public function getCompiledFile()
-    {
-        return $this->compiledFile;
     }
 
     /**
