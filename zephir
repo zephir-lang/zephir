@@ -34,7 +34,20 @@ use Zephir\Parser\Parser;
 $rootPath = realpath(dirname(__FILE__));
 
 require $rootPath.'/Library/autoload.php';
-require $rootPath.'/Library/bootstrap.php';
+
+set_error_handler(static function ($code, $message, $file = '', $line = -1) {
+    if (error_reporting() & $code) {
+        throw new ErrorException($message, 0, $code, (string)$file, $line);
+    }
+});
+
+if (filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
+    set_exception_handler(static function (Throwable $t) {
+        fwrite(STDERR, "[ERROR] {$t->getMessage()}". PHP_EOL);
+
+        exit(1);
+    });
+}
 
 $config = Config::fromServer();
 
