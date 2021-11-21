@@ -9,7 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-require_once __DIR__.'/../Library/autoload.php';
+require_once __DIR__.'/../config/autoload.php';
 
 if (!extension_loaded('phalcon')) {
     include_once __DIR__.'/../prototypes/phalcon.php';

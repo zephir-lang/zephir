@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use const PHP_BINARY;
@@ -51,7 +53,7 @@ foreach ($autoloaders as $file) {
     }
 }
 
-if (false == class_exists('Composer\Autoload\ClassLoader', false)) {
+if (!class_exists('Composer\Autoload\ClassLoader', false)) {
     fwrite(STDERR, 'Unable to find the Composer autoloader.'.PHP_EOL);
 
     exit(1);

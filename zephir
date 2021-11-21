@@ -33,7 +33,7 @@ use Zephir\Parser\Parser;
 
 $rootPath = realpath(dirname(__FILE__));
 
-require $rootPath.'/Library/autoload.php';
+require $rootPath.'/config/autoload.php';
 
 set_error_handler(static function ($code, $message, $file = '', $line = -1) {
     if (error_reporting() & $code) {
