@@ -297,29 +297,26 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 		case zephir_fcall_function:
 		case zephir_fcall_method:
 			if (Z_TYPE_P(func) == IS_OBJECT) {
+				if (Z_TYPE_P(this_ptr) == IS_OBJECT) {
+					fcic->calling_scope = Z_OBJCE_P(this_ptr);
+				}
+
 #if PHP_VERSION_ID >= 80000
-				if (Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 0) == SUCCESS) {
+				if (Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 1) == SUCCESS) {
 #else
 				if (Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
 #endif
 					fcic->called_scope = fcic->calling_scope;
 					break;
 				}
-
-				if (Z_TYPE_P(this_ptr) == IS_OBJECT) {
-					fcic->calling_scope = Z_OBJCE_P(this_ptr);
-				}
-
-				return;
 			} else if (Z_TYPE_P(func) == IS_STRING) {
 				if (ce) {
 					fcic->calling_scope = ce;
+
 #if PHP_VERSION_ID >= 80000
 					fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
 #endif
 				}
-
-				return;
 			}
 
 			break;
