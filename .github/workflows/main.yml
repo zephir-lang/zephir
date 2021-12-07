@@ -175,7 +175,7 @@ jobs:
 
       - name: Unit Tests (Zephir)
         if: always()
-        run: vendor/bin/phpunit --testsuite Zephir
+        run: php vendor/bin/phpunit --testsuite Zephir
         env:
           XDEBUG_MODE: coverage
 
