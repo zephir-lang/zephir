@@ -153,6 +153,8 @@ jobs:
           ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
+          cflags: '/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL'
+          ldflags: '/LTCG'
         env:
           CACHE_DIR: 'C:\Downloads'
           PHP_ROOT: 'C:\tools\php'
