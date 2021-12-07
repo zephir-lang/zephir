@@ -8,10 +8,12 @@ on:
       - '**.md'
       - '**.txt'
       - '**/nightly.yml'
+      - '**/release.yml'
+      - '**/FUNDING.yml'
   pull_request:
     branches:
       - master
-      - develoment
+      - development
 
 env:
   RE2C_VERSION: 2.2
