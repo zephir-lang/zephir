@@ -58,7 +58,7 @@ runs:
         }
         Write-Output "::endgroup::"
 
-    - name: Setup PHP SDK tool kit
+    - name: Setup PHP SDK Tool Kit
       uses: zephir-lang/setup-php-sdk@v1
       with:
         php_version: ${{ inputs.php_version }}

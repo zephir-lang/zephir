@@ -52,55 +52,32 @@ jobs:
         run: shellcheck .ci/*.sh
 
   build-and-test:
-    # To prevent build a particular commit use
-    #     git commit -m "......... [ci skip]"
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    name: "PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}"
 
-    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
-
       matrix:
-        php: ['7.4', '8.0']
-        build_type: ['ts', 'nts']
-        arch: ['x64']
+        php: [ '7.4', '8.0' ]
+        ts: [ 'ts', 'nts' ]
+        arch: [ 'x64' ]
 
         name:
           - ubuntu-gcc
           - macos-clang
-          - win2016-vc15
-          - win2019-vs16
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - name: ubuntu-gcc
-            os: ubuntu-18.04
-            compiler: gcc
-
+          - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
           # macOS
-          - name: macos-clang
-            os: macos-10.15
-            compiler: clang
-
+          - { name: macos-clang, os: macos-10.15, compiler: clang }
           # Windows
-          - name: win2016-vc15
-            os: windows-2016
-            compiler: vc15
-
-          - name: win2019-vs16
-            os: windows-2019
-            compiler: vs16
-
-        exclude:
-          - name: win2019-vs16
-            php: '7.4'
-
-          - name: win2016-vc15
-            php: '8.0'
+          - { php: '7.4', ts: 'ts',  arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
+          - { php: '7.4', ts: 'nts', arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
       - uses: actions/checkout@v2
@@ -127,7 +104,7 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
         env:
-          PHPTS: ${{ matrix.build_type }}
+          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get composer cache directory
@@ -170,7 +147,7 @@ jobs:
         uses: ./.github/workflows/build-win-ext
         with:
           php_version: ${{ matrix.php }}
-          ts: ${{ matrix.build_type }}
+          ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
         env:
@@ -216,14 +193,14 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./tests/output/clover.xml
-          flags: unittests,${{ matrix.name }},php-${{ matrix.php }}
+          flags: unittests,${{ runner.os }},php-${{ matrix.php }}
           name: codecov-umbrella
 
       - name: Upload build artifacts after Failure
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: debug-${{ matrix.name }}-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |
             ${{ github.workspace }}/*.log
             ${{ github.workspace }}/ext/
@@ -231,4 +208,4 @@ jobs:
             !${{ github.workspace }}/ext/stub/
             !${{ github.workspace }}/ext/Release/
             !${{ github.workspace }}/ext/x64/Release/
-          retention-days: 1
+          retention-days: 7

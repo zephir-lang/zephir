@@ -1,14 +1,17 @@
 name: 'Zephir Stub PHP Extension Build'
 description: 'Build Stub extension for Linux according to various php versions.'
+
 inputs:
   compiler:
     description: 'compiler name'
     required: false
     default: 'gcc'
+
   cflags:
     description: 'CFLAGS for GCC compiler'
     required: false
     default: ''
+
   ldflags:
     description: 'LDFLAGS for Linker'
     required: false
