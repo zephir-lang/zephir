@@ -52,5 +52,11 @@ runs:
         cd ./ext
         phpize
         ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
-        make
+        make -j$(getconf _NPROCESSORS_ONLN)
         echo "::endgroup::"
+
+    - name: Enable Stub Extension
+      shell: bash
+      run: |
+        cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
+        echo "extension=stub.so" > /usr/local/etc/php/${{ matrix.php }}/conf.d/ext-stub.ini

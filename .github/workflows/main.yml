@@ -157,11 +157,7 @@ jobs:
       - name: Stub Extension Info
         shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php  --ri stub
-          } else {
-            php -d extension=./ext/modules/stub.so --ri stub
-          }
+          php  --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -169,11 +165,7 @@ jobs:
       - name: Unit Tests (Stub Extension)
         shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php vendor/bin/phpunit -c phpunit.ext.xml
-          } else {
-            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
-          }
+          php vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
         if: always()
