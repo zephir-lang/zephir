@@ -16,6 +16,7 @@ on:
 env:
   RE2C_VERSION: 2.2
   ZEPHIR_PARSER_VERSION: 1.4.1
+  PSR_VERSION: 1.1.0
   CACHE_DIR: .cache
 
 jobs:
@@ -88,7 +89,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
