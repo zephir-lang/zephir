@@ -157,7 +157,8 @@ jobs:
       - name: Stub Extension Info
         shell: pwsh
         run: |
-          php  --ri stub
+          php --ini
+          php --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"

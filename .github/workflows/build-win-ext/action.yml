@@ -73,6 +73,16 @@ runs:
       with:
         arch: ${{ inputs.arch }}
 
+    # Workaround for Windows-2019 and PHP 7.4 with old msvc version
+    # PHP Warning:  PHP Startup: Can't load module 'C:\tools\php\ext\php_stub.dll'
+    # as it's linked with 14.29, but the core is linked with 14.16 in Unknown on line 0
+    - name: Configure Developer Command Prompt for MSVC compiler
+      uses: ilammy/msvc-dev-cmd@v1.10.0
+      if: ${{ inputs.php_version }} == '7.4'
+      with:
+        arch: ${{ inputs.arch }}
+        toolset: 14.16
+
     - name: Generate C code
       shell: powershell
       run: |
