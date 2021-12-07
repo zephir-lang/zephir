@@ -31,15 +31,12 @@ runs:
 
     - name: Compile Stub Extension
       shell: bash
+      env:
+        CC: ${{ inputs.compiler }}
+        CFLAGS: ${{ inputs.cflags }}
+        CXXFLAGS: ${{ inputs.cflags }}
+        LDFLAGS: ${{ inputs.ldflags }}
       run: |
-        echo "::group::Configure compiler"
-        CFLAGS="${{ inputs.cflags }}"
-        CXXFLAGS="${{ inputs.cflags }}"
-        LDFLAGS="${{ inputs.ldflags }}"
-
-        export CFLAGS CXXFLAGS LDFLAGS
-        echo "::endgroup::"
-
         echo "::group::Init stage"
         php zephir fullclean
         echo "::endgroup::"
@@ -51,7 +48,7 @@ runs:
         echo "::group::Compile stage"
         cd ./ext
         phpize
-        ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+        ./configure --enable-stub
         make -j$(getconf _NPROCESSORS_ONLN)
         echo "::endgroup::"
 

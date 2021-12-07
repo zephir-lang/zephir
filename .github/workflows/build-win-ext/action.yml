@@ -77,8 +77,8 @@ runs:
     # PHP Warning:  PHP Startup: Can't load module 'C:\tools\php\ext\php_stub.dll'
     # as it's linked with 14.29, but the core is linked with 14.16 in Unknown on line 0
     - name: Configure Developer Command Prompt for MSVC compiler
+      if: inputs.php_version == '7.4'
       uses: ilammy/msvc-dev-cmd@v1.10.0
-      if: ${{ inputs.php_version }} == '7.4'
       with:
         arch: ${{ inputs.arch }}
         toolset: 14.16
@@ -98,10 +98,13 @@ runs:
     - name: Configure
       shell: powershell
       working-directory: ext
+      env:
+        CFLAGS: ${{ inputs.cflags }}
+        CXXFLAGS: ${{ inputs.cflags }}
+        LDFLAGS: ${{ inputs.ldflags }}
       run: |
         Write-Output "::group::Configure"
-        .\configure.bat --enable-stub --with-prefix=${{ env.PHP_ROOT }} `
-          CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+        .\configure.bat --enable-stub --with-prefix=${{ env.PHP_ROOT }}
         Write-Output "::endgroup::"
 
     - name: Zephir compile
