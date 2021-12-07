@@ -68,4 +68,4 @@ runs:
       run: |
         sudo cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
         echo "extension=stub.so" > ./ext-stub.ini
-        sudo cp ./ext-stub.ini /etc/php/${{ matrix.php }}/cli/conf.d/20-stub.ini
+        sudo cp ./ext-stub.ini /etc/php/${{ matrix.php }}/cli/conf.d/99-stub.ini
