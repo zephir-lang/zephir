@@ -1,14 +1,17 @@
 name: 'Zephir Stub PHP Extension Build'
 description: 'Build Stub extension for Linux according to various php versions.'
+
 inputs:
   compiler:
     description: 'compiler name'
     required: false
     default: 'gcc'
+
   cflags:
     description: 'CFLAGS for GCC compiler'
     required: false
     default: ''
+
   ldflags:
     description: 'LDFLAGS for Linker'
     required: false
@@ -35,16 +38,12 @@ runs:
 
     - name: Compile Stub Extension
       shell: bash
+      env:
+        CC: ${{ inputs.compiler }}
+        CFLAGS: ${{ inputs.cflags }}
+        CXXFLAGS: ${{ inputs.cflags }}
+        LDFLAGS: ${{ inputs.ldflags }}
       run: |
-        echo "::group::Configure compiler"
-        CC=${{ inputs.compiler }}
-        CFLAGS="${{ inputs.cflags }}"
-        CXXFLAGS="${{ inputs.cflags }}"
-        LDFLAGS="${{ inputs.ldflags }}"
-
-        export CC CFLAGS CXXFLAGS LDFLAGS
-        echo "::endgroup::"
-
         echo "::group::Init stage"
         php zephir fullclean
         echo "::endgroup::"
@@ -56,6 +55,13 @@ runs:
         echo "::group::Compile stage"
         cd ./ext
         phpize
-        ./configure --enable-stub CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
-        make
+        ./configure --enable-stub
+        make -j$(getconf _NPROCESSORS_ONLN)
         echo "::endgroup::"
+
+    - name: Enable Stub Extension
+      shell: bash
+      run: |
+        sudo cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
+        echo "extension=stub.so" > ./ext-stub.ini
+        sudo cp ./ext-stub.ini /etc/php/${{ matrix.php }}/cli/conf.d/99-stub.ini

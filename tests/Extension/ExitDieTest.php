@@ -33,13 +33,6 @@ final class ExitDieTest extends TestCase
             $this->phpBinary .= ' -qrr';
         }
 
-        $this->phpBinary .= " -d 'enable_dl=true'";
-        $extension = realpath(__DIR__.'/../../ext/modules/stub.so');
-
-        if ($extension !== false && file_exists($extension)) {
-            $this->phpBinary .= sprintf(" -d 'extension=%s'", $extension);
-        }
-
         parent::setUp();
     }
 
