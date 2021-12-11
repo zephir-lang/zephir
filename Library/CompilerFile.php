@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
@@ -24,8 +26,6 @@ use Zephir\FileSystem\FileSystemInterface;
 use function is_array;
 
 /**
- * Zephir\CompilerFile.
- *
  * This class represents every file compiled in a project.
  * Every file may contain a class or an interface.
  */
