@@ -8,28 +8,27 @@ on:
 env:
   RE2C_VERSION: 2.2
   ZEPHIR_PARSER_VERSION: 1.4.1
+  PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
 jobs:
   nightly:
-    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.arch }}"
-    runs-on: ${{ matrix.os }}
+    name: "PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}"
 
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
 
       matrix:
         php: [ '8.1', '8.2' ]
-        build_type: [ 'ts', 'nts' ]
+        ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - name: ubuntu-gcc
-            os: ubuntu-20.04
-            compiler: gcc
+          - { name: ubuntu-gcc, os: ubuntu-20.04, compiler: gcc }
 
     steps:
       - name: Checkout Code
@@ -41,7 +40,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-1.2.0, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
@@ -57,7 +56,7 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
         env:
-          PHPTS: ${{ matrix.build_type }}
+          PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get composer cache directory
@@ -89,14 +88,14 @@ jobs:
 
       - name: Stub Extension Info
         run: |
-          php -d extension=./ext/modules/stub.so --ri stub
+          php --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Unit Tests (Stub Extension)
         run: |
-          php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
+          php vendor/bin/phpunit -c phpunit.ext.xml
 
       - name: Unit Tests (Zephir)
         run: vendor/bin/phpunit --testsuite Zephir
@@ -112,7 +111,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: debug-${{ matrix.name }}-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |
             ${{ github.workspace }}/*.log
             ${{ github.workspace }}/ext/
