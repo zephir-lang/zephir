@@ -7,7 +7,7 @@ on:
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.4.1
+  ZEPHIR_PARSER_VERSION: 1.4.2
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
 
       matrix:
-        php: [ '8.1', '8.2' ]
+        php: [ '8.2' ]
         ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
