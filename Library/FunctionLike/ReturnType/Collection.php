@@ -9,10 +9,14 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\FunctionLike\ReturnType;
 
 use SplObjectStorage;
 use Zephir\Exception\InvalidArgumentException;
+
+use function count;
 
 final class Collection extends SplObjectStorage
 {
@@ -23,6 +27,7 @@ final class Collection extends SplObjectStorage
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function getHash($returnType)
     {
         return $returnType->getDataType();
@@ -38,6 +43,7 @@ final class Collection extends SplObjectStorage
      *
      * @throws InvalidArgumentException
      */
+    #[\ReturnTypeWillChange]
     public function attach($returnType, $definition = null)
     {
         if (!$returnType instanceof TypeInterface) {
@@ -58,13 +64,9 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function hasReturnTypes()
+    public function hasReturnTypes(): bool
     {
-        if (0 == $this->count()) {
-            return false;
-        }
-
-        if ($this->onlyVoid()) {
+        if (0 === $this->count() || $this->onlyVoid()) {
             return false;
         }
 
@@ -78,7 +80,7 @@ final class Collection extends SplObjectStorage
      *
      * @return TypeInterface[]
      */
-    public function getTypesBySpecification(SpecificationInterface $spec)
+    public function getTypesBySpecification(SpecificationInterface $spec): array
     {
         $types = [];
 
@@ -97,7 +99,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesNullCompatible()
+    public function areReturnTypesNullCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\IsNull());
     }
@@ -107,7 +109,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesIntCompatible()
+    public function areReturnTypesIntCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\IntCompatible());
     }
@@ -117,7 +119,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesDoubleCompatible()
+    public function areReturnTypesDoubleCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\IsDouble());
     }
@@ -127,7 +129,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesBoolCompatible()
+    public function areReturnTypesBoolCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\IsBool());
     }
@@ -137,7 +139,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesStringCompatible()
+    public function areReturnTypesStringCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\StringCompatible());
     }
@@ -147,7 +149,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesArrayCompatible()
+    public function areReturnTypesArrayCompatible(): bool
     {
         return $this->isSatisfiedByTypeSpec(new Specification\ArrayCompatible());
     }
@@ -157,9 +159,9 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesObjectCompatible()
+    public function areReturnTypesObjectCompatible(): bool
     {
-        return \count($this->getObjectLikeReturnTypes()) > 0;
+        return count($this->getObjectLikeReturnTypes()) > 0;
     }
 
     /**
@@ -191,7 +193,7 @@ final class Collection extends SplObjectStorage
 
         $found = $this->getTypesBySpecification(new Specification\IsSpecial());
 
-        return \count($found) == $this->count();
+        return count($found) == $this->count();
     }
 
     /**
@@ -199,9 +201,9 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesWellKnown()
+    public function areReturnTypesWellKnown(): bool
     {
-        if (0 == $this->count() || $this->isSatisfiedByTypeSpec(new Specification\IsSpecial())) {
+        if (0 === $this->count() || $this->isSatisfiedByTypeSpec(new Specification\IsSpecial())) {
             return false;
         }
 
@@ -218,7 +220,7 @@ final class Collection extends SplObjectStorage
 
         $found = $this->getTypesBySpecification($spec);
 
-        return \count($found) == $this->count();
+        return count($found) == $this->count();
     }
 
     /**
@@ -226,7 +228,7 @@ final class Collection extends SplObjectStorage
      *
      * @return bool
      */
-    public function areReturnTypesCompatible()
+    public function areReturnTypesCompatible(): bool
     {
         $numberOfReturnTypes = $this->count();
 
@@ -239,7 +241,7 @@ final class Collection extends SplObjectStorage
 
         // <Class> | <Class_1[]> | <Class_1[]> | ... | <Class_n[]>
         $collections = $this->getTypesBySpecification(new Specification\IsCollection());
-        if (\count($collections) > 0 && $this->areReturnTypesObjectCompatible()) {
+        if (count($collections) > 0 && $this->areReturnTypesObjectCompatible()) {
             return false;
         }
 
@@ -292,7 +294,7 @@ final class Collection extends SplObjectStorage
      *
      * @return TypeInterface[]
      */
-    public function getCastHintedReturnTypes()
+    public function getCastHintedReturnTypes(): array
     {
         return $this->getTypesBySpecification(new Not(new Specification\IsReal()));
     }
@@ -302,19 +304,19 @@ final class Collection extends SplObjectStorage
      *
      * @return TypeInterface[]
      */
-    public function getRealReturnTypes()
+    public function getRealReturnTypes(): array
     {
         return $this->getTypesBySpecification(new Specification\IsReal());
     }
 
-    private function isSatisfiedByTypeSpec(SpecificationInterface $spec)
+    private function isSatisfiedByTypeSpec(SpecificationInterface $spec): bool
     {
-        if (0 == $this->count()) {
+        if (0 === $this->count()) {
             return false;
         }
 
         $found = $this->getTypesBySpecification($spec);
 
-        return \count($found) > 0;
+        return count($found) > 0;
     }
 }

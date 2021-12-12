@@ -444,6 +444,7 @@ class Backend extends BaseBackend
 
             /* Types which map to the same */
             case 'variable':
+            case 'mixed':
             case 'string':
                 $type = $index->getType();
                 break;
@@ -454,7 +455,7 @@ class Backend extends BaseBackend
                     $arrayAccess['right']
                 );
         }
-        if ($isVariable && \in_array($index->getType(), ['variable', 'string'])) {
+        if ($isVariable && \in_array($index->getType(), ['variable', 'string', 'mixed'])) {
             $output = 'zephir_array_fetch('.$this->getVariableCodePointer($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         } else {
             if ($isVariable) {
@@ -487,7 +488,7 @@ class Backend extends BaseBackend
 
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
             return new CompiledExpression('bool', 'zephir_array_isset_long('.$this->getVariableCode($var).', '.$this->getVariableCode($resolvedExpr).')', $expression);
-        } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType()) {
+        } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType() || 'mixed' === $resolvedExpr->getType()) {
             return new CompiledExpression('bool', 'zephir_array_isset('.$this->getVariableCode($var).', '.$this->getVariableCode($resolvedExpr).')', $expression);
         }
 
@@ -550,6 +551,7 @@ class Backend extends BaseBackend
 
                     case 'string':
                     case 'variable':
+                    case 'mixed':
                         $context->codePrinter->output('zephir_array_unset('.$variableCode.', '.$indexCode.', '.$flags.');');
                         break;
 

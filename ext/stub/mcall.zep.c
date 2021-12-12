@@ -1208,11 +1208,8 @@ PHP_METHOD(Stub_Mcall, issue1136)
 	if (zephir_is_true(&_3)) {
 		ZEPHIR_INIT_VAR(&_finfo);
 		object_init_ex(&_finfo, zephir_get_internal_ce(SL("finfo")));
-		if (zephir_has_constructor(&_finfo)) {
-			ZEPHIR_CALL_METHOD(NULL, &_finfo, "__construct", NULL, 0);
-			zephir_check_call_status();
-		}
-
+		ZEPHIR_CALL_METHOD(NULL, &_finfo, "__construct", NULL, 0);
+		zephir_check_call_status();
 	} else {
 		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 59);
 		zephir_check_call_status();

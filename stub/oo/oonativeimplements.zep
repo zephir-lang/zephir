@@ -22,19 +22,19 @@ class OoNativeImplements implements
 
 	/* Iterator */
 
-	public function current()
+	public function current() -> mixed
 	{
 	}
 
-	public function key()
+	public function key() -> mixed
 	{
 	}
 
-	public function next()
+	public function next() -> void
 	{
 	}
 
-	public function rewind()
+	public function rewind() -> void
 	{
 	}
 
@@ -44,7 +44,7 @@ class OoNativeImplements implements
 
 	/* OuterIterator */
 
-	public function getInnerIterator()
+	public function getInnerIterator() -> <\Iterator>|null
 	{
 	}
 
@@ -59,7 +59,7 @@ class OoNativeImplements implements
 
 	/* SeekableIterator */
 
-	public function seek (position)
+	public function seek(int position) -> void
 	{
 	}
 

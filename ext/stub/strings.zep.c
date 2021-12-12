@@ -736,7 +736,7 @@ PHP_METHOD(Stub_Strings, issue1267)
 	ZVAL_STRING(&_2, "");
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
-	ZVAL_LONG(&_3, 513);
+	ZVAL_LONG(&_3, 516);
 	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 42, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);

@@ -12,20 +12,26 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetset, 0, 0, 2)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccessobj_offsetset, 0, 2, IS_VOID, 0)
+
 	ZEND_ARG_INFO(0, offset)
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetexists, 0, 0, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccessobj_offsetexists, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetunset, 0, 0, 1)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccessobj_offsetunset, 0, 1, IS_VOID, 0)
+
 	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arrayaccessobj_offsetget, 0, 0, 1)
+#if PHP_VERSION_ID >= 80000
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccessobj_offsetget, 0, 1, IS_MIXED, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccessobj_offsetget, 0, 1, IS_NULL, 0)
+#endif
 	ZEND_ARG_INFO(0, offset)
 ZEND_END_ARG_INFO()
 

@@ -580,11 +580,8 @@ final class ClassDefinition extends AbstractClassDefinition
         }
 
         $extendsClassDefinition = $this->getExtendsClassDefinition();
-        if ($extendsClassDefinition instanceof self && $extendsClassDefinition->hasProperty($name)) {
-            return true;
-        }
 
-        return false;
+        return $extendsClassDefinition instanceof self && $extendsClassDefinition->hasProperty($name);
     }
 
     /**

@@ -46,23 +46,27 @@ if (!class_exists('APCIterator', false)) {
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function rewind()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function valid()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function current()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function key()
         {
         }
 
-        #[ReturnTypeWillChange]
+        #[\ReturnTypeWillChange]
         public function next()
         {
         }

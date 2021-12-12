@@ -21,8 +21,8 @@ final class NewInstanceOperatorTest extends TestCase
     public Operator $test;
 
     protected array $autoloadMap = [
-        'Fixture\ThrowException' => ZEPHIRPATH.'/tests/fixtures/throw-exception.php',
-        'Fixture\EmptyClass' => ZEPHIRPATH.'/tests/fixtures/class-empty.php',
+        'Fixture\ThrowException' => 'tests/fixtures/throw-exception.php',
+        'Fixture\EmptyClass' => 'tests/fixtures/class-empty.php',
     ];
 
     protected function setUp(): void
@@ -38,15 +38,29 @@ final class NewInstanceOperatorTest extends TestCase
 
     public function autoload(string $className): void
     {
-        if (isset($this->autoloadMap[$className])) {
-            include $this->autoloadMap[$className];
+        if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
+            try {
+                if (isset($this->autoloadMap[$className])) {
+                    include $this->autoloadMap[$className];
+                }
+            } catch (\Throwable $exception) {
+                // Ignore, as since PHP8.1 all exceptions are thrown during file include.
+            }
+        } else {
+            if (isset($this->autoloadMap[$className])) {
+                include $this->autoloadMap[$className];
+            }
         }
     }
 
     public function testException(): void
     {
-        $this->expectException(\Exception::class);
-        $this->test->testNewInstanceOperator('Fixture\ThrowException');
+        if (version_compare(PHP_VERSION, '8.1.0', '<')) {
+            $this->expectException(\Exception::class);
+            $this->test->testNewInstanceOperator('Fixture\ThrowException');
+        } else {
+            $this->markTestSkipped('spl_autoload_register() now can only register with valid class inside included file.');
+        }
     }
 
     public function testNewInstance(): void

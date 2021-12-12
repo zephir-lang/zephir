@@ -8,7 +8,7 @@ on:
 env:
   RE2C_VERSION: 2.2
   ZEPHIR_PARSER_VERSION: 1.4.1
-  PSR_VERSION: 1.1.0
+  PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
 jobs:
