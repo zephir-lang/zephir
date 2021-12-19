@@ -1,6 +1,6 @@
 namespace Stub;
 
-class ArrayAccessObj implements \ArrayAccess
+class ArrayAccessArr implements \ArrayAccess
 {
 	protected test;
 
