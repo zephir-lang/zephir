@@ -29,7 +29,7 @@ class IssetOperator extends AbstractOperator
     /**
      * Compiles an 'isset' operator.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
