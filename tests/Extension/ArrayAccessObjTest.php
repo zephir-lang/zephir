@@ -37,7 +37,7 @@ final class ArrayAccessObjTest extends TestCase
         $this->assertSame(1, $class->offsetGet('newKey'));
 
         $class->offsetSet('boolean', true);
-        $this->assertSame(true, $class->offsetGet('boolean'));
+        $this->assertTrue($class->offsetGet('boolean'));
     }
 
     public function testOffsetUnset(): void
