@@ -14,8 +14,6 @@ namespace Zephir\Types;
 use Zephir\Types;
 
 /**
- * StringType.
- *
  * Encapsulates built-in methods for the "string" type
  *
  * TODO: explode, join, replace
