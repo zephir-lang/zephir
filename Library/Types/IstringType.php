@@ -14,8 +14,6 @@ namespace Zephir\Types;
 use Zephir\Types;
 
 /**
- * IstringType.
- *
  * Encapsulates built-in methods for the "istring" type
  */
 class IstringType extends StringType

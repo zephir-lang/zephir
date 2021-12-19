@@ -17,7 +17,7 @@ class ArrayAccessTest
 	{
 		var arr;
 
-		let arr = new ArrayAccessObj();
+		let arr = new ArrayAccessArr();
 		return isset arr["one"];
 	}
 
@@ -25,7 +25,7 @@ class ArrayAccessTest
 	{
 		var arr;
 
-		let arr = new ArrayAccessObj();
+		let arr = new ArrayAccessArr();
 		return arr["two"];
 	}
 

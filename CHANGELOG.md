@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ## [Unreleased]
 ### Fixed
 - Fixed left `null` with `string` condition [#2299](https://github.com/zephir-lang/zephir/issues/2299)
+- Improved support of `mixed` type [#2330](https://github.com/zephir-lang/zephir/issues/2330)
 
 ## [0.15.2] - 2021-10-24
 ### Fixed

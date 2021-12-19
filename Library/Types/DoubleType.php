@@ -14,8 +14,6 @@ namespace Zephir\Types;
 use Zephir\Types;
 
 /**
- * DoubleType.
- *
  * Defines methods of the built-in double type
  */
 class DoubleType extends AbstractType
