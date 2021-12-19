@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -29,6 +30,7 @@ class UnsetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -61,6 +63,7 @@ class UnsetStatement extends StatementAbstract
                 break;
 
             case 'property-access':
+            case 'property-dinamic-access':
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar = $expr->compile($compilationContext);
@@ -71,9 +74,6 @@ class UnsetStatement extends StatementAbstract
                 $compilationContext->codePrinter->output('zephir_unset_property('.$variableCode.', "'.$expression['right']['value'].'");');
 
                 return;
-
-            case 'property-dynamic-access':
-                //TODO: fix it
 
             default:
                 throw new CompilerException('Cannot use expression type: '.$expression['type'].' in "unset"', $expression);
@@ -94,12 +94,13 @@ class UnsetStatement extends StatementAbstract
     }
 
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompilationContext
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     private function generateUnsetPropertyFromObject(array $expression, CompilationContext $compilationContext): CompilationContext
     {

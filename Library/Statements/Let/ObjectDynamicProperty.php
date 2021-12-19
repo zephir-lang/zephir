@@ -9,16 +9,17 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
+use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectDynamicProperty.
- *
  * Updates object properties dynamically
  */
 class ObjectDynamicProperty
@@ -26,16 +27,16 @@ class ObjectDynamicProperty
     /**
      * Compiles foo->{x} = {expr}.
      *
-     * @param string             $variable
+     * @param string $variable
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
      * @throws CompilerException
-     * @throws \Exception
+     * @throws Exception
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
+    public function assign(string $variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
@@ -48,7 +49,7 @@ class ObjectDynamicProperty
         $propertyName = $statement['property'];
 
         $propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
-        if ($propertyVariable->isNotVariableAndString()) {
+        if ($propertyVariable->isNotVariableAndMixedAndString()) {
             throw new CompilerException("Cannot use variable type '".$propertyVariable->getType()."' to update object property", $statement);
         }
 
@@ -64,7 +65,7 @@ class ObjectDynamicProperty
             throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /*
+        /**
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -98,14 +99,14 @@ class ObjectDynamicProperty
                 break;
 
             case 'bool':
-                $value = null;
                 if ('1' == $resolvedExpr->getBooleanCode()) {
                     $value = 'true';
                 } elseif ('0' == $resolvedExpr->getBooleanCode()) {
                     $value = 'false';
                 } else {
-                    throw new \Exception('?');
+                    throw new Exception('?');
                 }
+
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $value, $compilationContext);
                 break;
 
@@ -143,6 +144,7 @@ class ObjectDynamicProperty
                     case 'string':
                     case 'variable':
                     case 'array':
+                    case 'mixed':
                         $compilationContext->backend->updateProperty($symbolVariable, $propertyVariable, $resolvedExpr, $compilationContext);
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);

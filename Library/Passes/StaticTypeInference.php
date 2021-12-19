@@ -14,16 +14,14 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * StaticTypeInference.
- *
  * This pass try to infer typing on dynamic variables so the compiler
  * can replace them by low level types automatically
  */
 class StaticTypeInference
 {
-    protected $variables = [];
+    protected array $variables = [];
 
-    protected $infered = [];
+    protected array $infered = [];
 
     /**
      * Do the compilation pass.
@@ -156,6 +154,7 @@ class StaticTypeInference
                 break;
 
             case 'variable':
+            case 'mixed':
                 $this->variables[$variable] = 'undefined';
                 break;
 
@@ -243,11 +242,7 @@ class StaticTypeInference
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ('variable' == $parameter['parameter']['type']) {
-                    //$this->markVariable($parameter['value']);
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
+                $this->passExpression($parameter['parameter']);
             }
         }
     }
@@ -255,11 +250,7 @@ class StaticTypeInference
     public function passArray(array $expression)
     {
         foreach ($expression['left'] as $item) {
-            if ('variable' == $item['value']['type']) {
-                //$this->markVariable($item['value']['value'], 'dynamical');
-            } else {
-                $this->passExpression($item['value']);
-            }
+            $this->passExpression($item['value']);
         }
     }
 
@@ -267,11 +258,7 @@ class StaticTypeInference
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ('variable' == $parameter['parameter']['type']) {
-                    //$this->markVariable($parameter['value'], 'dynamical');
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
+                $this->passExpression($parameter['parameter']);
             }
         }
     }
@@ -561,27 +548,17 @@ class StaticTypeInference
                     }
                     break;
 
+                case 'throw':
                 case 'return':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
                     }
                     break;
 
+                case 'try-catch':
                 case 'loop':
                     if (isset($statement['statements'])) {
                         $this->passStatementBlock($statement['statements']);
-                    }
-                    break;
-
-                case 'try-catch':
-                    if (isset($statement['statements'])) {
-                        $this->passStatementBlock($statement['statements']);
-                    }
-                    break;
-
-                case 'throw':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
                     }
                     break;
 
