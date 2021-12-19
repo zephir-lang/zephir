@@ -37,6 +37,8 @@ class ArrayAccessObj implements \ArrayAccess
 	public function offsetUnset(mixed offset) -> void
 	{
 	    var obj = this->test;
+
+	    // It is not possible to unset dynamic property via Zend API.
 	    let obj = (array)obj;
 
         unset obj[offset];
