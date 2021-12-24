@@ -10,6 +10,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Zephir\Backends\BackendFactory;
@@ -31,11 +33,56 @@ use Zephir\Logger\Formatter\CompilerFormatter;
 use Zephir\Parser\Manager;
 use Zephir\Parser\Parser;
 
+if (version_compare('7.0.0', PHP_VERSION, '>')) {
+    fprintf(
+        STDERR,
+        'This Zephir version is supported on PHP >= 7.0.0.'.PHP_EOL.
+        'You are using PHP %s (%s).'.PHP_EOL,
+        PHP_VERSION,
+        PHP_BINARY
+    );
+
+    exit(1);
+}
+
+if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+    fprintf(
+        STDERR,
+        'Zephir should be invoked via the CLI version of PHP, not the %s SAPI.'.PHP_EOL,
+        PHP_SAPI
+    );
+
+    exit(1);
+}
+
+foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'] as $file) {
+    if (file_exists($file)) {
+        include_once $file;
+        break;
+    }
+}
+
+if (!class_exists('Composer\Autoload\ClassLoader', false)) {
+    fwrite(STDERR, 'Unable to find the Composer autoloader.'.PHP_EOL);
+
+    exit(1);
+}
+
+set_error_handler(static function ($code, $message, $file = '', $line = -1) {
+    if (error_reporting() & $code) {
+        throw new ErrorException($message, 0, $code, (string) $file, $line);
+    }
+});
+
+if (filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
+    set_exception_handler(static function (Throwable $t) {
+        fwrite(STDERR, "[ERROR] {$t->getMessage()}". PHP_EOL);
+
+        exit(1);
+    });
+}
+
 $rootPath = realpath(dirname(__FILE__));
-
-require $rootPath.'/Library/autoload.php';
-require $rootPath.'/Library/bootstrap.php';
-
 $config = Config::fromServer();
 
 /**

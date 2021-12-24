@@ -9,7 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-require_once __DIR__.'/../Library/autoload.php';
+declare(strict_types=1);
 
 /**
  * Draw message in the Box
