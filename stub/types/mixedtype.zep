@@ -132,4 +132,24 @@ class MixedType
 
         return val;
      }
+
+     /**
+      * Only used during generation
+      */
+     public function mixedInCondition(mixed val) -> void
+     {
+        if unlikely val {
+            // OK
+        }
+
+        if val === 1 {
+            // OK
+        }
+
+        if 1 === val {
+
+        }
+
+        echo val;
+     }
 }

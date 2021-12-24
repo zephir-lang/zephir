@@ -312,6 +312,7 @@ class Variable
                         break;
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
                         $exprVariable = $compilationContext->symbolTable->getVariableForWrite($resolvedExpr->resolve(null, $compilationContext), $compilationContext);
                         $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
@@ -503,6 +504,7 @@ class Variable
                         break;
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
                         $exprVariableCode = $compilationContext->backend->getVariableCode($itemVariable);
                         switch ($statement['operator']) {
@@ -691,6 +693,7 @@ class Variable
                         break;
 
                     case 'variable':
+                    case 'mixed':
                         switch ($statement['operator']) {
                             case 'assign':
                                 $symbolVariable->setMustInitNull(true);
@@ -879,6 +882,7 @@ class Variable
                         break;
 
                     case 'variable':
+                    case 'mixed':
                     case 'string':
                     case 'array':
                         switch ($statement['operator']) {
