@@ -106,8 +106,8 @@ final class MixedTypeTest extends TestCase
         /**
          * bool
          */
-        $this->assertSame(true, $returns->castToBoolMixedAndReturnMixed(1));
-        $this->assertSame(false, $returns->castToBoolMixedAndReturnMixed(0));
+        $this->assertTrue($returns->castToBoolMixedAndReturnMixed(1));
+        $this->assertFalse($returns->castToBoolMixedAndReturnMixed(0));
 
         /**
          * float
