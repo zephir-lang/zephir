@@ -83,4 +83,36 @@ final class MixedTypeTest extends TestCase
         $this->assertTrue($returns->paramAndReturnMixed(true));
         $this->assertNull($returns->paramAndReturnMixed(null));
     }
+
+    public function testCastMixedType(): void
+    {
+        $returns = new MixedType();
+
+        /**
+         * string
+         */
+        $this->assertSame('123', $returns->castToStringMixedAndReturnMixed(123));
+        $this->assertSame('123', $returns->castToStringMixedAndReturnMixed('123'));
+        $this->assertSame('string', $returns->castToStringMixedAndReturnMixed('string'));
+        $this->assertSame('', $returns->castToStringMixedAndReturnMixed(false));
+        $this->assertSame('1', $returns->castToStringMixedAndReturnMixed(true));
+
+        /**
+         * int
+         */
+        $this->assertSame(123, $returns->castToIntMixedAndReturnMixed('123'));
+        $this->assertSame(1, $returns->castToIntMixedAndReturnMixed(1.5));
+
+        /**
+         * bool
+         */
+        $this->assertTrue($returns->castToBoolMixedAndReturnMixed(1));
+        $this->assertFalse($returns->castToBoolMixedAndReturnMixed(0));
+
+        /**
+         * float
+         */
+        $this->assertSame(1.0, $returns->castToFloatMixedAndReturnMixed(1));
+        $this->assertSame(1.5, $returns->castToFloatMixedAndReturnMixed(1.5));
+    }
 }

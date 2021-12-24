@@ -84,4 +84,24 @@ class MixedType
      {
         return val;
      }
+
+     public function castToStringMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (string)val;
+     }
+
+     public function castToIntMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (int)val;
+     }
+
+     public function castToBoolMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (bool)val;
+     }
+
+     public function castToFloatMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (float)val;
+     }
 }
