@@ -100,6 +100,7 @@ class Variable
                 break;
 
             case 'variable':
+            case 'mixed':
                 $this->doVariableAssignment($codePrinter, $resolvedExpr, $symbolVariable, $variable, $statement, $compilationContext, $readDetector);
                 break;
 

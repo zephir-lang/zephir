@@ -84,7 +84,7 @@ final class MixedTypeTest extends TestCase
         $this->assertNull($returns->paramAndReturnMixed(null));
     }
 
-    public function testCastMixedType(): void
+    public function testReturnCastedMixedType(): void
     {
         $returns = new MixedType();
 
@@ -114,5 +114,37 @@ final class MixedTypeTest extends TestCase
          */
         $this->assertSame(1.0, $returns->castToFloatMixedAndReturnMixed(1));
         $this->assertSame(1.5, $returns->castToFloatMixedAndReturnMixed(1.5));
+    }
+
+    public function testReturnInternallyCastedCastMixedType(): void
+    {
+        $returns = new MixedType();
+
+        /**
+         * string
+         */
+        $this->assertSame('123', $returns->castToStringInternallyMixedAndReturnMixed(123));
+        $this->assertSame('123', $returns->castToStringInternallyMixedAndReturnMixed('123'));
+        $this->assertSame('string', $returns->castToStringInternallyMixedAndReturnMixed('string'));
+        $this->assertSame('', $returns->castToStringInternallyMixedAndReturnMixed(false));
+        $this->assertSame('1', $returns->castToStringInternallyMixedAndReturnMixed(true));
+
+        /**
+         * int
+         */
+        $this->assertSame(123, $returns->castToIntInternallyMixedAndReturnMixed('123'));
+        $this->assertSame(1, $returns->castToIntInternallyMixedAndReturnMixed(1.5));
+
+        /**
+         * bool
+         */
+        $this->assertTrue($returns->castToBoolInternallyMixedAndReturnMixed(1));
+        $this->assertFalse($returns->castToBoolInternallyMixedAndReturnMixed(0));
+
+        /**
+         * float
+         */
+        $this->assertSame(1.0, $returns->castToFloatInternallyMixedAndReturnMixed(1));
+        $this->assertSame(1.5, $returns->castToFloatInternallyMixedAndReturnMixed(1.5));
     }
 }

@@ -90,9 +90,23 @@ class MixedType
         return (string)val;
      }
 
+     public function castToStringInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (string)val;
+
+        return val;
+     }
+
      public function castToIntMixedAndReturnMixed(mixed val) -> mixed
      {
         return (int)val;
+     }
+
+     public function castToIntInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (int)val;
+
+        return val;
      }
 
      public function castToBoolMixedAndReturnMixed(mixed val) -> mixed
@@ -100,8 +114,22 @@ class MixedType
         return (bool)val;
      }
 
+     public function castToBoolInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (bool)val;
+
+        return val;
+     }
+
      public function castToFloatMixedAndReturnMixed(mixed val) -> mixed
      {
         return (float)val;
+     }
+
+     public function castToFloatInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (float)val;
+
+        return val;
      }
 }
