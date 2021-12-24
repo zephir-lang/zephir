@@ -85,12 +85,9 @@ MSG
             );
 
             return 1;
-        } catch (ExceptionInterface $e) {
-            $io->getErrorStyle()->error($e->getMessage());
-
-            return 1;
-        } catch (Exception $e) {
-            $io->getErrorStyle()->error($e->getMessage());
+        } catch (ExceptionInterface | Exception $e) {
+            $io->getErrorStyle()->error($e->getMessage() . sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine()));
+            $io->getErrorStyle()->error($e->getTraceAsString());
 
             return 1;
         }
