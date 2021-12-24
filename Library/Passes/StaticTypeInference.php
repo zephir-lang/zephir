@@ -154,11 +154,8 @@ class StaticTypeInference
                 break;
 
             case 'variable':
-            case 'mixed':
-                $this->variables[$variable] = 'undefined';
-                break;
-
             case 'array':
+            case 'mixed':
                 $this->variables[$variable] = 'undefined';
                 break;
 
