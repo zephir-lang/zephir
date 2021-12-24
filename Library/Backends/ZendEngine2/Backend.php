@@ -1047,6 +1047,7 @@ class Backend extends BaseBackend
             case 'object':
             case 'resource':
             case 'callable':
+            case 'mixed':
                 break;
             default:
                 throw new CompilerException('Unknown type: '.$type);
