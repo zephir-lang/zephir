@@ -98,7 +98,7 @@ class Entry
             return $this->classEntries[$className][0];
         }
 
-        if (class_exists($this->classname)) {
+        if (class_exists($this->classname) || interface_exists($this->classname)) {
             $reflection = new ReflectionClass($this->classname);
             $className = $reflection->getName();
 
