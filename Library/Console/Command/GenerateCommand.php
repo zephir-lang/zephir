@@ -57,7 +57,7 @@ final class GenerateCommand extends AbstractCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $trace = $input->hasOption('trace');
+        $trace = $input->getOption('trace');
 
         if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
             $io->getErrorStyle()->warning(
@@ -89,7 +89,7 @@ MSG
 
             return 1;
         } catch (ExceptionInterface | Exception $e) {
-            if ($trace) {
+            if ($trace === true) {
                 $io->getErrorStyle()->error($e->getMessage().sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine()));
                 $io->getErrorStyle()->error($e->getTraceAsString());
             } else {
