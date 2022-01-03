@@ -208,4 +208,5 @@ jobs:
             !${{ github.workspace }}/ext/stub/
             !${{ github.workspace }}/ext/Release/
             !${{ github.workspace }}/ext/x64/Release/
+            ${{ github.workspace }}/tests/output/
           retention-days: 7
