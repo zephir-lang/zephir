@@ -49,12 +49,15 @@ final class GenerateCommand extends AbstractCommand
             ->setName('generate')
             ->setDescription('Generates C code from the Zephir code without compiling it')
             ->setDefinition($this->createDefinition())
+            ->addOption('trace', 't', InputOption::VALUE_NONE, 'Show trace message output (in case of exception error)')
             ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
+
+        $trace = $input->hasOption('trace');
 
         if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
             $io->getErrorStyle()->warning(
@@ -86,8 +89,12 @@ MSG
 
             return 1;
         } catch (ExceptionInterface | Exception $e) {
-            $io->getErrorStyle()->error($e->getMessage().sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine()));
-            $io->getErrorStyle()->error($e->getTraceAsString());
+            if ($trace) {
+                $io->getErrorStyle()->error($e->getMessage().sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine()));
+                $io->getErrorStyle()->error($e->getTraceAsString());
+            } else {
+                $io->getErrorStyle()->error($e->getMessage());
+            }
 
             return 1;
         }
