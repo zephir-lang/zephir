@@ -73,7 +73,7 @@ jobs:
       - name: Install Project Dependencies
         run: |
           echo "::group::Install composer dependencies"
-          composer install --prefer-dist --no-interaction --no-ansi --no-progress
+          composer install --prefer-dist --no-interaction --no-ansi --no-progress --ignore-platform-reqs
           echo "::endgroup::"
 
       - name: Fast Commands Test
