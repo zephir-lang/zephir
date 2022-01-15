@@ -21,9 +21,9 @@ use Zephir\Fcall\FcallManagerInterface;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 
+use function in_array;
+
 /**
- * Zephir\Backends\ZendEngine2\Backend.
- *
  * NOTE: ZendEngine2 backend is no longer supported
  * and this class will be removed in the future.
  */
@@ -300,7 +300,7 @@ class Backend extends BaseBackend
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (\in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
+            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }
@@ -455,7 +455,7 @@ class Backend extends BaseBackend
                     $arrayAccess['right']
                 );
         }
-        if ($isVariable && \in_array($index->getType(), ['variable', 'string', 'mixed'])) {
+        if ($isVariable && in_array($index->getType(), ['variable', 'string', 'mixed'])) {
             $output = 'zephir_array_fetch('.$this->getVariableCodePointer($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         } else {
             if ($isVariable) {
@@ -500,20 +500,21 @@ class Backend extends BaseBackend
         $code = $this->getVariableCodePointer($target).', '.$this->getVariableCode($var);
 
         if (!($resolvedExpr instanceof Variable)) {
-            if ('string' == $resolvedExpr->getType()) {
+            if ('string' === $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch('.$code.', SS("'.$resolvedExpr->getCode().'"), '.$flags.')', $expression);
-            } elseif (\in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
+            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
                 return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.')', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
         }
 
-        if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
+        if (in_array($resolvedExpr->getType(), ['int', 'long'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
-        } elseif ('variable' == $resolvedExpr->getType() || 'string' == $resolvedExpr->getType()) {
+        } elseif (in_array($resolvedExpr->getType(), ['variable', 'mixed', 'string'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
         }
+
         throw new CompilerException('arrayIssetFetch ['.$resolvedExpr->getType().']', $expression);
     }
 
@@ -1047,6 +1048,7 @@ class Backend extends BaseBackend
             case 'object':
             case 'resource':
             case 'callable':
+            case 'mixed':
                 break;
             default:
                 throw new CompilerException('Unknown type: '.$type);
