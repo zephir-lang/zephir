@@ -9,12 +9,25 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder\Operators;
 
 /**
- * Abstract class for builders.
+ * Abstract class for builders
  */
 abstract class AbstractOperatorBuilder
 {
-    abstract public function get();
+    protected ?string $file = null;
+
+    protected int $line = 0;
+
+    protected int $char = 0;
+
+    /**
+     * Returns a builder definition.
+     *
+     * @return array
+     */
+    abstract public function get(): array;
 }
