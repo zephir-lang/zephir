@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function array_key_exists;
+use function count;
+
 class ArgInfoDefinition
 {
     /**
@@ -102,11 +105,11 @@ class ArgInfoDefinition
         ) {
             $this->richRenderStart();
 
-            if (false == $this->hasParameters() && false == $this->functionLike->isVoid()) {
+            if (!$this->hasParameters() && !$this->functionLike->isVoid()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
                 $this->codePrinter->outputBlankLine();
             }
-        } elseif (true == $this->hasParameters()) {
+        } elseif ($this->hasParameters()) {
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
@@ -150,7 +153,7 @@ class ArgInfoDefinition
             $this->codePrinter->outputBlankLine();
         }
 
-        if (true == $this->hasParameters()) {
+        if ($this->hasParameters()) {
             $this->renderEnd();
 
             $this->codePrinter->output('ZEND_END_ARG_INFO()');
@@ -160,10 +163,10 @@ class ArgInfoDefinition
 
     private function richRenderStart(): void
     {
-        if (\array_key_exists('object', $this->functionLike->getReturnTypes())) {
+        if (array_key_exists('object', $this->functionLike->getReturnTypes())) {
             $class = 'NULL';
 
-            if (1 == \count($this->functionLike->getReturnClassTypes())) {
+            if (1 === count($this->functionLike->getReturnClassTypes())) {
                 $class = key($this->functionLike->getReturnClassTypes());
                 $class = escape_class($this->compilationContext->getFullName($class));
             }
@@ -374,7 +377,7 @@ class ArgInfoDefinition
 
     private function hasParameters(): bool
     {
-        return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
+        return null !== $this->parameters && count($this->parameters->getParameters()) > 0;
     }
 
     private function defaultArrayValue(array $parameter): string
@@ -441,7 +444,7 @@ class ArgInfoDefinition
             return 'IS_VOID';
         }
 
-        if (\array_key_exists('array', $this->functionLike->getReturnTypes())) {
+        if (array_key_exists('array', $this->functionLike->getReturnTypes())) {
             return 'IS_ARRAY';
         }
 
