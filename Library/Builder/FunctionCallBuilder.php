@@ -9,38 +9,36 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder;
 
 /**
- * FunctionCallBuilder.
- *
  * Allows to manually build a function call AST node
  */
 class FunctionCallBuilder
 {
-    protected $name;
+    protected string $name;
 
-    protected $parameters;
+    protected array $parameters;
 
-    protected $type;
+    protected int $type;
 
-    protected $file;
+    protected ?string $file;
 
-    protected $line;
+    protected int $line = 0;
 
-    protected $char;
+    protected int $char = 0;
 
     /**
-     * FunctionCallBuilder construct.
-     *
-     * @param string $name
-     * @param array  $parameters
-     * @param int    $type
-     * @param string $file
-     * @param int    $line
-     * @param int    $char
+     * @param string      $name
+     * @param array       $parameters
+     * @param int         $type
+     * @param string|null $file
+     * @param int         $line
+     * @param int         $char
      */
-    public function __construct($name, $parameters, $type = 1, $file = null, $line = 0, $char = 0)
+    public function __construct(string $name, array $parameters, int $type = 1, ?string $file = null, int $line = 0, int $char = 0)
     {
         $this->name = $name;
         $this->parameters = $parameters;
@@ -53,7 +51,7 @@ class FunctionCallBuilder
     /**
      * @return array
      */
-    public function get()
+    public function get(): array
     {
         return [
             'type' => 'fcall',

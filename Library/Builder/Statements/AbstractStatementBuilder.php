@@ -9,15 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder\Statements;
 
-/**
- * Class AbstractStatementBuilder.
- */
 abstract class AbstractStatementBuilder
 {
     /**
+     * Returns a builder definition.
+     *
      * @return array
      */
-    abstract public function get();
+    abstract public function get(): array;
 }

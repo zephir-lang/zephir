@@ -9,26 +9,32 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder\Operators;
 
+use function is_object;
+
 /**
- * UnaryOperatorBuilder.
- *
  * Allows to manually build a unary operator AST node
  */
 class UnaryOperatorBuilder extends AbstractOperatorBuilder
 {
-    protected $operator;
+    /**
+     * Operator name
+     *
+     * @var string
+     */
+    protected string $operator;
 
+    /**
+     * Left Expression
+     *
+     * @var mixed
+     */
     protected $leftExpression;
 
-    protected $file;
-
-    protected $line;
-
-    protected $char;
-
-    public function __construct($operator, $leftExpression, $file = null, $line = 0, $char = 0)
+    public function __construct(string $operator, $leftExpression, ?string $file = null, int $line = 0, int $char = 0)
     {
         $this->operator = $operator;
         $this->leftExpression = $leftExpression;
@@ -42,9 +48,9 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
      *
      * @return array
      */
-    public function get()
+    public function get(): array
     {
-        if (\is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
+        if (is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
             $expr = $this->leftExpression->get();
         } else {
             $expr = $this->leftExpression;
