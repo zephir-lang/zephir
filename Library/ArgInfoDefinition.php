@@ -110,6 +110,7 @@ class ArgInfoDefinition
     {
         if ($this->renderCompatible()) {
             $this->codePrinter->outputBlankLine();
+
             return;
         }
 
