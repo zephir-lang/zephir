@@ -10,7 +10,8 @@ class OoNativeImplements implements
 							\Iterator,
 							\OuterIterator,
 							\RecursiveIterator,
-							\SeekableIterator
+							\SeekableIterator,
+							\Serializable
 							// \IteratorAggregate
 {
 
@@ -90,7 +91,7 @@ class OoNativeImplements implements
 	{
 	}
 
-	public function unserialize(string serialized)
+	public function unserialize(string serialized) -> void
 	{
 	}
 }

@@ -59,6 +59,13 @@ class ArgInfoDefinition
     private bool $richFormat = true;
 
     /**
+     * Declared in config/compatibility-headers.php file
+     *
+     * @var array
+     */
+    private array $compatibilityClasses = [];
+
+    /**
      * @param string             $name
      * @param ClassMethod        $functionLike
      * @param CodePrinter        $codePrinter
@@ -80,6 +87,8 @@ class ArgInfoDefinition
         $this->parameters = $this->functionLike->getParameters();
 
         $this->returnByRef = $returnByRef;
+
+        $this->compatibilityClasses = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/compatibility-headers.php';
     }
 
     public function setBooleanDefinition(string $definition): void
@@ -99,6 +108,11 @@ class ArgInfoDefinition
      */
     public function render(): void
     {
+        if ($this->renderCompatible()) {
+            $this->codePrinter->outputBlankLine();
+            return;
+        }
+
         if ($this->richFormat &&
             $this->functionLike->isReturnTypesHintDetermined() &&
             $this->functionLike->areReturnTypesCompatible()
@@ -132,7 +146,6 @@ class ArgInfoDefinition
                 );
 
                 $this->codePrinter->output('#else');
-
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
@@ -141,7 +154,6 @@ class ArgInfoDefinition
                         $this->functionLike->getNumberOfRequiredParameters()
                     )
                 );
-
                 $this->codePrinter->output('#endif');
             } else {
                 $this->codePrinter->output(
@@ -197,7 +209,7 @@ class ArgInfoDefinition
                 )
             );
 
-            if (false == $this->hasParameters()) {
+            if (!$this->hasParameters()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
             }
 
@@ -449,5 +461,45 @@ class ArgInfoDefinition
         }
 
         return 'IS_NULL';
+    }
+
+    /**
+     * Find from $compatibilityClasses and render specific
+     * hardcoded arg info for with specific PHP version
+     * conditions.
+     *
+     * @return bool
+     */
+    private function renderCompatible(): bool
+    {
+        $classDefinition = $this->functionLike->getClassDefinition();
+        $implementedInterfaces = $classDefinition !== null ? $classDefinition->getImplementedInterfaces() : [];
+
+        if (empty($implementedInterfaces)) {
+            return false;
+        }
+
+        $found = false;
+        $methodName = $this->functionLike->getName();
+
+        foreach ($this->functionLike->getClassDefinition()->getImplementedInterfaces() as $implementedInterface) {
+            if (!isset($this->compatibilityClasses[$implementedInterface][$methodName])) {
+                continue;
+            }
+
+            $found = true;
+            foreach ($this->compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
+                $this->codePrinter->output($condition);
+                foreach ($args as $arg) {
+                    $this->codePrinter->output(
+                        str_replace(['__ce__'], [$this->name], $arg)
+                    );
+                }
+            }
+
+            $this->codePrinter->output('#endif');
+        }
+
+        return $found;
     }
 }
