@@ -94,4 +94,13 @@ class OoNativeImplements implements
 	public function unserialize(string serialized) -> void
 	{
 	}
+
+	public function __serialize() -> array
+	{
+	    return [];
+	}
+
+	public function __unserialize(array data) -> void
+	{
+	}
 }
