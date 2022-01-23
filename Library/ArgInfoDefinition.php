@@ -477,7 +477,6 @@ class ArgInfoDefinition
             return false;
         }
 
-        $found = false;
         $methodName = $this->functionLike->getName();
 
         if ($extendsClass !== null) {
@@ -486,7 +485,6 @@ class ArgInfoDefinition
 
         foreach ($implementedInterfaces as $implementedInterface) {
             if (isset($compatibilityClasses[$implementedInterface][$methodName])) {
-                $found = true;
                 foreach ($compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
                     $this->codePrinter->output($condition);
                     foreach ($args as $arg) {
@@ -497,10 +495,11 @@ class ArgInfoDefinition
                 }
 
                 $this->codePrinter->output('#endif');
+
+                return true;
             }
 
             if (isset($compatibilityClasses[$extendsClass][$methodName])) {
-                $found = true;
                 foreach ($compatibilityClasses[$extendsClass][$methodName] as $condition => $args) {
                     $this->codePrinter->output($condition);
                     foreach ($args as $arg) {
@@ -511,9 +510,11 @@ class ArgInfoDefinition
                 }
 
                 $this->codePrinter->output('#endif');
+
+                return true;
             }
         }
 
-        return $found;
+        return false;
     }
 }
