@@ -462,7 +462,8 @@ class ArgInfoDefinition
      *
      * This is temporary solution designed specifically for Phalcon project.
      *
-     * @deprecated Used as MVP solution for cross PHP versions support.
+     * @deprecated used as MVP solution for cross PHP versions support
+     *
      * @return bool
      */
     private function renderPhalconCompatible(): bool
