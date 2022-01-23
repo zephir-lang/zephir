@@ -483,6 +483,7 @@ class ArgInfoDefinition
             $implementedInterfaces = array_merge($implementedInterfaces, [$extendsClass]);
         }
 
+        $found = false;
         foreach ($implementedInterfaces as $implementedInterface) {
             if (isset($compatibilityClasses[$implementedInterface][$methodName])) {
                 foreach ($compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
@@ -496,25 +497,10 @@ class ArgInfoDefinition
 
                 $this->codePrinter->output('#endif');
 
-                return true;
-            }
-
-            if (isset($compatibilityClasses[$extendsClass][$methodName])) {
-                foreach ($compatibilityClasses[$extendsClass][$methodName] as $condition => $args) {
-                    $this->codePrinter->output($condition);
-                    foreach ($args as $arg) {
-                        $this->codePrinter->output(
-                            str_replace(['__ce__'], [$this->name], $arg)
-                        );
-                    }
-                }
-
-                $this->codePrinter->output('#endif');
-
-                return true;
+                $found = true;
             }
         }
 
-        return false;
+        return $found;
     }
 }
