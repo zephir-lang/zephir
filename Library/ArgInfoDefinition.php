@@ -59,13 +59,6 @@ class ArgInfoDefinition
     private bool $richFormat = true;
 
     /**
-     * Declared in config/compatibility-headers.php file
-     *
-     * @var array
-     */
-    private array $compatibilityClasses = [];
-
-    /**
      * @param string             $name
      * @param ClassMethod        $functionLike
      * @param CodePrinter        $codePrinter
@@ -87,8 +80,6 @@ class ArgInfoDefinition
         $this->parameters = $this->functionLike->getParameters();
 
         $this->returnByRef = $returnByRef;
-
-        $this->compatibilityClasses = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/compatibility-headers.php';
     }
 
     public function setBooleanDefinition(string $definition): void
@@ -108,7 +99,7 @@ class ArgInfoDefinition
      */
     public function render(): void
     {
-        if ($this->renderCompatible()) {
+        if ($this->renderPhalconCompatible()) {
             $this->codePrinter->outputBlankLine();
 
             return;
@@ -469,14 +460,19 @@ class ArgInfoDefinition
      * hardcoded arg info for with specific PHP version
      * conditions.
      *
+     * This is temporary solution designed specifically for Phalcon project.
+     *
+     * @deprecated Used as MVP solution for cross PHP versions support.
      * @return bool
      */
-    private function renderCompatible(): bool
+    private function renderPhalconCompatible(): bool
     {
+        $compatibilityClasses = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/compatibility-headers.php';
         $classDefinition = $this->functionLike->getClassDefinition();
         $implementedInterfaces = $classDefinition !== null ? $classDefinition->getImplementedInterfaces() : [];
+        $extendsClass = $classDefinition->getExtendsClass() ?? null;
 
-        if (empty($implementedInterfaces)) {
+        if (empty($implementedInterfaces) && $extendsClass === null) {
             return false;
         }
 
@@ -484,21 +480,33 @@ class ArgInfoDefinition
         $methodName = $this->functionLike->getName();
 
         foreach ($this->functionLike->getClassDefinition()->getImplementedInterfaces() as $implementedInterface) {
-            if (!isset($this->compatibilityClasses[$implementedInterface][$methodName])) {
-                continue;
-            }
-
-            $found = true;
-            foreach ($this->compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
-                $this->codePrinter->output($condition);
-                foreach ($args as $arg) {
-                    $this->codePrinter->output(
-                        str_replace(['__ce__'], [$this->name], $arg)
-                    );
+            if (isset($compatibilityClasses[$implementedInterface][$methodName])) {
+                $found = true;
+                foreach ($compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
+                    $this->codePrinter->output($condition);
+                    foreach ($args as $arg) {
+                        $this->codePrinter->output(
+                            str_replace(['__ce__'], [$this->name], $arg)
+                        );
+                    }
                 }
+
+                $this->codePrinter->output('#endif');
             }
 
-            $this->codePrinter->output('#endif');
+            if (isset($compatibilityClasses[$extendsClass][$methodName])) {
+                $found = true;
+                foreach ($compatibilityClasses[$extendsClass][$methodName] as $condition => $args) {
+                    $this->codePrinter->output($condition);
+                    foreach ($args as $arg) {
+                        $this->codePrinter->output(
+                            str_replace(['__ce__'], [$this->name], $arg)
+                        );
+                    }
+                }
+
+                $this->codePrinter->output('#endif');
+            }
         }
 
         return $found;

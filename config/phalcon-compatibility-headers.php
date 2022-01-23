@@ -31,7 +31,37 @@ return [
         ],
     ],
 
+    'AbstractSerializer' => [
+        'unserialize' => [
+            '#if PHP_VERSION_ID >= 80000' => [
+                'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(__ce__, 0, 1, IS_VOID, 0)',
+                '    ZEND_ARG_TYPE_INFO(0, serialized, IS_STRING, 0)',
+                'ZEND_END_ARG_INFO()',
+            ],
+            '#else' => [
+                'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(__ce__, 0, 1, IS_VOID, 0)',
+                '    ZEND_ARG_INFO(0, serialized)',
+                'ZEND_END_ARG_INFO()',
+            ],
+        ],
+    ],
+
     'SessionHandlerInterface' => [
+        'gc' => [
+            '#if PHP_VERSION_ID >= 80000' => [
+                'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',
+                '    ZEND_ARG_TYPE_INFO(0, maxlifetime, IS_LONG, 0)',
+                'ZEND_END_ARG_INFO()',
+            ],
+            '#else' => [
+                'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',
+                '    ZEND_ARG_INFO(0, maxlifetime)',
+                'ZEND_END_ARG_INFO()',
+            ],
+        ],
+    ],
+
+    'Noop' => [
         'gc' => [
             '#if PHP_VERSION_ID >= 80000' => [
                 'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',
