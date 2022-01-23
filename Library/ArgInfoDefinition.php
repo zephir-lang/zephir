@@ -480,7 +480,11 @@ class ArgInfoDefinition
         $found = false;
         $methodName = $this->functionLike->getName();
 
-        foreach ($this->functionLike->getClassDefinition()->getImplementedInterfaces() as $implementedInterface) {
+        if ($extendsClass !== null) {
+            $implementedInterfaces = array_merge($implementedInterfaces, [$extendsClass]);
+        }
+
+        foreach ($implementedInterfaces as $implementedInterface) {
             if (isset($compatibilityClasses[$implementedInterface][$methodName])) {
                 $found = true;
                 foreach ($compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {

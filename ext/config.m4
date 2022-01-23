@@ -31,6 +31,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
 	stub/arithmetic.zep.c
+	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c

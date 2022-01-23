@@ -61,7 +61,7 @@ return [
         ],
     ],
 
-    'Noop' => [
+    'Phalcon\Session\Adapter\Noop' => [
         'gc' => [
             '#if PHP_VERSION_ID >= 80000' => [
                 'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',

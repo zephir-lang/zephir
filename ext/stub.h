@@ -26,6 +26,7 @@
 #include "stub/ooimpl/zbeginning.zep.h"
 #include "stub/properties/publicproperties.zep.h"
 #include "stub/arithmetic.zep.h"
+#include "stub/arrayaccessarr.zep.h"
 #include "stub/arrayaccessobj.zep.h"
 #include "stub/arrayaccesstest.zep.h"
 #include "stub/arrayiterator.zep.h"
