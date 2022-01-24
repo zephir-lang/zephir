@@ -48,7 +48,12 @@ return [
 
     'SessionHandlerInterface' => [
         'gc' => [
-            '#if PHP_VERSION_ID >= 80000' => [
+            '#if PHP_VERSION_ID >= 80100' => [
+                'ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_MASK_EX(__ce__, 0, 0, 1, MAY_BE_LONG|MAY_BE_FALSE)',
+                '    ZEND_ARG_TYPE_INFO(0, maxlifetime, IS_LONG, 0)',
+                'ZEND_END_ARG_INFO()',
+            ],
+            '#elif PHP_VERSION_ID >= 80000' => [
                 'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',
                 '    ZEND_ARG_TYPE_INFO(0, maxlifetime, IS_LONG, 0)',
                 'ZEND_END_ARG_INFO()',
@@ -63,7 +68,12 @@ return [
 
     'Phalcon\Session\Adapter\Noop' => [
         'gc' => [
-            '#if PHP_VERSION_ID >= 80000' => [
+            '#if PHP_VERSION_ID >= 80100' => [
+                'ZEND_BEGIN_ARG_WITH_TENTATIVE_RETURN_TYPE_MASK_EX(__ce__, 0, 0, 1, MAY_BE_LONG|MAY_BE_FALSE)',
+                '    ZEND_ARG_TYPE_INFO(0, maxlifetime, IS_LONG, 0)',
+                'ZEND_END_ARG_INFO()',
+            ],
+            '#elif PHP_VERSION_ID >= 80000' => [
                 'ZEND_BEGIN_ARG_INFO_EX(__ce__, 0, 0, 1)',
                 '    ZEND_ARG_TYPE_INFO(0, maxlifetime, IS_LONG, 0)',
                 'ZEND_END_ARG_INFO()',
