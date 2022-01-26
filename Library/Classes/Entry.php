@@ -121,7 +121,7 @@ class Entry
         /**
          * External class, we don't know its ClassEntry in C world.
          */
-        if (!$this->isInternalClass($classNamespace[0])) {
+        if ($classNamespace[0] == "" || !$this->isInternalClass($classNamespace[0])) {
             $className = str_replace(self::NAMESPACE_SEPARATOR, self::NAMESPACE_SEPARATOR.self::NAMESPACE_SEPARATOR, strtolower($className));
 
             return sprintf(
