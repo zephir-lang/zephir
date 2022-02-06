@@ -99,6 +99,12 @@ class ArgInfoDefinition
      */
     public function render(): void
     {
+        if ($this->renderPhalconCompatible()) {
+            $this->codePrinter->outputBlankLine();
+
+            return;
+        }
+
         if ($this->richFormat &&
             $this->functionLike->isReturnTypesHintDetermined() &&
             $this->functionLike->areReturnTypesCompatible()
@@ -132,7 +138,6 @@ class ArgInfoDefinition
                 );
 
                 $this->codePrinter->output('#else');
-
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
@@ -141,7 +146,6 @@ class ArgInfoDefinition
                         $this->functionLike->getNumberOfRequiredParameters()
                     )
                 );
-
                 $this->codePrinter->output('#endif');
             } else {
                 $this->codePrinter->output(
@@ -197,7 +201,7 @@ class ArgInfoDefinition
                 )
             );
 
-            if (false == $this->hasParameters()) {
+            if (!$this->hasParameters()) {
                 $this->codePrinter->output('ZEND_END_ARG_INFO()');
             }
 
@@ -449,5 +453,54 @@ class ArgInfoDefinition
         }
 
         return 'IS_NULL';
+    }
+
+    /**
+     * Find from $compatibilityClasses and render specific
+     * hardcoded arg info for with specific PHP version
+     * conditions.
+     *
+     * This is temporary solution designed specifically for Phalcon project.
+     *
+     * @deprecated used as MVP solution for cross PHP versions support
+     *
+     * @return bool
+     */
+    private function renderPhalconCompatible(): bool
+    {
+        $compatibilityClasses = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/phalcon-compatibility-headers.php';
+        $classDefinition = $this->functionLike->getClassDefinition();
+        $implementedInterfaces = $classDefinition !== null ? $classDefinition->getImplementedInterfaces() : [];
+        $extendsClass = $classDefinition !== null ? $classDefinition->getExtendsClass() : null;
+
+        if (empty($implementedInterfaces) && $extendsClass === null) {
+            return false;
+        }
+
+        $methodName = $this->functionLike->getName();
+
+        if ($extendsClass !== null) {
+            $implementedInterfaces = array_merge($implementedInterfaces, [$extendsClass]);
+        }
+
+        $found = false;
+        foreach ($implementedInterfaces as $implementedInterface) {
+            if (isset($compatibilityClasses[$implementedInterface][$methodName])) {
+                foreach ($compatibilityClasses[$implementedInterface][$methodName] as $condition => $args) {
+                    $this->codePrinter->output($condition);
+                    foreach ($args as $arg) {
+                        $this->codePrinter->output(
+                            str_replace(['__ce__'], [$this->name], $arg)
+                        );
+                    }
+                }
+
+                $this->codePrinter->output('#endif');
+
+                $found = true;
+            }
+        }
+
+        return $found;
     }
 }

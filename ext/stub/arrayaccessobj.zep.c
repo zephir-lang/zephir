@@ -13,8 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/memory.h"
-#include "kernel/array.h"
 #include "kernel/object.h"
+#include "kernel/operators.h"
+#include "kernel/array.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_ArrayAccessObj)
@@ -28,32 +29,42 @@ ZEPHIR_INIT_CLASS(Stub_ArrayAccessObj)
 
 PHP_METHOD(Stub_ArrayAccessObj, __construct)
 {
-	zval _0;
+	zval obj, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
+	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
 
 
 	ZEPHIR_MM_GROW();
 
+	ZEPHIR_INIT_VAR(&obj);
+	object_init(&obj);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_create_array(&_0, 3, 0);
-	add_assoc_long_ex(&_0, SL("one"), 1);
-	add_assoc_long_ex(&_0, SL("two"), 2);
-	add_assoc_long_ex(&_0, SL("three"), 3);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "val1");
+	zephir_update_property_zval(&obj, ZEND_STRL("key1"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "val2");
+	zephir_update_property_zval(&obj, ZEND_STRL("key2"), &_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "val3");
+	zephir_update_property_zval(&obj, ZEND_STRL("key3"), &_0);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &obj);
 	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 {
-	zval offset_sub, value_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval offset_sub, value_sub, obj;
 	zval *offset, *value;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
+	ZVAL_UNDEF(&obj);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -63,24 +74,28 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(2, 0, &offset, &value);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &offset, &value);
 
 
-	if (Z_TYPE_P(offset) == IS_NULL) {
-		zephir_update_property_array_append(this_ptr, SL("test"), value);
-	} else {
-		zephir_update_property_array(this_ptr, SL("test"), offset, value);
+	ZEPHIR_OBS_VAR(&obj);
+	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
+	if (!(Z_TYPE_P(offset) == IS_NULL)) {
+		zephir_update_property_zval_zval(&obj, offset, value);
 	}
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &obj);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 {
-	zval offset_sub, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval offset_sub, obj;
 	zval *offset;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&obj);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -89,20 +104,25 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(1, 0, &offset);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	RETURN_BOOL(zephir_array_isset(&_0, offset));
+	ZEPHIR_OBS_VAR(&obj);
+	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
+	RETURN_MM_BOOL(zephir_isset_property_zval(&obj, offset));
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 {
-	zval offset_sub, _0;
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval offset_sub, obj;
 	zval *offset;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
+	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
@@ -112,12 +132,18 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(1, 0, &offset);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &offset);
 
 
-	zephir_unset_property_array(this_ptr, ZEND_STRL("test"), offset);
-	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, offset, PH_SEPARATE);
+	ZEPHIR_OBS_VAR(&obj);
+	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
+	zephir_get_arrval(&_0, &obj);
+	ZEPHIR_CPY_WRT(&obj, &_0);
+	zephir_array_unset(&obj, offset, PH_SEPARATE);
+	zephir_convert_to_object(&obj);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &obj);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
@@ -145,9 +171,10 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	if (zephir_array_isset(&_1, offset)) {
-		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-		zephir_array_fetch(&_0, &_2, offset, PH_NOISY, "stub/arrayaccessobj.zep", 37);
+	if (zephir_isset_property_zval(&_1, offset)) {
+		ZEPHIR_OBS_VAR(&_2);
+		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
+		zephir_read_property_zval(&_0, &_2, offset, PH_NOISY_CC);
 	} else {
 		ZVAL_NULL(&_0);
 	}
