@@ -219,7 +219,7 @@ DOC;
      * Method with various tags
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
-     * @license MIT http://zephir-lang.com/license.html
+     * @license MIT https://docs.zephir-lang.com/0.12/en/license
      * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
@@ -236,7 +236,7 @@ DOC;
      *
      * @author Phalcon Team <noreply@zephir-lang.com>
      * @copyright (c) 2013-present Phalcon Team (https://zephir-lang.com/)
-     * @license MIT http://zephir-lang.com/license.html
+     * @license MIT https://docs.zephir-lang.com/0.12/en/license
      * @link https://github.com/zephir-lang/zephir
      * @since 1.0.0
      * @todo Something
