@@ -24,7 +24,7 @@ use Zephir\StatementsBlock;
  * mutations is relative, since assignments inside cycles/loops may perform a n-number of
  * mutations
  *
- * @see http://en.wikipedia.org/wiki/Escape_analysis
+ * @see https://en.wikipedia.org/wiki/Escape_analysis
  */
 class LocalContextPass
 {

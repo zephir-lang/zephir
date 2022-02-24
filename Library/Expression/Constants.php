@@ -38,7 +38,7 @@ class Constants
     /**
      * Reserved ENV Constants.
      *
-     * @see http://www.php.net/manual/ru/reserved.constants.php
+     * @see https://www.php.net/manual/ru/reserved.constants.php
      *
      * @var array
      */
@@ -66,7 +66,7 @@ class Constants
     /**
      * Magic constants.
      *
-     * @see http://php.net/manual/en/language.constants.predefined.php
+     * @see https://php.net/manual/en/language.constants.predefined.php
      *
      * @var array
      */
