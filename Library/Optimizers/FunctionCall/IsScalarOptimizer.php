@@ -21,7 +21,7 @@ use Zephir\Optimizers\OptimizerAbstract;
  *
  * Optimizes calls to 'is_scalar' using internal function
  *
- * @see http://php.net/manual/en/function.is-scalar.php
+ * @see https://php.net/manual/en/function.is-scalar.php
  */
 class IsScalarOptimizer extends OptimizerAbstract
 {

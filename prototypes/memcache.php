@@ -15,7 +15,7 @@ define('MEMCACHE_COMPRESSED', 2);
 /**
  * Class Memcache.
  *
- * @see http://se2.php.net/manual/en/class.memcache.php
+ * @see https://se2.php.net/manual/en/class.memcache.php
  */
 class memcache
 {

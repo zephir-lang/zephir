@@ -13,7 +13,7 @@ if (!function_exists('gd_info')) {
     /**
      * Retrieve information about the currently installed GD library.
      *
-     * @see http://www.php.net/manual/en/function.gd-info.php
+     * @see https://www.php.net/manual/en/function.gd-info.php
      *
      * @return array
      */
@@ -170,7 +170,7 @@ if (!function_exists('imagearc')) {
     /**
      * Draws an arc.
      *
-     * @see http://www.php.net/manual/ru/function.imagearc.php
+     * @see https://www.php.net/manual/ru/function.imagearc.php
      *
      * @param resource $image
      * @param int      $cx
@@ -357,7 +357,7 @@ if (!function_exists('imagecolorexact')) {
     /**
      * Get the index of the specified color.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolorexact.php
+     * @see https://www.php.net/manual/ru/function.imagecolorexact.php
      *
      * @param resource $image
      * @param int      $red
@@ -394,7 +394,7 @@ if (!function_exists('imagecolormatch')) {
     /**
      * Makes the colors of the palette version of an image more closely match the true color version.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolormatch.php
+     * @see https://www.php.net/manual/ru/function.imagecolormatch.php
      *
      * @param resource $image1
      * @param resource $image2
@@ -410,7 +410,7 @@ if (!function_exists('imagecolorresolve')) {
     /**
      * Get the index of the specified color or its closest possible alternative.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolorresolve.php
+     * @see https://www.php.net/manual/ru/function.imagecolorresolve.php
      *
      * @param resource $image
      * @param int      $red

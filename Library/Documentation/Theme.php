@@ -83,7 +83,7 @@ class Theme
     }
 
     /**
-     * from : http://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
+     * from : https://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
      *
      * @param $src
      * @param $dst

@@ -12,7 +12,7 @@
 namespace Zephir\Optimizers\FunctionCall;
 
 /**
- * @see http://php.net/manual/en/function.join.php
+ * @see https://php.net/manual/en/function.join.php
  *
  * Optimizes calls to 'join' using ImplodeOptimizer via it is an alias
  */

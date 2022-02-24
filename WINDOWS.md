@@ -7,24 +7,24 @@ PHP-Version requirements are marked using `[ ]`
 
 ## Software Requirements [PHP 5.5 or later]
 
-- [Install Visual Studio 2012 Express](http://www.microsoft.com/en-US/download/details.aspx?id=34673)
+- [Install Visual Studio 2012 Express](https://www.microsoft.com/en-US/download/details.aspx?id=34673)
 (You should start it and activate it)
 
 ## Software Requirements General
 
-- [Install PHP (NTS)](http://windows.php.net/download/)
+- [Install PHP (NTS)](https://windows.php.net/download/)
     - Download and extract it
     - Make sure it is in the PATH, as for example below:
     ```cmd
     setx path "%path%;c:\path-to-php\"
     ```
-- [Install PHP SDK for PHP 5.6](http://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
+- [Install PHP SDK for PHP 5.6](https://windows.php.net/downloads/php-sdk/)(Currently `php-sdk-binary-tools-20110915.zip` is the newest)
 - [Install PHP SDK for PHP 7.0+](https://github.com/Microsoft/php-sdk-binary-tools/releases)
 ```cmd
 setx php_sdk "c:\path-to-php-sdk"
 ```
 
-- [Download PHP Developer Pack(NTS!)：***php-devel-pack-?.?.?-Win??-VC??-x??.zip***](http://windows.php.net/downloads/releases/)
+- [Download PHP Developer Pack(NTS!)：***php-devel-pack-?.?.?-Win??-VC??-x??.zip***](https://windows.php.net/downloads/releases/)
 (or build it yourself with `--enable-debug --disable-zts` and `nmake build-devel` or just `nmake snap` by using the PHP-SDK)
 ```cmd
 setx php_devpack "c:\path-to-extracted-devpack"
