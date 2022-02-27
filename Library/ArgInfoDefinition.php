@@ -233,18 +233,46 @@ class ArgInfoDefinition
                 )
             );
             $this->codePrinter->output('#endif');
-        } else {
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    $this->getReturnType(),
-                    (int) $this->functionLike->areReturnTypesNullCompatible()
-                )
-            );
+
+            return;
         }
+
+        if (count($this->functionLike->getReturnTypes()) > 1) {
+            $types = [];
+            $mayBeTypes = $this->functionLike->getMayBeArgTypes();
+            foreach ($this->functionLike->getReturnTypes() as $type => $typeInfo) {
+                if (!isset($mayBeTypes[$type])) {
+                    continue;
+                }
+
+                $types[] = $mayBeTypes[$type];
+            }
+
+            if (count($types) > 1) {
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        join('|', $types)
+                    )
+                );
+
+                return;
+            }
+        }
+
+        $this->codePrinter->output(
+            sprintf(
+                'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                $this->name,
+                (int) $this->returnByRef,
+                $this->functionLike->getNumberOfRequiredParameters(),
+                $this->getReturnType(),
+                (int) $this->functionLike->areReturnTypesNullCompatible()
+            )
+        );
     }
 
     private function renderEnd(): void
