@@ -7,4 +7,9 @@ class MayBe
     {
         return 1;
     }
+
+    public function gcFalse() -> int | false
+    {
+        return false;
+    }
 }
