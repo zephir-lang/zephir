@@ -249,15 +249,28 @@ class ArgInfoDefinition
             }
 
             if (count($types) > 1) {
+                $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
                         $this->name,
                         (int) $this->returnByRef,
                         $this->functionLike->getNumberOfRequiredParameters(),
-                        join('|', $types)
+                        implode('|', $types)
                     )
                 );
+                $this->codePrinter->output('#else');
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                        $this->name,
+                        (int) $this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        $this->getReturnType(),
+                        (int) $this->functionLike->areReturnTypesNullCompatible()
+                    )
+                );
+                $this->codePrinter->output('#endif');
 
                 return;
             }
