@@ -82,7 +82,10 @@ if (filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
     });
 }
 
-$rootPath = realpath(dirname(__FILE__));
+/**
+ * When it is executed inside .phar, realpath() will return `false`.
+ */
+$rootPath = Phar::running() ?: realpath(dirname(__FILE__));
 $config = Config::fromServer();
 
 /**
