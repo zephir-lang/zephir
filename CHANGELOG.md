@@ -5,9 +5,12 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+## [0.16.0] - 2022-03-20
 ### Added
 - Added custom list of arg info definition (Phalcon only) [#2341](https://github.com/zephir-lang/zephir/issues/2341)
 - Added support for `int|false` return type (PHP >= 8.0 only) [#2338](https://github.com/zephir-lang/zephir/issues/2338)
+- Added support of PHP `8.1` [#2255](https://github.com/zephir-lang/zephir/issues/2255)
 
 ### Fixed
 - Fixed left `null` with `string` condition [#2299](https://github.com/zephir-lang/zephir/issues/2299)
@@ -569,7 +572,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.15.2...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.16.0...HEAD
+[0.16.0]: https://github.com/zephir-lang/zephir/compare/0.15.2...0.16.0
 [0.15.2]: https://github.com/zephir-lang/zephir/compare/0.15.1...0.15.2
 [0.15.1]: https://github.com/zephir-lang/zephir/compare/0.15.0...0.15.1
 [0.15.0]: https://github.com/zephir-lang/zephir/compare/0.14.0...0.15.0
