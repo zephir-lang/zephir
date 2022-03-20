@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 ### Added
 - Added custom list of arg info definition (Phalcon only) [#2341](https://github.com/zephir-lang/zephir/issues/2341)
+- Added support for `int|false` return type (PHP >= 8.0 only) [#2338](https://github.com/zephir-lang/zephir/issues/2338)
 
 ### Fixed
 - Fixed left `null` with `string` condition [#2299](https://github.com/zephir-lang/zephir/issues/2299)

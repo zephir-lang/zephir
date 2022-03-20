@@ -119,7 +119,13 @@ final class ReturnStatement extends StatementAbstract
                         break;
 
                     case Types::T_BOOL:
-                        if (!$currentMethod->areReturnTypesBoolCompatible() && !$currentMethod->isMixed()) {
+                        if (!$currentMethod->areReturnTypesBoolCompatible() && !$currentMethod->isMixed() && !$currentMethod->areReturnTypesFalseCompatible()) {
+                            throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
+                        }
+                        break;
+
+                    case Types::T_FALSE:
+                        if (!$currentMethod->areReturnTypesFalseCompatible() && !$currentMethod->isMixed()) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
