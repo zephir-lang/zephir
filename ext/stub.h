@@ -208,6 +208,7 @@
 #include "stub/typehinting/testabstract.zep.h"
 #include "stub/typeinstances.zep.h"
 #include "stub/typeoff.zep.h"
+#include "stub/types/maybe.zep.h"
 #include "stub/types/mixedtype.zep.h"
 #include "stub/unknownclass.zep.h"
 #include "stub/unsettest.zep.h"

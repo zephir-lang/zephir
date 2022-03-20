@@ -23,7 +23,7 @@
  *
  * Fannkuch Redux in Zephir
  *
- * @see https://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
+ * @see http://disciple-devel.blogspot.mx/2010/11/shootout-fannkuch-redux.html
  */
 ZEPHIR_INIT_CLASS(Stub_Fannkuch)
 {
