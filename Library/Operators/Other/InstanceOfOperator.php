@@ -20,16 +20,14 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 use function Zephir\escape_class;
 
 /**
- * InstanceOf.
- *
  * Checks if a variable is an instance of a class
  */
-class InstanceOfOperator extends BaseOperator
+class InstanceOfOperator extends AbstractOperator
 {
     /**
      * @param $expression

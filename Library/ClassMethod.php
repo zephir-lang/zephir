@@ -78,6 +78,16 @@ class ClassMethod
     protected array $returnTypes = [];
 
     /**
+     * Zend MAY_BE_* types.
+     *
+     * @var array|string[]
+     */
+    protected array $mayBeArgTypes = [
+        'int' => 'MAY_BE_LONG',
+        'false' => 'MAY_BE_FALSE',
+    ];
+
+    /**
      * Raw-types returned by the method.
      *
      * @var array|null
@@ -673,7 +683,7 @@ class ClassMethod
     }
 
     /**
-     * Checks whether at least one return type hint is integer compatible.
+     * Checks whether at least one return type hint is bool compatible.
      *
      * @return bool
      */
@@ -683,7 +693,17 @@ class ClassMethod
     }
 
     /**
-     * Checks whether at least one return type hint is integer compatible.
+     * Checks whether at least one return type hint is false compatible.
+     *
+     * @return bool
+     */
+    public function areReturnTypesFalseCompatible(): bool
+    {
+        return isset($this->returnTypes['false']);
+    }
+
+    /**
+     * Checks whether at least one return type hint is string compatible.
      *
      * @return bool
      */
@@ -995,6 +1015,14 @@ class ClassMethod
     public function isShortcut(): bool
     {
         return $this->expression && 'shortcut' === $this->expression['type'];
+    }
+
+    /**
+     * @return array|string[]
+     */
+    public function getMayBeArgTypes(): array
+    {
+        return $this->mayBeArgTypes;
     }
 
     /**
@@ -2294,6 +2322,7 @@ class ClassMethod
                     $this->areReturnTypesIntCompatible() ||
                     $this->areReturnTypesNullCompatible() ||
                     $this->areReturnTypesStringCompatible() ||
+                    $this->areReturnTypesFalseCompatible() ||
                     \array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
@@ -2323,13 +2352,23 @@ class ClassMethod
             return true;
         }
 
-        // null | T1 | T2
-        if (count($this->returnTypes) > 2) {
-            return false;
+        $totalTypes = count($this->returnTypes);
+
+        // union types
+        if ($totalTypes > 1) {
+            $diff = array_diff(array_keys($this->returnTypes), array_keys($this->mayBeArgTypes));
+            if (count($diff) === 0) {
+                return true;
+            }
         }
 
         // T1 | T2
-        if (2 === count($this->returnTypes) && !isset($this->returnTypes['null'])) {
+        if (2 === $totalTypes && !isset($this->returnTypes['null'])) {
+            return false;
+        }
+
+        // null | T1 | T2
+        if ($totalTypes > 2) {
             return false;
         }
 

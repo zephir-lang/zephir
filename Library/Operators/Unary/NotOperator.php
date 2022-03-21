@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Unary;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
-class NotOperator extends BaseOperator
+class NotOperator extends AbstractOperator
 {
     /**
      * @param $expression
@@ -29,6 +30,7 @@ class NotOperator extends BaseOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -58,6 +60,7 @@ class NotOperator extends BaseOperator
                         return new CompiledExpression('bool', '!'.$variable->getName(), $expression);
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbol = $compilationContext->backend->getVariableCode($variable);
 

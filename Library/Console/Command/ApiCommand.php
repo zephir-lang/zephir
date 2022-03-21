@@ -24,9 +24,7 @@ use Zephir\Config;
 use function in_array;
 
 /**
- * API Command
- *
- * Generates a HTML API based on the classes exposed in the extension.
+ * Generates an HTML API based on the classes exposed in the extension.
  */
 final class ApiCommand extends AbstractCommand
 {

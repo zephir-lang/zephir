@@ -15,15 +15,13 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
 /**
- * BaseOperator.
- *
  * This is the base operator for commutative, associative and distributive
  * arithmetic operators
  */
-class BitwiseBaseOperator extends BaseOperator
+class BitwiseBaseOperator extends AbstractOperator
 {
     protected bool $literalOnly = true;
 
@@ -31,7 +29,7 @@ class BitwiseBaseOperator extends BaseOperator
      * This tries to perform arithmetical operations
      * Probably gcc/clang will optimize them without this optimization.
      *
-     * @see http://en.wikipedia.org/wiki/Constant_folding
+     * @see https://en.wikipedia.org/wiki/Constant_folding
      *
      * @param array              $expression
      * @param CompilationContext $compilationContext

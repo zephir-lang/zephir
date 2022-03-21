@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
@@ -17,8 +19,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectDynamicProperty.
- *
  * Updates object properties dynamically
  */
 class ObjectDynamicStringProperty
@@ -35,13 +35,13 @@ class ObjectDynamicStringProperty
      * @throws CompilerException
      * @throws \Exception
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
+    public function assign(string $variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
         }
 
-        if ('variable' != $symbolVariable->getType()) {
+        if ('variable' !== $symbolVariable->getType()) {
             throw new CompilerException("Variable type '".$symbolVariable->getType()."' cannot be used as object", $statement);
         }
 
@@ -63,7 +63,7 @@ class ObjectDynamicStringProperty
             throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
         }
 
-        /*
+        /**
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {

@@ -13,22 +13,21 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Types;
 
 /**
- * Cast operator
- *
  * Converts a value into another of a different type
  */
-class CastOperator extends BaseOperator
+class CastOperator extends AbstractOperator
 {
     /**
      * Compiles a type cast operation.
@@ -36,9 +35,9 @@ class CastOperator extends BaseOperator
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -81,9 +80,11 @@ class CastOperator extends BaseOperator
                             'string',
                             $compilationContext
                         );
-                        $let = new LetVariable();
+
                         $original = $resolved->getOriginal();
                         $original['operator'] = 'assign';
+
+                        $let = new LetVariable();
                         $let->assign(
                             $symbolVariable->getName(),
                             $symbolVariable,
@@ -134,6 +135,7 @@ class CastOperator extends BaseOperator
 
                             case Types::T_ARRAY:
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                             case Types::T_STRING:
                                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
@@ -158,11 +160,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -222,6 +220,7 @@ class CastOperator extends BaseOperator
                                 );
 
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
                                 return new CompiledExpression(
@@ -245,11 +244,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -319,6 +314,7 @@ class CastOperator extends BaseOperator
 
                             case Types::T_ARRAY:
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
 
                                 return new CompiledExpression(
@@ -342,11 +338,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -395,6 +387,7 @@ class CastOperator extends BaseOperator
                                 );
 
                             case Types::T_VARIABLE:
+                            case Types::T_MIXED:
                                 return new CompiledExpression(
                                     'bool',
                                     sprintf('zephir_get_boolval(%s)', $symbol),
@@ -416,11 +409,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -435,6 +424,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('char', "'{$resolved->getCode()}'", $expression);
 
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolved->getCode(),
@@ -468,11 +458,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $tempVariable->getName(), $expression);
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -485,6 +471,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('string', $resolved->getCode(), $expression);
 
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -546,11 +533,7 @@ class CastOperator extends BaseOperator
                         break;
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -559,6 +542,7 @@ class CastOperator extends BaseOperator
             case Types::T_ARRAY:
                 switch ($resolved->getType()) {
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $compilationContext->headersManager->add('kernel/operators');
                         $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -589,11 +573,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -636,6 +616,7 @@ class CastOperator extends BaseOperator
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
                     case Types::T_VARIABLE:
+                    case Types::T_MIXED:
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbolVariable = $compilationContext->symbolTable->getVariableForRead(
                             $resolved->getCode(),
@@ -653,11 +634,7 @@ class CastOperator extends BaseOperator
 
                     default:
                         throw new CompilerException(
-                            sprintf(
-                                'Cannot cast: %s to %s',
-                                $resolved->getType(),
-                                $expression['left']
-                            ),
+                            sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
@@ -665,11 +642,7 @@ class CastOperator extends BaseOperator
 
             default:
                 throw new CompilerException(
-                    sprintf(
-                        'Cannot cast: %s to %s',
-                        $resolved->getType(),
-                        $expression['left']
-                    ),
+                    sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                     $expression
                 );
         }

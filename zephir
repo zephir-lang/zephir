@@ -10,13 +10,124 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Zephir\Backends\BackendFactory;
+use Zephir\Compiler;
+use Zephir\Config;
 use Zephir\Console\Application;
-use Zephir\DependencyInjection\ContainerFactory;
+use Zephir\Console\Command\ApiCommand;
+use Zephir\Console\Command\BuildCommand;
+use Zephir\Console\Command\CleanCommand;
+use Zephir\Console\Command\CompileCommand;
+use Zephir\Console\Command\FullCleanCommand;
+use Zephir\Console\Command\GenerateCommand;
+use Zephir\Console\Command\InitCommand;
+use Zephir\Console\Command\InstallCommand;
+use Zephir\Console\Command\ListCommand;
+use Zephir\Console\Command\StubsCommand;
+use Zephir\FileSystem\HardDisk;
+use Zephir\Logger\Formatter\CompilerFormatter;
+use Zephir\Parser\Manager;
+use Zephir\Parser\Parser;
 
-require __DIR__ . '/Library/autoload.php';
-require __DIR__ . '/Library/bootstrap.php';
+if (version_compare('7.0.0', PHP_VERSION, '>')) {
+    fprintf(
+        STDERR,
+        'This Zephir version is supported on PHP >= 7.0.0.'.PHP_EOL.
+        'You are using PHP %s (%s).'.PHP_EOL,
+        PHP_VERSION,
+        PHP_BINARY
+    );
 
-$container = (new ContainerFactory())->create();
+    exit(1);
+}
 
-$application = $container->get(Application::class);
+if (PHP_SAPI !== 'cli' && PHP_SAPI !== 'phpdbg') {
+    fprintf(
+        STDERR,
+        'Zephir should be invoked via the CLI version of PHP, not the %s SAPI.'.PHP_EOL,
+        PHP_SAPI
+    );
+
+    exit(1);
+}
+
+foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'] as $file) {
+    if (file_exists($file)) {
+        include_once $file;
+        break;
+    }
+}
+
+if (!class_exists('Composer\Autoload\ClassLoader', false)) {
+    fwrite(STDERR, 'Unable to find the Composer autoloader.'.PHP_EOL);
+
+    exit(1);
+}
+
+set_error_handler(static function ($code, $message, $file = '', $line = -1) {
+    if (error_reporting() & $code) {
+        throw new ErrorException($message, 0, $code, (string) $file, $line);
+    }
+});
+
+if (filter_var(getenv('ZEPHIR_DEBUG'), FILTER_VALIDATE_BOOLEAN)) {
+    set_exception_handler(static function (Throwable $t) {
+        fwrite(STDERR, "[ERROR] {$t->getMessage()}". PHP_EOL);
+
+        exit(1);
+    });
+}
+
+/**
+ * When it is executed inside .phar, realpath() will return `false`.
+ */
+$rootPath = Phar::running() ?: realpath(dirname(__FILE__));
+$config = Config::fromServer();
+
+/**
+ * Logger
+ */
+$formatter = new CompilerFormatter($config);
+
+$consoleStdErrorHandler = new StreamHandler('php://stderr', Logger::WARNING, false);
+$consoleStdErrorHandler->setFormatter($formatter);
+
+$consoleStdOutHandler = new StreamHandler('php://stdout', Logger::INFO, false);
+$consoleStdOutHandler->setFormatter($formatter);
+
+$handlers = [
+    $consoleStdErrorHandler,
+    $consoleStdOutHandler,
+];
+
+$disk = new HardDisk(getcwd().'/.zephir');
+
+$parser = new Parser();
+$logger = new Logger('zephir', $handlers);
+$compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
+$backend = (new BackendFactory($config, $rootPath.'/kernels', $rootPath.'/templates'))
+    ->createBackend();
+
+$compiler = new Compiler($config, $backend, new Manager($parser), $disk, $compilerFactory);
+$compiler->setPrototypesPath($rootPath.'/prototypes');
+$compiler->setOptimizersPath($rootPath.'/Library/Optimizers');
+$compiler->setTemplatesPath($rootPath.'/templates');
+$compiler->setLogger($logger);
+
+$application = new Application();
+$application->add(new ApiCommand($compiler, $config));
+$application->add(new BuildCommand());
+$application->add(new CleanCommand($disk));
+$application->add(new CompileCommand($compiler));
+$application->add(new FullCleanCommand());
+$application->add(new GenerateCommand($compiler));
+$application->add(new InitCommand($backend, $config, $logger));
+$application->add(new InstallCommand($compiler, $config));
+$application->add(new ListCommand());
+$application->add(new StubsCommand($compiler));
+
 $application->run();

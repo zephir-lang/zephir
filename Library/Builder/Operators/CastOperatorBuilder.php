@@ -9,27 +9,29 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder\Operators;
 
+use Zephir\Builder\FunctionCallBuilder;
+
 /**
- * CastOperatorBuilder.
- *
  * Allows to manually build a 'cast' operator AST node
  */
 class CastOperatorBuilder extends AbstractOperatorBuilder
 {
-    protected $leftOperand;
+    protected string $leftOperand;
 
-    protected $rightOperand;
+    protected FunctionCallBuilder $rightOperand;
 
     /**
-     * @param $left
-     * @param $right
-     * @param null $file
-     * @param int  $line
-     * @param int  $char
+     * @param string              $left
+     * @param FunctionCallBuilder $right
+     * @param string|null         $file
+     * @param int                 $line
+     * @param int                 $char
      */
-    public function __construct($left, $right, $file = null, $line = 0, $char = 0)
+    public function __construct(string $left, FunctionCallBuilder $right, ?string $file = null, int $line = 0, int $char = 0)
     {
         $this->leftOperand = $left;
         $this->rightOperand = $right;
@@ -43,7 +45,7 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
      *
      * @return array
      */
-    public function get()
+    public function get(): array
     {
         return [
             'type' => 'cast',

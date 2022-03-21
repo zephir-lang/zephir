@@ -736,7 +736,7 @@ PHP_METHOD(Stub_Strings, issue1267)
 	ZVAL_STRING(&_2, "");
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
-	ZVAL_LONG(&_3, 513);
+	ZVAL_LONG(&_3, 516);
 	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 42, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
@@ -1079,6 +1079,41 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 
 	if (!ZEPHIR_IS_NULL(&val)) {
 		RETURN_CTOR(&val);
+	}
+	RETURN_MM_NULL();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2299
+ */
+PHP_METHOD(Stub_Strings, issue2299NullableStringCondition)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *roleName_param = NULL;
+	zval roleName;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&roleName);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR_OR_NULL(roleName)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 0, 1, &roleName_param);
+	if (!roleName_param) {
+		ZEPHIR_INIT_VAR(&roleName);
+	} else {
+		zephir_get_strval(&roleName, roleName_param);
+	}
+
+
+	if (Z_TYPE_P(&roleName) != IS_NULL) {
+		RETURN_CTOR(&roleName);
 	}
 	RETURN_MM_NULL();
 }

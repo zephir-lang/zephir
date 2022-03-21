@@ -18,15 +18,13 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 use function Zephir\add_slashes;
 
 /**
- * ConcatOperator.
- *
  * Perform concatenations and optimizations
  */
-class ConcatOperator extends BaseOperator
+class ConcatOperator extends AbstractOperator
 {
     /**
      * Performs concat compilation.

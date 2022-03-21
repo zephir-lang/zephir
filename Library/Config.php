@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use ArrayAccess;
@@ -124,15 +126,13 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Factory method to create a Config instance from the $_SERVER['argv'].
      *
-     * @throws Exception
-     *
      * @return Config
      */
     public static function fromServer(): self
     {
         $config = new self();
 
-        /*
+        /**
          * Change configurations flags
          */
         if ($_SERVER['argc'] >= 2) {
@@ -224,25 +224,26 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Gets a $key from the internal container.
      *
-     * @param mixed $key
+     * @param mixed $offset
      *
      * @return mixed|null
      */
-    public function offsetGet($key)
+    #[\ReturnTypeWillChange]
+    public function offsetGet($offset)
     {
-        if (!\is_array($key)) {
-            return $this->offsetExists($key) ? $this->container[$key] : null;
+        if (!\is_array($offset)) {
+            return $this->offsetExists($offset) ? $this->container[$offset] : null;
         }
 
-        $namespace = key($key);
-        $key = current($key);
+        $namespace = key($offset);
+        $offset = current($offset);
 
         if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
             return null;
         }
 
-        if (isset($this->container[$namespace][$key]) || \array_key_exists($key, $this->container[$namespace])) {
-            return $this->container[$namespace][$key];
+        if (isset($this->container[$namespace][$offset]) || \array_key_exists($offset, $this->container[$namespace])) {
+            return $this->container[$namespace][$offset];
         }
 
         return null;
@@ -254,6 +255,7 @@ class Config implements ArrayAccess, JsonSerializable
      * @param mixed $key
      * @param mixed $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         if (!\is_array($key)) {
@@ -279,6 +281,7 @@ class Config implements ArrayAccess, JsonSerializable
      *
      * @param mixed $key
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         unset($this->container[$key]);

@@ -18,8 +18,6 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Types;
 
 /**
- * ArrayType.
- *
  * Defines methods of the built-in array type
  */
 class ArrayType extends AbstractType

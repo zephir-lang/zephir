@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext as Context;
@@ -17,8 +19,6 @@ use Zephir\Exception\CompilerException as Exception;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectProperty.
- *
  * Adds/Updates an array index
  */
 class ObjectProperty
@@ -285,6 +285,7 @@ class ObjectProperty
                     case 'array':
                     case 'string':
                     case 'variable':
+                    case 'mixed':
                         $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);

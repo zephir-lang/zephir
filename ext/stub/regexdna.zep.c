@@ -24,7 +24,7 @@
 /**
  * RegexDNA
  *
- * @see http://www.haskell.org/haskellwiki/Shootout/Regex_DNA
+ * @see https://www.haskell.org/haskellwiki/Shootout/Regex_DNA
  */
 ZEPHIR_INIT_CLASS(Stub_RegexDNA)
 {

@@ -15,9 +15,9 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
-class BitwiseNotOperator extends BaseOperator
+class BitwiseNotOperator extends AbstractOperator
 {
     /**
      * @param $expression
@@ -55,6 +55,7 @@ class BitwiseNotOperator extends BaseOperator
                         return new CompiledExpression('int', '~'.$variable->getName(), $expression);
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
 
                         return new CompiledExpression('int', '~zephir_get_intval('.$variable->getName().')', $expression);

@@ -31,6 +31,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
 	stub/arithmetic.zep.c
+	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c
@@ -212,6 +213,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/typehinting/testabstract.zep.c
 	stub/typeinstances.zep.c
 	stub/typeoff.zep.c
+	stub/types/maybe.zep.c
 	stub/types/mixedtype.zep.c
 	stub/unknownclass.zep.c
 	stub/unsettest.zep.c

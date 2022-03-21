@@ -39,18 +39,8 @@ final class Application extends BaseApplication
     {
         parent::__construct('Zephir', Zephir::VERSION);
 
-        $this->setupEventDispatcher();
-    }
-
-    protected function setupEventDispatcher(): void
-    {
         $dispatcher = new EventDispatcher();
-        $consoleErrorListener = new ConsoleErrorListener();
-
-        $dispatcher->addListener(
-            ConsoleEvents::ERROR,
-            [$consoleErrorListener, 'onCommandError']
-        );
+        $dispatcher->addListener(ConsoleEvents::ERROR, [new ConsoleErrorListener(), 'onCommandError']);
 
         $this->setDispatcher($dispatcher);
     }

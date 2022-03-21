@@ -330,6 +330,16 @@ final class StringTest extends TestCase
         $this->assertSame('string', $this->test->nullableStringReturnType('string'));
     }
 
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2299
+     */
+    public function testIssue2299NullableStringCondition(): void
+    {
+        $this->assertSame(null, $this->test->issue2299NullableStringCondition());
+        $this->assertSame('not-null', $this->test->issue2299NullableStringCondition('not-null'));
+        $this->assertSame('test', $this->test->issue2299NullableStringCondition('test'));
+    }
+
     public function providerHashEquals(): array
     {
         return [

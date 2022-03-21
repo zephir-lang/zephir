@@ -86,12 +86,15 @@ final class IsPhpVersionTest extends TestCase
         $this->isPhpVersion(-7);
     }
 
-    public function testOptimizerExceptionNull(): void
+    public function testOptimizerExceptionEmpty(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Could not parse PHP version');
 
-        $this->isPhpVersion(null);
+        /**
+         * After PHP8.1 it is impossible to pass null value to preg_match()
+         */
+        $this->isPhpVersion('');
     }
 
     public function testZephirUsingInteger70000(): void

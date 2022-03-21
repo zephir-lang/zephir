@@ -9,30 +9,28 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder\Statements;
 
 use Zephir\Builder\Operators\AbstractOperatorBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 
 /**
- * IfStatementBuilder.
- *
  * Allows to manually build a 'if' statement AST node
  */
 class IfStatementBuilder extends AbstractStatementBuilder
 {
-    private $evalExpr;
+    private AbstractOperatorBuilder $evalExpr;
 
-    private $ifBlock;
+    private StatementsBlockBuilder $ifBlock;
 
-    private $elseBlock;
+    private ?StatementsBlockBuilder $elseBlock;
 
     /**
-     * IfStatementBuilder constructor.
-     *
-     * @param AbstractOperatorBuilder $evalExpr
-     * @param StatementsBlockBuilder  $ifBlock
-     * @param StatementsBlockBuilder  $elseBlock
+     * @param AbstractOperatorBuilder     $evalExpr
+     * @param StatementsBlockBuilder      $ifBlock
+     * @param StatementsBlockBuilder|null $elseBlock
      */
     public function __construct(AbstractOperatorBuilder $evalExpr, StatementsBlockBuilder $ifBlock, StatementsBlockBuilder $elseBlock = null)
     {
@@ -42,9 +40,11 @@ class IfStatementBuilder extends AbstractStatementBuilder
     }
 
     /**
-     * {@inheritdoc}
+     * Returns a builder definition.
+     *
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         $expression = [
             'type' => 'if',

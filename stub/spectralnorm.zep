@@ -4,7 +4,7 @@ namespace Stub;
 /**
  * SpectralNorm
  *
- * @see http://mathworld.wolfram.com/SpectralNorm.html
+ * @see https://mathworld.wolfram.com/SpectralNorm.html
  */
 class SpectralNorm
 {

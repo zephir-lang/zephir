@@ -12,8 +12,6 @@
 namespace Zephir\Operators\Arithmetical;
 
 /**
- * SubOperator.
- *
  * Generates an arithmetical operation according to the operands
  */
 class SubOperator extends ArithmeticalBaseOperator

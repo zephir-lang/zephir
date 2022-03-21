@@ -29,11 +29,9 @@
         "ext-pcre": "*",
         "ext-xml": "*",
         "ext-zlib": "*",
+        "monolog/monolog": "^2.3",
         "symfony/console": "^5.2",
-        "symfony/framework-bundle": "^5.2",
-        "symfony/monolog-bridge": "^5.2",
-        "symfony/monolog-bundle": "^3.7",
-        "symfony/yaml": "^5.2"
+        "symfony/event-dispatcher": "^5.3"
     },
     "require-dev": {
         "ext-gmp": "*",

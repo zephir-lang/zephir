@@ -13,14 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Unary;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Operators\BaseOperator;
+use Zephir\Operators\AbstractOperator;
 
-class MinusOperator extends BaseOperator
+class MinusOperator extends AbstractOperator
 {
     /**
      * Compile expression.
@@ -31,6 +32,7 @@ class MinusOperator extends BaseOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
