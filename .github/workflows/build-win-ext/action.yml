@@ -58,7 +58,7 @@ runs:
         }
         Write-Output "::endgroup::"
 
-    - name: Setup PHP SDK tool kit
+    - name: Setup PHP SDK Tool Kit
       uses: zephir-lang/setup-php-sdk@v1
       with:
         php_version: ${{ inputs.php_version }}
@@ -72,6 +72,16 @@ runs:
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ inputs.arch }}
+
+    # Workaround for Windows-2019 and PHP 7.4 with old msvc version
+    # PHP Warning:  PHP Startup: Can't load module 'C:\tools\php\ext\php_stub.dll'
+    # as it's linked with 14.29, but the core is linked with 14.16 in Unknown on line 0
+    - name: Configure Developer Command Prompt for MSVC compiler
+      if: inputs.php_version == '7.4'
+      uses: ilammy/msvc-dev-cmd@v1.10.0
+      with:
+        arch: ${{ inputs.arch }}
+        toolset: 14.16
 
     - name: Generate C code
       shell: powershell
@@ -88,10 +98,13 @@ runs:
     - name: Configure
       shell: powershell
       working-directory: ext
+      env:
+        CFLAGS: ${{ inputs.cflags }}
+        CXXFLAGS: ${{ inputs.cflags }}
+        LDFLAGS: ${{ inputs.ldflags }}
       run: |
         Write-Output "::group::Configure"
-        .\configure.bat --enable-stub --with-prefix=${{ env.PHP_ROOT }} `
-          CFLAGS="${{ inputs.cflags }}" CXXFLAGS="${{ inputs.cflags }}" LDFLAGS="${{ inputs.ldflags }}"
+        .\configure.bat --enable-stub --with-prefix=${{ env.PHP_ROOT }}
         Write-Output "::endgroup::"
 
     - name: Zephir compile

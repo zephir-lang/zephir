@@ -108,7 +108,7 @@ class Memcached
     const GET_ERROR_RETURN_VALUE = false;
 
     /**
-     * @see http://php.net/manual/en/memcached.construct.php
+     * @see https://php.net/manual/en/memcached.construct.php
      *
      * @param string $persistent_id
      */
@@ -117,7 +117,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getresultcode.php
+     * @see https://php.net/manual/en/memcached.getresultcode.php
      *
      * @return int
      */
@@ -126,7 +126,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getresultmessage.php
+     * @see https://php.net/manual/en/memcached.getresultmessage.php
      *
      * @return string
      */
@@ -135,7 +135,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.get.php
+     * @see https://php.net/manual/en/memcached.get.php
      *
      * @param string   $key
      * @param callable $cache_cb
@@ -148,7 +148,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getbykey.php
+     * @see https://php.net/manual/en/memcached.getbykey.php
      *
      * @param string   $server_key
      * @param string   $key
@@ -162,7 +162,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getmulti.php
+     * @see https://php.net/manual/en/memcached.getmulti.php
      *
      * @param array $keys
      * @param array $cas_tokens
@@ -175,7 +175,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getmultibykey.php
+     * @see https://php.net/manual/en/memcached.getmultibykey.php
      *
      * @param string $server_key
      * @param array  $keys
@@ -189,7 +189,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getdelayed.php
+     * @see https://php.net/manual/en/memcached.getdelayed.php
      *
      * @param array    $keys
      * @param bool     $with_cas
@@ -202,7 +202,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getdelayedbykey.php
+     * @see https://php.net/manual/en/memcached.getdelayedbykey.php
      *
      * @param string   $server_key
      * @param array    $keys
@@ -216,7 +216,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.fetch.php
+     * @see https://php.net/manual/en/memcached.fetch.php
      *
      * @return array
      */
@@ -225,7 +225,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.fetchall.php
+     * @see https://php.net/manual/en/memcached.fetchall.php
      *
      * @return array
      */
@@ -234,7 +234,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.set.php
+     * @see https://php.net/manual/en/memcached.set.php
      *
      * @param string $key
      * @param mixed  $value
@@ -247,7 +247,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.setbykey.php
+     * @see https://php.net/manual/en/memcached.setbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -261,7 +261,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.touch.php
+     * @see https://php.net/manual/en/memcached.touch.php
      *
      * @param string $key
      * @param int    $expiration
@@ -273,7 +273,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.touchbykey.php
+     * @see https://php.net/manual/en/memcached.touchbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -286,7 +286,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.setmulti.php
+     * @see https://php.net/manual/en/memcached.setmulti.php
      *
      * @param array $items
      * @param int   $expiration
@@ -298,7 +298,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.setmultibykey.php
+     * @see https://php.net/manual/en/memcached.setmultibykey.php
      *
      * @param string $server_key
      * @param array  $items
@@ -311,7 +311,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.cas.php
+     * @see https://php.net/manual/en/memcached.cas.php
      *
      * @param float  $cas_token
      * @param string $key
@@ -325,7 +325,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.casbykey.php
+     * @see https://php.net/manual/en/memcached.casbykey.php
      *
      * @param float  $cas_token
      * @param string $server_key
@@ -340,7 +340,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.add.php
+     * @see https://php.net/manual/en/memcached.add.php
      *
      * @param string $key
      * @param mixed  $value
@@ -353,7 +353,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.addbykey.php
+     * @see https://php.net/manual/en/memcached.addbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -367,7 +367,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.append.php
+     * @see https://php.net/manual/en/memcached.append.php
      *
      * @param string $key
      * @param string $value
@@ -379,7 +379,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.appendbykey.php
+     * @see https://php.net/manual/en/memcached.appendbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -392,7 +392,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.prepend.php
+     * @see https://php.net/manual/en/memcached.prepend.php
      *
      * @param string $key
      * @param string $value
@@ -404,7 +404,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.prependbykey.php
+     * @see https://php.net/manual/en/memcached.prependbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -417,7 +417,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.replace.php
+     * @see https://php.net/manual/en/memcached.replace.php
      *
      * @param string $key
      * @param mixed  $value
@@ -430,7 +430,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.replacebykey.php
+     * @see https://php.net/manual/en/memcached.replacebykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -444,7 +444,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.delete.php
+     * @see https://php.net/manual/en/memcached.delete.php
      *
      * @param string $key
      * @param int    $time
@@ -456,7 +456,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.deletemulti.php
+     * @see https://php.net/manual/en/memcached.deletemulti.php
      *
      * @param array $keys
      * @param int   $time
@@ -468,7 +468,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.deletebykey.php
+     * @see https://php.net/manual/en/memcached.deletebykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -481,7 +481,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.deletemultibykey.php
+     * @see https://php.net/manual/en/memcached.deletemultibykey.php
      *
      * @param string $server_key
      * @param array  $keys
@@ -494,7 +494,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.increment.php
+     * @see https://php.net/manual/en/memcached.increment.php
      *
      * @param string $key
      * @param int    $offset
@@ -508,7 +508,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.decrement.php
+     * @see https://php.net/manual/en/memcached.decrement.php
      *
      * @param string $key
      * @param int    $offset
@@ -522,7 +522,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.incrementbykey.php
+     * @see https://php.net/manual/en/memcached.incrementbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -537,7 +537,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.decrementbykey.php
+     * @see https://php.net/manual/en/memcached.decrementbykey.php
      *
      * @param string $server_key
      * @param string $key
@@ -552,7 +552,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.addserver.php
+     * @see https://php.net/manual/en/memcached.addserver.php
      *
      * @param string $host
      * @param int    $port
@@ -565,7 +565,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.addservers.php
+     * @see https://php.net/manual/en/memcached.addservers.php
      *
      * @param array $servers
      *
@@ -576,7 +576,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getserverlist.php
+     * @see https://php.net/manual/en/memcached.getserverlist.php
      *
      * @return array
      */
@@ -585,7 +585,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getserverbykey.php
+     * @see https://php.net/manual/en/memcached.getserverbykey.php
      *
      * @param string $server_key
      *
@@ -596,7 +596,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.resetserverlist.php
+     * @see https://php.net/manual/en/memcached.resetserverlist.php
      *
      * @return bool
      */
@@ -605,7 +605,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.quit.php
+     * @see https://php.net/manual/en/memcached.quit.php
      *
      * @return bool
      */
@@ -614,7 +614,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getstats.php
+     * @see https://php.net/manual/en/memcached.getstats.php
      *
      * @return array
      */
@@ -623,7 +623,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getversion.php
+     * @see https://php.net/manual/en/memcached.getversion.php
      *
      * @return array
      */
@@ -632,7 +632,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getallkeys.php
+     * @see https://php.net/manual/en/memcached.getallkeys.php
      *
      * @return array
      */
@@ -641,7 +641,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.flush.php
+     * @see https://php.net/manual/en/memcached.flush.php
      *
      * @param int $delay
      *
@@ -652,7 +652,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.getoption.php
+     * @see https://php.net/manual/en/memcached.getoption.php
      *
      * @param int $option
      *
@@ -663,7 +663,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.setoption.php
+     * @see https://php.net/manual/en/memcached.setoption.php
      *
      * @param int   $option
      * @param mixed $value
@@ -675,7 +675,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.setoptions.php
+     * @see https://php.net/manual/en/memcached.setoptions.php
      *
      * @param array $options
      *
@@ -686,7 +686,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.ispersistent.php
+     * @see https://php.net/manual/en/memcached.ispersistent.php
      *
      * @return bool
      */
@@ -695,7 +695,7 @@ class Memcached
     }
 
     /**
-     * @see http://php.net/manual/en/memcached.ispristine.php
+     * @see https://php.net/manual/en/memcached.ispristine.php
      *
      * @return bool
      */

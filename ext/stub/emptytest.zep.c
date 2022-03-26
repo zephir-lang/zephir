@@ -22,7 +22,7 @@
  * Control Flow
  */
 /**
- * @link http://ru2.php.net/empty
+ * @link https://ru2.php.net/empty
  */
 ZEPHIR_INIT_CLASS(Stub_EmptyTest)
 {

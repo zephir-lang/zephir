@@ -166,7 +166,7 @@ class Strings
 	{
 		var x;
 		let value = str_replace(["\\", "\"", "'"], "", value);
-		let value = filter_var(value, FILTER_SANITIZE_STRING);
+		let value = filter_var(value, FILTER_UNSAFE_RAW);
 		let x = trim(stripslashes(strip_tags(value)));
 		return trim(stripcslashes(strip_tags(value)));
 	}

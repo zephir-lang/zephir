@@ -55,6 +55,7 @@ class BitwiseNotOperator extends AbstractOperator
                         return new CompiledExpression('int', '~'.$variable->getName(), $expression);
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
 
                         return new CompiledExpression('int', '~zephir_get_intval('.$variable->getName().')', $expression);

@@ -14,8 +14,6 @@
   <php>
     <ini name="memory_limit" value="4G"/>
 
-    <const name="TESTS_PATH" value="./tests"/>
-    <const name="DATA_PATH" value="./tests/Data"/>
     <const name="FIXTURES_PATH" value="./tests/fixtures"/>
     <const name="ZEPHIRPATH" value="./"/>
   </php>

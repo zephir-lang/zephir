@@ -13,8 +13,8 @@ namespace Zephir\Parser;
 
 class Manager
 {
-    const MINIMUM_PARSER_VERSION = '1.3.0';
-    const PARSER_HOME_PAGE = 'https://github.com/phalcon/php-zephir-parser';
+    const MINIMUM_PARSER_VERSION = '1.5.0';
+    const PARSER_HOME_PAGE = 'https://github.com/zephir-lang/php-zephir-parser';
 
     /**
      * Zephir Parser.

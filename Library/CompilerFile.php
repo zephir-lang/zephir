@@ -337,11 +337,11 @@ final class CompilerFile extends AbstractCompilerFile implements FileInterface
         }
 
         if (isset($topStatement['abstract'])) {
-            $classDefinition->setIsAbstract((bool)$topStatement['abstract']);
+            $classDefinition->setIsAbstract((bool) $topStatement['abstract']);
         }
 
         if (isset($topStatement['final'])) {
-            $classDefinition->setIsFinal((bool)$topStatement['final']);
+            $classDefinition->setIsFinal((bool) $topStatement['final']);
         }
 
         if (is_array($docblock)) {

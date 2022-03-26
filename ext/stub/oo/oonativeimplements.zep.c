@@ -14,8 +14,8 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_iterators.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_OoNativeImplements)
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_OuterIterator);
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_RecursiveIterator);
 	zend_class_implements(stub_oo_oonativeimplements_ce, 1, spl_ce_SeekableIterator);
+	zend_class_implements(stub_oo_oonativeimplements_ce, 1, zend_ce_serializable);
 	return SUCCESS;
 }
 
@@ -107,19 +108,20 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, hasChildren)
 
 PHP_METHOD(Stub_Oo_OoNativeImplements, seek)
 {
-	zval *position, position_sub;
+	zval *position_param = NULL;
+	zend_long position;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&position_sub);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(position)
+		Z_PARAM_LONG(position)
 	ZEND_PARSE_PARAMETERS_END();
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(1, 0, &position);
+	zephir_fetch_params_without_memory_grow(1, 0, &position_param);
+	position = zephir_get_intval(position_param);
 
 
 }
@@ -237,6 +239,39 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, unserialize)
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 1, 0, &serialized_param);
 	zephir_get_strval(&serialized, serialized_param);
+
+
+}
+
+PHP_METHOD(Stub_Oo_OoNativeImplements, __serialize)
+{
+	zval *this_ptr = getThis();
+
+
+
+	array_init(return_value);
+	return;
+}
+
+PHP_METHOD(Stub_Oo_OoNativeImplements, __unserialize)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *data_param = NULL;
+	zval data;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&data);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ARRAY(data)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &data_param);
+	zephir_get_arrval(&data, data_param);
 
 
 }

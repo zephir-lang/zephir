@@ -24,6 +24,7 @@ final class Types
     const T_NUMBER = 'number';
     const T_NULL = 'null';
     const T_BOOL = 'bool';
+    const T_FALSE = 'false';
     const T_STRING = 'string';
     const T_ISTRING = 'istring';
     const T_VARIABLE = 'variable';

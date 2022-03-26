@@ -9,20 +9,20 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Builder;
 
 /**
- * StatementsBlockBuilder.
- *
  * Allows to manually build a statements block AST node
  */
 class StatementsBlockBuilder
 {
-    protected $statements;
+    protected array $statements;
 
-    protected $raw;
+    protected bool $raw;
 
-    public function __construct(array $statements, $raw = false)
+    public function __construct(array $statements, bool $raw = false)
     {
         $this->statements = $statements;
         $this->raw = $raw;
@@ -33,18 +33,17 @@ class StatementsBlockBuilder
      *
      * @return array
      */
-    public function get()
+    public function get(): array
     {
-        if (!$this->raw) {
-            $statements = [];
-
-            foreach ($this->statements as $statement) {
-                $statements[] = $statement->get();
-            }
-
-            return $statements;
+        if ($this->raw) {
+            return $this->statements;
         }
 
-        return $this->statements;
+        $statements = [];
+        foreach ($this->statements as $statement) {
+            $statements[] = $statement->get();
+        }
+
+        return $statements;
     }
 }

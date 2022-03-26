@@ -1073,6 +1073,16 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Shortcut is type mixed?
+     *
+     * @return bool
+     */
+    public function isMixed(): bool
+    {
+        return 'mixed' === $this->type;
+    }
+
+    /**
      * Shortcut is type bool?
      *
      * @return bool
@@ -1140,6 +1150,16 @@ class Variable implements TypeAwareInterface
     public function isNotVariableAndString()
     {
         return !$this->isVariable() && !$this->isString();
+    }
+
+    /**
+     * Shortcut is type variable or mixed or string?
+     *
+     * @return bool
+     */
+    public function isNotVariableAndMixedAndString()
+    {
+        return !$this->isVariable() && !$this->isMixed() && !$this->isString();
     }
 
     /**

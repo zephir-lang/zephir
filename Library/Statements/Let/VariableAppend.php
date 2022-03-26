@@ -70,6 +70,7 @@ class VariableAppend
         switch ($type) {
             case 'array':
             case 'variable':
+            case 'mixed':
                 switch ($resolvedExpr->getType()) {
                     case 'null':
                         $compilationContext->backend->addArrayEntry($symbolVariable, null, 'null', $compilationContext, $statement);
@@ -112,6 +113,7 @@ class VariableAppend
                         break;
 
                     case 'variable':
+                    case 'mixed':
                         $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
                         switch ($exprVariable->getType()) {
                             case 'int':
@@ -138,6 +140,7 @@ class VariableAppend
                                 break;
 
                             case 'variable':
+                            case 'mixed':
                             case 'string':
                             case 'array':
                                 $compilationContext->backend->addArrayEntry($symbolVariable, null, $exprVariable, $compilationContext, $statement);

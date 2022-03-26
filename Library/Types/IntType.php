@@ -14,8 +14,6 @@ namespace Zephir\Types;
 use Zephir\Types;
 
 /**
- * IntType.
- *
  * Defines methods of the built-in int type
  */
 class IntType extends AbstractType

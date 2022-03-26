@@ -23,7 +23,7 @@
 /**
  * SpectralNorm
  *
- * @see http://mathworld.wolfram.com/SpectralNorm.html
+ * @see https://mathworld.wolfram.com/SpectralNorm.html
  */
 ZEPHIR_INIT_CLASS(Stub_SpectralNorm)
 {

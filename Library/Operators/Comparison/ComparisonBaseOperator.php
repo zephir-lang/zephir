@@ -228,6 +228,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', '0 '.$this->operator.' '.$variableRight->getName(), $expression);
 
                             case 'variable':
+                            case 'mixed':
                             case 'string':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $condition = $compilationContext->backend->getTypeofCondition($variableRight, $this->operator, 'null', $compilationContext);
@@ -281,6 +282,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', $left->getCode().' '.$this->operator.' '.$variableRight->getName(), $expression);
 
                             case 'variable':
+                            case 'mixed':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableCode = $compilationContext->backend->getVariableCode($variableRight);
 
@@ -330,6 +332,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', $left->getBooleanCode().' '.$this->operator.' '.$variableRight->getName(), $expression);
 
                             case 'variable':
+                            case 'mixed':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $boolOperator = '1' == $left->getBooleanCode() ? $this->zvalBoolTrueOperator : $this->zvalBoolFalseOperator;
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
@@ -370,6 +373,7 @@ class ComparisonBaseOperator extends AbstractOperator
                         switch ($variableRight->getType()) {
                             case 'string':
                             case 'variable':
+                            case 'mixed':
                                 $compilationContext->headersManager->add('kernel/operators');
                                 $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
@@ -424,6 +428,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', $variable->getName().' '.$this->operator.' '.$variableRight->getName(), $expression);
 
                                     case 'variable':
+                                    case 'mixed':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
                                         $variableCode = $compilationContext->backend->getVariableCode($variable);
@@ -468,6 +473,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', $variable->getName().' '.$this->operator.' '.$variableRight->getName(), $expression);
 
                                     case 'variable':
+                                    case 'mixed':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
                                         $variableCode = $compilationContext->backend->getVariableCode($variable);
@@ -508,6 +514,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', $variable->getName().' '.$this->operator.' '.$variableRight->getName(), $expression);
 
                                     case 'variable':
+                                    case 'mixed':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $boolOperator = '1' == $left->getBooleanCode() ? $this->zvalBoolTrueOperator : $this->zvalBoolFalseOperator;
                                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
@@ -534,6 +541,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 switch ($variableRight->getType()) {
                                     case 'string':
                                     case 'variable':
+                                    case 'mixed':
                                     case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
@@ -566,6 +574,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                 switch ($variableRight->getType()) {
                                     case 'string':
                                     case 'variable':
+                                    case 'mixed':
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 
                                         return new CompiledExpression('bool', $this->zvalOperator.'('.$variableCode.', '.$variableRight.')', $expression);
@@ -581,6 +590,7 @@ class ComparisonBaseOperator extends AbstractOperator
                         break;
 
                     case 'variable':
+                    case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
 
                         switch ($right->getType()) {
@@ -625,6 +635,7 @@ class ComparisonBaseOperator extends AbstractOperator
 
                                     case 'string':
                                     case 'variable':
+                                    case 'mixed':
                                     case 'array':
                                         $variableRight = $compilationContext->backend->getVariableCode($variableRight);
 

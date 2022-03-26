@@ -12,26 +12,36 @@
 namespace Zephir\Builder\Statements;
 
 /**
- * IfStatementBuilder.
- *
  * Allows to manually build a 'let' statement AST node
  */
 class LetStatementBuilder extends AbstractStatementBuilder
 {
+    /**
+     * List of assignments
+     *
+     * @var array
+     */
+    private array $assignments;
+
+    /**
+     * Expression
+     *
+     * @var mixed
+     */
     private $expr;
 
-    private $assignments;
-
-    public function __construct($assignments, $expr)
+    public function __construct(array $assignments, $expr)
     {
         $this->assignments = $assignments;
         $this->expr = $expr;
     }
 
     /**
-     * {@inheritdoc}
+     * Returns a builder definition.
+     *
+     * @return array
      */
-    public function get()
+    public function get(): array
     {
         return [
             'type' => 'let',

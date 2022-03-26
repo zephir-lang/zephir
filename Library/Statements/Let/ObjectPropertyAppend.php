@@ -175,6 +175,7 @@ class ObjectPropertyAppend
                         break;
 
                     case 'variable':
+                    case 'mixed':
                     case 'string':
                     case 'array':
                     case 'resource':

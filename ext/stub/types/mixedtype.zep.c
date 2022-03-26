@@ -245,3 +245,234 @@ PHP_METHOD(Stub_Types_MixedType, paramAndReturnMixed)
 	return;
 }
 
+PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
+{
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval val_sub;
+	zval *val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &val);
+
+
+	zephir_cast_to_string(&_0, val);
+	RETURN_CTOR(&_0);
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
+{
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval val_sub;
+	zval *val = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+	ZVAL_UNDEF(&_0);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &val);
+
+
+	zephir_cast_to_string(&_0, val);
+	ZEPHIR_CPY_WRT(val, &_0);
+	RETVAL_ZVAL(val, 1, 0);
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToIntMixedAndReturnMixed)
+{
+	zval val_sub;
+	zval *val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	zephir_fetch_params_without_memory_grow(1, 0, &val);
+
+
+	RETURN_LONG(zephir_get_intval(val));
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
+{
+	zend_long _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval val_sub;
+	zval *val = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &val);
+
+
+	_0 = zephir_get_intval(val);
+	ZEPHIR_INIT_NVAR(val);
+	ZVAL_LONG(val, _0);
+	RETVAL_ZVAL(val, 1, 0);
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToBoolMixedAndReturnMixed)
+{
+	zval val_sub;
+	zval *val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	zephir_fetch_params_without_memory_grow(1, 0, &val);
+
+
+	RETURN_BOOL(zephir_get_boolval(val));
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
+{
+	double _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval val_sub;
+	zval *val = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &val);
+
+
+	_0 = zephir_get_boolval(val);
+	ZEPHIR_INIT_NVAR(val);
+	ZVAL_BOOL(val, _0);
+	RETVAL_ZVAL(val, 1, 0);
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToFloatMixedAndReturnMixed)
+{
+	zval val_sub;
+	zval *val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	zephir_fetch_params_without_memory_grow(1, 0, &val);
+
+
+	RETURN_DOUBLE(zephir_get_doubleval(val));
+}
+
+PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
+{
+	double _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval val_sub;
+	zval *val = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &val);
+
+
+	_0 = zephir_get_doubleval(val);
+	ZEPHIR_INIT_NVAR(val);
+	ZVAL_DOUBLE(val, _0);
+	RETVAL_ZVAL(val, 1, 0);
+	RETURN_MM();
+}
+
+/**
+ * Only used during generation
+ */
+PHP_METHOD(Stub_Types_MixedType, mixedInCondition)
+{
+	zval val_sub;
+	zval *val;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&val_sub);
+#if PHP_VERSION_ID >= 80000
+	bool is_null_true = 1;
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(val)
+	ZEND_PARSE_PARAMETERS_END();
+#endif
+
+
+	zephir_fetch_params_without_memory_grow(1, 0, &val);
+
+
+	if (UNEXPECTED(zephir_is_true(val))) {
+	}
+	if (ZEPHIR_IS_LONG_IDENTICAL(val, 1)) {
+	}
+	if (ZEPHIR_IS_LONG_IDENTICAL(val, 1)) {
+	}
+	zend_print_zval(val, 0);
+}
+

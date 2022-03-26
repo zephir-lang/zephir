@@ -13,6 +13,7 @@ doc
 vendor
 
 # Compilation artifacts.
+*.dep
 *.gch
 *.lo
 *.la
@@ -37,6 +38,7 @@ phpunit.xml
 # Build artefact
 zephir.phar
 box.phar
+php-cs-fixer.phar
 
 # Ignore codecoverage stuff.
 *.profraw
