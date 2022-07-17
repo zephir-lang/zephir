@@ -71,12 +71,10 @@ class FunctionCache
         $cacheSlot = SlotsCache::getFunctionSlot($functionName);
 
         $number = 0;
-        if (!$compilationContext->insideCycle) {
-            if ($this->gatherer !== null) {
-                $number = $this->gatherer->getNumberOfFunctionCalls($functionName);
-                if ($number <= 1) {
-                    return 'NULL, '.$cacheSlot;
-                }
+        if (!$compilationContext->insideCycle && $this->gatherer !== null) {
+            $number = $this->gatherer->getNumberOfFunctionCalls($functionName);
+            if ($number <= 1) {
+                return 'NULL, '.$cacheSlot;
             }
         }
 
