@@ -12,8 +12,6 @@
 namespace Zephir\Detectors;
 
 /**
- * ForValueUseDetector.
- *
  * Detects whether the traversed variable is modified within the 'for's block
  */
 class ForValueUseDetector extends WriteDetector

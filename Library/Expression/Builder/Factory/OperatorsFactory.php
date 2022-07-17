@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder\Factory;
 
 use Zephir\Expression\Builder\AbstractBuilder;
@@ -24,8 +26,7 @@ use Zephir\Expression\Builder\Operators\UnaryOperator;
  */
 class OperatorsFactory
 {
-    protected $factory;
-    protected $assignFactory;
+    protected BuilderFactory $factory;
 
     /**
      * @param BuilderFactory $factory

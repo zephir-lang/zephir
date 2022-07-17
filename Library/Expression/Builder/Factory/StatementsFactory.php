@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder\Factory;
 
 use Zephir\Expression\Builder\AbstractBuilder;
@@ -22,12 +24,9 @@ use Zephir\Expression\Builder\Statements\LetStatement;
 use Zephir\Expression\Builder\Statements\RawStatement;
 use Zephir\Expression\Builder\Statements\StatementsBlock;
 
-/**
- * Class StatementsFactory.
- */
 class StatementsFactory
 {
-    protected $factory;
+    protected BuilderFactory $factory;
 
     /**
      * @param BuilderFactory $factory
