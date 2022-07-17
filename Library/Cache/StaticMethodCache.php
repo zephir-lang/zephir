@@ -55,18 +55,14 @@ class StaticMethodCache
             $completeName = $method->getClassDefinition()->getCompleteName();
 
             /**
-             * Avoid generate caches for external classes
+             * Avoid generate caches for external classes or for interfaces.
              */
-            if ($method->getClassDefinition()->isExternal()) {
+            if ($method->getClassDefinition()->isExternal() || $method->getClassDefinition()->isInterface()) {
                 return 'NULL, 0';
             }
 
             if (isset($this->cache[$completeName][$method->getName()])) {
                 return '&'.$this->cache[$completeName][$method->getName()]->getName().', '.SlotsCache::getExistingMethodSlot($method);
-            }
-
-            if ($method->getClassDefinition()->isInterface()) {
-                return 'NULL, 0';
             }
         }
 
