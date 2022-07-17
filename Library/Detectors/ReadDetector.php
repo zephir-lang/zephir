@@ -9,15 +9,19 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Detectors;
 
 use Zephir\Variable;
+
+use function is_array;
 
 /**
  * Detects if a variable is used in a given expression context
  * Since zvals are collected between executions to the same section of code
  * We need to ensure that a variable is not contained in the "right-side" expression
- * used to assign the variable, avoiding premature initializations
+ * used to assign the variable, avoiding premature initializations.
  */
 class ReadDetector
 {
@@ -27,48 +31,27 @@ class ReadDetector
             return false;
         }
 
-        /* Remove branch from variable name */
+        /**
+         * Remove branch from variable name.
+         */
         $pos = strpos($variable, Variable::BRANCH_MAGIC);
         if ($pos > -1) {
             $variable = substr($variable, 0, $pos);
         }
 
-        if ('variable' == $expression['type']) {
-            if ($variable == $expression['value']) {
-                return true;
-            }
+        if ('variable' === $expression['type'] && $variable === $expression['value']) {
+            return true;
         }
 
-        if ('fcall' == $expression['type'] || 'mcall' == $expression['type'] || 'scall' == $expression['type']) {
-            if (isset($expression['parameters'])) {
-                foreach ($expression['parameters'] as $parameter) {
-                    if (\is_array($parameter['parameter'])) {
-                        if ('variable' == $parameter['parameter']['type']) {
-                            if ($variable == $parameter['parameter']['value']) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (isset($expression['left'])) {
-            if (\is_array($expression['left'])) {
-                if (true === $this->detect($variable, $expression['left'])) {
+        if (in_array($expression['type'], ['fcall', 'mcall', 'scall']) && isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                if (is_array($parameter['parameter']) && 'variable' === $parameter['parameter']['type'] && $variable == $parameter['parameter']['value']) {
                     return true;
                 }
             }
         }
 
-        if (isset($expression['right'])) {
-            if (\is_array($expression['right'])) {
-                if (true === $this->detect($variable, $expression['right'])) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return (isset($expression['left']) && is_array($expression['left']) && $this->detect($variable, $expression['left'])) ||
+               (isset($expression['right']) && is_array($expression['right']) && $this->detect($variable, $expression['right']));
     }
 }
