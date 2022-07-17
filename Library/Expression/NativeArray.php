@@ -242,7 +242,6 @@ class NativeArray
         }
         foreach ($expression['left'] as $item) {
             if (isset($item['key'])) {
-                $key = null;
                 $exprKey = new Expression($item['key']);
                 $resolvedExprKey = $exprKey->compile($compilationContext);
 
