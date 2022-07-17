@@ -39,9 +39,9 @@ class StaticMethodCache
     /**
      * MethodCache.
      *
-     * @param CompilationContext            $compilationContext
+     * @param CompilationContext                $compilationContext
      * @param ClassMethod|ReflectionMethod|null $method
-     * @param bool                          $allowNtsCache
+     * @param bool                              $allowNtsCache
      *
      * @return string
      */

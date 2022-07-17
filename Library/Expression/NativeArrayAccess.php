@@ -123,10 +123,12 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array $expression
-     * @param Variable $variableVariable
+     * @param array              $expression
+     * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
+     *
      * @return CompiledExpression
+     *
      * @throws ReflectionException
      * @throws Exception
      */

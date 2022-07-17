@@ -56,10 +56,11 @@ class MethodCache
      * Retrieves/Creates a function cache for a method call.
      *
      * @param CompilationContext $compilationContext
-     * @param string $methodName
-     * @param Variable $caller
+     * @param string             $methodName
+     * @param Variable           $caller
      *
      * @return string
+     *
      * @throws ReflectionException
      */
     public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
