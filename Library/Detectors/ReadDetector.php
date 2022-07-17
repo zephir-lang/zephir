@@ -14,8 +14,6 @@ namespace Zephir\Detectors;
 use Zephir\Variable;
 
 /**
- * ReadDetector.
- *
  * Detects if a variable is used in a given expression context
  * Since zvals are collected between executions to the same section of code
  * We need to ensure that a variable is not contained in the "right-side" expression
@@ -23,7 +21,7 @@ use Zephir\Variable;
  */
 class ReadDetector
 {
-    public function detect($variable, array $expression)
+    public function detect($variable, array $expression): bool
     {
         if (!isset($expression['type'])) {
             return false;

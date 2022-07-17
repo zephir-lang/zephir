@@ -9,25 +9,26 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Cache;
 
 use Zephir\ClassMethod;
 
 /**
- * SlotsCache.
- *
  * In order to reduce memory allocation when calling functions and method_exists
  * Zephir provides a global cache that store pointers to resolved functions
  * that aren't dynamical reducing the time to lookup functions and methods
  */
 class SlotsCache
 {
-    const MAX_SLOTS_NUMBER = 512;
-    private static $slot = 1;
+    public const MAX_SLOTS_NUMBER = 512;
 
-    private static $cacheMethodSlots = [];
+    private static int $slot = 1;
 
-    private static $cacheFunctionSlots = [];
+    private static array $cacheMethodSlots = [];
+
+    private static array $cacheFunctionSlots = [];
 
     /**
      * Returns or creates a cache slot for a function.
@@ -36,7 +37,7 @@ class SlotsCache
      *
      * @return int
      */
-    public static function getFunctionSlot($functionName)
+    public static function getFunctionSlot(string $functionName): int
     {
         if (isset(self::$cacheFunctionSlots[$functionName])) {
             return self::$cacheFunctionSlots[$functionName];
@@ -59,13 +60,9 @@ class SlotsCache
      *
      * @return int
      */
-    public static function getExistingFunctionSlot($functionName)
+    public static function getExistingFunctionSlot(string $functionName): int
     {
-        if (isset(self::$cacheFunctionSlots[$functionName])) {
-            return self::$cacheFunctionSlots[$functionName];
-        }
-
-        return 0;
+        return self::$cacheFunctionSlots[$functionName] ?? 0;
     }
 
     /**
@@ -75,7 +72,7 @@ class SlotsCache
      *
      * @return int
      */
-    public static function getMethodSlot(ClassMethod $method)
+    public static function getMethodSlot(ClassMethod $method): int
     {
         $className = $method->getClassDefinition()->getCompleteName();
         $methodName = $method->getName();
@@ -101,15 +98,11 @@ class SlotsCache
      *
      * @return int
      */
-    public static function getExistingMethodSlot(ClassMethod $method)
+    public static function getExistingMethodSlot(ClassMethod $method): int
     {
         $className = $method->getClassDefinition()->getCompleteName();
         $methodName = $method->getName();
 
-        if (isset(self::$cacheMethodSlots[$className][$methodName])) {
-            return self::$cacheMethodSlots[$className][$methodName];
-        }
-
-        return 0;
+        return self::$cacheMethodSlots[$className][$methodName] ?? 0;
     }
 }

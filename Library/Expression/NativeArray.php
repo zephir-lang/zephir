@@ -9,38 +9,43 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 
+use function count;
+use function function_exists;
+
 /**
- * Zephir\Expression\NativeArray.
- *
  * Resolves expressions that create arrays
  */
 class NativeArray
 {
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
-    protected $noisy = true;
+    protected bool $noisy = true;
 
-    protected $expectingVariable;
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -51,7 +56,7 @@ class NativeArray
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -61,7 +66,7 @@ class NativeArray
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -99,11 +104,11 @@ class NativeArray
                 return $tempVar;
 
             case 'bool':
-                if ('true' == $exprCompiled->getCode()) {
+                if ('true' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
                 }
 
-                if ('false' == $exprCompiled->getCode()) {
+                if ('false' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
                 }
 
@@ -168,14 +173,16 @@ class NativeArray
     /**
      * Compiles an array initialization.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -195,7 +202,8 @@ class NativeArray
             if ($this->expectingVariable) {
                 $symbolVariable->initVariant($compilationContext);
             }
-            /*+
+
+            /**
              * Mark the variable as an array
              */
             $symbolVariable->setDynamicTypes('array');
@@ -204,18 +212,17 @@ class NativeArray
         }
 
         $codePrinter = $compilationContext->codePrinter;
-
         $compilationContext->headersManager->add('kernel/array');
 
         /**
          * This calculates a prime number bigger than the current array size to possibly
          * reduce hash collisions when adding new members to the array.
          */
-        $arrayLength = \count($expression['left']);
-        if ($arrayLength >= 33 && \function_exists('gmp_nextprime')) {
+        $arrayLength = count($expression['left']);
+        if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
             $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
         }
-        $oldSymbolVariable = $symbolVariable;
+
         if ($this->expectingVariable && $symbolVariable->getVariantInits() >= 1) {
             $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
             $symbolVariable->initVariant($compilationContext);
@@ -225,7 +232,8 @@ class NativeArray
             if ($this->expectingVariable) {
                 $symbolVariable->initVariant($compilationContext);
             }
-            /*+
+
+            /**
              * Mark the variable as an array
              */
             $symbolVariable->setDynamicTypes('array');
@@ -246,6 +254,7 @@ class NativeArray
                             case 'uint':
                             case 'long':
                             case 'ulong':
+                            case 'string':
                             case 'double':
                                 $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
@@ -257,10 +266,6 @@ class NativeArray
                                 } else {
                                     $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY | PH_SEPARATE');
                                 }
-                                break;
-
-                            case 'string':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
                                 break;
 
                             case 'null':
@@ -402,16 +407,8 @@ class NativeArray
                                 $resolvedExpr = $expr->compile($compilationContext);
                                 switch ($resolvedExpr->getType()) {
                                     case 'null':
-                                    case 'bool':
-                                        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
-
-                                        if ($valueVariable->isTemporal()) {
-                                            $valueVariable->setIdle(true);
-                                        }
-                                        break;
-
                                     case 'variable':
+                                    case 'bool':
                                         $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                         $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
 

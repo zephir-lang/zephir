@@ -9,18 +9,19 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Cache;
 
 use Zephir\CompilationContext;
+use Zephir\Variable;
 
 /**
- * ClassEntryCache.
- *
  * Classes located in the PHP userland are cached to avoid further relocates
  */
 class ClassEntryCache
 {
-    protected $cache = [];
+    protected array $cache = [];
 
     /**
      * Retrieves/Creates a class entry cache.
@@ -29,11 +30,11 @@ class ClassEntryCache
      * @param bool               $dynamic
      * @param CompilationContext $compilationContext
      *
-     * @return \Zephir\Variable
+     * @return Variable
      */
-    public function get($className, $dynamic, CompilationContext $compilationContext)
+    public function get(string $className, bool $dynamic, CompilationContext $compilationContext): Variable
     {
-        /*
+        /**
          * Creates a guard variable if the class name is not dynamic
          */
         if (!$dynamic) {

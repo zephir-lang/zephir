@@ -15,14 +15,11 @@ use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
 
-/**
- * Zephir\Backends\ZendEngine3\FcallManager.
- */
 class FcallManager implements FcallManagerInterface
 {
-    protected $requiredMacros = [];
+    protected array $requiredMacros = [];
 
-    public function macroIsRequired($macro)
+    public function macroIsRequired($macro): bool
     {
         return isset($this->requiredMacros[$macro]);
     }

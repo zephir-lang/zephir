@@ -17,23 +17,31 @@ use Zephir\Exception\CompilerException;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Variable;
 
+use function constant;
+use function defined;
+use function gettype;
+use function in_array;
 use function Zephir\add_slashes;
 
 /**
- * Zephir\Expression\Constants.
- *
  * Resolves PHP or Zephir constants into C-Code
  */
 class Constants
 {
-    /** @var bool */
-    protected $expecting = true;
+    /**
+     * @var bool
+     */
+    protected bool $expecting = true;
 
-    /** @var bool */
-    protected $readOnly = false;
+    /**
+     * @var bool
+     */
+    protected bool $readOnly = false;
 
-    /** @var Variable */
-    protected $expectingVariable;
+    /**
+     * @var Variable|null
+     */
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Reserved ENV Constants.
@@ -42,7 +50,7 @@ class Constants
      *
      * @var array
      */
-    protected $envConstants = [
+    protected array $envConstants = [
         'PHP_VERSION',
         'PHP_MAJOR_VERSION',
         'PHP_MINOR_VERSION',
@@ -70,7 +78,7 @@ class Constants
      *
      * @var array
      */
-    protected $magicConstants = [
+    protected array $magicConstants = [
         '__LINE__',
         '__FILE__',
         '__DIR__',
@@ -81,7 +89,7 @@ class Constants
         '__NAMESPACE__',
     ];
 
-    protected $resources = [
+    protected array $resources = [
         'STDIN',
         'STDOUT',
         'STDERR',
@@ -91,10 +99,10 @@ class Constants
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -105,7 +113,7 @@ class Constants
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -128,7 +136,7 @@ class Constants
         $constantName = $expression['value'];
 
         $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
-        if (!\defined($expression['value']) && !\in_array($constantName, $mergedConstants)) {
+        if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning(
                     "Constant '".$constantName."' does not exist at compile time",
@@ -138,22 +146,18 @@ class Constants
                 $isZephirConstant = true;
             }
         } else {
-            if (false !== strpos($constantName, 'VERSION')) {
-                $isPhpConstant = false;
-            } else {
-                $isPhpConstant = true;
-            }
+            $isPhpConstant = false === strpos($constantName, 'VERSION');
         }
 
-        if ($isZephirConstant && !\in_array($constantName, $this->resources)) {
+        if ($isZephirConstant && !in_array($constantName, $this->resources)) {
             $constant = $compilationContext->compiler->getConstant($constantName);
 
             return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
         }
 
-        if ($isPhpConstant && !\in_array($constantName, $mergedConstants)) {
-            $constantName = \constant($constantName);
-            $type = strtolower(\gettype($constantName));
+        if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
+            $constantName = constant($constantName);
+            $type = strtolower(gettype($constantName));
 
             switch ($type) {
                 case 'integer':
@@ -172,7 +176,7 @@ class Constants
             }
         }
 
-        if (\in_array($constantName, $this->magicConstants)) {
+        if (in_array($constantName, $this->magicConstants)) {
             switch ($constantName) {
                 case '__CLASS__':
                     return new CompiledExpression(
