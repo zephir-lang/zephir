@@ -40,7 +40,6 @@ class StringType extends AbstractType
         'parsecsv' => 'str_getcsv',
         'parsejson' => 'json_decode',
         'tojson' => 'json_encode',
-        'toutf8' => 'utf8_encode',
         'repeat' => 'str_repeat',
         'shuffle' => 'str_shuffle',
         'split' => 'str_split',
