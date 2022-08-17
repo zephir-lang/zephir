@@ -469,7 +469,7 @@ class ArgInfoDefinition
             return false;
         }
 
-        if ('null' == $parameter['default']['type']) {
+        if ('null' === $parameter['default']['type']) {
             return true;
         }
 
