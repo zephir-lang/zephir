@@ -221,7 +221,7 @@ class NativeArray
          */
         $arrayLength = count($expression['left']);
         if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
-            $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
+            $arrayLength = (int)gmp_strval(gmp_nextprime($arrayLength - 1));
         }
 
         if ($this->expectingVariable && $symbolVariable->getVariantInits() >= 1) {
