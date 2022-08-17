@@ -215,6 +215,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/typeoff.zep.c
 	stub/types/maybe.zep.c
 	stub/types/mixedtype.zep.c
+	stub/types/obj.zep.c
 	stub/unknownclass.zep.c
 	stub/unsettest.zep.c
 	stub/usetest.zep.c
