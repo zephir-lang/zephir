@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Extension\Types;
 
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Stub\Types\Obj;
 
 final class ObjTypeTest extends TestCase
@@ -23,6 +24,6 @@ final class ObjTypeTest extends TestCase
         $class = new Obj();
 
         $this->assertNull($class->nullableObjectReturnNull());
-        $this->assertSame(new \stdClass(), $class->nullableObjectReturnObj());
+        $this->assertInstanceOf(stdClass::class, $class->nullableObjectReturnObj());
     }
 }
