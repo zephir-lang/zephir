@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed generation of `ARG_INFO` for nullable object (`?object`) [#2374](https://github.com/zephir-lang/zephir/issues/2374)
 
 ## [0.16.0] - 2022-03-20
 ### Added

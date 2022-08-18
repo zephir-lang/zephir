@@ -167,13 +167,9 @@ class ArgInfoDefinition
 
     private function richRenderStart(): void
     {
-        if (array_key_exists('object', $this->functionLike->getReturnTypes())) {
-            $class = 'NULL';
-
-            if (1 === count($this->functionLike->getReturnClassTypes())) {
-                $class = key($this->functionLike->getReturnClassTypes());
-                $class = escape_class($this->compilationContext->getFullName($class));
-            }
+        if (array_key_exists('object', $this->functionLike->getReturnTypes()) && 1 === count($this->functionLike->getReturnClassTypes())) {
+            $class = key($this->functionLike->getReturnClassTypes());
+            $class = escape_class($this->compilationContext->getFullName($class));
 
             $this->codePrinter->output(
                 sprintf(
@@ -230,6 +226,33 @@ class ArgInfoDefinition
                     $this->functionLike->getNumberOfRequiredParameters(),
                     $this->getReturnType(),
                     (int) $this->functionLike->areReturnTypesNullCompatible()
+                )
+            );
+            $this->codePrinter->output('#endif');
+
+            return;
+        }
+
+        if ($this->functionLike->isReturnTypeNullableObject()) {
+            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    'MAY_BE_NULL|MAY_BE_OBJECT',
+                )
+            );
+            $this->codePrinter->output('#else');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    'IS_OBJECT',
+                    1,
                 )
             );
             $this->codePrinter->output('#endif');
@@ -446,7 +469,7 @@ class ArgInfoDefinition
             return false;
         }
 
-        if ('null' == $parameter['default']['type']) {
+        if ('null' === $parameter['default']['type']) {
             return true;
         }
 

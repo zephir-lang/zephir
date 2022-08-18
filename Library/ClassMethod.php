@@ -2341,6 +2341,16 @@ class ClassMethod
     }
 
     /**
+     * Checks if method's return type is nullable object `?object`.
+     *
+     * @return bool
+     */
+    public function isReturnTypeNullableObject(): bool
+    {
+        return count($this->returnTypes) === 2 && isset($this->returnTypes['object']) && isset($this->returnTypes['null']);
+    }
+
+    /**
      * Checks if the method have compatible return types.
      *
      * @return bool
