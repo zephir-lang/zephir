@@ -9,8 +9,12 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Cache;
 
+use ReflectionClass;
+use ReflectionException;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\MethodCallWarmUp;
@@ -18,8 +22,6 @@ use Zephir\Passes\CallGathererPass;
 use Zephir\Variable;
 
 /**
- * MethodCache.
- *
  * Calls in Zephir implement monomorphic and polymorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
  * first-level method lookup cache.
@@ -38,14 +40,12 @@ use Zephir\Variable;
  */
 class MethodCache
 {
-    protected $cache = [];
+    protected array $cache = [];
 
-    protected $gatherer;
+    protected ?CallGathererPass $gatherer = null;
 
     /**
-     * MethodCache.
-     *
-     * @param CallGathererPass $gatherer
+     * @param CallGathererPass|null $gatherer
      */
     public function __construct(CallGathererPass $gatherer = null)
     {
@@ -60,8 +60,10 @@ class MethodCache
      * @param Variable           $caller
      *
      * @return string
+     *
+     * @throws ReflectionException
      */
-    public function get(CompilationContext $compilationContext, $methodName, Variable $caller)
+    public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
     {
         $compiler = $compilationContext->compiler;
 
@@ -185,27 +187,22 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching.
      *
-     * @param ClassDefinition $classDefinition
+     * @param ClassDefinition|ReflectionClass|null $classDefinition
      *
      * @return bool
      */
-    private function isClassCacheable($classDefinition)
+    private function isClassCacheable($classDefinition = null): bool
     {
         if ($classDefinition instanceof ClassDefinition) {
             return true;
         }
-        if ($classDefinition instanceof \ReflectionClass) {
-            if ($classDefinition->isInternal() && $classDefinition->isInstantiable()) {
-                $extension = $classDefinition->getExtension();
-                switch ($extension->getName()) {
-                    case 'Reflection':
-                    case 'Core':
-                    case 'SPL':
-                        return true;
-                }
-            }
+
+        if (!($classDefinition instanceof ReflectionClass)) {
+            return false;
         }
 
-        return false;
+        return $classDefinition->isInternal() &&
+               $classDefinition->isInstantiable() &&
+               in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
     }
 }

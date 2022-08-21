@@ -218,18 +218,6 @@ function is_macos()
 }
 
 /**
- * Checks if currently running under BSD based OS.
- *
- * @see   https://en.wikipedia.org/wiki/List_of_BSD_operating_systems
- *
- * @return bool
- */
-function is_bsd()
-{
-    return false !== stripos(PHP_OS, 'BSD');
-}
-
-/**
  * Checks if current PHP is thread safe.
  *
  * @return bool

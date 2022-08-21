@@ -243,6 +243,7 @@ zend_class_entry *stub_typeinstances_ce;
 zend_class_entry *stub_typeoff_ce;
 zend_class_entry *stub_types_maybe_ce;
 zend_class_entry *stub_types_mixedtype_ce;
+zend_class_entry *stub_types_obj_ce;
 zend_class_entry *stub_unknownclass_ce;
 zend_class_entry *stub_unsettest_ce;
 zend_class_entry *stub_usetest_ce;
@@ -473,6 +474,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Typeoff);
 	ZEPHIR_INIT(Stub_Types_MayBe);
 	ZEPHIR_INIT(Stub_Types_MixedType);
+	ZEPHIR_INIT(Stub_Types_Obj);
 	ZEPHIR_INIT(Stub_UnknownClass);
 	ZEPHIR_INIT(Stub_Unsettest);
 	ZEPHIR_INIT(Stub_UseTest);

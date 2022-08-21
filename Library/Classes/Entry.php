@@ -125,7 +125,6 @@ class Entry
             $className = str_replace(self::NAMESPACE_SEPARATOR, self::NAMESPACE_SEPARATOR.self::NAMESPACE_SEPARATOR, strtolower($className));
 
             return sprintf(
-                //'zend_lookup_class_ex(zend_string_init(ZEND_STRL("%s"), 0), NULL, 0)',
                 'zephir_get_internal_ce(SL("%s"))',
                 $className,
             );

@@ -9,11 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Detectors;
 
 /**
- * WriteDetector.
- *
  * Detects whether a variable is mutated in a given context
  * If a variable is not modified in a local context (method block) we can avoid allocate
  * memory for its body (zvalue)
@@ -22,15 +22,16 @@ namespace Zephir\Detectors;
  */
 class WriteDetector
 {
-    const DETECT_NONE = 0;
+    public const DETECT_NONE = 0;
 
-    const DETECT_PARAM_PASS = 1;
+    public const DETECT_PARAM_PASS = 1;
 
-    const DETECT_ARRAY_USE = 2;
+    public const DETECT_ARRAY_USE = 2;
 
-    const DETECT_VALUE_IN_ASSIGNMENT = 4;
+    public const DETECT_VALUE_IN_ASSIGNMENT = 4;
 
-    const DETECT_ALL = 255;
+    public const DETECT_ALL = 255;
+
     protected $detectionFlags = 0;
 
     protected $mutations = [];
@@ -65,9 +66,9 @@ class WriteDetector
      *
      * @param string $variable
      *
-     * @return ForValueUseDetector
+     * @return WriteDetector
      */
-    public function increaseMutations($variable)
+    public function increaseMutations($variable): self
     {
         if (isset($this->mutations[$variable])) {
             ++$this->mutations[$variable];
@@ -177,7 +178,7 @@ class WriteDetector
      *
      * @param array $statement
      */
-    public function declareVariables(array $statement)
+    public function declareVariables(array $statement): void
     {
         if (isset($statement['data-type'])) {
             if ('variable' != $statement['data-type']) {
@@ -249,6 +250,22 @@ class WriteDetector
                 break;
 
             case 'typeof':
+            case 'minus':
+            case 'list':
+            case 'array-access':
+            case 'static-property-access':
+            case 'property-string-access':
+            case 'property-dynamic-access':
+            case 'property-access':
+            case 'ternary':
+            case 'unlikely':
+            case 'likely':
+            case 'clone':
+            case 'require_once':
+            case 'require':
+            case 'instanceof':
+            case 'empty':
+            case 'isset':
             case 'not':
                 $this->passExpression($expression['left']);
                 break;
@@ -268,38 +285,9 @@ class WriteDetector
                 $this->passNew($expression);
                 break;
 
-            case 'property-access':
-            case 'property-dynamic-access':
-            case 'property-string-access':
-            case 'static-property-access':
-            case 'array-access':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'isset':
-            case 'empty':
-            case 'instanceof':
-            case 'require':
-            case 'require_once':
-            case 'clone':
-            case 'likely':
-            case 'unlikely':
-            /* do special pass later */
-            case 'ternary':
-                $this->passExpression($expression['left']);
-                break;
-
             case 'fetch':
                 $this->increaseMutations($expression['left']['value']);
                 $this->passExpression($expression['right']);
-                break;
-
-            case 'minus':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'list':
-                $this->passExpression($expression['left']);
                 break;
 
             case 'cast':
@@ -391,6 +379,7 @@ class WriteDetector
                     }
                     break;
 
+                case 'throw':
                 case 'return':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -416,12 +405,6 @@ class WriteDetector
                                 $this->passStatementBlock($catch['statements']);
                             }
                         }
-                    }
-                    break;
-
-                case 'throw':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
                     }
                     break;
 

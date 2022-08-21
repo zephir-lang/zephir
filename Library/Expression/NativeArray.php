@@ -9,38 +9,43 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 
+use function count;
+use function function_exists;
+
 /**
- * Zephir\Expression\NativeArray.
- *
  * Resolves expressions that create arrays
  */
 class NativeArray
 {
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
-    protected $noisy = true;
+    protected bool $noisy = true;
 
-    protected $expectingVariable;
+    protected ?Variable $expectingVariable = null;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -51,7 +56,7 @@ class NativeArray
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -61,7 +66,7 @@ class NativeArray
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -99,11 +104,11 @@ class NativeArray
                 return $tempVar;
 
             case 'bool':
-                if ('true' == $exprCompiled->getCode()) {
+                if ('true' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
                 }
 
-                if ('false' == $exprCompiled->getCode()) {
+                if ('false' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_false)');
                 }
 
@@ -172,10 +177,13 @@ class NativeArray
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile(array $expression, CompilationContext $compilationContext)
     {
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -195,7 +203,8 @@ class NativeArray
             if ($this->expectingVariable) {
                 $symbolVariable->initVariant($compilationContext);
             }
-            /*+
+
+            /**
              * Mark the variable as an array
              */
             $symbolVariable->setDynamicTypes('array');
@@ -204,18 +213,17 @@ class NativeArray
         }
 
         $codePrinter = $compilationContext->codePrinter;
-
         $compilationContext->headersManager->add('kernel/array');
 
         /**
          * This calculates a prime number bigger than the current array size to possibly
          * reduce hash collisions when adding new members to the array.
          */
-        $arrayLength = \count($expression['left']);
-        if ($arrayLength >= 33 && \function_exists('gmp_nextprime')) {
-            $arrayLength = gmp_strval(gmp_nextprime($arrayLength - 1));
+        $arrayLength = count($expression['left']);
+        if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
+            $arrayLength = (int) gmp_strval(gmp_nextprime($arrayLength - 1));
         }
-        $oldSymbolVariable = $symbolVariable;
+
         if ($this->expectingVariable && $symbolVariable->getVariantInits() >= 1) {
             $symbolVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
             $symbolVariable->initVariant($compilationContext);
@@ -225,215 +233,15 @@ class NativeArray
             if ($this->expectingVariable) {
                 $symbolVariable->initVariant($compilationContext);
             }
-            /*+
+
+            /**
              * Mark the variable as an array
              */
             $symbolVariable->setDynamicTypes('array');
             $compilationContext->backend->initArray($symbolVariable, $compilationContext, $arrayLength > 0 ? $arrayLength : null);
         }
         foreach ($expression['left'] as $item) {
-            if (isset($item['key'])) {
-                $key = null;
-                $exprKey = new Expression($item['key']);
-                $resolvedExprKey = $exprKey->compile($compilationContext);
-
-                switch ($resolvedExprKey->getType()) {
-                    case 'string':
-                        $expr = new Expression($item['value']);
-                        $resolvedExpr = $expr->compile($compilationContext);
-                        switch ($resolvedExpr->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'double':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                break;
-
-                            case 'bool':
-                                $compilationContext->headersManager->add('kernel/array');
-                                if ('true' == $resolvedExpr->getCode()) {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY | PH_SEPARATE');
-                                } else {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY | PH_SEPARATE');
-                                }
-                                break;
-
-                            case 'string':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                break;
-
-                            case 'null':
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY | PH_SEPARATE');
-                                break;
-
-                            case 'array':
-                            case 'variable':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY | PH_SEPARATE');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid value type: '.$resolvedExpr->getType(), $item['value']);
-                        }
-                        break;
-
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        $expr = new Expression($item['value']);
-                        $resolvedExpr = $expr->compile($compilationContext);
-                        switch ($resolvedExpr->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                            case 'double':
-                            case 'string':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                break;
-
-                            case 'bool':
-                                if ('true' == $resolvedExpr->getCode()) {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY');
-                                } else {
-                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY');
-                                }
-                                break;
-
-                            case 'null':
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY');
-                                break;
-
-                            case 'array':
-                            case 'variable':
-                                $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
-                                if ($valueVariable->isTemporal()) {
-                                    $valueVariable->setIdle(true);
-                                }
-                                break;
-
-                            default:
-                                throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
-                        }
-                        break;
-
-                    case 'variable':
-                        $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExprKey->getCode(), $compilationContext, $item['key']);
-                        switch ($variableVariable->getType()) {
-                            case 'int':
-                            case 'uint':
-                            case 'long':
-                            case 'ulong':
-                                $expr = new Expression($item['value']);
-                                $resolvedExpr = $expr->compile($compilationContext);
-                                switch ($resolvedExpr->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                    case 'bool':
-                                    case 'double':
-                                    case 'null':
-                                    case 'string':
-                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                        break;
-
-                                    case 'variable':
-                                        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
-                                        if ($valueVariable->isTemporal()) {
-                                            $valueVariable->setIdle(true);
-                                        }
-                                        break;
-
-                                    default:
-                                        throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
-                                }
-                                break;
-
-                            case 'string':
-                                $expr = new Expression($item['value']);
-                                $resolvedExpr = $expr->compile($compilationContext);
-                                switch ($resolvedExpr->getType()) {
-                                    case 'int':
-                                    case 'uint':
-                                    case 'long':
-                                    case 'ulong':
-                                        $codePrinter->output('add_assoc_long_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getCode().');');
-                                        break;
-
-                                    case 'double':
-                                        $codePrinter->output('add_assoc_double_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getCode().');');
-                                        break;
-
-                                    case 'bool':
-                                        $codePrinter->output('add_assoc_bool_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getBooleanCode().');');
-                                        break;
-
-                                    case 'string':
-                                        $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                        break;
-
-                                    case 'null':
-                                        $codePrinter->output('add_assoc_null_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].') + 1);');
-                                        break;
-
-                                    case 'variable':
-                                        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
-                                        if ($valueVariable->isTemporal()) {
-                                            $valueVariable->setIdle(true);
-                                        }
-                                        break;
-
-                                    default:
-                                        throw new CompilerException('Invalid value type: '.$resolvedExpr->getType(), $item['value']);
-                                }
-                                break;
-
-                            case 'variable':
-                                $expr = new Expression($item['value']);
-                                $resolvedExpr = $expr->compile($compilationContext);
-                                switch ($resolvedExpr->getType()) {
-                                    case 'null':
-                                    case 'bool':
-                                        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
-
-                                        if ($valueVariable->isTemporal()) {
-                                            $valueVariable->setIdle(true);
-                                        }
-                                        break;
-
-                                    case 'variable':
-                                        $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
-                                        $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
-
-                                        if ($valueVariable->isTemporal()) {
-                                            $valueVariable->setIdle(true);
-                                        }
-                                        break;
-
-                                    default:
-                                        throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
-                                }
-                                break;
-
-                            default:
-                                throw new CompilerException('Cannot use variable type: '.$variableVariable->getType().' as array index', $item['key']);
-                        }
-                        break;
-
-                    default:
-                        throw new CompilerException('Invalid key type: '.$resolvedExprKey->getType(), $item['key']);
-                }
-            } else {
+            if (!isset($item['key'])) {
                 $expr = new Expression($item['value']);
                 $resolvedExpr = $expr->compile($compilationContext);
                 $itemVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
@@ -443,6 +251,197 @@ class NativeArray
                 if ($itemVariable->isTemporal()) {
                     $itemVariable->setIdle(true);
                 }
+
+                continue;
+            }
+
+            $exprKey = new Expression($item['key']);
+            $resolvedExprKey = $exprKey->compile($compilationContext);
+
+            switch ($resolvedExprKey->getType()) {
+                case 'string':
+                    $expr = new Expression($item['value']);
+                    $resolvedExpr = $expr->compile($compilationContext);
+                    switch ($resolvedExpr->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                        case 'string':
+                        case 'double':
+                            $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                            break;
+
+                        case 'bool':
+                            $compilationContext->headersManager->add('kernel/array');
+                            if ('true' == $resolvedExpr->getCode()) {
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                            } else {
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                            }
+                            break;
+
+                        case 'null':
+                            $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY | PH_SEPARATE');
+                            break;
+
+                        case 'array':
+                        case 'variable':
+                            $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+                            $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY | PH_SEPARATE');
+                            if ($valueVariable->isTemporal()) {
+                                $valueVariable->setIdle(true);
+                            }
+                            break;
+
+                        default:
+                            throw new CompilerException('Invalid value type: '.$resolvedExpr->getType(), $item['value']);
+                    }
+                    break;
+
+                case 'int':
+                case 'uint':
+                case 'long':
+                case 'ulong':
+                    $expr = new Expression($item['value']);
+                    $resolvedExpr = $expr->compile($compilationContext);
+                    switch ($resolvedExpr->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                        case 'double':
+                        case 'string':
+                            $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                            break;
+
+                        case 'bool':
+                            if ('true' == $resolvedExpr->getCode()) {
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'true', $compilationContext, 'PH_COPY');
+                            } else {
+                                $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'false', $compilationContext, 'PH_COPY');
+                            }
+                            break;
+
+                        case 'null':
+                            $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, 'null', $compilationContext, 'PH_COPY');
+                            break;
+
+                        case 'array':
+                        case 'variable':
+                            $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+                            $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
+                            if ($valueVariable->isTemporal()) {
+                                $valueVariable->setIdle(true);
+                            }
+                            break;
+
+                        default:
+                            throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
+                    }
+                    break;
+
+                case 'variable':
+                    $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExprKey->getCode(), $compilationContext, $item['key']);
+                    switch ($variableVariable->getType()) {
+                        case 'int':
+                        case 'uint':
+                        case 'long':
+                        case 'ulong':
+                            $expr = new Expression($item['value']);
+                            $resolvedExpr = $expr->compile($compilationContext);
+                            switch ($resolvedExpr->getType()) {
+                                case 'int':
+                                case 'uint':
+                                case 'long':
+                                case 'ulong':
+                                case 'bool':
+                                case 'double':
+                                case 'null':
+                                case 'string':
+                                    $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                                    break;
+
+                                case 'variable':
+                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $valueVariable, $compilationContext, 'PH_COPY');
+                                    if ($valueVariable->isTemporal()) {
+                                        $valueVariable->setIdle(true);
+                                    }
+                                    break;
+
+                                default:
+                                    throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
+                            }
+                            break;
+
+                        case 'string':
+                            $expr = new Expression($item['value']);
+                            $resolvedExpr = $expr->compile($compilationContext);
+                            switch ($resolvedExpr->getType()) {
+                                case 'int':
+                                case 'uint':
+                                case 'long':
+                                case 'ulong':
+                                    $codePrinter->output('add_assoc_long_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getCode().');');
+                                    break;
+
+                                case 'double':
+                                    $codePrinter->output('add_assoc_double_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getCode().');');
+                                    break;
+
+                                case 'bool':
+                                    $codePrinter->output('add_assoc_bool_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].'), '.$resolvedExpr->getBooleanCode().');');
+                                    break;
+
+                                case 'string':
+                                    $compilationContext->backend->addArrayEntry($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                                    break;
+
+                                case 'null':
+                                    $codePrinter->output('add_assoc_null_ex('.$symbolVariable->getName().', Z_STRVAL_P('.$resolvedExprKey->getCode().'), Z_STRLEN_P('.$item['key']['value'].') + 1);');
+                                    break;
+
+                                case 'variable':
+                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+                                    $compilationContext->backend->updateArray($symbolVariable, $resolvedExprKey, $resolvedExpr, $compilationContext);
+                                    if ($valueVariable->isTemporal()) {
+                                        $valueVariable->setIdle(true);
+                                    }
+                                    break;
+
+                                default:
+                                    throw new CompilerException('Invalid value type: '.$resolvedExpr->getType(), $item['value']);
+                            }
+                            break;
+
+                        case 'variable':
+                            $expr = new Expression($item['value']);
+                            $resolvedExpr = $expr->compile($compilationContext);
+                            switch ($resolvedExpr->getType()) {
+                                case 'null':
+                                case 'variable':
+                                case 'bool':
+                                    $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
+                                    $compilationContext->backend->updateArray($symbolVariable, $variableVariable, $valueVariable, $compilationContext);
+
+                                    if ($valueVariable->isTemporal()) {
+                                        $valueVariable->setIdle(true);
+                                    }
+                                    break;
+
+                                default:
+                                    throw new CompilerException('Invalid value type: '.$item['value']['type'], $item['value']);
+                            }
+                            break;
+
+                        default:
+                            throw new CompilerException('Cannot use variable type: '.$variableVariable->getType().' as array index', $item['key']);
+                    }
+                    break;
+
+                default:
+                    throw new CompilerException('Invalid key type: '.$resolvedExprKey->getType(), $item['key']);
             }
         }
 

@@ -23,6 +23,7 @@ use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
 use Zephir\StatementsBlock;
 use Zephir\Variable;
+
 use function is_array;
 
 /**

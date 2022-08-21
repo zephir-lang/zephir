@@ -9,11 +9,10 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
-/**
- * Zephir\Zephir.
- */
 final class Zephir
 {
     public const VERSION = '0.16.0-$Id$';

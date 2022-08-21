@@ -9,15 +9,14 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Cache;
 
-use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
 
 /**
- * FunctionCache.
- *
  * Calls in Zephir implement monomorphic and polymorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
  * first-level method lookup cache.
@@ -36,14 +35,14 @@ use Zephir\Passes\CallGathererPass;
  */
 class FunctionCache
 {
-    protected $cache = [];
+    protected array $cache = [];
 
-    protected $gatherer;
+    protected ?CallGathererPass $gatherer = null;
 
     /**
      * FunctionCache constructor.
      *
-     * @param CallGathererPass $gatherer
+     * @param CallGathererPass|null $gatherer
      */
     public function __construct(CallGathererPass $gatherer = null)
     {
@@ -54,13 +53,12 @@ class FunctionCache
      * Retrieves/Creates a function cache for a function call.
      *
      * @param string             $functionName
-     * @param Call               $call
      * @param CompilationContext $compilationContext
      * @param bool               $exists
      *
      * @return string
      */
-    public function get($functionName, CompilationContext $compilationContext, Call $call, $exists)
+    public function get(string $functionName, CompilationContext $compilationContext, bool $exists): string
     {
         if (isset($this->cache[$functionName])) {
             return $this->cache[$functionName].', '.SlotsCache::getExistingFunctionSlot($functionName);
@@ -73,13 +71,10 @@ class FunctionCache
         $cacheSlot = SlotsCache::getFunctionSlot($functionName);
 
         $number = 0;
-        if (!$compilationContext->insideCycle) {
-            $gatherer = $this->gatherer;
-            if ($gatherer) {
-                $number = $gatherer->getNumberOfFunctionCalls($functionName);
-                if ($number <= 1) {
-                    return 'NULL, '.$cacheSlot;
-                }
+        if (!$compilationContext->insideCycle && $this->gatherer !== null) {
+            $number = $this->gatherer->getNumberOfFunctionCalls($functionName);
+            if ($number <= 1) {
+                return 'NULL, '.$cacheSlot;
             }
         }
 

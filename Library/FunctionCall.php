@@ -15,9 +15,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * Zephir\FunctionCall.
- *
- * Call functions. By default functions are called in the PHP userland if an optimizer
+ * Call functions. By default, functions are called in the PHP userland if an optimizer
  * was not found or there is not a user-handler for it
  */
 class FunctionCall extends Call
@@ -388,7 +386,6 @@ class FunctionCall extends Call
         }
 
         $exists = $this->functionExists($funcName, $compilationContext);
-
         if (!$exists) {
             $compilationContext->logger->warning(
                 sprintf('Function "%s" does not exist at compile time', $funcName),
@@ -396,7 +393,7 @@ class FunctionCall extends Call
             );
         }
 
-        /*
+        /**
          * Static variables can be passed using local variables saving memory if the function is read only
          */
         if ($exists) {
@@ -405,7 +402,7 @@ class FunctionCall extends Call
             $readOnly = false;
         }
 
-        /*
+        /**
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -418,14 +415,14 @@ class FunctionCall extends Call
             $params = [];
         }
 
-        /*
+        /**
          * Some functions receive parameters as references
          * We mark those parameters temporary as references to properly pass them
          */
         $this->markReferences($funcName, $params, $compilationContext, $references, $expression);
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $this->processExpectedObservedReturn($compilationContext);
@@ -443,19 +440,19 @@ class FunctionCall extends Call
                 );
             }
 
-            /*
+            /**
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
             $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
         }
 
-        /*
+        /**
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
 
-        /*
+        /**
          * Call functions must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -464,9 +461,9 @@ class FunctionCall extends Call
          * Check if the function can have an inline cache.
          */
         $functionCache = $compilationContext->cacheManager->getFunctionCache();
-        $cachePointer = $functionCache->get($funcName, $compilationContext, $this, $exists);
+        $cachePointer = $functionCache->get($funcName, $compilationContext, $exists);
 
-        /*
+        /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
@@ -525,7 +522,7 @@ class FunctionCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -543,7 +540,7 @@ class FunctionCall extends Call
 
         $this->addCallStatusOrJump($compilationContext);
 
-        /*
+        /**
          * We can mark temporary variables generated as idle
          */
         foreach ($this->getTemporalVariables() as $tempVariable) {
@@ -585,7 +582,7 @@ class FunctionCall extends Call
                 );
         }
 
-        /*
+        /**
          * Resolve parameters
          */
         if (isset($expression['parameters'])) {
@@ -596,7 +593,7 @@ class FunctionCall extends Call
 
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $this->processExpectedObservedReturn($compilationContext);
@@ -614,23 +611,23 @@ class FunctionCall extends Call
                 );
             }
 
-            /*
+            /**
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
 
-        /*
+        /**
          * Add the last call status to the current symbol table
          */
         $this->addCallStatusFlag($compilationContext);
 
-        /*
+        /**
          * Call functions must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
@@ -680,7 +677,7 @@ class FunctionCall extends Call
             }
         }
 
-        /*
+        /**
          * Temporary variables must be copied if they have more than one reference
          */
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
@@ -689,7 +686,7 @@ class FunctionCall extends Call
 
         $this->addCallStatusOrJump($compilationContext);
 
-        /*
+        /**
          * We can mark temporary variables generated as idle
          */
         foreach ($this->getTemporalVariables() as $tempVariable) {

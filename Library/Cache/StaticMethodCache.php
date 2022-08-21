@@ -11,12 +11,11 @@
 
 namespace Zephir\Cache;
 
+use ReflectionMethod;
 use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 
 /**
- * StaticMethodCache.
- *
  * Calls in Zephir implement monomorphic and polymorphic caches to
  * improve performance. Method/Functions lookups are cached in a standard
  * first-level method lookup cache.
@@ -35,45 +34,41 @@ use Zephir\CompilationContext;
  */
 class StaticMethodCache
 {
-    protected $cache = [];
+    protected array $cache = [];
 
     /**
      * MethodCache.
      *
-     * @param CompilationContext            $compilationContext
-     * @param ClassMethod|\ReflectionMethod $method
-     * @param bool                          $allowNtsCache
+     * @param CompilationContext                $compilationContext
+     * @param ClassMethod|ReflectionMethod|null $method
+     * @param bool                              $allowNtsCache
      *
      * @return string
      */
-    public function get(CompilationContext $compilationContext, $method, $allowNtsCache = true)
+    public function get(CompilationContext $compilationContext, $method, bool $allowNtsCache = true): string
     {
-        if (!\is_object($method)) {
+        if ($method === null) {
             return 'NULL, 0';
         }
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             $completeName = $method->getClassDefinition()->getCompleteName();
 
-            /*
-             * Avoid generate caches for external classes
+            /**
+             * Avoid generate caches for external classes or for interfaces.
              */
-            if ($method->getClassDefinition()->isExternal()) {
+            if ($method->getClassDefinition()->isExternal() || $method->getClassDefinition()->isInterface()) {
                 return 'NULL, 0';
             }
 
             if (isset($this->cache[$completeName][$method->getName()])) {
                 return '&'.$this->cache[$completeName][$method->getName()]->getName().', '.SlotsCache::getExistingMethodSlot($method);
             }
-
-            if ($method->getClassDefinition()->isInterface()) {
-                return 'NULL, 0';
-            }
         }
 
         $mustBeCached = false;
         if (!$compilationContext->insideCycle) {
-            if (!($method instanceof \ReflectionMethod)) {
+            if (!($method instanceof ReflectionMethod)) {
                 $classDefinition = $method->getClassDefinition();
                 if (!$classDefinition->isBundled() && $allowNtsCache) {
                     $mustBeCached = !$compilationContext->backend->isZE3();
@@ -100,7 +95,7 @@ class StaticMethodCache
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 
