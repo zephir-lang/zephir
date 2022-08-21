@@ -5,6 +5,9 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+### Changed
+- Changed usage of `utf8_decode()` function in favour of `mb_convert_encoding()` [#2376](https://github.com/zephir-lang/zephir/issues/2376)
+
 ### Fixed
 - Fixed generation of `ARG_INFO` for nullable object (`?object`) [#2374](https://github.com/zephir-lang/zephir/issues/2374)
 
