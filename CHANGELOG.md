@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+## [0.16.1] - 2022-08-21
 ### Changed
 - Changed usage of `utf8_decode()` function in favour of `mb_convert_encoding()` [#2376](https://github.com/zephir-lang/zephir/issues/2376)
 
@@ -578,6 +580,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 
 [Unreleased]: https://github.com/zephir-lang/zephir/compare/0.16.0...HEAD
+[0.16.1]: https://github.com/zephir-lang/zephir/compare/0.16.0...0.16.1
 [0.16.0]: https://github.com/zephir-lang/zephir/compare/0.15.2...0.16.0
 [0.15.2]: https://github.com/zephir-lang/zephir/compare/0.15.1...0.15.2
 [0.15.1]: https://github.com/zephir-lang/zephir/compare/0.15.0...0.15.1
