@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.16.2] - 2022-08-22
+### Added
+- Added support for `object` return type [#2374](https://github.com/zephir-lang/zephir/issues/2374)
+
 ## [0.16.1] - 2022-08-21
 ### Changed
 - Changed usage of `utf8_decode()` function in favour of `mb_convert_encoding()` [#2376](https://github.com/zephir-lang/zephir/issues/2376)
@@ -579,7 +583,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.16.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.16.2...HEAD
+[0.16.2]: https://github.com/zephir-lang/zephir/compare/0.16.1...0.16.2
 [0.16.1]: https://github.com/zephir-lang/zephir/compare/0.16.0...0.16.1
 [0.16.0]: https://github.com/zephir-lang/zephir/compare/0.15.2...0.16.0
 [0.15.2]: https://github.com/zephir-lang/zephir/compare/0.15.1...0.15.2
