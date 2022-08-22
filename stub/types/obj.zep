@@ -12,4 +12,9 @@ class Obj
     {
         return new \stdClass();
     }
+
+    public function objectReturn() -> object
+    {
+        return new \stdClass();
+    }
 }

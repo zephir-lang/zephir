@@ -712,6 +712,11 @@ class ClassMethod
         return isset($this->returnTypes['string']);
     }
 
+    public function areReturnTypesObjectCompatible(): bool
+    {
+        return isset($this->returnTypes['object']);
+    }
+
     /**
      * Returned type hints by the method.
      *
@@ -2323,6 +2328,7 @@ class ClassMethod
                     $this->areReturnTypesNullCompatible() ||
                     $this->areReturnTypesStringCompatible() ||
                     $this->areReturnTypesFalseCompatible() ||
+                    $this->areReturnTypesObjectCompatible() ||
                     \array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
@@ -2348,6 +2354,16 @@ class ClassMethod
     public function isReturnTypeNullableObject(): bool
     {
         return count($this->returnTypes) === 2 && isset($this->returnTypes['object']) && isset($this->returnTypes['null']);
+    }
+
+    /**
+     * Checks if method's return type is object `object`.
+     *
+     * @return bool
+     */
+    public function isReturnTypeObject(): bool
+    {
+        return count($this->returnTypes) === 1 && isset($this->returnTypes['object']);
     }
 
     /**
