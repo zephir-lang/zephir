@@ -2229,24 +2229,17 @@ class ClassMethod
             }
 
             $statements = $statement['else_statements'];
-            foreach ($statements as $item) {
-                $type = $item['type'] ?? null;
-                if ('return' === $type || 'throw' === $type) {
-                    return true;
-                }
-
-                return $this->hasChildReturnStatementType($item);
-            }
         } else {
             $statements = $statement['statements'];
-            foreach ($statements as $item) {
-                $type = $item['type'] ?? null;
-                if ('return' === $type || 'throw' === $type) {
-                    return true;
-                }
+        }
 
-                return $this->hasChildReturnStatementType($item);
+        foreach ($statements as $item) {
+            $type = $item['type'] ?? null;
+            if ('return' === $type || 'throw' === $type) {
+                return true;
             }
+
+            return $this->hasChildReturnStatementType($item);
         }
 
         return false;
