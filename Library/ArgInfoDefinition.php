@@ -260,6 +260,33 @@ class ArgInfoDefinition
             return;
         }
 
+        if ($this->functionLike->isReturnTypeObject()) {
+            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    'MAY_BE_OBJECT',
+                )
+            );
+            $this->codePrinter->output('#else');
+            $this->codePrinter->output(
+                sprintf(
+                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                    $this->name,
+                    (int) $this->returnByRef,
+                    $this->functionLike->getNumberOfRequiredParameters(),
+                    'IS_OBJECT',
+                    0,
+                )
+            );
+            $this->codePrinter->output('#endif');
+
+            return;
+        }
+
         if (count($this->functionLike->getReturnTypes()) > 1) {
             $types = [];
             $mayBeTypes = $this->functionLike->getMayBeArgTypes();

@@ -41,3 +41,13 @@ PHP_METHOD(Stub_Types_Obj, nullableObjectReturnObj)
 	return;
 }
 
+PHP_METHOD(Stub_Types_Obj, objectReturn)
+{
+	zval *this_ptr = getThis();
+
+
+
+	object_init(return_value);
+	return;
+}
+

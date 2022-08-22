@@ -25,5 +25,6 @@ final class ObjTypeTest extends TestCase
 
         $this->assertNull($class->nullableObjectReturnNull());
         $this->assertInstanceOf(stdClass::class, $class->nullableObjectReturnObj());
+        $this->assertInstanceOf(stdClass::class, $class->objectReturn());
     }
 }
