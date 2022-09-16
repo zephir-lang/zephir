@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+### Fixed
+- Fixed segmentation fault on `mixed` return type and PHP 7.4 [#2387](https://github.com/zephir-lang/zephir/issues/2387)
 
 ## [0.16.2] - 2022-08-22
 ### Added
