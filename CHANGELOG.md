@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.16.3] - 2022-09-17
+### Fixed
+- Fixed segmentation fault on `mixed` return type and PHP 7.4 [#2387](https://github.com/zephir-lang/zephir/issues/2387)
+
 ## [0.16.2] - 2022-08-22
 ### Added
 - Added support for `object` return type [#2374](https://github.com/zephir-lang/zephir/issues/2374)
