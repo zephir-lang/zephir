@@ -29,56 +29,56 @@ PHP_METHOD(Stub_Types_MixedType, mixedInCondition);
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedobject, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedobject, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedobject, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedarray, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedarray, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedarray, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedstring, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedstring, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedstring, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedint, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedint, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedint, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedfloat, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedfloat, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedfloat, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedbool, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixedbool, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixedbool, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixednull, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixednull, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixednull, 0, 0, 0)
 #endif
 ZEND_END_ARG_INFO()
 
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixed74, 0, 0, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_returnmixed74, 0, 0, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_returnmixed74, 0, 0, 0)
 #endif
 	ZEND_ARG_TYPE_INFO(0, diff, _IS_BOOL, 0)
 ZEND_END_ARG_INFO()
@@ -104,7 +104,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_paramandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_paramandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_paramandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -112,7 +112,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttostringmixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttostringmixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttostringmixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -120,7 +120,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttostringinternallymixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttostringinternallymixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttostringinternallymixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -128,7 +128,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttointmixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttointmixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttointmixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -136,7 +136,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttointinternallymixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttointinternallymixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttointinternallymixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -144,7 +144,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttoboolmixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttoboolmixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttoboolmixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -152,7 +152,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttoboolinternallymixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttoboolinternallymixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttoboolinternallymixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -160,7 +160,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttofloatmixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttofloatmixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttofloatmixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
@@ -168,7 +168,7 @@ ZEND_END_ARG_INFO()
 #if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttofloatinternallymixedandreturnmixed, 0, 1, IS_MIXED, 0)
 #else
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_types_mixedtype_casttofloatinternallymixedandreturnmixed, 0, 1, IS_NULL, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_types_mixedtype_casttofloatinternallymixedandreturnmixed, 0, 0, 1)
 #endif
 	ZEND_ARG_INFO(0, val)
 ZEND_END_ARG_INFO()
