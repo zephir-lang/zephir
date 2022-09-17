@@ -99,15 +99,13 @@ $consoleStdErrorHandler->setFormatter($formatter);
 $consoleStdOutHandler = new StreamHandler('php://stdout', Logger::INFO, false);
 $consoleStdOutHandler->setFormatter($formatter);
 
-$handlers = [
-    $consoleStdErrorHandler,
-    $consoleStdOutHandler,
-];
-
 $disk = new HardDisk(getcwd().'/.zephir');
 
 $parser = new Parser();
-$logger = new Logger('zephir', $handlers);
+$logger = new Logger('zephir', [
+    $consoleStdErrorHandler,
+    $consoleStdOutHandler,
+]);
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
 $backend = (new BackendFactory($config, $rootPath.'/kernels', $rootPath.'/templates'))
     ->createBackend();
