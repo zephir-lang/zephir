@@ -220,12 +220,10 @@ class ArgInfoDefinition
             $this->codePrinter->output('#else');
             $this->codePrinter->output(
                 sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
+                    'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
                     $this->name,
                     (int) $this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
-                    $this->getReturnType(),
-                    (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
             $this->codePrinter->output('#endif');
