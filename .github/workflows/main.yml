@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -75,7 +75,7 @@ jobs:
           # Linux
           - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
           # macOS
-          - { name: macos-clang, os: macos-10.15, compiler: clang }
+          - { name: macos-clang, os: macos-12, compiler: clang }
           # Windows
           - { php: '7.4', ts: 'ts',  arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
           - { php: '7.4', ts: 'nts', arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
@@ -85,7 +85,7 @@ jobs:
           - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 5
 
@@ -112,16 +112,16 @@ jobs:
           PHPTS: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#      - name: Get composer cache directory
+#        id: composer-cache
+#        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
 
-      - name: Set Up Composer Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+#      - name: Set Up Composer Cache
+#        uses: actions/cache@v2
+#        with:
+#          path: ${{ steps.composer-cache.outputs.dir }}
+#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Project Dependencies
         run: |

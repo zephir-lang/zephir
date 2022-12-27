@@ -9,27 +9,34 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
+use function count;
+use function in_array;
+
 /**
- * Branch\BranchGraphNode.
- *
- * Allows to visualize assignments for a specific variable in every branch used
+ * Allows visualizing assignments for a specific variable in every branch used.
  */
 class BranchGraphNode
 {
-    /** @var int */
-    protected $increase = 0;
-
-    /** @var Branch[] */
-    protected $branches = [];
-
-    /** @var Branch */
-    protected $branch;
+    /**
+     * @var int
+     */
+    protected int $increase = 0;
 
     /**
-     * BranchGraphNode.
-     *
+     * @var Branch[]
+     */
+    protected array $branches = [];
+
+    /**
+     * @var Branch
+     */
+    protected Branch $branch;
+
+    /**
      * @param Branch $branch
      */
     public function __construct(Branch $branch)
@@ -42,9 +49,9 @@ class BranchGraphNode
      *
      * @param BranchGraphNode $branch
      */
-    public function insert(self $branch)
+    public function insert(self $branch): void
     {
-        if (!\in_array($branch, $this->branches)) {
+        if (!in_array($branch, $this->branches)) {
             $this->branches[] = $branch;
         }
     }
@@ -52,7 +59,7 @@ class BranchGraphNode
     /**
      * Increases the branch graph level.
      */
-    public function increase()
+    public function increase(): void
     {
         ++$this->increase;
     }
@@ -62,11 +69,13 @@ class BranchGraphNode
      *
      * @param int $padding
      */
-    public function show($padding = 0)
+    public function show(int $padding = 0): void
     {
         echo str_repeat('    ', $padding), $this->branch->getUniqueId(), ':' , $this->increase;
-        if (\count($this->branches)) {
+
+        if (count($this->branches) > 0) {
             echo ':', PHP_EOL;
+            /** @var BranchGraphNode $node */
             foreach ($this->branches as $node) {
                 $node->show($padding + 1);
             }
