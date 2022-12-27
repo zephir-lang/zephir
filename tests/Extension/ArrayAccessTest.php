@@ -94,6 +94,7 @@ final class ArrayAccessTest extends TestCase
     {
         if (version_compare(PHP_VERSION, '8.1.0', '>')) {
             $this->markTestSkipped('Deprecated Callable Patterns');
+
             return;
         }
 
