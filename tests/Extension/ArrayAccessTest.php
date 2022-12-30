@@ -92,6 +92,12 @@ final class ArrayAccessTest extends TestCase
      */
     public function testIssue1086StaticallyCalledFunctionWithArrayAsArgMustReturnArray(): void
     {
+        if (version_compare(PHP_VERSION, '8.1.0', '>')) {
+            $this->markTestSkipped('Deprecated Callable Patterns');
+
+            return;
+        }
+
         $class = new \Stub\ArrayAccessTest();
 
         $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithStrictParams();
