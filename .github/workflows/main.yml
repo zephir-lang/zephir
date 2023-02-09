@@ -111,7 +111,7 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
         env:
-          PHPTS: ${{ matrix.ts }}
+          phpts: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #      - name: Get composer cache directory
