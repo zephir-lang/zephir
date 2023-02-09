@@ -92,7 +92,7 @@ jobs:
           fetch-depth: 5
 
       - name: Install PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@0d6002468386cec66a4ecac07fca1417e1fd8ee0
+        uses: shivammathur/setup-php@develop
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
