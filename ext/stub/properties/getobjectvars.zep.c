@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Properties_GetObjectVars, issue1245)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 71, this_ptr);
+	ZEPHIR_RETURN_CALL_FUNCTION("get_object_vars", NULL, 72, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM();
 }

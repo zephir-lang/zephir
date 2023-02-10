@@ -177,7 +177,7 @@ PHP_METHOD(Stub_Mcall, testCall3)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", NULL, 52);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", NULL, 53);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -258,7 +258,7 @@ PHP_METHOD(Stub_Mcall, testCall6)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", NULL, 53, a, b);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", NULL, 54, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -353,7 +353,7 @@ PHP_METHOD(Stub_Mcall, testCall9)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod6", NULL, 53, a, b);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "testmethod6", NULL, 54, a, b);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(&_1, this_ptr, "testmethod5", NULL, 0, a, b);
 	zephir_check_call_status();
@@ -401,7 +401,7 @@ PHP_METHOD(Stub_Mcall, testCall12)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", NULL, 52);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod3", NULL, 53);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -482,7 +482,7 @@ PHP_METHOD(Stub_Mcall, testCall15)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", NULL, 53, a, b);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod6", NULL, 54, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -551,7 +551,7 @@ PHP_METHOD(Stub_Mcall, testCall18)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod7", NULL, 54);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "testmethod7", NULL, 55);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -692,7 +692,7 @@ PHP_METHOD(Stub_Mcall, testCall22)
 				_0 = 1;
 			}
 			i = _1;
-			ZEPHIR_CALL_METHOD(&_3$$3, this_ptr, "testmethod21", &_4, 55, p, p);
+			ZEPHIR_CALL_METHOD(&_3$$3, this_ptr, "testmethod21", &_4, 56, p, p);
 			zephir_check_call_status();
 			j += zephir_get_numberval(&_3$$3);
 		}
@@ -1116,7 +1116,7 @@ PHP_METHOD(Stub_Mcall, testCallablePass)
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_create_closure_ex(&_0, NULL, stub_12__closure_ce, SL("__invoke"));
-	ZEPHIR_RETURN_CALL_METHOD(&a, "setcallable", NULL, 56, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(&a, "setcallable", NULL, 57, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -1149,7 +1149,7 @@ PHP_METHOD(Stub_Mcall, testCallableArrayThisMethodPass)
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "bb");
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_RETURN_CALL_METHOD(&a, "setcallable", NULL, 56, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(&a, "setcallable", NULL, 57, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -1173,7 +1173,7 @@ PHP_METHOD(Stub_Mcall, aa)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_RETURN_CALL_METHOD(&a, "bb", NULL, 57);
+	ZEPHIR_RETURN_CALL_METHOD(&a, "bb", NULL, 58);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -1203,18 +1203,15 @@ PHP_METHOD(Stub_Mcall, issue1136)
 	ZVAL_STRING(&_1, "8.0.0");
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, ">=");
-	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 58, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "version_compare", NULL, 59, &_0, &_1, &_2);
 	zephir_check_call_status();
 	if (zephir_is_true(&_3)) {
 		ZEPHIR_INIT_VAR(&_finfo);
 		object_init_ex(&_finfo, zephir_get_internal_ce(SL("finfo")));
-		if (zephir_has_constructor(&_finfo)) {
-			ZEPHIR_CALL_METHOD(NULL, &_finfo, "__construct", NULL, 0);
-			zephir_check_call_status();
-		}
-
+		ZEPHIR_CALL_METHOD(NULL, &_finfo, "__construct", NULL, 0);
+		zephir_check_call_status();
 	} else {
-		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 59);
+		ZEPHIR_CALL_FUNCTION(&_finfo, "finfo_open", NULL, 60);
 		zephir_check_call_status();
 	}
 	RETURN_CCTOR(&_finfo);

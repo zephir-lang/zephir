@@ -47,7 +47,7 @@ PHP_METHOD(Stub_Functions, filterVar1)
 	ZVAL_STRING(&ret, "0");
 	ZVAL_LONG(&_0, 259);
 	ZVAL_LONG(&_1, 20480);
-	ZEPHIR_CALL_FUNCTION(&_2, "filter_var", NULL, 42, &ret, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "filter_var", NULL, 43, &ret, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_FALSE_IDENTICAL(&_2));
 }
@@ -74,7 +74,7 @@ PHP_METHOD(Stub_Functions, filterVar2)
 	ZVAL_STRING(&ret, "0");
 	ZVAL_LONG(&_0, 259);
 	ZVAL_LONG(&_1, 20480);
-	ZEPHIR_CALL_FUNCTION(&_2, "filter_var", NULL, 42, &ret, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "filter_var", NULL, 43, &ret, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(ZEPHIR_IS_FALSE(&_2));
 }

@@ -15,7 +15,7 @@
 #include "kernel/object.h"
 #include "kernel/operators.h"
 #include "kernel/memory.h"
-#include "kernel/math.h"
+#include "kernel/fcall.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Flow_SwitchFlow)
@@ -268,12 +268,15 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 {
-	zval *a_param = NULL, _0, _1;
-	long a, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *a_param = NULL, _0, _1, _2;
+	long a;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
 #if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -282,20 +285,23 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 1, 0, &a_param);
 	a = zephir_get_intval(a_param);
 
 
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
+	ZEPHIR_CALL_FUNCTION(&_2, "mt_rand", NULL, 31, &_0, &_1);
+	zephir_check_call_status();
 	do {
-		_2 = zephir_mt_rand(zephir_get_intval(&_0), zephir_get_intval(&_1));
-		if (_2 == 100) {
-			RETURN_LONG(1);
+		if (ZEPHIR_IS_LONG(&_2, 100)) {
+			RETURN_MM_LONG(1);
 		}
-		RETURN_LONG(0);
+		RETURN_MM_LONG(0);
 	} while(0);
 
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)

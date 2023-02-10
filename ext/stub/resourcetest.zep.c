@@ -123,7 +123,7 @@ PHP_METHOD(Stub_ResourceTest, testFunctionsForSTDIN)
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
 	ZVAL_LONG(&_0, 1);
-	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 83, &a, &_0);
+	ZEPHIR_CALL_FUNCTION(NULL, "stream_set_blocking", NULL, 84, &a, &_0);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }
