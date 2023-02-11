@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Added
 - Added support of PHP `8.2` [#2255](https://github.com/zephir-lang/zephir/issues/2370)
 
+### Fixed
+- Fixed backtrace on alpine [#2397](https://github.com/zephir-lang/zephir/issues/2397)
+
 ## [0.16.3] - 2022-09-17
 ### Fixed
 - Fixed segmentation fault on `mixed` return type and PHP 7.4 [#2387](https://github.com/zephir-lang/zephir/issues/2387)
