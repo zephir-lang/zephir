@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+## [0.17.0] - 2023-02-11
 ### Added
 - Added support of PHP `8.2` [#2255](https://github.com/zephir-lang/zephir/issues/2370)
 
@@ -589,7 +591,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.16.2...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.17.0...HEAD
+[0.17.0]: https://github.com/zephir-lang/zephir/compare/0.16.3...0.17.0
+[0.16.3]: https://github.com/zephir-lang/zephir/compare/0.16.2...0.16.3
 [0.16.2]: https://github.com/zephir-lang/zephir/compare/0.16.1...0.16.2
 [0.16.1]: https://github.com/zephir-lang/zephir/compare/0.16.0...0.16.1
 [0.16.0]: https://github.com/zephir-lang/zephir/compare/0.15.2...0.16.0
