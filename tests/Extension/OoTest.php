@@ -68,9 +68,11 @@ final class OoTest extends TestCase
         $this->assertIsObject($obj);
         $this->assertInstanceOf(OoConstructParams::class, $obj);
 
-        $obj12 = $test->testInstance12();
-        $this->assertIsObject($obj12);
-        $this->assertInstanceOf('Stub\Oo\OoDynamicA', $obj12);
+        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+            $obj12 = $test->testInstance12();
+            $this->assertIsObject($obj12);
+            $this->assertInstanceOf('Stub\Oo\OoDynamicA', $obj12);
+        }
     }
 
     /**

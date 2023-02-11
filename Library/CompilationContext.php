@@ -19,8 +19,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 
 /**
- * CompilationContext.
- *
  * This class encapsulates important entities required during compilation
  */
 class CompilationContext

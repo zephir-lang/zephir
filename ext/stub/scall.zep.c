@@ -175,7 +175,7 @@ PHP_METHOD(Stub_Scall, testCall3)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 85);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 86);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -257,7 +257,7 @@ PHP_METHOD(Stub_Scall, testCall6)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 86, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 87, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -303,7 +303,7 @@ PHP_METHOD(Stub_Scall, testCall9)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 85);
+	ZEPHIR_RETURN_CALL_SELF("testmethod3", &_0, 86);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -385,7 +385,7 @@ PHP_METHOD(Stub_Scall, testCall12)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 86, a, b);
+	ZEPHIR_RETURN_CALL_SELF("testmethod6", &_0, 87, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }

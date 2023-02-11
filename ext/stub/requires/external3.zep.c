@@ -52,12 +52,12 @@ PHP_METHOD(Stub_Requires_External3, req)
 	zephir_fetch_params(1, 2, 0, &path, &requires);
 
 
-	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 81);
+	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 82);
 	zephir_check_call_status();
 	if (zephir_require_zval(path) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 82);
+	ZEPHIR_CALL_FUNCTION(&_0, "ob_get_contents", NULL, 83);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, requires, "setcontent", NULL, 0, &_0);
 	zephir_check_call_status();

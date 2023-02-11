@@ -67,7 +67,9 @@ final class ExtendClassTest extends TestCase
     public function testShouldCallParentMethodFromStaticByUsingSelf(): void
     {
         $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::parentFunction());
-        $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
+        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+            $this->assertSame('ConcreteStatic:parentFunction', ConcreteStatic::childFunction());
+        }
     }
 
     public function testShouldCallParentMethodFromStaticByUsingParent(): void

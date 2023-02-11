@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir;
 
 /**
- * Class Definition in Runtime
- *
  * Represents a class/interface that only exists in runtime.
  */
 final class ClassDefinitionRuntime extends AbstractClassDefinition

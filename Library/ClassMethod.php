@@ -27,8 +27,6 @@ use function in_array;
 use function is_array;
 
 /**
- * ClassMethod.
- *
  * Represents a class method
  */
 class ClassMethod

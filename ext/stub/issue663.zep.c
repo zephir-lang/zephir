@@ -55,7 +55,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 51, arr);
+	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 52, arr);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -136,7 +136,7 @@ PHP_METHOD(Stub_Issue663, is_array_indexed)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 51, arr);
+	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 52, arr);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(!zephir_is_true(&_1));
 }

@@ -17,8 +17,6 @@ use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 
 /**
- * ClassProperty.
- *
  * Represents a property class
  */
 class ClassProperty
@@ -26,7 +24,7 @@ class ClassProperty
     /**
      * @var ClassDefinition
      */
-    protected $classDefinition;
+    protected ClassDefinition $classDefinition;
 
     protected $visibility;
 
