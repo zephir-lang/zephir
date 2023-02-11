@@ -24,7 +24,7 @@ env:
 jobs:
   analyze:
     name: Static Code Analysis
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -73,7 +73,7 @@ jobs:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-18.04, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-latest, compiler: gcc }
           # macOS
           - { name: macos-clang, os: macos-12, compiler: clang }
           # Windows
