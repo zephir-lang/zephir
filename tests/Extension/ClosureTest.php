@@ -40,4 +40,11 @@ final class ClosureTest extends TestCase
 
         $this->assertTrue($test->issue1036Call());
     }
+
+    public function testIssue2321CallPrivateCallbackViaPrivateMethod(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame('filtered_value', $test->issue2321CallPrivateCallback());
+    }
 }

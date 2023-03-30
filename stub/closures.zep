@@ -97,4 +97,26 @@ class Closures
 	{
 	    return call_user_func(this->_function, this->_argument);
 	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     */
+	public function issue2321CallPrivateCallback() -> string
+	{
+	    return this->issue2321filterQuery("filtered_value");
+	}
+
+	private function issue2321filterQuery(string value) -> string
+    {
+        return preg_replace_callback(
+            "/(?:[^%:!\$&\'\(\)\*\+,;=@\/\?]+|%(?![A-Fa-f0-9]{2}))/u",
+            [this, "issue2321doUrlEncode"],
+            value
+        );
+    }
+
+    private function issue2321doUrlEncode(array matches) -> string
+    {
+        return rawurlencode(matches[0]);
+    }
 }

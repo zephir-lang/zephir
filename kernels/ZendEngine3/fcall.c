@@ -118,14 +118,14 @@ static int zephir_make_fcall_key(zend_string* s, zephir_call_type type, zend_cla
 		if (Z_TYPE_P(function) == IS_STRING) {
 			mth     = Z_STRVAL_P(function);
 			mth_len = Z_STRLEN_P(function);
-		}
-		else if (Z_TYPE_P(function) == IS_ARRAY) {
+		} else if (Z_TYPE_P(function) == IS_ARRAY) {
 			zval *method;
 			HashTable *function_hash = Z_ARRVAL_P(function);
+
 			if (
-					function_hash->nNumOfElements == 2
-				 && ((method = zend_hash_index_find(function_hash, 1)) != NULL)
-				 && Z_TYPE_P(method) == IS_STRING
+				function_hash->nNumOfElements == 2 &&
+				((method = zend_hash_index_find(function_hash, 1)) != NULL) &&
+				Z_TYPE_P(method) == IS_STRING
 			) {
 				mth     = Z_STRVAL_P(method);
 				mth_len = Z_STRLEN_P(method);
@@ -279,47 +279,47 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 			break;
 
 		case zephir_fcall_ce:
-#if PHP_VERSION_ID >= 80000
-			if (ce && Z_TYPE_P(func) == IS_STRING) {
-				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
+			fcic->calling_scope = ce;
+			fcic->called_scope = ce;
 
-				fcic->calling_scope = ce;
-			} else if (calling_scope && Z_TYPE_P(func) == IS_STRING) {
-				fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
-				fcic->calling_scope = calling_scope;
+#if PHP_VERSION_ID >= 80000
+			if (Z_TYPE_P(func) == IS_STRING) {
+				if (ce) {
+					fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
+				} else if (calling_scope) {
+					fcic->function_handler = zend_hash_find_ptr(&calling_scope->function_table, Z_STR_P(func));
+					fcic->calling_scope = calling_scope;
+				}
 			}
 #endif
-			// TODO: Check for PHP 7.4 and PHP 8.0, as it rewrite from above
-			fcic->calling_scope = ce;
-			fcic->called_scope  = ce;
 			break;
 
 		case zephir_fcall_function:
 		case zephir_fcall_method:
 			if (Z_TYPE_P(func) == IS_OBJECT) {
+				if (Z_TYPE_P(this_ptr) == IS_OBJECT) {
+					fcic->calling_scope = Z_OBJCE_P(this_ptr);
+				}
+
 #if PHP_VERSION_ID >= 80000
-				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 0) == SUCCESS) {
+				if (Z_OBJ_HANDLER_P(func, get_closure)(Z_OBJ_P(func), &fcic->calling_scope, &fcic->function_handler, &fcic->object, 1) == SUCCESS) {
 #else
-				if (Z_OBJ_HANDLER_P(func, get_closure) && Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
+				if (Z_OBJ_HANDLER_P(func, get_closure)(func, &fcic->calling_scope, &fcic->function_handler, &fcic->object) == SUCCESS) {
 #endif
 					fcic->called_scope = fcic->calling_scope;
 					break;
 				}
-
-				return;
-			}
+			} else if (Z_TYPE_P(func) == IS_STRING) {
+				if (ce) {
+					fcic->calling_scope = ce;
 
 #if PHP_VERSION_ID >= 80000
-			if (ce && Z_TYPE_P(func) == IS_STRING) {
-				fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
-			}
+					fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
 #endif
-			fcic->calling_scope = this_ptr ? Z_OBJCE_P(this_ptr) : NULL;
-			fcic->called_scope  = fcic->calling_scope;
-			break;
+				}
+			}
 
-		default:
-			return;
+			break;
 	}
 }
 
@@ -449,7 +449,8 @@ int zephir_call_user_function(
 		zval_ptr_dtor(&callable);
 	}
 
-	/* Skip caching IF:
+	/**
+	 * Skip caching IF:
 	 * call failed OR there was an exception (to be safe) OR cache key is not defined OR
 	 * fcall cache was de-initialized OR we have a slot cache
 	 */
@@ -482,10 +483,15 @@ int zephir_call_user_function(
 	return status;
 }
 
-int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint32_t func_length,
-	zephir_fcall_cache_entry **cache_entry, int cache_slot,
-	uint32_t param_count, zval **params)
-{
+int zephir_call_func_aparams(
+	zval *return_value_ptr,
+	const char *func_name,
+	uint32_t func_length,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
 	int status;
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
 
@@ -517,10 +523,14 @@ int zephir_call_func_aparams(zval *return_value_ptr, const char *func_name, uint
 	return status;
 }
 
-int zephir_call_zval_func_aparams(zval *return_value_ptr, zval *func_name,
-	zephir_fcall_cache_entry **cache_entry, int cache_slot,
-	uint32_t param_count, zval **params)
-{
+int zephir_call_zval_func_aparams(
+	zval *return_value_ptr,
+	zval *func_name,
+	zephir_fcall_cache_entry **cache_entry,
+	int cache_slot,
+	uint32_t param_count,
+	zval **params
+) {
 	int status;
 	zval rv, *rvp = return_value_ptr ? return_value_ptr : &rv;
 
