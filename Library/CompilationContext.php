@@ -24,11 +24,6 @@ use Zephir\Passes\StaticTypeInference;
 class CompilationContext
 {
     /**
-     * @var EventsManager|null
-     */
-    public ?EventsManager $eventsManager = null;
-
-    /**
      * Compiler.
      *
      * @var Compiler|null

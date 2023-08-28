@@ -143,11 +143,6 @@ final class ClassDefinition extends AbstractClassDefinition
     protected array $originalNode = [];
 
     /**
-     * @var EventsManager
-     */
-    protected EventsManager $eventsManager;
-
-    /**
      * @var bool
      */
     protected bool $isBundled = false;
@@ -174,8 +169,6 @@ final class ClassDefinition extends AbstractClassDefinition
         $this->namespace = $namespace;
         $this->name = $name;
         $this->shortName = $shortName ?: $name;
-
-        $this->eventsManager = new EventsManager();
     }
 
     /**
@@ -216,16 +209,6 @@ final class ClassDefinition extends AbstractClassDefinition
     public function isExternal(): bool
     {
         return $this->external;
-    }
-
-    /**
-     * Get eventsManager for class definition.
-     *
-     * @return EventsManager
-     */
-    public function getEventsManager(): EventsManager
-    {
-        return $this->eventsManager;
     }
 
     /**
