@@ -36,7 +36,7 @@ jobs:
         env:
           PHP_CS_FIXER_VERSION: 3.2.0
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
           tools: php-cs-fixer:${{ env.PHP_CS_FIXER_VERSION }}, phpcs
 
