@@ -42,3 +42,13 @@ services:
       - "USER=Zephir"
     volumes:
       - .:/srv
+
+  zephir-8.3:
+    container_name: phalcon-zephir-8.3
+    hostname: zephir-83
+    build: docker/8.3
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv
