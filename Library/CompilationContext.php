@@ -85,13 +85,6 @@ class CompilationContext
     public ?ClassMethod $currentMethod = null;
 
     /**
-     * Methods warm-up.
-     *
-     * @var MethodCallWarmUp|null
-     */
-    public ?MethodCallWarmUp $methodWarmUp = null;
-
-    /**
      * Represents the c-headers added to the file.
      *
      * @var HeadersManager|null

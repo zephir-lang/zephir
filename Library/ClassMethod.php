@@ -1594,11 +1594,6 @@ class ClassMethod
         $compilationContext->currentMethod = $this;
 
         /**
-         * Initialize the method warm-up to null
-         */
-        $compilationContext->methodWarmUp = null;
-
-        /**
          * Assign pre-made compilation passes.
          */
         $typeInference = $this->typeInference;
