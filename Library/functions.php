@@ -16,31 +16,6 @@ use const INFO_GENERAL;
 use const PHP_INT_SIZE;
 use const PHP_OS;
 use const PHP_ZTS;
-use const SCANDIR_SORT_ASCENDING;
-
-/**
- * Attempts to remove recursively the directory with all subdirectories and files.
- *
- * A E_WARNING level error will be generated on failure.
- *
- * @param string $path
- */
-function unlink_recursive($path)
-{
-    if (is_dir($path)) {
-        $objects = array_diff(scandir($path, SCANDIR_SORT_ASCENDING), ['.', '..']);
-
-        foreach ($objects as $object) {
-            if (is_dir("{$path}/{$object}")) {
-                unlink_recursive("{$path}/{$object}");
-            } else {
-                unlink("{$path}/{$object}");
-            }
-        }
-
-        rmdir($path);
-    }
-}
 
 /**
  * Camelize a string.
