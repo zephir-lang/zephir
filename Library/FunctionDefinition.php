@@ -14,17 +14,10 @@ declare(strict_types=1);
 namespace Zephir;
 
 /**
- * FunctionDefinition.
- *
  * Represents a function
  */
 class FunctionDefinition extends ClassMethod
 {
-    /**
-     * The namespace of the function.
-     */
-    private string $namespace;
-
     /**
      * Whether the function is declared in a global or namespaced scope.
      *
@@ -35,7 +28,7 @@ class FunctionDefinition extends ClassMethod
     /**
      * FunctionDefinition constructor.
      *
-     * @param string                     $namespace
+     * @param string                     $namespace The namespace of the function.
      * @param string                     $name
      * @param ClassMethodParameters|null $parameters
      * @param StatementsBlock|null       $statements
@@ -43,14 +36,13 @@ class FunctionDefinition extends ClassMethod
      * @param array|null                 $expression
      */
     public function __construct(
-        string $namespace,
+        private string $namespace,
         string $name,
         ClassMethodParameters $parameters = null,
         StatementsBlock $statements = null,
         array $returnType = null,
         array $expression = null
     ) {
-        $this->namespace = $namespace;
         $this->name = $name;
         $this->parameters = $parameters;
         $this->statements = $statements;

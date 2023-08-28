@@ -15,8 +15,6 @@ use Zephir\ClassDefinition;
 use Zephir\Compiler;
 
 /**
- * FileInterface.
- *
  * Provides a common interface for compiler files
  */
 interface FileInterface

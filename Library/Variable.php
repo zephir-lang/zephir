@@ -41,13 +41,6 @@ class Variable implements TypeAwareInterface
     protected $name;
 
     /**
-     * Branch where the variable was declared.
-     *
-     * @var Branch|null
-     */
-    protected $branch;
-
-    /**
      * Branch where the variable was initialized for the first time.
      */
     protected $initBranch = false;
@@ -164,14 +157,7 @@ class Variable implements TypeAwareInterface
         'object' => 1,
     ];
 
-    /**
-     * Variable constructor.
-     *
-     * @param string $type
-     * @param string $name
-     * @param Branch $branch
-     */
-    public function __construct(string $type, string $name, Branch $branch = null)
+    public function __construct(string $type, string $name, protected ?Branch $branch = null)
     {
         $this->globalsManager = new Globals();
 
@@ -181,7 +167,6 @@ class Variable implements TypeAwareInterface
 
         $this->type = $type;
         $this->name = $name;
-        $this->branch = $branch;
     }
 
     /**

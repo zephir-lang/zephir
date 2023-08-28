@@ -86,7 +86,7 @@ class Struct
      *
      * @throws InvalidArgumentException
      */
-    public function addProperty(string $field, array $global)
+    public function addProperty(string $field, array $global): void
     {
         if (!isset($global['type']) || !is_string($global['type'])) {
             throw new InvalidArgumentException('Property type must be string');

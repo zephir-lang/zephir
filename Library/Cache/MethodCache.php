@@ -17,7 +17,6 @@ use ReflectionClass;
 use ReflectionException;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
-use Zephir\MethodCallWarmUp;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Variable;
 
@@ -146,13 +145,6 @@ class MethodCache
         } else {
             $staticCacheable = false;
             $cacheable = false;
-        }
-
-        // Recursive methods require warm-up
-        if ($compilationContext->currentMethod == $method) {
-            if (!$compilationContext->methodWarmUp) {
-                $compilationContext->methodWarmUp = new MethodCallWarmUp();
-            }
         }
 
         if ('this_ptr' != $caller->getName()) {

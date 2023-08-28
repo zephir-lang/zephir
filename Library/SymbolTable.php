@@ -16,8 +16,6 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
 
 /**
- * Zephir\SymbolTable.
- *
  * A symbol table stores all the variables defined in a method, their data types and default values.
  */
 class SymbolTable
@@ -38,21 +36,11 @@ class SymbolTable
     protected $localContext;
 
     /**
-     * @var CompilationContext
-     */
-    protected $compilationContext;
-
-    /**
      * @var Globals
      */
     protected $globalsManager;
 
-    /**
-     * SymbolTable.
-     *
-     * @param CompilationContext $compilationContext
-     */
-    public function __construct(CompilationContext $compilationContext)
+    public function __construct(protected CompilationContext $compilationContext)
     {
         $this->globalsManager = new Globals();
 
@@ -85,7 +73,7 @@ class SymbolTable
 
         do {
             $currentId = $currentBranch->getUniqueId();
-            if (isset($this->branchVariables[$currentId]) && isset($this->branchVariables[$currentId][$name])) {
+            if (isset($this->branchVariables[$currentId][$name])) {
                 return $currentBranch;
             }
             $currentBranch = $currentBranch->getParentBranch();
@@ -222,22 +210,13 @@ class SymbolTable
     public function getVariables()
     {
         $ret = [];
-        foreach ($this->branchVariables as $branchId => $vars) {
+        foreach ($this->branchVariables as $vars) {
             foreach ($vars as $var) {
                 $ret[$var->getName()] = $var;
             }
         }
 
         return $ret;
-    }
-
-    public function getVariablesByBranch($branchId)
-    {
-        if (isset($this->branchVariables[$branchId])) {
-            return $this->branchVariables[$branchId];
-        }
-
-        return null;
     }
 
     /**

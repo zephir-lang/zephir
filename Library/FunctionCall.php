@@ -77,7 +77,7 @@ class FunctionCall extends Call
      *
      * @return bool
      */
-    public function isBuiltInFunction($functionName)
+    public function isBuiltInFunction(string $functionName)
     {
         switch ($functionName) {
             case 'memstr':

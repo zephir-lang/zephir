@@ -78,17 +78,10 @@ class Expression
     protected bool $expecting = true;
     protected bool $readOnly = false;
     protected bool $evalMode = false;
-    protected array $expression = [];
     protected ?Variable $expectingVariable = null;
 
-    /**
-     * Expression constructor.
-     *
-     * @param array $expression
-     */
-    public function __construct(array $expression)
+    public function __construct(protected array $expression)
     {
-        $this->expression = $expression;
     }
 
     /**

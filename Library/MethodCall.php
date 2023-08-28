@@ -15,8 +15,6 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 
 /**
- * MethodCall.
- *
  * Call methods in a non-static context
  */
 class MethodCall extends Call

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Classes;
 
 use ReflectionClass;
-use ReflectionException;
 use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
@@ -75,7 +74,6 @@ class Entry
      * @return string
      *
      * @throws Exception
-     * @throws ReflectionException
      */
     public function get(): string
     {

@@ -12,23 +12,15 @@
 namespace Zephir;
 
 /**
- * GlobalConstant.
+ * Creates a new global constant.
  *
  * Global constants are allocated one time at extension initialization
  * and are referenced across the C code saving memory
  */
 class GlobalConstant
 {
-    protected $name;
-
-    /**
-     * Creates a new global constant.
-     *
-     * @param string $name
-     */
-    public function __construct($name)
+    public function __construct(protected string $name)
     {
-        $this->name = $name;
     }
 
     /**
@@ -36,7 +28,7 @@ class GlobalConstant
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -46,7 +38,7 @@ class GlobalConstant
      *
      * @return bool
      */
-    public function isTemporal()
+    public function isTemporal(): bool
     {
         return false;
     }

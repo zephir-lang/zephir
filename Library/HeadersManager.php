@@ -12,8 +12,6 @@
 namespace Zephir;
 
 /**
- * Class HeadersManager.
- *
  * Manages the c-headers that must be added to a file
  */
 class HeadersManager
