@@ -25,14 +25,13 @@ class ConsoleErrorListener
             return;
         }
 
-        $exitCode = $event->getExitCode();
         $throwable = $event->getError();
 
         $event->setError(
             new CompilerException(
                 $event->getError()->getMessage(),
                 $throwable instanceof ExceptionInterface ? $throwable->getExtra() : null,
-                $exitCode,
+                $event->getExitCode(),
                 $event->getError()
             )
         );

@@ -13,100 +13,41 @@ namespace Zephir\FunctionLike\ReturnType;
 
 final class CastHint implements TypeInterface
 {
-    /**
-     * @var string
-     */
-    private $dataType;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var bool
-     */
-    private $collection;
-
-    /**
-     * Real return type constructor.
-     *
-     * @param string      $dataType
-     * @param string|null $value
-     * @param string|null $type
-     * @param int|bool    $collection
-     */
-    public function __construct($dataType, $value, $type = null, $collection = false)
-    {
-        $this->dataType = $dataType;
-        $this->value = $value;
+    public function __construct(
+        private string $dataType,
+        private ?string $value = null,
+        private ?string $type = null,
+        private bool $collection = false
+    ) {
         $this->type = $type ?: TypeInterface::TYPE_PARAMETER;
-        $this->collection = (bool) $collection;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getDataType()
+    public function getDataType(): string
     {
         return $this->dataType;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string|null
-     */
-    public function getValue()
+    public function getValue(): ?string
     {
         return $this->value;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * The cast hint is always not mandatory.
-     *
-     * @return mixed
-     */
-    public function isMandatory()
+    public function isMandatory(): bool
     {
         return false;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isCollection()
+    public function isCollection(): bool
     {
         return $this->collection;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return bool
-     */
-    public function isRealType()
+    public function isRealType(): bool
     {
         return false;
     }

@@ -27,17 +27,6 @@ class CodePrinter
     protected int $currentPrints = 0;
 
     /**
-     * Adds a line to the output without the automatic line feed.
-     *
-     * @param string $code
-     */
-    public function outputNoLineFeed(string $code): void
-    {
-        $this->lastLine = $code;
-        $this->code .= str_repeat("\t", $this->level).$code;
-    }
-
-    /**
      * Add code to the output at the beginning.
      *
      * @param string $code
@@ -46,29 +35,6 @@ class CodePrinter
     {
         $this->lastLine = $code;
         $this->code = str_repeat("\t", $this->level).$code.PHP_EOL.$this->code;
-        ++$this->currentPrints;
-    }
-
-    /**
-     * Adds a line to the output without the automatic line feed.
-     *
-     * @param string $code
-     */
-    public function preOutputNoLineFeed(string $code): void
-    {
-        $this->lastLine = $code;
-        $this->code = str_repeat("\t", $this->level).$code.$this->code;
-    }
-
-    /**
-     * Adds code to the output without the indentation level.
-     *
-     * @param string $code
-     */
-    public function preOutputNoLevel(string $code): void
-    {
-        $this->lastLine = $code;
-        $this->code = $code.PHP_EOL.$this->code;
         ++$this->currentPrints;
     }
 
@@ -118,18 +84,6 @@ class CodePrinter
 
         $this->lastLine = $code;
         $this->code .= $code;
-        ++$this->currentPrints;
-    }
-
-    /**
-     * Adds code to the output without the indentation level.
-     *
-     * @param string $code
-     */
-    public function outputNoLevel(string $code): void
-    {
-        $this->lastLine = $code;
-        $this->code .= $code.PHP_EOL;
         ++$this->currentPrints;
     }
 
@@ -193,11 +147,6 @@ class CodePrinter
         --$this->level;
     }
 
-    public function setLevel(int $level): void
-    {
-        $this->level = $level;
-    }
-
     /**
      * Returns the output in the buffer.
      *
@@ -226,13 +175,5 @@ class CodePrinter
         $this->code = '';
         $this->lastLine = '';
         $this->level = 0;
-    }
-
-    public function duplicate(): self
-    {
-        $printer = new self();
-        $printer->setLevel($this->level);
-
-        return $printer;
     }
 }

@@ -21,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
- * Build Command
- *
  * Generates/Compiles/Installs a Zephir extension.
  */
 final class BuildCommand extends AbstractCommand

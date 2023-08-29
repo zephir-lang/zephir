@@ -14,11 +14,6 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
-/**
- * ContinueStatement.
- *
- * Continue statement
- */
 class ContinueStatement extends StatementAbstract
 {
     /**
@@ -26,7 +21,7 @@ class ContinueStatement extends StatementAbstract
      *
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         if ($compilationContext->insideCycle) {
             $compilationContext->codePrinter->output('continue;');

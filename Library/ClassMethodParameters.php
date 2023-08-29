@@ -21,8 +21,6 @@ use Zephir\Exception\CompilerException;
 use function count;
 
 /**
- * Class Method Parameters
- *
  * Represents the parameters defined in a method.
  */
 class ClassMethodParameters implements Countable, Iterator, ArrayAccess

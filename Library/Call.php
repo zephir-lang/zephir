@@ -79,7 +79,7 @@ class Call
      *
      * @param CompilationContext $compilationContext
      */
-    public function processExpectedReturn(CompilationContext $compilationContext)
+    public function processExpectedReturn(CompilationContext $compilationContext): void
     {
         $expr = $this->expression;
         $expression = $expr->getExpression();
@@ -299,34 +299,6 @@ class Call
     {
         $codePrinter = $compilationContext->codePrinter;
         $exprParams = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
-
-        /**
-         * Static typed parameters in final/private methods are promotable to read only parameters
-         * Recursive calls with static typed methods also also promotable.
-         */
-        $readOnlyParameters = [];
-        if (\is_object($calleeDefinition)) {
-            if ($calleeDefinition instanceof ClassMethod) {
-                if ($calleeDefinition->isFinal() || $calleeDefinition->isPrivate() || $calleeDefinition->isInternal() || $compilationContext->currentMethod === $calleeDefinition) {
-                    foreach ($calleeDefinition->getParameters() as $position => $parameter) {
-                        if (isset($parameter['data-type'])) {
-                            switch ($parameter['data-type']) {
-                                case 'int':
-                                case 'uint':
-                                case 'double':
-                                case 'long':
-                                case 'char':
-                                case 'uchar':
-                                case 'boolean':
-                                case 'bool':
-                                    $readOnlyParameters[$position] = true;
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         $params = [];
         $types = [];

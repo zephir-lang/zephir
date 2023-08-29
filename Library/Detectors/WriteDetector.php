@@ -32,9 +32,9 @@ class WriteDetector
 
     public const DETECT_ALL = 255;
 
-    protected $detectionFlags = 0;
+    protected int $detectionFlags = 0;
 
-    protected $mutations = [];
+    protected array $mutations = [];
 
     /**
      * Do the detection pass on a single variable.
@@ -44,7 +44,7 @@ class WriteDetector
      *
      * @return bool
      */
-    public function detect($variable, array $statements)
+    public function detect(string $variable, array $statements)
     {
         $this->passStatementBlock($statements);
 
@@ -56,7 +56,7 @@ class WriteDetector
      *
      * @param int $flags
      */
-    public function setDetectionFlags($flags)
+    public function setDetectionFlags(int $flags): void
     {
         $this->detectionFlags = $flags;
     }
@@ -68,7 +68,7 @@ class WriteDetector
      *
      * @return WriteDetector
      */
-    public function increaseMutations($variable): self
+    public function increaseMutations(string $variable): self
     {
         if (isset($this->mutations[$variable])) {
             ++$this->mutations[$variable];
@@ -86,7 +86,7 @@ class WriteDetector
      *
      * @return int
      */
-    public function getNumberOfMutations($variable)
+    public function getNumberOfMutations(string $variable): int
     {
         if (isset($this->mutations[$variable])) {
             return $this->mutations[$variable];
@@ -100,7 +100,7 @@ class WriteDetector
      *
      * @param array $statement
      */
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -142,7 +142,7 @@ class WriteDetector
      *
      * @param array $expression
      */
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             $usePass = self::DETECT_ARRAY_USE == ($this->detectionFlags & self::DETECT_ARRAY_USE);
@@ -202,7 +202,7 @@ class WriteDetector
      *
      * @param array $expression
      */
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':

@@ -132,7 +132,7 @@ class Documentation
 
         foreach ($this->themesDirectories as $themeDir) {
             $path = rtrim($themeDir, '\\/').\DIRECTORY_SEPARATOR.$name;
-            if (0 !== strpos($path, 'phar://')) {
+            if (!str_starts_with($path, 'phar://')) {
                 $path = realpath($path);
             }
 
@@ -151,7 +151,7 @@ class Documentation
     {
         foreach ($this->classes as $class) {
             // class files (class/ns1/n2/class.html)
-            $cfile = new File\ClassFile($this->config, $class);
+            $cfile = new File\ClassFile($class);
             $this->theme->drawFile($cfile);
 
             // class source file (source/ns1/n2/class.html)
@@ -160,7 +160,7 @@ class Documentation
         }
 
         // classes file (classes.html)
-        $file = new File\ClassesFile($this->config, $this->classes);
+        $file = new File\ClassesFile($this->classes);
         $this->theme->drawFile($file);
 
         $namespaceAccessor = new NamespaceAccessor($this->classes);

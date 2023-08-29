@@ -22,8 +22,6 @@ use Zephir\FileSystem\FileSystemInterface;
 use function Zephir\is_windows;
 
 /**
- * Zephir\Console\Command\CleanCommand.
- *
  * Cleans any object files created by the extension.
  */
 final class CleanCommand extends AbstractCommand

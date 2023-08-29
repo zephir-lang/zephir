@@ -146,11 +146,6 @@ final class CompilerFile implements FileInterface
         return $this->classDefinition;
     }
 
-    public function getFunctionDefinitions()
-    {
-        return $this->functionDefinitions;
-    }
-
     /**
      * Sets if the class belongs to an external dependency or not.
      *
@@ -244,6 +239,7 @@ final class CompilerFile implements FileInterface
      *
      * @param CompilationContext $compilationContext
      * @param FunctionDefinition $functionDefinition
+     * @throws Exception
      */
     public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
     {
@@ -858,7 +854,7 @@ final class CompilerFile implements FileInterface
         }
 
         /**
-         * If the file does not exists we create it for the first time
+         * If the file does not exist we create it for the first time
          */
         if (!file_exists($filePath)) {
             file_put_contents($filePath, $codePrinter->getOutput());
@@ -954,10 +950,10 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    protected function processShortcuts(array $property, ClassDefinition $classDefinition)
+    protected function processShortcuts(array $property, ClassDefinition $classDefinition): void
     {
         foreach ($property['shortcuts'] as $shortcut) {
-            if ('_' == substr($property['name'], 0, 1)) {
+            if (str_starts_with($property['name'], '_')) {
                 $name = substr($property['name'], 1);
             } else {
                 $name = $property['name'];

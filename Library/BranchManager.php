@@ -84,12 +84,4 @@ class BranchManager
     {
         $this->rootBranch = $branch;
     }
-
-    /**
-     * @return Branch|null
-     */
-    public function getRootBranch()
-    {
-        return $this->rootBranch;
-    }
 }

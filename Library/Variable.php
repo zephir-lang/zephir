@@ -148,7 +148,7 @@ class Variable implements TypeAwareInterface
      *
      * @var array
      */
-    protected $complexTypes = [
+    protected array $complexTypes = [
         'variable' => 1,
         'string' => 1,
         'array' => 1,

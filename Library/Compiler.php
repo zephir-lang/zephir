@@ -194,9 +194,8 @@ final class Compiler
     /**
      * Resolves path to the internal prototypes.
      *
-     * @return string
+     * @return string|null
      *
-     * @throws IllegalStateException in case of absence internal prototypes directory
      */
     private function resolvePrototypesPath(): ?string
     {

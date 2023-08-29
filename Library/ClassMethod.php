@@ -1784,7 +1784,6 @@ class ClassMethod
                 if (isset($parameter['cast'])) {
                     $symbol->setDynamicTypes('object');
                     $symbol->setClassTypes($compilationContext->getFullName($parameter['cast']['value']));
-                    $classCastChecks[] = [$symbol, $parameter];
                 } else {
                     if (isset($parameter['data-type'])) {
                         if ('variable' === $parameter['data-type']) {

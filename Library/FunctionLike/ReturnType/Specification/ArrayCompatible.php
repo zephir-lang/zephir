@@ -16,17 +16,10 @@ use Zephir\Types;
 
 final class ArrayCompatible extends ReturnType\CompositeSpecification
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @param ReturnType\TypeInterface $type
-     *
-     * @return bool
-     */
-    public function isSatisfiedBy(ReturnType\TypeInterface $type)
+    public function isSatisfiedBy(ReturnType\TypeInterface $type): bool
     {
         if ($type->isRealType()) {
-            return Types::T_ARRAY == $type->getDataType();
+            return Types::T_ARRAY === $type->getDataType();
         }
 
         return $type->isCollection();

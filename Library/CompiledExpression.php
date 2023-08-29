@@ -76,7 +76,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function getBooleanCode(): string
     {
-        if ($this->code && ('true' == $this->code || true === $this->code)) {
+        if ('true' === $this->code || true === $this->code) {
             return '1';
         }
 
@@ -95,16 +95,6 @@ class CompiledExpression implements TypeAwareInterface
     public function isIntCompatibleType(): bool
     {
         return in_array($this->type, ['int', 'uint', 'long', 'ulong', 'char', 'uchar'], true);
-    }
-
-    /**
-     * Checks if the compiled expression is a char or compatible type.
-     *
-     * @return bool
-     */
-    public function isCharCompatibleType(): bool
-    {
-        return in_array($this->type, ['char', 'uchar'], true);
     }
 
     /**

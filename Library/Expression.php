@@ -470,7 +470,7 @@ class Expression
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
                 if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
-                    if (false !== strpos($resolved->getCode(), ' ')) {
+                    if (str_contains($resolved->getCode(), ' ')) {
                         return new CompiledExpression($resolved->getType(), '('.$resolved->getCode().')', $expression);
                     }
                 }

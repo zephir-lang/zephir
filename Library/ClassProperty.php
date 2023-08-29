@@ -11,51 +11,31 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
+
+use function in_array;
+use function is_array;
 
 /**
  * Represents a property class
  */
 class ClassProperty
 {
-    /**
-     * @var ClassDefinition
-     */
-    protected ClassDefinition $classDefinition;
-
-    protected $visibility;
-
-    protected $name;
-
-    protected $defaultValue;
-
-    protected $docblock;
-
-    protected $original;
-
-    /**
-     * @param ClassDefinition $classDefinition
-     * @param array           $visibility
-     * @param string          $name
-     * @param mixed           $defaultValue
-     * @param string          $docBlock
-     * @param array           $original
-     */
-    public function __construct(ClassDefinition $classDefinition, $visibility, $name, $defaultValue, $docBlock, $original)
-    {
+    public function __construct(
+        protected ClassDefinition $classDefinition,
+        protected array $visibility,
+        protected string $name,
+        protected ?array $defaultValue,
+        protected string $docBlock,
+        protected array $original,
+    ) {
         $this->checkVisibility($visibility, $name, $original);
 
-        $this->classDefinition = $classDefinition;
-        $this->visibility = $visibility;
-        $this->name = $name;
-        $this->defaultValue = $defaultValue;
-        $this->docblock = $docBlock;
-        $this->original = $original;
-
-        if (!\is_array($this->defaultValue)) {
+        if (!is_array($this->defaultValue)) {
             $this->defaultValue = [];
             $this->defaultValue['type'] = 'null';
             $this->defaultValue['value'] = null;
@@ -67,7 +47,7 @@ class ClassProperty
      *
      * @return ClassDefinition
      */
-    public function getClassDefinition()
+    public function getClassDefinition(): ClassDefinition
     {
         return $this->classDefinition;
     }
@@ -77,7 +57,7 @@ class ClassProperty
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -85,7 +65,7 @@ class ClassProperty
     /**
      * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         if ('array' == $this->defaultValue['type']) {
             $result = [];
@@ -108,7 +88,7 @@ class ClassProperty
     /**
      * @return mixed
      */
-    public function getOriginal()
+    public function getOriginal(): mixed
     {
         return $this->original;
     }
@@ -122,15 +102,15 @@ class ClassProperty
      *
      * @throws CompilerException
      */
-    public function checkVisibility($visibility, $name, $original)
+    public function checkVisibility($visibility, $name, $original): void
     {
-        if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
+        if (in_array('public', $visibility) && in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
         }
-        if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
+        if (in_array('public', $visibility) && in_array('private', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'private' at the same time", $original);
         }
-        if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
+        if (in_array('private', $visibility) && in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'protected' and 'private' at the same time", $original);
         }
     }
@@ -177,9 +157,9 @@ class ClassProperty
      *
      * @return string
      */
-    public function getDocBlock()
+    public function getDocBlock(): string
     {
-        return $this->docblock;
+        return $this->docBlock;
     }
 
     /**
@@ -187,9 +167,9 @@ class ClassProperty
      *
      * @return bool
      */
-    public function isStatic()
+    public function isStatic(): bool
     {
-        return \in_array('static', $this->visibility);
+        return in_array('static', $this->visibility);
     }
 
     /**
@@ -197,9 +177,9 @@ class ClassProperty
      *
      * @return bool
      */
-    public function isPublic()
+    public function isPublic(): bool
     {
-        return \in_array('public', $this->visibility);
+        return in_array('public', $this->visibility);
     }
 
     /**
@@ -207,9 +187,9 @@ class ClassProperty
      *
      * @return bool
      */
-    public function isProtected()
+    public function isProtected(): bool
     {
-        return \in_array('protected', $this->visibility);
+        return in_array('protected', $this->visibility);
     }
 
     /**
@@ -217,9 +197,9 @@ class ClassProperty
      *
      * @return bool
      */
-    public function isPrivate()
+    public function isPrivate(): bool
     {
-        return \in_array('private', $this->visibility);
+        return in_array('private', $this->visibility);
     }
 
     /**
@@ -227,9 +207,10 @@ class ClassProperty
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         switch ($this->defaultValue['type']) {
             case 'long':
@@ -242,7 +223,7 @@ class ClassProperty
 
             case 'array':
             case 'empty-array':
-                $this->initializeArray($compilationContext);
+                $this->initializeArray();
                 // no break
             case 'null':
                 $this->declareProperty($compilationContext, $this->defaultValue['type'], null);
@@ -265,7 +246,7 @@ class ClassProperty
      *
      * @param array $statements
      */
-    protected function removeInitializationStatements(&$statements)
+    protected function removeInitializationStatements(array &$statements): void
     {
         foreach ($statements as $index => $statement) {
             if (!$this->isStatic()) {
@@ -328,14 +309,14 @@ class ClassProperty
      *
      * @return bool|string
      */
-    protected function getBooleanCode($value)
+    protected function getBooleanCode($value): bool|string
     {
-        if ($value && ('true' == $value || true === $value)) {
+        if ('true' == $value || true === $value) {
             return '1';
-        } else {
-            if ('false' == $value || false === $value) {
-                return '0';
-            }
+        }
+
+        if ('false' == $value || false === $value) {
+            return '0';
         }
 
         return (bool) $value;
@@ -351,7 +332,7 @@ class ClassProperty
      * @throws Exception
      * @throws CompilerException
      */
-    protected function declareProperty(CompilationContext $compilationContext, $type, $value)
+    protected function declareProperty(CompilationContext $compilationContext, $type, $value): void
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -435,7 +416,7 @@ class ClassProperty
         }
     }
 
-    private function initializeArray($compilationContext)
+    private function initializeArray(): void
     {
         $classDefinition = $this->classDefinition;
         $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
@@ -464,13 +445,7 @@ class ClassProperty
 
                 $this->removeInitializationStatements($statements);
                 if ($needLetStatementAdded) {
-                    $newStatements = [];
-
-                    /*
-                     * Start from let statement
-                     */
-                    $newStatements[] = $letStatement;
-
+                    $newStatements = [$letStatement];
                     foreach ($statements as $statement) {
                         $newStatements[] = $statement;
                     }

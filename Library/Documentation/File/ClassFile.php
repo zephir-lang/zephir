@@ -18,37 +18,18 @@ use Zephir\Documentation\FileInterface;
 
 class ClassFile implements FileInterface
 {
-    /**
-     * @var ClassDefinition
-     */
-    protected $class;
+    protected ClassDefinition $class;
 
-    /**
-     * @var CompilerFile
-     */
-    protected $compilerFile;
-
-    public function __construct($config, CompilerFile $class)
+    public function __construct(protected CompilerFile $compilerFile)
     {
-        $this->compilerFile = $class;
-        $this->class = $class->getClassDefinition();
+        $this->class = $compilerFile->getClassDefinition();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'class.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         $nsPieces = explode('\\', $this->class->getNamespace());
@@ -75,11 +56,6 @@ class ClassFile implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return Documentation::classUrl($this->class);

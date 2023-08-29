@@ -28,15 +28,15 @@ use Zephir\StatementsBlock;
  */
 class LocalContextPass
 {
-    protected $variables = [];
+    protected array $variables = [];
 
-    protected $mutations = [];
+    protected array $mutations = [];
 
-    protected $uses = [];
+    protected array $uses = [];
 
-    protected $lastCallLine = false;
+    protected bool $lastCallLine = false;
 
-    protected $lastUnsetLine = false;
+    protected bool $lastUnsetLine = false;
 
     /**
      * Do the compilation pass.

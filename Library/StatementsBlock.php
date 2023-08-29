@@ -38,8 +38,6 @@ use function count;
  */
 class StatementsBlock
 {
-    protected $statements;
-
     protected ?bool $unreachable = null;
 
     protected $debug = false;
@@ -53,15 +51,8 @@ class StatementsBlock
      */
     protected $lastStatement;
 
-    /**
-     * StatementsBlock constructor.
-     *
-     * @param array $statements
-     */
-    public function __construct(array $statements)
+    public function __construct(protected $statements)
     {
-        $this->statements = $statements;
-
         $debug = false;
         if (getenv('ZEPHIR_DEBUG')) {
             // Do not use this feature for typical use case.
@@ -80,13 +71,13 @@ class StatementsBlock
     }
 
     /**
-     * Sets whether the statements blocks belongs to a loop.
+     * Sets whether the statements block belongs to a loop.
      *
      * @param bool $loop
      *
      * @return StatementsBlock
      */
-    public function isLoop($loop)
+    public function isLoop(bool $loop): static
     {
         $this->loop = $loop;
 

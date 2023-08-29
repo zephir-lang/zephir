@@ -34,7 +34,7 @@ interface TypeInterface
     public function getDataType();
 
     /**
-     * Gets casted return type.
+     * Gets cast return type.
      *
      * @return string|null
      */

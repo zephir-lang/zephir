@@ -22,8 +22,6 @@ use Zephir\Compiler;
 use Zephir\Exception\CompilerException;
 
 /**
- * Compile Command
- *
  * Compile a Zephir extension.
  */
 final class CompileCommand extends AbstractCommand
@@ -52,7 +50,7 @@ final class CompileCommand extends AbstractCommand
             ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 

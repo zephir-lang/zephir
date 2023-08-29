@@ -14,28 +14,26 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * MutateGathererPass.
- *
  * Counts variables mutated inside a specific statement block
  * Non-mutated variables can be promoted to use an inline cache
  */
 class MutateGathererPass
 {
-    protected $variables = [];
+    protected array $variables = [];
 
-    protected $mutations = [];
+    protected array $mutations = [];
 
     /**
      * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function declareVariables(array $statement)
+    public function declareVariables(array $statement): void
     {
         foreach ($statement['variables'] as $variable) {
             if (!isset($this->variables[$variable['variable']])) {
@@ -51,7 +49,7 @@ class MutateGathererPass
      *
      * @return MutateGathererPass
      */
-    public function increaseMutations($variable)
+    public function increaseMutations(string $variable): static
     {
         if (isset($this->mutations[$variable])) {
             ++$this->mutations[$variable];
@@ -63,27 +61,11 @@ class MutateGathererPass
     }
 
     /**
-     * Returns the number of assignment instructions that mutated a variable.
-     *
-     * @param string $variable
-     *
-     * @return int
-     */
-    public function getNumberOfMutations($variable)
-    {
-        if (isset($this->mutations[$variable])) {
-            return $this->mutations[$variable];
-        }
-
-        return 0;
-    }
-
-    /**
      * Pass let statements.
      *
      * @param array $statement
      */
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -98,7 +80,7 @@ class MutateGathererPass
      *
      * @param array $expression
      */
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -116,7 +98,7 @@ class MutateGathererPass
      *
      * @param array $expression
      */
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             if ('variable' != $item['value']['type']) {
@@ -130,7 +112,7 @@ class MutateGathererPass
      *
      * @param array $expression
      */
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -146,7 +128,7 @@ class MutateGathererPass
      *
      * @param array $expression
      */
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':
@@ -197,6 +179,13 @@ class MutateGathererPass
                 break;
 
             case 'typeof':
+            case 'minus':
+            case 'list':
+            case 'array-access':
+            case 'static-property-access':
+            case 'property-string-access':
+            case 'property-dynamic-access':
+            case 'property-access':
             case 'not':
                 $this->passExpression($expression['left']);
                 break;
@@ -213,14 +202,6 @@ class MutateGathererPass
 
             case 'new':
                 $this->passNew($expression);
-                break;
-
-            case 'property-access':
-            case 'property-dynamic-access':
-            case 'property-string-access':
-            case 'static-property-access':
-            case 'array-access':
-                $this->passExpression($expression['left']);
                 break;
 
             case 'isset':
@@ -241,14 +222,6 @@ class MutateGathererPass
                 $this->passExpression($expression['right']);
                 break;
 
-            case 'minus':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'list':
-                $this->passExpression($expression['left']);
-                break;
-
             case 'cast':
             case 'type-hint':
                 $this->passExpression($expression['right']);
@@ -265,7 +238,7 @@ class MutateGathererPass
      *
      * @param array $statements
      */
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
@@ -341,6 +314,7 @@ class MutateGathererPass
                     }
                     break;
 
+                case 'throw':
                 case 'return':
                     if (isset($statement['expr'])) {
                         $this->passExpression($statement['expr']);
@@ -366,12 +340,6 @@ class MutateGathererPass
                                 $this->passStatementBlock($catch['statements']);
                             }
                         }
-                    }
-                    break;
-
-                case 'throw':
-                    if (isset($statement['expr'])) {
-                        $this->passExpression($statement['expr']);
                     }
                     break;
 

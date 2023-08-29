@@ -11,33 +11,35 @@
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 
 /**
- * DoWhileStatement.
- *
  * DoWhile statement, the same as in PHP/C
  */
 class DoWhileStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('do {');
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
 
-        /*
+        /**
          * Compile statements in the 'while' block
          */
         if (isset($this->statement['statements'])) {
@@ -46,16 +48,15 @@ class DoWhileStatement extends StatementAbstract
         }
 
         $compilationContext->codePrinter->increaseLevel();
-        $expr = new EvalExpression();
-        $condition = $expr->optimize($exprRaw, $compilationContext);
+        $condition = (new EvalExpression())->optimize($exprRaw, $compilationContext);
         $compilationContext->codePrinter->decreaseLevel();
 
-        /*
+        /**
          * Restore the cycle counter
          */
         --$compilationContext->insideCycle;
 
-        /*
+        /**
          * Compound conditions can be evaluated in a single line of the C-code
          */
         $codePrinter->output('} while ('.$condition.');');

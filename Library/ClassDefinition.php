@@ -416,7 +416,7 @@ final class ClassDefinition extends AbstractClassDefinition
     public function getDependencies(): array
     {
         $dependencies = [];
-        if ($this->extendsClassDefinition && $this->extendsClassDefinition instanceof self) {
+        if ($this->extendsClassDefinition instanceof self) {
             $dependencies[] = $this->extendsClassDefinition;
         }
 

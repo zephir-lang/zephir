@@ -49,14 +49,4 @@ class BranchGraph
             }
         }
     }
-
-    /**
-     * Returns the tree's root node.
-     *
-     * @return BranchGraphNode
-     */
-    public function getRoot(): BranchGraphNode
-    {
-        return $this->root;
-    }
 }

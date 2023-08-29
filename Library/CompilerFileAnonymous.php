@@ -64,7 +64,7 @@ final class CompilerFileAnonymous implements FileInterface
      *
      * @param bool $external
      */
-    public function setIsExternal($external)
+    public function setIsExternal($external): void
     {
         $this->external = (bool) $external;
     }

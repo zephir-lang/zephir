@@ -37,10 +37,13 @@ class MethodCall extends Call
     /**
      * Compiles a method call.
      *
-     * @param Expression         $expr
+     * @param Expression $expr
      * @param CompilationContext $compilationContext
+     * @return mixed|CompiledExpression
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public function compile(Expression $expr, CompilationContext $compilationContext)
+    public function compile(Expression $expr, CompilationContext $compilationContext): mixed
     {
         $expression = $expr->getExpression();
 

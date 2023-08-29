@@ -14,26 +14,24 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 /**
- * LoopBreakPass.
- *
  * This pass checks if the statement block related to a 'loop' loop has at least a 'break'
  * statement disallowing full infinite loops
  */
 class LoopBreakPass
 {
-    protected $hasBreak = false;
+    protected bool $hasBreak = false;
 
     /**
      * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
@@ -55,7 +53,7 @@ class LoopBreakPass
         }
     }
 
-    public function hasBreak()
+    public function hasBreak(): bool
     {
         return $this->hasBreak;
     }

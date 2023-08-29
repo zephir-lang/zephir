@@ -27,7 +27,7 @@ class StringsManager extends BaseStringsManager
      *
      * @param string $key
      */
-    public function addConcatKey($key)
+    public function addConcatKey(string $key): void
     {
         $this->concatKeys[$key] = true;
     }

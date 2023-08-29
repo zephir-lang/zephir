@@ -16,29 +16,15 @@ use Zephir\Types;
 
 final class IntCompatible extends ReturnType\CompositeSpecification
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @param ReturnType\TypeInterface $type
-     *
-     * @return bool
-     */
-    public function isSatisfiedBy(ReturnType\TypeInterface $type)
+    public function isSatisfiedBy(ReturnType\TypeInterface $type): bool
     {
-        if (false == $type->isRealType()) {
+        if (!$type->isRealType()) {
             return false;
         }
 
-        switch ($type->getDataType()) {
-            case Types::T_INT:
-            case Types::T_UINT:
-            case Types::T_CHAR:
-            case Types::T_UCHAR:
-            case Types::T_LONG:
-            case Types::T_ULONG:
-                return true;
-            default:
-                return false;
-        }
+        return match ($type->getDataType()) {
+            Types::T_INT, Types::T_UINT, Types::T_CHAR, Types::T_UCHAR, Types::T_LONG, Types::T_ULONG => true,
+            default => false,
+        };
     }
 }

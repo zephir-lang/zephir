@@ -54,7 +54,7 @@ class CacheManager
      *
      * @param CallGathererPass|null $gatherer
      */
-    public function setGatherer(?CallGathererPass $gatherer = null)
+    public function setGatherer(?CallGathererPass $gatherer = null): void
     {
         $this->gatherer = $gatherer;
     }
@@ -76,7 +76,7 @@ class CacheManager
     /**
      * Creates or returns an existing function cache.
      *
-     * @return FunctionCache
+     * @return FunctionCache|null
      */
     public function getFunctionCache(): ?FunctionCache
     {
@@ -90,7 +90,7 @@ class CacheManager
     /**
      * Creates or returns an existing method cache.
      *
-     * @return MethodCache
+     * @return MethodCache|null
      */
     public function getMethodCache(): ?MethodCache
     {

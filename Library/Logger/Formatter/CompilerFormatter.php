@@ -119,7 +119,7 @@ final class CompilerFormatter extends LineFormatter
             $placeholder = '%'.$var.'%';
             $realValue = $this->stringify($val);
 
-            if (false === strpos($output, $placeholder)) {
+            if (!str_contains($output, $placeholder)) {
                 continue;
             }
 
@@ -148,7 +148,7 @@ final class CompilerFormatter extends LineFormatter
      */
     private function cleanExtraPlaceholders(string $output): string
     {
-        if (false !== strpos($output, '%')) {
+        if (str_contains($output, '%')) {
             $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
             $output = preg_replace('/ %type%\n/', "\n", $output);
             $output = preg_replace('/on line %line%/', '', $output);

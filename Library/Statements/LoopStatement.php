@@ -13,13 +13,12 @@ namespace Zephir\Statements;
 
 use Zephir\Branch;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\LoopBreakPass;
 use Zephir\StatementsBlock;
 
 /**
- * LoopStatement.
- *
  * Loop statement, infinite loop
  */
 class LoopStatement extends StatementAbstract
@@ -27,18 +26,19 @@ class LoopStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws \ReflectionException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $compilationContext->codePrinter->output('while (1) {');
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
 
-        /*
+        /**
          * Compile statements in the 'loop' block
          */
         if (!isset($this->statement['statements'])) {

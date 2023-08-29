@@ -75,7 +75,7 @@ class CompilationContext
     /**
      * Current method or function that being compiled.
      *
-     * @var ClassMethod|FunctionDefinition|null
+     * @var ClassMethod|null
      */
     public ?ClassMethod $currentMethod = null;
 
@@ -94,21 +94,21 @@ class CompilationContext
     public ?StringsManager $stringsManager = null;
 
     /**
-     * Tells if the the compilation is being made inside a cycle/loop.
+     * Tells if the compilation is being made inside a cycle/loop.
      *
      * @var int
      */
     public int $insideCycle = 0;
 
     /**
-     * Tells if the the compilation is being made inside a try/catch block.
+     * Tells if the compilation is being made inside a try/catch block.
      *
      * @var int
      */
     public int $insideTryCatch = 0;
 
     /**
-     * Tells if the the compilation is being made inside a switch.
+     * Tells if the compilation is being made inside a switch.
      *
      * @var int
      */
@@ -192,7 +192,7 @@ class CompilationContext
      */
     public function getFullName(string $className): string
     {
-        $isFunction = $this->currentMethod && $this->currentMethod instanceof FunctionDefinition;
+        $isFunction = $this->currentMethod instanceof FunctionDefinition;
         $namespace = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
         return fqcn($className, $namespace, $this->aliasManager);

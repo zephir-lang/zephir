@@ -16,31 +16,15 @@ use Zephir\Documentation\FileInterface;
 
 class ClassesFile implements FileInterface
 {
-    /**
-     * @var ClassDefinition
-     */
-    protected $classes;
-
-    public function __construct($config, $classList)
+    public function __construct(protected ClassDefinition $classes)
     {
-        $this->classes = $classList;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'classes.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         return [
@@ -48,11 +32,6 @@ class ClassesFile implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return 'classes.html';
