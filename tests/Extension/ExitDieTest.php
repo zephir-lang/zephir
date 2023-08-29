@@ -107,7 +107,7 @@ final class ExitDieTest extends TestCase
             return '(empty output)';
         }
 
-        if (isset($output[0]) && !empty($output[0])) {
+        if (!empty($output[0])) {
             return $output[0];
         }
 
