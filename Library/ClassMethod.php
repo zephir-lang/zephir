@@ -1690,19 +1690,15 @@ class ClassMethod
                         case 'mixed':
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
-                            if ($compilationContext->backend->isZE3()) {
-                                $symbol->setIsDoublePointer(true);
-                                $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'].'_sub', $compilationContext);
-                            }
+                            $symbol->setIsDoublePointer(true);
+                            $substituteVars[$parameter['name']] = $symbolTable->addVariable('variable', $parameter['name'].'_sub', $compilationContext);
                             break;
 
                         default:
                             $symbol = $symbolTable->addVariable($parameter['data-type'], $parameter['name'], $compilationContext);
                             $symbolParam = $symbolTable->addVariable('variable', $parameter['name'].'_param', $compilationContext);
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
-                            if ($compilationContext->backend->isZE3()) {
-                                $symbolParam->setIsDoublePointer(true);
-                            }
+                            $symbolParam->setIsDoublePointer(true);
 
                             if ('string' == $parameter['data-type'] || 'array' == $parameter['data-type']) {
                                 $symbol->setMustInitNull(true);
@@ -1928,11 +1924,9 @@ class ClassMethod
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
                 $initCode .= "\t".$compilationContext->backend->ifVariableValueUndefined($targetVar, $compilationContext, false, false).PHP_EOL;
 
-                if ($compilationContext->backend->isZE3()) {
-                    if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
-                        $substituteVar = $substituteVars[$parameter['name']];
-                        $initCode .= "\t\t".$targetVar->getName().' = &'.$substituteVar->getName().';'.PHP_EOL;
-                    }
+                if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
+                    $substituteVar = $substituteVars[$parameter['name']];
+                    $initCode .= "\t\t".$targetVar->getName().' = &'.$substituteVar->getName().';'.PHP_EOL;
                 }
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 

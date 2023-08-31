@@ -1884,17 +1884,15 @@ final class Compiler
 
             $headerPrinter->output('PHP_FUNCTION('.$funcName.');');
 
-            $argInfo->setBooleanDefinition($this->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
-            $argInfo->setRichFormat($this->backend->isZE3());
+            $argInfo->setBooleanDefinition('_IS_BOOL');
+            $argInfo->setRichFormat(true);
 
             $argInfo->render();
 
             /** Generate FE's */
             $paramData = 'NULL';
 
-            $richFormat = $this->backend->isZE3() &&
-                $func->isReturnTypesHintDetermined() &&
-                $func->areReturnTypesCompatible();
+            $richFormat = $func->isReturnTypesHintDetermined() && $func->areReturnTypesCompatible();
 
             if ($richFormat || $func->hasParameters()) {
                 $paramData = $argInfoName;

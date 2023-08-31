@@ -66,27 +66,13 @@ class StaticMethodCache
             }
         }
 
-        $mustBeCached = false;
-        if (!$compilationContext->insideCycle) {
-            if (!($method instanceof ReflectionMethod)) {
-                $classDefinition = $method->getClassDefinition();
-                if (!$classDefinition->isBundled() && $allowNtsCache) {
-                    $mustBeCached = !$compilationContext->backend->isZE3();
-                } else {
-                    if (!$method->isPrivate() && !$method->isFinal()) {
-                        return 'NULL, 0';
-                    }
-                }
-            } else {
-                if (!$method->isPrivate() && !$method->isFinal()) {
-                    return 'NULL, 0';
-                }
-            }
+        if (!$compilationContext->insideCycle && !$method->isPrivate() && !$method->isFinal()) {
+            return 'NULL, 0';
         }
 
         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
 
-        if ($method->isPrivate() || $method->isFinal() || $mustBeCached) {
+        if ($method->isPrivate() || $method->isFinal()) {
             $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
             $cacheSlot = '0';

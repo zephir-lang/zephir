@@ -34,16 +34,6 @@ class Backend extends BackendZendEngine2
     /**
      * {@inheritdoc}
      *
-     * @return bool
-     */
-    public function isZE3()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return FcallManagerInterface
      */
     public function getFcallManager()

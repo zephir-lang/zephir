@@ -269,12 +269,11 @@ class FunctionCall extends Call
             if ($numberParameters > 0) {
                 $n = 1;
                 $funcParameters = $reflector->getParameters();
-                $isZendEngine3 = $compilationContext->backend->isZE3();
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
                             /* TODO hack, fix this better */
-                            if ($isZendEngine3 && '&' == $parameters[$n - 1][0]) {
+                            if ('&' === $parameters[$n - 1][0]) {
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
 

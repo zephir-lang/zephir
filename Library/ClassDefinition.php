@@ -1296,8 +1296,8 @@ final class ClassDefinition extends AbstractClassDefinition
                 $compilationContext
             );
 
-            $argInfo->setBooleanDefinition($this->compiler->backend->isZE3() ? '_IS_BOOL' : 'IS_BOOL');
-            $argInfo->setRichFormat($this->compiler->backend->isZE3());
+            $argInfo->setBooleanDefinition('_IS_BOOL');
+            $argInfo->setRichFormat(true);
 
             $argInfo->render();
         }
@@ -1314,9 +1314,7 @@ final class ClassDefinition extends AbstractClassDefinition
             foreach ($methods as $method) {
                 if (self::TYPE_CLASS === $this->getType()) {
                     if (!$method->isInternal()) {
-                        $richFormat = $this->compiler->backend->isZE3() &&
-                            $method->isReturnTypesHintDetermined() &&
-                            $method->areReturnTypesCompatible();
+                        $richFormat = $method->isReturnTypesHintDetermined() && $method->areReturnTypesCompatible();
 
                         if ($richFormat || $method->hasParameters()) {
                             $codePrinter->output(
@@ -1358,9 +1356,7 @@ final class ClassDefinition extends AbstractClassDefinition
                         }
                     }
                 } else {
-                    $richFormat = $this->compiler->backend->isZE3() &&
-                            $method->isReturnTypesHintDetermined() &&
-                            $method->areReturnTypesCompatible();
+                    $richFormat = $method->isReturnTypesHintDetermined() && $method->areReturnTypesCompatible();
 
                     if ($method->isStatic()) {
                         if ($richFormat || $method->hasParameters()) {

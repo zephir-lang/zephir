@@ -49,13 +49,6 @@ abstract class BaseBackend implements FcallAwareInterface
         $this->templatesPath = $templatesPath;
     }
 
-    /**
-     * TODO: This should not be used, temporary (until its completely refactored).
-     *
-     * @return bool
-     */
-    abstract public function isZE3();
-
     public function getName()
     {
         return $this->name;

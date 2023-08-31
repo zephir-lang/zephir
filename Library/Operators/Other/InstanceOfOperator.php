@@ -131,7 +131,7 @@ class InstanceOfOperator extends AbstractOperator
     {
         return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
             ':name' => $variable,
-            ':p' => $context->backend->isZE3() ? '&' : '',
+            ':p' => '&',
         ]);
     }
 }

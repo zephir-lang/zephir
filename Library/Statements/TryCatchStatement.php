@@ -76,11 +76,7 @@ class TryCatchStatement extends StatementAbstract
                     $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $compilationContext);
                 }
 
-                if ($compilationContext->backend->isZE3()) {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&'.$variable->getName().', &'.$exc_var->getName().');');
-                } else {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT('.$variable->getName().', '.$exc_var->getName().');');
-                }
+                $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&'.$variable->getName().', &'.$exc_var->getName().');');
 
                 /*
                  * TODO:, use a builder here

@@ -34,16 +34,6 @@ class Backend extends BaseBackend
     /**
      * {@inheritdoc}
      *
-     * @return bool
-     */
-    public function isZE3()
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return FcallManagerInterface
      */
     public function getFcallManager()
@@ -963,12 +953,8 @@ class Backend extends BaseBackend
                 $conditions[] = $cond.'IS_LONG';
                 break;
             case 'bool':
-                if (!$this->isZE3()) {
-                    $conditions[] = $cond.'IS_BOOL';
-                } else {
-                    $conditions[] = $cond.'IS_TRUE';
-                    $conditions[] = $cond.'IS_FALSE';
-                }
+                $conditions[] = $cond.'IS_TRUE';
+                $conditions[] = $cond.'IS_FALSE';
                 break;
             case 'double':
                 $conditions[] = $cond.'IS_DOUBLE';
@@ -1031,9 +1017,7 @@ class Backend extends BaseBackend
                 $codePrinter->output('if (EXPECTED(Z_TYPE_P('.$parameterCode.') == IS_STRING)) {');
                 $codePrinter->increaseLevel();
                 $targetVar = $var['name'];
-                if ($this->isZE3()) {
-                    $targetVar = '&'.$targetVar;
-                }
+                $targetVar = '&'.$targetVar;
                 $codePrinter->output('zephir_get_strval('.$targetVar.', '.$var['name'].'_param);');
                 $codePrinter->decreaseLevel();
                 $codePrinter->output('} else {');
