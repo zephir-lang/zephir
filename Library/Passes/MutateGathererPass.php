@@ -234,6 +234,18 @@ class MutateGathererPass
     }
 
     /**
+     * Returns the number of assignment instructions that mutated a variable.
+     *
+     * @param string $variable
+     *
+     * @return int
+     */
+    public function getNumberOfMutations(string $variable): int
+    {
+        return $this->mutations[$variable] ?? 0;
+    }
+
+    /**
      * Pass statement block.
      *
      * @param array $statements
