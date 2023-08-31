@@ -51,8 +51,7 @@ final class BackendFactory
      */
     private function resolveBackendClass(): string
     {
-        $parser = new ArgvInput();
-        $backend = $parser->getParameterOption('--backend', null);
+        $backend = (new ArgvInput())->getParameterOption('--backend', null);
 
         if (null === $backend) {
             // Do not use this feature for typical use case.
