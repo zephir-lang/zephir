@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir;
 
 use Psr\Log\LoggerInterface;
+use Zephir\Backend\Backend;
 use Zephir\Cache\FunctionCache;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
@@ -179,9 +180,9 @@ class CompilationContext
     /**
      * The current backend.
      *
-     * @var BaseBackend|null
+     * @var Backend|null
      */
-    public ?BaseBackend $backend = null;
+    public ?Backend $backend = null;
 
     /**
      * Transform class/interface name to FQN format.

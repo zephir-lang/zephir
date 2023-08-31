@@ -100,13 +100,6 @@ final class ApiCommand extends AbstractCommand
         return new InputDefinition(
             [
                 new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to generate HTML API for the extension',
-                    'ZendEngine3'
-                ),
-                new InputOption(
                     'path',
                     'p',
                     InputOption::VALUE_REQUIRED,

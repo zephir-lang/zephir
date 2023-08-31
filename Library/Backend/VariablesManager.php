@@ -9,16 +9,17 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Backends\ZendEngine3;
+namespace Zephir\Backend;
 
 use Zephir\CompilationContext as Context;
 use Zephir\Exception\CompilerException as Exception;
 use Zephir\Types;
 use Zephir\Variable;
+use function Zephir\Backend\ZendEngine3\add_slashes;
 
 class VariablesManager
 {
-    const RESERVED_NAMES = [
+    public const RESERVED_NAMES = [
         'this_ptr',
         'return_value',
         'return_value_ptr',
@@ -38,7 +39,7 @@ class VariablesManager
      *
      * @return void
      */
-    public function initializeDefaults(Variable $variable, array $value, Context $context)
+    public function initializeDefaults(Variable $variable, array $value, Context $context): void
     {
         switch ($variable->getType()) {
             case Types::T_VARIABLE:
@@ -63,9 +64,9 @@ class VariablesManager
      *
      * @return void
      */
-    private function initDynamicVar(Variable $variable, array $value, Context $context)
+    private function initDynamicVar(Variable $variable, array $value, Context $context): void
     {
-        /* These ones are system variables, do not add default values.
+        /* These are system variables, do not add default values.
            Also see: https://github.com/zephir-lang/zephir/issues/1660 */
         if (\in_array($variable->getName(), self::RESERVED_NAMES, true)) {
             return;
@@ -111,7 +112,7 @@ class VariablesManager
                 break;
 
             default:
-                throw $this->invalidDefaulTypeException($variable, $value);
+                throw $this->invalidDefaultTypeException($variable, $value);
         }
     }
 
@@ -125,7 +126,7 @@ class VariablesManager
      *
      * @return void
      */
-    private function initStringVar(Variable $variable, array $value, Context $context)
+    private function initStringVar(Variable $variable, array $value, Context $context): void
     {
         $context->symbolTable->mustGrownStack(true);
         $context->backend->initVar($variable, $context);
@@ -141,7 +142,7 @@ class VariablesManager
                 break;
 
             default:
-                throw $this->invalidDefaulTypeException($variable, $value);
+                throw $this->invalidDefaultTypeException($variable, $value);
         }
     }
 
@@ -155,7 +156,7 @@ class VariablesManager
      *
      * @return void
      */
-    private function initArrayVar(Variable $variable, array $value, Context $context)
+    private function initArrayVar(Variable $variable, array $value, Context $context): void
     {
         $context->symbolTable->mustGrownStack(true);
         $context->backend->initVar($variable, $context);
@@ -171,7 +172,7 @@ class VariablesManager
                 break;
 
             default:
-                throw $this->invalidDefaulTypeException($variable, $value);
+                throw $this->invalidDefaultTypeException($variable, $value);
         }
     }
 
@@ -183,7 +184,7 @@ class VariablesManager
      *
      * @return Exception
      */
-    private function invalidDefaulTypeException(Variable $variable, array $value): Exception
+    private function invalidDefaultTypeException(Variable $variable, array $value): Exception
     {
         new Exception(
             sprintf(
@@ -204,7 +205,7 @@ class VariablesManager
      *
      * @return void
      */
-    private function validateCharValue(array $value)
+    private function validateCharValue(array $value): void
     {
         if (\strlen($value['value']) > 2) {
             throw new Exception(

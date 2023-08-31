@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test\Backends\ZendEngine3;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\Backends\ZendEngine3\Backend;
+use Zephir\Backend\Backend;
 use Zephir\CompilationContext;
 use Zephir\Config;
 use Zephir\Variable;

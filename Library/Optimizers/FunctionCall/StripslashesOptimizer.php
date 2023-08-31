@@ -63,11 +63,7 @@ class StripslashesOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        if ('ZendEngine2' == $context->backend->getName()) {
-            $context->codePrinter->output('zephir_stripslashes('.$symbol.', '.$resolvedParams[0].');');
-        } else {
-            $context->codePrinter->output('zephir_stripslashes('.$symbol.', '.$resolvedParams[0].');');
-        }
+        $context->codePrinter->output('zephir_stripslashes('.$symbol.', '.$resolvedParams[0].');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

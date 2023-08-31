@@ -21,7 +21,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zephir\BaseBackend;
+use Zephir\Backend\Backend;
 use Zephir\Config;
 
 use function chdir;
@@ -30,7 +30,6 @@ use function is_dir;
 use function is_readable;
 use function mkdir;
 use function preg_match;
-
 use const DIRECTORY_SEPARATOR;
 
 /**
@@ -40,11 +39,11 @@ use const DIRECTORY_SEPARATOR;
  */
 final class InitCommand extends AbstractCommand
 {
-    private BaseBackend $backend;
+    private Backend $backend;
     private Config $config;
     private LoggerInterface $logger;
 
-    public function __construct(BaseBackend $backend, Config $config, LoggerInterface $logger)
+    public function __construct(Backend $backend, Config $config, LoggerInterface $logger)
     {
         $this->backend = $backend;
         $this->config = $config;
@@ -53,7 +52,7 @@ final class InitCommand extends AbstractCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('init')
@@ -62,7 +61,7 @@ final class InitCommand extends AbstractCommand
             ->setHelp(sprintf('%s.', $this->getDescription()));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $namespace = $this->sanitizeNamespace($input->getArgument('namespace'));
 
@@ -87,7 +86,6 @@ final class InitCommand extends AbstractCommand
 
         // Copy the latest kernel files
         $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
-
         // Dump initial configuration on project creation
         $this->config->dumpToFile();
 
@@ -102,13 +100,6 @@ final class InitCommand extends AbstractCommand
                     'namespace',
                     InputArgument::REQUIRED,
                     'The extension namespace'
-                ),
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to create extension',
-                    'ZendEngine3'
                 ),
             ]
         );
@@ -139,9 +130,9 @@ final class InitCommand extends AbstractCommand
      * @param string|null $pattern
      * @param string      $callback
      *
-     * @return bool
+     * @return void
      */
-    private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): bool
+    private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): void
     {
         $success = true;
         $iterator = new DirectoryIterator($src);
@@ -167,7 +158,5 @@ final class InitCommand extends AbstractCommand
                 $success = $success && $callback($pathName, $path);
             }
         }
-
-        return $success;
     }
 }

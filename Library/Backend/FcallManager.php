@@ -9,7 +9,7 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Backends\ZendEngine3;
+namespace Zephir\Backend;
 
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;

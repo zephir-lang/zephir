@@ -19,6 +19,8 @@ use Psr\Log\NullLogger;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionException;
+use Zephir\Backend\Backend;
+use Zephir\Backend\StringsManager;
 use Zephir\Code\Builder\Struct;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Compiler\FileInterface;
@@ -30,13 +32,11 @@ use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
-
 use function count;
 use function dirname;
 use function extension_loaded;
 use function is_array;
 use function is_string;
-
 use const DIRECTORY_SEPARATOR;
 
 final class Compiler
@@ -44,9 +44,9 @@ final class Compiler
     use LoggerAwareTrait;
 
     /**
-     * @var BaseBackend
+     * @var Backend
      */
-    public BaseBackend $backend;
+    public Backend $backend;
 
     /**
      * @var FunctionDefinition[]
@@ -151,7 +151,7 @@ final class Compiler
      * Compiler constructor.
      *
      * @param Config              $config
-     * @param BaseBackend         $backend
+     * @param Backend         $backend
      * @param Parser\Manager      $manager
      * @param FileSystemInterface $filesystem
      * @param CompilerFileFactory $compilerFileFactory
@@ -160,7 +160,7 @@ final class Compiler
      */
     public function __construct(
         Config $config,
-        BaseBackend $backend,
+        Backend $backend,
         Parser\Manager $manager,
         FileSystemInterface $filesystem,
         CompilerFileFactory $compilerFileFactory
@@ -172,7 +172,7 @@ final class Compiler
         $this->compilerFileFactory = $compilerFileFactory;
         $this->logger = new NullLogger();
 
-        $this->stringManager = $this->backend->getStringsManager();
+        $this->stringManager = new StringsManager();
         $this->fcallManager = $this->backend->getFcallManager();
 
         try {

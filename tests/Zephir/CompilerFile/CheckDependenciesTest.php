@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
 use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\Backends\ZendEngine3\Backend;
+use Zephir\Backend\Backend;
 use Zephir\Compiler;
 use Zephir\CompilerFile;
 use Zephir\Config;
@@ -34,7 +34,7 @@ final class CheckDependenciesTest extends TestCase
     {
         $logger = new TestLogger();
         $config = new Config();
-        $backend = new Backend($config, 'kernels', 'templates');
+        $backend = new Backend($config, 'kernel', 'templates');
         $disk = new HardDisk(realpath('..').'/tests/output');
         $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
 

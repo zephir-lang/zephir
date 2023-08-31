@@ -73,17 +73,7 @@ final class CompileCommand extends AbstractCommand
 
     protected function createDefinition(): InputDefinition
     {
-        return new InputDefinition(
-            [
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to compile extension',
-                    'ZendEngine3'
-                ),
-            ]
-        );
+        return new InputDefinition([]);
     }
 
     /**

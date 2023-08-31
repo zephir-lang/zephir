@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,7 +47,6 @@ final class GenerateCommand extends AbstractCommand
         $this
             ->setName('generate')
             ->setDescription('Generates C code from the Zephir code without compiling it')
-            ->setDefinition($this->createDefinition())
             ->addOption('trace', 't', InputOption::VALUE_NONE, 'Show trace message output (in case of exception error)')
             ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
     }
@@ -100,20 +98,5 @@ MSG
         }
 
         return 0;
-    }
-
-    protected function createDefinition(): InputDefinition
-    {
-        return new InputDefinition(
-            [
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to generate extension',
-                    'ZendEngine3'
-                ),
-            ]
-        );
     }
 }

@@ -11,10 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Backends\ZendEngine3;
+namespace Zephir\Backend;
 
 use Zephir\StringsManager as BaseStringsManager;
-
 use function Zephir\file_put_contents_ex;
 
 /**
@@ -66,7 +65,6 @@ class StringsManager extends BaseStringsManager
             $useCopy = [];
             $avars = [];
             $zvars = [];
-            $svars = [];
             $lengths = [];
             $sparams = [];
             $lparams = [];
@@ -78,7 +76,6 @@ class StringsManager extends BaseStringsManager
                     $params[] = 'const char *op'.$n.', uint32_t op'.$n.'_len';
                     $lparams[] = 'op'.$n.', sizeof(op'.$n.')-1';
                     $lengths[] = 'op'.$n.'_len';
-                    $svars[] = $n;
                     $avars[$n] = 's';
                 } else {
                     $params[] = 'zval *op'.$n;

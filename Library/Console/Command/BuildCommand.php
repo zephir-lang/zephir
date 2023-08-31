@@ -47,7 +47,6 @@ final class BuildCommand extends AbstractCommand
 
         $arguments = [
             'command' => 'generate',
-            '--backend' => $input->getOption('backend'),
         ];
 
         try {
@@ -64,7 +63,6 @@ final class BuildCommand extends AbstractCommand
 
         $arguments = [
             'command' => 'compile',
-            '--backend' => $input->getOption('backend'),
             '--dev' => $this->isDevelopmentModeEnabled($input),
         ];
 
@@ -96,17 +94,7 @@ final class BuildCommand extends AbstractCommand
 
     protected function createDefinition(): InputDefinition
     {
-        return new InputDefinition(
-            [
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to build extension',
-                    'ZendEngine3'
-                ),
-            ]
-        );
+        return new InputDefinition([]);
     }
 
     /**
