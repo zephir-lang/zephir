@@ -388,6 +388,8 @@ class ForStatement extends StatementAbstract
         $codePrinter->output('}');
         $codePrinter->decreaseLevel();
         $codePrinter->output('}');
+
+        return true;
     }
 
     /**
@@ -396,11 +398,11 @@ class ForStatement extends StatementAbstract
      * @param array $exprRaw
      * @param CompilationContext $compilationContext
      *
-     * @return bool
+     * @return void
      * @throws Exception
      * @throws ReflectionException
      */
-    public function compileIterator(array $exprRaw, CompilationContext $compilationContext): bool
+    public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
         $compilationContext->headersManager->add('kernel/iterator');
@@ -418,10 +420,6 @@ class ForStatement extends StatementAbstract
         }
 
         $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
-        switch ($exprVariable->getType()) {
-            case 'variable':
-                break;
-        }
 
         /**
          * Initialize 'key' variable
