@@ -33,8 +33,6 @@ class Backend
     protected FcallManagerInterface $fcallManager;
 
     /**
-     * BaseBackend constructor.
-     *
      * @param Config $config
      * @param string $kernelsPath
      * @param string $templatesPath
@@ -133,16 +131,6 @@ class Backend
         }
 
         return '&'.$variable->getName();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * TODO: Do we need this method at all?
-     */
-    public function getVariableCodePointer(Variable $variable)
-    {
-        return $this->getVariableCode($variable);
     }
 
     /**
@@ -800,7 +788,7 @@ class Backend
 
     public function arrayIssetFetch2(Variable $target, Variable $var, $resolvedExpr, $flags, $expression, CompilationContext $context)
     {
-        $code = $this->getVariableCodePointer($target).', '.$this->getVariableCode($var);
+        $code = $this->getVariableCode($target).', '.$this->getVariableCode($var);
 
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' === $resolvedExpr->getType()) {
@@ -829,7 +817,7 @@ class Backend
     public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
-        $variableCode = $this->getVariableCodePointer($variable);
+        $variableCode = $this->getVariableCode($variable);
         if ('string' == $exprIndex->getType()) {
             $context->codePrinter->output('zephir_array_unset_string('.$variableCode.', SL("'.$exprIndex->getCode().'"), '.$flags.');');
 
@@ -842,7 +830,7 @@ class Backend
     public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context)
     {
         $context->headersManager->add('kernel/array');
-        $variableCode = $this->getVariableCodePointer($variable);
+        $variableCode = $this->getVariableCode($variable);
         switch ($exprIndex->getType()) {
             case 'int':
             case 'uint':
@@ -1379,7 +1367,7 @@ class Backend
 
     public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context)
     {
-        $variable = $this->getVariableCodePointer($variable);
+        $variable = $this->getVariableCode($variable);
         $itemVariable = $this->getVariableCode($itemVariable);
         $context->codePrinter->output('zephir_concat_self('.$variable.', '.$itemVariable.');');
     }
@@ -1395,13 +1383,13 @@ class Backend
             switch ($key->getType()) {
                 case 'string':
                 case 'variable':
-                    $compilationContext->codePrinter->output('zephir_array_update_zval('.$this->getVariableCodePointer($symbolVariable).', '.$this->getVariableCode($key).', '.$value.', '.$flags.');');
+                    $compilationContext->codePrinter->output('zephir_array_update_zval('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($key).', '.$value.', '.$flags.');');
                     break;
 
                 case 'int':
                 case 'uint':
                 case 'long':
-                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCodePointer($symbolVariable).', '.$key->getName().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
+                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCode($symbolVariable).', '.$key->getName().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
 
                 default:
@@ -1410,11 +1398,11 @@ class Backend
         } elseif ($key instanceof CompiledExpression) {
             switch ($key->getType()) {
                 case 'string':
-                    $compilationContext->codePrinter->output('zephir_array_update_string('.$this->getVariableCodePointer($symbolVariable).', SL("'.$key->getCode().'"), '.$value.', '.$flags.');');
+                    $compilationContext->codePrinter->output('zephir_array_update_string('.$this->getVariableCode($symbolVariable).', SL("'.$key->getCode().'"), '.$value.', '.$flags.');');
                     break;
 
                 case 'int':
-                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCodePointer($symbolVariable).', '.$key->getCode().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
+                    $compilationContext->codePrinter->output('zephir_array_update_long('.$this->getVariableCode($symbolVariable).', '.$key->getCode().', '.$value.', '.$flags.' ZEPHIR_DEBUG_PARAMS_DUMMY);');
                     break;
 
                 case 'variable':
@@ -1471,7 +1459,7 @@ class Backend
                 );
         }
         if ($isVariable && in_array($index->getType(), ['variable', 'string', 'mixed'])) {
-            $output = 'zephir_array_fetch('.$this->getVariableCodePointer($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
+            $output = 'zephir_array_fetch('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         } else {
             if ($isVariable) {
                 $indexAccess = $this->getVariableCode($index);
@@ -1481,7 +1469,7 @@ class Backend
                     $indexAccess = 'SL("'.$indexAccess.'")';
                 }
             }
-            $output = 'zephir_array_fetch_'.$type.'('.$this->getVariableCodePointer($var).', '.$this->getVariableCode($src).', '.$indexAccess.', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
+            $output = 'zephir_array_fetch_'.$type.'('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$indexAccess.', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         }
 
         if ($useCodePrinter) {
@@ -1496,7 +1484,7 @@ class Backend
         list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
         $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
-        $varCode = $this->getVariableCodePointer($variable);
+        $varCode = $this->getVariableCode($variable);
         $compilationContext->codePrinter->output(
             sprintf(
                 'zephir_array_update_multi(%s, %s, SL("%s"), %d, %s);',
@@ -1559,7 +1547,7 @@ class Backend
         } elseif ('return_value' == $symbolVariable->getName()) {
             $context->codePrinter->output('ZEPHIR_RETURN_CALL_ZVAL_FUNCTION('.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
         } else {
-            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION('.$this->getVariableCodePointer($symbolVariable).', '.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
+            $context->codePrinter->output('ZEPHIR_CALL_ZVAL_FUNCTION('.$this->getVariableCode($symbolVariable).', '.$this->getVariableCode($variable).', '.$cache.', '.$cacheSlot.$paramStr.');');
         }
     }
 

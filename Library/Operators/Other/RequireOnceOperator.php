@@ -68,7 +68,7 @@ class RequireOnceOperator extends AbstractOperator
 
         if ($symbolVariable) {
             $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
             $codePrinter->output('if (zephir_require_once_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
         } else {
             $codePrinter->output('if (zephir_require_once_zval('.$exprVar.') == FAILURE) {');

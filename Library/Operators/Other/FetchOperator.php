@@ -136,7 +136,7 @@ class FetchOperator extends AbstractOperator
                 $property = $expression['right']['right']['value'];
 
                 $compilationContext->headersManager->add('kernel/object');
-                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $symbol = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
 
                 return new CompiledExpression('bool', 'zephir_fetch_property('.$symbol.', '.$evalSymbol.', SL("'.$property.'"), PH_SILENT_CC)', $expression);
@@ -178,7 +178,7 @@ class FetchOperator extends AbstractOperator
 
                 $compilationContext->headersManager->add('kernel/object');
 
-                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $symbol = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
                 $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
 

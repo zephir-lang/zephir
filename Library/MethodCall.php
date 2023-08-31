@@ -746,7 +746,7 @@ class MethodCall extends Call
             } else {
                 //TODO: also move to backend
                 if ($isExpecting) {
-                    $symbolCode = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+                    $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
                 }
                 $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
                 $paramCount = \count($params);

@@ -443,7 +443,7 @@ class FunctionCall extends Call
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         /**
