@@ -30,8 +30,8 @@ class ClassProperty
         protected array $visibility,
         protected string $name,
         protected ?array $defaultValue,
-        protected string $docBlock,
-        protected array $original,
+        protected ?string $docBlock = null,
+        protected ?array $original = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -96,13 +96,11 @@ class ClassProperty
     /**
      * Checks for visibility congruence.
      *
-     * @param array  $visibility
+     * @param array $visibility
      * @param string $name
-     * @param array  $original
-     *
-     * @throws CompilerException
+     * @param array|null $original
      */
-    public function checkVisibility($visibility, $name, $original): void
+    public function checkVisibility(array $visibility, string $name, ?array $original = null): void
     {
         if (in_array('public', $visibility) && in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
@@ -122,7 +120,7 @@ class ClassProperty
      *
      * @return string
      */
-    public function getVisibilityAccessor()
+    public function getVisibilityAccessor(): string
     {
         $modifiers = [];
 
@@ -155,9 +153,9 @@ class ClassProperty
     /**
      * Returns the docblock related to the property.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDocBlock(): string
+    public function getDocBlock(): ?string
     {
         return $this->docBlock;
     }
@@ -422,10 +420,10 @@ class ClassProperty
         $parentClassDefinition = $classDefinition->getExtendsClassDefinition();
 
         if (!$this->isStatic()) {
-            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getInitMethod() : null;
+            $constructParentMethod = $parentClassDefinition?->getInitMethod();
             $constructMethod = $classDefinition->getInitMethod();
         } else {
-            $constructParentMethod = $parentClassDefinition ? $parentClassDefinition->getStaticInitMethod() : null;
+            $constructParentMethod = $parentClassDefinition?->getStaticInitMethod();
             $constructMethod = $classDefinition->getStaticInitMethod();
         }
 
