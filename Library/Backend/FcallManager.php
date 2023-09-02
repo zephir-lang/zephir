@@ -29,7 +29,7 @@ class FcallManager implements FcallManagerInterface
      *
      * @return string
      */
-    public function getMacro($static, $doReturn, $paramCount)
+    public function getMacro($static, $doReturn, $paramCount): string
     {
         $scope = $static ? 'STATIC' : '';
         $mode = 'CALL_INTERNAL_METHOD_NORETURN_P';
@@ -50,7 +50,7 @@ class FcallManager implements FcallManagerInterface
         return $macroName;
     }
 
-    public function genFcallCode()
+    public function genFcallCode(): void
     {
         $codePrinter = new CodePrinter();
 
