@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use ReflectionClass;
@@ -23,6 +25,10 @@ use function is_string;
  */
 class Variable implements TypeAwareInterface
 {
+    public const VAR_THIS_POINTER = 'this_ptr';
+
+    public const VAR_RETURN_VALUE = 'return_value';
+
     public const BRANCH_MAGIC = '$$';
 
     /**
@@ -40,7 +46,7 @@ class Variable implements TypeAwareInterface
     /**
      * Compiled variable's name.
      */
-    protected $lowName;
+    protected string $lowName = '';
 
     /**
      * Number of times the variable has been read.
@@ -88,17 +94,11 @@ class Variable implements TypeAwareInterface
 
     protected bool $doublePointer = false;
 
-    protected $defaultInitValue;
+    protected mixed $defaultInitValue = null;
 
-    /**
-     * Class types.
-     */
     protected array $classTypes = [];
 
-    /**
-     * Associated class.
-     */
-    protected ClassDefinition $associatedClass;
+    protected ?ClassDefinition $associatedClass = null;
 
     /**
      * Initialization skips.
@@ -108,17 +108,17 @@ class Variable implements TypeAwareInterface
     /**
      * AST node where the variable was originally declared or created.
      */
-    protected $node;
+    protected ?array $node = null;
 
     /**
      * Possible constant value assigned to the variable.
      */
-    protected $possibleValue;
+    protected mixed $possibleValue = null;
 
     /**
      * Branch where the variable got its last possible value.
      */
-    protected $possibleValueBranch;
+    protected mixed $possibleValueBranch = null;
 
     /**
      * Whether the variable was used or not.
@@ -128,26 +128,12 @@ class Variable implements TypeAwareInterface
     /**
      * Last AST node where the variable was used.
      */
-    protected $usedNode;
+    protected ?array $usedNode = null;
 
     /**
      * @var Globals
      */
     protected Globals $globalsManager;
-
-    /**
-     * Complex variable type, they may need special treatment.
-     *
-     * @var array
-     */
-    protected array $complexTypes = [
-        'variable' => 1,
-        'string' => 1,
-        'array' => 1,
-        'resource' => 1,
-        'callable' => 1,
-        'object' => 1,
-    ];
 
     public function __construct(protected string $type, protected string $name, protected ?Branch $branch = null)
     {
@@ -158,9 +144,9 @@ class Variable implements TypeAwareInterface
     /**
      * Get init branch.
      *
-     * @return bool|int
+     * @return bool
      */
-    public function getInitBranch()
+    public function getInitBranch(): bool
     {
         return $this->initBranch;
     }
@@ -238,7 +224,7 @@ class Variable implements TypeAwareInterface
      *
      * @return string
      */
-    public function getRealName()
+    public function getRealName(): string
     {
         return $this->name;
     }
@@ -248,13 +234,9 @@ class Variable implements TypeAwareInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
-        if ($this->lowName) {
-            return $this->lowName;
-        }
-
-        return $this->name;
+        return $this->lowName ?: $this->name;
     }
 
     /**
@@ -262,7 +244,7 @@ class Variable implements TypeAwareInterface
      *
      * @param string $lowName
      */
-    public function setLowName(string $lowName)
+    public function setLowName(string $lowName): void
     {
         $this->lowName = $lowName;
     }
@@ -272,7 +254,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $readOnly
      */
-    public function setReadOnly(bool $readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -282,7 +264,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isReadOnly()
+    public function isReadOnly(): bool
     {
         return $this->readOnly;
     }
@@ -359,7 +341,7 @@ class Variable implements TypeAwareInterface
      * @param bool       $used
      * @param array|null $node
      */
-    public function setUsed(bool $used, array $node = null)
+    public function setUsed(bool $used, array $node = null): void
     {
         $this->used = $used;
         $this->usedNode = $node;
@@ -370,17 +352,15 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isUsed()
+    public function isUsed(): bool
     {
         return $this->used;
     }
 
     /**
      * Returns the last node where the variable was assigned or used.
-     *
-     * @return array
      */
-    public function getLastUsedNode()
+    public function getLastUsedNode(): ?array
     {
         return $this->usedNode;
     }
@@ -390,7 +370,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $memoryTracked
      */
-    public function setMemoryTracked(bool $memoryTracked)
+    public function setMemoryTracked(bool $memoryTracked): void
     {
         $this->memoryTracked = $memoryTracked;
     }
@@ -400,7 +380,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isMemoryTracked()
+    public function isMemoryTracked(): bool
     {
         return $this->memoryTracked;
     }
@@ -410,7 +390,7 @@ class Variable implements TypeAwareInterface
      *
      * @return Branch|null
      */
-    public function getBranch()
+    public function getBranch(): ?Branch
     {
         return $this->branch;
     }
@@ -446,17 +426,17 @@ class Variable implements TypeAwareInterface
      */
     public function setClassTypes(array|string $classTypes): void
     {
-        if ($classTypes) {
-            if (is_string($classTypes)) {
-                if (!in_array($classTypes, $this->classTypes)) {
-                    $this->classTypes[] = $classTypes;
-                }
-            } else {
-                foreach ($classTypes as $classType) {
-                    if (!in_array($classType, $this->classTypes)) {
-                        $this->classTypes[] = $classType;
-                    }
-                }
+        if (is_string($classTypes)) {
+            if (!in_array($classTypes, $this->classTypes)) {
+                $this->classTypes[] = $classTypes;
+            }
+
+            return;
+        }
+
+        foreach ($classTypes as $classType) {
+            if (!in_array($classType, $this->classTypes)) {
+                $this->classTypes[] = $classType;
             }
         }
     }
@@ -474,9 +454,9 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the PHP class related to variable.
      *
-     * @param ClassDefinition|ReflectionClass $associatedClass
+     * @param ReflectionClass|ClassDefinition $associatedClass
      */
-    public function setAssociatedClass($associatedClass)
+    public function setAssociatedClass(ReflectionClass|ClassDefinition $associatedClass): void
     {
         $this->associatedClass = $associatedClass;
     }
@@ -484,9 +464,9 @@ class Variable implements TypeAwareInterface
     /**
      * Returns the class related to the variable.
      *
-     * @return ClassDefinition
+     * @return ClassDefinition|null
      */
-    public function getAssociatedClass(): ClassDefinition
+    public function getAssociatedClass(): ?ClassDefinition
     {
         return $this->associatedClass;
     }
@@ -496,21 +476,17 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $types
      */
-    public function setDynamicTypes($types): void
+    public function setDynamicTypes(array|string $types): void
     {
-        if ($types) {
-            unset($this->dynamicTypes['unknown']);
+        unset($this->dynamicTypes['unknown']);
 
-            if (is_string($types)) {
-                if (!isset($this->dynamicTypes[$types])) {
-                    $this->dynamicTypes[$types] = true;
-                }
-            } else {
-                foreach ($types as $one) {
-                    if (!isset($this->dynamicTypes[$one])) {
-                        $this->dynamicTypes[$one] = true;
-                    }
-                }
+        if (is_string($types)) {
+            $types = [$types];
+        }
+
+        foreach ($types as $type) {
+            if (!isset($this->dynamicTypes[$type])) {
+                $this->dynamicTypes[$type] = true;
             }
         }
     }
@@ -563,7 +539,7 @@ class Variable implements TypeAwareInterface
             }
         }
 
-        return 0 == $number;
+        return 0 === $number;
     }
 
     /**
@@ -668,11 +644,11 @@ class Variable implements TypeAwareInterface
     /**
      * Set if the variable must be initialized to null.
      *
-     * @param mixed $mustInitNull
+     * @param bool $mustInitNull
      */
-    public function setMustInitNull($mustInitNull): void
+    public function setMustInitNull(bool $mustInitNull): void
     {
-        $this->mustInitNull = (bool) $mustInitNull;
+        $this->mustInitNull = $mustInitNull;
     }
 
     /**
@@ -680,7 +656,7 @@ class Variable implements TypeAwareInterface
      *
      * @param mixed $value
      */
-    public function setDefaultInitValue($value)
+    public function setDefaultInitValue(mixed $value): void
     {
         $this->defaultInitValue = $value;
     }
@@ -688,7 +664,7 @@ class Variable implements TypeAwareInterface
     /**
      * Sets an automatic safe default init value according to its type.
      */
-    public function enableDefaultAutoInitValue()
+    public function enableDefaultAutoInitValue(): void
     {
         switch ($this->type) {
             case 'char':
@@ -722,7 +698,7 @@ class Variable implements TypeAwareInterface
      *
      * @return mixed
      */
-    public function getDefaultInitValue()
+    public function getDefaultInitValue(): mixed
     {
         return $this->defaultInitValue;
     }
@@ -732,9 +708,9 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function separate(CompilationContext $compilationContext)
+    public function separate(CompilationContext $compilationContext): void
     {
-        if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
+        if (!in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
             $compilationContext->codePrinter->output('ZEPHIR_SEPARATE('.$compilationContext->backend->getVariableCode($this).');');
         }
     }
@@ -793,7 +769,7 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function initVariant(CompilationContext $compilationContext)
+    public function initVariant(CompilationContext $compilationContext): void
     {
         if ($this->numberSkips) {
             --$this->numberSkips;
@@ -806,9 +782,9 @@ class Variable implements TypeAwareInterface
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
-        if ('this_ptr' !== $this->getName() && 'return_value' !== $this->getName()) {
-            if (false === $this->initBranch) {
-                $this->initBranch = $compilationContext->currentBranch;
+        if (self::VAR_THIS_POINTER !== $this->getName() && self::VAR_RETURN_VALUE !== $this->getName()) {
+            if (!$this->initBranch) {
+                $this->initBranch = $compilationContext->currentBranch === 0;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
@@ -820,7 +796,7 @@ class Variable implements TypeAwareInterface
                     $compilationContext->backend->initVar($this, $compilationContext, true, true);
                 } else {
                     if ($this->variantInits > 0) {
-                        if (0 === $this->initBranch) {
+                        if (!$this->initBranch) {
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR('.$this->getName().');');
                         } else {
                             $this->mustInitNull = true;
@@ -849,7 +825,7 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function trackVariant(CompilationContext $compilationContext)
+    public function trackVariant(CompilationContext $compilationContext): void
     {
         if ($this->numberSkips) {
             --$this->numberSkips;
@@ -857,14 +833,14 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        /*
+        /**
          * Variables are allocated for the first time using ZEPHIR_INIT_VAR
-         * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
+         * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
-        if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
-            if (false === $this->initBranch) {
-                $this->initBranch = $compilationContext->currentBranch;
+        if (self::VAR_THIS_POINTER !== $this->getName() && self::VAR_RETURN_VALUE !== $this->getName()) {
+            if (!$this->initBranch) {
+                $this->initBranch = $compilationContext->currentBranch === 0;
             }
 
             if (!$this->isLocalOnly()) {
@@ -873,7 +849,7 @@ class Variable implements TypeAwareInterface
                     $this->mustInitNull = true;
                 } else {
                     if ($this->variantInits > 0) {
-                        if (1 !== $this->initBranch) {
+                        if (!$this->initBranch) {
                             $this->mustInitNull = true;
                         }
                     }
@@ -894,7 +870,7 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function initComplexLiteralVariant(CompilationContext $compilationContext)
+    public function initComplexLiteralVariant(CompilationContext $compilationContext): void
     {
         if ($this->numberSkips) {
             --$this->numberSkips;
@@ -902,9 +878,9 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
-            if (false === $this->initBranch) {
-                $this->initBranch = $compilationContext->currentBranch;
+        if (self::VAR_THIS_POINTER != $this->getName() && self::VAR_RETURN_VALUE != $this->getName()) {
+            if (!$this->initBranch) {
+                $this->initBranch = $compilationContext->currentBranch === 0;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
@@ -924,6 +900,7 @@ class Variable implements TypeAwareInterface
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
                 }
             }
+
             ++$this->variantInits;
         }
     }
@@ -933,7 +910,7 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function observeVariant(CompilationContext $compilationContext)
+    public function observeVariant(CompilationContext $compilationContext): void
     {
         if ($this->numberSkips) {
             --$this->numberSkips;
@@ -942,9 +919,9 @@ class Variable implements TypeAwareInterface
         }
 
         $name = $this->getName();
-        if ('this_ptr' != $name && 'return_value' != $name) {
-            if (false === $this->initBranch) {
-                $this->initBranch = $compilationContext->currentBranch;
+        if (self::VAR_THIS_POINTER != $name && self::VAR_RETURN_VALUE != $name) {
+            if (!$this->initBranch) {
+                $this->initBranch = $compilationContext->currentBranch === 0;
             }
 
             $compilationContext->headersManager->add('kernel/memory');
@@ -968,7 +945,7 @@ class Variable implements TypeAwareInterface
      *
      * @param CompilationContext $compilationContext
      */
-    public function observeOrNullifyVariant(CompilationContext $compilationContext)
+    public function observeOrNullifyVariant(CompilationContext $compilationContext): void
     {
         if ($this->numberSkips) {
             --$this->numberSkips;
@@ -976,47 +953,30 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        $name = $this->getName();
-        if ('this_ptr' != $name && 'return_value' != $name) {
-            if (false === $this->initBranch) {
-                $this->initBranch = $compilationContext->currentBranch;
-            }
-
-            $compilationContext->headersManager->add('kernel/memory');
-            $compilationContext->symbolTable->mustGrownStack(true);
-            /**
-             * TODO: Do we need this?
-             * $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $this->getName() . ');');.
-             *
-             * TODO: What about else?
-             * $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR(' . $this->getName() . ');');
-             */
-            if ($this->variantInits > 0 || $compilationContext->insideCycle) {
-                $this->mustInitNull = true;
-            }
-
-            ++$this->variantInits;
-
-            $this->setMustInitNull(true);
+        if (in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
+            return;
         }
+
+        if (!$this->initBranch) {
+            $this->initBranch = $compilationContext->currentBranch === 0;
+        }
+
+        $compilationContext->headersManager->add('kernel/memory');
+        $compilationContext->symbolTable->mustGrownStack(true);
+        if ($this->variantInits > 0 || $compilationContext->insideCycle) {
+            $this->mustInitNull = true;
+        }
+
+        ++$this->variantInits;
+        $this->setMustInitNull(true);
     }
 
     /**
-     * Whether the variable is of a complex type.
+     * Checks if a variable is a super global.
      *
      * @return bool
      */
-    public function isComplex()
-    {
-        return isset($this->complexTypes[$this->type]);
-    }
-
-    /**
-     * Checks if a variable is a superglobal.
-     *
-     * @return bool
-     */
-    public function isSuperGlobal()
+    public function isSuperGlobal(): bool
     {
         return $this->isExternal && $this->globalsManager->isSuperGlobal($this->name);
     }
@@ -1058,7 +1018,7 @@ class Variable implements TypeAwareInterface
      */
     public function isBoolean(): bool
     {
-        return 'bool' == $this->type;
+        return 'bool' === $this->type;
     }
 
     /**
@@ -1068,7 +1028,7 @@ class Variable implements TypeAwareInterface
      */
     public function isString(): bool
     {
-        return 'string' == $this->type;
+        return 'string' === $this->type;
     }
 
     /**
@@ -1076,9 +1036,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isInt()
+    public function isInt(): bool
     {
-        return 'int' == $this->type;
+        return 'int' === $this->type;
     }
 
     /**
@@ -1086,9 +1046,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isDouble()
+    public function isDouble(): bool
     {
-        return 'double' == $this->type;
+        return 'double' === $this->type;
     }
 
     /**
@@ -1147,7 +1107,7 @@ class Variable implements TypeAwareInterface
      * @param CompiledExpression $possibleValue
      * @param CompilationContext $compilationContext
      */
-    public function setPossibleValue(CompiledExpression $possibleValue, CompilationContext $compilationContext)
+    public function setPossibleValue(CompiledExpression $possibleValue, CompilationContext $compilationContext): void
     {
         $this->possibleValue = $possibleValue;
         $this->possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
@@ -1158,17 +1118,15 @@ class Variable implements TypeAwareInterface
      *
      * @return mixed
      */
-    public function getPossibleValue()
+    public function getPossibleValue(): mixed
     {
         return $this->possibleValue;
     }
 
     /**
      * Returns the branch where the variable was assigned for the last time.
-     *
-     * @return Branch
      */
-    public function getPossibleValueBranch()
+    public function getPossibleValueBranch(): ?Branch
     {
         return $this->possibleValueBranch;
     }

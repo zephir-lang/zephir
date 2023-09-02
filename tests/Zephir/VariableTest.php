@@ -74,7 +74,6 @@ final class VariableTest extends TestCase
         $this->assertTrue($this->zephirVar->isVariable());
         $this->assertFalse($this->zephirVar->isLocalStatic());
         $this->assertFalse($this->zephirVar->isSuperGlobal());
-        $this->assertTrue($this->zephirVar->isComplex());
         $this->assertFalse($this->zephirVar->isBoolean());
         $this->assertFalse($this->zephirVar->isString());
         $this->assertFalse($this->zephirVar->isInt());
@@ -174,9 +173,6 @@ final class VariableTest extends TestCase
         $superglobalVar = new Variable('', '_SERVER');
         $superglobalVar->setIsExternal(true);
         $this->assertTrue($superglobalVar->isSuperGlobal());
-
-        $this->zephirVar->setType('int');
-        $this->assertFalse($this->zephirVar->isComplex());
 
         $this->zephirVar->setType('bool');
         $this->assertTrue($this->zephirVar->isBoolean());
