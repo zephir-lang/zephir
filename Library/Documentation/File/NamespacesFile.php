@@ -16,31 +16,15 @@ use Zephir\Documentation\NamespaceAccessor;
 
 class NamespacesFile implements FileInterface
 {
-    /**
-     * @var NamespaceAccessor
-     */
-    protected $namespaceAccessor;
-
-    public function __construct($config, NamespaceAccessor $namespaceAccessor)
+    public function __construct(protected NamespaceAccessor $namespaceAccessor)
     {
-        $this->namespaceAccessor = $namespaceAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'namespaces.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         return [
@@ -50,11 +34,6 @@ class NamespacesFile implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return 'namespaces.html';

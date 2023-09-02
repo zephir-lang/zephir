@@ -20,8 +20,6 @@ use function in_array;
 use function is_string;
 
 /**
- * StaticCall.
- *
  * Call methods in a static context
  */
 class StaticCall extends Call
@@ -413,16 +411,17 @@ class StaticCall extends Call
     }
 
     /**
-     * Calls static methods on the some class context.
+     * Calls static methods on some class context.
      *
-     * @param string             $methodName
-     * @param array              $expression
-     * @param Variable           $symbolVariable
-     * @param bool               $mustInit
-     * @param bool               $isExpecting
-     * @param ClassDefinition    $classDefinition
+     * @param string $methodName
+     * @param array $expression
+     * @param Variable $symbolVariable
+     * @param bool $mustInit
+     * @param bool $isExpecting
+     * @param ClassDefinition $classDefinition
      * @param CompilationContext $compilationContext
-     * @param ClassMethod        $method
+     * @param ClassMethod $method
+     * @throws Exception
      */
     protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
     {
@@ -446,15 +445,13 @@ class StaticCall extends Call
             $symbolVariable->trackVariant($compilationContext);
         }
 
-        if ($method) {
-            $method = $method->getOptimizedMethod();
-        }
+        $method = $method->getOptimizedMethod();
 
         /**
          * Check if the  method call can have an inline cache.
          */
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
+        $cachePointer = $methodCache->get($compilationContext, $method);
 
         $params = [];
         if (isset($expression['parameters']) && count($expression['parameters'])) {

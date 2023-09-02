@@ -12,8 +12,6 @@
 namespace Zephir\Expression\Builder;
 
 /**
- * RawExpression.
- *
  * Allows to use a raw expression in a builder
  */
 class RawExpression extends AbstractBuilder

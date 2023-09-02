@@ -24,7 +24,6 @@ class Template
     protected $nestedLevel;
     protected $pathToRoot = './';
     protected $themeOptions;
-    protected $theme;
     /**
      * @var Config
      */
@@ -40,14 +39,13 @@ class Template
      *
      * @throws Exception
      */
-    public function __construct(Theme $theme, array $data, string $template, int $nestedLevel = 0)
+    public function __construct(protected Theme $theme, array $data, string $template, int $nestedLevel = 0)
     {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception('Recursive inclusion detected in theme creation');
         }
 
-        $this->theme = $theme;
         $this->data = $data;
         $this->template = $template;
         $this->nestedLevel = $nestedLevel;

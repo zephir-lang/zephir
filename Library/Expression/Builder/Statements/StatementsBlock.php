@@ -14,8 +14,6 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * StatementsBlock.
- *
  * Allows to manually build a statements block AST node
  */
 class StatementsBlock extends AbstractBuilder

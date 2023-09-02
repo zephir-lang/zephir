@@ -15,35 +15,27 @@ use ReflectionClass;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Globals;
 
+use function in_array;
+use function is_string;
+
 /**
- * Variable.
- *
  * This represents a variable in a symbol table
  */
 class Variable implements TypeAwareInterface
 {
-    const BRANCH_MAGIC = '$$';
-    /**
-     * Variable's type.
-     */
-    protected $type;
+    public const BRANCH_MAGIC = '$$';
 
     /**
      * Current dynamic type of the variable.
      *
      * @var array
      */
-    protected $dynamicTypes = ['unknown' => true];
-
-    /**
-     * Variable's name.
-     */
-    protected $name;
+    protected array $dynamicTypes = ['unknown' => true];
 
     /**
      * Branch where the variable was initialized for the first time.
      */
-    protected $initBranch = false;
+    protected bool $initBranch = false;
 
     /**
      * Compiled variable's name.
@@ -53,65 +45,65 @@ class Variable implements TypeAwareInterface
     /**
      * Number of times the variable has been read.
      */
-    protected $numberUses = 0;
+    protected int $numberUses = 0;
 
     /**
      * Whether the variable is temporal or not.
      */
-    protected $temporal = false;
+    protected bool $temporal = false;
 
     /**
      * Temporal variables are marked as idle.
      */
-    protected $idle = false;
+    protected bool $idle = false;
 
     /**
      * Reusable temporary variables?
      */
-    protected $reusable = true;
+    protected bool $reusable = true;
 
     /**
      * Number of mutations to the variable.
      */
-    protected $numberMutates = 0;
+    protected int $numberMutates = 0;
 
     /**
      * Whether the variable has received any assignment.
      */
-    protected $initialized = false;
+    protected bool $initialized = false;
 
-    protected $initBranches = [];
+    protected array $initBranches = [];
 
-    protected $isExternal = false;
+    protected bool $isExternal = false;
 
-    protected $variantInits = 0;
+    protected int $variantInits = 0;
 
-    protected $mustInitNull = false;
+    protected bool $mustInitNull = false;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
-    protected $localOnly = false;
+    protected bool $localOnly = false;
 
-    protected $memoryTracked = true;
+    protected bool $memoryTracked = true;
 
-    protected $doublePointer = false;
+    protected bool $doublePointer = false;
 
     protected $defaultInitValue;
 
     /**
      * Class types.
      */
-    protected $classTypes = [];
+    protected array $classTypes = [];
 
     /**
      * Associated class.
      */
-    protected $associatedClass;
+    protected ClassDefinition $associatedClass;
 
     /**
      * Initialization skips.
      */
-    protected $numberSkips = 0;
+    protected int $numberSkips = 0;
 
     /**
      * AST node where the variable was originally declared or created.
@@ -131,7 +123,7 @@ class Variable implements TypeAwareInterface
     /**
      * Whether the variable was used or not.
      */
-    protected $used = true;
+    protected bool $used = true;
 
     /**
      * Last AST node where the variable was used.
@@ -141,7 +133,7 @@ class Variable implements TypeAwareInterface
     /**
      * @var Globals
      */
-    protected $globalsManager;
+    protected Globals $globalsManager;
 
     /**
      * Complex variable type, they may need special treatment.
@@ -157,16 +149,10 @@ class Variable implements TypeAwareInterface
         'object' => 1,
     ];
 
-    public function __construct(string $type, string $name, protected ?Branch $branch = null)
+    public function __construct(protected string $type, protected string $name, protected ?Branch $branch = null)
     {
         $this->globalsManager = new Globals();
-
-        if (\in_array($type, ['callable', 'object', 'resource'], true)) {
-            $type = 'variable';
-        }
-
-        $this->type = $type;
-        $this->name = $name;
+        $this->type = in_array($type, ['callable', 'object', 'resource'], true) ? 'variable' : $type;
     }
 
     /**
@@ -184,7 +170,7 @@ class Variable implements TypeAwareInterface
      *
      * @return Branch[]
      */
-    public function getInitBranches()
+    public function getInitBranches(): array
     {
         return $this->initBranches;
     }
@@ -194,7 +180,7 @@ class Variable implements TypeAwareInterface
      *
      * @param string $type
      */
-    public function setType(string $type)
+    public function setType(string $type): void
     {
         $this->type = $type;
     }
@@ -214,7 +200,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $localOnly
      */
-    public function setLocalOnly(bool $localOnly)
+    public function setLocalOnly(bool $localOnly): void
     {
         $this->localOnly = $localOnly;
     }
@@ -224,7 +210,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isLocalOnly()
+    public function isLocalOnly(): bool
     {
         return $this->localOnly;
     }
@@ -234,7 +220,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $doublePointer
      */
-    public function setIsDoublePointer(bool $doublePointer)
+    public function setIsDoublePointer(bool $doublePointer): void
     {
         $this->doublePointer = $doublePointer;
     }
@@ -242,7 +228,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns the variable.
      */
-    public function isDoublePointer()
+    public function isDoublePointer(): bool
     {
         return $this->doublePointer;
     }
@@ -306,7 +292,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $temporal
      */
-    public function setTemporal(bool $temporal)
+    public function setTemporal(bool $temporal): void
     {
         $this->temporal = $temporal;
     }
@@ -316,7 +302,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isTemporal()
+    public function isTemporal(): bool
     {
         return $this->temporal;
     }
@@ -326,7 +312,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $idle
      */
-    public function setIdle(bool $idle)
+    public function setIdle(bool $idle): void
     {
         $this->idle = false;
 
@@ -342,7 +328,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isIdle()
+    public function isIdle(): bool
     {
         return $this->idle;
     }
@@ -352,7 +338,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $reusable
      */
-    public function setReusable(bool $reusable)
+    public function setReusable(bool $reusable): void
     {
         $this->reusable = $reusable;
     }
@@ -362,7 +348,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isReusable()
+    public function isReusable(): bool
     {
         return $this->reusable;
     }
@@ -434,7 +420,7 @@ class Variable implements TypeAwareInterface
      *
      * @param array $node
      */
-    public function setOriginal(array $node)
+    public function setOriginal(array $node): void
     {
         $this->node = $node;
     }
@@ -444,15 +430,13 @@ class Variable implements TypeAwareInterface
      *
      * @return array
      */
-    public function getOriginal()
+    public function getOriginal(): array
     {
-        $node = $this->node;
-
-        if (!$node) {
-            $node = ['file' => 'unknown', 'line' => 0, 'char' => 0];
+        if ($this->node) {
+            return $this->node;
         }
 
-        return $node;
+        return ['file' => 'unknown', 'line' => 0, 'char' => 0];
     }
 
     /**
@@ -460,16 +444,16 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $classTypes
      */
-    public function setClassTypes($classTypes)
+    public function setClassTypes(array|string $classTypes): void
     {
         if ($classTypes) {
-            if (\is_string($classTypes)) {
-                if (!\in_array($classTypes, $this->classTypes)) {
+            if (is_string($classTypes)) {
+                if (!in_array($classTypes, $this->classTypes)) {
                     $this->classTypes[] = $classTypes;
                 }
             } else {
                 foreach ($classTypes as $classType) {
-                    if (!\in_array($classType, $this->classTypes)) {
+                    if (!in_array($classType, $this->classTypes)) {
                         $this->classTypes[] = $classType;
                     }
                 }
@@ -482,7 +466,7 @@ class Variable implements TypeAwareInterface
      *
      * @return array
      */
-    public function getClassTypes()
+    public function getClassTypes(): array
     {
         return $this->classTypes;
     }
@@ -502,7 +486,7 @@ class Variable implements TypeAwareInterface
      *
      * @return ClassDefinition
      */
-    public function getAssociatedClass()
+    public function getAssociatedClass(): ClassDefinition
     {
         return $this->associatedClass;
     }
@@ -512,17 +496,17 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $types
      */
-    public function setDynamicTypes($types)
+    public function setDynamicTypes($types): void
     {
         if ($types) {
             unset($this->dynamicTypes['unknown']);
 
-            if (\is_string($types)) {
+            if (is_string($types)) {
                 if (!isset($this->dynamicTypes[$types])) {
                     $this->dynamicTypes[$types] = true;
                 }
             } else {
-                foreach ($types as $type => $one) {
+                foreach ($types as $one) {
                     if (!isset($this->dynamicTypes[$one])) {
                         $this->dynamicTypes[$one] = true;
                     }
@@ -536,7 +520,7 @@ class Variable implements TypeAwareInterface
      *
      * @return array
      */
-    public function getDynamicTypes()
+    public function getDynamicTypes(): array
     {
         return $this->dynamicTypes;
     }
@@ -548,9 +532,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function hasAnyDynamicType($types)
+    public function hasAnyDynamicType(array|string $types): bool
     {
-        if (\is_string($types)) {
+        if (is_string($types)) {
             $types = [$types];
         }
 
@@ -570,7 +554,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function hasDifferentDynamicType(array $types)
+    public function hasDifferentDynamicType(array $types): bool
     {
         $number = 0;
         foreach ($types as $type) {
@@ -585,7 +569,7 @@ class Variable implements TypeAwareInterface
     /**
      * Increase the number of uses a variable may have.
      */
-    public function increaseUses()
+    public function increaseUses(): void
     {
         ++$this->numberUses;
     }
@@ -593,7 +577,7 @@ class Variable implements TypeAwareInterface
     /**
      * Increase the number of mutations a variable may have.
      */
-    public function increaseMutates()
+    public function increaseMutates(): void
     {
         ++$this->numberMutates;
     }
@@ -603,7 +587,7 @@ class Variable implements TypeAwareInterface
      *
      * @return int
      */
-    public function getNumberUses()
+    public function getNumberUses(): int
     {
         return $this->numberUses;
     }
@@ -613,7 +597,7 @@ class Variable implements TypeAwareInterface
      *
      * @return int
      */
-    public function getNumberMutations()
+    public function getNumberMutations(): int
     {
         return $this->numberMutates;
     }
@@ -625,7 +609,7 @@ class Variable implements TypeAwareInterface
      * @param bool               $initialized
      * @param CompilationContext $compilationContext
      */
-    public function setIsInitialized(bool $initialized, CompilationContext $compilationContext)
+    public function setIsInitialized(bool $initialized, CompilationContext $compilationContext): void
     {
         $this->initialized = $initialized;
 
@@ -645,7 +629,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isInitialized()
+    public function isInitialized(): bool
     {
         return $this->initialized;
     }
@@ -655,7 +639,7 @@ class Variable implements TypeAwareInterface
      *
      * @param bool $isExternal
      */
-    public function setIsExternal(bool $isExternal)
+    public function setIsExternal(bool $isExternal): void
     {
         $this->isExternal = $isExternal;
         $this->variantInits = 1;
@@ -666,7 +650,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isExternal()
+    public function isExternal(): bool
     {
         return $this->isExternal;
     }
@@ -676,7 +660,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function mustInitNull()
+    public function mustInitNull(): bool
     {
         return $this->mustInitNull;
     }
@@ -686,7 +670,7 @@ class Variable implements TypeAwareInterface
      *
      * @param mixed $mustInitNull
      */
-    public function setMustInitNull($mustInitNull)
+    public function setMustInitNull($mustInitNull): void
     {
         $this->mustInitNull = (bool) $mustInitNull;
     }
@@ -760,7 +744,7 @@ class Variable implements TypeAwareInterface
      *
      * @param int $numberSkips
      */
-    public function skipInitVariant($numberSkips)
+    public function skipInitVariant(int $numberSkips): void
     {
         $this->numberSkips += $numberSkips;
     }
@@ -770,17 +754,17 @@ class Variable implements TypeAwareInterface
      *
      * @return int
      */
-    public function getSkipVariant()
+    public function getSkipVariant(): int
     {
         return $this->numberSkips;
     }
 
-    /*
+    /**
      * Allocate memory for variable and init it null val
      *
      * @param CompilationContext $compilationContext
      */
-    public function initNonReferenced(CompilationContext $compilationContext)
+    public function initNonReferenced(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/memory');
         $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF('.$this->getName().');');
@@ -791,7 +775,7 @@ class Variable implements TypeAwareInterface
      *
      * @return int
      */
-    public function getVariantInits()
+    public function getVariantInits(): int
     {
         return $this->variantInits;
     }
@@ -799,7 +783,7 @@ class Variable implements TypeAwareInterface
     /**
      * Increase the number of times the variable has been initialized.
      */
-    public function increaseVariantIfNull()
+    public function increaseVariantIfNull(): void
     {
         ++$this->variantInits;
     }
@@ -817,12 +801,12 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        /*
+        /**
          * Variables are allocated for the first time using ZEPHIR_INIT_VAR
-         * the second, third, etc times are allocated using ZEPHIR_INIT_NVAR
+         * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
-        if ('this_ptr' != $this->getName() && 'return_value' != $this->getName()) {
+        if ('this_ptr' !== $this->getName() && 'return_value' !== $this->getName()) {
             if (false === $this->initBranch) {
                 $this->initBranch = $compilationContext->currentBranch;
             }
@@ -1042,7 +1026,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isLocalStatic()
+    public function isLocalStatic(): bool
     {
         return $this->isExternal && $this->localOnly;
     }
@@ -1052,9 +1036,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isVariable()
+    public function isVariable(): bool
     {
-        return 'variable' == $this->type;
+        return 'variable' === $this->type;
     }
 
     /**
@@ -1072,7 +1056,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isBoolean()
+    public function isBoolean(): bool
     {
         return 'bool' == $this->type;
     }
@@ -1082,7 +1066,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isString()
+    public function isString(): bool
     {
         return 'string' == $this->type;
     }
@@ -1112,9 +1096,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isArray()
+    public function isArray(): bool
     {
-        return 'array' == $this->type;
+        return 'array' === $this->type;
     }
 
     /**
@@ -1122,7 +1106,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isNotVariable()
+    public function isNotVariable(): bool
     {
         return !$this->isVariable();
     }
@@ -1132,7 +1116,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isNotVariableAndString()
+    public function isNotVariableAndString(): bool
     {
         return !$this->isVariable() && !$this->isString();
     }
@@ -1142,7 +1126,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isNotVariableAndMixedAndString()
+    public function isNotVariableAndMixedAndString(): bool
     {
         return !$this->isVariable() && !$this->isMixed() && !$this->isString();
     }
@@ -1152,7 +1136,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function isNotVariableAndArray()
+    public function isNotVariableAndArray(): bool
     {
         return !$this->isVariable() && !$this->isArray();
     }

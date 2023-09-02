@@ -50,7 +50,7 @@ final class Application extends BaseApplication
      *
      * @return string
      */
-    public function getHelp()
+    public function getHelp(): string
     {
         return Zephir::LOGO.parent::getHelp();
     }
@@ -77,7 +77,7 @@ final class Application extends BaseApplication
     {
         $version = explode('-', parent::getVersion());
 
-        if (isset($version[1]) && 0 === strpos($version[1], '$')) {
+        if (isset($version[1]) && str_starts_with($version[1], '$')) {
             return "{$version[0]}-source";
         }
 
@@ -131,7 +131,7 @@ final class Application extends BaseApplication
         try {
             // Makes ArgvInput::getFirstArgument() able to distinguish an option from an argument.
             $input->bind($this->getDefinition());
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Errors must be ignored, full binding/validation happens later when the command is known.
         }
 
@@ -152,11 +152,7 @@ final class Application extends BaseApplication
 
         try {
             return parent::doRun($input, $output);
-        } catch (CommandNotFoundException $e) {
-            fprintf(STDERR, $e->getMessage().PHP_EOL);
-
-            return 1;
-        } catch (RuntimeException $e) {
+        } catch (CommandNotFoundException|RuntimeException $e) {
             fprintf(STDERR, $e->getMessage().PHP_EOL);
 
             return 1;
@@ -168,7 +164,7 @@ final class Application extends BaseApplication
      *
      * @return Command[] An array of default Command instances
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         return [new HelpCommand(), new ListCommand()];
     }

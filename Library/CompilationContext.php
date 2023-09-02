@@ -19,6 +19,8 @@ use Zephir\Cache\FunctionCache;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 
+use function in_array;
+
 /**
  * This class encapsulates important entities required during compilation
  */
@@ -209,7 +211,7 @@ class CompilationContext
      */
     public function classLookup(string $className, array $statement = null): ClassDefinition
     {
-        if (!\in_array($className, ['self', 'static', 'parent'])) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $this->getFullName($className);
             if ($this->compiler->isClass($className)) {
                 return $this->compiler->getClassDefinition($className);
@@ -218,7 +220,7 @@ class CompilationContext
             throw new CompilerException("Cannot locate class '{$className}'", $statement);
         }
 
-        if (\in_array($className, ['self', 'static'])) {
+        if (in_array($className, ['self', 'static'])) {
             return $this->classDefinition;
         }
 

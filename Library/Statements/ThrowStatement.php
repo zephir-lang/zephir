@@ -27,8 +27,6 @@ use function Zephir\add_slashes;
 use function Zephir\fqcn;
 
 /**
- * ThrowStatement.
- *
  * Throws exceptions
  */
 class ThrowStatement extends StatementAbstract
@@ -39,7 +37,7 @@ class ThrowStatement extends StatementAbstract
      * @throws Exception
      * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/exception');
 
@@ -47,7 +45,7 @@ class ThrowStatement extends StatementAbstract
         $statement = $this->statement;
         $expr = $statement['expr'];
 
-        /*
+        /**
          * This optimizes throw new Exception("hello")
          */
         if (!$compilationContext->insideTryCatch) {

@@ -45,7 +45,7 @@ class NativeArray
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -59,16 +59,6 @@ class NativeArray
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
-    }
-
-    /**
-     * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
-     */
-    public function setNoisy(bool $noisy): void
-    {
-        $this->noisy = $noisy;
     }
 
     /**

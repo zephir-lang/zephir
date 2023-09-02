@@ -485,7 +485,8 @@ class ForStatement extends StatementAbstract
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
             $codePrinter->increaseLevel();
-            $compilationContext->backend->forStatementIterator($iteratorVariable, $variable, $compilationContext);
+            $compilationContext->symbolTable->mustGrownStack(true);
+            $compilationContext->codePrinter->output('ZEPHIR_ITERATOR_COPY('.$compilationContext->backend->getVariableCode($variable).', '.$iteratorVariable->getName().');');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
             $codePrinter->decreaseLevel();

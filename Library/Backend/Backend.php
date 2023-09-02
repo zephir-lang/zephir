@@ -26,6 +26,7 @@ use Zephir\GlobalConstant;
 use Zephir\Variable;
 use Zephir\Variable\Globals;
 
+use function in_array;
 use function Zephir\add_slashes;
 
 class Backend
@@ -74,10 +75,10 @@ class Backend
         return $this->fcallManager;
     }
 
-    public function declareVariables($method, $typeToVariables, CompilationContext $compilationContext)
+    public function declareVariables($method, $typeToVariables)
     {
         $varInitCode = [];
-        $additionalCode = $method ? $this->onPreInitVar($method, $compilationContext) : '';
+        $additionalCode = $method ? $this->onPreInitVar($method) : '';
 
         foreach ($typeToVariables as $type => $variables) {
             list($pointer, $code) = $this->getTypeDefinition($type);
@@ -119,24 +120,18 @@ class Backend
         return $code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getVariableCode(Variable $variable): string
     {
         if ($variable->isDoublePointer() ||
-            \in_array($variable->getName(), ['this_ptr', 'return_value']) ||
-            \in_array($variable->getType(), ['int', 'long'])) {
+            in_array($variable->getName(), ['this_ptr', 'return_value']) ||
+            in_array($variable->getType(), ['int', 'long'])) {
             return $variable->getName();
         }
 
         return '&'.$variable->getName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true)
+    public function getBoolCode(Variable $variable, CompilationContext $context, $useCodePrinter = true): string
     {
         $code = '(Z_TYPE_P('.$this->getVariableCode($variable).') == IS_TRUE)';
         if ($useCodePrinter) {
@@ -146,9 +141,6 @@ class Backend
         return $code;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getTypeDefinition($type): array
     {
         switch ($type) {
@@ -252,12 +244,9 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Variable           $variableVariable
      * @param string             $operator
      * @param string             $value
-     * @param CompilationContext $context
      *
      * @throws CompilerException
      *
@@ -267,7 +256,6 @@ class Backend
         Variable $variableVariable,
         string $operator,
         string $value,
-        CompilationContext $context
     ): string {
         $variableName = $this->getVariableCode($variableVariable);
 
@@ -319,10 +307,7 @@ class Backend
         return $condition;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function onPreInitVar(ClassMethod $method, CompilationContext $context): string
+    public function onPreInitVar(ClassMethod $method): string
     {
         if (!$method instanceof FunctionDefinition && !$method->isInternal()) {
             return "zval *this_ptr = getThis();\n"; //TODO: think about a better way to solve this.
@@ -360,7 +345,7 @@ class Backend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
+        $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
             $groupVariables[] = $variable->getName();
@@ -441,8 +426,6 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Variable[]         $variables
      * @param CompilationContext $context
      *
@@ -522,8 +505,6 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param ClassMethod        $method
      * @param CompilationContext $context
      *
@@ -574,8 +555,6 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Variable             $variable
      * @param string|Variable|null $value
      * @param CompilationContext   $context
@@ -617,7 +596,7 @@ class Backend
         }
     }
 
-    public function returnString($value, CompilationContext $context, $useCodePrinter = true, $doCopy = true)
+    public function returnString($value, CompilationContext $context, $useCodePrinter = true)
     {
         return $this->returnHelper('RETURN_MM_STRING', $value, $context, $useCodePrinter);
     }
@@ -668,7 +647,7 @@ class Backend
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (\in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
+            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }
@@ -809,7 +788,7 @@ class Backend
         throw new CompilerException('arrayIssetFetch ['.$resolvedExpr->getType().']', $expression);
     }
 
-    public function propertyIsset(Variable $var, $key, CompilationContext $context)
+    public function propertyIsset(Variable $var, $key)
     {
         return new CompiledExpression('bool', 'zephir_isset_property('.$this->getVariableCode($var).', SL("'.$key.'"))', null);
     }
@@ -893,8 +872,6 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Variable           $symbolVariable
      * @param Variable           $variableVariable
      * @param Variable|string    $property
@@ -1028,8 +1005,6 @@ class Backend
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param Variable           $variable
      * @param string|Variable    $property
      * @param mixed              $value
@@ -1037,7 +1012,7 @@ class Backend
      *
      * @return void
      */
-    public function updateProperty(Variable $variable, $property, $value, CompilationContext $context)
+    public function updateProperty(Variable $variable, $property, $value, CompilationContext $context): void
     {
         $value = $this->resolveValue($value, $context);
 
@@ -1094,7 +1069,7 @@ class Backend
         }
     }
 
-    public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context)
+    public function callMethod($symbolVariable, Variable $variable, $methodName, $cachePointer, $params, CompilationContext $context): void
     {
         $paramStr = null != $params ? ', '.implode(', ', $params) : '';
         $macro = 'CALL_METHOD';
@@ -1104,6 +1079,7 @@ class Backend
         } else {
             $methodName = '"'.$methodName.'"';
         }
+
         if (!isset($symbolVariable)) {
             $context->codePrinter->output('ZEPHIR_'.$macro.'(NULL, '.$this->getVariableCode($variable).', '.$methodName.', '.$cachePointer.$paramStr.');');
         } elseif ('return_value' == $symbolVariable->getName()) {
@@ -1114,9 +1090,9 @@ class Backend
         }
     }
 
-    public function copyOnWrite(Variable $target, $var, CompilationContext $context)
+    public function copyOnWrite(Variable $target, $var, CompilationContext $context): void
     {
-        if ('EG(exception)' == $var) {
+        if ('EG(exception)' === $var) {
             $context->codePrinter->output('ZVAL_OBJ('.$this->getVariableCode($target).', EG(exception));');
             $context->codePrinter->output('Z_ADDREF_P('.$this->getVariableCode($target).');');
 
@@ -1275,26 +1251,16 @@ class Backend
         $codePrinter->output('}');
 
         /* Since we do not observe, still do cleanup */
-        if (isset($variable)) {
-            $variable->initVariant($compilationContext);
-        }
-        if (isset($keyVariable)) {
-            $keyVariable->initVariant($compilationContext);
-        }
+        $variable?->initVariant($compilationContext);
+        $keyVariable?->initVariant($compilationContext);
     }
 
-    public function forStatementIterator(Variable $iteratorVariable, Variable $targetVariable, CompilationContext $compilationContext)
-    {
-        $compilationContext->symbolTable->mustGrownStack(true);
-        $compilationContext->codePrinter->output('ZEPHIR_ITERATOR_COPY('.$this->getVariableCode($targetVariable).', '.$iteratorVariable->getName().');');
-    }
-
-    public function destroyIterator(Variable $iteratorVariable, CompilationContext $context)
+    public function destroyIterator(Variable $iteratorVariable, CompilationContext $context): void
     {
         $context->codePrinter->output('zend_iterator_dtor('.$iteratorVariable->getName().');');
     }
 
-    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useBody = false, $useCodePrinter = true)
+    public function ifVariableValueUndefined(Variable $var, CompilationContext $context, $useBody = false, $useCodePrinter = true): string
     {
         if ($var->isDoublePointer()) {
             return $this->ifVariableValueUndefined2($var, $context, $useBody, $useCodePrinter);
@@ -1308,7 +1274,7 @@ class Backend
         return $useBody ? $body : $output;
     }
 
-    public function ifVariableValueUndefined2(Variable $var, CompilationContext $context, $onlyBody = false, $useCodePrinter = true)
+    public function ifVariableValueUndefined2(Variable $var, CompilationContext $context, $onlyBody = false, $useCodePrinter = true): string
     {
         $body = '!'.$var->getName();
         $output = 'if ('.$body.') {';
@@ -1319,24 +1285,20 @@ class Backend
         return $onlyBody ? $body : $output;
     }
 
-    public function fetchClassEntry($str)
+    public function fetchClassEntry(string $str): string
     {
         return 'zephir_get_internal_ce(SL("'.$str.'"))';
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @param string             $type
      * @param CompilationContext $compilationContext
-     * @param bool               $isLocal
      *
      * @return Variable
      */
     public function getScalarTempVariable(
         string $type,
         CompilationContext $compilationContext,
-        $isLocal = true
     ): Variable {
         return $compilationContext->symbolTable->getTempNonTrackedVariable($type, $compilationContext);
     }
@@ -1707,7 +1669,7 @@ class Backend
     {
         if ($value instanceof Variable) {
             $value = $value->getName();
-        } elseif ($macro === 'RETURN_MM_STRING' && !preg_match('/^ZEPHIR_GLOBAL/', $value)) {
+        } elseif ($macro === 'RETURN_MM_STRING' && !str_starts_with($value, 'ZEPHIR_GLOBAL')) {
             $value = '"'.$value.'"';
         }
 
@@ -1734,11 +1696,10 @@ class Backend
      * @param CompiledExpression[]|string[] $offsetExprs
      * @param CompilationContext            $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return array
+     * @throws CompilerException
      */
-    private function resolveOffsetExprs($offsetExprs, CompilationContext $compilationContext)
+    private function resolveOffsetExprs(array $offsetExprs, CompilationContext $compilationContext): array
     {
         $keys = '';
         $offsetItems = [];
@@ -1750,6 +1711,7 @@ class Backend
                 ++$numberParams;
                 continue;
             }
+
             switch ($offsetExpr->getType()) {
                 case 'int':
                 case 'uint':
@@ -1770,7 +1732,6 @@ class Backend
                     $variableIndex = $compilationContext->symbolTable->getVariableForRead(
                         $offsetExpr->getCode(),
                         $compilationContext,
-                        null
                     );
 
                     switch ($variableIndex->getType()) {

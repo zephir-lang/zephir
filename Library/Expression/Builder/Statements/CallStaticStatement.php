@@ -12,8 +12,6 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * CallStaticStatement.
- *
  * Allows to manually build a static function call AST node
  */
 class CallStaticStatement extends AbstractStatement

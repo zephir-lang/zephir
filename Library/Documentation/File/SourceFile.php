@@ -16,26 +16,13 @@ use Zephir\Documentation;
 
 class SourceFile extends ClassFile
 {
-    /**
-     * @var ClassDefinition
-     */
-    protected $class;
+    protected ClassDefinition $class;
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'source.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return Documentation::sourceUrl($this->class);

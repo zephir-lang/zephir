@@ -12,8 +12,6 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * CallMethodStatement.
- *
  * Allows to manually build a method call AST node
  */
 class CallMethodStatement extends CallFunctionStatement

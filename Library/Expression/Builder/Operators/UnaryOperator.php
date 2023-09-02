@@ -14,8 +14,6 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * UnaryOperator.
- *
  * Allows to manually build a unary operator AST node
  */
 class UnaryOperator extends AbstractOperator

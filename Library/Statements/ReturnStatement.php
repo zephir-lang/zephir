@@ -22,8 +22,6 @@ use Zephir\Types;
 use function Zephir\add_slashes;
 
 /**
- * ReturnStatement.
- *
  * Return statement is used to assign variables
  */
 final class ReturnStatement extends StatementAbstract

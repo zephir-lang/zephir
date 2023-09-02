@@ -13,16 +13,12 @@ namespace Zephir\Backend;
 
 use Zephir\CodePrinter;
 use Zephir\Fcall\FcallManagerInterface;
+
 use function Zephir\file_put_contents_ex;
 
 class FcallManager implements FcallManagerInterface
 {
     protected array $requiredMacros = [];
-
-    public function macroIsRequired($macro): bool
-    {
-        return isset($this->requiredMacros[$macro]);
-    }
 
     /**
      * {@inheritdoc}
@@ -47,7 +43,7 @@ class FcallManager implements FcallManagerInterface
 
         $macroName = 'ZEPHIR_'.($scope ? $scope.'_' : '').$mode.$paramCount;
 
-        if (!$this->macroIsRequired($macroName)) {
+        if (!isset($this->requiredMacros[$macroName])) {
             $this->requiredMacros[$macroName] = [$scope, $mode, $paramCount];
         }
 

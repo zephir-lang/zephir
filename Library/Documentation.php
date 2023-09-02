@@ -170,7 +170,7 @@ class Documentation
 
         foreach ($byNamespace as $namespaceName => $nh) {
             // namespace files (namespace/ns1/n2/namespace.html)
-            $nfile = new File\NamespaceFile($this->config, $nh);
+            $nfile = new File\NamespaceFile($nh);
             $this->theme->drawFile($nfile);
         }
 
@@ -184,11 +184,11 @@ class Documentation
         $this->theme->drawFile($sitemapFile);
 
         // namespaces files (namespaces.html)
-        $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
+        $nsfile = new File\NamespacesFile($namespaceAccessor);
         $this->theme->drawFile($nsfile);
 
         // index (index.html)
-        $indexfile = new File\IndexFile($this->config, $namespaceAccessor);
+        $indexfile = new File\IndexFile($namespaceAccessor);
         $this->theme->drawFile($indexfile);
 
         $this->theme->buildStaticDirectory();

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Operators\Logical;
 
 use Exception;
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -32,6 +33,7 @@ class AndOperator extends LogicalBaseOperator
      *
      * @return CompiledExpression
      *
+     * @throws ReflectionException
      * @throws \Zephir\Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression

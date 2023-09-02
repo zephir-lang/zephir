@@ -24,11 +24,9 @@ use Zephir\Variable;
  */
 class NativeArrayAccess
 {
-    /** @var bool */
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    /** @var bool */
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
     /** @var Variable|null */
     protected $expectingVariable;
@@ -278,11 +276,11 @@ class NativeArrayAccess
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
                     }
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
             }
         }
 

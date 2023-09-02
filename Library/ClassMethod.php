@@ -2128,8 +2128,7 @@ class ClassMethod
                 PHP_EOL."\t",
                 $compilationContext->backend->declareVariables(
                     $this,
-                    $usedVariables,
-                    $compilationContext
+                    $usedVariables
                 )
             )
         );

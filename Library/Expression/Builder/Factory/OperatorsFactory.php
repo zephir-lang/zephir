@@ -21,9 +21,6 @@ use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Operators\RawOperator;
 use Zephir\Expression\Builder\Operators\UnaryOperator;
 
-/**
- * Class OperatorsFactory.
- */
 class OperatorsFactory
 {
     protected BuilderFactory $factory;
@@ -42,7 +39,7 @@ class OperatorsFactory
      *
      * @return AssignVariableOperator
      */
-    public function assignVariable($variable = null, AbstractBuilder $expression = null)
+    public function assignVariable($variable = null, AbstractBuilder $expression = null): AssignVariableOperator
     {
         return new AssignVariableOperator($variable, $expression);
     }
@@ -54,7 +51,7 @@ class OperatorsFactory
      *
      * @return AssignPropertyOperator
      */
-    public function assignProperty($variable = null, $property = null, AbstractBuilder $expression = null)
+    public function assignProperty($variable = null, $property = null, AbstractBuilder $expression = null): AssignPropertyOperator
     {
         $assignProperty = new AssignPropertyOperator($variable, $property, $expression);
         $assignProperty->setType($assignProperty::TYPE_ASSIGN_OBJECT_PROPERTY);
@@ -69,7 +66,7 @@ class OperatorsFactory
      *
      * @return AssignPropertyOperator
      */
-    public function assignStaticProperty($variable = null, $property = null, AbstractBuilder $expression = null)
+    public function assignStaticProperty($variable = null, $property = null, AbstractBuilder $expression = null): AssignPropertyOperator
     {
         $assignProperty = $this->assignProperty($variable, $property, $expression);
         $assignProperty->setType($assignProperty::TYPE_ASSIGN_STATIC_PROPERTY);

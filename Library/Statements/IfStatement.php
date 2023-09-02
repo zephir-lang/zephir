@@ -11,36 +11,37 @@
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Passes\SkipVariantInit;
 use Zephir\StatementsBlock;
 
 /**
- * IfStatement.
- *
  * 'If' statement, the same as in PHP/C
  */
 class IfStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
 
         $expr = new EvalExpression();
         $condition = $expr->optimize($exprRaw, $compilationContext);
 
-        /*
+        /**
          * This pass tries to move dynamic variable initialization out of the if/else branch
          */
         if (isset($this->statement['statements']) && (isset($this->statement['else_statements']) || isset($this->statement['elseif_statements']))) {
             $readDetector = new ReadDetector();
-
             $skipVariantInit = new SkipVariantInit();
 
             $skipVariantInit->setVariablesToSkip(0, $expr->getUsedVariables());
@@ -73,7 +74,7 @@ class IfStatement extends StatementAbstract
             foreach ($skipVariantInit->getVariables() as $variable) {
                 if ($symbolTable->hasVariable($variable)) {
                     $symbolVariable = $symbolTable->getVariable($variable);
-                    if ('variable' == $symbolVariable->getType()) {
+                    if ('variable' === $symbolVariable->getType()) {
                         if (!$readDetector->detect($variable, $exprRaw)) {
                             $symbolVariable->initVariant($compilationContext);
                             $symbolVariable->skipInitVariant(2);
@@ -96,7 +97,7 @@ class IfStatement extends StatementAbstract
             }
         }
 
-        /*
+        /**
          * Compile statements in the 'if' block
          */
         if (isset($this->statement['statements'])) {
@@ -105,11 +106,11 @@ class IfStatement extends StatementAbstract
             $branch->setRelatedStatement($this);
         }
 
-        /*
+        /**
          * Compile statements in the 'elseif' block
          */
         if (isset($this->statement['elseif_statements'])) {
-            foreach ($this->statement['elseif_statements'] as $key => $statement) {
+            foreach ($this->statement['elseif_statements'] as $statement) {
                 if (!isset($statement['statements'])) {
                     continue;
                 }
@@ -121,7 +122,7 @@ class IfStatement extends StatementAbstract
             }
         }
 
-        /*
+        /**
          * Compile statements in the 'else' block
          */
         if (isset($this->statement['else_statements'])) {

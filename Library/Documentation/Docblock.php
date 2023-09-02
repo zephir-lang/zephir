@@ -12,8 +12,6 @@
 namespace Zephir\Documentation;
 
 /**
- * Annotation.
- *
  * A parsed Annotation
  */
 class Docblock
@@ -21,17 +19,17 @@ class Docblock
     /**
      * @var string
      */
-    protected $description;
+    protected string $description;
 
     /**
      * @var Annotation[]
      */
-    protected $annotations = [];
+    protected array $annotations = [];
 
     /**
      * @var string
      */
-    protected $summary;
+    protected string $summary;
 
     /**
      * @return string
@@ -110,7 +108,7 @@ class Docblock
     /**
      * @param string $summary
      */
-    public function setSummary(string $summary)
+    public function setSummary(string $summary): void
     {
         $this->summary = $summary;
     }
@@ -133,7 +131,7 @@ class Docblock
             $docBlock .= PHP_EOL.' *';
             $docBlock .= PHP_EOL.' *';
 
-            foreach ((array) explode("\n", $descriptionBlock) as $line) {
+            foreach (explode("\n", $descriptionBlock) as $line) {
                 $docBlock .= PHP_EOL.' * '.trim($line);
             }
 

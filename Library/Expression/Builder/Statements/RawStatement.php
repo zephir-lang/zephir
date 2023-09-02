@@ -11,9 +11,6 @@
 
 namespace Zephir\Expression\Builder\Statements;
 
-/**
- * Class RawStatement.
- */
 class RawStatement extends AbstractStatement
 {
     /**

@@ -13,21 +13,23 @@ namespace Zephir\Statements;
 
 use Zephir\Branch;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
+use function count;
 
 /**
- * SwitchStatement.
- *
  * Switch statement, the same as in PHP/C
  */
 class SwitchStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     * @throws \ReflectionException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
 
@@ -113,14 +115,14 @@ class SwitchStatement extends StatementAbstract
                 }
             }
 
-            /*
+            /**
              * In the second round we generate the conditions with their blocks
              * grouping 'cases' without a statement block using an 'or'
              */
             foreach ($blocks as $block) {
                 $expressions = $block['expr'];
 
-                if (1 == \count($expressions)) {
+                if (1 == count($expressions)) {
                     $condition = $evalExpr->optimize($expressions[0], $compilationContext);
                     $codePrinter->output('if ('.$condition.') {');
                 } else {
@@ -142,7 +144,7 @@ class SwitchStatement extends StatementAbstract
 
             $compilationContext->codePrinter->decreaseLevel();
 
-            /*
+            /**
              * The default block is resolved at the end of the 'switch'
              */
             if ($defaultBlock) {
@@ -165,7 +167,7 @@ class SwitchStatement extends StatementAbstract
             }
         }
 
-        if ($defaultIndex === \count($clauses) - 1) {
+        if ($defaultIndex === count($clauses) - 1) {
             return $clauses;
         }
 

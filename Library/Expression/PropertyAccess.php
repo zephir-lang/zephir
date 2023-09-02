@@ -18,31 +18,26 @@ use Zephir\Expression;
 use Zephir\Variable;
 
 /**
- * Zephir\Expression\PropertyAccess.
- *
  * Resolves expressions that read properties
  */
 class PropertyAccess
 {
-    /** @var bool */
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    /** @var bool */
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
     protected $expectingVariable;
 
-    /** @var bool */
-    protected $noisy = true;
+    protected bool $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -140,7 +135,7 @@ class PropertyAccess
             }
         }
 
-        /*
+        /**
          * Having a proper propertyDefinition we can check if the property is readable
          * according to its modifiers
          */
@@ -150,7 +145,7 @@ class PropertyAccess
             }
 
             if (!$propertyDefinition->isPublic()) {
-                /*
+                /**
                  * Protected variables only can be read in the class context
                  * where they were declared
                  */
@@ -184,7 +179,7 @@ class PropertyAccess
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
 
-                /*
+                /**
                  * If a variable is assigned once in the method, we try to promote it
                  * to a read only variable
                  */
@@ -201,13 +196,12 @@ class PropertyAccess
                     }
                 }
 
-                /*
-                 * Variable is not read only or it wasn't promoted
+                /**
+                 * Variable is not read only, or it wasn't promoted
                  */
                 if (!$readOnly) {
                     if ('return_value' != $symbolVariable->getName()) {
                         $symbolVariable->observeVariant($compilationContext);
-                        $this->readOnly = false;
                     } else {
                         $makeSymbolVariable = true;
                     }
@@ -227,24 +221,22 @@ class PropertyAccess
             if ($readOnly) {
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext);
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
             }
         }
 
-        /*
+        /**
          * Variable that receives a property value must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
         }
 
-        /*
+        /**
          * At this point, we don't know the exact dynamic type fetched from the property
          */
         $symbolVariable->setDynamicTypes('undefined');
-
         $compilationContext->headersManager->add('kernel/object');
-
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, $readOnly, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

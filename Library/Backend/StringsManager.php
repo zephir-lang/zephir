@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Backend;
 
 use Zephir\StringsManager as BaseStringsManager;
+
+use function strlen;
 use function Zephir\file_put_contents_ex;
 
 /**
@@ -59,7 +61,7 @@ class StringsManager extends BaseStringsManager
         $macros = [];
         ksort($this->concatKeys, SORT_STRING);
         foreach ($this->concatKeys as $key => $one) {
-            $len = \strlen($key);
+            $len = strlen($key);
             $params = [];
             $zvalCopy = [];
             $useCopy = [];
@@ -94,7 +96,7 @@ class StringsManager extends BaseStringsManager
 
             $proto = 'void zephir_concat_'.$key.'(zval *result, '.implode(', ', $params).', int self_var)';
 
-            $codeh .= ''.$proto.';'.PHP_EOL;
+            $codeh .= $proto.';'.PHP_EOL;
 
             $code .= $proto.'{'.PHP_EOL.PHP_EOL;
 
@@ -118,7 +120,7 @@ class StringsManager extends BaseStringsManager
 
             $code .= "\t".'length = '.implode(' + ', $lengths).';'.PHP_EOL;
             $code .= "\t".'if (self_var) {'.PHP_EOL;
-            $code .= ''.PHP_EOL;
+            $code .= PHP_EOL;
             $code .= "\t\t".'if (Z_TYPE_P(result) != IS_STRING) {'.PHP_EOL;
             $code .= "\t\t\t".'use_copy = zend_make_printable_zval(result, &result_copy);'.PHP_EOL;
             $code .= "\t\t\t".'if (use_copy) {'.PHP_EOL;
@@ -128,7 +130,7 @@ class StringsManager extends BaseStringsManager
             $code .= "\t\t".'offset = Z_STRLEN_P(result);'.PHP_EOL;
             $code .= "\t\t".'length += offset;'.PHP_EOL;
             $code .= "\t\t".'Z_STR_P(result) = zend_string_realloc(Z_STR_P(result), length, 0);'.PHP_EOL;
-            $code .= ''.PHP_EOL;
+            $code .= PHP_EOL;
             $code .= "\t".'} else {'.PHP_EOL;
             $code .= "\t\t".'ZVAL_STR(result, zend_string_alloc(length, 0));'.PHP_EOL;
             $code .= "\t".'}'.PHP_EOL.PHP_EOL;

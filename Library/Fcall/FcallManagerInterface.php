@@ -11,13 +11,8 @@
 
 namespace Zephir\Fcall;
 
-/**
- * Zephir\Fcall\FcallManagerInterface.
- */
 interface FcallManagerInterface
 {
-    public function macroIsRequired($macro);
-
     /**
      * Resolve internal fcall attributes to a suitable macro and ensure that it's generated during compilation.
      *

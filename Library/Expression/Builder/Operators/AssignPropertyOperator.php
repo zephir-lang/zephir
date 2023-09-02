@@ -13,16 +13,13 @@ namespace Zephir\Expression\Builder\Operators;
 
 use Zephir\Expression\Builder\AbstractBuilder;
 
-/**
- * Class AssignPropertyOperator.
- */
 class AssignPropertyOperator extends AssignVariableOperator
 {
     // a -> property = expr
-    const TYPE_ASSIGN_OBJECT_PROPERTY = 'object-property';
+    public const TYPE_ASSIGN_OBJECT_PROPERTY = 'object-property';
 
     // a :: property = expr
-    const TYPE_ASSIGN_STATIC_PROPERTY = 'static-property';
+    public const TYPE_ASSIGN_STATIC_PROPERTY = 'static-property';
 
     private $property;
     private $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
@@ -44,7 +41,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     /**
      * @return string
      */
-    public function getProperty()
+    public function getProperty(): string
     {
         return $this->property;
     }
@@ -54,7 +51,7 @@ class AssignPropertyOperator extends AssignVariableOperator
      *
      * @return $this
      */
-    public function setProperty($property)
+    public function setProperty(string $property): static
     {
         $this->property = $property;
 
@@ -64,7 +61,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
@@ -74,17 +71,14 @@ class AssignPropertyOperator extends AssignVariableOperator
      *
      * @return AssignPropertyOperator
      */
-    public function setType($type)
+    public function setType(string $type): static
     {
         $this->type = $type;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         $expression = parent::preBuild();
         $expression['assign-type'] = $this->getType();

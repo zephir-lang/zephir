@@ -11,26 +11,14 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\CompilerFile;
 use Zephir\Documentation;
 use Zephir\Documentation\FileInterface;
 use Zephir\Documentation\NamespaceHelper;
 
 class NamespaceFile implements FileInterface
 {
-    /**
-     * @var NamespaceHelper
-     */
-    protected $namespaceHelper;
-
-    /**
-     * @var CompilerFile
-     */
-    protected $compilerFile;
-
-    public function __construct($config, NamespaceHelper $nh)
+    public function __construct(protected NamespaceHelper $namespaceHelper)
     {
-        $this->namespaceHelper = $nh;
     }
 
     /**

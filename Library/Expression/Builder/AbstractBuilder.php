@@ -11,9 +11,6 @@
 
 namespace Zephir\Expression\Builder;
 
-/**
- * Class AbstractBuilder.
- */
 abstract class AbstractBuilder
 {
     private $file = null;

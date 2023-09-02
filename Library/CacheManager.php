@@ -104,7 +104,7 @@ class CacheManager
     /**
      * Creates or returns an existing method cache.
      *
-     * @return StaticMethodCache
+     * @return StaticMethodCache|null
      */
     public function getStaticMethodCache(): ?StaticMethodCache
     {

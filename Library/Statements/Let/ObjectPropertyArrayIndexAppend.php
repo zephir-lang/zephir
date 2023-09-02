@@ -13,13 +13,12 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable as ZephirVariable;
 
 /**
- * ObjectPropertyArrayIndexAppend.
- *
  * Updates object properties dynamically
  */
 class ObjectPropertyArrayIndexAppend extends ArrayIndex
@@ -43,21 +42,21 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
             throw new CompilerException('Attempt to use variable type: '.$symbolVariable->getType().' as object', $statement);
         }
 
-        $this->_assignPropertyArrayMultipleIndex($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        $this->_assignPropertyArrayMultipleIndex($symbolVariable, $resolvedExpr, $compilationContext, $statement);
     }
 
     /**
      * Compiles x->y[a][b][] = {expr} (multiple offset assignment).
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
-     * @throws CompilerException
+     * @throws \ReflectionException
+     * @throws Exception
      */
-    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
+    protected function _assignPropertyArrayMultipleIndex(ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
@@ -94,7 +93,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
             $offsetExprs[] = $resolvedIndex;
         }
 
-        /*
+        /**
          * Check if the property to update is defined
          */
         if ('this' == $symbolVariable->getRealName()) {
@@ -103,7 +102,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
             }
         } else {
-            /*
+            /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */

@@ -14,7 +14,7 @@ namespace Zephir;
 /**
  * LiteralCompiledExpression.
  *
- * This represent a compiled expression as CompiledExpression, but the contents of
+ * This represents a compiled expression as CompiledExpression, but the contents of
  * the resolved code is potentially a simple literal expression
  */
 class LiteralCompiledExpression extends CompiledExpression

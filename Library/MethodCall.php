@@ -11,6 +11,7 @@
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 
@@ -41,7 +42,7 @@ class MethodCall extends Call
      * @param CompilationContext $compilationContext
      * @return mixed|CompiledExpression
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext): mixed
     {
@@ -670,7 +671,7 @@ class MethodCall extends Call
                                         }
                                         break;
 
-                                    /*
+                                    /**
                                      * Passing polymorphic variables to static typed parameters
                                      * could lead to potential unexpected type coercions
                                      */
@@ -826,12 +827,13 @@ class MethodCall extends Call
      * Examine internal class information and returns the method called.
      *
      * @param CompilationContext $compilationContext
-     * @param Variable           $caller
-     * @param string             $methodName
+     * @param Variable $caller
+     * @param string $methodName
      *
      * @return array
+     * @throws ReflectionException
      */
-    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, $methodName)
+    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, string $methodName): array
     {
         $compiler = $compilationContext->compiler;
 

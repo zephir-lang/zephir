@@ -13,9 +13,6 @@ namespace Zephir\Expression\Builder\Operators;
 
 use Zephir\Expression\Builder\AbstractBuilder;
 
-/**
- * Class AssignVariableOperator.
- */
 class AssignVariableOperator extends AbstractOperator
 {
     // =
@@ -99,18 +96,6 @@ class AssignVariableOperator extends AbstractOperator
     public function getOperator()
     {
         return $this->operator;
-    }
-
-    /**
-     * @param $operator
-     *
-     * @return $this
-     */
-    public function setOperator($operator)
-    {
-        $this->operator = $operator;
-
-        return $this;
     }
 
     /**
