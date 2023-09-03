@@ -146,8 +146,6 @@ class CompilationContext
 
     /**
      * Manages both function and method call caches.
-     *
-     * @var CacheManager|null
      */
     public ?CacheManager $cacheManager = null;
 

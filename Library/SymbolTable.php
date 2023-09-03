@@ -9,11 +9,15 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
+
+use function count;
 
 /**
  * A symbol table stores all the variables defined in a method, their data types and default values.
@@ -22,23 +26,18 @@ class SymbolTable
 {
     protected bool $mustGrownStack = false;
 
-    /** @var Variable[][] */
-    protected $branchVariables = [];
+    protected array $branchVariables = [];
 
     protected int $tempVarCount = 0;
 
-    /** @var Variable[][][][] */
-    protected $branchTempVariables = [];
+    protected array $branchTempVariables = [];
 
     /**
      * @var LocalContextPass
      */
     protected $localContext;
 
-    /**
-     * @var Globals
-     */
-    protected $globalsManager;
+    protected Globals $globalsManager;
 
     public function __construct(protected CompilationContext $compilationContext)
     {
@@ -162,7 +161,7 @@ class SymbolTable
      *
      * @return Variable
      */
-    public function addRawVariable(Variable $variable)
+    public function addRawVariable(Variable $variable): Variable
     {
         if (!isset($this->branchVariables[1])) {
             $this->branchVariables[1] = [];
@@ -176,7 +175,7 @@ class SymbolTable
      * Returns a variable in the symbol table.
      *
      * @param $name
-     * @param CompilationContext $compilationContext
+     * @param CompilationContext|null $compilationContext
      *
      * @return bool|Variable
      */
@@ -299,7 +298,7 @@ class SymbolTable
                     /** @var Branch[] $branches */
                     $branches = array_reverse($initBranches);
 
-                    if (1 == \count($branches)) {
+                    if (1 == count($branches)) {
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if (true === $branches[0]->isUnreachable()) {
                                 throw new CompilerException('Initialization of variable "'.$name.'" depends on unreachable branch, consider initialize it at its declaration', $statement);
@@ -348,26 +347,28 @@ class SymbolTable
                          * Check if last assignment
                          * Variable was initialized in a sub-branch, and it's being used in a parent branch.
                          */
-                        $possibleBadAssignment = false;
+                        $possibleBadAssignment = $currentBranch->getLevel() < $branches[0]->getLevel();
+                        if ($possibleBadAssignment && count($branches) === 1) {
+                            /**
+                             * Variable is assigned just once, and it's assigned in a conditional branch
+                             */
+                            if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+                                $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
 
-                        if ($currentBranch->getLevel() < $branches[0]->getLevel()) {
-                            $possibleBadAssignment = true;
-                        }
-
-                        if ($possibleBadAssignment) {
-                            if (\count($branches) > 1) {
-                                $graph = new BranchGraph();
-                                foreach ($branches as $branch) {
-                                    $graph->addLeaf($branch);
+                                if (true === $evalExpression->isUnreachable()) {
+                                    throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
+                                } else {
+                                    $variable->enableDefaultAutoInitValue();
+                                    $compilationContext->logger->warning(
+                                        "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
+                                        ['conditional-initialization', $statement]
+                                    );
                                 }
                             } else {
-                                /*
-                                 * Variable is assigned just once, and it's assigned in a conditional branch
-                                 */
-                                if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+                                if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
                                     $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
 
-                                    if (true === $evalExpression->isUnreachable()) {
+                                    if (true === $evalExpression->isUnreachableElse()) {
                                         throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
@@ -375,20 +376,6 @@ class SymbolTable
                                             "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
                                             ['conditional-initialization', $statement]
                                         );
-                                    }
-                                } else {
-                                    if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
-                                        $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-
-                                        if (true === $evalExpression->isUnreachableElse()) {
-                                            throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
-                                        } else {
-                                            $variable->enableDefaultAutoInitValue();
-                                            $compilationContext->logger->warning(
-                                                "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                                ['conditional-initialization', $statement]
-                                            );
-                                        }
                                     }
                                 }
                             }
@@ -449,7 +436,7 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        /*
+        /**
          * Saves the last place where the variable was mutated
          * We discard mutations inside loops because iterations could use the value
          * and Zephir only provides top-down compilation
@@ -932,13 +919,12 @@ class SymbolTable
     /**
      * Reuse variables marked as idle after leave a branch.
      *
-     * @param string             $type
-     * @param string             $location
-     * @param CompilationContext $compilationContext
-     *
-     * @return Variable
+     * @param string $type
+     * @param string $location
+     * @param CompilationContext|null $compilationContext
+     * @return Variable|null
      */
-    protected function reuseTempVariable(string $type, $location, CompilationContext $compilationContext = null)
+    protected function reuseTempVariable(string $type, string $location, CompilationContext $compilationContext = null): ?Variable
     {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId = $compilationContext->branchManager->getCurrentBranchId();
