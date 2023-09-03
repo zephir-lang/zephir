@@ -11,13 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Zephir\EventListener;
+namespace Zephir\Console;
 
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\ExceptionInterface;
 
-class ConsoleErrorListener
+class ErrorListener
 {
     public function onCommandError(ConsoleErrorEvent $event): void
     {

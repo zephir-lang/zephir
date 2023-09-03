@@ -30,7 +30,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Throwable;
 use Zephir\Console\Command\ListCommand;
-use Zephir\EventListener\ConsoleErrorListener;
 use Zephir\Zephir;
 
 final class Application extends BaseApplication
@@ -40,7 +39,7 @@ final class Application extends BaseApplication
         parent::__construct('Zephir', Zephir::VERSION);
 
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(ConsoleEvents::ERROR, [new ConsoleErrorListener(), 'onCommandError']);
+        $dispatcher->addListener(ConsoleEvents::ERROR, [new ErrorListener(), 'onCommandError']);
 
         $this->setDispatcher($dispatcher);
     }
@@ -114,7 +113,7 @@ final class Application extends BaseApplication
      *
      * @throws Exception|Throwable
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         if (true === $input->hasParameterOption(['--dumpversion', '-dumpversion'], true)) {
             $output->writeln($this->getVersion());
