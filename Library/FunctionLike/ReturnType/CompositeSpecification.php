@@ -28,18 +28,6 @@ abstract class CompositeSpecification implements SpecificationInterface
     }
 
     /**
-     * Creates a new logical AND specification.
-     *
-     * @param SpecificationInterface $spec
-     *
-     * @return Plus
-     */
-    public function plus(SpecificationInterface $spec)
-    {
-        return new Plus($this, $spec);
-    }
-
-    /**
      * Creates a new logical NOT specification.
      *
      * @return Not
