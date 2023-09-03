@@ -9,19 +9,23 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
+use function constant;
+use function defined;
+use function gettype;
+
 /**
- * LocalContextPass.
- *
  * This pass tries to check whether variables only do exist in the local context of the method block
- * or if they're used externally which will unallow variables to be placed in the stack
+ * or if they're used externally which will un allow variables to be placed in the stack
  *
  * This pass also tracks the number of initializations a variable may have, this allows
  * to mark variables as read-only after their last initialization. The number of
- * mutations is relative, since assignments inside cycles/loops may perform a n-number of
+ * mutations is relative, since assignments inside cycles/loops may perform an n-number of
  * mutations
  *
  * @see https://en.wikipedia.org/wiki/Escape_analysis
@@ -34,21 +38,21 @@ class LocalContextPass
 
     protected array $uses = [];
 
-    protected bool $lastCallLine = false;
+    protected int $lastCallLine = 0;
 
-    protected bool $lastUnsetLine = false;
+    protected int $lastUnsetLine = 0;
 
     /**
      * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function declareVariables(array $statement)
+    public function declareVariables(array $statement): void
     {
         if (isset($statement['data-type'])) {
             if ('variable' != $statement['data-type']) {
@@ -73,7 +77,7 @@ class LocalContextPass
      *
      * @param string $variable
      */
-    public function markVariableNoLocal($variable)
+    public function markVariableNoLocal(string $variable): void
     {
         if (isset($this->variables[$variable])) {
             $this->variables[$variable] = false;
@@ -84,9 +88,9 @@ class LocalContextPass
      * Marks the latest use/read of a variable.
      *
      * @param string $variable
-     * @param array  $node
+     * @param array $node
      */
-    public function markLastUse($variable, $node)
+    public function markLastUse(string $variable, array $node): void
     {
         if (isset($node['line'])) {
             $this->uses[$variable] = $node['line'];
@@ -100,15 +104,9 @@ class LocalContextPass
      *
      * @return bool
      */
-    public function shouldBeLocal($variable)
+    public function shouldBeLocal(string $variable): bool
     {
-        if (isset($this->variables[$variable])) {
-            if ($this->variables[$variable]) {
-                return true;
-            }
-        }
-
-        return false;
+        return !empty($this->variables[$variable]);
     }
 
     /**
@@ -116,7 +114,7 @@ class LocalContextPass
      *
      * @param string $variable
      */
-    public function increaseMutations($variable)
+    public function increaseMutations(string $variable): void
     {
         if (isset($this->mutations[$variable])) {
             ++$this->mutations[$variable];
@@ -132,29 +130,9 @@ class LocalContextPass
      *
      * @return int
      */
-    public function getNumberOfMutations($variable)
+    public function getNumberOfMutations(string $variable): int
     {
-        if (isset($this->mutations[$variable])) {
-            return $this->mutations[$variable];
-        }
-
-        return 0;
-    }
-
-    /**
-     * Returns the latest line where a variable was read.
-     *
-     * @param string $variable
-     *
-     * @return int
-     */
-    public function getLastVariableUseLine($variable)
-    {
-        if (isset($this->uses[$variable])) {
-            return $this->uses[$variable];
-        }
-
-        return 0;
+        return $this->mutations[$variable] ?? 0;
     }
 
     /**
@@ -162,7 +140,7 @@ class LocalContextPass
      *
      * @return int
      */
-    public function getLastCallLine()
+    public function getLastCallLine(): int
     {
         return $this->lastCallLine;
     }
@@ -172,12 +150,12 @@ class LocalContextPass
      *
      * @return int
      */
-    public function getLastUnsetLine()
+    public function getLastUnsetLine(): int
     {
         return $this->lastUnsetLine;
     }
 
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -225,8 +203,8 @@ class LocalContextPass
                             break;
 
                         case 'constant':
-                            if (\defined($assignment['expr']['value'])) {
-                                if ('string' == \gettype(\constant($assignment['expr']['value']))) {
+                            if (defined($assignment['expr']['value'])) {
+                                if ('string' === gettype(constant($assignment['expr']['value']))) {
                                     $this->markVariableNoLocal($assignment['variable']);
                                 }
                             }
@@ -255,10 +233,8 @@ class LocalContextPass
                 case 'array-index':
                 case 'object-property-array-index':
                 case 'object-property-append':
-                    switch ($assignment['expr']['type']) {
-                        case 'variable':
-                            $this->markVariableNoLocal($assignment['expr']['value']);
-                            break;
+                    if ($assignment['expr']['type'] == 'variable') {
+                        $this->markVariableNoLocal($assignment['expr']['value']);
                     }
                     $this->markVariableNoLocal($assignment['variable']);
                     break;
@@ -280,7 +256,7 @@ class LocalContextPass
         }
     }
 
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -293,7 +269,7 @@ class LocalContextPass
         }
     }
 
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             if ('variable' == $item['value']['type']) {
@@ -304,7 +280,7 @@ class LocalContextPass
         }
     }
 
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -317,7 +293,7 @@ class LocalContextPass
         }
     }
 
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':
@@ -377,6 +353,23 @@ class LocalContextPass
 
             case 'typeof':
             case 'bitwise_not':
+            case 'array-access':
+            case 'static-property-access':
+            case 'property-string-access':
+            case 'short-ternary':
+            case 'property-dynamic-access':
+            case 'property-access':
+            case 'ternary':
+            case 'unlikely':
+            case 'likely':
+            case 'clone':
+            case 'require_once':
+            case 'list':
+            case 'minus':
+            case 'require':
+            case 'instanceof':
+            case 'empty':
+            case 'isset':
             case 'not':
                 $this->passExpression($expression['left']);
                 break;
@@ -404,40 +397,10 @@ class LocalContextPass
                 $this->passNew($expression);
                 break;
 
-            case 'property-access':
-            case 'property-dynamic-access':
-            case 'property-string-access':
-            case 'static-property-access':
-            case 'array-access':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'isset':
-            case 'empty':
-            case 'instanceof':
-            case 'require':
-            case 'require_once':
-            case 'clone':
-            case 'likely':
-            case 'unlikely':
-            /* do special pass later */
-            case 'ternary':
-            case 'short-ternary':
-                $this->passExpression($expression['left']);
-                break;
-
             case 'fetch':
                 $this->increaseMutations($expression['left']['value']);
                 $this->markVariableNoLocal($expression['left']['value']);
                 $this->passExpression($expression['right']);
-                break;
-
-            case 'minus':
-                $this->passExpression($expression['left']);
-                break;
-
-            case 'list':
-                $this->passExpression($expression['left']);
                 break;
 
             case 'cast':
@@ -451,7 +414,7 @@ class LocalContextPass
         }
     }
 
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
