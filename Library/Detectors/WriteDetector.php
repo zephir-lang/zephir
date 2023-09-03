@@ -44,7 +44,7 @@ class WriteDetector
      *
      * @return bool
      */
-    public function detect(string $variable, array $statements)
+    public function detect(string $variable, array $statements): bool
     {
         $this->passStatementBlock($statements);
 
@@ -123,7 +123,7 @@ class WriteDetector
      *
      * @param array $expression
      */
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -159,7 +159,7 @@ class WriteDetector
      *
      * @param array $expression
      */
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -306,7 +306,7 @@ class WriteDetector
      *
      * @param array $statements
      */
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {

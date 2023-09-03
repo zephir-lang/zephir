@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -25,12 +26,13 @@ use Zephir\Operators\AbstractOperator;
 class RequireOperator extends AbstractOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -58,7 +60,7 @@ class RequireOperator extends AbstractOperator
 
         $symbolVariable = false;
         if ($this->isExpecting()) {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
         }
 
         $compilationContext->headersManager->add('kernel/memory');

@@ -82,10 +82,10 @@ class LogicalBaseOperator extends AbstractOperator
                 switch ($right->getType()) {
                     case 'int':
                     case 'double':
-                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->bitOperator.' (('.$right->getCode().') ? 1 : 0))', $expression);
+                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' (('.$right->getCode().') ? 1 : 0))', $expression);
 
                     case 'bool':
-                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$this->bitOperator.' '.$right->getBooleanCode().')', $expression);
+                        return new CompiledExpression('bool', '('.$left->getBooleanCode().' '.$right->getBooleanCode().')', $expression);
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression);
@@ -166,7 +166,7 @@ class LogicalBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$right->getCode().')', $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->bitOperator.' '.$right->getBooleanCode().')', $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$right->getBooleanCode().')', $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -175,7 +175,7 @@ class LogicalBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->operator.' '.$variableRight->getName().')', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$this->bitOperator.' '.$variableRight->getName().')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' '.$variableRight->getName().')', $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -200,7 +200,7 @@ class LogicalBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', $variableLeft->getName().' '.$this->bitOperator.''.$right->getBooleanCode(), $expression);
+                                return new CompiledExpression('bool', $variableLeft->getName().' '.$right->getBooleanCode(), $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -212,7 +212,7 @@ class LogicalBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', $variableLeft->getName().' '.$this->operator.'  '.$variableRight->getName(), $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$this->bitOperator.''.$variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', $variableLeft->getName().' '.$variableRight->getName(), $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -237,7 +237,7 @@ class LogicalBaseOperator extends AbstractOperator
                                 return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' '.$right->getCode(), $expression);
 
                             case 'bool':
-                                return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->bitOperator.''.$right->getBooleanCode(), $expression);
+                                return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$right->getBooleanCode(), $expression);
 
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->getCode(), $compilationContext, $expression['right']);
@@ -252,7 +252,7 @@ class LogicalBaseOperator extends AbstractOperator
                                         return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->operator.' ('.$variableRight->getName().' && Z_STRLEN_P('.$variableRight->getName().'))', $expression);
 
                                     case 'bool':
-                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$this->bitOperator.' '.$variableRight->getName(), $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.$variableRight->getName(), $expression);
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');

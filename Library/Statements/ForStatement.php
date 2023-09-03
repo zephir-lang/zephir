@@ -617,12 +617,12 @@ class ForStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/operators');
         $codePrinter->output("\t".$variable->getName().' = ZEPHIR_STRING_OFFSET('.$stringVariableCode.', '.$tempVariable->getName().');');
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
 
-        /*
+        /**
          * Compile statements in the 'for' block
          */
         if (isset($this->statement['statements'])) {
@@ -749,7 +749,7 @@ class ForStatement extends StatementAbstract
      * @throws Exception
      * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
 

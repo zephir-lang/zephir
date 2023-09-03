@@ -316,7 +316,7 @@ class Backend
         return '';
     }
 
-    public function onPreCompile(ClassMethod $method, CompilationContext $context)
+    public function onPreCompile(ClassMethod $method, CompilationContext $context): void
     {
         /**
          * Initialize the properties within create_object, handler code
@@ -331,15 +331,14 @@ class Backend
         }
     }
 
-    public function onPostCompile(ClassMethod $method, CompilationContext $context)
+    public function onPostCompile(ClassMethod $method, CompilationContext $context): void
     {
-        $codePrinter = $context->codePrinter;
-        if (preg_match('/^zephir_init_properties/', $method->getName())) {
-            $codePrinter->increaseLevel();
-            $codePrinter->output('return Z_OBJ_P(this_ptr);');
-            $codePrinter->decreaseLevel();
-            $codePrinter->output('}');
-            $codePrinter->decreaseLevel();
+        if (str_starts_with($method->getName(), 'zephir_init_properties')) {
+            $context->codePrinter->increaseLevel();
+            $context->codePrinter->output('return Z_OBJ_P(this_ptr);');
+            $context->codePrinter->decreaseLevel();
+            $context->codePrinter->output('}');
+            $context->codePrinter->decreaseLevel();
         }
     }
 
@@ -347,7 +346,7 @@ class Backend
     {
         $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
-        if ($isComplex && !$variable->isDoublePointer()) { /* && $variable->mustInitNull() */
+        if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
             switch ($variable->getRealname()) {
                 case '__$null':

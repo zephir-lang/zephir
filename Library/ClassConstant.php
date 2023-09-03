@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use Zephir\Exception\CompilerException;
+use ReflectionException;
 use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
@@ -38,8 +38,6 @@ class ClassConstant
     protected ?string $docblock = null;
 
     /**
-     * ClassConstant constructor.
-     *
      * @param string      $name
      * @param array       $value
      * @param string|null $docBlock
@@ -64,8 +62,6 @@ class ClassConstant
     /**
      * Returns the constant's value.
      *
-     * TODO: Rewrite name
-     *
      * @return array
      */
     public function getValue(): array
@@ -88,9 +84,9 @@ class ClassConstant
      *
      * @return mixed
      */
-    public function getValueValue()
+    public function getValueValue(): mixed
     {
-        return $this->value['value'] ?? false;
+        return $this->value['value'] ?? null;
     }
 
     /**
@@ -119,12 +115,12 @@ class ClassConstant
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
+     * @throws ReflectionException
      */
-    public function processValue(CompilationContext $compilationContext)
+    public function processValue(CompilationContext $compilationContext): void
     {
         if ('constant' === $this->value['type']) {
-            $constant = new Constants();
-            $compiledExpression = $constant->compile($this->value, $compilationContext);
+            $compiledExpression = (new Constants())->compile($this->value, $compilationContext);
 
             $this->value = [
                 'type' => $compiledExpression->getType(),
@@ -135,8 +131,7 @@ class ClassConstant
         }
 
         if ('static-constant-access' === $this->value['type']) {
-            $staticConstantAccess = new StaticConstantAccess();
-            $compiledExpression = $staticConstantAccess->compile($this->value, $compilationContext);
+            $compiledExpression = (new StaticConstantAccess())->compile($this->value, $compilationContext);
 
             $this->value = [
                 'type' => $compiledExpression->getType(),
@@ -150,15 +145,13 @@ class ClassConstant
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
         $this->processValue($compilationContext);
-
         $constantValue = $this->value['value'] ?? null;
-
         $compilationContext->backend->declareConstant(
             $this->value['type'],
             $this->getName(),

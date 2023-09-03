@@ -18,8 +18,8 @@ use Zephir\Documentation\Annotation;
  */
 class ReturnAnnotation extends Annotation
 {
-    protected $returnType;
-    protected $description;
+    protected string $returnType;
+    protected string $description;
 
     public function getReturnType(): string
     {

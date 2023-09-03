@@ -133,12 +133,12 @@ class Call
             if (\is_object($symbolVariable)) {
                 $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
                 } else {
                     $mustInit = true;
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
             }
         }
 

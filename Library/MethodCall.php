@@ -99,7 +99,7 @@ class MethodCall extends Call
 
         $type = $expression['call-type'];
 
-        /*
+        /**
          * In normal method calls and dynamic string method calls we just use the name given by the user
          */
         if (self::CALL_NORMAL == $type || self::CALL_DYNAMIC_STRING == $type) {
@@ -136,12 +136,11 @@ class MethodCall extends Call
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
             if (\is_object($symbolVariable)) {
-                $readDetector = new ReadDetector($expression);
+                $readDetector = new ReadDetector();
                 if ($caller == $symbolVariable || $readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
                         'variable',
                         $compilationContext,
-                        $expression
                     );
                 } else {
                     $mustInit = true;
@@ -150,7 +149,6 @@ class MethodCall extends Call
                 $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
                     'variable',
                     $compilationContext,
-                    $expression
                 );
             }
         }

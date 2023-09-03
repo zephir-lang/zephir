@@ -98,7 +98,7 @@ class Variable implements TypeAwareInterface
 
     protected array $classTypes = [];
 
-    protected ?ClassDefinition $associatedClass = null;
+    protected ClassDefinition|ReflectionClass|null $associatedClass = null;
 
     /**
      * Initialization skips.
@@ -463,10 +463,8 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the class related to the variable.
-     *
-     * @return ClassDefinition|null
      */
-    public function getAssociatedClass(): ?ClassDefinition
+    public function getAssociatedClass(): ClassDefinition|ReflectionClass|null
     {
         return $this->associatedClass;
     }
@@ -796,7 +794,7 @@ class Variable implements TypeAwareInterface
                     $compilationContext->backend->initVar($this, $compilationContext, true, true);
                 } else {
                     if ($this->variantInits > 0) {
-                        if (!$this->initBranch) {
+                        if ($this->initBranch) {
                             $compilationContext->codePrinter->output('ZEPHIR_INIT_BNVAR('.$this->getName().');');
                         } else {
                             $this->mustInitNull = true;

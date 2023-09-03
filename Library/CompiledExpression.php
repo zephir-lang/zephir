@@ -21,22 +21,13 @@ use Closure;
  */
 class CompiledExpression implements TypeAwareInterface
 {
-    protected string $type;
-
-    protected ?string $code;
-
-    protected ?array $originalExpr;
-
     /**
      * @param string      $type
-     * @param string|null $code
+     * @param mixed $code
      * @param array|null  $originalExpr
      */
-    public function __construct(string $type, ?string $code, ?array $originalExpr = null)
+    public function __construct(protected string $type, protected mixed $code, protected ?array $originalExpr = null)
     {
-        $this->type = $type;
-        $this->code = $code;
-        $this->originalExpr = $originalExpr;
     }
 
     /**
@@ -52,9 +43,9 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Returns the code produced by the compiled expression.
      *
-     * @return string|null
+     * @return mixed
      */
-    public function getCode(): ?string
+    public function getCode(): mixed
     {
         return $this->code;
     }

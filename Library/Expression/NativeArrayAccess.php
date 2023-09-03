@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression;
 
 use ReflectionException;
@@ -28,20 +30,18 @@ class NativeArrayAccess
 
     protected bool $readOnly = false;
 
-    /** @var Variable|null */
-    protected $expectingVariable;
+    protected ?Variable $expectingVariable;
 
-    /** @var bool */
-    protected $noisy = true;
+    protected bool $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool $expecting
+     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -52,7 +52,7 @@ class NativeArrayAccess
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -62,7 +62,7 @@ class NativeArrayAccess
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -73,9 +73,9 @@ class NativeArrayAccess
      * @param $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -130,7 +130,7 @@ class NativeArrayAccess
      * @throws ReflectionException
      * @throws Exception
      */
-    protected function accessStringOffset(array $expression, Variable $variableVariable, CompilationContext $compilationContext)
+    protected function accessStringOffset(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
     {
         if ($this->expecting) {
             if ($this->expectingVariable) {
@@ -182,15 +182,15 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array              $expression
-     * @param Variable           $variableVariable
+     * @param array $expression
+     * @param Variable $variableVariable
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
-    protected function accessDimensionArray($expression, Variable $variableVariable, CompilationContext $compilationContext)
+    protected function accessDimensionArray(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
     {
         $arrayAccess = $expression;
 

@@ -58,7 +58,7 @@ class PropertyAccess
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
@@ -101,7 +101,7 @@ class PropertyAccess
         $classDefinition = null;
         $currentClassDefinition = $compilationContext->classDefinition;
 
-        /*
+        /**
          * If the property is accessed on 'this', we check if the method does exist
          */
         if ('this' == $variableVariable->getRealName()) {
@@ -112,7 +112,7 @@ class PropertyAccess
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
-            /*
+            /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */

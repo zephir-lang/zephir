@@ -11,9 +11,6 @@
 
 namespace Zephir\Exception;
 
-/**
- * Zephir\Exception\FileSystemException.
- */
 class FileSystemException extends RuntimeException
 {
 }

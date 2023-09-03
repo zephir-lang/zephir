@@ -12,8 +12,6 @@
 namespace Zephir\Exception;
 
 /**
- * Zephir\Exception\LogicException.
- *
  * Exception that represents error in the program logic.
  * This kind of exception should directly lead to a fix in your code.
  */

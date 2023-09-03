@@ -441,16 +441,6 @@ class ClassMethod
     }
 
     /**
-     * Sets if the method is internal or not.
-     *
-     * @param bool $internal
-     */
-    public function setIsInternal(bool $internal): void
-    {
-        $this->isInternal = $internal;
-    }
-
-    /**
      * Sets if the method is bundled or not.
      *
      * @param bool $bundled
@@ -556,7 +546,7 @@ class ClassMethod
      *
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -573,8 +563,6 @@ class ClassMethod
 
     /**
      * Returns the raw docblock.
-     *
-     * @return string
      */
     public function getDocBlock(): ?string
     {
@@ -607,19 +595,9 @@ class ClassMethod
      *
      * @return mixed
      */
-    public function getLine()
+    public function getLine(): mixed
     {
         return $this->expression['line'];
-    }
-
-    /**
-     * the ending line of the method in the source file.
-     *
-     * @return mixed
-     */
-    public function getLastLine()
-    {
-        return $this->expression['last-line'];
     }
 
     /**
@@ -781,20 +759,6 @@ class ClassMethod
     }
 
     /**
-     * Returns the number of required parameters the method has.
-     *
-     * @return string
-     */
-    public function getInternalParameters(): string
-    {
-        if ($this->parameters === null) {
-            return '';
-        }
-
-        return $this->parameters->count().', ...';
-    }
-
-    /**
      * Checks whether the method has a specific modifier.
      *
      * @param string $modifier
@@ -898,16 +862,6 @@ class ClassMethod
     public function isMixed(): bool
     {
         return $this->mixed;
-    }
-
-    /**
-     * Checks if the method is inline.
-     *
-     * @return bool
-     */
-    public function isInline(): bool
-    {
-        return in_array('inline', $this->visibility);
     }
 
     /**
@@ -1036,26 +990,6 @@ class ClassMethod
     public function getShortcutName()
     {
         return $this->expression['name'];
-    }
-
-    /**
-     * Returns the local context pass information.
-     *
-     * @return LocalContextPass
-     */
-    public function getLocalContextPass(): LocalContextPass
-    {
-        return $this->localContext;
-    }
-
-    /**
-     * Returns the static type inference pass information.
-     *
-     * @return StaticTypeInference
-     */
-    public function getStaticTypeInferencePass(): StaticTypeInference
-    {
-        return $this->typeInference;
     }
 
     /**
@@ -2312,8 +2246,8 @@ class ClassMethod
                     continue;
                 }
 
-                /*
-                 * TODO: Probable we should detect return type more more carefully.
+                /**
+                 * TODO: Probably we should detect return type more more carefully.
                  * It is hard to process return type from the annotations at this time.
                  * Thus we just return false here.
                  */

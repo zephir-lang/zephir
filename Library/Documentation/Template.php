@@ -67,53 +67,6 @@ class Template
     }
 
     /**
-     * Set a variable that will be accessible in the template.
-     *
-     * @param $name
-     * @param $value
-     */
-    public function setVar($name, $value)
-    {
-        $this->data[$name] = $value;
-    }
-
-    /**
-     * get a variable set with setVar().
-     *
-     * @param $name
-     *
-     * @return bool
-     */
-    public function getVar($name)
-    {
-        return isset($this->data[$name]) ? $this->data[$name] : null;
-    }
-
-    /**
-     * find the value in the project configuration (e.g the version).
-     *
-     * @param string $name the name of the config to get
-     */
-    public function projectConfig($name)
-    {
-        if (isset($this->projectConfig)) {
-            return $this->projectConfig->get($name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * find the value of an option of the theme.
-     *
-     * @param string $name the name of the option to get
-     */
-    public function themeOption($name)
-    {
-        return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null;
-    }
-
-    /**
      * set the config of the project (it usually wraps the version, the theme config, etc...).
      *
      * @param array $projectConfig
@@ -131,20 +84,6 @@ class Template
     public function setThemeOptions($themeOptions)
     {
         $this->themeOptions = $themeOptions;
-    }
-
-    /**
-     * get a value from the theme config (theme.json file placed inside the theme directory).
-     */
-    public function getAssets()
-    {
-        $css = $this->theme->getThemeInfoExtendAware('css');
-        $js = $this->theme->getThemeInfoExtendAware('javascript');
-
-        return [
-            'css' => $css,
-            'javascript' => $js,
-        ];
     }
 
     /**
@@ -187,11 +126,6 @@ class Template
     public function getPathToRoot()
     {
         return $this->pathToRoot;
-    }
-
-    public function asset($name)
-    {
-        return $this->getPathToRoot().'asset/'.rtrim($name);
     }
 
     public function write($outputFile)
