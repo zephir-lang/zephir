@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\CompilationContext;
@@ -85,26 +87,16 @@ class CallGathererPass
     }
 
     /**
-     * Returns all the method calls.
-     *
-     * @return array
-     */
-    public function getAllMethodCalls(): array
-    {
-        return $this->methodCalls;
-    }
-
-    /**
      * Do the compilation pass.
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -113,7 +105,7 @@ class CallGathererPass
         }
     }
 
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -122,14 +114,14 @@ class CallGathererPass
         }
     }
 
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             $this->passExpression($item['value']);
         }
     }
 
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (!$expression['dynamic']) {
             $className = $this->compilationContext->getFullName($expression['class']);
@@ -147,7 +139,7 @@ class CallGathererPass
         }
     }
 
-    public function passNewType(array $expression)
+    public function passNewType(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -156,7 +148,7 @@ class CallGathererPass
         }
     }
 
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':
@@ -285,7 +277,7 @@ class CallGathererPass
         }
     }
 
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {
