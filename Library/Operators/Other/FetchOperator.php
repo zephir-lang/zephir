@@ -21,8 +21,6 @@ use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
 /**
- * FetchOperator.
- *
  * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
  * without calculating the hash key twice
  */
