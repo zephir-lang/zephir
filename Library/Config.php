@@ -335,7 +335,7 @@ class Config implements ArrayAccess, JsonSerializable
      *
      * @throws Exception
      */
-    protected function populate()
+    protected function populate(): void
     {
         if (!file_exists('config.json')) {
             return;

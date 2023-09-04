@@ -19,6 +19,7 @@ use ReflectionException;
 use Zephir\AliasManager;
 use Zephir\Backend\Backend;
 use Zephir\Compiler;
+use Zephir\Compiler\CompilerFileFactory;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\FileSystem\HardDisk;
@@ -36,7 +37,7 @@ final class CheckDependenciesTest extends TestCase
         $config = new Config();
         $backend = new Backend($config, 'kernel', 'templates');
         $disk = new HardDisk(realpath('..').'/tests/output');
-        $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
+        $compilerFactory = new CompilerFileFactory($config, $disk, $logger);
 
         $compiler = new Compiler($config, $backend, new Manager(new Parser()), $disk, $compilerFactory);
 

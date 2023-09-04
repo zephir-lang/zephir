@@ -32,6 +32,7 @@ use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
 use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
+use Zephir\Parser\Manager;
 use function count;
 use function dirname;
 use function extension_loaded;
@@ -42,11 +43,6 @@ use const DIRECTORY_SEPARATOR;
 final class Compiler
 {
     use LoggerAwareTrait;
-
-    /**
-     * @var Backend
-     */
-    public Backend $backend;
 
     /**
      * @var FunctionDefinition[]
@@ -103,16 +99,6 @@ final class Compiler
     private array $extraFiles = [];
 
     /**
-     * @var Config
-     */
-    private Config $config;
-
-    /**
-     * @var Parser\Manager
-     */
-    private Parser\Manager $parserManager;
-
-    /**
      * @var StringsManager
      */
     private StringsManager $stringManager;
@@ -137,41 +123,14 @@ final class Compiler
      */
     private ?string $templatesPath;
 
-    /**
-     * @var FileSystemInterface
-     */
-    private FileSystemInterface $filesystem;
-
-    /**
-     * @var CompilerFileFactory
-     */
-    private CompilerFileFactory $compilerFileFactory;
-
-    /**
-     * Compiler constructor.
-     *
-     * @param Config              $config
-     * @param Backend         $backend
-     * @param Parser\Manager      $manager
-     * @param FileSystemInterface $filesystem
-     * @param CompilerFileFactory $compilerFileFactory
-     *
-     * @throws RuntimeException
-     */
     public function __construct(
-        Config $config,
-        Backend $backend,
-        Parser\Manager $manager,
-        FileSystemInterface $filesystem,
-        CompilerFileFactory $compilerFileFactory
+        private Config $config,
+        public Backend $backend,
+        private Manager $parserManager,
+        private FileSystemInterface $filesystem,
+        private CompilerFileFactory $compilerFileFactory,
     ) {
-        $this->config = $config;
-        $this->backend = $backend;
-        $this->parserManager = $manager;
-        $this->filesystem = $filesystem;
-        $this->compilerFileFactory = $compilerFileFactory;
         $this->logger = new NullLogger();
-
         $this->stringManager = new StringsManager();
         $this->fcallManager = $this->backend->getFcallManager();
 
@@ -268,11 +227,10 @@ final class Compiler
      * Adds a function to the function definitions.
      *
      * @param FunctionDefinition $func
-     * @param array|null         $statement
+     * @param array $statement
      *
-     * @throws CompilerException
      */
-    public function addFunction(FunctionDefinition $func, array $statement = [])
+    public function addFunction(FunctionDefinition $func, array $statement = []): void
     {
         $funcName = strtolower($func->getInternalName());
         if (isset($this->functionDefinitions[$funcName])) {
@@ -431,7 +389,7 @@ final class Compiler
      * @param CompilerFileAnonymous $file
      * @param ClassDefinition       $classDefinition
      */
-    public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition)
+    public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition): void
     {
         $this->definitions[$classDefinition->getCompleteName()] = $classDefinition;
         $this->anonymousFiles[$classDefinition->getCompleteName()] = $file;
@@ -485,7 +443,7 @@ final class Compiler
      *
      * @param array $globals
      */
-    public function setExtensionGlobals(array $globals)
+    public function setExtensionGlobals(array $globals): void
     {
         foreach ($globals as $key => $value) {
             $this->globals[$key] = $value;
@@ -505,7 +463,7 @@ final class Compiler
     }
 
     /**
-     * Returns a extension global by its name.
+     * Returns an extension global by its name.
      *
      * @param string $name
      *
@@ -563,7 +521,7 @@ final class Compiler
     /**
      * Pre-compile headers to speed up compilation.
      */
-    public function preCompileHeaders()
+    public function preCompileHeaders(): void
     {
         if (is_windows()) {
             // TODO: Add Windows support
@@ -1490,11 +1448,11 @@ final class Compiler
 
         if (isset($entries[$section])) {
             foreach ($entries[$section] as $entry) {
-                if (isset($entry['code']) && !empty($entry['code'])) {
+                if (!empty($entry['code'])) {
                     $codes[] = $entry['code'].';';
                 }
 
-                if (isset($entry['include']) && !empty($entry['include'])) {
+                if (!empty($entry['include'])) {
                     $includes[] = '#include "'.$entry['include'].'"';
                 }
             }

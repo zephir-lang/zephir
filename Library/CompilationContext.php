@@ -26,11 +26,6 @@ use function in_array;
  */
 class CompilationContext
 {
-    /**
-     * Compiler.
-     *
-     * @var Compiler|null
-     */
     public ?Compiler $compiler = null;
 
     /**
@@ -150,7 +145,7 @@ class CompilationContext
     public ?CacheManager $cacheManager = null;
 
     /**
-     * Manages class renamings using keyword 'use'.
+     * Manages class renaming using keyword 'use'.
      *
      * @var AliasManager|null
      */
@@ -201,13 +196,8 @@ class CompilationContext
 
     /**
      * Lookup a class from a given class name.
-     *
-     * @param string     $className
-     * @param array|null $statement
-     *
-     * @return ClassDefinition
      */
-    public function classLookup(string $className, array $statement = null): ClassDefinition
+    public function classLookup(string $className, array $statement = null): AbstractClassDefinition
     {
         if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $this->getFullName($className);
@@ -215,7 +205,7 @@ class CompilationContext
                 return $this->compiler->getClassDefinition($className);
             }
 
-            throw new CompilerException("Cannot locate class '{$className}'", $statement);
+            throw new CompilerException("Cannot locate class '$className'", $statement);
         }
 
         if (in_array($className, ['self', 'static'])) {
