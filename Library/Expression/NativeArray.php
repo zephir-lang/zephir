@@ -34,8 +34,6 @@ class NativeArray
 
     protected bool $readOnly = false;
 
-    protected bool $noisy = true;
-
     protected ?Variable $expectingVariable = null;
 
     /**
