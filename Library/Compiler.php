@@ -1313,17 +1313,17 @@ final class Compiler
              * Process compound structures
              */
             foreach ($structures as $structureName => $internalStructure) {
-                if (preg_match('/^[0-9a-zA-Z\_]$/', $structureName)) {
+                if (preg_match('/^[0-9a-zA-Z_]$/', $structureName)) {
                     throw new Exception("Struct name: '".$structureName."' contains invalid characters");
                 }
 
                 $structBuilder = new Struct('_zephir_struct_'.$structureName, $structureName);
                 foreach ($internalStructure as $field => $global) {
-                    if (preg_match('/^[0-9a-zA-Z\_]$/', $field)) {
+                    if (preg_match('/^[0-9a-zA-Z_]$/', $field)) {
                         throw new Exception("Struct field name: '".$field."' contains invalid characters");
                     }
 
-                    $structBuilder->addProperty($field, $global);
+                    $structBuilder->addProperty($field, $global['type']);
 
                     $isModuleGlobal = (int) !empty($global['module']);
                     $globalsDefault[$isModuleGlobal][] = $structBuilder->getCDefault($field, $global, $namespace);
@@ -1342,7 +1342,7 @@ final class Compiler
              * Process single variables
              */
             foreach ($variables as $name => $global) {
-                if (preg_match('/^[0-9a-zA-Z\_]$/', $name)) {
+                if (preg_match('/^[0-9a-zA-Z_]$/', $name)) {
                     throw new Exception("Extension global variable name: '".$name."' contains invalid characters");
                 }
 

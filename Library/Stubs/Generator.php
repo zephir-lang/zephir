@@ -25,9 +25,6 @@ use Zephir\Exception;
 use function array_key_exists;
 use function in_array;
 
-/**
- * Stubs Generator.
- */
 class Generator
 {
     /**
@@ -41,18 +38,11 @@ class Generator
         'scoped',
         'deprecated',
     ];
-
-    /**
-     * @var CompilerFile[]
-     */
-    protected array $files;
-
     /**
      * @param CompilerFile[] $files
      */
-    public function __construct(array $files)
+    public function __construct(protected array $files)
     {
-        $this->files = $files;
     }
 
     /**
@@ -454,10 +444,7 @@ class Generator
     private function fetchDocBlock(?string $docBlock, string $indent): string
     {
         $docBlock = (new DocBlock($docBlock, $indent))->__toString();
-        if ($docBlock) {
-            return $docBlock.PHP_EOL;
-        }
 
-        return '';
+        return $docBlock ? $docBlock.PHP_EOL : '';
     }
 }

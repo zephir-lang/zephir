@@ -31,16 +31,8 @@ class CallGathererPass
 
     protected array $methodCalls = [];
 
-    protected CompilationContext $compilationContext;
-
-    /**
-     * CallGathererPass constructor.
-     *
-     * @param CompilationContext $compilationContext
-     */
-    public function __construct(CompilationContext $compilationContext)
+    public function __construct(protected CompilationContext $compilationContext)
     {
-        $this->compilationContext = $compilationContext;
     }
 
     /**
@@ -62,11 +54,7 @@ class CallGathererPass
      */
     public function getNumberOfFunctionCalls(string $funcName): int
     {
-        if (isset($this->functionCalls[$funcName])) {
-            return $this->functionCalls[$funcName];
-        }
-
-        return 0;
+        return $this->functionCalls[$funcName] ?? 0;
     }
 
     /**
@@ -79,11 +67,7 @@ class CallGathererPass
      */
     public function getNumberOfMethodCalls(string $className, string $methodName): int
     {
-        if (isset($this->methodCalls[$className][$methodName])) {
-            return $this->methodCalls[$className][$methodName];
-        }
-
-        return 0;
+        return $this->methodCalls[$className][$methodName] ?? 0;
     }
 
     /**
