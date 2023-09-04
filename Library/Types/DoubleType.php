@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
 use Zephir\Types;
@@ -18,10 +20,7 @@ use Zephir\Types;
  */
 class DoubleType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $methodMap = [
+    public array $methodMap = [
         'abs' => 'abs',
         'tobinary' => 'decbin',
         'tohex' => 'dechex',
@@ -38,10 +37,7 @@ class DoubleType extends AbstractType
         'log' => 'log',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_DOUBLE;
     }

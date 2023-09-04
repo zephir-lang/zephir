@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
 use Zephir\Types;
@@ -18,10 +20,7 @@ use Zephir\Types;
  */
 class IstringType extends StringType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_ISTRING;
     }

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
 use Zephir\Types;
@@ -20,10 +22,7 @@ use Zephir\Types;
  */
 class StringType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $methodMap = [
+    public array $methodMap = [
         'index' => 'strpos',
         'trim' => 'trim',
         'trimleft' => 'ltrim',
@@ -51,10 +50,7 @@ class StringType extends AbstractType
         'uncamelize' => 'uncamelize',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_STRING;
     }
