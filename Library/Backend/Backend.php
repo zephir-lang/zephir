@@ -63,7 +63,7 @@ class Backend
     public function getTemplateFileContents(string $filename): string
     {
         $templatePath = rtrim((string) $this->config->get('templatepath', 'backend'), '\\/');
-        if (empty($templatepath)) {
+        if (empty($templatePath)) {
             $templatePath = $this->templatesPath;
         }
 
