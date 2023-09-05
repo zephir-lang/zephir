@@ -110,9 +110,6 @@ class VariablesManager
             case 'empty-array':
                 $context->backend->initArray($variable, $context);
                 break;
-
-            default:
-                throw $this->invalidDefaultTypeException($variable, $value);
         }
     }
 
@@ -140,9 +137,6 @@ class VariablesManager
             case Types::T_NULL:
                 $context->backend->assignString($variable, null, $context);
                 break;
-
-            default:
-                throw $this->invalidDefaultTypeException($variable, $value);
         }
     }
 
@@ -170,30 +164,7 @@ class VariablesManager
             case 'empty-array':
                 $context->backend->initArray($variable, $context);
                 break;
-
-            default:
-                throw $this->invalidDefaultTypeException($variable, $value);
         }
-    }
-
-    /**
-     * Create a compiler exception with 'Invalid default type' message.
-     *
-     * @param Variable $variable
-     * @param array    $value
-     *
-     * @return Exception
-     */
-    private function invalidDefaultTypeException(Variable $variable, array $value): Exception
-    {
-        new Exception(
-            sprintf(
-                'Invalid default type: %s for data type: %s',
-                $value['type'],
-                $variable->getType()
-            ),
-            $variable->getOriginal()
-        );
     }
 
     /**
