@@ -6,7 +6,7 @@ services:
   zephir-8.0:
     container_name: phalcon-zephir-8.0
     hostname: zephir-80
-    build: docker/8.0
+    build: .docker/8.0
     working_dir: /srv
     environment:
       - "USER=Zephir"
@@ -16,7 +16,7 @@ services:
   zephir-8.1:
     container_name: phalcon-zephir-8.1
     hostname: zephir-81
-    build: docker/8.1
+    build: .docker/8.1
     working_dir: /srv
     environment:
       - "USER=Zephir"
@@ -26,7 +26,7 @@ services:
   zephir-8.2:
     container_name: phalcon-zephir-8.2
     hostname: zephir-82
-    build: docker/8.2
+    build: .docker/8.2
     working_dir: /srv
     environment:
       - "USER=Zephir"
@@ -36,7 +36,7 @@ services:
   zephir-8.3:
     container_name: phalcon-zephir-8.3
     hostname: zephir-83
-    build: docker/8.3
+    build: .docker/8.3
     working_dir: /srv
     environment:
       - "USER=Zephir"
