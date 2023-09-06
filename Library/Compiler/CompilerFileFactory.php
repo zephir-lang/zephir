@@ -21,8 +21,11 @@ use Zephir\FileSystem\FileSystemInterface;
 
 final class CompilerFileFactory
 {
-    public function __construct(private Config $config, private FileSystemInterface $filesystem, private LoggerInterface $logger)
-    {
+    public function __construct(
+        private Config $config,
+        private FileSystemInterface $filesystem,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**

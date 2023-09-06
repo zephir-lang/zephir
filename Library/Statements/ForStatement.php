@@ -647,13 +647,12 @@ class ForStatement extends StatementAbstract
      * - A key must be a zval
      * - A value must be a zval
      *
-     * @param array              $expression
      * @param CompilationContext $compilationContext
      * @param Variable           $exprVariable
      */
-    public function compileHashTraverse($expression, CompilationContext $compilationContext, Variable $exprVariable)
+    public function compileHashTraverse(CompilationContext $compilationContext, Variable $exprVariable): void
     {
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -671,7 +670,7 @@ class ForStatement extends StatementAbstract
             $keyVariable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Initialize 'value' variable
          */
         if (isset($this->statement['value'])) {
@@ -793,7 +792,7 @@ class ForStatement extends StatementAbstract
         switch ($exprVariable->getType()) {
             case 'variable':
             case 'array':
-                $this->compileHashTraverse($expression, $compilationContext, $exprVariable);
+                $this->compileHashTraverse($compilationContext, $exprVariable);
                 break;
 
             case 'string':

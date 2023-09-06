@@ -88,11 +88,7 @@ class WriteDetector
      */
     public function getNumberOfMutations(string $variable): int
     {
-        if (isset($this->mutations[$variable])) {
-            return $this->mutations[$variable];
-        }
-
-        return 0;
+        return $this->mutations[$variable] ?? 0;
     }
 
     /**

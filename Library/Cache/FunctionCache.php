@@ -37,16 +37,8 @@ class FunctionCache
 {
     protected array $cache = [];
 
-    protected ?CallGathererPass $gatherer = null;
-
-    /**
-     * FunctionCache constructor.
-     *
-     * @param CallGathererPass|null $gatherer
-     */
-    public function __construct(CallGathererPass $gatherer = null)
+    public function __construct(protected ?CallGathererPass $gatherer = null)
     {
-        $this->gatherer = $gatherer;
     }
 
     /**

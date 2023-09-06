@@ -41,14 +41,8 @@ class MethodCache
 {
     protected array $cache = [];
 
-    protected ?CallGathererPass $gatherer = null;
-
-    /**
-     * @param CallGathererPass|null $gatherer
-     */
-    public function __construct(CallGathererPass $gatherer = null)
+    public function __construct(protected ?CallGathererPass $gatherer = null)
     {
-        $this->gatherer = $gatherer;
     }
 
     /**

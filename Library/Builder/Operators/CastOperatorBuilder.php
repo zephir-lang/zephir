@@ -24,15 +24,13 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
 
     protected FunctionCallBuilder $rightOperand;
 
-    /**
-     * @param string              $left
-     * @param FunctionCallBuilder $right
-     * @param string|null         $file
-     * @param int                 $line
-     * @param int                 $char
-     */
-    public function __construct(string $left, FunctionCallBuilder $right, ?string $file = null, int $line = 0, int $char = 0)
-    {
+    public function __construct(
+        string $left,
+        FunctionCallBuilder $right,
+        ?string $file = null,
+        int $line = 0,
+        int $char = 0
+    ) {
         $this->leftOperand = $left;
         $this->rightOperand = $right;
         $this->file = $file;

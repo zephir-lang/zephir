@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Backend;
 
 use Zephir\ClassDefinition;
@@ -33,13 +35,11 @@ class Backend
 {
     protected FcallManagerInterface $fcallManager;
 
-    /**
-     * @param Config $config
-     * @param string $kernelsPath
-     * @param string $templatesPath
-     */
-    public function __construct(protected Config $config, protected string $kernelsPath, protected string $templatesPath)
-    {
+    public function __construct(
+        protected Config $config,
+        protected string $kernelsPath,
+        protected string $templatesPath
+    ) {
         $this->fcallManager = new FcallManager();
     }
 

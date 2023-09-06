@@ -35,11 +35,6 @@ class Entry
     private string $classname;
 
     /**
-     * @var CompilationContext
-     */
-    private CompilationContext $compilationContext;
-
-    /**
      * @var bool
      */
     private bool $isInternal = false;
@@ -51,15 +46,8 @@ class Entry
      */
     private array $classEntries;
 
-    /**
-     * Entry constructor.
-     *
-     * @param string             $className
-     * @param CompilationContext $compilationContext
-     */
-    public function __construct(string $className, CompilationContext $compilationContext)
+    public function __construct(string $className, private CompilationContext $compilationContext)
     {
-        $this->compilationContext = $compilationContext;
         $this->classname = $this->compilationContext->getFullName($className);
 
         $this->classEntries = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/class-entries.php';

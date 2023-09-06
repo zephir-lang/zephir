@@ -30,92 +30,66 @@ class CompilationContext
 
     /**
      * Current code printer.
-     *
-     * @var CodePrinter|null
      */
     public ?CodePrinter $codePrinter = null;
 
     /**
      * Whether the current method is static or not.
-     *
-     * @var bool
      */
     public bool $staticContext = false;
 
     /**
      * Code printer for the header.
-     *
-     * @var CodePrinter|null
      */
     public ?CodePrinter $headerPrinter = null;
 
     /**
      * Current symbol table.
-     *
-     * @var SymbolTable|null
      */
     public ?SymbolTable $symbolTable = null;
 
     /**
      * Type inference data.
-     *
-     * @var StaticTypeInference|null
      */
     public ?StaticTypeInference $typeInference = null;
 
     /**
      * Represents the class currently being compiled.
-     *
-     * @var ClassDefinition|null
      */
     public ?ClassDefinition $classDefinition = null;
 
     /**
      * Current method or function that being compiled.
-     *
-     * @var ClassMethod|null
      */
     public ?ClassMethod $currentMethod = null;
 
     /**
      * Represents the c-headers added to the file.
-     *
-     * @var HeadersManager|null
      */
     public ?HeadersManager $headersManager = null;
 
     /**
      * Represents interned strings and concatenations made in the project.
-     *
-     * @var StringsManager|null
      */
     public ?StringsManager $stringsManager = null;
 
     /**
      * Tells if the compilation is being made inside a cycle/loop.
-     *
-     * @var int
      */
     public int $insideCycle = 0;
 
     /**
      * Tells if the compilation is being made inside a try/catch block.
-     *
-     * @var int
      */
     public int $insideTryCatch = 0;
 
     /**
      * Tells if the compilation is being made inside a switch.
-     *
-     * @var int
      */
     public int $insideSwitch = 0;
 
     /**
      * Current cycle/loop block.
-     *
-     * @var array
      */
     public array $cycleBlocks = [];
 
@@ -127,15 +101,11 @@ class CompilationContext
 
     /**
      * Global consecutive for try/catch blocks.
-     *
-     * @var int
      */
     public int $currentTryCatch = 0;
 
     /**
      * Helps to create graphs of conditional/jump branches in a specific method.
-     *
-     * @var BranchManager|null
      */
     public ?BranchManager $branchManager = null;
 
@@ -146,36 +116,26 @@ class CompilationContext
 
     /**
      * Manages class renaming using keyword 'use'.
-     *
-     * @var AliasManager|null
      */
     public ?AliasManager $aliasManager = null;
 
     /**
      * Function Cache.
-     *
-     * @var FunctionCache|null
      */
     public ?FunctionCache $functionCache = null;
 
     /**
      * Global config.
-     *
-     * @var Config|null
      */
     public ?Config $config = null;
 
     /**
      * Global logger.
-     *
-     * @var LoggerInterface|null
      */
     public ?LoggerInterface $logger = null;
 
     /**
      * The current backend.
-     *
-     * @var Backend|null
      */
     public ?Backend $backend = null;
 

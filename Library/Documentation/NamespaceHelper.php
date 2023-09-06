@@ -15,18 +15,14 @@ use Zephir\CompilerFile;
 
 class NamespaceHelper
 {
-    protected $fullNamespace;
+    protected string $endNamespace;
+    protected string $parentName;
 
-    protected $endNamespace;
-    protected $parentName;
+    protected array $classes = [];
+    protected array $namespaces = [];
 
-    protected $classes = [];
-    protected $namespaces = [];
-
-    public function __construct($fullNamespace)
+    public function __construct(protected string $fullNamespace)
     {
-        $this->fullNamespace = $fullNamespace;
-
         $ex = explode('\\', $fullNamespace);
         $this->endNamespace = $ex[\count($ex) - 1];
 
@@ -35,51 +31,32 @@ class NamespaceHelper
         $this->parentName = implode('\\', $ex);
     }
 
-    public function addClass(CompilerFile $c)
+    public function addClass(CompilerFile $c): void
     {
         $this->classes[] = $c;
     }
 
-    public function addNamespace(self $n)
-    {
-        if (!isset($this->namespaces[$n->getFullNamespace()])) {
-            $this->namespaces[$n->getFullNamespace()] = $n;
-        }
-    }
-
-    public function getFullNamespace()
+    public function getFullNamespace(): string
     {
         return $this->fullNamespace;
     }
 
-    /**
-     * @return string
-     */
-    public function getShortName()
+    public function getShortName(): string
     {
         return $this->endNamespace;
     }
 
-    /**
-     * @return string
-     */
-    public function getParentName()
+    public function getParentName(): string
     {
         return $this->parentName;
     }
 
-    /**
-     * @return CompilerFile[]
-     */
-    public function getClasses()
+    public function getClasses(): array
     {
         return $this->classes;
     }
 
-    /**
-     * @return NamespaceHelper[]
-     */
-    public function getNamespaces()
+    public function getNamespaces(): array
     {
         return $this->namespaces;
     }

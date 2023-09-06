@@ -18,24 +18,8 @@ namespace Zephir\Builder\Statements;
  */
 class LetStatementBuilder extends AbstractStatementBuilder
 {
-    /**
-     * List of assignments
-     *
-     * @var array
-     */
-    private array $assignments;
-
-    /**
-     * Expression
-     *
-     * @var mixed
-     */
-    private $expr;
-
-    public function __construct(array $assignments, $expr)
+    public function __construct(private array $assignments, private mixed $expr)
     {
-        $this->assignments = $assignments;
-        $this->expr = $expr;
     }
 
     /**

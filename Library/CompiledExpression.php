@@ -21,11 +21,6 @@ use Closure;
  */
 class CompiledExpression implements TypeAwareInterface
 {
-    /**
-     * @param string      $type
-     * @param mixed $code
-     * @param array|null  $originalExpr
-     */
     public function __construct(protected string $type, protected mixed $code, protected ?array $originalExpr = null)
     {
     }

@@ -19,10 +19,7 @@ use Zephir\Exception;
 
 class Template
 {
-    protected $template;
-    protected $data;
-    protected $nestedLevel;
-    protected $pathToRoot = './';
+    protected string $pathToRoot = './';
     protected $themeOptions;
     /**
      * @var Config
@@ -39,16 +36,16 @@ class Template
      *
      * @throws Exception
      */
-    public function __construct(protected Theme $theme, array $data, string $template, int $nestedLevel = 0)
-    {
+    public function __construct(
+        protected Theme $theme,
+        protected array $data,
+        protected string $template,
+        protected int $nestedLevel = 0,
+    ) {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception('Recursive inclusion detected in theme creation');
         }
-
-        $this->data = $data;
-        $this->template = $template;
-        $this->nestedLevel = $nestedLevel;
     }
 
     private function getTemplatePath($fileName)
@@ -71,7 +68,7 @@ class Template
      *
      * @param array $projectConfig
      */
-    public function setProjectConfig($projectConfig)
+    public function setProjectConfig($projectConfig): void
     {
         $this->projectConfig = $projectConfig;
     }
@@ -81,7 +78,7 @@ class Template
      *
      * @param array $themeOptions
      */
-    public function setThemeOptions($themeOptions)
+    public function setThemeOptions($themeOptions): void
     {
         $this->themeOptions = $themeOptions;
     }
@@ -91,7 +88,7 @@ class Template
      *
      * @param string $pathToRoot
      */
-    public function setPathToRoot($pathToRoot)
+    public function setPathToRoot(string $pathToRoot): void
     {
         $this->pathToRoot = $pathToRoot;
     }
@@ -103,7 +100,7 @@ class Template
      *
      * @return string the relative path to the url
      */
-    public function url($url)
+    public function url(string $url): string
     {
         if (\is_string($url)) {
             if ('/' == $url[0]) {
@@ -123,12 +120,12 @@ class Template
     /**
      * @return string
      */
-    public function getPathToRoot()
+    public function getPathToRoot(): string
     {
         return $this->pathToRoot;
     }
 
-    public function write($outputFile)
+    public function write($outputFile): void
     {
         $content = $this->parse();
         file_put_contents($outputFile, $content);
