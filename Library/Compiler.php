@@ -18,8 +18,10 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use ReflectionException;
 use Zephir\Backend\Backend;
+use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\Definition;
 use Zephir\Code\ArgInfoDefinition;
@@ -33,7 +35,6 @@ use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\NotImplementedException;
 use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
-use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Parser\Manager;
 use function count;
@@ -57,16 +58,11 @@ final class Compiler
      */
     private array $files = [];
 
-    /**
-     * @var string[]
-     */
     private array $anonymousFiles = [];
 
     /**
      * Additional initializer code.
      * Used for static property initialization.
-     *
-     * @var array
      */
     private array $internalInitializers = [];
 
@@ -75,9 +71,6 @@ final class Compiler
      */
     private array $definitions = [];
 
-    /**
-     * @var string[]
-     */
     private array $compiledFiles = [];
 
     private array $constants = [];
@@ -91,39 +84,18 @@ final class Compiler
      */
     private static array $internalDefinitions = [];
 
-    /**
-     * @var bool
-     */
     private static bool $loadedPrototypes = false;
 
-    /**
-     * @var array
-     */
     private array $extraFiles = [];
 
-    /**
-     * @var StringsManager
-     */
     private StringsManager $stringManager;
 
-    /**
-     * @var FcallManagerInterface
-     */
     private FcallManagerInterface $fcallManager;
 
-    /**
-     * @var string|null
-     */
     private ?string $prototypesPath;
 
-    /**
-     * @var string|null
-     */
     private ?string $optimizersPath;
 
-    /**
-     * @var string|null
-     */
     private ?string $templatesPath;
 
     public function __construct(
@@ -145,9 +117,6 @@ final class Compiler
         }
     }
 
-    /**
-     * @param string $prototypesPath
-     */
     public function setPrototypesPath(string $prototypesPath): void
     {
         $this->prototypesPath = $prototypesPath;
@@ -155,9 +124,6 @@ final class Compiler
 
     /**
      * Resolves path to the internal prototypes.
-     *
-     * @return string|null
-     *
      */
     private function resolvePrototypesPath(): ?string
     {
@@ -175,9 +141,6 @@ final class Compiler
         return $prototypesPath;
     }
 
-    /**
-     * @param string $optimizersPath
-     */
     public function setOptimizersPath(string $optimizersPath): void
     {
         $this->optimizersPath = $optimizersPath;
@@ -204,9 +167,6 @@ final class Compiler
         return $optimizersPath;
     }
 
-    /**
-     * @param string $templatesPath
-     */
     public function setTemplatesPath(string $templatesPath): void
     {
         $this->templatesPath = $templatesPath;
@@ -216,8 +176,6 @@ final class Compiler
      * Gets the Zephir Parser Manager.
      *
      * @deprecated
-     *
-     * @return Parser\Manager
      */
     public function getParserManager(): Parser\Manager
     {
@@ -226,10 +184,6 @@ final class Compiler
 
     /**
      * Adds a function to the function definitions.
-     *
-     * @param FunctionDefinition $func
-     * @param array $statement
-     *
      */
     public function addFunction(FunctionDefinition $func, array $statement = []): void
     {
@@ -246,11 +200,6 @@ final class Compiler
 
     /**
      * Loads a class definition in an external dependency.
-     *
-     * @param string $className
-     * @param string $location
-     *
-     * @return bool
      *
      * @throws CompilerException
      * @throws IllegalStateException
@@ -286,10 +235,6 @@ final class Compiler
 
     /**
      * Allows to check if a class is part of the compiled extension.
-     *
-     * @param string $className
-     *
-     * @return bool
      */
     public function isClass(string $className): bool
     {
@@ -313,10 +258,6 @@ final class Compiler
 
     /**
      * Allows checking if an interface is part of the compiled extension.
-     *
-     * @param string $className
-     *
-     * @return bool
      *
      * @throws CompilerException
      * @throws IllegalStateException
@@ -344,10 +285,6 @@ final class Compiler
 
     /**
      * Allows checking if a class is part of PHP.
-     *
-     * @param string $className
-     *
-     * @return bool
      */
     public function isBundledClass(string $className): bool
     {
@@ -356,10 +293,6 @@ final class Compiler
 
     /**
      * Allows checking if an interface is part of PHP.
-     *
-     * @param string $className
-     *
-     * @return bool
      */
     public function isBundledInterface(string $className): bool
     {
@@ -368,12 +301,8 @@ final class Compiler
 
     /**
      * Returns class the class definition from a given class name.
-     *
-     * @param string $className
-     *
-     * @return Definition|false returns false if no class definition is found
      */
-    public function getClassDefinition(string $className)
+    public function getClassDefinition(string $className): Definition|bool
     {
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
@@ -386,9 +315,6 @@ final class Compiler
 
     /**
      * Inserts an anonymous class definition in the compiler.
-     *
-     * @param CompilerFileAnonymous $file
-     * @param Definition       $classDefinition
      */
     public function addClassDefinition(CompilerFileAnonymous $file, Definition $classDefinition): void
     {
@@ -399,16 +325,12 @@ final class Compiler
     /**
      * Returns class the class definition from a given class name.
      *
-     * @param string $className
-     *
-     * @return Definition
-     *
      * @throws ReflectionException
      */
     public function getInternalClassDefinition(string $className): Definition
     {
         if (!isset(self::$internalDefinitions[$className])) {
-            $reflection = new \ReflectionClass($className);
+            $reflection = new ReflectionClass($className);
             self::$internalDefinitions[$className] = Definition::buildFromReflection($reflection);
         }
 
@@ -417,10 +339,6 @@ final class Compiler
 
     /**
      * Checks if $name is a Zephir constant.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function isConstant(string $name): bool
     {
@@ -429,20 +347,14 @@ final class Compiler
 
     /**
      * Returns a Zephir Constant by its name.
-     *
-     * @param string $name
-     *
-     * @return mixed
      */
-    public function getConstant(string $name)
+    public function getConstant(string $name): mixed
     {
         return $this->constants[$name];
     }
 
     /**
      * Sets extensions globals.
-     *
-     * @param array $globals
      */
     public function setExtensionGlobals(array $globals): void
     {
@@ -453,10 +365,6 @@ final class Compiler
 
     /**
      * Checks if a specific extension global is defined.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function isExtensionGlobal(string $name): bool
     {
@@ -465,10 +373,6 @@ final class Compiler
 
     /**
      * Returns an extension global by its name.
-     *
-     * @param string $name
-     *
-     * @return array
      */
     public function getExtensionGlobal(string $name): array
     {
@@ -477,10 +381,6 @@ final class Compiler
 
     /**
      * Returns GCC flags for current compilation.
-     *
-     * @param bool $development
-     *
-     * @return string
      */
     public function getGccFlags(bool $development = false): string
     {
@@ -509,8 +409,6 @@ final class Compiler
 
     /**
      * Returns the php include directories returned by php-config.
-     *
-     * @return string
      */
     public function getPhpIncludeDirs(): string
     {
@@ -553,10 +451,6 @@ final class Compiler
 
     /**
      * Generates the C sources from Zephir without compiling them.
-     *
-     * @param bool $fromGenerate
-     *
-     * @return bool
      *
      * @throws Exception
      * @throws ReflectionException
@@ -934,9 +828,6 @@ final class Compiler
     /**
      * Generate a HTML API.
      *
-     * @param array $options
-     * @param bool  $fromGenerate
-     *
      * @throws ConfigException
      * @throws Exception
      * @throws ReflectionException
@@ -958,8 +849,6 @@ final class Compiler
 
     /**
      * Generate IDE stubs.
-     *
-     * @param bool $fromGenerate
      *
      * @throws Exception
      * @throws ReflectionException
@@ -994,8 +883,6 @@ final class Compiler
 
     /**
      * Compiles and installs the extension.
-     *
-     * @param bool $development
      *
      * @throws Exception
      * @throws NotImplementedException
@@ -1046,10 +933,6 @@ final class Compiler
      * Create config.m4 and config.w32 for the extension.
      *
      * TODO: move this to backend?
-     *
-     * @param string $project
-     *
-     * @return bool true if we need to run configure
      *
      * @throws Exception
      */
@@ -1239,11 +1122,7 @@ final class Compiler
     /**
      * Process extension globals.
      *
-     * @param string $namespace
-     *
      * @throws Exception
-     *
-     * @return array
      */
     public function processExtensionGlobals(string $namespace): array
     {
@@ -1392,8 +1271,6 @@ final class Compiler
 
     /**
      * Generates phpinfo() sections showing information about the extension.
-     *
-     * @return string
      */
     public function processExtensionInfo(): string
     {
@@ -1436,11 +1313,6 @@ final class Compiler
 
     /**
      * Process extension code injection.
-     *
-     * @param array  $entries
-     * @param string $section
-     *
-     * @return array
      */
     public function processCodeInjection(array $entries, string $section = 'request'): array
     {
@@ -1464,19 +1336,12 @@ final class Compiler
 
     /**
      * Adds an external dependency to the compiler.
-     *
-     * @param string $namespace
-     * @param string $location
      */
     public function addExternalDependency(string $namespace, string $location): void
     {
         $this->externalDependencies[$namespace] = $location;
     }
 
-    /**
-     * @param CompilerFile[] $files
-     * @param null           $_dependency
-     */
     public function calculateDependencies(array $files, $_dependency = null): void
     {
         /**
@@ -1517,10 +1382,6 @@ final class Compiler
      * Create project.c and project.h according to the current extension.
      *
      * TODO: Move the part of the logic which depends on templates (backend-specific) to backend?
-     *
-     * @param string $project
-     *
-     * @return bool
      *
      * @throws Exception
      */
@@ -1888,10 +1749,6 @@ final class Compiler
 
     /**
      * Returns a short user path.
-     *
-     * @param string $path
-     *
-     * @return string
      */
     public static function getShortUserPath(string $path): string
     {
@@ -1902,10 +1759,6 @@ final class Compiler
      * Generate package-dependencies config for m4.
      *
      * TODO: Move the template depending part to backend?
-     *
-     * @param string $contentM4
-     *
-     * @return string
      */
     public function generatePackageDependenciesM4(string $contentM4): string
     {
@@ -1969,8 +1822,6 @@ final class Compiler
     /**
      * Pre-compiles classes creating a CompilerFile definition.
      *
-     * @param string $filePath
-     *
      * @throws IllegalStateException
      */
     private function preCompile(string $filePath): void
@@ -1996,12 +1847,10 @@ final class Compiler
     /**
      * Recursively pre-compiles all sources found in the given path.
      *
-     * @param string $path
-     *
      * @throws IllegalStateException
      * @throws InvalidArgumentException
      */
-    private function recursivePreCompile(string $path)
+    private function recursivePreCompile(string $path): void
     {
         if (!is_dir($path)) {
             throw new InvalidArgumentException(
@@ -2219,8 +2068,6 @@ final class Compiler
      * Checks which files in the base kernel must be copied.
      *
      * @throws Exception
-     *
-     * @return bool
      */
     private function checkKernelFiles(): bool
     {
@@ -2259,8 +2106,6 @@ final class Compiler
      * Checks if the current directory is a valid Zephir project.
      *
      * @throws Exception
-     *
-     * @return string
      */
     private function checkDirectory(): string
     {
@@ -2294,8 +2139,6 @@ final class Compiler
 
     /**
      * Returns current GCC version.
-     *
-     * @return string
      */
     private function getGccVersion(): string
     {

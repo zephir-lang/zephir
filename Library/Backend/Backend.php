@@ -22,7 +22,6 @@ use Zephir\Compiler;
 use Zephir\Config;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Fcall\FcallManagerInterface;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable\Globals;

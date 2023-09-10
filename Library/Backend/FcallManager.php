@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Backend;
 
 use Zephir\Code\Printer;
-use Zephir\Fcall\FcallManagerInterface;
 use function Zephir\file_put_contents_ex;
 
 class FcallManager implements FcallManagerInterface
@@ -25,12 +24,12 @@ class FcallManager implements FcallManagerInterface
      * {@inheritdoc}
      *
      * @param bool $static
-     * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
-     * @param int  $paramCount
+     * @param int $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     * @param int $paramCount
      *
      * @return string
      */
-    public function getMacro($static, $doReturn, $paramCount): string
+    public function getMacro(bool $static, int $doReturn, int $paramCount): string
     {
         $scope = $static ? 'STATIC' : '';
         $mode = 'CALL_INTERNAL_METHOD_NORETURN_P';

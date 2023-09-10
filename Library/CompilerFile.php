@@ -39,14 +39,8 @@ final class CompilerFile implements FileInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var string|null
-     */
     private ?string $namespace = null;
 
-    /**
-     * @var string|null
-     */
     private ?string $className = null;
 
     /**
