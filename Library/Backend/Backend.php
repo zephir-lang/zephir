@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -307,7 +307,7 @@ class Backend
         return $condition;
     }
 
-    public function onPreInitVar(ClassMethod $method): string
+    public function onPreInitVar(Method $method): string
     {
         if (!$method instanceof FunctionDefinition && !$method->isInternal()) {
             return "zval *this_ptr = getThis();\n"; //TODO: think about a better way to solve this.
@@ -316,7 +316,7 @@ class Backend
         return '';
     }
 
-    public function onPreCompile(ClassMethod $method, CompilationContext $context): void
+    public function onPreCompile(Method $method, CompilationContext $context): void
     {
         /**
          * Initialize the properties within create_object, handler code
@@ -331,7 +331,7 @@ class Backend
         }
     }
 
-    public function onPostCompile(ClassMethod $method, CompilationContext $context): void
+    public function onPostCompile(Method $method, CompilationContext $context): void
     {
         if (str_starts_with($method->getName(), 'zephir_init_properties')) {
             $context->codePrinter->increaseLevel();
@@ -505,12 +505,12 @@ class Backend
     }
 
     /**
-     * @param ClassMethod        $method
+     * @param Method        $method
      * @param CompilationContext $context
      *
      * @return string
      */
-    public function getInternalSignature(ClassMethod $method, CompilationContext $context): string
+    public function getInternalSignature(Method $method, CompilationContext $context): string
     {
         if ($method->isInitializer() && !$method->isStatic()) {
             return 'zend_object *'.$method->getName().'(zend_class_entry *class_type)';
@@ -922,7 +922,7 @@ class Backend
 
     /**
      * @param Variable $symbolVariable
-     * @param ClassDefinition $classDefinition
+     * @param Definition $classDefinition
      * @param $property
      * @param bool $readOnly
      * @param CompilationContext $context

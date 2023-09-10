@@ -11,14 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Class;
-
-use Zephir\AbstractClassDefinition;
+namespace Zephir\Class\Definition;
 
 /**
  * Represents a class/interface that only exists in runtime.
  */
-final class ClassDefinitionRuntime extends AbstractClassDefinition
+final class DefinitionRuntime extends AbstractDefinition
 {
     public function __construct(string $name)
     {

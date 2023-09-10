@@ -16,7 +16,7 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\Branch;
 use Zephir\BranchManager;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -128,7 +128,7 @@ final class VariableTest extends TestCase
         $this->zephirVar->setClassTypes('class1');
         $this->assertSame(['class1', 'class2', 'class3'], $this->zephirVar->getClassTypes());
 
-        $classDefinition = new ClassDefinition('Zephir\Test', 'VariableTest');
+        $classDefinition = new Definition('Zephir\Test', 'VariableTest');
         $this->zephirVar->setAssociatedClass($classDefinition);
         $this->assertSame($classDefinition, $this->zephirVar->getAssociatedClass());
 

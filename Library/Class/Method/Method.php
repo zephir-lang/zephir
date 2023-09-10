@@ -11,12 +11,13 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Class;
+namespace Zephir\Class\Method;
 
 use ReflectionException;
 use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\CacheManager;
+use Zephir\Class\Definition\Definition;
 use Zephir\Class\Entry as ClassEntry;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
@@ -42,7 +43,7 @@ use function Zephir\add_slashes;
 /**
  * Represents a class method
  */
-class ClassMethod
+class Method
 {
     public bool $optimizable = true;
 
@@ -132,18 +133,18 @@ class ClassMethod
 
     protected array $staticVariables = [];
 
-    protected ?ClassDefinition $classDefinition = null;
+    protected ?Definition $classDefinition = null;
 
     public function __construct(
-        ClassDefinition $classDefinition,
-        protected array $visibility,
-        protected string $name,
-        protected ?ClassMethodParameters $parameters = null,
+        Definition                 $classDefinition,
+        protected array            $visibility,
+        protected string           $name,
+        protected ?Parameters      $parameters = null,
         protected ?StatementsBlock $statements = null,
-        protected ?string $docblock = null,
-        ?array $returnType = null,
-        protected ?array $expression = [],
-        array $staticVariables = [],
+        protected ?string          $docblock = null,
+        ?array                     $returnType = null,
+        protected ?array           $expression = [],
+        array                      $staticVariables = [],
     ) {
         $this->classDefinition = $classDefinition;
         $this->staticVariables = $staticVariables;
@@ -365,7 +366,7 @@ class ClassMethod
     /**
      * Returns the class definition where the method was declared.
      */
-    public function getClassDefinition(): ?ClassDefinition
+    public function getClassDefinition(): ?Definition
     {
         return $this->classDefinition;
     }
@@ -491,7 +492,7 @@ class ClassMethod
     /**
      * Returns the parameters.
      */
-    public function getParameters(): ?ClassMethodParameters
+    public function getParameters(): ?Parameters
     {
         return $this->parameters;
     }
@@ -586,7 +587,7 @@ class ClassMethod
      */
     public function hasParameters(): bool
     {
-        return $this->parameters instanceof ClassMethodParameters && $this->parameters->count() > 0;
+        return $this->parameters instanceof Parameters && $this->parameters->count() > 0;
     }
 
     /**
@@ -594,7 +595,7 @@ class ClassMethod
      */
     public function getNumberOfParameters(): int
     {
-        if ($this->parameters instanceof ClassMethodParameters) {
+        if ($this->parameters instanceof Parameters) {
             return $this->parameters->count();
         }
 
@@ -1366,7 +1367,7 @@ class ClassMethod
         /**
          * Parameters has an additional extra mutation.
          */
-        if ($this->localContext instanceof LocalContextPass && $this->parameters instanceof ClassMethodParameters) {
+        if ($this->localContext instanceof LocalContextPass && $this->parameters instanceof Parameters) {
             foreach ($this->parameters->getParameters() as $parameter) {
                 $this->localContext->increaseMutations($parameter['name']);
             }
@@ -1402,7 +1403,7 @@ class ClassMethod
         $compilationContext->insideTryCatch = 0;
         $compilationContext->currentTryCatch = 0;
 
-        if ($this->parameters instanceof ClassMethodParameters) {
+        if ($this->parameters instanceof Parameters) {
             /**
              * Round 1. Create variables in parameters in the symbol table.
              */
@@ -1550,7 +1551,7 @@ class ClassMethod
         $code = '';
         $requiredParams = [];
         $optionalParams = [];
-        if ($this->parameters instanceof ClassMethodParameters) {
+        if ($this->parameters instanceof Parameters) {
             /**
              * Round 2. Fetch the parameters in the method.
              */
@@ -1806,7 +1807,7 @@ class ClassMethod
          * ZEND_PARSE_PARAMETERS
          */
         $tempCodePrinter = new CodePrinter();
-        if ($this->parameters instanceof ClassMethodParameters && $this->parameters->count() > 0) {
+        if ($this->parameters instanceof Parameters && $this->parameters->count() > 0) {
             $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
             $tempCodePrinter->output("\t".'bool is_null_true = 1;');
 
@@ -1951,9 +1952,9 @@ class ClassMethod
     /**
      * Returns arginfo name for current method.
      */
-    public function getArgInfoName(?ClassDefinition $classDefinition = null): string
+    public function getArgInfoName(?Definition $classDefinition = null): string
     {
-        if ($classDefinition instanceof ClassDefinition) {
+        if ($classDefinition instanceof Definition) {
             return sprintf(
                 'arginfo_%s_%s_%s',
                 strtolower($classDefinition->getCNamespace()),

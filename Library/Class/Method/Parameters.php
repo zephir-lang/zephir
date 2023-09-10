@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Class;
+namespace Zephir\Class\Method;
 
 use ArrayAccess;
 use Countable;
@@ -22,39 +22,24 @@ use function count;
 /**
  * Represents the parameters defined in a method.
  */
-class ClassMethodParameters implements Countable, Iterator, ArrayAccess
+class Parameters implements Countable, Iterator, ArrayAccess
 {
-    /**
-     * List of all method's parameters
-     *
-     * @var array
-     */
-    private array $parameters = [];
-
     private int $position = 0;
 
     /**
      * List of Required parameters
-     *
-     * @var array
      */
     private array $requiredParameters = [];
 
     /**
      * List of Optional parameters (with default value)
-     *
-     * @var array
      */
     private array $optionalParameters = [];
 
     /**
-     * ClassMethodParameters constructor.
-     *
-     * @param array $parameters
-     *
      * @throws CompilerException
      */
-    public function __construct(array $parameters)
+    public function __construct(private array $parameters)
     {
         foreach ($parameters as $parameter) {
             if (isset($parameter['reference']) && $parameter['reference']) {
@@ -65,14 +50,10 @@ class ClassMethodParameters implements Countable, Iterator, ArrayAccess
                 );
             }
         }
-
-        $this->parameters = $parameters;
     }
 
     /**
      * Return internal parameters.
-     *
-     * @return array
      */
     public function getParameters(): array
     {
@@ -139,56 +120,47 @@ class ClassMethodParameters implements Countable, Iterator, ArrayAccess
         return count($this->parameters);
     }
 
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
 
-    #[\ReturnTypeWillChange]
-    public function key()
+    public function key(): int
     {
         return $this->position;
     }
 
-    #[\ReturnTypeWillChange]
-    public function valid()
+    public function valid(): bool
     {
         return isset($this->parameters[$this->position]);
     }
 
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current(): mixed
     {
         return $this->parameters[$this->position];
     }
 
-    #[\ReturnTypeWillChange]
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->parameters[$offset]);
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->parameters[$offset];
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         $this->parameters[$offset] = $value;
     }
 
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->parameters[$offset]);
     }

@@ -11,13 +11,17 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Class;
+namespace Zephir\Class\Definition;
 
 use ReflectionClass;
 use ReflectionException;
-use Zephir\AbstractClassDefinition;
 use Zephir\AliasManager;
 use Zephir\ArgInfoDefinition;
+use Zephir\Class\Property;
+use Zephir\Class\Constant;
+use Zephir\Class\Entry;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
@@ -36,151 +40,94 @@ use const DIRECTORY_SEPARATOR;
 /**
  * Represents a class/interface and their properties and methods.
  */
-final class ClassDefinition extends AbstractClassDefinition
+final class Definition extends AbstractDefinition
 {
     public const TYPE_CLASS = 'class';
     public const TYPE_INTERFACE = 'interface';
 
     /**
-     * Class namespace
-     *
-     * @var string
-     */
-    protected string $namespace;
-
-    /**
      * Class short name
      *
-     * If didn't specified, then equals to $name
+     * If didn't specify, then equals to $name
      *
-     * @var string
-     *
-     * @see ClassDefinition::name
+     * @see Definition::name
      */
     protected string $shortName;
 
     /**
      * Definition type
-     *
-     * @var string
      */
     protected string $type = self::TYPE_CLASS;
 
     /**
      * Name of inherited class
-     *
-     * @var string|null
      */
     protected ?string $extendsClass = null;
 
     /**
      * List of implemented interfaces of current class
-     *
-     * @var array
      */
     protected array $interfaces = [];
 
     /**
      * Contains "final" in the definition
-     *
-     * @var bool
      */
     protected bool $final = false;
 
     /**
      * Contains "abstract" in the definition
-     *
-     * @var bool
      */
     protected bool $abstract = false;
 
     /**
      * When class is from external dependency
-     *
-     * @var bool
      */
     protected bool $external = false;
 
     /**
      * Definition object of inherited class
-     *
-     * @var AbstractClassDefinition|null
      */
-    protected ?AbstractClassDefinition $extendsClassDefinition = null;
+    protected ?AbstractDefinition $extendsClassDefinition = null;
 
-    /**
-     * @var AbstractClassDefinition[]
-     */
     protected array $implementedInterfaceDefinitions = [];
 
     /**
-     * @var ClassProperty[]
+     * @var Property[]
      */
     protected array $properties = [];
 
     /**
-     * @var ClassConstant[]
+     * @var Constant[]
      */
     protected array $constants = [];
 
     /**
-     * @var ClassMethod[]
+     * @var Method[]
      */
     protected array $methods = [];
 
-    /**
-     * @var string
-     */
     protected string $docBlock = '';
 
-    /**
-     * @var Docblock|null
-     */
     protected ?Docblock $parsedDocblock = null;
 
-    /**
-     * @var int
-     */
     protected int $dependencyRank = 0;
 
-    /**
-     * @var array
-     */
     protected array $originalNode = [];
 
-    /**
-     * @var bool
-     */
     protected bool $isBundled = false;
 
-    /**
-     * @var AliasManager|null
-     */
     protected ?AliasManager $aliasManager = null;
 
-    /**
-     * @var Compiler
-     */
     protected Compiler $compiler;
 
-    /**
-     * ClassDefinition.
-     *
-     * @param string      $namespace
-     * @param string      $name
-     * @param string|null $shortName
-     */
-    public function __construct(string $namespace, string $name, ?string $shortName = null)
+    public function __construct(protected string $namespace, string $name, ?string $shortName = null)
     {
-        $this->namespace = $namespace;
         $this->name = $name;
         $this->shortName = $shortName ?: $name;
     }
 
     /**
      * Sets if the class is internal or not.
-     *
-     * @param bool $isBundled
      */
     public function setIsBundled(bool $isBundled): void
     {
@@ -189,8 +136,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns whether the class is bundled or not.
-     *
-     * @return bool
      */
     public function isBundled(): bool
     {
@@ -199,8 +144,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets whether the class is external or not.
-     *
-     * @param bool $isExternal
      */
     public function setIsExternal(bool $isExternal): void
     {
@@ -209,8 +152,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns whether the class is internal or not.
-     *
-     * @return bool
      */
     public function isExternal(): bool
     {
@@ -219,8 +160,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Set the class' type (class/interface).
-     *
-     * @param string $type
      */
     public function setType(string $type): void
     {
@@ -229,8 +168,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the class type.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -239,8 +176,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the class name without namespace.
-     *
-     * @return string
      */
     public function getShortName(): string
     {
@@ -249,8 +184,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Check if the class definition correspond to an interface.
-     *
-     * @return bool
      */
     public function isInterface(): bool
     {
@@ -259,8 +192,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets if the class is final.
-     *
-     * @param bool $final
      */
     public function setIsFinal(bool $final): void
     {
@@ -269,8 +200,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets if the class is final.
-     *
-     * @param bool $abstract
      */
     public function setIsAbstract(bool $abstract): void
     {
@@ -279,8 +208,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Checks whether the class is abstract or not.
-     *
-     * @return bool
      */
     public function isAbstract(): bool
     {
@@ -289,8 +216,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Checks whether the class is abstract or not.
-     *
-     * @return bool
      */
     public function isFinal(): bool
     {
@@ -299,8 +224,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the class name including its namespace.
-     *
-     * @return string
      */
     public function getCompleteName(): string
     {
@@ -309,8 +232,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Return the class namespace.
-     *
-     * @return string
      */
     public function getNamespace(): string
     {
@@ -319,8 +240,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Set the original node where the class was declared.
-     *
-     * @param array $originalNode
      */
     public function setOriginalNode(array $originalNode): void
     {
@@ -329,8 +248,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets the extended class.
-     *
-     * @param string $extendsClass
      */
     public function setExtendsClass(string $extendsClass): void
     {
@@ -339,8 +256,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets the implemented interfaces.
-     *
-     * @param array $implementedInterfaces
      */
     public function setImplementsInterfaces(array $implementedInterfaces): void
     {
@@ -352,8 +267,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the extended class.
-     *
-     * @return string|null
      */
     public function getExtendsClass(): ?string
     {
@@ -362,8 +275,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the implemented interfaces.
-     *
-     * @return array
      */
     public function getImplementedInterfaces(): array
     {
@@ -372,20 +283,16 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets the class definition for the extended class.
-     *
-     * @param AbstractClassDefinition $classDefinition
      */
-    public function setExtendsClassDefinition(AbstractClassDefinition $classDefinition): void
+    public function setExtendsClassDefinition(AbstractDefinition $classDefinition): void
     {
         $this->extendsClassDefinition = $classDefinition;
     }
 
     /**
      * Returns the class definition related to the extended class.
-     *
-     * @return AbstractClassDefinition|null
      */
-    public function getExtendsClassDefinition(): ?AbstractClassDefinition
+    public function getExtendsClassDefinition(): ?AbstractDefinition
     {
         if (!$this->extendsClassDefinition && $this->extendsClass && $this->compiler) {
             $this->setExtendsClassDefinition($this->compiler->getClassDefinition($this->extendsClass));
@@ -396,18 +303,14 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets the class definition for the implemented interfaces.
-     *
-     * @param AbstractClassDefinition[] $implementedInterfaceDefinitions
      */
-    public function setImplementedInterfaceDefinitions(array $implementedInterfaceDefinitions)
+    public function setImplementedInterfaceDefinitions(array $implementedInterfaceDefinitions): void
     {
         $this->implementedInterfaceDefinitions = $implementedInterfaceDefinitions;
     }
 
     /**
      * Returns the class definition for the implemented interfaces.
-     *
-     * @return AbstractClassDefinition[]
      */
     public function getImplementedInterfaceDefinitions(): array
     {
@@ -416,8 +319,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Calculate the dependency rank of the class based on its dependencies.
-     *
-     * @return AbstractClassDefinition[]
      */
     public function getDependencies(): array
     {
@@ -447,8 +348,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the dependency rank for this class.
-     *
-     * @return int
      */
     public function getDependencyRank(): int
     {
@@ -457,8 +356,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Sets the class/interface docBlock.
-     *
-     * @param string $docBlock
      */
     public function setDocBlock(string $docBlock): void
     {
@@ -467,8 +364,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the class/interface docBlock.
-     *
-     * @return string
      */
     public function getDocBlock(): string
     {
@@ -477,8 +372,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the parsed docBlock.
-     *
-     * @return DocBlock|null
      */
     public function getParsedDocBlock(): ?DocBlock
     {
@@ -498,11 +391,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Adds a property to the definition.
      *
-     * @param ClassProperty $property
-     *
      * @throws CompilerException
      */
-    public function addProperty(ClassProperty $property): void
+    public function addProperty(Property $property): void
     {
         if (isset($this->properties[$property->getName()])) {
             throw new CompilerException("Property '".$property->getName()."' was defined more than one time", $property->getOriginal());
@@ -514,11 +405,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Adds a constant to the definition.
      *
-     * @param ClassConstant $constant
-     *
      * @throws CompilerException
      */
-    public function addConstant(ClassConstant $constant)
+    public function addConstant(Constant $constant): void
     {
         if (isset($this->constants[$constant->getName()])) {
             throw new CompilerException("Constant '".$constant->getName()."' was defined more than one time");
@@ -529,10 +418,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Checks if a class definition has a property.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasProperty(string $name): bool
     {
@@ -550,9 +435,9 @@ final class ClassDefinition extends AbstractClassDefinition
      *
      * @param string $propertyName
      *
-     * @return ClassProperty|null
+     * @return Property|null
      */
-    public function getProperty(string $propertyName): ?ClassProperty
+    public function getProperty(string $propertyName): ?Property
     {
         if (isset($this->properties[$propertyName])) {
             return $this->properties[$propertyName];
@@ -568,10 +453,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Checks if class definition has a property.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
     public function hasConstant(string $name): bool
     {
@@ -593,13 +474,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Returns a constant definition by its name.
      *
-     * @param string $constantName
-     *
-     * @return ClassConstant|null
-     *
      * @throws InvalidArgumentException
      */
-    public function getConstant(string $constantName): ?ClassConstant
+    public function getConstant(string $constantName): ?Constant
     {
         if (isset($this->constants[$constantName])) {
             return $this->constants[$constantName];
@@ -619,12 +496,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Adds a method to the class definition.
      *
-     * @param ClassMethod $method
-     * @param array|null  $statement
-     *
      * @throws CompilerException
      */
-    public function addMethod(ClassMethod $method, ?array $statement = null)
+    public function addMethod(Method $method, ?array $statement = null): void
     {
         $methodName = strtolower($method->getName());
         if (isset($this->methods[$methodName])) {
@@ -637,12 +511,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Updates an existing method definition.
      *
-     * @param ClassMethod $method
-     * @param array|null  $statement
-     *
      * @throws CompilerException
      */
-    public function updateMethod(ClassMethod $method, ?array $statement = null): void
+    public function updateMethod(Method $method, ?array $statement = null): void
     {
         $methodName = strtolower($method->getName());
         if (!isset($this->methods[$methodName])) {
@@ -655,7 +526,7 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Returns all properties defined in the class.
      *
-     * @return ClassProperty[]
+     * @return Property[]
      */
     public function getProperties(): array
     {
@@ -665,7 +536,7 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Returns all constants defined in the class.
      *
-     * @return ClassConstant[]
+     * @return Constant[]
      */
     public function getConstants(): array
     {
@@ -675,7 +546,7 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Returns all methods defined in the class.
      *
-     * @return ClassMethod[]
+     * @return Method[]
      */
     public function getMethods(): array
     {
@@ -683,7 +554,7 @@ final class ClassDefinition extends AbstractClassDefinition
     }
 
     /**
-     * Checks if the class implements an specific name.
+     * Checks if the class implements a specific name.
      *
      * @param string $methodName
      *
@@ -699,7 +570,7 @@ final class ClassDefinition extends AbstractClassDefinition
         }
 
         $extendsClassDefinition = $this->getExtendsClassDefinition();
-        if ($extendsClassDefinition instanceof ClassDefinitionRuntime) {
+        if ($extendsClassDefinition instanceof DefinitionRuntime) {
             try {
                 $extendsClassDefinition = $this->compiler->getInternalClassDefinition(
                     $extendsClassDefinition->getName()
@@ -723,13 +594,8 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns a method by its name.
-     *
-     * @param string $methodName
-     * @param bool   $checkExtends
-     *
-     * @return ClassMethod|null
      */
-    public function getMethod(string $methodName, bool $checkExtends = true): ?ClassMethod
+    public function getMethod(string $methodName, bool $checkExtends = true): ?Method
     {
         $methodNameLower = strtolower($methodName);
         foreach ($this->methods as $name => $method) {
@@ -754,31 +620,14 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Set a method and its body.
-     *
-     * @param string      $methodName
-     * @param ClassMethod $method
      */
-    public function setMethod(string $methodName, ClassMethod $method): void
+    public function setMethod(string $methodName, Method $method): void
     {
         $this->methods[$methodName] = $method;
     }
 
     /**
-     * Sets class methods externally.
-     *
-     * @param array $methods
-     */
-    public function setMethods(array $methods): void
-    {
-        $this->methods = $methods;
-    }
-
-    /**
      * Tries to find the most similar name.
-     *
-     * @param string $methodName
-     *
-     * @return string|null
      */
     public function getPossibleMethodName(string $methodName): ?string
     {
@@ -800,11 +649,7 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Returns the name of the zend_class_entry according to the class name.
      *
-     * @param CompilationContext|null $compilationContext
-     *
      * @throws Exception
-     *
-     * @return string
      */
     public function getClassEntry(?CompilationContext $compilationContext = null): string
     {
@@ -826,8 +671,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns a valid namespace to be used in C-sources.
-     *
-     * @return string
      */
     public function getCNamespace(): string
     {
@@ -836,8 +679,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns a valid namespace to be used in C-sources.
-     *
-     * @return string
      */
     public function getNCNamespace(): string
     {
@@ -846,10 +687,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Class name without namespace prefix for class registration.
-     *
-     * @param string $namespace
-     *
-     * @return string
      */
     public function getSCName(string $namespace): string
     {
@@ -858,8 +695,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns an absolute location to the class header.
-     *
-     * @return string
      */
     public function getExternalHeader(): string
     {
@@ -871,12 +706,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Checks if a class implements an interface.
      *
-     * @param ClassDefinition $classDefinition
-     * @param ClassDefinition $interfaceDefinition
-     *
      * @throws CompilerException
      */
-    public function checkInterfaceImplements(self $classDefinition, self $interfaceDefinition)
+    public function checkInterfaceImplements(self $classDefinition, self $interfaceDefinition): void
     {
         foreach ($interfaceDefinition->getMethods() as $method) {
             if (!$classDefinition->hasMethod($method->getName())) {
@@ -913,11 +745,9 @@ final class ClassDefinition extends AbstractClassDefinition
     /**
      * Pre-compiles a class/interface gathering method information required by other methods.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      */
-    public function preCompile(CompilationContext $compilationContext)
+    public function preCompile(CompilationContext $compilationContext): void
     {
         $this->compiler = $compilationContext->compiler;
 
@@ -933,10 +763,8 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the initialization method if any does exist.
-     *
-     * @return ClassMethod|null
      */
-    public function getInitMethod(): ?ClassMethod
+    public function getInitMethod(): ?Method
     {
         $initClassName = $this->getCNamespace().'_'.$this->getName();
 
@@ -945,10 +773,8 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the initialization method if any does exist.
-     *
-     * @return ClassMethod|null
      */
-    public function getStaticInitMethod(): ?ClassMethod
+    public function getStaticInitMethod(): ?Method
     {
         $initClassName = $this->getCNamespace().'_'.$this->getName();
 
@@ -957,10 +783,8 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Returns the initialization method if any does exist.
-     *
-     * @return ClassMethod|null
      */
-    public function getLocalOrParentInitMethod(): ?ClassMethod
+    public function getLocalOrParentInitMethod(): ?Method
     {
         $method = $this->getInitMethod();
         if ($method === null) {
@@ -970,7 +794,7 @@ final class ClassDefinition extends AbstractClassDefinition
         $parentClassDefinition = $this->getExtendsClassDefinition();
         if ($parentClassDefinition instanceof self) {
             $method = $parentClassDefinition->getInitMethod();
-            if ($method instanceof ClassMethod) {
+            if ($method instanceof Method) {
                 $this->addInitMethod($method->getStatementsBlock());
             }
         }
@@ -980,8 +804,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Creates the initialization method.
-     *
-     * @param StatementsBlock $statementsBlock
      */
     public function addInitMethod(StatementsBlock $statementsBlock): void
     {
@@ -990,7 +812,7 @@ final class ClassDefinition extends AbstractClassDefinition
         }
 
         $initClassName = $this->getCNamespace().'_'.$this->getName();
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this,
             ['internal'],
             'zephir_init_properties_'.$initClassName,
@@ -1004,14 +826,12 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Creates the static initialization method.
-     *
-     * @param StatementsBlock $statementsBlock
      */
     public function addStaticInitMethod(StatementsBlock $statementsBlock): void
     {
         $initClassName = $this->getCNamespace().'_'.$this->getName();
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this,
             ['internal'],
             'zephir_init_static_properties_'.$initClassName,
@@ -1026,8 +846,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Compiles a class/interface.
-     *
-     * @param CompilationContext $compilationContext
      *
      * @throws Exception
      * @throws ReflectionException
@@ -1413,17 +1231,11 @@ final class ClassDefinition extends AbstractClassDefinition
         $compilationContext->headerPrinter = $codePrinter;
     }
 
-    /**
-     * @return AliasManager|null
-     */
     public function getAliasManager(): ?AliasManager
     {
         return $this->aliasManager;
     }
 
-    /**
-     * @param AliasManager $aliasManager
-     */
     public function setAliasManager(AliasManager $aliasManager): void
     {
         $this->aliasManager = $aliasManager;
@@ -1431,10 +1243,6 @@ final class ClassDefinition extends AbstractClassDefinition
 
     /**
      * Builds a class definition from reflection.
-     *
-     * @param ReflectionClass $class
-     *
-     * @return ClassDefinition
      */
     public static function buildFromReflection(ReflectionClass $class): self
     {
@@ -1464,11 +1272,11 @@ final class ClassDefinition extends AbstractClassDefinition
                 $parameters[] = $params;
             }
 
-            $classMethod = new ClassMethod(
+            $classMethod = new Method(
                 $classDefinition,
                 [],
                 $method->getName(),
-                new ClassMethodParameters($parameters)
+                new Parameters($parameters)
             );
             $classMethod->setIsStatic($method->isStatic());
             $classMethod->setIsBundled(true);
@@ -1477,7 +1285,7 @@ final class ClassDefinition extends AbstractClassDefinition
 
         foreach ($class->getConstants() as $constantName => $constantValue) {
             $type = self::convertPhpConstantType(gettype($constantValue));
-            $classConstant = new ClassConstant($constantName, ['value' => $constantValue, 'type' => $type], null);
+            $classConstant = new Constant($constantName, ['value' => $constantValue, 'type' => $type], null);
             $classDefinition->addConstant($classConstant);
         }
 
@@ -1500,7 +1308,7 @@ final class ClassDefinition extends AbstractClassDefinition
                 $visibility[] = 'static';
             }
 
-            $classProperty = new ClassProperty(
+            $classProperty = new Property(
                 $classDefinition,
                 $visibility,
                 $property->getName(),
@@ -1516,11 +1324,6 @@ final class ClassDefinition extends AbstractClassDefinition
         return $classDefinition;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
     protected function hasConstantFromInterfaces(string $name): bool
     {
         if ($interfaces = $this->getImplementedInterfaceDefinitions()) {
@@ -1534,12 +1337,7 @@ final class ClassDefinition extends AbstractClassDefinition
         return false;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ClassConstant|null
-     */
-    protected function getConstantFromInterfaces(string $name): ?ClassConstant
+    protected function getConstantFromInterfaces(string $name): ?Constant
     {
         if ($interfaces = $this->getImplementedInterfaceDefinitions()) {
             foreach ($interfaces as $interface) {

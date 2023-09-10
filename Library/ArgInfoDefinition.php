@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use function array_key_exists;
 use function count;
 
@@ -26,7 +26,7 @@ class ArgInfoDefinition
     private bool $returnByRef;
 
     /**
-     * @var ClassMethod|FunctionDefinition
+     * @var Method|FunctionDefinition
      */
     private $functionLike;
 
@@ -36,9 +36,9 @@ class ArgInfoDefinition
     private string $name;
 
     /**
-     * @var ClassMethodParameters|null
+     * @var Parameters|null
      */
-    private ?ClassMethodParameters $parameters;
+    private ?Parameters $parameters;
 
     /**
      * @var CodePrinter
@@ -62,17 +62,17 @@ class ArgInfoDefinition
 
     /**
      * @param string             $name
-     * @param ClassMethod        $functionLike
+     * @param Method        $functionLike
      * @param CodePrinter        $codePrinter
      * @param CompilationContext $compilationContext
      * @param bool               $returnByRef
      */
     public function __construct(
-        string $name,
-        ClassMethod $functionLike,
-        CodePrinter $codePrinter,
+        string             $name,
+        Method             $functionLike,
+        CodePrinter        $codePrinter,
         CompilationContext $compilationContext,
-        bool $returnByRef = false
+        bool               $returnByRef = false
     ) {
         $this->functionLike = $functionLike;
         $this->codePrinter = $codePrinter;

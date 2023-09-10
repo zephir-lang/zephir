@@ -11,12 +11,12 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Documentation;
 
 class SourceFile extends ClassFile
 {
-    protected ClassDefinition $class;
+    protected Definition $class;
 
     public function getTemplateName(): string
     {

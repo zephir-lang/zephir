@@ -13,7 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Documentation\File;
 use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
@@ -201,7 +201,7 @@ class Documentation
     public static function classUrl($c)
     {
         $cname = $c;
-        if ($c instanceof ClassDefinition) {
+        if ($c instanceof Definition) {
             $cname = $c->getCompleteName();
         }
 
@@ -213,7 +213,7 @@ class Documentation
         return '/namespace/'.str_replace('\\', '/', $ns).'.html';
     }
 
-    public static function sourceUrl(ClassDefinition $c)
+    public static function sourceUrl(Definition $c)
     {
         return '/source/'.str_replace('\\', '/', $c->getCompleteName()).'.html';
     }

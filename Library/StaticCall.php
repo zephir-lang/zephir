@@ -12,8 +12,8 @@
 namespace Zephir;
 
 use ReflectionException;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use function count;
@@ -151,7 +151,7 @@ class StaticCall extends Call
                 }
 
                 if (!$classDefinition->hasMethod('__callStatic')) {
-                    if ($method instanceof ClassMethod && !$method->isBundled()) {
+                    if ($method instanceof Method && !$method->isBundled()) {
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */
@@ -214,7 +214,7 @@ class StaticCall extends Call
         /**
          * Transfer the return type-hint to the returned variable
          */
-        if ($isExpecting && isset($method) && $method instanceof ClassMethod) {
+        if ($isExpecting && isset($method) && $method instanceof Method) {
             $symbolVariable->setDynamicTypes('object');
             foreach ($method->getReturnClassTypes() as $classType) {
                 $symbolVariable->setClassTypes($compilationContext->getFullName($classType));
@@ -249,7 +249,7 @@ class StaticCall extends Call
      * @param bool $isExpecting
      * @param CompilationContext $compilationContext
      * @param Variable|null $symbolVariable
-     * @param ClassMethod|null $method
+     * @param Method|null $method
      * @throws Exception
      */
     protected function call(
@@ -260,7 +260,7 @@ class StaticCall extends Call
         bool $isExpecting,
         CompilationContext $compilationContext,
         ?Variable $symbolVariable = null,
-        ?ClassMethod $method = null
+        ?Method $method = null
     ): void {
         if (!in_array($context, ['SELF', 'STATIC'])) {
             $context = 'SELF';
@@ -348,12 +348,12 @@ class StaticCall extends Call
      * @param Variable $symbolVariable
      * @param bool $mustInit
      * @param bool $isExpecting
-     * @param ClassDefinition $classDefinition
+     * @param Definition $classDefinition
      * @param CompilationContext $compilationContext
-     * @param ClassMethod $method
+     * @param Method $method
      * @throws Exception
      */
-    protected function callParent(string $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
+    protected function callParent(string $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method)
     {
         $codePrinter = $compilationContext->codePrinter;
         $classCe = $classDefinition->getClassEntry($compilationContext);
@@ -419,12 +419,12 @@ class StaticCall extends Call
      * @param Variable $symbolVariable
      * @param bool $mustInit
      * @param bool $isExpecting
-     * @param ClassDefinition $classDefinition
+     * @param Definition $classDefinition
      * @param CompilationContext $compilationContext
-     * @param ClassMethod $method
+     * @param Method $method
      * @throws Exception
      */
-    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, ClassDefinition $classDefinition, CompilationContext $compilationContext, ClassMethod $method)
+    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method)
     {
         $codePrinter = $compilationContext->codePrinter;
 

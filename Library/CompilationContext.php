@@ -16,8 +16,9 @@ namespace Zephir;
 use Psr\Log\LoggerInterface;
 use Zephir\Backend\Backend;
 use Zephir\Cache\FunctionCache;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Definition\AbstractDefinition;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 use function in_array;
@@ -57,12 +58,12 @@ class CompilationContext
     /**
      * Represents the class currently being compiled.
      */
-    public ?ClassDefinition $classDefinition = null;
+    public ?Definition $classDefinition = null;
 
     /**
      * Current method or function that being compiled.
      */
-    public ?ClassMethod $currentMethod = null;
+    public ?Method $currentMethod = null;
 
     /**
      * Represents the c-headers added to the file.
@@ -158,7 +159,7 @@ class CompilationContext
     /**
      * Lookup a class from a given class name.
      */
-    public function classLookup(string $className, array $statement = null): AbstractClassDefinition
+    public function classLookup(string $className, array $statement = null): AbstractDefinition
     {
         if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $this->getFullName($className);
@@ -174,7 +175,7 @@ class CompilationContext
         }
 
         $parent = $this->classDefinition->getExtendsClass();
-        if (!$parent instanceof ClassDefinition) {
+        if (!$parent instanceof Definition) {
             throw new CompilerException(
                 sprintf(
                     'Cannot access parent:: because class %s does not extend any class',

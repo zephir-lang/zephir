@@ -11,22 +11,15 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class\Definition;
 
-abstract class AbstractClassDefinition
+abstract class AbstractDefinition
 {
     /**
      * Class name
-     *
-     * @var string
      */
     protected string $name;
 
-    /**
-     * Returns the class name.
-     *
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;

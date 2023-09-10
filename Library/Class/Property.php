@@ -14,13 +14,13 @@ declare(strict_types=1);
 namespace Zephir\Class;
 
 use ReflectionException;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
-use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
 use Zephir\StatementsBlock;
 use Zephir\Types;
 use function in_array;
@@ -29,15 +29,15 @@ use function is_array;
 /**
  * Represents a property class
  */
-class ClassProperty
+class Property
 {
     public function __construct(
-        protected ClassDefinition $classDefinition,
-        protected array $visibility,
-        protected string $name,
-        protected ?array $defaultValue,
-        protected ?string $docBlock = null,
-        protected ?array $original = null,
+        protected Definition $classDefinition,
+        protected array      $visibility,
+        protected string     $name,
+        protected ?array     $defaultValue,
+        protected ?string    $docBlock = null,
+        protected ?array     $original = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
 
@@ -50,27 +50,20 @@ class ClassProperty
 
     /**
      * Returns the class definition where the method was declared.
-     *
-     * @return ClassDefinition
      */
-    public function getClassDefinition(): ClassDefinition
+    public function getClassDefinition(): Definition
     {
         return $this->classDefinition;
     }
 
     /**
      * Returns the property name.
-     *
-     * @return string
      */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return mixed
-     */
     public function getValue(): mixed
     {
         if ('array' == $this->defaultValue['type']) {
@@ -91,20 +84,13 @@ class ClassProperty
         return $this->defaultValue['type'];
     }
 
-    /**
-     * @return mixed
-     */
-    public function getOriginal(): mixed
+    public function getOriginal(): ?array
     {
         return $this->original;
     }
 
     /**
      * Checks for visibility congruence.
-     *
-     * @param array $visibility
-     * @param string $name
-     * @param array|null $original
      */
     public function checkVisibility(array $visibility, string $name, ?array $original = null): void
     {
@@ -123,8 +109,6 @@ class ClassProperty
      * Returns the C-visibility accessors for the model.
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function getVisibilityAccessor(): string
     {
@@ -158,8 +142,6 @@ class ClassProperty
 
     /**
      * Returns the docblock related to the property.
-     *
-     * @return string|null
      */
     public function getDocBlock(): ?string
     {
@@ -168,8 +150,6 @@ class ClassProperty
 
     /**
      * Checks whether the variable is static.
-     *
-     * @return bool
      */
     public function isStatic(): bool
     {
@@ -178,8 +158,6 @@ class ClassProperty
 
     /**
      * Checks whether the variable is public.
-     *
-     * @return bool
      */
     public function isPublic(): bool
     {
@@ -188,8 +166,6 @@ class ClassProperty
 
     /**
      * Checks whether the variable is protected.
-     *
-     * @return bool
      */
     public function isProtected(): bool
     {
@@ -198,8 +174,6 @@ class ClassProperty
 
     /**
      * Checks whether the variable is private.
-     *
-     * @return bool
      */
     public function isPrivate(): bool
     {
@@ -208,8 +182,6 @@ class ClassProperty
 
     /**
      * Produce the code to register a property.
-     *
-     * @param CompilationContext $compilationContext
      *
      * @throws Exception
      * @throws ReflectionException
@@ -247,8 +219,6 @@ class ClassProperty
 
     /**
      * Removes all initialization statements related to this property.
-     *
-     * @param array $statements
      */
     protected function removeInitializationStatements(array &$statements): void
     {
@@ -265,9 +235,6 @@ class ClassProperty
         }
     }
 
-    /**
-     * @return $this|ExpressionLetStatement
-     */
     protected function getLetStatement()
     {
         $exprBuilder = BuilderFactory::getInstance();
@@ -308,11 +275,6 @@ class ClassProperty
             ->setStatements($exprBuilder->statements()->block([$lsb]));
     }
 
-    /**
-     * @param $value
-     *
-     * @return bool|string
-     */
     protected function getBooleanCode($value): bool|string
     {
         if ('true' == $value || true === $value) {

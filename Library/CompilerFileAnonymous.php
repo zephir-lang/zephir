@@ -16,7 +16,7 @@ namespace Zephir;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use ReflectionException;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Compiler\FileInterface;
 use function count;
 
@@ -33,17 +33,17 @@ final class CompilerFileAnonymous implements FileInterface
     protected bool $external = false;
     protected array $headerCBlocks = [];
     protected ?CompilationContext $context = null;
-    protected ClassDefinition $classDefinition;
+    protected Definition $classDefinition;
     protected Config $config;
 
     /**
      * CompilerFileAnonymous constructor.
      *
-     * @param ClassDefinition         $classDefinition
+     * @param Definition         $classDefinition
      * @param Config                  $config
      * @param CompilationContext|null $context
      */
-    public function __construct(ClassDefinition $classDefinition, Config $config, ?CompilationContext $context = null)
+    public function __construct(Definition $classDefinition, Config $config, ?CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
@@ -52,9 +52,9 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
-     * @return ClassDefinition
+     * @return Definition
      */
-    public function getClassDefinition(): ClassDefinition
+    public function getClassDefinition(): Definition
     {
         return $this->classDefinition;
     }

@@ -16,12 +16,12 @@ namespace Zephir;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use ReflectionException;
-use Zephir\Class\ClassConstant;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassDefinitionRuntime;
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
-use Zephir\Class\ClassProperty;
+use Zephir\Class\Property;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Definition\DefinitionRuntime;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
@@ -76,9 +76,9 @@ final class CompilerFile implements FileInterface
     private ?string $compiledFile = null;
 
     /**
-     * @var ClassDefinition|null
+     * @var Definition|null
      */
-    private ?ClassDefinition $classDefinition = null;
+    private ?Definition $classDefinition = null;
 
     /**
      * @var FunctionDefinition[]
@@ -142,7 +142,7 @@ final class CompilerFile implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @return ClassDefinition
+     * @return Definition
      */
     public function getClassDefinition()
     {
@@ -284,7 +284,7 @@ final class CompilerFile implements FileInterface
      */
     public function preCompileInterface($namespace, $topStatement, $docblock)
     {
-        $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+        $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
 
         if (isset($topStatement['extends'])) {
@@ -308,7 +308,7 @@ final class CompilerFile implements FileInterface
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
-                    $classConstant = new ClassConstant(
+                    $classConstant = new Constant(
                         $constant['name'],
                         $constant['default'] ?? null,
                         $constant['docblock'] ?? null
@@ -322,11 +322,11 @@ final class CompilerFile implements FileInterface
              */
             if (isset($definition['methods'])) {
                 foreach ($definition['methods'] as $method) {
-                    $classMethod = new ClassMethod(
+                    $classMethod = new Method(
                         $classDefinition,
                         $method['visibility'],
                         $method['name'],
-                        isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+                        isset($method['parameters']) ? new Parameters($method['parameters']) : null,
                         null,
                         $method['docblock'] ?? null,
                         $method['return-type'] ?? null,
@@ -350,7 +350,7 @@ final class CompilerFile implements FileInterface
      */
     public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
     {
-        $classDefinition = new ClassDefinition($namespace, $topStatement['name']);
+        $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
 
         if (isset($topStatement['extends'])) {
@@ -384,7 +384,7 @@ final class CompilerFile implements FileInterface
                     /**
                      * Add property to the definition
                      */
-                    $classDefinition->addProperty(new ClassProperty(
+                    $classDefinition->addProperty(new Property(
                         $classDefinition,
                         $property['visibility'],
                         $property['name'],
@@ -407,7 +407,7 @@ final class CompilerFile implements FileInterface
              */
             if (isset($definition['constants'])) {
                 foreach ($definition['constants'] as $constant) {
-                    $classDefinition->addConstant(new ClassConstant(
+                    $classDefinition->addConstant(new Constant(
                         $constant['name'],
                         $constant['default'] ?? null,
                         $constant['docblock'] ?? null
@@ -420,11 +420,11 @@ final class CompilerFile implements FileInterface
              */
             if (isset($definition['methods'])) {
                 foreach ($definition['methods'] as $method) {
-                    $classDefinition->addMethod(new ClassMethod(
+                    $classDefinition->addMethod(new Method(
                         $classDefinition,
                         $method['visibility'],
                         $method['name'],
-                        isset($method['parameters']) ? new ClassMethodParameters($method['parameters']) : null,
+                        isset($method['parameters']) ? new Parameters($method['parameters']) : null,
                         isset($method['statements']) ? new StatementsBlock($method['statements']) : null,
                         $method['docblock'] ?? null,
                         $method['return-type'] ?? null,
@@ -512,7 +512,7 @@ final class CompilerFile implements FileInterface
 
                     $parameters = null;
                     if (isset($topStatement['parameters'])) {
-                        $parameters = new ClassMethodParameters($topStatement['parameters']);
+                        $parameters = new Parameters($topStatement['parameters']);
                     }
 
                     $returnType = null;
@@ -670,7 +670,7 @@ final class CompilerFile implements FileInterface
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
+                        $extendedDefinition = new DefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
 
                         $this->logger->warning(
@@ -693,7 +693,7 @@ final class CompilerFile implements FileInterface
                         $extendedDefinition = $compiler->getInternalClassDefinition($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
                     } else {
-                        $extendedDefinition = new ClassDefinitionRuntime($extendedClass);
+                        $extendedDefinition = new DefinitionRuntime($extendedClass);
                         $classDefinition->setExtendsClassDefinition($extendedDefinition);
 
                         $this->logger->warning(
@@ -718,7 +718,7 @@ final class CompilerFile implements FileInterface
                     $interfaceDefinitions[$interface] = $compiler->getInternalClassDefinition($interface);
                 } else {
                     if ($extendedClass !== null) {
-                        $classDefinition->setExtendsClassDefinition(new ClassDefinitionRuntime($extendedClass));
+                        $classDefinition->setExtendsClassDefinition(new DefinitionRuntime($extendedClass));
                     }
 
                     $this->logger->warning(
@@ -951,11 +951,11 @@ final class CompilerFile implements FileInterface
      * Creates the property shortcuts.
      *
      * @param array           $property
-     * @param ClassDefinition $classDefinition
+     * @param Definition $classDefinition
      *
      * @throws CompilerException
      */
-    protected function processShortcuts(array $property, ClassDefinition $classDefinition): void
+    protected function processShortcuts(array $property, Definition $classDefinition): void
     {
         foreach ($property['shortcuts'] as $shortcut) {
             if (str_starts_with($property['name'], '_')) {
@@ -990,7 +990,7 @@ final class CompilerFile implements FileInterface
 
             switch ($shortcut['name']) {
                 case 'get':
-                    $classDefinition->addMethod(new ClassMethod(
+                    $classDefinition->addMethod(new Method(
                         $classDefinition,
                         ['public'],
                         'get'.camelize($name),
@@ -1018,11 +1018,11 @@ final class CompilerFile implements FileInterface
                     break;
 
                 case 'set':
-                    $classDefinition->addMethod(new ClassMethod(
+                    $classDefinition->addMethod(new Method(
                         $classDefinition,
                         ['public'],
                         'set'.camelize($name),
-                        new ClassMethodParameters([
+                        new Parameters([
                             [
                                 'type' => 'parameter',
                                 'name' => $name,
@@ -1072,7 +1072,7 @@ final class CompilerFile implements FileInterface
 
                 case 'toString':
                 case '__toString':
-                    $classDefinition->addMethod(new ClassMethod(
+                    $classDefinition->addMethod(new Method(
                         $classDefinition,
                         ['public'],
                         '__toString',

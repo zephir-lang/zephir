@@ -11,7 +11,7 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Documentation;
@@ -108,7 +108,7 @@ class Template
             } elseif (\is_string($url)) {
                 return $url;
             }
-        } elseif ($url instanceof ClassDefinition) {
+        } elseif ($url instanceof Definition) {
             return $this->url(Documentation::classUrl($url));
         } elseif ($url instanceof CompilerFile) {
             return $this->url(Documentation::classUrl($url->getClassDefinition()));

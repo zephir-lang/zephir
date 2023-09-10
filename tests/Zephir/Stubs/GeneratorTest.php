@@ -16,11 +16,11 @@ namespace Zephir\Test\Stubs;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\Class\ClassConstant;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
-use Zephir\Class\ClassProperty;
+use Zephir\Class\Property;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\Stubs\Generator;
 use function Zephir\is_windows;
 
@@ -31,13 +31,13 @@ class GeneratorTest extends TestCase
      */
     private $generatorClass;
     private Generator $testClass;
-    private ClassDefinition $classDefinition;
+    private Definition $classDefinition;
 
     protected function setUp(): void
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
         $this->testClass = new Generator([]);
-        $this->classDefinition = new ClassDefinition('Stub\Stubs', 'StubsBuildClass');
+        $this->classDefinition = new Definition('Stub\Stubs', 'StubsBuildClass');
     }
 
     /**
@@ -101,8 +101,8 @@ DOC;
 
         $buildClass = $this->getMethod('buildClass');
 
-        $extendsClassDefinition = new ClassDefinition('Stub\Extendable', 'BaseTestClass');
-        $implementClassDefinition = new ClassDefinition('Stub\Events', 'EventsManagerInterface');
+        $extendsClassDefinition = new Definition('Stub\Extendable', 'BaseTestClass');
+        $implementClassDefinition = new Definition('Stub\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
 
         // Definitions
@@ -128,14 +128,14 @@ DOC;
             ],
         ];
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'init',
-            new ClassMethodParameters($methodParamsDefinition)
+            new Parameters($methodParamsDefinition)
         );
 
-        $constantsDefinition = new ClassConstant(
+        $constantsDefinition = new Constant(
             'DEFAULT_PATH_DELIMITER',
             [
                 'type' => 'string',
@@ -144,7 +144,7 @@ DOC;
             'Default path delimiter'
         );
 
-        $propertyDefinition = new ClassProperty(
+        $propertyDefinition = new Property(
             $this->classDefinition,
             ['public', 'static'],
             'defaultPathDelimiter',
@@ -263,7 +263,7 @@ DOC;
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildProperty');
-        $classProperty = new ClassProperty(
+        $classProperty = new Property(
             $this->classDefinition,
             $visibility,
             'testProperty',
@@ -359,7 +359,7 @@ DOC;
             $extended = $value;
         }
 
-        $classConstant = new ClassConstant(
+        $classConstant = new Constant(
             'TEST',
             [
                 'type' => $type,
@@ -408,7 +408,7 @@ DOC;
                 ],
             ],
         ];
-        $methodParams = new ClassMethodParameters($methodParamsDefinition);
+        $methodParams = new Parameters($methodParamsDefinition);
 
         $returnType = [
             'type' => 'return-type',
@@ -424,7 +424,7 @@ DOC;
 
         $this->classDefinition->setAliasManager(new AliasManager());
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'testName',

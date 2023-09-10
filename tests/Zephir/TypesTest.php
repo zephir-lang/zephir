@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
 use Zephir\Types;
 
 final class TypesTest extends TestCase
@@ -101,10 +101,10 @@ final class TypesTest extends TestCase
      * @param array $testData   - dataProvider data set
      * @param int   $definition - (optional) one of mandatory/collection flag
      */
-    private function buildMethod(array $testData, int $definition = 0): ClassMethod
+    private function buildMethod(array $testData, int $definition = 0): Method
     {
-        return new ClassMethod(
-            new ClassDefinition('Zephir', 'testMethod'),
+        return new Method(
+            new Definition('Zephir', 'testMethod'),
             ['public'],
             'exampleMethodName',
             null,

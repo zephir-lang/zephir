@@ -22,39 +22,17 @@ use Zephir\Expression\StaticConstantAccess;
 /**
  * Represents a class constant
  */
-class ClassConstant
+class Constant
 {
-    /**
-     * @var string
-     */
-    protected string $name;
-
-    /**
-     * @var array
-     */
-    protected array $value = [];
-
-    /**
-     * @var string|null
-     */
-    protected ?string $docblock = null;
-
-    /**
-     * @param string      $name
-     * @param array       $value
-     * @param string|null $docBlock
-     */
-    public function __construct(string $name, array $value, ?string $docBlock = null)
-    {
-        $this->name = $name;
-        $this->value = $value;
-        $this->docblock = $docBlock;
+    public function __construct(
+        protected string $name,
+        protected array $value,
+        protected ?string $docblock = null,
+    ) {
     }
 
     /**
      * Returns the constant's name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -63,8 +41,6 @@ class ClassConstant
 
     /**
      * Returns the constant's value.
-     *
-     * @return array
      */
     public function getValue(): array
     {
@@ -73,8 +49,6 @@ class ClassConstant
 
     /**
      * Get the type of the value of the constant.
-     *
-     * @return string
      */
     public function getValueType(): string
     {
@@ -83,8 +57,6 @@ class ClassConstant
 
     /**
      * Get value of the value of the constant.
-     *
-     * @return mixed
      */
     public function getValueValue(): mixed
     {
@@ -93,8 +65,6 @@ class ClassConstant
 
     /**
      * Returns the docblock related to the constant.
-     *
-     * @return string|null
      */
     public function getDocBlock(): ?string
     {
@@ -103,8 +73,6 @@ class ClassConstant
 
     /**
      * Get type of class constant.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -113,8 +81,6 @@ class ClassConstant
 
     /**
      * Process the value of the class constant if needed.
-     *
-     * @param CompilationContext $compilationContext
      *
      * @throws Exception
      * @throws ReflectionException
@@ -144,8 +110,6 @@ class ClassConstant
 
     /**
      * Produce the code to register a class constant.
-     *
-     * @param CompilationContext $compilationContext
      *
      * @throws Exception
      * @throws ReflectionException

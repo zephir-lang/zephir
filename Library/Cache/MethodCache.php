@@ -15,7 +15,7 @@ namespace Zephir\Cache;
 
 use ReflectionClass;
 use ReflectionException;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Variable;
@@ -167,13 +167,13 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching.
      *
-     * @param ClassDefinition|ReflectionClass|null $classDefinition
+     * @param Definition|ReflectionClass|null $classDefinition
      *
      * @return bool
      */
     private function isClassCacheable($classDefinition = null): bool
     {
-        if ($classDefinition instanceof ClassDefinition) {
+        if ($classDefinition instanceof Definition) {
             return true;
         }
 

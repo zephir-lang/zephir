@@ -12,7 +12,7 @@
 namespace Zephir;
 
 use ReflectionException;
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 
@@ -389,7 +389,7 @@ class MethodCall extends Call
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
                                  */
-                                if ($method instanceof ClassMethod && !$method->isBundled()) {
+                                if ($method instanceof Method && !$method->isBundled()) {
                                     if (isset($expression['parameters'])) {
                                         $callNumberParameters = \count($expression['parameters']);
                                     } else {
@@ -486,7 +486,7 @@ class MethodCall extends Call
          */
         if ($isExpecting) {
             if (isset($method)) {
-                if ($method instanceof ClassMethod) {
+                if ($method instanceof Method) {
                     if ($method->isVoid()) {
                         throw new CompilerException(
                             sprintf(
@@ -571,7 +571,7 @@ class MethodCall extends Call
 
             // We check here if a correct parameter type is passed to the called method
             if (self::CALL_NORMAL == $type) {
-                if (isset($method) && $method instanceof ClassMethod && isset($expression['parameters'])) {
+                if (isset($method) && $method instanceof Method && isset($expression['parameters'])) {
                     $resolvedTypes = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
 

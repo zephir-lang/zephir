@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
-use Zephir\Class\ClassProperty;
+use Zephir\Class\Property;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
@@ -85,7 +85,7 @@ class Closure
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $classDefinition = new ClassDefinition(
+        $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
             self::$id.'__closure'
         );
@@ -99,7 +99,7 @@ class Closure
 
         $parameters = null;
         if (isset($expression['left'])) {
-            $parameters = new ClassMethodParameters($expression['left']);
+            $parameters = new Parameters($expression['left']);
         }
 
         $block = $expression['right'] ?? [];
@@ -112,7 +112,7 @@ class Closure
         }
 
         foreach ($staticVariables as $var) {
-            $classDefinition->addProperty(new ClassProperty(
+            $classDefinition->addProperty(new Property(
                 $classDefinition,
                 ['public', 'static'],
                 $var->getName(),
@@ -122,7 +122,7 @@ class Closure
             ));
         }
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $classDefinition,
             ['public', 'final'],
             '__invoke',

@@ -11,7 +11,7 @@
 
 namespace Zephir\Compiler;
 
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Compiler;
 
 /**
@@ -29,7 +29,7 @@ interface FileInterface
     /**
      * Returns the class definition related to the compiled file.
      *
-     * @return ClassDefinition
+     * @return Definition
      */
     public function getClassDefinition();
 

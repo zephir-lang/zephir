@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir;
 
 use ReflectionClass;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Globals;
 use function in_array;
@@ -98,7 +98,7 @@ class Variable implements TypeAwareInterface
 
     protected array $classTypes = [];
 
-    protected ClassDefinition|ReflectionClass|null $associatedClass = null;
+    protected Definition|ReflectionClass|null $associatedClass = null;
 
     /**
      * Initialization skips.
@@ -454,9 +454,9 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the PHP class related to variable.
      *
-     * @param ReflectionClass|ClassDefinition $associatedClass
+     * @param ReflectionClass|Definition $associatedClass
      */
-    public function setAssociatedClass(ReflectionClass|ClassDefinition $associatedClass): void
+    public function setAssociatedClass(ReflectionClass|Definition $associatedClass): void
     {
         $this->associatedClass = $associatedClass;
     }
@@ -464,7 +464,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns the class related to the variable.
      */
-    public function getAssociatedClass(): ClassDefinition|ReflectionClass|null
+    public function getAssociatedClass(): Definition|ReflectionClass|null
     {
         return $this->associatedClass;
     }

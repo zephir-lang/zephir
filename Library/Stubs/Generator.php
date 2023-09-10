@@ -14,11 +14,11 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\Class\ClassConstant;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
-use Zephir\Class\ClassProperty;
+use Zephir\Class\Property;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\CompilerFile;
 use Zephir\Exception;
 use function array_key_exists;
@@ -89,15 +89,15 @@ class Generator
     /**
      * Build class.
      *
-     * @param ClassDefinition $class
+     * @param Definition $class
      * @param string          $indent
      * @param string          $banner
      *
-     * @throws Exception\RuntimeException
-     *
      * @return string
+     *@throws Exception\RuntimeException
+     *
      */
-    protected function buildClass(ClassDefinition $class, string $indent, string $banner): string
+    protected function buildClass(Definition $class, string $indent, string $banner): string
     {
         $source = '<?php'.PHP_EOL.PHP_EOL;
         $source .= '' === $banner ? '' : $banner.PHP_EOL;
@@ -208,12 +208,12 @@ class Generator
     /**
      * Build property.
      *
-     * @param ClassProperty $property
+     * @param Property $property
      * @param string        $indent
      *
      * @return string
      */
-    protected function buildProperty(ClassProperty $property, string $indent): string
+    protected function buildProperty(Property $property, string $indent): string
     {
         $visibility = 'public';
 
@@ -238,12 +238,12 @@ class Generator
     }
 
     /**
-     * @param ClassConstant $constant
+     * @param Constant $constant
      * @param string        $indent
      *
      * @return string
      */
-    protected function buildConstant(ClassConstant $constant, string $indent): string
+    protected function buildConstant(Constant $constant, string $indent): string
     {
         $source = 'const '.$constant->getName();
 
@@ -255,13 +255,13 @@ class Generator
     }
 
     /**
-     * @param ClassMethod $method
+     * @param Method $method
      * @param bool        $isInterface
      * @param string      $indent
      *
      * @return string
      */
-    protected function buildMethod(ClassMethod $method, bool $isInterface, string $indent): string
+    protected function buildMethod(Method $method, bool $isInterface, string $indent): string
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
 
@@ -271,7 +271,7 @@ class Generator
 
         $parameters = [];
 
-        if ($methodParameters instanceof ClassMethodParameters) {
+        if ($methodParameters instanceof Parameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
                 $paramStr = '';
                 if (isset($parameter['cast'])) {

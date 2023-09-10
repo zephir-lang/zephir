@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
 use ReflectionException;
 use Zephir\Backend\Backend;
 use Zephir\Backend\StringsManager;
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Code\Builder\Struct;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Compiler\FileInterface;
@@ -69,7 +69,7 @@ final class Compiler
     private array $internalInitializers = [];
 
     /**
-     * @var ClassDefinition[]
+     * @var Definition[]
      */
     private array $definitions = [];
 
@@ -85,7 +85,7 @@ final class Compiler
     private array $externalDependencies = [];
 
     /**
-     * @var ClassDefinition[]
+     * @var Definition[]
      */
     private static array $internalDefinitions = [];
 
@@ -369,7 +369,7 @@ final class Compiler
      *
      * @param string $className
      *
-     * @return ClassDefinition|false returns false if no class definition is found
+     * @return Definition|false returns false if no class definition is found
      */
     public function getClassDefinition(string $className)
     {
@@ -386,9 +386,9 @@ final class Compiler
      * Inserts an anonymous class definition in the compiler.
      *
      * @param CompilerFileAnonymous $file
-     * @param ClassDefinition       $classDefinition
+     * @param Definition       $classDefinition
      */
-    public function addClassDefinition(CompilerFileAnonymous $file, ClassDefinition $classDefinition): void
+    public function addClassDefinition(CompilerFileAnonymous $file, Definition $classDefinition): void
     {
         $this->definitions[$classDefinition->getCompleteName()] = $classDefinition;
         $this->anonymousFiles[$classDefinition->getCompleteName()] = $file;
@@ -399,15 +399,15 @@ final class Compiler
      *
      * @param string $className
      *
-     * @return ClassDefinition
+     * @return Definition
      *
      * @throws ReflectionException
      */
-    public function getInternalClassDefinition(string $className): ClassDefinition
+    public function getInternalClassDefinition(string $className): Definition
     {
         if (!isset(self::$internalDefinitions[$className])) {
             $reflection = new \ReflectionClass($className);
-            self::$internalDefinitions[$className] = ClassDefinition::buildFromReflection($reflection);
+            self::$internalDefinitions[$className] = Definition::buildFromReflection($reflection);
         }
 
         return self::$internalDefinitions[$className];

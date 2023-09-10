@@ -11,14 +11,14 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\Class\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilerFile;
 use Zephir\Documentation;
 use Zephir\Documentation\FileInterface;
 
 class ClassFile implements FileInterface
 {
-    protected ClassDefinition $class;
+    protected Definition $class;
 
     public function __construct(protected CompilerFile $compilerFile)
     {

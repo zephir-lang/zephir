@@ -11,7 +11,7 @@
 
 namespace Zephir;
 
-use Zephir\Class\ClassMethod;
+use Zephir\Class\Method\Method;
 
 final class Types
 {
@@ -42,12 +42,12 @@ final class Types
     /**
      * Gets PHP compatible return type from class method.
      *
-     * @param ClassMethod $method
+     * @param Method $method
      * @param array|null  $returnTypes
      *
      * @return string
      */
-    public function getReturnTypeAnnotation(ClassMethod $method, array $returnTypes = null): string
+    public function getReturnTypeAnnotation(Method $method, array $returnTypes = null): string
     {
         if (!$method->hasReturnTypes() && !$method->isVoid()) {
             return '';

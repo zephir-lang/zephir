@@ -15,9 +15,9 @@ namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
-use Zephir\Class\ClassDefinition;
-use Zephir\Class\ClassMethod;
-use Zephir\Class\ClassMethodParameters;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Method\Method;
 use Zephir\StatementsBlock;
 use Zephir\Stubs\MethodDocBlock;
 
@@ -36,7 +36,7 @@ final class MethodDocBlockTest extends TestCase
         $className = $params['class']['className'];
         $classShortName = $params['class']['classShortName'];
 
-        $classDefinition = new ClassDefinition(
+        $classDefinition = new Definition(
             $classNamespace,
             $className,
             $classShortName
@@ -45,10 +45,10 @@ final class MethodDocBlockTest extends TestCase
         /**
          * ClassMethod constructor.
          *
-         * @param ClassDefinition            $classDefinition
+         * @param Definition            $classDefinition
          * @param array                      $visibility
          * @param string                     $name
-         * @param ClassMethodParameters|null $parameters
+         * @param Parameters|null $parameters
          * @param StatementsBlock|null       $statements
          * @param string|null                $docblock
          * @param array|null                 $returnType
@@ -62,11 +62,11 @@ final class MethodDocBlockTest extends TestCase
         $methodReturnType = $params['method']['returnType'];
         $methodExpression = $params['method']['expression'];
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $classDefinition,
             $methodVisibility,
             $methodName,
-            $methodParams ? new ClassMethodParameters($methodParams) : null,
+            $methodParams ? new Parameters($methodParams) : null,
             new StatementsBlock($methodStBlock),
             $methodDocBlock,
             $methodReturnType,
@@ -250,8 +250,8 @@ final class MethodDocBlockTest extends TestCase
      */
     public function testShouldParseDocBlock(string $zephirDocBlock, string $phpDocBlock): void
     {
-        $classMethod = new ClassMethod(
-            new ClassDefinition('Zephir', 'testMethod'),
+        $classMethod = new Method(
+            new Definition('Zephir', 'testMethod'),
             ['public'],
             'exampleMethodName',
             null,

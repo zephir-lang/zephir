@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Class;
 
 use ReflectionClass;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 
@@ -107,7 +108,7 @@ class Entry
         array_pop($classNamespace);
         $namespace = implode(self::NAMESPACE_SEPARATOR, $classNamespace);
 
-        return (new ClassDefinition($namespace, $className))->getClassEntry();
+        return (new Definition($namespace, $className))->getClassEntry();
     }
 
     public function isInternal(): bool

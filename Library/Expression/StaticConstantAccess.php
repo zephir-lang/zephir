@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use ReflectionException;
-use Zephir\Class\ClassConstant;
+use Zephir\Class\Constant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -176,7 +176,7 @@ class StaticConstantAccess
 
         $constantDefinition = $classDefinition->getConstant($constant);
 
-        if ($constantDefinition instanceof ClassConstant) {
+        if ($constantDefinition instanceof Constant) {
             $constantDefinition->processValue($compilationContext);
             $value = $constantDefinition->getValueValue();
             $type = $constantDefinition->getValueType();
