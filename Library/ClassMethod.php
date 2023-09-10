@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir;
 
 use ReflectionException;
-use Zephir\Classes\Entry as ClassEntry;
+use Zephir\Class\Entry as ClassEntry;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;

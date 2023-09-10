@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Statements;
 
 use ReflectionException;
-use Zephir\Classes\Entry;
+use Zephir\Class\Entry;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Compiler;

@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Classes;
+namespace Zephir\Class;
 
 use ReflectionClass;
 use Zephir\ClassDefinition;
