@@ -183,16 +183,6 @@ function is_windows()
 }
 
 /**
- * Checks if currently running under macOs.
- *
- * @return bool
- */
-function is_macos()
-{
-    return 0 === stripos(PHP_OS, 'DARWIN');
-}
-
-/**
  * Checks if current PHP is thread safe.
  *
  * @return bool
