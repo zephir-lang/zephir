@@ -28,29 +28,15 @@ final class CompilerFormatter extends LineFormatter
     public const SIMPLE_FORMAT = " %level_name%: %message% in %file% on line %line% %type%\n";
 
     /**
-     * @var Config
-     */
-    private Config $config;
-
-    /**
      * The contents of the files that are involved in the log message.
-     *
-     * @var array
      */
     private array $filesContent = [];
 
-    public function __construct(Config $config)
+    public function __construct(private Config $config)
     {
         parent::__construct();
-
-        $this->config = $config;
     }
 
-    /**
-     * @param array $record
-     *
-     * @return string
-     */
     public function format(array $record): string
     {
         if ($this->config->get('silent')) {
@@ -141,10 +127,6 @@ final class CompilerFormatter extends LineFormatter
 
     /**
      * Remove leftover %extra.xxx% and %context.xxx% (if any).
-     *
-     * @param string $output
-     *
-     * @return string
      */
     private function cleanExtraPlaceholders(string $output): string
     {
@@ -160,10 +142,6 @@ final class CompilerFormatter extends LineFormatter
 
     /**
      * Gets the contents of the files that are involved in the log message.
-     *
-     * @param string $file File path
-     *
-     * @return array
      */
     private function getFileContents(string $file): array
     {
