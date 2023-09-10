@@ -11,18 +11,14 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Cache;
 
-use Zephir\Cache\ClassEntryCache;
-use Zephir\Cache\FunctionCache;
-use Zephir\Cache\MethodCache;
-use Zephir\Cache\StaticMethodCache;
 use Zephir\Passes\CallGathererPass;
 
 /**
  * Creates and manages function, method and class entries caches
  */
-class CacheManager
+class Manager
 {
     /**
      * @var FunctionCache|null

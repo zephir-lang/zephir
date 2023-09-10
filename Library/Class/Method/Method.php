@@ -16,7 +16,7 @@ namespace Zephir\Class\Method;
 use ReflectionException;
 use Zephir\Branch;
 use Zephir\BranchManager;
-use Zephir\CacheManager;
+use Zephir\Cache\Manager;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Entry as ClassEntry;
 use Zephir\CodePrinter;
@@ -1376,7 +1376,7 @@ class Method
         /**
          * Cache Manager manages function calls, method calls and class entries caches.
          */
-        $cacheManager = new CacheManager();
+        $cacheManager = new Manager();
         $cacheManager->setGatherer($callGathererPass);
 
         $compilationContext->cacheManager = $cacheManager;

@@ -15,6 +15,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerInterface;
 use Zephir\Backend\Backend;
+use Zephir\Cache\Manager;
 use Zephir\Cache\FunctionCache;
 use Zephir\Class\Definition\AbstractDefinition;
 use Zephir\Class\Definition\Definition;
@@ -114,7 +115,7 @@ class CompilationContext
     /**
      * Manages both function and method call caches.
      */
-    public ?CacheManager $cacheManager = null;
+    public ?Manager $cacheManager = null;
 
     /**
      * Manages class renaming using keyword 'use'.
