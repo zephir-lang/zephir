@@ -9,43 +9,43 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir;
+declare(strict_types=1);
+
+namespace Zephir\Types;
 
 use Zephir\Class\Method\Method;
+use function array_key_exists;
+use function count;
+use function in_array;
 
 final class Types
 {
-    const T_INT = 'int';
-    const T_UINT = 'uint';
-    const T_CHAR = 'char';
-    const T_UCHAR = 'uchar';
-    const T_LONG = 'long';
-    const T_ULONG = 'ulong';
-    const T_DOUBLE = 'double';
-    const T_FLOAT = 'float';
-    const T_NUMBER = 'number';
-    const T_NULL = 'null';
-    const T_BOOL = 'bool';
-    const T_FALSE = 'false';
-    const T_STRING = 'string';
-    const T_ISTRING = 'istring';
-    const T_VARIABLE = 'variable';
-    const T_MIXED = 'mixed';
-    const T_ARRAY = 'array';
-    const T_VOID = 'void';
-    const T_OBJECT = 'object';
-    const T_CALLABLE = 'callable';
-    const T_RESOURCE = 'resource';
-    const T_ITERABLE = 'iterable';
-    const T_UNDEFINED = 'undefined';
+    public const T_INT = 'int';
+    public const T_UINT = 'uint';
+    public const T_CHAR = 'char';
+    public const T_UCHAR = 'uchar';
+    public const T_LONG = 'long';
+    public const T_ULONG = 'ulong';
+    public const T_DOUBLE = 'double';
+    public const T_FLOAT = 'float';
+    public const T_NUMBER = 'number';
+    public const T_NULL = 'null';
+    public const T_BOOL = 'bool';
+    public const T_FALSE = 'false';
+    public const T_STRING = 'string';
+    public const T_ISTRING = 'istring';
+    public const T_VARIABLE = 'variable';
+    public const T_MIXED = 'mixed';
+    public const T_ARRAY = 'array';
+    public const T_VOID = 'void';
+    public const T_OBJECT = 'object';
+    public const T_CALLABLE = 'callable';
+    public const T_RESOURCE = 'resource';
+    public const T_ITERABLE = 'iterable';
+    public const T_UNDEFINED = 'undefined';
 
     /**
      * Gets PHP compatible return type from class method.
-     *
-     * @param Method $method
-     * @param array|null  $returnTypes
-     *
-     * @return string
      */
     public function getReturnTypeAnnotation(Method $method, array $returnTypes = null): string
     {
@@ -55,9 +55,9 @@ final class Types
 
         $isProcessedReturnType = null !== $returnTypes;
         $returnTypes = $returnTypes ?? $method->getReturnTypes();
-        $typesCount = \count($returnTypes);
+        $typesCount = count($returnTypes);
 
-        $isDynamic = \in_array('var', array_keys($returnTypes));
+        $isDynamic = in_array('var', array_keys($returnTypes));
         $isNullable = $this->isNullable($returnTypes);
 
         $isBool = $this->areReturnTypesBoolCompatible($returnTypes);
@@ -145,10 +145,6 @@ final class Types
 
     /**
      * Match Zephir types with Integer type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesIntegerCompatible(array $types): bool
     {
@@ -167,10 +163,6 @@ final class Types
 
     /**
      * Match Zephir types with Float type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesFloatCompatible(array $types): bool
     {
@@ -185,10 +177,6 @@ final class Types
 
     /**
      * Match Zephir types with Boolean type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesBoolCompatible(array $types): bool
     {
@@ -197,10 +185,6 @@ final class Types
 
     /**
      * Match Zephir types with String type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesStringCompatible(array $types): bool
     {
@@ -216,10 +200,6 @@ final class Types
 
     /**
      * Match Zephir types with Null type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesNullCompatible(array $types): bool
     {
@@ -228,10 +208,6 @@ final class Types
 
     /**
      * Match Zephir types with Array type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesArrayCompatible(array $types): bool
     {
@@ -240,10 +216,6 @@ final class Types
 
     /**
      * Match Zephir types with Object type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesObjectCompatible(array $types): bool
     {
@@ -252,10 +224,6 @@ final class Types
 
     /**
      * Match Zephir types with Iterable type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesIterableCompatible(array $types): bool
     {
@@ -264,10 +232,6 @@ final class Types
 
     /**
      * Match Zephir types with Resource type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesResourceCompatible(array $types): bool
     {
@@ -276,17 +240,13 @@ final class Types
 
     /**
      * Match Zephir types with Collections.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesCollectionCompatible(array $types): bool
     {
         $result = false;
 
         foreach ($types as $type => $data) {
-            if (false !== strpos($type, '[]')) {
+            if (str_contains($type, '[]')) {
                 $result = true;
             }
         }
@@ -296,10 +256,6 @@ final class Types
 
     /**
      * Match Zephir types with Void type.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function areReturnTypesVoidCompatible(array $types): bool
     {
@@ -308,10 +264,6 @@ final class Types
 
     /**
      * Check if Zephir types is a Numeric type compatible.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function isNumeric(array $types): bool
     {
@@ -320,16 +272,12 @@ final class Types
 
     /**
      * Check if Zephir types can be Nullable.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     private function isNullable(array $types): bool
     {
-        return (\array_key_exists(self::T_NULL, $types)
-            || \in_array(self::T_NULL, $types))
-            && 1 !== \count($types);
+        return (array_key_exists(self::T_NULL, $types)
+            || in_array(self::T_NULL, $types))
+            && 1 !== count($types);
     }
 
     /**
@@ -347,12 +295,6 @@ final class Types
      *          'char' => 48,
      *       ]
      *  ]
-     *
-     * @param array $types        - Return types from parser
-     * @param array $allowedTypes - Allowed return types
-     * @param bool  $isNullable
-     *
-     * @return bool
      */
     private function areReturnTypesCompatible(array $types, array $allowedTypes, bool $isNullable = false): bool
     {
@@ -363,7 +305,7 @@ final class Types
         }
 
         foreach ($types as $type => $data) {
-            $areEquals = \in_array($type, $allowedTypes);
+            $areEquals = in_array($type, $allowedTypes);
 
             $result = isset($result)
                 ? ($areEquals && $result)

@@ -16,7 +16,7 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
-use Zephir\Types;
+use Zephir\Types\Types;
 
 final class TypesTest extends TestCase
 {

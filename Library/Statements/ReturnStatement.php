@@ -17,8 +17,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
-use Zephir\Types;
-
+use Zephir\Types\Types;
 use function Zephir\add_slashes;
 
 /**

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
-use Zephir\Types;
-
 /**
  * Encapsulates built-in methods for the "string" type
  *

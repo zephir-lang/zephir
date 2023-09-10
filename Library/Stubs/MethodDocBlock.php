@@ -15,7 +15,7 @@ namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
 use Zephir\Class\Method\Method;
-use Zephir\Types;
+use Zephir\Types\Types;
 
 /**
  * Stubs Generator.

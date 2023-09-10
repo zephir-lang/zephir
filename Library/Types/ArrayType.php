@@ -18,7 +18,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Types;
 
 /**
  * Defines methods of the built-in array type

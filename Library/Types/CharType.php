@@ -20,7 +20,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Types;
 
 class CharType extends AbstractType
 {

@@ -15,7 +15,7 @@ namespace Zephir\Backend;
 
 use Zephir\CompilationContext as Context;
 use Zephir\Exception\CompilerException as Exception;
-use Zephir\Types;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 use function Zephir\Backend\ZendEngine3\add_slashes;
 

@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
-use Zephir\Types;
-
 /**
  * Defines methods of the built-in double type
  */

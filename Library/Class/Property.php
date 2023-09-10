@@ -22,7 +22,7 @@ use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
-use Zephir\Types;
+use Zephir\Types\Types;
 use function in_array;
 use function is_array;
 

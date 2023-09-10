@@ -15,6 +15,7 @@ use ReflectionException;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 /**
