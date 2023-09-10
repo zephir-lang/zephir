@@ -25,6 +25,7 @@ use Zephir\StatementsBlock;
 use Zephir\Types\Types;
 use function in_array;
 use function is_array;
+use function Zephir\add_slashes;
 
 /**
  * Represents a property class
