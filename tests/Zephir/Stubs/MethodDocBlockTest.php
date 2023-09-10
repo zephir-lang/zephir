@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
 use Zephir\Class\ClassDefinition;
 use Zephir\Class\ClassMethod;
-use Zephir\ClassMethodParameters;
+use Zephir\Class\ClassMethodParameters;
 use Zephir\StatementsBlock;
 use Zephir\Stubs\MethodDocBlock;
 

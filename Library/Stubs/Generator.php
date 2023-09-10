@@ -17,7 +17,7 @@ use Zephir\AliasManager;
 use Zephir\Class\ClassConstant;
 use Zephir\Class\ClassDefinition;
 use Zephir\Class\ClassMethod;
-use Zephir\ClassMethodParameters;
+use Zephir\Class\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Exception;

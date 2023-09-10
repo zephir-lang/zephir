@@ -18,7 +18,6 @@ use ReflectionException;
 use Zephir\AbstractClassDefinition;
 use Zephir\AliasManager;
 use Zephir\ArgInfoDefinition;
-use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;

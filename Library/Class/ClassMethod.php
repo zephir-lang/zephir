@@ -18,7 +18,6 @@ use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\CacheManager;
 use Zephir\Class\Entry as ClassEntry;
-use Zephir\ClassMethodParameters;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
 use Zephir\Detectors\WriteDetector;
