@@ -9,14 +9,20 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir;
+declare(strict_types=1);
+
+namespace Zephir\Class;
 
 use ReflectionException;
-use Zephir\Class\ClassDefinition;
+use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
+use Zephir\StatementsBlock;
+use Zephir\Types;
 use function in_array;
 use function is_array;
 

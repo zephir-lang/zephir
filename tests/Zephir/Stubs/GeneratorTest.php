@@ -20,7 +20,7 @@ use Zephir\Class\ClassConstant;
 use Zephir\Class\ClassDefinition;
 use Zephir\Class\ClassMethod;
 use Zephir\Class\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\ClassProperty;
 use Zephir\Stubs\Generator;
 use function Zephir\is_windows;
 

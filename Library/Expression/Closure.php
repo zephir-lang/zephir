@@ -16,7 +16,7 @@ namespace Zephir\Expression;
 use Zephir\Class\ClassDefinition;
 use Zephir\Class\ClassMethod;
 use Zephir\Class\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\ClassProperty;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
