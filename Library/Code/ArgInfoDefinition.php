@@ -11,77 +11,32 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Code;
 
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\CompilationContext;
+use Zephir\Exception;
 use function array_key_exists;
 use function count;
+use function Zephir\escape_class;
 
 class ArgInfoDefinition
 {
-    /**
-     * @var bool
-     */
-    private bool $returnByRef;
-
-    /**
-     * @var Method|FunctionDefinition
-     */
-    private $functionLike;
-
-    /**
-     * @var string
-     */
-    private string $name;
-
-    /**
-     * @var Parameters|null
-     */
     private ?Parameters $parameters;
 
-    /**
-     * @var CodePrinter
-     */
-    private CodePrinter $codePrinter;
-
-    /**
-     * @var CompilationContext
-     */
-    private CompilationContext $compilationContext;
-
-    /**
-     * @var string
-     */
     private string $booleanDefinition = '_IS_BOOL';
 
-    /**
-     * @var bool
-     */
     private bool $richFormat = true;
 
-    /**
-     * @param string             $name
-     * @param Method        $functionLike
-     * @param CodePrinter        $codePrinter
-     * @param CompilationContext $compilationContext
-     * @param bool               $returnByRef
-     */
     public function __construct(
-        string             $name,
-        Method             $functionLike,
-        CodePrinter        $codePrinter,
-        CompilationContext $compilationContext,
-        bool               $returnByRef = false
+        private string     $name,
+        private Method     $functionLike,
+        private Printer    $codePrinter,
+        private CompilationContext $compilationContext,
+        private bool               $returnByRef = false
     ) {
-        $this->functionLike = $functionLike;
-        $this->codePrinter = $codePrinter;
-        $this->compilationContext = $compilationContext;
-
-        $this->name = $name;
         $this->parameters = $this->functionLike->getParameters();
-
-        $this->returnByRef = $returnByRef;
     }
 
     public function setBooleanDefinition(string $definition): void
