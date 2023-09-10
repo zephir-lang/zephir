@@ -32,7 +32,11 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInt(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/must be of (the\s)?type int, bool given/');
+        if (version_compare(PHP_VERSION, '8.2.0', '<=')) {
+            $this->expectExceptionMessageMatches('/must be of (the\s)?type int, bool given/');
+        } else {
+            $this->expectExceptionMessageMatches('/must be of type int, true given/');
+        }
 
         (new ImplementInt())->set(true);
     }
@@ -40,9 +44,15 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInterface(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches(
-            '/(must be of type|implement interface) Stub\\\\Interfaces\\\\InterfaceInt, bool given/'
-        );
+        if (version_compare(PHP_VERSION, '8.2.0', '<=')) {
+            $this->expectExceptionMessageMatches(
+                '/(must be of type|implement interface) Stub\\\\Interfaces\\\\InterfaceInt, bool given/'
+            );
+        } else {
+            $this->expectExceptionMessageMatches(
+                '/(must be of type) Stub\\\\Interfaces\\\\InterfaceInt, true given/'
+            );
+        }
 
         (new ImplementInterface())->getVoid(true);
     }
