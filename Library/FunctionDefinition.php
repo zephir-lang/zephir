@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use Zephir\Class\ClassMethod;
+
 /**
  * Represents a function
  */

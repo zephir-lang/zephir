@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Zephir\Backend\Backend;
 use Zephir\Cache\FunctionCache;
 use Zephir\Class\ClassDefinition;
+use Zephir\Class\ClassMethod;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 use function in_array;

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use Zephir\Class\ClassMethod;
 use function array_key_exists;
 use function count;
 

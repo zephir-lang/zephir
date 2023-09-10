@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use Zephir\Class\ClassDefinition;
-use Zephir\ClassMethod;
+use Zephir\Class\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;

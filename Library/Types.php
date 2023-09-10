@@ -11,6 +11,8 @@
 
 namespace Zephir;
 
+use Zephir\Class\ClassMethod;
+
 final class Types
 {
     const T_INT = 'int';

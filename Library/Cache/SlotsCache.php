@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
-use Zephir\ClassMethod;
+use Zephir\Class\ClassMethod;
 
 /**
  * In order to reduce memory allocation when calling functions and method_exists

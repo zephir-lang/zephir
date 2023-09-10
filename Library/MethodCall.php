@@ -12,6 +12,7 @@
 namespace Zephir;
 
 use ReflectionException;
+use Zephir\Class\ClassMethod;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 

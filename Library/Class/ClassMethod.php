@@ -11,24 +11,34 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class;
 
 use ReflectionException;
-use Zephir\Class\ClassDefinition;
+use Zephir\Branch;
+use Zephir\BranchManager;
+use Zephir\CacheManager;
 use Zephir\Class\Entry as ClassEntry;
+use Zephir\ClassMethodParameters;
+use Zephir\CodePrinter;
+use Zephir\CompilationContext;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
-
+use Zephir\StatementsBlock;
+use Zephir\SymbolTable;
+use Zephir\Variable;
 use function array_key_exists;
 use function count;
 use function in_array;
 use function is_array;
 use function is_object;
+use function Zephir\add_slashes;
 
 /**
  * Represents a class method

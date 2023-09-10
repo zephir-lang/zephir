@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\ClassMethod;
+use Zephir\Class\ClassMethod;
 use Zephir\Types;
 
 /**
