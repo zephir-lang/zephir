@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use ReflectionException;
-use Zephir\ClassConstant;
+use Zephir\Class\ClassConstant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable;
-
 use function gettype;
 use function in_array;
 

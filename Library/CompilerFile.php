@@ -16,13 +16,13 @@ namespace Zephir;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use ReflectionException;
+use Zephir\Class\ClassConstant;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
-
 use function is_array;
 
 /**

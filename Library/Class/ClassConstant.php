@@ -11,9 +11,11 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class;
 
 use ReflectionException;
+use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 

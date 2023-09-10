@@ -15,6 +15,7 @@ namespace Zephir;
 
 use ReflectionClass;
 use ReflectionException;
+use Zephir\Class\ClassConstant;
 use Zephir\Class\Entry;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;

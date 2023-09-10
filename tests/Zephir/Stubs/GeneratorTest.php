@@ -16,13 +16,12 @@ namespace Zephir\Test\Stubs;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\ClassConstant;
+use Zephir\Class\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\Stubs\Generator;
-
 use function Zephir\is_windows;
 
 class GeneratorTest extends TestCase

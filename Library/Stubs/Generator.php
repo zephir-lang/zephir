@@ -14,14 +14,13 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\ClassConstant;
+use Zephir\Class\ClassConstant;
 use Zephir\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;
 use Zephir\CompilerFile;
 use Zephir\Exception;
-
 use function array_key_exists;
 use function in_array;
 
