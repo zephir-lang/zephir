@@ -11,13 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class;
 
 use ArrayAccess;
 use Countable;
 use Iterator;
 use Zephir\Exception\CompilerException;
-
 use function count;
 
 /**
