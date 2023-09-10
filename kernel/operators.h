@@ -146,7 +146,11 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define zephir_get_boolval(z) (Z_TYPE_P(z) == IS_TRUE ? 1 : (Z_TYPE_P(z) == IS_FALSE ? 0 : zephir_get_boolval_ex(z)))
 #define zephir_get_charval(z) (Z_TYPE_P(z) == IS_LONG ? Z_LVAL_P(z) : zephir_get_charval_ex(z))
 
+#if PHP_VERSION_ID >= 80300
+#define zephir_add_function(result, left, right) add_function(result, left, right)
+#else
 #define zephir_add_function(result, left, right) fast_add_function(result, left, right)
+#endif
 #define zephir_sub_function(result, left, right) sub_function(result, left, right)
 #define zephir_pow_function(result, op1, op2) pow_function(result, op1, op2)
 #define zephir_increment(var) increment_function(var)
