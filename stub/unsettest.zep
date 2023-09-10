@@ -45,7 +45,7 @@ class Unsettest
 	public function testStdClassUnset()
 	{
 		var simpleObject;
-		let simpleObject = new \StdClass();
+		let simpleObject = new \stdClass();
 
 		let simpleObject->property1 = 12345;
 		let simpleObject->property2 = "test";

@@ -223,7 +223,7 @@ class Mcall
 		return driverOptions;
 	}
 
-	public function testObjectParamCastStdClass(<\StdClass> param)
+	public function testObjectParamCastStdClass(<\stdClass> param)
 	{
 		return param;
 	}
