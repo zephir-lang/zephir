@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Classes\Entry as ClassEntry;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
@@ -22,9 +23,11 @@ use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 
+use function array_key_exists;
 use function count;
 use function in_array;
 use function is_array;
+use function is_object;
 
 /**
  * Represents a class method
@@ -33,52 +36,15 @@ class ClassMethod
 {
     public bool $optimizable = true;
 
-    /**
-     * @var ClassDefinition|null
-     */
-    protected ?ClassDefinition $classDefinition = null;
-
-    /**
-     * @var array
-     */
-    protected array $visibility = [];
-
-    /**
-     * @var string
-     */
-    protected string $name;
-
-    /**
-     * @var ClassMethodParameters|null
-     */
-    protected ?ClassMethodParameters $parameters = null;
-
-    /**
-     * @var StatementsBlock|null
-     */
-    protected ?StatementsBlock $statements = null;
-
-    /**
-     * @var string|null
-     */
-    protected ?string $docblock = null;
-
-    /**
-     * @var Docblock|null
-     */
     protected ?Docblock $parsedDocblock = null;
 
     /**
      * Types returned by the method.
-     *
-     * @var array
      */
     protected array $returnTypes = [];
 
     /**
      * Zend MAY_BE_* types.
-     *
-     * @var array|string[]
      */
     protected array $mayBeArgTypes = [
         'int' => 'MAY_BE_LONG',
@@ -87,8 +53,6 @@ class ClassMethod
 
     /**
      * Raw-types returned by the method.
-     *
-     * @var array|null
      */
     protected ?array $returnTypesRaw = null;
 
@@ -99,8 +63,6 @@ class ClassMethod
 
     /**
      * Whether the variable is void.
-     *
-     * @var bool
      */
     protected bool $void = false;
 
@@ -108,126 +70,68 @@ class ClassMethod
      * Whether the variable is mixed.
      *
      * Only for PHP >= 8.0
-     *
-     * @var bool
      */
     protected bool $mixed = false;
 
     /**
      * Whether the method is public or not.
-     *
-     * @var bool
      */
     protected bool $isPublic = true;
 
     /**
      * Whether the method is static or not.
-     *
-     * @var bool
      */
     protected bool $isStatic = false;
 
     /**
      * Whether the method is final or not.
-     *
-     * @var bool
      */
     protected bool $isFinal = false;
 
     /**
      * Whether the method is abstract or not.
-     *
-     * @var bool
      */
     protected bool $isAbstract = false;
 
     /**
      * Whether the method is internal or not.
-     *
-     * @var bool
      */
     protected bool $isInternal = false;
 
     /**
      * Whether the method is bundled with PHP or not.
-     *
-     * @var bool
      */
     protected bool $isBundled = false;
 
     /**
      * Whether the method is an initializer or not.
-     *
-     * @var bool
      */
     protected bool $isInitializer = false;
 
-    /**
-     * @var array|null
-     */
-    protected ?array $expression = null;
-
-    /**
-     * @var array|null
-     */
-    protected ?array $staticVariables = null;
-
-    /**
-     * LocalContextPass.
-     *
-     * @var LocalContextPass|null
-     */
     protected ?LocalContextPass $localContext = null;
 
     /**
      * Static Type Inference Pass.
-     *
-     * @var StaticTypeInference|null
      */
     protected ?StaticTypeInference $typeInference = null;
 
     /**
      * Call Gatherer Pass.
-     *
-     * @var CallGathererPass|null
      */
     protected ?CallGathererPass $callGathererPass = null;
 
-    /**
-     * ClassMethod constructor.
-     *
-     * @param ClassDefinition            $classDefinition
-     * @param array                      $visibility
-     * @param string                     $name
-     * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null       $statements
-     * @param string|null                $docblock
-     * @param array|null                 $returnType
-     * @param array|null                 $expression
-     * @param array|null                 $staticVariables
-     */
     public function __construct(
-        ClassDefinition $classDefinition,
-        array $visibility,
-        string $name,
-        ?ClassMethodParameters $parameters = null,
-        ?StatementsBlock $statements = null,
-        ?string $docblock = null,
+        protected ClassDefinition $classDefinition,
+        protected array $visibility,
+        protected string $name,
+        protected ?ClassMethodParameters $parameters = null,
+        protected ?StatementsBlock $statements = null,
+        protected ?string $docblock = null,
         ?array $returnType = null,
-        ?array $expression = null,
-        ?array $staticVariables = null
+        protected ?array $expression = null,
+        protected array $staticVariables = []
     ) {
         $this->checkVisibility($visibility, $name, $expression);
-
-        $this->classDefinition = $classDefinition;
-        $this->visibility = $visibility;
-        $this->name = $name;
-        $this->parameters = $parameters;
-        $this->statements = $statements;
-        $this->docblock = $docblock;
-        $this->expression = $expression;
-        $this->staticVariables = $staticVariables;
-
         $this->setReturnTypes($returnType);
     }
 
@@ -348,8 +252,6 @@ class ClassMethod
 
     /**
      * Getter for statements block.
-     *
-     * @return StatementsBlock $statements Statements block
      */
     public function getStatementsBlock(): StatementsBlock
     {
@@ -358,8 +260,6 @@ class ClassMethod
 
     /**
      * Setter for statements block.
-     *
-     * @param StatementsBlock $statementsBlock
      */
     public function setStatementsBlock(StatementsBlock $statementsBlock): void
     {
@@ -368,8 +268,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is empty.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -378,10 +276,6 @@ class ClassMethod
 
     /**
      * Checks for visibility congruence.
-     *
-     * @param array  $visibility
-     * @param string $name
-     * @param array  $original
      *
      * @throws CompilerException
      */
@@ -432,8 +326,6 @@ class ClassMethod
 
     /**
      * Sets if the method is internal or not.
-     *
-     * @param bool $static
      */
     public function setIsStatic(bool $static): void
     {
@@ -442,8 +334,6 @@ class ClassMethod
 
     /**
      * Sets if the method is bundled or not.
-     *
-     * @param bool $bundled
      */
     public function setIsBundled(bool $bundled): void
     {
@@ -452,8 +342,6 @@ class ClassMethod
 
     /**
      * Sets if the method is an initializer or not.
-     *
-     * @param bool $initializer
      */
     public function setIsInitializer(bool $initializer): void
     {
@@ -462,8 +350,6 @@ class ClassMethod
 
     /**
      * Returns the class definition where the method was declared.
-     *
-     * @return ClassDefinition|null
      */
     public function getClassDefinition(): ?ClassDefinition
     {
@@ -473,10 +359,6 @@ class ClassMethod
     /**
      * Generate internal method's based on the equivalent PHP methods,
      * allowing bypassing php userspace for internal method calls.
-     *
-     * @param CompilationContext $compilationContext
-     *
-     * @return $this
      */
     public function setupOptimized(CompilationContext $compilationContext): self
     {
@@ -543,8 +425,6 @@ class ClassMethod
 
     /**
      * Sets the method name.
-     *
-     * @param string $name
      */
     public function setName(string $name): void
     {
@@ -553,8 +433,6 @@ class ClassMethod
 
     /**
      * Returns the method name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -571,8 +449,6 @@ class ClassMethod
 
     /**
      * Returns the parsed docblock.
-     *
-     * @return Docblock|null
      */
     public function getParsedDocBlock(): ?Docblock
     {
@@ -592,8 +468,6 @@ class ClassMethod
 
     /**
      * the starting line of the method in the source file.
-     *
-     * @return mixed
      */
     public function getLine(): mixed
     {
@@ -602,8 +476,6 @@ class ClassMethod
 
     /**
      * Returns the parameters.
-     *
-     * @return ClassMethodParameters|null
      */
     public function getParameters(): ?ClassMethodParameters
     {
@@ -612,8 +484,6 @@ class ClassMethod
 
     /**
      * Checks if the method has return-type or cast hints.
-     *
-     * @return bool
      */
     public function hasReturnTypes(): bool
     {
@@ -622,8 +492,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is null compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesNullCompatible(): bool
     {
@@ -632,8 +500,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is integer compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesIntCompatible(): bool
     {
@@ -650,8 +516,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is double compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesDoubleCompatible(): bool
     {
@@ -660,8 +524,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is bool compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesBoolCompatible(): bool
     {
@@ -670,8 +532,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is false compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesFalseCompatible(): bool
     {
@@ -680,8 +540,6 @@ class ClassMethod
 
     /**
      * Checks whether at least one return type hint is string compatible.
-     *
-     * @return bool
      */
     public function areReturnTypesStringCompatible(): bool
     {
@@ -695,8 +553,6 @@ class ClassMethod
 
     /**
      * Returned type hints by the method.
-     *
-     * @return array
      */
     public function getReturnTypes(): array
     {
@@ -705,8 +561,6 @@ class ClassMethod
 
     /**
      * Returned class-type hints by the method.
-     *
-     * @return array
      */
     public function getReturnClassTypes(): array
     {
@@ -715,8 +569,6 @@ class ClassMethod
 
     /**
      * Returns the number of parameters the method has.
-     *
-     * @return bool
      */
     public function hasParameters(): bool
     {
@@ -725,8 +577,6 @@ class ClassMethod
 
     /**
      * Returns the number of parameters the method has.
-     *
-     * @return int
      */
     public function getNumberOfParameters(): int
     {
@@ -739,8 +589,6 @@ class ClassMethod
 
     /**
      * Returns the number of required parameters the method has.
-     *
-     * @return int
      */
     public function getNumberOfRequiredParameters(): int
     {
@@ -760,10 +608,6 @@ class ClassMethod
 
     /**
      * Checks whether the method has a specific modifier.
-     *
-     * @param string $modifier
-     *
-     * @return bool
      */
     public function hasModifier(string $modifier): bool
     {
@@ -772,8 +616,6 @@ class ClassMethod
 
     /**
      * Returns method visibility modifiers.
-     *
-     * @return array
      */
     public function getVisibility(): array
     {
@@ -789,8 +631,6 @@ class ClassMethod
      * Returns the C-modifier flags.
      *
      * @throws Exception
-     *
-     * @return string
      */
     public function getModifiers(): string
     {
@@ -846,8 +686,6 @@ class ClassMethod
 
     /**
      * Checks if the method must not return any value.
-     *
-     * @return bool
      */
     public function isVoid(): bool
     {
@@ -856,8 +694,6 @@ class ClassMethod
 
     /**
      * Checks if the methods return type is `mixed`.
-     *
-     * @return bool
      */
     public function isMixed(): bool
     {
@@ -866,8 +702,6 @@ class ClassMethod
 
     /**
      * Checks if the method is private.
-     *
-     * @return bool
      */
     public function isPrivate(): bool
     {
@@ -876,8 +710,6 @@ class ClassMethod
 
     /**
      * Checks if the method is protected.
-     *
-     * @return bool
      */
     public function isProtected(): bool
     {
@@ -886,8 +718,6 @@ class ClassMethod
 
     /**
      * Checks if the method is public.
-     *
-     * @return bool
      */
     public function isPublic(): bool
     {
@@ -896,8 +726,6 @@ class ClassMethod
 
     /**
      * Checks is abstract method?
-     *
-     * @return bool
      */
     public function isAbstract(): bool
     {
@@ -906,8 +734,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is static.
-     *
-     * @return bool
      */
     public function isStatic(): bool
     {
@@ -916,8 +742,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is final.
-     *
-     * @return bool
      */
     public function isFinal(): bool
     {
@@ -926,8 +750,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is internal.
-     *
-     * @return bool
      */
     public function isInternal(): bool
     {
@@ -936,8 +758,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is bundled.
-     *
-     * @return bool
      */
     public function isBundled(): bool
     {
@@ -946,8 +766,6 @@ class ClassMethod
 
     /**
      * Checks whether the method is an initializer.
-     *
-     * @return bool
      */
     public function isInitializer(): bool
     {
@@ -956,8 +774,6 @@ class ClassMethod
 
     /**
      * Check whether the current method is a constructor.
-     *
-     * @return bool
      */
     public function isConstructor(): bool
     {
@@ -966,17 +782,12 @@ class ClassMethod
 
     /**
      * Checks if method is a shortcut.
-     *
-     * @return bool
      */
     public function isShortcut(): bool
     {
         return $this->expression && 'shortcut' === $this->expression['type'];
     }
 
-    /**
-     * @return array|string[]
-     */
     public function getMayBeArgTypes(): array
     {
         return $this->mayBeArgTypes;
@@ -984,18 +795,14 @@ class ClassMethod
 
     /**
      * Return shortcut method name.
-     *
-     * @return mixed
      */
-    public function getShortcutName()
+    public function getShortcutName(): mixed
     {
         return $this->expression['name'];
     }
 
     /**
      * Returns the call gatherer pass information.
-     *
-     * @return CallGathererPass
      */
     public function getCallGathererPass(): CallGathererPass
     {
@@ -1004,11 +811,6 @@ class ClassMethod
 
     /**
      * Replace macros.
-     *
-     * @param SymbolTable $symbolTable
-     * @param string      $containerCode
-     *
-     * @return string
      */
     public function removeMemoryStackReferences(SymbolTable $symbolTable, string $containerCode): string
     {
@@ -1036,20 +838,15 @@ class ClassMethod
         $containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
         $containerCode = str_replace('RETURN_MM_MEMBER', 'RETURN_MEMBER', $containerCode);
         $containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
-        $containerCode = preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);'.PHP_EOL.'/s', '', $containerCode);
 
-        return $containerCode;
+        return preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);'.PHP_EOL.'/s', '', $containerCode);
     }
 
     /**
      * Assigns a default value.
      *
-     * @param array              $parameter
-     * @param CompilationContext $compilationContext
-     *
-     * @return string
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext): string
     {
@@ -1268,7 +1065,7 @@ class ClassMethod
                     case 'empty-array':
                     case 'array':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
-                        $compilationContext->backend->initArray($paramVariable, $compilationContext, null);
+                        $compilationContext->backend->initArray($paramVariable, $compilationContext);
                         break;
 
                     default:
@@ -1358,7 +1155,7 @@ class ClassMethod
                         $compilationContext->symbolTable->mustGrownStack(true);
                         $compilationContext->headersManager->add('kernel/memory');
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
-                        $compilationContext->backend->initArray($symbolVariable, $compilationContext, null);
+                        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
                         break;
 
                     default:
@@ -1380,12 +1177,7 @@ class ClassMethod
      *
      * TODO: rewrite this to build ifs and throw from builders
      *
-     * @param array              $parameter
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
-     *
-     * @return string
      */
     public function checkStrictType(array $parameter, CompilationContext $compilationContext): string
     {
@@ -1408,12 +1200,7 @@ class ClassMethod
     /**
      * Assigns a zval value to a static low-level type.
      *
-     * @param array              $parameter
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
-     *
-     * @return string
      */
     public function assignZvalValue(array $parameter, CompilationContext $compilationContext): string
     {
@@ -1463,8 +1250,6 @@ class ClassMethod
     /**
      * Pre-compiles the method making compilation pass data (static inference, local-context-pass) available to other methods.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      */
     public function preCompile(CompilationContext $compilationContext): void
@@ -1473,7 +1258,7 @@ class ClassMethod
         $typeInference = null;
         $callGathererPass = null;
 
-        if (\is_object($this->statements)) {
+        if (is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
 
             /**
@@ -1516,9 +1301,8 @@ class ClassMethod
     /**
      * Compiles the method.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -1555,16 +1339,14 @@ class ClassMethod
             $symbolTable->setLocalContext($this->localContext);
         }
 
-        if ($this->staticVariables !== null) {
-            foreach ($this->staticVariables as $var) {
-                $localVar = clone $var;
-                $localVar->setIsExternal(true);
-                $localVar->setLocalOnly(true);
-                $localVar->setDynamicTypes($localVar->getType());
-                $localVar->setType('variable');
-                $localVar->setIsDoublePointer(false);
-                $symbolTable->addRawVariable($localVar);
-            }
+        foreach ($this->staticVariables as $var) {
+            $localVar = clone $var;
+            $localVar->setIsExternal(true);
+            $localVar->setLocalOnly(true);
+            $localVar->setDynamicTypes($localVar->getType());
+            $localVar->setType('variable');
+            $localVar->setIsDoublePointer(false);
+            $symbolTable->addRawVariable($localVar);
         }
 
         /**
@@ -1610,7 +1392,6 @@ class ClassMethod
             /**
              * Round 1. Create variables in parameters in the symbol table.
              */
-            $classCastChecks = [];
             $substituteVars = [];
             foreach ($this->parameters->getParameters() as $parameter) {
                 $symbolParam = null;
@@ -1656,12 +1437,12 @@ class ClassMethod
                  */
                 if (!empty($parameter['const'])) {
                     $symbol->setReadOnly(true);
-                    if (\is_object($symbolParam)) {
+                    if (is_object($symbolParam)) {
                         $symbolParam->setReadOnly(true);
                     }
                 }
 
-                if (\is_object($symbolParam)) {
+                if (is_object($symbolParam)) {
                     /**
                      * Parameters are marked as 'external'
                      */
@@ -1731,7 +1512,7 @@ class ClassMethod
         /**
          * Compile the block of statements if any
          */
-        if (\is_object($this->statements)) {
+        if (is_object($this->statements)) {
             $compilationContext->staticContext = $this->hasModifier('static');
 
             /**
@@ -1770,7 +1551,7 @@ class ClassMethod
              * variable is modified so as do the proper separation.
              */
             $parametersToSeparate = [];
-            if (\is_object($this->statements)) {
+            if (is_object($this->statements)) {
                 if (!$this->localContext instanceof LocalContextPass) {
                     $writeDetector = new WriteDetector();
                 }
@@ -1838,19 +1619,10 @@ class ClassMethod
                 $mandatory = $parameter['mandatory'] ?? 0;
                 $dataType = $this->getParamDataType($parameter);
 
-                switch ($dataType) {
-                    case 'object':
-                    case 'callable':
-                    case 'resource':
-                    case 'variable':
-                    case 'mixed':
-                        $name = $parameter['name'];
-                        break;
-
-                    default:
-                        $name = $parameter['name'].'_param';
-                        break;
-                }
+                $name = match ($dataType) {
+                    'object', 'callable', 'resource', 'variable', 'mixed' => $parameter['name'],
+                    default => $parameter['name'] . '_param',
+                };
 
                 /**
                  * Assign the default value according to the variable's type.
@@ -1871,7 +1643,7 @@ class ClassMethod
                         $initCode .= "\t\t".'ZEPHIR_SEPARATE_PARAM('.$name.');'.PHP_EOL;
                     } else {
                         if ($mandatory) {
-                            $initCode .= $this->checkStrictType($parameter, $compilationContext, $mandatory);
+                            $initCode .= $this->checkStrictType($parameter, $compilationContext);
                         } else {
                             $initCode .= "\t".$this->assignZvalValue($parameter, $compilationContext);
                         }
@@ -1954,16 +1726,11 @@ class ClassMethod
          * Check if there are unused variables.
          */
         $usedVariables = [];
-        $classDefinition = $this->getClassDefinition();
-        if ($classDefinition) {
-            $completeName = $classDefinition->getCompleteName();
-        } else {
-            $completeName = '[unknown]';
-        }
+        $completeName = $this->getClassDefinition()?->getCompleteName() ?: '[unknown]';
 
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
-                if (false == $variable->isExternal()) {
+                if (!$variable->isExternal()) {
                     $compilationContext->logger->warning(
                         'Variable "'.$variable->getName().'" declared but not used in '.$completeName.'::'.$this->getName(),
                         ['unused-variable', $variable->getOriginal()]
@@ -2072,7 +1839,7 @@ class ClassMethod
         /**
          * Finalize the method compilation
          */
-        if (\is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
+        if (is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed.
@@ -2119,10 +1886,6 @@ class ClassMethod
 
     /**
      * Simple method to check if one of the paths are returning the right expected type.
-     *
-     * @param array $statement
-     *
-     * @return bool
      */
     public function hasChildReturnStatementType(array $statement): bool
     {
@@ -2164,9 +1927,6 @@ class ClassMethod
         return false;
     }
 
-    /**
-     * @return string
-     */
     public function getInternalName(): string
     {
         $classDefinition = $this->getClassDefinition();
@@ -2176,10 +1936,6 @@ class ClassMethod
 
     /**
      * Returns arginfo name for current method.
-     *
-     * @param ClassDefinition|null $classDefinition
-     *
-     * @return string
      */
     public function getArgInfoName(?ClassDefinition $classDefinition = null): string
     {
@@ -2207,13 +1963,11 @@ class ClassMethod
      *
      * - TRUE: function foo() -> void;
      * - TRUE: function foo() -> null;
-     * - TRUE: function foo() -> bool|string|..;
+     * - TRUE: function foo() -> bool|string|...;
      * - TRUE: function foo() -> <\stdClass>;
      * - FALSE: function foo();
      * - FALSE: function foo() -> var;
      * - FALSE: function foo() -> resource|callable;
-     *
-     * @return bool
      */
     public function isReturnTypesHintDetermined(): bool
     {
@@ -2241,7 +1995,7 @@ class ClassMethod
                     $this->areReturnTypesStringCompatible() ||
                     $this->areReturnTypesFalseCompatible() ||
                     $this->areReturnTypesObjectCompatible() ||
-                    \array_key_exists('array', $this->getReturnTypes())
+                    array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
                 }
@@ -2260,18 +2014,16 @@ class ClassMethod
 
     /**
      * Checks if method's return type is nullable object `?object`.
-     *
-     * @return bool
      */
     public function isReturnTypeNullableObject(): bool
     {
-        return count($this->returnTypes) === 2 && isset($this->returnTypes['object']) && isset($this->returnTypes['null']);
+        return count($this->returnTypes) === 2 &&
+               isset($this->returnTypes['object']) &&
+               isset($this->returnTypes['null']);
     }
 
     /**
      * Checks if method's return type is object `object`.
-     *
-     * @return bool
      */
     public function isReturnTypeObject(): bool
     {
@@ -2280,8 +2032,6 @@ class ClassMethod
 
     /**
      * Checks if the method have compatible return types.
-     *
-     * @return bool
      */
     public function areReturnTypesCompatible(): bool
     {
@@ -2315,11 +2065,6 @@ class ClassMethod
 
     /**
      * Determine Z_PARAM_*
-     *
-     * @param array              $parameter
-     * @param CompilationContext $compilationContext
-     *
-     * @return string
      *
      * @throws Exception
      */
@@ -2428,10 +2173,6 @@ class ClassMethod
 
     /**
      * Get data type of method's parameter
-     *
-     * @param array $parameter
-     *
-     * @return string
      */
     private function getParamDataType(array $parameter): string
     {
