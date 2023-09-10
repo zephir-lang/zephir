@@ -21,6 +21,7 @@ use RecursiveIteratorIterator;
 use ReflectionException;
 use Zephir\Backend\Backend;
 use Zephir\Backend\StringsManager;
+use Zephir\Class\ClassDefinition;
 use Zephir\Code\Builder\Struct;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Compiler\FileInterface;

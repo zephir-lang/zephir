@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\CodePrinter;
 use Zephir\CompilationContext;
@@ -27,7 +27,6 @@ use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable;
 use Zephir\Variable\Globals;
-
 use function in_array;
 use function strlen;
 use function Zephir\add_slashes;

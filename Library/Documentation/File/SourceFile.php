@@ -11,7 +11,7 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\Documentation;
 
 class SourceFile extends ClassFile

@@ -16,7 +16,7 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 use Zephir\Branch;
 use Zephir\BranchManager;
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;

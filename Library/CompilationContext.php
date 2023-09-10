@@ -16,9 +16,9 @@ namespace Zephir;
 use Psr\Log\LoggerInterface;
 use Zephir\Backend\Backend;
 use Zephir\Cache\FunctionCache;
+use Zephir\Class\ClassDefinition;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
-
 use function in_array;
 
 /**

@@ -13,6 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Zephir\Class\ClassDefinition;
 use Zephir\Documentation\File;
 use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;

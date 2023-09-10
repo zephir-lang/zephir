@@ -11,7 +11,7 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Documentation;

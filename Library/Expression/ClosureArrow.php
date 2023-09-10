@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\CompilationContext;

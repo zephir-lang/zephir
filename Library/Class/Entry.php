@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Class;
 
 use ReflectionClass;
-use Zephir\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 
@@ -26,8 +25,6 @@ class Entry
     public const NAMESPACE_SEPARATOR = '\\';
 
     /**
-     * Class name
-     *
      * As it was passed: partially or fully.
      */
     private string $classname;

@@ -3,7 +3,7 @@
  * @var string $fullName
  * @var string $className
  * @var array $namespacePieces
- * @var Zephir\ClassDefinition $classDefinition
+ * @var \Zephir\Class\ClassDefinition $classDefinition
  * @var Zephir\CompilerFile $compilerFile
  */
 
@@ -17,7 +17,7 @@ $items = [
 <?= $this->partial('partials/breadcrumb.phtml', ['items'=> $items]) ?>
 
 <div class="class-header source clearfix">
-    
+
     <div class="access-buttons">
         <a class="zep-button" href="<?= $this->url($classDefinition) ?>">Class</a>
 
@@ -28,10 +28,10 @@ $items = [
         </a>
         <?php endif; ?>
     </div>
-    
+
     <div class="class-full-name">
         <span class="class-type">Class</span>
-        
+
         <?php foreach ($namespacePieces as $nsname => $nspath): ?>
         <span class="namespace-piece">
             <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>"><?=$nsname?></a>
@@ -40,7 +40,7 @@ $items = [
 
         <h1 class="class-name"><?= $className ?></h1>
     </div>
-    
+
 </div>
 
 <pre class="zephir-source-file prettyprint linenums">

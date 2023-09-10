@@ -12,11 +12,11 @@
 namespace Zephir;
 
 use ReflectionException;
+use Zephir\Class\ClassDefinition;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\Expression\Builder\Statements\LetStatement as ExpressionLetStatement;
-
 use function in_array;
 use function is_array;
 

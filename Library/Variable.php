@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Zephir;
 
 use ReflectionClass;
+use Zephir\Class\ClassDefinition;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Globals;
-
 use function in_array;
 use function is_string;
 

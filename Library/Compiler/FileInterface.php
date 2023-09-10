@@ -11,7 +11,7 @@
 
 namespace Zephir\Compiler;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\Compiler;
 
 /**

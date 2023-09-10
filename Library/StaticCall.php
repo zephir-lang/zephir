@@ -12,9 +12,9 @@
 namespace Zephir;
 
 use ReflectionException;
+use Zephir\Class\ClassDefinition;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
-
 use function count;
 use function in_array;
 use function is_string;

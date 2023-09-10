@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\Types;
 

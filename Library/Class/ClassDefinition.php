@@ -11,24 +11,33 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class;
 
 use ReflectionClass;
 use ReflectionException;
-use Zephir\Class\ClassConstant;
-use Zephir\Class\Entry;
+use Zephir\AbstractClassDefinition;
+use Zephir\AliasManager;
+use Zephir\ArgInfoDefinition;
+use Zephir\ClassDefinitionRuntime;
+use Zephir\ClassMethod;
+use Zephir\ClassMethodParameters;
+use Zephir\ClassProperty;
+use Zephir\CodePrinter;
+use Zephir\CompilationContext;
+use Zephir\Compiler;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidArgumentException;
+use Zephir\HeadersManager;
+use Zephir\StatementsBlock;
 use function count;
 use function gettype;
 use function is_array;
 use const DIRECTORY_SEPARATOR;
 
 /**
- * Class Definition
- *
  * Represents a class/interface and their properties and methods.
  */
 final class ClassDefinition extends AbstractClassDefinition

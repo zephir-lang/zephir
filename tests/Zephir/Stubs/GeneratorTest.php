@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use Zephir\AliasManager;
 use Zephir\Class\ClassConstant;
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\ClassProperty;

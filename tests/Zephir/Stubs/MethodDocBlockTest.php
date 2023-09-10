@@ -15,7 +15,7 @@ namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\ClassMethod;
 use Zephir\ClassMethodParameters;
 use Zephir\StatementsBlock;

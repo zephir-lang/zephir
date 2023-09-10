@@ -4,7 +4,7 @@
  * @var string $className
  * @var array $methods
  * @var string[] $namespacePieces
- * @var Zephir\ClassDefinition $classDefinition
+ * @var \Zephir\Class\ClassDefinition $classDefinition
  * @var Zephir\CompilerFile $compilerFile
  */
 
@@ -27,10 +27,10 @@ $items = [
         </a>
         <?php } ?>
     </div>
-    
+
     <div class="class-full-name">
         <span class="class-type">Class</span>
-        
+
         <?php foreach ($namespacePieces as $nsname => $nspath) { ?>
         <span class="namespace-piece">
             <a href="<?= $this->url(Zephir\Documentation::namespaceUrl($nspath)) ?>">

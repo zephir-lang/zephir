@@ -15,7 +15,7 @@ namespace Zephir\Cache;
 
 use ReflectionClass;
 use ReflectionException;
-use Zephir\ClassDefinition;
+use Zephir\Class\ClassDefinition;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Variable;
