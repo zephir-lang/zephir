@@ -29,7 +29,7 @@ class FunctionDefinition extends ClassMethod
         protected ?ClassMethodParameters $parameters = null,
         protected ?StatementsBlock $statements = null,
         array $returnType = null,
-        protected array $expression = [],
+        protected ?array $expression = [],
     ) {
         $this->setReturnTypes($returnType);
     }
