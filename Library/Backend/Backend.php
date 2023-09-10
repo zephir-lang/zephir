@@ -15,7 +15,7 @@ namespace Zephir\Backend;
 
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
-use Zephir\CodePrinter;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Compiler;
@@ -435,7 +435,7 @@ class Backend
      */
     public function initializeVariableDefaults(array $variables, CompilationContext $context): string
     {
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
         $codePrinter->increaseLevel();
 
         $oldCodePrinter = $context->codePrinter;

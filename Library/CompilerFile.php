@@ -16,12 +16,13 @@ namespace Zephir;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 use ReflectionException;
-use Zephir\Class\Property;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Definition\DefinitionRuntime;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
+use Zephir\Code\Printer;
 use Zephir\Compiler\FileInterface;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception\CompilerException;
@@ -794,7 +795,7 @@ final class CompilerFile implements FileInterface
         /**
          * Main code-printer for the file.
          */
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
         $compilationContext->codePrinter = $codePrinter;
 
         /**

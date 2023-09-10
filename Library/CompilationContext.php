@@ -15,11 +15,12 @@ namespace Zephir;
 
 use Psr\Log\LoggerInterface;
 use Zephir\Backend\Backend;
-use Zephir\Cache\Manager;
 use Zephir\Cache\FunctionCache;
+use Zephir\Cache\Manager;
 use Zephir\Class\Definition\AbstractDefinition;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
+use Zephir\Code\Printer;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 use function in_array;
@@ -34,7 +35,7 @@ class CompilationContext
     /**
      * Current code printer.
      */
-    public ?CodePrinter $codePrinter = null;
+    public ?Printer $codePrinter = null;
 
     /**
      * Whether the current method is static or not.
@@ -44,7 +45,7 @@ class CompilationContext
     /**
      * Code printer for the header.
      */
-    public ?CodePrinter $headerPrinter = null;
+    public ?Printer $headerPrinter = null;
 
     /**
      * Current symbol table.

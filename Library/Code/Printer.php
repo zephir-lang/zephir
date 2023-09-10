@@ -11,12 +11,12 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Code;
 
 /**
  * Buffers code, making it look pretty
  */
-class CodePrinter
+class Printer
 {
     protected string $code = '';
 
@@ -40,8 +40,6 @@ class CodePrinter
 
     /**
      * Add code to the output without indentation.
-     *
-     * @param string $code
      */
     public function outputNoIndent(string $code): void
     {
@@ -52,9 +50,6 @@ class CodePrinter
 
     /**
      * Add code to the output.
-     *
-     * @param string $code
-     * @param bool   $appendEOL
      */
     public function output(string $code, bool $appendEOL = true): void
     {
@@ -65,9 +60,6 @@ class CodePrinter
 
     /**
      * Adds a comment to the output with indentation level.
-     *
-     * @param $docblock
-     * @param bool $replaceTab
      */
     public function outputDocBlock($docblock, bool $replaceTab = true): void
     {
@@ -91,8 +83,6 @@ class CodePrinter
      * Adds a blank line to the output
      * Optionally controlling if the blank link must be added if the
      * previous line added isn't one blank line too.
-     *
-     * @param bool $ifPrevNotBlank
      */
     public function preOutputBlankLine(bool $ifPrevNotBlank = false): void
     {
@@ -113,8 +103,6 @@ class CodePrinter
      * Adds a blank line to the output
      * Optionally controlling if the blank link must be added if the
      * previous line added isn't one blank line too.
-     *
-     * @param bool $ifPrevNotBlank
      */
     public function outputBlankLine(bool $ifPrevNotBlank = false): void
     {
@@ -149,8 +137,6 @@ class CodePrinter
 
     /**
      * Returns the output in the buffer.
-     *
-     * @return string
      */
     public function getOutput(): string
     {
@@ -159,8 +145,6 @@ class CodePrinter
 
     /**
      * Returns an approximate number of lines printed by the CodePrinter.
-     *
-     * @return int
      */
     public function getNumberPrints(): int
     {

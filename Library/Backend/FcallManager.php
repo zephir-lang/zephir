@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
-use Zephir\CodePrinter;
+use Zephir\Code\Printer;
 use Zephir\Fcall\FcallManagerInterface;
-
 use function Zephir\file_put_contents_ex;
 
 class FcallManager implements FcallManagerInterface
@@ -54,7 +53,7 @@ class FcallManager implements FcallManagerInterface
 
     public function genFcallCode(): void
     {
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
 
         $header = <<<HEAD
 /*

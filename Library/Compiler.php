@@ -22,7 +22,9 @@ use ReflectionException;
 use Zephir\Backend\Backend;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\Definition;
+use Zephir\Code\ArgInfoDefinition;
 use Zephir\Code\Builder\Struct;
+use Zephir\Code\Printer;
 use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Compiler\FileInterface;
 use Zephir\Exception\CompilerException;
@@ -1822,8 +1824,8 @@ final class Compiler
 
     public function generateFunctionInformation(): array
     {
-        $headerPrinter = new CodePrinter();
-        $entryPrinter = new CodePrinter();
+        $headerPrinter = new Printer();
+        $entryPrinter = new Printer();
 
         /**
          * Specifying Argument Information

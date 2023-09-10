@@ -19,7 +19,7 @@ use Zephir\BranchManager;
 use Zephir\Cache\Manager;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Entry as ClassEntry;
-use Zephir\CodePrinter;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\Detectors\WriteDetector;
 use Zephir\Documentation\Docblock;
@@ -875,7 +875,7 @@ class Method
         }
 
         $oldCodePrinter = $compilationContext->codePrinter;
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
         $codePrinter->increaseLevel();
         $codePrinter->increaseLevel();
         $compilationContext->codePrinter = $codePrinter;
@@ -1201,7 +1201,7 @@ class Method
         $compilationContext->headersManager->add('ext/spl/spl_exceptions');
         $compilationContext->headersManager->add('kernel/exception');
 
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
         $codePrinter->increaseLevel();
         $oldCodePrinter = $compilationContext->codePrinter;
         $compilationContext->codePrinter = $codePrinter;
@@ -1388,7 +1388,7 @@ class Method
         /**
          * Change the code printer to a single method instance.
          */
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
         $compilationContext->codePrinter = $codePrinter;
 
         /**
@@ -1683,7 +1683,7 @@ class Method
             } else {
                 foreach ($params as $param) {
                     /* TODO: Migrate all this code to codeprinter, get rid of temp code printer */
-                    $tempCodePrinter = new CodePrinter();
+                    $tempCodePrinter = new Printer();
                     $realCodePrinter = $compilationContext->codePrinter;
                     $compilationContext->codePrinter = $tempCodePrinter;
                     $paramVar = $compilationContext->symbolTable->getVariableForRead($param, $compilationContext);
@@ -1806,7 +1806,7 @@ class Method
         /**
          * ZEND_PARSE_PARAMETERS
          */
-        $tempCodePrinter = new CodePrinter();
+        $tempCodePrinter = new Printer();
         if ($this->parameters instanceof Parameters && $this->parameters->count() > 0) {
             $tempCodePrinter->output('#if PHP_VERSION_ID >= 80000');
             $tempCodePrinter->output("\t".'bool is_null_true = 1;');

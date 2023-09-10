@@ -16,13 +16,13 @@ namespace Zephir\Class\Definition;
 use ReflectionClass;
 use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\ArgInfoDefinition;
-use Zephir\Class\Property;
 use Zephir\Class\Constant;
 use Zephir\Class\Entry;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
-use Zephir\CodePrinter;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
+use Zephir\Code\ArgInfoDefinition;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Documentation\Docblock;
@@ -1088,7 +1088,7 @@ final class Definition extends AbstractDefinition
         /**
          * Create a code printer for the header file.
          */
-        $codePrinter = new CodePrinter();
+        $codePrinter = new Printer();
 
         $codePrinter->outputBlankLine();
         $codePrinter->output($exportAPI.' zend_class_entry *'.$this->getClassEntry().';');

@@ -15,13 +15,12 @@ namespace Zephir\Statements;
 
 use ReflectionException;
 use Zephir\Class\Entry;
-use Zephir\CodePrinter;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-
 use function in_array;
 use function Zephir\add_slashes;
 use function Zephir\fqcn;
@@ -142,12 +141,12 @@ class ThrowStatement extends StatementAbstract
     /**
      * Throws an exception escaping the data.
      *
-     * @param CodePrinter $printer
+     * @param Printer $printer
      * @param string      $class
      * @param string      $message
      * @param array       $expression
      */
-    private function throwStringException(CodePrinter $printer, string $class, string $message, array $expression): void
+    private function throwStringException(Printer $printer, string $class, string $message, array $expression): void
     {
         $message = add_slashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
