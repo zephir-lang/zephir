@@ -183,8 +183,6 @@ final class Compiler
     /**
      * Resolves path to the internal optimizers.
      *
-     * @return string
-     *
      * @throws IllegalStateException in case of absence internal optimizers directory
      */
     private function resolveOptimizersPath(): ?string
@@ -834,16 +832,16 @@ final class Compiler
         }
 
         $currentDir = getcwd();
-        if (file_exists("{$currentDir}/compile.log")) {
-            unlink("{$currentDir}/compile.log");
+        if (file_exists("$currentDir/compile.log")) {
+            unlink("$currentDir/compile.log");
         }
 
-        if (file_exists("{$currentDir}/compile-errors.log")) {
-            unlink("{$currentDir}/compile-errors.log");
+        if (file_exists("$currentDir/compile-errors.log")) {
+            unlink("$currentDir/compile-errors.log");
         }
 
-        if (file_exists("{$currentDir}/ext/modules/{$namespace}.so")) {
-            unlink("{$currentDir}/ext/modules/{$namespace}.so");
+        if (file_exists("$currentDir/ext/modules/{$namespace}.so")) {
+            unlink("$currentDir/ext/modules/{$namespace}.so");
         }
 
         if (is_windows()) {

@@ -32,16 +32,10 @@ final class CompilerFileFactory
      * Creates CompilerFile instance.
      *
      * NOTE: Each instance of CompilerFile must have its own AliasManager instance.
-     *
-     * @param string $className
-     * @param string $filePath
-     *
-     * @return FileInterface
      */
     public function create(string $className, string $filePath): FileInterface
     {
         $compiler = new CompilerFile($this->config, new AliasManager(), $this->filesystem);
-
         $compiler->setClassName($className);
         $compiler->setFilePath($filePath);
         $compiler->setLogger($this->logger);

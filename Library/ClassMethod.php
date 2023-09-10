@@ -120,17 +120,24 @@ class ClassMethod
      */
     protected ?CallGathererPass $callGathererPass = null;
 
+    protected array $staticVariables = [];
+
+    protected ?ClassDefinition $classDefinition = null;
+
     public function __construct(
-        protected ClassDefinition $classDefinition,
+        ClassDefinition $classDefinition,
         protected array $visibility,
         protected string $name,
         protected ?ClassMethodParameters $parameters = null,
         protected ?StatementsBlock $statements = null,
         protected ?string $docblock = null,
         ?array $returnType = null,
-        protected ?array $expression = null,
-        protected array $staticVariables = []
+        protected ?array $expression = [],
+        array $staticVariables = [],
     ) {
+        $this->classDefinition = $classDefinition;
+        $this->staticVariables = $staticVariables;
+
         $this->checkVisibility($visibility, $name, $expression);
         $this->setReturnTypes($returnType);
     }
@@ -237,9 +244,6 @@ class ClassMethod
         }
     }
 
-    /**
-     * @return array
-     */
     public function getReturnTypesRaw(): array
     {
         return $this->returnTypesRaw;

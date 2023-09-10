@@ -29,27 +29,19 @@ class Entry
      * Class name
      *
      * As it was passed: partially or fully.
-     *
-     * @var string
      */
     private string $classname;
 
-    /**
-     * @var bool
-     */
     private bool $isInternal = false;
 
     /**
      * Loaded via config/class-entries.php
-     *
-     * @var array
      */
     private array $classEntries;
 
     public function __construct(string $className, private CompilationContext $compilationContext)
     {
         $this->classname = $this->compilationContext->getFullName($className);
-
         $this->classEntries = require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'config/class-entries.php';
 
         foreach ($this->classEntries as $key => $val) {
@@ -59,8 +51,6 @@ class Entry
     }
 
     /**
-     * @return string
-     *
      * @throws Exception
      */
     public function get(): string
@@ -129,12 +119,7 @@ class Entry
     }
 
     /**
-     * Detect if start of namespace class
-     * belongs to project namespace.
-     *
-     * @param string $className
-     *
-     * @return bool
+     * Detect if start of namespace class belongs to project namespace.
      */
     private function isInternalClass(string $className): bool
     {

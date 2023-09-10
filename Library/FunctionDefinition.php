@@ -20,34 +20,17 @@ class FunctionDefinition extends ClassMethod
 {
     /**
      * Whether the function is declared in a global or namespaced scope.
-     *
-     * @var bool
      */
     private bool $isGlobal = false;
 
-    /**
-     * FunctionDefinition constructor.
-     *
-     * @param string                     $namespace The namespace of the function.
-     * @param string                     $name
-     * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null       $statements
-     * @param array|null                 $returnType
-     * @param array|null                 $expression
-     */
     public function __construct(
         private string $namespace,
-        string $name,
-        ClassMethodParameters $parameters = null,
-        StatementsBlock $statements = null,
+        protected string $name,
+        protected ?ClassMethodParameters $parameters = null,
+        protected ?StatementsBlock $statements = null,
         array $returnType = null,
-        array $expression = null
+        protected array $expression = [],
     ) {
-        $this->name = $name;
-        $this->parameters = $parameters;
-        $this->statements = $statements;
-        $this->expression = $expression;
-
         $this->setReturnTypes($returnType);
     }
 

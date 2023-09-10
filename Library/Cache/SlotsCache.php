@@ -55,10 +55,6 @@ class SlotsCache
 
     /**
      * Returns or creates a cache slot for a function.
-     *
-     * @param string $functionName
-     *
-     * @return int
      */
     public static function getExistingFunctionSlot(string $functionName): int
     {
@@ -67,10 +63,6 @@ class SlotsCache
 
     /**
      * Returns or creates a cache slot for a method.
-     *
-     * @param ClassMethod $method
-     *
-     * @return int
      */
     public static function getMethodSlot(ClassMethod $method): int
     {
@@ -93,10 +85,6 @@ class SlotsCache
 
     /**
      * Returns a cache slot for a method.
-     *
-     * @param ClassMethod $method
-     *
-     * @return int
      */
     public static function getExistingMethodSlot(ClassMethod $method): int
     {

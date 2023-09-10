@@ -43,12 +43,6 @@ class FunctionCache
 
     /**
      * Retrieves/Creates a function cache for a function call.
-     *
-     * @param string             $functionName
-     * @param CompilationContext $compilationContext
-     * @param bool               $exists
-     *
-     * @return string
      */
     public function get(string $functionName, CompilationContext $compilationContext, bool $exists): string
     {

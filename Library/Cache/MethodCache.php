@@ -48,12 +48,6 @@ class MethodCache
     /**
      * Retrieves/Creates a function cache for a method call.
      *
-     * @param CompilationContext $compilationContext
-     * @param string             $methodName
-     * @param Variable           $caller
-     *
-     * @return string
-     *
      * @throws ReflectionException
      */
     public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
@@ -62,7 +56,7 @@ class MethodCache
 
         $numberPoly = 0;
 
-        if ('this' == $caller->getRealName()) {
+        if ('this' === $caller->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if ($classDefinition->hasMethod($methodName)) {
                 ++$numberPoly;
@@ -141,7 +135,7 @@ class MethodCache
             $cacheable = false;
         }
 
-        if ('this_ptr' != $caller->getName()) {
+        if ('this_ptr' !== $caller->getName()) {
             $associatedClass = $caller->getAssociatedClass();
             if ($this->isClassCacheable($associatedClass)) {
                 $staticCacheable = true;

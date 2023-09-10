@@ -29,8 +29,6 @@ class Struct
      *     key value;
      * }
      * ```
-     *
-     * @var array
      */
     protected array $properties = [];
 
@@ -157,12 +155,7 @@ class Struct
 
     /**
      * Generates the internal c-type according to the php's type.
-     *
-     * @param string $type
-     *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     protected function convertToCType(string $type): string
     {

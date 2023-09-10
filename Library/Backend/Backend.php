@@ -29,6 +29,7 @@ use Zephir\Variable;
 use Zephir\Variable\Globals;
 
 use function in_array;
+use function strlen;
 use function Zephir\add_slashes;
 
 class Backend
@@ -398,8 +399,9 @@ class Backend
                     break;
 
                 case 'char':
-                    if (\strlen($defaultValue) > 4) {
-                        if (\strlen($defaultValue) > 10) {
+                    $defaultValue = (string)$defaultValue;
+                    if (strlen($defaultValue) > 4) {
+                        if (strlen($defaultValue) > 10) {
                             throw new CompilerException("Invalid char literal: '".substr($defaultValue, 0, 10)."...'", $variable->getOriginal());
                         } else {
                             throw new CompilerException("Invalid char literal: '".$defaultValue."'", $variable->getOriginal());

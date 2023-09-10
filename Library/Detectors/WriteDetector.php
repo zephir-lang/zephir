@@ -38,11 +38,6 @@ class WriteDetector
 
     /**
      * Do the detection pass on a single variable.
-     *
-     * @param string $variable
-     * @param array  $statements
-     *
-     * @return bool
      */
     public function detect(string $variable, array $statements): bool
     {
@@ -53,8 +48,6 @@ class WriteDetector
 
     /**
      * Sets detection flags.
-     *
-     * @param int $flags
      */
     public function setDetectionFlags(int $flags): void
     {
@@ -63,10 +56,6 @@ class WriteDetector
 
     /**
      * Increase the number of mutations a variable has inside a statement block.
-     *
-     * @param string $variable
-     *
-     * @return WriteDetector
      */
     public function increaseMutations(string $variable): self
     {
@@ -81,10 +70,6 @@ class WriteDetector
 
     /**
      * Returns the number of assignment instructions that mutated a variable.
-     *
-     * @param string $variable
-     *
-     * @return int
      */
     public function getNumberOfMutations(string $variable): int
     {
@@ -93,8 +78,6 @@ class WriteDetector
 
     /**
      * Pass let statements.
-     *
-     * @param array $statement
      */
     public function passLetStatement(array $statement): void
     {
@@ -116,8 +99,6 @@ class WriteDetector
 
     /**
      * Pass call expressions.
-     *
-     * @param array $expression
      */
     public function passCall(array $expression): void
     {
@@ -135,8 +116,6 @@ class WriteDetector
 
     /**
      * Pass array expressions.
-     *
-     * @param array $expression
      */
     public function passArray(array $expression): void
     {
@@ -152,8 +131,6 @@ class WriteDetector
 
     /**
      * Pass "new" expressions.
-     *
-     * @param array $expression
      */
     public function passNew(array $expression): void
     {
@@ -171,8 +148,6 @@ class WriteDetector
 
     /**
      * Pass "declare" statement.
-     *
-     * @param array $statement
      */
     public function declareVariables(array $statement): void
     {
@@ -195,8 +170,6 @@ class WriteDetector
 
     /**
      * Pass expressions.
-     *
-     * @param array $expression
      */
     public function passExpression(array $expression): void
     {
@@ -299,8 +272,6 @@ class WriteDetector
 
     /**
      * Pass statement block.
-     *
-     * @param array $statements
      */
     public function passStatementBlock(array $statements): void
     {

@@ -18,14 +18,6 @@ namespace Zephir\Builder;
  */
 class FunctionCallBuilder
 {
-    /**
-     * @param string      $name
-     * @param array       $parameters
-     * @param int         $type
-     * @param string|null $file
-     * @param int         $line
-     * @param int         $char
-     */
     public function __construct(
         protected string $name,
         protected array $parameters,
@@ -36,9 +28,6 @@ class FunctionCallBuilder
     ) {
     }
 
-    /**
-     * @return array
-     */
     public function get(): array
     {
         return [

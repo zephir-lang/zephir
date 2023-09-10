@@ -30,22 +30,16 @@ class Reference
 {
     /**
      * Expecting the value
-     *
-     * @var bool
      */
     protected bool $expecting = true;
 
     /**
      * Result of the evaluated expression is read only or not
-     *
-     * @var bool
      */
     protected bool $readOnly = false;
 
     /**
      * Expecting variable
-     *
-     * @var Variable|null
      */
     protected ?Variable $expectingVariable = null;
 
@@ -82,11 +76,6 @@ class Reference
 
     /**
      * Compiles a reference to a value.
-     *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
      *
      * @throws Exception
      * @throws ReflectionException

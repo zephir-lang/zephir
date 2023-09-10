@@ -12,7 +12,6 @@
 namespace Zephir\Cache;
 
 use ReflectionMethod;
-use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 
 /**
@@ -36,16 +35,7 @@ class StaticMethodCache
 {
     protected array $cache = [];
 
-    /**
-     * MethodCache.
-     *
-     * @param CompilationContext                $compilationContext
-     * @param ClassMethod|ReflectionMethod|null $method
-     * @param bool                              $allowNtsCache
-     *
-     * @return string
-     */
-    public function get(CompilationContext $compilationContext, $method, bool $allowNtsCache = true): string
+    public function get(CompilationContext $compilationContext, $method): string
     {
         if ($method === null) {
             return 'NULL, 0';
