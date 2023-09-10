@@ -15,7 +15,6 @@ namespace Zephir\Backend;
 
 use Zephir\StringsManager as BaseStringsManager;
 
-use function strlen;
 use function Zephir\file_put_contents_ex;
 
 /**
@@ -61,7 +60,7 @@ class StringsManager extends BaseStringsManager
         $macros = [];
         ksort($this->concatKeys, SORT_STRING);
         foreach ($this->concatKeys as $key => $one) {
-            $len = strlen($key);
+            $len = \strlen($key);
             $params = [];
             $zvalCopy = [];
             $useCopy = [];

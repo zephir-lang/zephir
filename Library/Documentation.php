@@ -236,9 +236,9 @@ class Documentation
      * @param array       $themeConfig
      * @param string|null $options
      *
-     * @throws Exception
-     *
      * @return array
+     *
+     * @throws Exception
      */
     private function prepareThemeOptions($themeConfig, $options = null)
     {
@@ -307,10 +307,10 @@ class Documentation
      * @param array       $themeConfig
      * @param string|null $path
      *
+     * @return string|null
+     *
      * @throws InvalidArgumentException
      * @throws ConfigException
-     *
-     * @return string|null
      */
     private function findThemeDirectory($themeConfig, $path = null)
     {

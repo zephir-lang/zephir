@@ -18,6 +18,7 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Variable\Variable as ZephirVariable;
+
 use function Zephir\add_slashes;
 
 /**
@@ -115,10 +116,10 @@ class Variable
      * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doNumericAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        string             $variable,
-        array              $statement,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext
     ) {
         switch ($resolvedExpr->getType()) {
@@ -347,10 +348,10 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doDoubleAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        string             $variable,
-        array              $statement,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext
     ) {
         switch ($resolvedExpr->getType()) {
@@ -528,11 +529,11 @@ class Variable
      * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doStringAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable     $symbolVariable,
-        string             $variable,
-        array              $statement,
+        ZephirVariable $symbolVariable,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext
     ) {
         switch ($resolvedExpr->getType()) {
@@ -705,7 +706,7 @@ class Variable
     /**
      * Performs array assignment.
      *
-     * @param Printer        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param ZephirVariable     $symbolVariable
      * @param string             $variable
@@ -716,11 +717,11 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doArrayAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable     $symbolVariable,
-        string             $variable,
-        array              $statement,
+        ZephirVariable $symbolVariable,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext
     ) {
         switch ($resolvedExpr->getType()) {
@@ -754,7 +755,7 @@ class Variable
     /**
      * Performs boolean assignment.
      *
-     * @param Printer        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param string             $variable
      * @param array              $statement
@@ -764,10 +765,10 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doBoolAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        string             $variable,
-        array              $statement,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext
     ) {
         switch ($resolvedExpr->getType()) {
@@ -889,7 +890,7 @@ class Variable
     /**
      * Performs variable assignment.
      *
-     * @param Printer        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param ZephirVariable     $symbolVariable
      * @param string             $variable
@@ -901,13 +902,13 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doVariableAssignment(
-        Printer            $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
-        ZephirVariable     $symbolVariable,
-        string             $variable,
-        array              $statement,
+        ZephirVariable $symbolVariable,
+        string $variable,
+        array $statement,
         CompilationContext $compilationContext,
-        ReadDetector       $readDetector
+        ReadDetector $readDetector
     ) {
         switch ($resolvedExpr->getType()) {
             case 'null':

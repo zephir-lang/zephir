@@ -13,8 +13,6 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
-use function count;
-
 /**
  * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch
  * Same case in 'switch' statements
@@ -28,7 +26,7 @@ class SkipVariantInit
     /**
      * Do the compilation pass.
      *
-     * @param int $branchNumber
+     * @param int             $branchNumber
      * @param StatementsBlock $block
      */
     public function pass(int $branchNumber, StatementsBlock $block): void
@@ -40,7 +38,7 @@ class SkipVariantInit
     /**
      * Check assignment types for possible skip.
      *
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $statement
      */
     public function passLetStatement(int $branchNumber, array $statement): void
@@ -99,7 +97,7 @@ class SkipVariantInit
         }
 
         $variables = [];
-        $numberBranches = count($this->branches);
+        $numberBranches = \count($this->branches);
         foreach ($variableStats as $variable => $number) {
             if ($number == $numberBranches) {
                 $variables[] = $variable;
@@ -110,7 +108,7 @@ class SkipVariantInit
     }
 
     /**
-     * @param int $branchNumber
+     * @param int   $branchNumber
      * @param array $variablesToSkip
      */
     public function setVariablesToSkip(int $branchNumber, array $variablesToSkip): void

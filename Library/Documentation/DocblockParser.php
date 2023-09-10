@@ -19,9 +19,9 @@ class DocblockParser
     protected $annotation;
     protected $annotationLen;
 
-    protected $currentChar = null;
-    protected $currentCharIndex = null;
-    protected $currentLine = null;
+    protected $currentChar;
+    protected $currentCharIndex;
+    protected $currentLine;
     protected $lines = [];
 
     // Parsing helpers

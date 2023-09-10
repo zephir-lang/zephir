@@ -18,8 +18,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 
-use function count;
-
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
     /**
@@ -33,7 +31,7 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context): ?CompiledExpression
     {
-        if (!isset($expression['parameters']) || count($expression['parameters']) !== 1) {
+        if (!isset($expression['parameters']) || \count($expression['parameters']) !== 1) {
             return null;
         }
 

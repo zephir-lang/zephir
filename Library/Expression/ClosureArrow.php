@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Expression;
 
 use Zephir\Class\Definition\Definition;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
@@ -34,9 +34,9 @@ class ClosureArrow extends Closure
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {

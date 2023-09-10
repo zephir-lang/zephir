@@ -35,7 +35,7 @@ abstract class AbstractOperator
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -81,8 +81,8 @@ abstract class AbstractOperator
      * store the result.
      *
      * @param CompilationContext $compilationContext
-     * @param array $expression
-     * @param bool $init
+     * @param array              $expression
+     * @param bool               $init
      *
      * @return Variable|null
      */

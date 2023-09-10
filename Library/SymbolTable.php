@@ -17,7 +17,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
-use function count;
 
 /**
  * A symbol table stores all the variables defined in a method, their data types and default values.
@@ -94,7 +93,7 @@ class SymbolTable
     /**
      * Check if a variable is declared in the current symbol table.
      *
-     * @param string $name
+     * @param string                  $name
      * @param CompilationContext|null $compilationContext
      *
      * @return bool
@@ -174,7 +173,7 @@ class SymbolTable
     /**
      * Returns a variable in the symbol table.
      *
-     * @param $name
+     * @param                         $name
      * @param CompilationContext|null $compilationContext
      *
      * @return bool|Variable
@@ -184,7 +183,7 @@ class SymbolTable
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
         if ($pos > -1) {
-            $branchId = (int) (substr($name, $pos + \strlen(Variable::BRANCH_MAGIC)));
+            $branchId = (int) substr($name, $pos + \strlen(Variable::BRANCH_MAGIC));
             $name = substr($name, 0, $pos);
         } else {
             $compilationContext = $compilationContext ?: $this->compilationContext;
@@ -225,9 +224,9 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
-     *
      * @return Variable
+     *
+     * @throws CompilerException
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -298,7 +297,7 @@ class SymbolTable
                     /** @var Branch[] $branches */
                     $branches = array_reverse($initBranches);
 
-                    if (1 == count($branches)) {
+                    if (1 == \count($branches)) {
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
                             if (true === $branches[0]->isUnreachable()) {
                                 throw new CompilerException('Initialization of variable "'.$name.'" depends on unreachable branch, consider initialize it at its declaration', $statement);
@@ -348,7 +347,7 @@ class SymbolTable
                          * Variable was initialized in a sub-branch, and it's being used in a parent branch.
                          */
                         $possibleBadAssignment = $currentBranch->getLevel() < $branches[0]->getLevel();
-                        if ($possibleBadAssignment && count($branches) === 1) {
+                        if ($possibleBadAssignment && \count($branches) === 1) {
                             /**
                              * Variable is assigned just once, and it's assigned in a conditional branch
                              */
@@ -402,8 +401,8 @@ class SymbolTable
      * @param array              $statement
      *
      * @return bool|\Zephir\Variable\Variable
-     *@throws CompilerException
      *
+     * @throws CompilerException
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {
@@ -454,9 +453,9 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a mutating operation
      * This method implies mutation of one of the members of the variable but no the variables itself.
      *
-     * @param string $name
+     * @param string             $name
      * @param CompilationContext $compilationContext
-     * @param array|null $statement
+     * @param array|null         $statement
      *
      * @return Variable
      */
@@ -549,7 +548,7 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used in a write operation.
      *
-     * @param string $type
+     * @param string             $type
      * @param CompilationContext $context
      * @param mixed              $init
      *
@@ -587,7 +586,7 @@ class SymbolTable
      * Creates a temporary variable to be used to point to a heap variable
      * These kind of variables MUST not be tracked by the Zephir memory manager.
      *
-     * @param $type
+     * @param                    $type
      * @param CompilationContext $context
      * @param bool               $initNonReferenced
      *
@@ -839,7 +838,7 @@ class SymbolTable
                     $pos = strpos($variable->getName(), Variable::BRANCH_MAGIC);
                     $otherBranchId = 1;
                     if ($pos > -1) {
-                        $otherBranchId = (int) (substr($variable->getName(), $pos + \strlen(Variable::BRANCH_MAGIC)));
+                        $otherBranchId = (int) substr($variable->getName(), $pos + \strlen(Variable::BRANCH_MAGIC));
                     }
                     if ($branchId == $otherBranchId) {
                         $variable->setIdle(true);
@@ -919,9 +918,10 @@ class SymbolTable
     /**
      * Reuse variables marked as idle after leave a branch.
      *
-     * @param string $type
-     * @param string $location
+     * @param string                  $type
+     * @param string                  $location
      * @param CompilationContext|null $compilationContext
+     *
      * @return Variable|null
      */
     protected function reuseTempVariable(string $type, string $location, CompilationContext $compilationContext = null): ?Variable

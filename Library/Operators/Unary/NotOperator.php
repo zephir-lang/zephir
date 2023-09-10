@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Unary;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -24,13 +23,13 @@ use Zephir\Operators\AbstractOperator;
 class NotOperator extends AbstractOperator
 {
     /**
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {

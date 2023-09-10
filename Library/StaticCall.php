@@ -11,15 +11,11 @@
 
 namespace Zephir;
 
-use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
-use function count;
-use function in_array;
-use function is_string;
 
 /**
  * Call methods in a static context
@@ -29,13 +25,13 @@ class StaticCall extends Call
     /**
      * Compiles a static method call.
      *
-     * @param Expression $expr
+     * @param Expression         $expr
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext): CompiledExpression
     {
@@ -91,8 +87,8 @@ class StaticCall extends Call
             $className = $expression['class'];
             $classDefinition = false;
 
-            if (!in_array($className, ['self', 'static', 'parent'])) {
-                if (is_string($className)) {
+            if (!\in_array($className, ['self', 'static', 'parent'])) {
+                if (\is_string($className)) {
                     $className = $compilationContext->getFullName($className);
                     if ($compiler->isClass($className)) {
                         $classDefinition = $compiler->getClassDefinition($className);
@@ -147,7 +143,7 @@ class StaticCall extends Call
                     throw new CompilerException("Cannot call private method '".$methodName."' out of its scope", $expression);
                 }
 
-                if (!in_array($className, ['self', 'static', 'parent']) && !$method->isStatic()) {
+                if (!\in_array($className, ['self', 'static', 'parent']) && !$method->isStatic()) {
                     throw new CompilerException("Cannot call non-static method '".$methodName."' in a static way", $expression);
                 }
 
@@ -156,7 +152,7 @@ class StaticCall extends Call
                         /**
                          * Try to produce an exception if method is called with a wrong number of parameters
                          */
-                        $callNumberParameters = isset($expression['parameters']) ? count($expression['parameters']) : 0;
+                        $callNumberParameters = isset($expression['parameters']) ? \count($expression['parameters']) : 0;
 
                         $classMethod = $classDefinition->getMethod($methodName);
                         $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
@@ -191,7 +187,7 @@ class StaticCall extends Call
             if ($dynamicClass) {
                 $this->callFromDynamicClass($methodName, $expression, $symbolVariable, $mustInit, $isExpecting, $compilationContext);
             } else {
-                if (in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
+                if (\in_array($className, ['self', 'static']) || $classDefinition == $compilationContext->classDefinition) {
                     $this->call(strtoupper($className), $methodName, $expression, $mustInit, $isExpecting, $compilationContext, $symbolVariable, $method ?? null);
                 } else {
                     if ('parent' == $className) {
@@ -243,14 +239,15 @@ class StaticCall extends Call
     /**
      * Calls static methods on the 'self/static' context.
      *
-     * @param string $context SELF / STATIC
-     * @param string $methodName
-     * @param array $expression
-     * @param bool $mustInit
-     * @param bool $isExpecting
+     * @param string             $context            SELF / STATIC
+     * @param string             $methodName
+     * @param array              $expression
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param CompilationContext $compilationContext
-     * @param Variable|null $symbolVariable
-     * @param Method|null $method
+     * @param Variable|null      $symbolVariable
+     * @param Method|null        $method
+     *
      * @throws Exception
      */
     protected function call(
@@ -260,10 +257,10 @@ class StaticCall extends Call
         bool $mustInit,
         bool $isExpecting,
         CompilationContext $compilationContext,
-        ?Variable $symbolVariable = null,
-        ?Method $method = null
+        Variable $symbolVariable = null,
+        Method $method = null
     ): void {
-        if (!in_array($context, ['SELF', 'STATIC'])) {
+        if (!\in_array($context, ['SELF', 'STATIC'])) {
             $context = 'SELF';
         }
 
@@ -293,7 +290,7 @@ class StaticCall extends Call
         $cachePointer = $methodCache->get($compilationContext, $method ?? null);
 
         $params = [];
-        if (isset($expression['parameters']) && count($expression['parameters'])) {
+        if (isset($expression['parameters']) && \count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
@@ -301,7 +298,7 @@ class StaticCall extends Call
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
-        $paramCount = count($params);
+        $paramCount = \count($params);
         $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
 
         $isInternal = isset($method) && $method->isInternal();
@@ -344,14 +341,15 @@ class StaticCall extends Call
     /**
      * Calls static methods on the 'parent' context.
      *
-     * @param string $methodName
-     * @param array $expression
-     * @param Variable $symbolVariable
-     * @param bool $mustInit
-     * @param bool $isExpecting
-     * @param Definition $classDefinition
+     * @param string             $methodName
+     * @param array              $expression
+     * @param Variable           $symbolVariable
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
+     * @param Definition         $classDefinition
      * @param CompilationContext $compilationContext
-     * @param Method $method
+     * @param Method             $method
+     *
      * @throws Exception
      */
     protected function callParent(string $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method)
@@ -376,11 +374,11 @@ class StaticCall extends Call
         $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
 
         $params = [];
-        if (isset($expression['parameters']) && count($expression['parameters'])) {
+        if (isset($expression['parameters']) && \count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
-        if (!count($params)) {
+        if (!\count($params)) {
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $codePrinter->output('ZEPHIR_RETURN_CALL_PARENT('.$classCe.', getThis(), "'.$methodName.'", '.$cachePointer.');');
@@ -415,14 +413,15 @@ class StaticCall extends Call
     /**
      * Calls static methods on some class context.
      *
-     * @param string $methodName
-     * @param array $expression
-     * @param Variable $symbolVariable
-     * @param bool $mustInit
-     * @param bool $isExpecting
-     * @param Definition $classDefinition
+     * @param string             $methodName
+     * @param array              $expression
+     * @param Variable           $symbolVariable
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
+     * @param Definition         $classDefinition
      * @param CompilationContext $compilationContext
-     * @param Method $method
+     * @param Method             $method
+     *
      * @throws Exception
      */
     protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method)
@@ -456,7 +455,7 @@ class StaticCall extends Call
         $cachePointer = $methodCache->get($compilationContext, $method);
 
         $params = [];
-        if (isset($expression['parameters']) && count($expression['parameters'])) {
+        if (isset($expression['parameters']) && \count($expression['parameters'])) {
             $params = $this->getResolvedParams($expression['parameters'], $compilationContext, $expression);
         }
 
@@ -464,7 +463,7 @@ class StaticCall extends Call
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
-        $paramCount = count($params);
+        $paramCount = \count($params);
         $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
 
         if ($method->isInternal()) {
@@ -506,7 +505,7 @@ class StaticCall extends Call
     /**
      * Calls static methods on using a dynamic variable as class.
      *
-     * @param string $methodName
+     * @param string             $methodName
      * @param array              $expression
      * @param Variable           $symbolVariable
      * @param bool               $mustInit
@@ -523,7 +522,7 @@ class StaticCall extends Call
 
         $cachePointer = 'NULL, 0';
 
-        if (!count($params)) {
+        if (!\count($params)) {
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
                     $compilationContext->codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC('.$classEntry.', "'.$methodName.'", '.$cachePointer.');');
@@ -558,10 +557,10 @@ class StaticCall extends Call
     /**
      * Calls static methods on using a dynamic variable as class and a dynamic method.
      *
-     * @param array $expression
-     * @param Variable $symbolVariable
-     * @param bool $mustInit
-     * @param bool $isExpecting
+     * @param array              $expression
+     * @param Variable           $symbolVariable
+     * @param bool               $mustInit
+     * @param bool               $isExpecting
      * @param CompilationContext $compilationContext
      */
     protected function callFromDynamicClassDynamicMethod(array $expression, $symbolVariable, bool $mustInit, bool $isExpecting, CompilationContext $compilationContext): void
@@ -582,7 +581,7 @@ class StaticCall extends Call
 
         $cachePointer = 'NULL, 0';
 
-        if (!count($params)) {
+        if (!\count($params)) {
             if ($isExpecting) {
                 if ('return_value' === $symbolVariable->getName()) {
                     $compilationContext->codePrinter->output('ZEPHIR_RETURN_CALL_CE_STATIC_ZVAL('.$classEntry.', '.$methodNameVariable->getName().', '.$cachePointer.');');

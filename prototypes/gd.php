@@ -60,7 +60,7 @@ if (!function_exists('image_type_to_extension')) {
      *
      * @see https://www.php.net/manual/en/function.image-type-to-extension.php
      *
-     * @param $imagetype
+     * @param      $imagetype
      * @param bool $include_dot
      *
      * @return string

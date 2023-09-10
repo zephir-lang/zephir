@@ -38,8 +38,7 @@ final class NewInstanceOperatorTest extends TestCase
 
     public function autoload(string $className): void
     {
-        if (version_compare(PHP_VERSION, '8.1.0', '>=') &&
-            version_compare(PHP_VERSION, '8.3.0', '<')) {
+        if (version_compare(PHP_VERSION, '8.1.0', '>=')) {
             try {
                 if (isset($this->autoloadMap[$className])) {
                     include $this->autoloadMap[$className];

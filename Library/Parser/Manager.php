@@ -32,8 +32,8 @@ class Manager
      */
     public function isAvailable(): bool
     {
-        return $this->parser->isAvailable() &&
-            version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
+        return $this->parser->isAvailable()
+            && version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
     }
 
     public function requirements(): string

@@ -15,9 +15,6 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 
-use function constant;
-use function defined;
-
 final class ExitDieTest extends TestCase
 {
     private string $phpBinary;
@@ -27,9 +24,9 @@ final class ExitDieTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->phpBinary = constant('PHP_BINARY');
+        $this->phpBinary = \constant('PHP_BINARY');
         /* If we use phpdbg, you need to add options -qrr */
-        if (defined('PHP_SAPI') && 'phpdbg' == constant('PHP_SAPI')) {
+        if (\defined('PHP_SAPI') && 'phpdbg' == \constant('PHP_SAPI')) {
             $this->phpBinary .= ' -qrr';
         }
 

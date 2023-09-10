@@ -14,14 +14,14 @@ declare(strict_types=1);
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\Class\Property;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\Definition;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\Stubs\Generator;
+
 use function Zephir\is_windows;
 
 class GeneratorTest extends TestCase
@@ -47,7 +47,7 @@ class GeneratorTest extends TestCase
      *
      * @return mixed
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     private function getMethod(string $name)
     {
@@ -238,14 +238,15 @@ DOC;
 
     /**
      * @dataProvider propertyProvider
+     *
      * @covers       \Zephir\Stubs\Generator::buildProperty
      *
      * @param array  $visibility
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
@@ -330,10 +331,10 @@ DOC;
      * @dataProvider constantProvider
      *
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
     {

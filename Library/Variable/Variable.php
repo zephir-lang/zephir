@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Variable;
 
-use ReflectionClass;
 use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\Class\Definition\Definition;
@@ -21,8 +20,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\TypeAwareInterface;
-use function in_array;
-use function is_string;
 
 /**
  * This represents a variable in a symbol table
@@ -102,7 +99,7 @@ class Variable implements TypeAwareInterface
 
     protected array $classTypes = [];
 
-    protected Definition|ReflectionClass|null $associatedClass = null;
+    protected Definition | \ReflectionClass | null $associatedClass = null;
 
     /**
      * Initialization skips.
@@ -142,7 +139,7 @@ class Variable implements TypeAwareInterface
     public function __construct(protected string $type, protected string $name, protected ?Branch $branch = null)
     {
         $this->globalsManager = new Globals();
-        $this->type = in_array($type, ['callable', 'object', 'resource'], true) ? 'variable' : $type;
+        $this->type = \in_array($type, ['callable', 'object', 'resource'], true) ? 'variable' : $type;
     }
 
     /**
@@ -428,10 +425,10 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $classTypes
      */
-    public function setClassTypes(array|string $classTypes): void
+    public function setClassTypes(array | string $classTypes): void
     {
-        if (is_string($classTypes)) {
-            if (!in_array($classTypes, $this->classTypes)) {
+        if (\is_string($classTypes)) {
+            if (!\in_array($classTypes, $this->classTypes)) {
                 $this->classTypes[] = $classTypes;
             }
 
@@ -439,7 +436,7 @@ class Variable implements TypeAwareInterface
         }
 
         foreach ($classTypes as $classType) {
-            if (!in_array($classType, $this->classTypes)) {
+            if (!\in_array($classType, $this->classTypes)) {
                 $this->classTypes[] = $classType;
             }
         }
@@ -458,9 +455,9 @@ class Variable implements TypeAwareInterface
     /**
      * Sets the PHP class related to variable.
      *
-     * @param ReflectionClass|Definition $associatedClass
+     * @param \ReflectionClass|Definition $associatedClass
      */
-    public function setAssociatedClass(ReflectionClass|Definition $associatedClass): void
+    public function setAssociatedClass(\ReflectionClass | Definition $associatedClass): void
     {
         $this->associatedClass = $associatedClass;
     }
@@ -468,7 +465,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns the class related to the variable.
      */
-    public function getAssociatedClass(): Definition|ReflectionClass|null
+    public function getAssociatedClass(): Definition | \ReflectionClass | null
     {
         return $this->associatedClass;
     }
@@ -478,11 +475,11 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $types
      */
-    public function setDynamicTypes(array|string $types): void
+    public function setDynamicTypes(array | string $types): void
     {
         unset($this->dynamicTypes['unknown']);
 
-        if (is_string($types)) {
+        if (\is_string($types)) {
             $types = [$types];
         }
 
@@ -510,9 +507,9 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function hasAnyDynamicType(array|string $types): bool
+    public function hasAnyDynamicType(array | string $types): bool
     {
-        if (is_string($types)) {
+        if (\is_string($types)) {
             $types = [$types];
         }
 
@@ -712,7 +709,7 @@ class Variable implements TypeAwareInterface
      */
     public function separate(CompilationContext $compilationContext): void
     {
-        if (!in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
+        if (!\in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
             $compilationContext->codePrinter->output('ZEPHIR_SEPARATE('.$compilationContext->backend->getVariableCode($this).');');
         }
     }
@@ -955,7 +952,7 @@ class Variable implements TypeAwareInterface
             return;
         }
 
-        if (in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
+        if (\in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
             return;
         }
 

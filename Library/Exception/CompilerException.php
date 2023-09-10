@@ -19,7 +19,7 @@ class CompilerException extends RuntimeException
     /**
      * CompilerException constructor.
      *
-     * @param string $message  the Exception message to throw [optional]
+     * @param string                $message  the Exception message to throw [optional]
      * @param array|null            $extra    extra info [optional]
      * @param int                   $code     the Exception code [optional]
      * @param \Exception|\Throwable $previous the previous throwable used for the exception chaining [optional]

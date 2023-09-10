@@ -35,9 +35,9 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -118,9 +118,9 @@ class PregMatchOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return array
+     *
+     * @throws CompilerException
      */
     private function processOptionals(array &$expression, Call $call, CompilationContext $context)
     {

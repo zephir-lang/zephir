@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Optimizers\EvalExpression;
@@ -24,7 +23,8 @@ class DoWhileStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void

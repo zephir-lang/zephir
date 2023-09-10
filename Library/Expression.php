@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -225,12 +224,11 @@ class Expression
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException|Exception
-     *
      * @return CompiledExpression
      *
+     * @throws CompilerException|Exception
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): CompiledExpression
     {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Comparison;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -35,7 +34,7 @@ class ComparisonBaseOperator extends AbstractOperator
      * @return CompiledExpression|null
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function optimizeTypeOf(array $expr, CompilationContext $compilationContext): ?CompiledExpression
     {
@@ -170,7 +169,7 @@ class ComparisonBaseOperator extends AbstractOperator
      *
      * @return CompiledExpression
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext)

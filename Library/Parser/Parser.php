@@ -17,8 +17,6 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\ParseException;
 
-use function function_exists;
-
 class Parser
 {
     /**
@@ -28,7 +26,7 @@ class Parser
      */
     public function isAvailable(): bool
     {
-        return function_exists('zephir_parse_file');
+        return \function_exists('zephir_parse_file');
     }
 
     /**

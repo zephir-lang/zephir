@@ -50,7 +50,7 @@ class Manager
      *
      * @param CallGathererPass|null $gatherer
      */
-    public function setGatherer(?CallGathererPass $gatherer = null): void
+    public function setGatherer(CallGathererPass $gatherer = null): void
     {
         $this->gatherer = $gatherer;
     }

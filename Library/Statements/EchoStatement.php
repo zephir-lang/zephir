@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -27,7 +26,7 @@ class EchoStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void

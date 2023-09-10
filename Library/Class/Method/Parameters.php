@@ -13,16 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Class\Method;
 
-use ArrayAccess;
-use Countable;
-use Iterator;
 use Zephir\Exception\CompilerException;
-use function count;
 
 /**
  * Represents the parameters defined in a method.
  */
-class Parameters implements Countable, Iterator, ArrayAccess
+class Parameters implements \Countable, \Iterator, \ArrayAccess
 {
     private int $position = 0;
 
@@ -67,7 +63,7 @@ class Parameters implements Countable, Iterator, ArrayAccess
 
     public function countRequiredParameters(): int
     {
-        return count($this->requiredParameters);
+        return \count($this->requiredParameters);
     }
 
     public function getOptionalParameters(): array
@@ -77,7 +73,7 @@ class Parameters implements Countable, Iterator, ArrayAccess
 
     public function countOptionalParameters(): int
     {
-        return count($this->optionalParameters);
+        return \count($this->optionalParameters);
     }
 
     public function fetchParameters(bool $isMethodInternal): array
@@ -117,7 +113,7 @@ class Parameters implements Countable, Iterator, ArrayAccess
      */
     public function count(): int
     {
-        return count($this->parameters);
+        return \count($this->parameters);
     }
 
     public function rewind(): void

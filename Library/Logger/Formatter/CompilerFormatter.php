@@ -16,10 +16,6 @@ namespace Zephir\Logger\Formatter;
 use Monolog\Formatter\LineFormatter;
 use Zephir\Config;
 
-use function array_key_exists;
-use function count;
-use function is_array;
-
 /**
  * Formatter for warnings/notices/errors generated in compilation.
  */
@@ -53,9 +49,9 @@ final class CompilerFormatter extends LineFormatter
         $output = str_replace('%context%', '', $output);
 
         // ignore empty context or invalid format
-        if (!empty($vars['context']) &&
-            is_array($vars['context']) &&
-            2 == count($vars['context'])
+        if (!empty($vars['context'])
+            && \is_array($vars['context'])
+            && 2 == \count($vars['context'])
         ) {
             $type = $vars['context'][0];
             $node = $vars['context'][1];
@@ -97,7 +93,7 @@ final class CompilerFormatter extends LineFormatter
     private function replacePlaceholders(array $vars, $output)
     {
         // WARNING -> Warning
-        if (array_key_exists('level_name', $vars)) {
+        if (\array_key_exists('level_name', $vars)) {
             $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
         }
 

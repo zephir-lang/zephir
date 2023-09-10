@@ -239,7 +239,7 @@ class ObjectProperty
                 $codePrinter->output('}');
                 break;
 
-            /* unreachable code */
+                /* unreachable code */
             case 'empty-array':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
 

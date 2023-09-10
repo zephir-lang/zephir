@@ -17,7 +17,6 @@ use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
-use function count;
 
 /**
  * Switch statement, the same as in PHP/C
@@ -26,6 +25,7 @@ class SwitchStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
+     *
      * @throws \ReflectionException
      * @throws Exception
      */
@@ -122,7 +122,7 @@ class SwitchStatement extends StatementAbstract
             foreach ($blocks as $block) {
                 $expressions = $block['expr'];
 
-                if (1 == count($expressions)) {
+                if (1 == \count($expressions)) {
                     $condition = $evalExpr->optimize($expressions[0], $compilationContext);
                     $codePrinter->output('if ('.$condition.') {');
                 } else {
@@ -167,7 +167,7 @@ class SwitchStatement extends StatementAbstract
             }
         }
 
-        if ($defaultIndex === count($clauses) - 1) {
+        if ($defaultIndex === \count($clauses) - 1) {
             return $clauses;
         }
 

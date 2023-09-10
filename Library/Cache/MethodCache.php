@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
-use ReflectionClass;
-use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
@@ -48,7 +46,7 @@ class MethodCache
     /**
      * Retrieves/Creates a function cache for a method call.
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
     {
@@ -167,7 +165,7 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching.
      *
-     * @param Definition|ReflectionClass|null $classDefinition
+     * @param Definition|\ReflectionClass|null $classDefinition
      *
      * @return bool
      */
@@ -177,12 +175,12 @@ class MethodCache
             return true;
         }
 
-        if (!($classDefinition instanceof ReflectionClass)) {
+        if (!($classDefinition instanceof \ReflectionClass)) {
             return false;
         }
 
-        return $classDefinition->isInternal() &&
-               $classDefinition->isInstantiable() &&
-               in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
+        return $classDefinition->isInternal()
+               && $classDefinition->isInstantiable()
+               && in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
     }
 }

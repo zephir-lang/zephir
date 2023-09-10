@@ -16,8 +16,8 @@ namespace Zephir\Test\Stubs;
 use PHPUnit\Framework\TestCase;
 use Zephir\AliasManager;
 use Zephir\Class\Definition\Definition;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 use Zephir\StatementsBlock;
 use Zephir\Stubs\MethodDocBlock;
 
@@ -45,14 +45,14 @@ final class MethodDocBlockTest extends TestCase
         /**
          * ClassMethod constructor.
          *
-         * @param Definition            $classDefinition
-         * @param array                      $visibility
-         * @param string                     $name
-         * @param Parameters|null $parameters
-         * @param StatementsBlock|null       $statements
-         * @param string|null                $docblock
-         * @param array|null                 $returnType
-         * @param array|null                 $original
+         * @param Definition           $classDefinition
+         * @param array                $visibility
+         * @param string               $name
+         * @param Parameters|null      $parameters
+         * @param StatementsBlock|null $statements
+         * @param string|null          $docblock
+         * @param array|null           $returnType
+         * @param array|null           $original
          */
         $methodVisibility = $params['method']['visibility'];
         $methodName = $params['method']['name'];

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
-use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -31,13 +30,14 @@ class CharType extends AbstractType
     /**
      * Transforms calls to method "toHex" to sprintf('%X') call.
      *
-     * @param object $caller
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
      *
      * @return bool|mixed|CompiledExpression
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)

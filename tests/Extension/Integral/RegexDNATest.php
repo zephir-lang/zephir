@@ -16,7 +16,6 @@ namespace Extension\Integral;
 use PHPUnit\Framework\TestCase;
 use Stub\RegexDNA;
 
-use function dirname;
 use function Zephir\is_windows;
 
 final class RegexDNATest extends TestCase
@@ -30,12 +29,12 @@ final class RegexDNATest extends TestCase
         $test = new RegexDNA();
 
         ob_start();
-        $test->process(dirname(__DIR__).'/../fixtures/regexdna/input.txt');
+        $test->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(
             $content,
-            file_get_contents(dirname(__DIR__).'/../fixtures/regexdna/output.txt')
+            file_get_contents(\dirname(__DIR__).'/../fixtures/regexdna/output.txt')
         );
     }
 }

@@ -19,8 +19,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function count;
-
 /**
  * `globals_get()` internal function.
  *
@@ -43,7 +41,7 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             return null;
         }
 
-        if (1 !== count($expression['parameters'])) {
+        if (1 !== \count($expression['parameters'])) {
             throw new CompilerException("'globals_get' only accepts one parameter", $expression);
         }
 
@@ -59,7 +57,7 @@ class GlobalsGetOptimizer extends OptimizerAbstract
 
         $type = $context->compiler->getExtensionGlobal($globalName)['type'];
 
-        if (false !== strpos($globalName, '.')) {
+        if (str_contains($globalName, '.')) {
             $parts = explode('.', $globalName);
 
             return new CompiledExpression($type, 'ZEPHIR_GLOBAL('.$parts[0].').'.$parts[1], $expression);

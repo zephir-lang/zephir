@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use ArrayAccess;
-use JsonSerializable;
-
 /**
  * Manages compiler global configuration.
  */
-class Config implements ArrayAccess, JsonSerializable
+class Config implements \ArrayAccess, \JsonSerializable
 {
     /**
      * Is config changed?

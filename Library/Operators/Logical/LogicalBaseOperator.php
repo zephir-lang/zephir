@@ -258,7 +258,7 @@ class LogicalBaseOperator extends AbstractOperator
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableCode = $compilationContext->backend->getVariableCode($variableRight);
 
-                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().')) '.' '.$this->operator.' zephir_is_true('.$variableCode.')', $expression);
+                                        return new CompiledExpression('bool', '('.$variableLeft->getName().' && Z_STRLEN_P('.$variableLeft->getName().'))  '.$this->operator.' zephir_is_true('.$variableCode.')', $expression);
 
                                     default:
                                         throw new CompilerException("Cannot compare variable('double') with variable('".$variableRight->getType()."')", $expression);
@@ -285,7 +285,7 @@ class LogicalBaseOperator extends AbstractOperator
 
                                 return new CompiledExpression('bool', 'zephir_is_true('.$op1.') '.$op.' '.$op2, $expression);
 
-                            /* a(var) && a(x) */
+                                /* a(var) && a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
@@ -298,7 +298,7 @@ class LogicalBaseOperator extends AbstractOperator
 
                                         return new CompiledExpression('bool', 'zephir_is_true('.$variableLeftCode.') '.$this->operator.' '.$variableRightCode, $expression);
 
-                                    /* a(var) && a(var) */
+                                        /* a(var) && a(var) */
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $op1 = $variableLeftCode;

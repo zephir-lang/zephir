@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -38,7 +37,7 @@ class NativeArrayAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
@@ -70,12 +69,13 @@ class NativeArrayAccess
     /**
      * Compiles foo[x] = {expr}.
      *
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -127,7 +127,7 @@ class NativeArrayAccess
      *
      * @return CompiledExpression
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     protected function accessStringOffset(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
@@ -182,13 +182,14 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array $expression
-     * @param Variable $variableVariable
+     * @param array              $expression
+     * @param Variable           $variableVariable
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     protected function accessDimensionArray(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
     {

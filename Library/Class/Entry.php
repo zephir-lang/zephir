@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Class;
 
-use ReflectionClass;
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
@@ -73,7 +72,7 @@ class Entry
         }
 
         if (class_exists($this->classname) || interface_exists($this->classname)) {
-            $reflection = new ReflectionClass($this->classname);
+            $reflection = new \ReflectionClass($this->classname);
             $className = $reflection->getName();
 
             /**

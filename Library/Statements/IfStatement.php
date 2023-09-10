@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
@@ -27,7 +26,8 @@ class IfStatement extends StatementAbstract
 {
     /**
      * @param CompilationContext $compilationContext
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void

@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 
 /**
  * Represents a function
@@ -27,12 +27,12 @@ class FunctionDefinition extends Method
     private bool $isGlobal = false;
 
     public function __construct(
-        private string             $namespace,
-        protected string           $name,
-        protected ?Parameters      $parameters = null,
+        private string $namespace,
+        protected string $name,
+        protected ?Parameters $parameters = null,
         protected ?StatementsBlock $statements = null,
-        array                      $returnType = null,
-        protected ?array           $expression = [],
+        array $returnType = null,
+        protected ?array $expression = [],
     ) {
         $this->setReturnTypes($returnType);
     }

@@ -36,7 +36,7 @@ class BitwiseBaseOperator extends AbstractOperator
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @return null|CompiledExpression
+     * @return CompiledExpression|null
      */
     public function optimizeConstantFolding(array $expression, CompilationContext $compilationContext): ?CompiledExpression
     {
@@ -50,7 +50,7 @@ class BitwiseBaseOperator extends AbstractOperator
             case 'long':
             case 'ulong':
             case 'double':
-                //continue to next switch
+                // continue to next switch
                 break;
             default:
                 return null;
@@ -63,7 +63,7 @@ class BitwiseBaseOperator extends AbstractOperator
             case 'long':
             case 'ulong':
             case 'double':
-                //continue to operator switch
+                // continue to operator switch
                 break;
             default:
                 return null;
@@ -430,7 +430,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                 }
                                 break;
 
-                            /* a(var) + a(x) */
+                                /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 $symbol = $compilationContext->backend->getVariableCode($variableLeft);
@@ -445,14 +445,14 @@ class BitwiseBaseOperator extends AbstractOperator
                                         return new CompiledExpression('int', '((int) (zephir_get_numberval('.$symbol.')) '.$this->operator.' '.$variableRight->getName().')', $expression);
                                         break;
 
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
 
                                         return new CompiledExpression('int', '((int) (zephir_get_numberval('.$symbol.')) '.$this->operator.' '.$variableRight->getName().')', $expression);
                                         break;
 
-                                    /* a(var) + a(var) */
+                                        /* a(var) + a(var) */
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $op1 = $symbol;

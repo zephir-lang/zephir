@@ -13,9 +13,9 @@ namespace Zephir\Expression\Builder;
 
 abstract class AbstractBuilder
 {
-    private $file = null;
-    private $line = null;
-    private $char = null;
+    private $file;
+    private $line;
+    private $char;
 
     /**
      * @param string $file

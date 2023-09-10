@@ -17,8 +17,8 @@ use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\Exception;
+
 use function array_key_exists;
-use function count;
 use function Zephir\escape_class;
 
 class ArgInfoDefinition
@@ -30,11 +30,11 @@ class ArgInfoDefinition
     private bool $richFormat = true;
 
     public function __construct(
-        private string     $name,
-        private Method     $functionLike,
-        private Printer    $codePrinter,
+        private string $name,
+        private Method $functionLike,
+        private Printer $codePrinter,
         private CompilationContext $compilationContext,
-        private bool               $returnByRef = false
+        private bool $returnByRef = false
     ) {
         $this->parameters = $this->functionLike->getParameters();
     }
@@ -62,9 +62,9 @@ class ArgInfoDefinition
             return;
         }
 
-        if ($this->richFormat &&
-            $this->functionLike->isReturnTypesHintDetermined() &&
-            $this->functionLike->areReturnTypesCompatible()
+        if ($this->richFormat
+            && $this->functionLike->isReturnTypesHintDetermined()
+            && $this->functionLike->areReturnTypesCompatible()
         ) {
             $this->richRenderStart();
 
@@ -124,7 +124,7 @@ class ArgInfoDefinition
 
     private function richRenderStart(): void
     {
-        if (array_key_exists('object', $this->functionLike->getReturnTypes()) && 1 === count($this->functionLike->getReturnClassTypes())) {
+        if (\array_key_exists('object', $this->functionLike->getReturnTypes()) && 1 === \count($this->functionLike->getReturnClassTypes())) {
             $class = key($this->functionLike->getReturnClassTypes());
             $class = escape_class($this->compilationContext->getFullName($class));
 
@@ -242,7 +242,7 @@ class ArgInfoDefinition
             return;
         }
 
-        if (count($this->functionLike->getReturnTypes()) > 1) {
+        if (\count($this->functionLike->getReturnTypes()) > 1) {
             $types = [];
             $mayBeTypes = $this->functionLike->getMayBeArgTypes();
             foreach ($this->functionLike->getReturnTypes() as $type => $typeInfo) {
@@ -253,7 +253,7 @@ class ArgInfoDefinition
                 $types[] = $mayBeTypes[$type];
             }
 
-            if (count($types) > 1) {
+            if (\count($types) > 1) {
                 $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                 $this->codePrinter->output(
                     sprintf(
@@ -423,7 +423,7 @@ class ArgInfoDefinition
 
     private function hasParameters(): bool
     {
-        return null !== $this->parameters && count($this->parameters->getParameters()) > 0;
+        return null !== $this->parameters && \count($this->parameters->getParameters()) > 0;
     }
 
     private function defaultArrayValue(array $parameter): string
@@ -490,7 +490,7 @@ class ArgInfoDefinition
             return 'IS_VOID';
         }
 
-        if (array_key_exists('array', $this->functionLike->getReturnTypes())) {
+        if (\array_key_exists('array', $this->functionLike->getReturnTypes())) {
             return 'IS_ARRAY';
         }
 

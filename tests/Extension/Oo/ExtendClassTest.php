@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Extension\Oo;
 
-use PDO;
 use PHPUnit\Framework\TestCase;
 use Stub\Integration\Psr\Http\Message\MessageInterfaceEx;
 use Stub\Oo\ConcreteStatic;
@@ -27,13 +26,13 @@ final class ExtendClassTest extends TestCase
             $this->markTestSkipped('The PDO extension is not loaded');
         }
 
-        $this->assertSame(PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
-        $this->assertSame(PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
+        $this->assertSame(\PDO::getAvailableDrivers(), ExtendPdoClass::getAvailableDrivers());
+        $this->assertSame(\PDO::PARAM_STR, ExtendPdoClass::PARAM_STR);
     }
 
     public function testPDOStatementExtending(): void
     {
-        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+        $pdo = new ExtendPdoClass('sqlite::memory:', '', '', [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
         $stmt = $pdo->prepare('SELECT CURRENT_TIME');
 
         $this->assertInstanceof('Stub\\PdoStatement', $stmt);

@@ -98,7 +98,7 @@ class OperatorsFactory
     }
 
     /**
-     * @param $type
+     * @param                 $type
      * @param AbstractBuilder $expression
      *
      * @return RawOperator
@@ -113,7 +113,7 @@ class OperatorsFactory
     }
 
     /**
-     * @param $type
+     * @param                 $type
      * @param AbstractBuilder $expression
      *
      * @return RawOperator

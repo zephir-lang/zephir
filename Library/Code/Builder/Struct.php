@@ -52,7 +52,7 @@ class Struct
 
     /**
      * @param string $field
-     * @param string  $type
+     * @param string $type
      *
      * @throws InvalidArgumentException
      */
@@ -72,10 +72,10 @@ class Struct
      * @param array  $global
      * @param string $namespace
      *
+     * @return string
+     *
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     public function getCDefault(string $name, array $global, string $namespace): string
     {
@@ -155,6 +155,7 @@ class Struct
 
     /**
      * Generates the internal c-type according to the php's type.
+     *
      * @throws InvalidArgumentException
      */
     protected function convertToCType(string $type): string

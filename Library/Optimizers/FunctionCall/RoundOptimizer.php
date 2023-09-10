@@ -30,9 +30,9 @@ class RoundOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -74,9 +74,9 @@ class RoundOptimizer extends OptimizerAbstract
                 );
                 break;
 
-            /*
-             * float $val, int $mode
-             */
+                /*
+                 * float $val, int $mode
+                 */
             case 2:
                 $context->codePrinter->output(
                     'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', NULL);'

@@ -15,10 +15,6 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
-use function constant;
-use function defined;
-use function gettype;
-
 /**
  * This pass tries to check whether variables only do exist in the local context of the method block
  * or if they're used externally which will un allow variables to be placed in the stack
@@ -88,7 +84,7 @@ class LocalContextPass
      * Marks the latest use/read of a variable.
      *
      * @param string $variable
-     * @param array $node
+     * @param array  $node
      */
     public function markLastUse(string $variable, array $node): void
     {
@@ -203,8 +199,8 @@ class LocalContextPass
                             break;
 
                         case 'constant':
-                            if (defined($assignment['expr']['value'])) {
-                                if ('string' === gettype(constant($assignment['expr']['value']))) {
+                            if (\defined($assignment['expr']['value'])) {
+                                if ('string' === \gettype(\constant($assignment['expr']['value']))) {
                                     $this->markVariableNoLocal($assignment['variable']);
                                 }
                             }
@@ -225,7 +221,7 @@ class LocalContextPass
                             break;
 
                         default:
-                            //echo '[', $assignment['expr']['type'], ']', PHP_EOL;
+                            // echo '[', $assignment['expr']['type'], ']', PHP_EOL;
                     }
                     break;
 
@@ -246,12 +242,12 @@ class LocalContextPass
                             $this->markVariableNoLocal($assignment['expr']['value']);
                             break;
                         default:
-                            //echo '[', $assignment['assign-type'], ']';
+                            // echo '[', $assignment['assign-type'], ']';
                     }
                     break;
 
                 default:
-                    //echo $assignment['assign-type'];
+                    // echo $assignment['assign-type'];
             }
         }
     }

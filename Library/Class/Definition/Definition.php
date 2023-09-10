@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Class\Definition;
 
-use ReflectionClass;
-use ReflectionException;
 use Zephir\AliasManager;
 use Zephir\Class\Constant;
 use Zephir\Class\Entry;
@@ -32,10 +30,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\HeadersManager;
 use Zephir\StatementsBlock;
-use function count;
-use function gettype;
-use function is_array;
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Represents a class/interface and their properties and methods.
@@ -120,7 +114,7 @@ final class Definition extends AbstractDefinition
 
     protected Compiler $compiler;
 
-    public function __construct(protected string $namespace, string $name, ?string $shortName = null)
+    public function __construct(protected string $namespace, string $name, string $shortName = null)
     {
         $this->name = $name;
         $this->shortName = $shortName ?: $name;
@@ -498,7 +492,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function addMethod(Method $method, ?array $statement = null): void
+    public function addMethod(Method $method, array $statement = null): void
     {
         $methodName = strtolower($method->getName());
         if (isset($this->methods[$methodName])) {
@@ -513,7 +507,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function updateMethod(Method $method, ?array $statement = null): void
+    public function updateMethod(Method $method, array $statement = null): void
     {
         $methodName = strtolower($method->getName());
         if (!isset($this->methods[$methodName])) {
@@ -575,7 +569,7 @@ final class Definition extends AbstractDefinition
                 $extendsClassDefinition = $this->compiler->getInternalClassDefinition(
                     $extendsClassDefinition->getName()
                 );
-            } catch (ReflectionException $e) {
+            } catch (\ReflectionException $e) {
                 // Do nothing
                 return false;
             }
@@ -651,7 +645,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws Exception
      */
-    public function getClassEntry(?CompilationContext $compilationContext = null): string
+    public function getClassEntry(CompilationContext $compilationContext = null): string
     {
         if ($this->external) {
             if ($compilationContext === null) {
@@ -700,7 +694,7 @@ final class Definition extends AbstractDefinition
     {
         $parts = explode('\\', $this->namespace);
 
-        return 'ext/'.strtolower($parts[0].DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $this->namespace).DIRECTORY_SEPARATOR.$this->name).'.zep';
+        return 'ext/'.strtolower($parts[0].\DIRECTORY_SEPARATOR.str_replace('\\', \DIRECTORY_SEPARATOR, $this->namespace).\DIRECTORY_SEPARATOR.$this->name).'.zep';
     }
 
     /**
@@ -727,8 +721,8 @@ final class Definition extends AbstractDefinition
             }
 
             $implementedMethod = $classDefinition->getMethod($method->getName());
-            if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters() ||
-                $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()
+            if ($implementedMethod->getNumberOfRequiredParameters() > $method->getNumberOfRequiredParameters()
+                || $implementedMethod->getNumberOfParameters() < $method->getNumberOfParameters()
             ) {
                 throw new CompilerException(
                     sprintf(
@@ -848,7 +842,7 @@ final class Definition extends AbstractDefinition
      * Compiles a class/interface.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -878,7 +872,7 @@ final class Definition extends AbstractDefinition
         $methods = &$this->methods;
         $initMethod = $this->getLocalOrParentInitMethod();
 
-        if (count($methods) > 0 || $initMethod) {
+        if (\count($methods) > 0 || $initMethod) {
             $methodEntry = strtolower($this->getCNamespace()).'_'.strtolower($this->getName()).'_method_entry';
         } else {
             $methodEntry = 'NULL';
@@ -968,7 +962,7 @@ final class Definition extends AbstractDefinition
         $interfaces = $this->interfaces;
         $compiler = $compilationContext->compiler;
 
-        if (is_array($interfaces)) {
+        if (\is_array($interfaces)) {
             $codePrinter->outputBlankLine(true);
 
             foreach ($interfaces as $interface) {
@@ -1097,7 +1091,7 @@ final class Definition extends AbstractDefinition
         $codePrinter->output('ZEPHIR_INIT_CLASS('.$this->getCNamespace().'_'.$this->getName().');');
         $codePrinter->outputBlankLine();
 
-        if (self::TYPE_CLASS === $this->getType() && count($methods) > 0) {
+        if (self::TYPE_CLASS === $this->getType() && \count($methods) > 0) {
             foreach ($methods as $method) {
                 if (!$method->isInternal()) {
                     $codePrinter->output('PHP_METHOD('.$this->getCNamespace().'_'.$this->getName().', '.$method->getName().');');
@@ -1126,7 +1120,7 @@ final class Definition extends AbstractDefinition
             $argInfo->render();
         }
 
-        if (count($methods) > 0) {
+        if (\count($methods) > 0) {
             $codePrinter->output(
                 sprintf(
                     'ZEPHIR_INIT_FUNCS(%s_%s_method_entry) {',
@@ -1156,7 +1150,7 @@ final class Definition extends AbstractDefinition
                             $codePrinter->output('#if PHP_VERSION_ID >= 80000');
                             $codePrinter->output(
                                 sprintf(
-                                // TODO: Rename to ZEND_ME
+                                    // TODO: Rename to ZEND_ME
                                     "\tPHP_ME(%s_%s, %s, %s, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
@@ -1168,7 +1162,7 @@ final class Definition extends AbstractDefinition
                             $codePrinter->output('#else');
                             $codePrinter->output(
                                 sprintf(
-                                // TODO: Rename to ZEND_ME
+                                    // TODO: Rename to ZEND_ME
                                     "\tPHP_ME(%s_%s, %s, NULL, %s)",
                                     $this->getCNamespace(),
                                     $this->getName(),
@@ -1244,7 +1238,7 @@ final class Definition extends AbstractDefinition
     /**
      * Builds a class definition from reflection.
      */
-    public static function buildFromReflection(ReflectionClass $class): self
+    public static function buildFromReflection(\ReflectionClass $class): self
     {
         $classDefinition = new self($class->getNamespaceName(), $class->getName(), $class->getShortName());
 
@@ -1263,7 +1257,7 @@ final class Definition extends AbstractDefinition
                 if (!$params['mandatory']) {
                     try {
                         $params['default'] = $row->getDefaultValue();
-                    } catch (ReflectionException $e) {
+                    } catch (\ReflectionException $e) {
                         // TODO: dummy default value
                         $params['default'] = true;
                     }
@@ -1284,7 +1278,7 @@ final class Definition extends AbstractDefinition
         }
 
         foreach ($class->getConstants() as $constantName => $constantValue) {
-            $type = self::convertPhpConstantType(gettype($constantValue));
+            $type = self::convertPhpConstantType(\gettype($constantValue));
             $classConstant = new Constant($constantName, ['value' => $constantValue, 'type' => $type], null);
             $classDefinition->addConstant($classConstant);
         }

@@ -27,7 +27,7 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
     public function __construct(
         string $left,
         FunctionCallBuilder $right,
-        ?string $file = null,
+        string $file = null,
         int $line = 0,
         int $char = 0
     ) {

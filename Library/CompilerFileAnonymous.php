@@ -15,11 +15,9 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\Code\Printer;
 use Zephir\Compiler\FileInterface;
-use function count;
 
 /**
  * This class represents an anonymous file created to dump
@@ -40,11 +38,11 @@ final class CompilerFileAnonymous implements FileInterface
     /**
      * CompilerFileAnonymous constructor.
      *
-     * @param Definition         $classDefinition
+     * @param Definition              $classDefinition
      * @param Config                  $config
      * @param CompilationContext|null $context
      */
-    public function __construct(Definition $classDefinition, Config $config, ?CompilationContext $context = null)
+    public function __construct(Definition $classDefinition, Config $config, CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
         $this->config = $config;
@@ -84,7 +82,7 @@ final class CompilerFileAnonymous implements FileInterface
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     private function compileClass(CompilationContext $compilationContext)
     {
@@ -95,7 +93,7 @@ final class CompilerFileAnonymous implements FileInterface
          */
         $classDefinition->compile($compilationContext);
 
-        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+        $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
         $code = PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
@@ -121,7 +119,7 @@ final class CompilerFileAnonymous implements FileInterface
             }
         }
 
-        if (count($this->headerCBlocks) > 0) {
+        if (\count($this->headerCBlocks) > 0) {
             $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
         }
 

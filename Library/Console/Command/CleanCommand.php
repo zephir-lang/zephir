@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
-use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Exception\FileSystemException;
 use Zephir\FileSystem\FileSystemInterface;
+
 use function Zephir\is_windows;
 
 /**
@@ -74,7 +74,7 @@ final class CleanCommand extends AbstractCommand
             );
 
             return 1;
-        } catch (Exception | \Throwable $e) {
+        } catch (\Exception | \Throwable $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;

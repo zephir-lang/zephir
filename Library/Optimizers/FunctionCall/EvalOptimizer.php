@@ -29,10 +29,10 @@ class EvalOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
+     * @return bool|CompiledExpression|mixed
+     *
      * @throws CompilerException
      * @throws \Zephir\Exception
-     *
-     * @return bool|CompiledExpression|mixed
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {

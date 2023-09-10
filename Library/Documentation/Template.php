@@ -50,7 +50,7 @@ class Template
 
     private function getTemplatePath($fileName)
     {
-        if ('/' == $fileName[0] || 0 === strpos($fileName, 'phar://')) {
+        if ('/' == $fileName[0] || str_starts_with($fileName, 'phar://')) {
             return $fileName;
         }
 

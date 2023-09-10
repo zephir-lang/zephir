@@ -40,7 +40,7 @@ class CallFunctionStatement extends AbstractStatement
     /**
      * @param string|null $name
      * @param array|null  $parameters
-     * @param int $typeCall
+     * @param int         $typeCall
      */
     public function __construct(string $name = null, array $parameters = null, int $typeCall = self::TYPE_CALL_DIRECT)
     {

@@ -96,9 +96,9 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return GlobalConstant|ZephirVariable
+     *
+     * @throws CompilerException
      */
     protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {

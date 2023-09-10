@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -21,8 +20,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
 use Zephir\Variable\Variable;
-use function count;
-use function function_exists;
 
 /**
  * Resolves expressions that create arrays
@@ -165,7 +162,7 @@ class NativeArray
      *
      * @return CompiledExpression
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext)
@@ -206,8 +203,8 @@ class NativeArray
          * This calculates a prime number bigger than the current array size to possibly
          * reduce hash collisions when adding new members to the array.
          */
-        $arrayLength = count($expression['left']);
-        if ($arrayLength >= 33 && function_exists('gmp_nextprime')) {
+        $arrayLength = \count($expression['left']);
+        if ($arrayLength >= 33 && \function_exists('gmp_nextprime')) {
             $arrayLength = (int) gmp_strval(gmp_nextprime($arrayLength - 1));
         }
 

@@ -16,10 +16,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Variable\Variable;
+
 use function constant;
-use function defined;
-use function gettype;
-use function in_array;
 use function Zephir\add_slashes;
 
 /**
@@ -101,7 +99,7 @@ class Constants
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -123,9 +121,9 @@ class Constants
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
@@ -135,7 +133,7 @@ class Constants
         $constantName = $expression['value'];
 
         $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
-        if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
+        if (!\defined($expression['value']) && !\in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning(
                     "Constant '".$constantName."' does not exist at compile time",
@@ -145,18 +143,18 @@ class Constants
                 $isZephirConstant = true;
             }
         } else {
-            $isPhpConstant = false === strpos($constantName, 'VERSION');
+            $isPhpConstant = !str_contains($constantName, 'VERSION');
         }
 
-        if ($isZephirConstant && !in_array($constantName, $this->resources)) {
+        if ($isZephirConstant && !\in_array($constantName, $this->resources)) {
             $constant = $compilationContext->compiler->getConstant($constantName);
 
             return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
         }
 
-        if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
-            $constantName = constant($constantName);
-            $type = strtolower(gettype($constantName));
+        if ($isPhpConstant && !\in_array($constantName, $mergedConstants)) {
+            $constantName = \constant($constantName);
+            $type = strtolower(\gettype($constantName));
 
             switch ($type) {
                 case 'integer':
@@ -175,7 +173,7 @@ class Constants
             }
         }
 
-        if (in_array($constantName, $this->magicConstants)) {
+        if (\in_array($constantName, $this->magicConstants)) {
             switch ($constantName) {
                 case '__CLASS__':
                     return new CompiledExpression(

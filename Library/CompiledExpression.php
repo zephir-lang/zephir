@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use Closure;
-
 /**
  * This represents a compiled expression, the object can be used to check
  * if the expression type is able to used in certain types of the application.
@@ -97,7 +95,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function resolve(?string $result, CompilationContext $compilationContext): string
     {
-        if (!($this->code instanceof Closure)) {
+        if (!($this->code instanceof \Closure)) {
             return $this->code;
         }
 

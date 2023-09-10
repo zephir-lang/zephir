@@ -15,7 +15,6 @@ namespace Zephir\Test\CompilerFile;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
-use ReflectionException;
 use Zephir\AliasManager;
 use Zephir\Backend\Backend;
 use Zephir\Compiler;
@@ -29,7 +28,7 @@ use Zephir\Parser\Parser;
 final class CheckDependenciesTest extends TestCase
 {
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testExtendsClassThatDoesNotExist(): void
     {

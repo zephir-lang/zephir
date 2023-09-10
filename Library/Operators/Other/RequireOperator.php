@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -26,13 +25,13 @@ use Zephir\Operators\AbstractOperator;
 class RequireOperator extends AbstractOperator
 {
     /**
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {

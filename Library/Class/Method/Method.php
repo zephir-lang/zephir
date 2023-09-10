@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Class\Method;
 
-use ReflectionException;
 use Zephir\Branch;
 use Zephir\BranchManager;
 use Zephir\Cache\Manager;
@@ -33,11 +32,7 @@ use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
 use Zephir\Variable\Variable;
-use function array_key_exists;
-use function count;
-use function in_array;
-use function is_array;
-use function is_object;
+
 use function Zephir\add_slashes;
 
 /**
@@ -136,15 +131,15 @@ class Method
     protected ?Definition $classDefinition = null;
 
     public function __construct(
-        Definition                 $classDefinition,
-        protected array            $visibility,
-        protected string           $name,
-        protected ?Parameters      $parameters = null,
+        Definition $classDefinition,
+        protected array $visibility,
+        protected string $name,
+        protected ?Parameters $parameters = null,
         protected ?StatementsBlock $statements = null,
-        protected ?string          $docblock = null,
-        ?array                     $returnType = null,
-        protected ?array           $expression = [],
-        array                      $staticVariables = [],
+        protected ?string $docblock = null,
+        array $returnType = null,
+        protected ?array $expression = [],
+        array $staticVariables = [],
     ) {
         $this->classDefinition = $classDefinition;
         $this->staticVariables = $staticVariables;
@@ -194,7 +189,7 @@ class Method
      *
      * @param array|null $returnType
      */
-    public function setReturnTypes(?array $returnType = null): void
+    public function setReturnTypes(array $returnType = null): void
     {
         $this->returnTypesRaw = $returnType;
         if (null === $returnType) {
@@ -245,12 +240,12 @@ class Method
             }
         }
 
-        if (count($castTypes) > 0) {
+        if (\count($castTypes) > 0) {
             $types['object'] = [];
             $this->returnClassTypes = $castTypes;
         }
 
-        if (count($types) > 0) {
+        if (\count($types) > 0) {
             $this->returnTypes = $types;
         }
     }
@@ -296,47 +291,47 @@ class Method
      */
     public function checkVisibility(array $visibility, string $name, array $original = null): void
     {
-        if (count($visibility) > 1) {
-            if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\count($visibility) > 1) {
+            if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('private', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'private' at the same time", $original);
             }
 
-            if (in_array('protected', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('protected', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'public' at the same time", $original);
             }
         }
 
         if ('__construct' === $name) {
-            if (in_array('static', $visibility)) {
+            if (\in_array('static', $visibility)) {
                 throw new CompilerException("Constructors cannot be 'static'", $original);
             }
         } elseif ('__destruct' === $name) {
-            if (in_array('static', $visibility)) {
+            if (\in_array('static', $visibility)) {
                 throw new CompilerException("Destructors cannot be 'static'", $original);
             }
         }
 
-        $this->isAbstract = in_array('abstract', $visibility);
-        $this->isStatic = in_array('static', $visibility);
-        $this->isFinal = in_array('final', $visibility);
-        $this->isPublic = in_array('public', $visibility);
-        $this->isInternal = in_array('internal', $visibility);
+        $this->isAbstract = \in_array('abstract', $visibility);
+        $this->isStatic = \in_array('static', $visibility);
+        $this->isFinal = \in_array('final', $visibility);
+        $this->isPublic = \in_array('public', $visibility);
+        $this->isInternal = \in_array('internal', $visibility);
     }
 
     /**
@@ -502,7 +497,7 @@ class Method
      */
     public function hasReturnTypes(): bool
     {
-        return count($this->returnTypes) || count($this->returnClassTypes);
+        return \count($this->returnTypes) || \count($this->returnClassTypes);
     }
 
     /**
@@ -521,7 +516,7 @@ class Method
         $types = ['int', 'uint', 'char', 'uchar', 'long', 'ulong'];
 
         foreach ($this->returnTypes as $returnType => $definition) {
-            if (in_array($returnType, $types)) {
+            if (\in_array($returnType, $types)) {
                 return true;
             }
         }
@@ -626,7 +621,7 @@ class Method
      */
     public function hasModifier(string $modifier): bool
     {
-        return in_array($modifier, $this->visibility);
+        return \in_array($modifier, $this->visibility);
     }
 
     /**
@@ -639,7 +634,7 @@ class Method
 
     public function isDeprecated(): bool
     {
-        return !empty($this->visibility) && in_array('deprecated', $this->visibility, true);
+        return !empty($this->visibility) && \in_array('deprecated', $this->visibility, true);
     }
 
     /**
@@ -720,7 +715,7 @@ class Method
      */
     public function isPrivate(): bool
     {
-        return in_array('private', $this->visibility);
+        return \in_array('private', $this->visibility);
     }
 
     /**
@@ -728,7 +723,7 @@ class Method
      */
     public function isProtected(): bool
     {
-        return in_array('protected', $this->visibility);
+        return \in_array('protected', $this->visibility);
     }
 
     /**
@@ -861,7 +856,7 @@ class Method
      * Assigns a default value.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function assignDefaultValue(array $parameter, CompilationContext $compilationContext): string
     {
@@ -1221,7 +1216,7 @@ class Method
     {
         $dataType = $this->getParamDataType($parameter);
 
-        if (in_array($dataType, ['variable', 'callable', 'object', 'resource', 'mixed'])) {
+        if (\in_array($dataType, ['variable', 'callable', 'object', 'resource', 'mixed'])) {
             return '';
         }
 
@@ -1273,7 +1268,7 @@ class Method
         $typeInference = null;
         $callGathererPass = null;
 
-        if (is_object($this->statements)) {
+        if (\is_object($this->statements)) {
             $compilationContext->currentMethod = $this;
 
             /**
@@ -1317,7 +1312,7 @@ class Method
      * Compiles the method.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -1452,12 +1447,12 @@ class Method
                  */
                 if (!empty($parameter['const'])) {
                     $symbol->setReadOnly(true);
-                    if (is_object($symbolParam)) {
+                    if (\is_object($symbolParam)) {
                         $symbolParam->setReadOnly(true);
                     }
                 }
 
-                if (is_object($symbolParam)) {
+                if (\is_object($symbolParam)) {
                     /**
                      * Parameters are marked as 'external'
                      */
@@ -1527,7 +1522,7 @@ class Method
         /**
          * Compile the block of statements if any
          */
-        if (is_object($this->statements)) {
+        if (\is_object($this->statements)) {
             $compilationContext->staticContext = $this->hasModifier('static');
 
             /**
@@ -1566,7 +1561,7 @@ class Method
              * variable is modified so as do the proper separation.
              */
             $parametersToSeparate = [];
-            if (is_object($this->statements)) {
+            if (\is_object($this->statements)) {
                 if (!$this->localContext instanceof LocalContextPass) {
                     $writeDetector = new WriteDetector();
                 }
@@ -1636,7 +1631,7 @@ class Method
 
                 $name = match ($dataType) {
                     'object', 'callable', 'resource', 'variable', 'mixed' => $parameter['name'],
-                    default => $parameter['name'] . '_param',
+                    default => $parameter['name'].'_param',
                 };
 
                 /**
@@ -1784,7 +1779,7 @@ class Method
 
             if (!$variable->isUsed()) {
                 $node = $variable->getLastUsedNode();
-                if (is_array($node)) {
+                if (\is_array($node)) {
                     $expression = $node['expr'] ?? $node;
                     $compilationContext->logger->warning(
                         'Variable "'.$variable->getName().'" assigned but not used in '.$completeName.'::'.$this->getName(),
@@ -1799,7 +1794,7 @@ class Method
             }
         }
 
-        if (count($usedVariables)) {
+        if (\count($usedVariables)) {
             $codePrinter->preOutputBlankLine();
         }
 
@@ -1818,14 +1813,14 @@ class Method
             ));
 
             foreach ($requiredParams as $requiredParam) {
-                $tempCodePrinter->output("\t"."\t".$this->detectParam($requiredParam, $compilationContext));
+                $tempCodePrinter->output("\t\t".$this->detectParam($requiredParam, $compilationContext));
             }
 
             if (!empty($optionalParams)) {
-                $tempCodePrinter->output("\t"."\t".'Z_PARAM_OPTIONAL');
+                $tempCodePrinter->output("\t\t".'Z_PARAM_OPTIONAL');
 
                 foreach ($optionalParams as $optionalParam) {
-                    $tempCodePrinter->output("\t"."\t".$this->detectParam($optionalParam, $compilationContext));
+                    $tempCodePrinter->output("\t\t".$this->detectParam($optionalParam, $compilationContext));
                 }
             }
 
@@ -1854,7 +1849,7 @@ class Method
         /**
          * Finalize the method compilation
          */
-        if (is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
+        if (\is_object($this->statements) && !empty($statement = $this->statements->getLastStatement())) {
             /**
              * If the last statement is not a 'return' or 'throw' we need to
              * restore the memory stack if needed.
@@ -1904,7 +1899,7 @@ class Method
      */
     public function hasChildReturnStatementType(array $statement): bool
     {
-        if (!isset($statement['statements']) || !is_array($statement['statements'])) {
+        if (!isset($statement['statements']) || !\is_array($statement['statements'])) {
             return false;
         }
 
@@ -1952,7 +1947,7 @@ class Method
     /**
      * Returns arginfo name for current method.
      */
-    public function getArgInfoName(?Definition $classDefinition = null): string
+    public function getArgInfoName(Definition $classDefinition = null): string
     {
         if ($classDefinition instanceof Definition) {
             return sprintf(
@@ -1990,7 +1985,7 @@ class Method
             return true;
         }
 
-        if (0 === count($this->returnTypes)) {
+        if (0 === \count($this->returnTypes)) {
             return false;
         }
 
@@ -2003,14 +1998,14 @@ class Method
             }
 
             if (isset($definition['type']) && 'return-type-annotation' === $definition['type']) {
-                if ($this->areReturnTypesBoolCompatible() ||
-                    $this->areReturnTypesDoubleCompatible() ||
-                    $this->areReturnTypesIntCompatible() ||
-                    $this->areReturnTypesNullCompatible() ||
-                    $this->areReturnTypesStringCompatible() ||
-                    $this->areReturnTypesFalseCompatible() ||
-                    $this->areReturnTypesObjectCompatible() ||
-                    array_key_exists('array', $this->getReturnTypes())
+                if ($this->areReturnTypesBoolCompatible()
+                    || $this->areReturnTypesDoubleCompatible()
+                    || $this->areReturnTypesIntCompatible()
+                    || $this->areReturnTypesNullCompatible()
+                    || $this->areReturnTypesStringCompatible()
+                    || $this->areReturnTypesFalseCompatible()
+                    || $this->areReturnTypesObjectCompatible()
+                    || \array_key_exists('array', $this->getReturnTypes())
                 ) {
                     continue;
                 }
@@ -2032,9 +2027,9 @@ class Method
      */
     public function isReturnTypeNullableObject(): bool
     {
-        return count($this->returnTypes) === 2 &&
-               isset($this->returnTypes['object']) &&
-               isset($this->returnTypes['null']);
+        return \count($this->returnTypes) === 2
+               && isset($this->returnTypes['object'])
+               && isset($this->returnTypes['null']);
     }
 
     /**
@@ -2042,7 +2037,7 @@ class Method
      */
     public function isReturnTypeObject(): bool
     {
-        return count($this->returnTypes) === 1 && isset($this->returnTypes['object']);
+        return \count($this->returnTypes) === 1 && isset($this->returnTypes['object']);
     }
 
     /**
@@ -2055,12 +2050,12 @@ class Method
             return true;
         }
 
-        $totalTypes = count($this->returnTypes);
+        $totalTypes = \count($this->returnTypes);
 
         // union types
         if ($totalTypes > 1) {
             $diff = array_diff(array_keys($this->returnTypes), array_keys($this->mayBeArgTypes));
-            if (count($diff) === 0) {
+            if (\count($diff) === 0) {
                 return true;
             }
         }
@@ -2167,10 +2162,10 @@ class Method
                 break;
 
             case 'variable':
-                if (isset($parameter['cast']) &&
-                    $parameter['cast']['type'] === 'variable' &&
-                    $parameter['cast']['value'] &&
-                    $this->classDefinition !== null
+                if (isset($parameter['cast'])
+                    && $parameter['cast']['type'] === 'variable'
+                    && $parameter['cast']['value']
+                    && $this->classDefinition !== null
                 ) {
                     $classEntry = (new ClassEntry($parameter['cast']['value'], $compilationContext))->get();
                     if ($hasDefaultNull) {

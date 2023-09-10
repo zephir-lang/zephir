@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Stubs;
 
-use function count;
-
 /**
  * @author Gusakov Nikita <dev@nkt.me>
  */
@@ -43,7 +41,7 @@ class DocBlock
     {
         $this->indent = $indent;
         $lines = explode("\n", trim($source ?: ''));
-        $count = count($lines);
+        $count = \count($lines);
 
         foreach ($lines as $i => $line) {
             $line = preg_replace('#^([\s\t]+)?/?([*]+)([\s\t]+)?$#im', '', rtrim($line));
@@ -56,7 +54,7 @@ class DocBlock
             $cleaned = trim($line, "\t*\0 ");
             $cleaned = str_replace('$$', '$', $cleaned);
 
-            if (0 === strpos($cleaned, '@')) {
+            if (str_starts_with($cleaned, '@')) {
                 $this->lines[] = $cleaned;
             } else {
                 $line = preg_replace('#([\s\t]+)?[*]#', '', $line);
@@ -68,7 +66,7 @@ class DocBlock
             }
         }
 
-        if (!empty($this->lines) && 0 !== strpos(trim($this->lines[0], "\t*\0 "), '@')) {
+        if (!empty($this->lines) && !str_starts_with(trim($this->lines[0], "\t*\0 "), '@')) {
             $description = array_shift($this->lines);
             $description = explode("\n", $description);
 

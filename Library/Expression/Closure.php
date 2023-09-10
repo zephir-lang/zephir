@@ -23,7 +23,6 @@ use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
-use function is_array;
 
 /**
  * Creates an anonymous function within the extension simulating a closure
@@ -57,7 +56,7 @@ class Closure
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -105,7 +104,7 @@ class Closure
         $block = $expression['right'] ?? [];
 
         $staticVariables = [];
-        if (isset($expression['use']) && is_array($expression['use'])) {
+        if (isset($expression['use']) && \is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
                 $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable($parameter['name']);
             }

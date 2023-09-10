@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Exception;
@@ -22,6 +21,7 @@ use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
+
 use function Zephir\add_slashes;
 
 class ForStatement extends StatementAbstract
@@ -29,11 +29,12 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a for statement that use a 'range' as expression.
      *
-     * @param array $exprRaw
+     * @param array              $exprRaw
      * @param CompilationContext $compilationContext
      *
      * @return bool
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compileRange(array $exprRaw, CompilationContext $compilationContext): bool
@@ -394,12 +395,13 @@ class ForStatement extends StatementAbstract
     /**
      * Compiles a 'for' statement that use an 'iterator' as expression.
      *
-     * @param array $exprRaw
+     * @param array              $exprRaw
      * @param CompilationContext $compilationContext
      *
      * @return void
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
@@ -520,11 +522,12 @@ class ForStatement extends StatementAbstract
      * - Every key must be an integer or compatible
      * - Every value must be a char/integer or compatible.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
-     * @param Variable $exprVariable
+     * @param Variable           $exprVariable
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compileStringTraverse($expression, CompilationContext $compilationContext, $exprVariable)
     {
@@ -745,7 +748,7 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {

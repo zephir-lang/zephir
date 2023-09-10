@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Detectors;
 
 use Zephir\Variable\Variable;
-use function is_array;
 
 /**
  * Detects if a variable is used in a given expression context
@@ -44,13 +43,13 @@ class ReadDetector
 
         if (in_array($expression['type'], ['fcall', 'mcall', 'scall']) && isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if (is_array($parameter['parameter']) && 'variable' === $parameter['parameter']['type'] && $variable == $parameter['parameter']['value']) {
+                if (\is_array($parameter['parameter']) && 'variable' === $parameter['parameter']['type'] && $variable == $parameter['parameter']['value']) {
                     return true;
                 }
             }
         }
 
-        return (isset($expression['left']) && is_array($expression['left']) && $this->detect($variable, $expression['left'])) ||
-               (isset($expression['right']) && is_array($expression['right']) && $this->detect($variable, $expression['right']));
+        return (isset($expression['left']) && \is_array($expression['left']) && $this->detect($variable, $expression['left']))
+               || (isset($expression['right']) && \is_array($expression['right']) && $this->detect($variable, $expression['right']));
     }
 }

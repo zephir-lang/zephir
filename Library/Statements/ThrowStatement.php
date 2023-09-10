@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\Class\Entry;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
@@ -21,7 +20,7 @@ use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use function in_array;
+
 use function Zephir\add_slashes;
 use function Zephir\fqcn;
 
@@ -34,7 +33,7 @@ class ThrowStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -48,10 +47,10 @@ class ThrowStatement extends StatementAbstract
          * This optimizes throw new Exception("hello")
          */
         if (!$compilationContext->insideTryCatch) {
-            if (isset($expr['class']) &&
-                isset($expr['parameters']) &&
-                1 == \count($expr['parameters']) &&
-                'string' == $expr['parameters'][0]['parameter']['type']
+            if (isset($expr['class'])
+                && isset($expr['parameters'])
+                && 1 == \count($expr['parameters'])
+                && 'string' == $expr['parameters'][0]['parameter']['type']
             ) {
                 $className = fqcn(
                     $expr['class'],
@@ -80,7 +79,7 @@ class ThrowStatement extends StatementAbstract
                     }
                 }
             } else {
-                if (in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
+                if (\in_array($expr['type'], ['string', 'char', 'int', 'double'])) {
                     $class = (new Entry('Exception', $compilationContext))->get();
 
                     $this->throwStringException($codePrinter, $class, $expr['value'], $expr);
@@ -97,7 +96,7 @@ class ThrowStatement extends StatementAbstract
             throw new CompilerException($e->getMessage(), $expr, $e->getCode(), $e);
         }
 
-        if (!in_array($resolvedExpr->getType(), ['variable', 'string'])) {
+        if (!\in_array($resolvedExpr->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Expression '".$resolvedExpr->getType().'" cannot be used as exception',
                 $expr
@@ -110,7 +109,7 @@ class ThrowStatement extends StatementAbstract
             $expr
         );
 
-        if (!in_array($variableVariable->getType(), ['variable', 'string'])) {
+        if (!\in_array($variableVariable->getType(), ['variable', 'string'])) {
             throw new CompilerException(
                 "Variable '".$variableVariable->getType()."' cannot be used as exception",
                 $expr
@@ -142,9 +141,9 @@ class ThrowStatement extends StatementAbstract
      * Throws an exception escaping the data.
      *
      * @param Printer $printer
-     * @param string      $class
-     * @param string      $message
-     * @param array       $expression
+     * @param string  $class
+     * @param string  $message
+     * @param array   $expression
      */
     private function throwStringException(Printer $printer, string $class, string $message, array $expression): void
     {

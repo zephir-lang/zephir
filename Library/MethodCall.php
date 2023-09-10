@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use ReflectionException;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
@@ -41,11 +40,13 @@ class MethodCall extends Call
     /**
      * Compiles a method call.
      *
-     * @param Expression $expr
+     * @param Expression         $expr
      * @param CompilationContext $compilationContext
+     *
      * @return mixed|CompiledExpression
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext): mixed
     {
@@ -319,10 +320,10 @@ class MethodCall extends Call
                         $numberImplemented = 0;
                         $compiler = $compilationContext->compiler;
                         foreach ($classTypes as $classType) {
-                            if ($compiler->isClass($classType) ||
-                                $compiler->isInterface($classType) ||
-                                $compiler->isBundledClass($classType) ||
-                                $compiler->isBundledInterface($classType)
+                            if ($compiler->isClass($classType)
+                                || $compiler->isInterface($classType)
+                                || $compiler->isBundledClass($classType)
+                                || $compiler->isBundledInterface($classType)
                             ) {
                                 if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
                                     $classDefinition = $compiler->getClassDefinition($classType);
@@ -373,9 +374,9 @@ class MethodCall extends Call
                                 /*
                                  * Check visibility for protected methods
                                  */
-                                if ($method->isProtected() &&
-                                    $method->getClassDefinition() != $classDefinition &&
-                                    $method->getClassDefinition() != $classDefinition->getExtendsClass()
+                                if ($method->isProtected()
+                                    && $method->getClassDefinition() != $classDefinition
+                                    && $method->getClassDefinition() != $classDefinition->getExtendsClass()
                                 ) {
                                     throw new CompilerException(
                                         sprintf(
@@ -672,10 +673,10 @@ class MethodCall extends Call
                                         }
                                         break;
 
-                                    /**
-                                     * Passing polymorphic variables to static typed parameters
-                                     * could lead to potential unexpected type coercions
-                                     */
+                                        /**
+                                         * Passing polymorphic variables to static typed parameters
+                                         * could lead to potential unexpected type coercions
+                                         */
                                     case 'variable':
                                         if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
                                             if ('undefined' == $resolvedDynamicTypes[$n]) {
@@ -746,7 +747,7 @@ class MethodCall extends Call
                     $compilationContext
                 );
             } else {
-                //TODO: also move to backend
+                // TODO: also move to backend
                 if ($isExpecting) {
                     $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
                 }
@@ -828,11 +829,12 @@ class MethodCall extends Call
      * Examine internal class information and returns the method called.
      *
      * @param CompilationContext $compilationContext
-     * @param Variable $caller
-     * @param string $methodName
+     * @param Variable           $caller
+     * @param string             $methodName
      *
      * @return array
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      */
     private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, string $methodName): array
     {
@@ -854,9 +856,9 @@ class MethodCall extends Call
                     continue;
                 }
 
-                if ($compiler->isClass($classType) ||
-                    $compiler->isBundledClass($classType) ||
-                    $compiler->isBundledInterface($classType)
+                if ($compiler->isClass($classType)
+                    || $compiler->isBundledClass($classType)
+                    || $compiler->isBundledInterface($classType)
                 ) {
                     if ($compiler->isClass($classType)) {
                         $classDefinition = $compiler->getClassDefinition($classType);

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Backend;
 
 use Zephir\Code\Printer;
+
 use function Zephir\file_put_contents_ex;
 
 class FcallManager implements FcallManagerInterface
@@ -24,8 +25,8 @@ class FcallManager implements FcallManagerInterface
      * {@inheritdoc}
      *
      * @param bool $static
-     * @param int $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
-     * @param int $paramCount
+     * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     * @param int  $paramCount
      *
      * @return string
      */
@@ -133,7 +134,7 @@ HEAD;
                 sprintf(
                     'method(0, execute_data, %s, %s%s%s); \\',
                     $retParam,
-                    ($scope ? 'NULL, ' : $objParam),
+                    $scope ? 'NULL, ' : $objParam,
                     $retValueUsed,
                     $i ? ', &'.implode(', &', $zvals) : ''
                 )

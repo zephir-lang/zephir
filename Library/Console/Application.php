@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Console;
 
-use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
@@ -28,7 +27,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Throwable;
 use Zephir\Console\Command\ListCommand;
 use Zephir\Zephir;
 
@@ -111,7 +109,7 @@ final class Application extends BaseApplication
      *
      * @return int
      *
-     * @throws Exception|Throwable
+     * @throws \Exception|\Throwable
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
@@ -151,7 +149,7 @@ final class Application extends BaseApplication
 
         try {
             return parent::doRun($input, $output);
-        } catch (CommandNotFoundException|RuntimeException $e) {
+        } catch (CommandNotFoundException | RuntimeException $e) {
             fprintf(STDERR, $e->getMessage().PHP_EOL);
 
             return 1;

@@ -285,7 +285,7 @@ final class TypesTest extends TestCase
         $typesList = [];
         $collections = [];
         foreach ($returnTypes as $type) {
-            if (false !== strpos($type, '[]')) {
+            if (str_contains($type, '[]')) {
                 $typesList[] = $this->variableReturnTypeDefinition([$type], 1)[0];
                 $collectionType = trim($type, '<>');
                 $collections[$collectionType] = $collectionType;

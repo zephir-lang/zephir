@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
-use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -32,16 +31,16 @@ abstract class AbstractType
     /**
      * Intercepts calls to built-in methods.
      *
-     * @param string $methodName
-     * @param object $caller
+     * @param string             $methodName
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
      *
      * @return bool|CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function invokeMethod(
         $methodName,

@@ -75,7 +75,7 @@ class BuilderFactory
     }
 
     /**
-     * @param $type
+     * @param      $type
      * @param null $value
      *
      * @return RawExpression

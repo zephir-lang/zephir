@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Class;
 
-use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Exception;
@@ -23,8 +22,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
 use Zephir\Types\Types;
-use function in_array;
-use function is_array;
+
 use function Zephir\add_slashes;
 
 /**
@@ -34,15 +32,15 @@ class Property
 {
     public function __construct(
         protected Definition $classDefinition,
-        protected array      $visibility,
-        protected string     $name,
-        protected ?array     $defaultValue,
-        protected ?string    $docBlock = null,
-        protected ?array     $original = null,
+        protected array $visibility,
+        protected string $name,
+        protected ?array $defaultValue,
+        protected ?string $docBlock = null,
+        protected ?array $original = null,
     ) {
         $this->checkVisibility($visibility, $name, $original);
 
-        if (!is_array($this->defaultValue)) {
+        if (!\is_array($this->defaultValue)) {
             $this->defaultValue = [];
             $this->defaultValue['type'] = 'null';
             $this->defaultValue['value'] = null;
@@ -93,15 +91,15 @@ class Property
     /**
      * Checks for visibility congruence.
      */
-    public function checkVisibility(array $visibility, string $name, ?array $original = null): void
+    public function checkVisibility(array $visibility, string $name, array $original = null): void
     {
-        if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'protected' at the same time", $original);
         }
-        if (in_array('public', $visibility) && in_array('private', $visibility)) {
+        if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'public' and 'private' at the same time", $original);
         }
-        if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+        if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
             throw new CompilerException("Property '$name' cannot be 'protected' and 'private' at the same time", $original);
         }
     }
@@ -154,7 +152,7 @@ class Property
      */
     public function isStatic(): bool
     {
-        return in_array('static', $this->visibility);
+        return \in_array('static', $this->visibility);
     }
 
     /**
@@ -162,7 +160,7 @@ class Property
      */
     public function isPublic(): bool
     {
-        return in_array('public', $this->visibility);
+        return \in_array('public', $this->visibility);
     }
 
     /**
@@ -170,7 +168,7 @@ class Property
      */
     public function isProtected(): bool
     {
-        return in_array('protected', $this->visibility);
+        return \in_array('protected', $this->visibility);
     }
 
     /**
@@ -178,14 +176,14 @@ class Property
      */
     public function isPrivate(): bool
     {
-        return in_array('private', $this->visibility);
+        return \in_array('private', $this->visibility);
     }
 
     /**
      * Produce the code to register a property.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -276,7 +274,7 @@ class Property
             ->setStatements($exprBuilder->statements()->block([$lsb]));
     }
 
-    protected function getBooleanCode($value): bool|string
+    protected function getBooleanCode($value): bool | string
     {
         if ('true' == $value || true === $value) {
             return '1';
@@ -294,7 +292,7 @@ class Property
      *
      * @param CompilationContext $compilationContext
      * @param string             $type
-     * @param $value
+     * @param                    $value
      *
      * @throws Exception
      * @throws CompilerException

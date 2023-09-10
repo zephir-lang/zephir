@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Class;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Expression\Constants;
@@ -83,7 +82,7 @@ class Constant
      * Process the value of the class constant if needed.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function processValue(CompilationContext $compilationContext): void
     {
@@ -112,7 +111,7 @@ class Constant
      * Produce the code to register a class constant.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {

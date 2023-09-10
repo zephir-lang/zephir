@@ -13,14 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use ReflectionException;
 use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
-use function in_array;
 
 /**
  * Resolves class static properties
@@ -54,7 +52,7 @@ class StaticPropertyAccess
     /**
      * Access a static property.
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
@@ -67,7 +65,7 @@ class StaticPropertyAccess
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, ['self', 'static', 'parent'])) {
+        if (!\in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -79,7 +77,7 @@ class StaticPropertyAccess
                 }
             }
         } else {
-            if (in_array($className, ['self', 'static'])) {
+            if (\in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' === $className) {

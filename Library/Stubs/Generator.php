@@ -14,15 +14,13 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\Class\Property;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\Definition;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\CompilerFile;
 use Zephir\Exception;
-use function array_key_exists;
-use function in_array;
 
 class Generator
 {
@@ -37,6 +35,7 @@ class Generator
         'scoped',
         'deprecated',
     ];
+
     /**
      * @param CompilerFile[] $files
      */
@@ -90,12 +89,12 @@ class Generator
      * Build class.
      *
      * @param Definition $class
-     * @param string          $indent
-     * @param string          $banner
+     * @param string     $indent
+     * @param string     $banner
      *
      * @return string
-     *@throws Exception\RuntimeException
      *
+     * @throws Exception\RuntimeException
      */
     protected function buildClass(Definition $class, string $indent, string $banner): string
     {
@@ -209,7 +208,7 @@ class Generator
      * Build property.
      *
      * @param Property $property
-     * @param string        $indent
+     * @param string   $indent
      *
      * @return string
      */
@@ -239,7 +238,7 @@ class Generator
 
     /**
      * @param Constant $constant
-     * @param string        $indent
+     * @param string   $indent
      *
      * @return string
      */
@@ -256,8 +255,8 @@ class Generator
 
     /**
      * @param Method $method
-     * @param bool        $isInterface
-     * @param string      $indent
+     * @param bool   $isInterface
+     * @param string $indent
      *
      * @return string
      */
@@ -285,13 +284,13 @@ class Generator
                 } elseif (isset($parameter['data-type']) && 'array' === $parameter['data-type']) {
                     $paramStr .= 'array ';
                 } elseif (isset($parameter['data-type'])) {
-                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                    if (\in_array($parameter['data-type'], ['bool', 'boolean'])) {
                         $paramStr .= 'bool ';
                     } elseif ('double' == $parameter['data-type']) {
                         $paramStr .= 'float ';
-                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                    } elseif (\in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
                         $paramStr .= 'int ';
-                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
+                    } elseif (\in_array($parameter['data-type'], ['char', 'string'])) {
                         $paramStr .= 'string ';
                     }
                 }
@@ -310,7 +309,7 @@ class Generator
         if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes())) {
+            if (\array_key_exists('object', $method->getReturnTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -335,7 +334,7 @@ class Generator
                 ++$supported;
             }
 
-            if (array_key_exists('array', $method->getReturnTypes())) {
+            if (\array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
                 ++$supported;
             }
@@ -345,7 +344,7 @@ class Generator
             }
 
             // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
+            if ($supported > 1 || \array_key_exists('variable', $method->getReturnTypes())) {
                 $return = '';
             }
         } elseif ($method->isVoid()) {
@@ -376,9 +375,9 @@ class Generator
      *
      * @param array $parameter
      *
-     * @throws Exception\NotImplementedException
-     *
      * @return string
+     *
+     * @throws Exception\NotImplementedException
      */
     protected function wrapPHPValue(array $parameter): string
     {

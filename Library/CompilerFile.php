@@ -15,7 +15,6 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
-use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Definition\DefinitionRuntime;
@@ -29,7 +28,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
-use function is_array;
 
 /**
  * This class represents every file compiled in a project.
@@ -192,10 +190,10 @@ final class CompilerFile implements FileInterface
      *
      * @param Compiler $compiler
      *
+     * @return array
+     *
      * @throws ParseException
      * @throws IllegalStateException if the intermediate representation is not of type 'array'
-     *
-     * @return array
      */
     public function genIR(Compiler $compiler): array
     {
@@ -227,7 +225,7 @@ final class CompilerFile implements FileInterface
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compileClass(CompilationContext $compilationContext): void
     {
@@ -239,6 +237,7 @@ final class CompilerFile implements FileInterface
      *
      * @param CompilationContext $compilationContext
      * @param FunctionDefinition $functionDefinition
+     *
      * @throws Exception
      */
     public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
@@ -291,7 +290,7 @@ final class CompilerFile implements FileInterface
 
         $classDefinition->setType('interface');
 
-        if (is_array($docblock)) {
+        if (\is_array($docblock)) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
@@ -367,7 +366,7 @@ final class CompilerFile implements FileInterface
             $classDefinition->setIsFinal((bool) $topStatement['final']);
         }
 
-        if (is_array($docblock)) {
+        if (\is_array($docblock)) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
@@ -648,7 +647,7 @@ final class CompilerFile implements FileInterface
      *
      * @param Compiler $compiler
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function checkDependencies(Compiler $compiler)
     {
@@ -945,7 +944,7 @@ final class CompilerFile implements FileInterface
     /**
      * Creates the property shortcuts.
      *
-     * @param array           $property
+     * @param array      $property
      * @param Definition $classDefinition
      *
      * @throws CompilerException

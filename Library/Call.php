@@ -52,7 +52,7 @@ class Call
     /**
      * @var mixed|null
      */
-    protected $reflection = null;
+    protected $reflection;
 
     /**
      * @var array
@@ -382,7 +382,7 @@ class Call
                         case 'int':
                         case 'uint':
                         case 'long':
-                        /* ulong must be stored in string */
+                            /* ulong must be stored in string */
                         case 'ulong':
                             $parameterTempVariable = $compilationContext->backend->getScalarTempVariable('variable', $compilationContext);
                             $params[] = $compilationContext->backend->getVariableCode($parameterTempVariable);

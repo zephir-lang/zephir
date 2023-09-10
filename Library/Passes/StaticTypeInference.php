@@ -198,7 +198,7 @@ class StaticTypeInference
         if (isset($this->variables[$variable])) {
             $type = $this->variables[$variable];
             if ('variable' != $type && 'undefined' != $type && 'string' != $type && 'istring' != $type && 'array' != $type && 'null' != $type && 'numeric' != $type) {
-                //echo $variable, ' ', $type, PHP_EOL;
+                // echo $variable, ' ', $type, PHP_EOL;
                 return $type;
             }
         }
@@ -457,8 +457,8 @@ class StaticTypeInference
 
             case 'ternary':
             case 'short-ternary':
-                //$right = $this->passExpression($expression['right']);
-                //$extra = $this->passExpression($expression['extra']);
+                // $right = $this->passExpression($expression['right']);
+                // $extra = $this->passExpression($expression['extra']);
                 /*if ($right == $extra) {
                     if ($right != 'string' && $right != 'array') {
                         return $right;
@@ -576,7 +576,7 @@ class StaticTypeInference
                 case 'unset':
                 case 'cblock':
                 case 'comment':
-                // empty statement != empty operator
+                    // empty statement != empty operator
                 case 'empty':
                     break;
 

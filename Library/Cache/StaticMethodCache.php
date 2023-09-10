@@ -11,7 +11,6 @@
 
 namespace Zephir\Cache;
 
-use ReflectionMethod;
 use Zephir\CompilationContext;
 
 /**
@@ -41,7 +40,7 @@ class StaticMethodCache
             return 'NULL, 0';
         }
 
-        if (!($method instanceof ReflectionMethod)) {
+        if (!($method instanceof \ReflectionMethod)) {
             $completeName = $method->getClassDefinition()->getCompleteName();
 
             /**
@@ -71,7 +70,7 @@ class StaticMethodCache
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 
-        if (!($method instanceof ReflectionMethod)) {
+        if (!($method instanceof \ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 

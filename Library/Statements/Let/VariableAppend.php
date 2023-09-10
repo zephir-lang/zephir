@@ -26,11 +26,11 @@ class VariableAppend
     /**
      * Compiles foo[] = {expr}.
      *
-     * @param $variable
+     * @param                    $variable
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param $statement
+     * @param                    $statement
      *
      * @throws CompilerException
      */

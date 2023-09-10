@@ -48,10 +48,10 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
     /**
      * Compiles x->y[a][b][] = {expr} (multiple offset assignment).
      *
-     * @param ZephirVariable $symbolVariable
+     * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
      * @throws \ReflectionException
      * @throws Exception

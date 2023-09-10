@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
@@ -37,7 +36,7 @@ class CastOperator extends AbstractOperator
      *
      * @return CompiledExpression
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {

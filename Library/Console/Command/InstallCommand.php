@@ -23,8 +23,6 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
 
-use function extension_loaded;
-
 /**
  * Install Command
  *
@@ -77,7 +75,7 @@ final class InstallCommand extends AbstractCommand
         $success = ['Extension installed.'];
 
         $namespace = $this->config->get('namespace');
-        if (!extension_loaded($namespace)) {
+        if (!\extension_loaded($namespace)) {
             $success[] = sprintf('Add "extension=%s.so" to your php.ini', $namespace);
         }
 

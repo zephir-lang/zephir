@@ -64,10 +64,10 @@ class MethodDocBlock extends DocBlock
     private Types $types;
 
     public function __construct(
-        Method       $method,
+        Method $method,
         AliasManager $aliasManager,
-        string       $indent = '    ',
-        ?Types       $types = null
+        string $indent = '    ',
+        Types $types = null
     ) {
         parent::__construct($method->getDocBlock(), $indent);
 

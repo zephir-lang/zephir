@@ -13,15 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
-use function gettype;
-use function in_array;
 
 /**
  * Resolves class constants
@@ -38,7 +35,7 @@ class StaticConstantAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool $expecting
+     * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
@@ -60,12 +57,13 @@ class StaticConstantAccess
     /**
      * Access a static constant class.
      *
-     * @param array $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
+     *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -77,7 +75,7 @@ class StaticConstantAccess
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
+        if (!\in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -89,7 +87,7 @@ class StaticConstantAccess
                 }
             }
         } else {
-            if (in_array($className, ['self', 'static', 'this'])) {
+            if (\in_array($className, ['self', 'static', 'this'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } elseif ('parent' === $className) {
                 $classDefinition = $compilationContext->classDefinition;
@@ -182,7 +180,7 @@ class StaticConstantAccess
             $type = $constantDefinition->getValueType();
         } else {
             $value = $constantDefinition;
-            $type = gettype($value);
+            $type = \gettype($value);
             if ('integer' === $type) {
                 $type = 'int';
             }

@@ -26,8 +26,7 @@ use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
-use function in_array;
-use function strlen;
+
 use function Zephir\add_slashes;
 
 class Backend
@@ -121,9 +120,9 @@ class Backend
 
     public function getVariableCode(Variable $variable): string
     {
-        if ($variable->isDoublePointer() ||
-            in_array($variable->getName(), ['this_ptr', 'return_value']) ||
-            in_array($variable->getType(), ['int', 'long'])) {
+        if ($variable->isDoublePointer()
+            || \in_array($variable->getName(), ['this_ptr', 'return_value'])
+            || \in_array($variable->getType(), ['int', 'long'])) {
             return $variable->getName();
         }
 
@@ -243,13 +242,13 @@ class Backend
     }
 
     /**
-     * @param Variable           $variableVariable
-     * @param string             $operator
-     * @param string             $value
-     *
-     * @throws CompilerException
+     * @param Variable $variableVariable
+     * @param string   $operator
+     * @param string   $value
      *
      * @return string
+     *
+     * @throws CompilerException
      */
     public function getTypeofCondition(
         Variable $variableVariable,
@@ -309,7 +308,7 @@ class Backend
     public function onPreInitVar(Method $method): string
     {
         if (!$method instanceof FunctionDefinition && !$method->isInternal()) {
-            return "zval *this_ptr = getThis();\n"; //TODO: think about a better way to solve this.
+            return "zval *this_ptr = getThis();\n"; // TODO: think about a better way to solve this.
         }
 
         return '';
@@ -343,7 +342,7 @@ class Backend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
+        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
@@ -397,9 +396,9 @@ class Backend
                     break;
 
                 case 'char':
-                    $defaultValue = (string)$defaultValue;
-                    if (strlen($defaultValue) > 4) {
-                        if (strlen($defaultValue) > 10) {
+                    $defaultValue = (string) $defaultValue;
+                    if (\strlen($defaultValue) > 4) {
+                        if (\strlen($defaultValue) > 10) {
                             throw new CompilerException("Invalid char literal: '".substr($defaultValue, 0, 10)."...'", $variable->getOriginal());
                         } else {
                             throw new CompilerException("Invalid char literal: '".$defaultValue."'", $variable->getOriginal());
@@ -428,9 +427,9 @@ class Backend
      * @param Variable[]         $variables
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return string
+     *
+     * @throws CompilerException
      */
     public function initializeVariableDefaults(array $variables, CompilationContext $context): string
     {
@@ -504,7 +503,7 @@ class Backend
     }
 
     /**
-     * @param Method        $method
+     * @param Method             $method
      * @param CompilationContext $context
      *
      * @return string
@@ -646,7 +645,7 @@ class Backend
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
+            if (\in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }
@@ -771,16 +770,16 @@ class Backend
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' === $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch('.$code.', SS("'.$resolvedExpr->getCode().'"), '.$flags.')', $expression);
-            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
+            } elseif (\in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
                 return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.')', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
         }
 
-        if (in_array($resolvedExpr->getType(), ['int', 'long'])) {
+        if (\in_array($resolvedExpr->getType(), ['int', 'long'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
-        } elseif (in_array($resolvedExpr->getType(), ['variable', 'mixed', 'string'])) {
+        } elseif (\in_array($resolvedExpr->getType(), ['variable', 'mixed', 'string'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
         }
 
@@ -920,11 +919,12 @@ class Backend
     }
 
     /**
-     * @param Variable $symbolVariable
-     * @param Definition $classDefinition
-     * @param $property
-     * @param bool $readOnly
+     * @param Variable           $symbolVariable
+     * @param Definition         $classDefinition
+     * @param                    $property
+     * @param bool               $readOnly
      * @param CompilationContext $context
+     *
      * @throws Exception
      */
     public function fetchStaticProperty(Variable $symbolVariable, $classDefinition, $property, $readOnly, CompilationContext $context): void
@@ -943,14 +943,14 @@ class Backend
     }
 
     /**
-     * @param $value
+     * @param                    $value
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return bool|string|Variable
+     *
+     * @throws CompilerException
      */
-    public function resolveValue($value, CompilationContext $context): Variable|bool|string
+    public function resolveValue($value, CompilationContext $context): Variable | bool | string
     {
         if ($value instanceof GlobalConstant) {
             switch ($value->getName()) {
@@ -988,7 +988,7 @@ class Backend
             $value = $this->getVariableCode($tempVariable);
         } else {
             if ($value instanceof CompiledExpression) {
-                if (in_array($value->getType(), ['array', 'variable', 'mixed'])) {
+                if (\in_array($value->getType(), ['array', 'variable', 'mixed'])) {
                     $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
                 } else {
                     return $value->getCode();
@@ -1313,7 +1313,7 @@ class Backend
      *
      * @return void
      */
-    public function initArray(Variable $variable, CompilationContext $context, ?int $size = null): void
+    public function initArray(Variable $variable, CompilationContext $context, int $size = null): void
     {
         $code = $this->getVariableCode($variable);
 
@@ -1406,7 +1406,7 @@ class Backend
                 $type = 'long';
                 break;
 
-            /* Types which map to the same */
+                /* Types which map to the same */
             case 'variable':
             case 'mixed':
             case 'string':
@@ -1419,7 +1419,7 @@ class Backend
                     $arrayAccess['right']
                 );
         }
-        if ($isVariable && in_array($index->getType(), ['variable', 'string', 'mixed'])) {
+        if ($isVariable && \in_array($index->getType(), ['variable', 'string', 'mixed'])) {
             $output = 'zephir_array_fetch('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         } else {
             if ($isVariable) {
@@ -1630,19 +1630,11 @@ class Backend
 
     /**
      * Assign value to variable helper.
-     *
-     * @param string               $macro
-     * @param string               $variableName
-     * @param string|Variable|null $value
-     * @param CompilationContext   $context
-     * @param bool                 $useCodePrinter
-     *
-     * @return string
      */
     protected function assignHelper(
         string $macro,
         string $variableName,
-               $value,
+        $value,
         CompilationContext $context,
         bool $useCodePrinter
     ): string {
@@ -1696,6 +1688,7 @@ class Backend
      * @param CompilationContext            $compilationContext
      *
      * @return array
+     *
      * @throws CompilerException
      */
     private function resolveOffsetExprs(array $offsetExprs, CompilationContext $compilationContext): array

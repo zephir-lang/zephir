@@ -17,6 +17,7 @@ use Zephir\CompilationContext as Context;
 use Zephir\Exception\CompilerException as Exception;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
+
 use function Zephir\Backend\ZendEngine3\add_slashes;
 
 class VariablesManager
@@ -174,9 +175,9 @@ class VariablesManager
      *
      * @param array $value
      *
-     * @throws Exception
-     *
      * @return void
+     *
+     * @throws Exception
      */
     private function validateCharValue(array $value): void
     {

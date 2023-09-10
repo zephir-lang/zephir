@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionException;
 use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -30,13 +29,13 @@ use function Zephir\escape_class;
 class InstanceOfOperator extends AbstractOperator
 {
     /**
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $context
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile($expression, CompilationContext $context): CompiledExpression
     {

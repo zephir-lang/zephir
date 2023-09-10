@@ -22,8 +22,6 @@ use Zephir\Exception;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
 
-use function extension_loaded;
-
 /**
  * Generate Command
  *
@@ -57,7 +55,7 @@ final class GenerateCommand extends AbstractCommand
 
         $trace = $input->getOption('trace');
 
-        if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
+        if (\extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
             $io->getErrorStyle()->warning(
                 <<<MSG
 The timecop extension was detected. It is recommended to disable

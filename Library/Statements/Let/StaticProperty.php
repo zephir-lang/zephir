@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -28,13 +27,13 @@ class StaticProperty
     /**
      * Compiles ClassName::foo = {expr}.
      *
-     * @param string $className
-     * @param string $property
+     * @param string             $className
+     * @param string             $property
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array $statement
+     * @param array              $statement
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function assignStatic(
         string $className,

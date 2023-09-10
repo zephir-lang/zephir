@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Types;
 
 use Zephir\Class\Method\Method;
-use function array_key_exists;
-use function count;
-use function in_array;
 
 final class Types
 {
@@ -55,9 +52,9 @@ final class Types
 
         $isProcessedReturnType = null !== $returnTypes;
         $returnTypes = $returnTypes ?? $method->getReturnTypes();
-        $typesCount = count($returnTypes);
+        $typesCount = \count($returnTypes);
 
-        $isDynamic = in_array('var', array_keys($returnTypes));
+        $isDynamic = \in_array('var', array_keys($returnTypes));
         $isNullable = $this->isNullable($returnTypes);
 
         $isBool = $this->areReturnTypesBoolCompatible($returnTypes);
@@ -275,9 +272,9 @@ final class Types
      */
     private function isNullable(array $types): bool
     {
-        return (array_key_exists(self::T_NULL, $types)
-            || in_array(self::T_NULL, $types))
-            && 1 !== count($types);
+        return (\array_key_exists(self::T_NULL, $types)
+            || \in_array(self::T_NULL, $types))
+            && 1 !== \count($types);
     }
 
     /**
@@ -305,7 +302,7 @@ final class Types
         }
 
         foreach ($types as $type => $data) {
-            $areEquals = in_array($type, $allowedTypes);
+            $areEquals = \in_array($type, $allowedTypes);
 
             $result = isset($result)
                 ? ($areEquals && $result)

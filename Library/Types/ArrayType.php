@@ -11,7 +11,6 @@
 
 namespace Zephir\Types;
 
-use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -78,13 +77,14 @@ class ArrayType extends AbstractType
     /**
      * Transforms calls to method "join" to function calls to "join".
      *
-     * @param object $caller
+     * @param object             $caller
      * @param CompilationContext $compilationContext
-     * @param Call $call
-     * @param array $expression
+     * @param Call               $call
+     * @param array              $expression
      *
      * @return bool|CompiledExpression
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)

@@ -13,13 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\FileSystem;
 
-use FilesystemIterator;
-use Generator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
 use Zephir\Exception\InvalidArgumentException;
-use Zephir\Exception\RuntimeException;
 use Zephir\Zephir;
 
 /**
@@ -172,10 +166,10 @@ class HardDisk implements FileSystemInterface
 
         $contents = $this->listDirectoryRecursively(
             $this->basePath.DIRECTORY_SEPARATOR.$this->localPath,
-            RecursiveIteratorIterator::CHILD_FIRST,
+            \RecursiveIteratorIterator::CHILD_FIRST,
         );
 
-        /** @var SplFileInfo $file */
+        /** @var \SplFileInfo $file */
         foreach ($contents as $file) {
             $this->deleteFileInfoObject($file);
         }
@@ -231,7 +225,7 @@ class HardDisk implements FileSystemInterface
         return str_replace(['\\', ':', '/'], '_', $path);
     }
 
-    protected function deleteFileInfoObject(SplFileInfo $file): bool
+    protected function deleteFileInfoObject(\SplFileInfo $file): bool
     {
         switch ($file->getType()) {
             case 'dir':
@@ -245,10 +239,10 @@ class HardDisk implements FileSystemInterface
 
     private function listDirectoryRecursively(
         string $path,
-        int $mode = RecursiveIteratorIterator::SELF_FIRST
-    ): Generator {
-        yield from new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+        int $mode = \RecursiveIteratorIterator::SELF_FIRST
+    ): \Generator {
+        yield from new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
             $mode
         );
     }

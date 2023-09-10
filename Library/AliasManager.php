@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use function in_array;
-
 /**
  * Manage aliases in a file
  */
@@ -117,7 +115,7 @@ final class AliasManager
     {
         $extractAlias = $this->implicitAlias($className);
 
-        $isClassDeclared = in_array($className, $this->aliases);
+        $isClassDeclared = \in_array($className, $this->aliases);
         $classAlias = array_flip($this->aliases)[$className] ?? null;
 
         return $isClassDeclared && $classAlias !== $extractAlias;
