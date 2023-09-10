@@ -32,7 +32,7 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 use function array_key_exists;
 use function count;
 use function in_array;

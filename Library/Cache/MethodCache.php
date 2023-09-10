@@ -18,7 +18,7 @@ use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Calls in Zephir implement monomorphic and polymorphic caches to

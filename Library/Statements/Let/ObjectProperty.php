@@ -16,7 +16,7 @@ namespace Zephir\Statements\Let;
 use Zephir\CompilationContext as Context;
 use Zephir\CompiledExpression as Expression;
 use Zephir\Exception\CompilerException as Exception;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * Adds/Updates an array index

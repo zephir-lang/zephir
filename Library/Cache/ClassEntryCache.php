@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Cache;
 
 use Zephir\CompilationContext;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Classes located in the PHP userland are cached to avoid further relocates

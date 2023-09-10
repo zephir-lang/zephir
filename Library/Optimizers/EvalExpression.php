@@ -19,7 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while' statements

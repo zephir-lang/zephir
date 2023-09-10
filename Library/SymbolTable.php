@@ -16,7 +16,7 @@ namespace Zephir;
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
-
+use Zephir\Variable\Variable;
 use function count;
 
 /**
@@ -401,9 +401,9 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
+     * @return bool|\Zephir\Variable\Variable
+     *@throws CompilerException
      *
-     * @return bool|\Zephir\Variable
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {

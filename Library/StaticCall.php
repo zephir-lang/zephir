@@ -16,6 +16,7 @@ use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Variable\Variable;
 use function count;
 use function in_array;
 use function is_string;

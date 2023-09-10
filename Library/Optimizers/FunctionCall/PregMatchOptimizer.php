@@ -17,7 +17,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Zephir\Optimizers\FunctionCall\PregMatchOptimizer.

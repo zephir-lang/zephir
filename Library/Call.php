@@ -15,6 +15,7 @@ namespace Zephir;
 
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Variable\Variable;
 
 /**
  * Base class for common functionality in functions/calls

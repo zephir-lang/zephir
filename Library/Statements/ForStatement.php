@@ -21,8 +21,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
-use Zephir\Variable;
-
+use Zephir\Variable\Variable;
 use function Zephir\add_slashes;
 
 class ForStatement extends StatementAbstract

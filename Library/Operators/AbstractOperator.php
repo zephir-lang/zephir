@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 abstract class AbstractOperator
 {

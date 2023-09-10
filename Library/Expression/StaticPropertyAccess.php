@@ -19,7 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 use function in_array;
 
 /**

@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Zephir\Backend\Backend;
 use Zephir\CompilationContext;
 use Zephir\Config;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 final class BackendTest extends TestCase
 {

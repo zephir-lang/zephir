@@ -20,7 +20,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\FunctionCall\PregMatchOptimizer;
 use Zephir\SymbolTable;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 final class PregMatchOptimizerTest extends TestCase
 {

@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Detectors;
 
-use Zephir\Variable;
-
+use Zephir\Variable\Variable;
 use function is_array;
 
 /**

@@ -15,8 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Variable;
-
+use Zephir\Variable\Variable;
 use function constant;
 use function defined;
 use function gettype;

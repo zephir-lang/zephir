@@ -19,7 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Resolves expressions that read array indexes

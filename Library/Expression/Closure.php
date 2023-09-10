@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\Class\Property;
 use Zephir\Class\Definition\Definition;
-use Zephir\Class\Method\Parameters;
 use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
 use Zephir\StatementsBlock;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 use function is_array;
 
 /**

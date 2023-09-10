@@ -15,6 +15,7 @@ use ReflectionException;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Variable\Variable;
 
 /**
  * Call methods in a non-static context

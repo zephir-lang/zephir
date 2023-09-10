@@ -11,12 +11,16 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Variable;
 
 use ReflectionClass;
+use Zephir\Branch;
+use Zephir\BranchManager;
 use Zephir\Class\Definition\Definition;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable\Globals;
+use Zephir\TypeAwareInterface;
 use function in_array;
 use function is_string;
 

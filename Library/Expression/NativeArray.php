@@ -20,8 +20,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
-use Zephir\Variable;
-
+use Zephir\Variable\Variable;
 use function count;
 use function function_exists;
 

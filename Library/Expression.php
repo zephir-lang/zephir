@@ -67,6 +67,7 @@ use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\UnlikelyOperator;
 use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
+use Zephir\Variable\Variable;
 
 /**
  * Represents an expression.

@@ -11,7 +11,7 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Test;
+namespace Zephir\Test\Variable;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Branch;
@@ -20,7 +20,7 @@ use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 final class VariableTest extends TestCase
 {

@@ -17,7 +17,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * This is the base operator for commutative, associative and distributive

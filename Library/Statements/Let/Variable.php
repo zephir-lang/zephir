@@ -17,8 +17,7 @@ use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
-use Zephir\Variable as ZephirVariable;
-
+use Zephir\Variable\Variable as ZephirVariable;
 use function Zephir\add_slashes;
 
 /**

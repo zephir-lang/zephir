@@ -15,7 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Resolves expressions that read properties
