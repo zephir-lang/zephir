@@ -11,7 +11,9 @@
 
 declare(strict_types=1);
 
-namespace Zephir;
+namespace Zephir\Class;
+
+use Zephir\AbstractClassDefinition;
 
 /**
  * Represents a class/interface that only exists in runtime.
