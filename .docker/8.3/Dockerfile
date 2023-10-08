@@ -1,5 +1,5 @@
 FROM composer:latest AS composer
-FROM php:8.3.0beta3-fpm
+FROM 8.3.0RC3-fpm
 
 RUN CPU_CORES="$(getconf _NPROCESSORS_ONLN)";
 ENV MAKEFLAGS="-j${CPU_CORES}"
