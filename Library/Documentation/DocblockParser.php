@@ -22,7 +22,6 @@ class DocblockParser
     protected $currentChar;
     protected $currentCharIndex;
     protected $currentLine;
-    protected $lines = [];
 
     // Parsing helpers
     protected $ignoreSpaces;
