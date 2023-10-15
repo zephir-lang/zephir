@@ -22,9 +22,6 @@ class StatementsBlockBuilder
     {
     }
 
-    /**
-     * Returns a builder definition.
-     */
     public function get(): array
     {
         if ($this->raw) {

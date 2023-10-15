@@ -38,11 +38,6 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
         $this->char = $char;
     }
 
-    /**
-     * Returns a builder definition.
-     *
-     * @return array
-     */
     public function get(): array
     {
         return [

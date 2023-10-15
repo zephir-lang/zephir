@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
@@ -25,8 +27,6 @@ class GlobalConstant
 
     /**
      * Returns global constant name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -35,8 +35,6 @@ class GlobalConstant
 
     /**
      * Check if the global constant is temporal.
-     *
-     * @return bool
      */
     public function isTemporal(): bool
     {

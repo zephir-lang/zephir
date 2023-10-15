@@ -20,35 +20,18 @@ use Zephir\Passes\CallGathererPass;
  */
 class Manager
 {
-    /**
-     * @var FunctionCache|null
-     */
     protected ?FunctionCache $functionCache = null;
 
-    /**
-     * @var MethodCache|null
-     */
     protected ?MethodCache $methodCache = null;
 
-    /**
-     * @var StaticMethodCache|null
-     */
     protected ?StaticMethodCache $staticMethodCache = null;
 
-    /**
-     * @var ClassEntryCache|null
-     */
     protected ?ClassEntryCache $classEntryCache = null;
 
-    /**
-     * @var CallGathererPass|null
-     */
     protected ?CallGathererPass $gatherer = null;
 
     /**
      * Sets the CallGathererPass.
-     *
-     * @param CallGathererPass|null $gatherer
      */
     public function setGatherer(CallGathererPass $gatherer = null): void
     {
@@ -57,8 +40,6 @@ class Manager
 
     /**
      * Creates or returns an existing class entry cache.
-     *
-     * @return ClassEntryCache
      */
     public function getClassEntryCache(): ClassEntryCache
     {
@@ -71,8 +52,6 @@ class Manager
 
     /**
      * Creates or returns an existing function cache.
-     *
-     * @return FunctionCache|null
      */
     public function getFunctionCache(): ?FunctionCache
     {
@@ -85,8 +64,6 @@ class Manager
 
     /**
      * Creates or returns an existing method cache.
-     *
-     * @return MethodCache|null
      */
     public function getMethodCache(): ?MethodCache
     {
@@ -99,8 +76,6 @@ class Manager
 
     /**
      * Creates or returns an existing method cache.
-     *
-     * @return StaticMethodCache|null
      */
     public function getStaticMethodCache(): ?StaticMethodCache
     {

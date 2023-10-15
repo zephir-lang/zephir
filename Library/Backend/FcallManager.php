@@ -22,8 +22,6 @@ class FcallManager implements FcallManagerInterface
     protected array $requiredMacros = [];
 
     /**
-     * {@inheritdoc}
-     *
      * @param bool $static
      * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
      * @param int  $paramCount

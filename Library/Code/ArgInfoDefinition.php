@@ -18,7 +18,6 @@ use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 
-use function array_key_exists;
 use function Zephir\escape_class;
 
 class ArgInfoDefinition

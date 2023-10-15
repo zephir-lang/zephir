@@ -20,8 +20,6 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
 {
     /**
      * Operator name
-     *
-     * @var string
      */
     protected string $operator;
 
@@ -41,11 +39,6 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
         $this->char = $char;
     }
 
-    /**
-     * Returns a builder definition.
-     *
-     * @return array
-     */
     public function get(): array
     {
         if (\is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {

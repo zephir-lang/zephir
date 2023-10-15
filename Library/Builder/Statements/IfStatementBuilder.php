@@ -28,11 +28,6 @@ class IfStatementBuilder extends AbstractStatementBuilder
     ) {
     }
 
-    /**
-     * Returns a builder definition.
-     *
-     * @return array
-     */
     public function get(): array
     {
         $expression = [
