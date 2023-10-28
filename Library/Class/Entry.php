@@ -116,6 +116,14 @@ class Entry
     }
 
     /**
+     * Prepares a class name to be used as a C-string.
+     */
+    public static function escape(string $className): string
+    {
+        return str_replace(static::NAMESPACE_SEPARATOR, '\\\\', $className);
+    }
+
+    /**
      * Detect if start of namespace class belongs to project namespace.
      */
     private function isInternalClass(string $className): bool

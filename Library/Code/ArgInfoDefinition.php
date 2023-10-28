@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Code;
 
+use Zephir\Class\Entry;
 use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\Exception;
-
-use function Zephir\escape_class;
 
 class ArgInfoDefinition
 {
@@ -125,7 +124,7 @@ class ArgInfoDefinition
     {
         if (\array_key_exists('object', $this->functionLike->getReturnTypes()) && 1 === \count($this->functionLike->getReturnClassTypes())) {
             $class = key($this->functionLike->getReturnClassTypes());
-            $class = escape_class($this->compilationContext->getFullName($class));
+            $class = Entry::escape($this->compilationContext->getFullName($class));
 
             $this->codePrinter->output(
                 sprintf(
@@ -345,7 +344,7 @@ class ArgInfoDefinition
                                 "\tZEND_ARG_OBJ_INFO(%d, %s, %s, %d)",
                                 $this->passByReference($parameter),
                                 $parameter['name'],
-                                escape_class($this->compilationContext->getFullName($parameter['cast']['value'])),
+                                Entry::escape($this->compilationContext->getFullName($parameter['cast']['value'])),
                                 (int) $this->allowNull($parameter)
                             )
                         );

@@ -22,8 +22,6 @@ use Zephir\Expression;
 use Zephir\MethodCall;
 use Zephir\Operators\AbstractOperator;
 
-use function Zephir\escape_class;
-
 /**
  * Creates a new instance of a class
  */
@@ -151,7 +149,7 @@ class NewInstanceOperator extends AbstractOperator
                             'Class "'.$className.'" does not exist at compile time',
                             ['nonexistent-class', $expression]
                         );
-                        $classNameToFetch = 'SL("'.escape_class($className).'")';
+                        $classNameToFetch = 'SL("'.Entry::escape($className).'")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();

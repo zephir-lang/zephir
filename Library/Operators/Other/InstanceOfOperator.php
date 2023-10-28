@@ -21,8 +21,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
-use function Zephir\escape_class;
-
 /**
  * Checks if a variable is an instance of a class
  */
@@ -85,13 +83,13 @@ class InstanceOfOperator extends AbstractOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("'.trim(escape_class($className), '\\').'")';
+                                        $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
                                     } else {
                                         $entry = (new Entry($resolvedVariable, $context));
                                         $classEntry = $entry->get();
 
                                         if (!$entry->isInternal()) {
-                                            $code = 'SL("'.trim(escape_class($className), '\\').'")';
+                                            $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
                                         }
                                     }
                                 }

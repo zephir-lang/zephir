@@ -26,18 +26,6 @@ function camelize($string)
 }
 
 /**
- * Prepares a class name to be used as a C-string.
- *
- * @param string $className
- *
- * @return string
- */
-function escape_class($className)
-{
-    return str_replace('\\', '\\\\', $className);
-}
-
-/**
  * Prepares a string to be used as a C-string.
  *
  * Should NOT escape next `escape sequences`:

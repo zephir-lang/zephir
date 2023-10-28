@@ -17,19 +17,9 @@ use PHPUnit\Framework\TestCase;
 
 use function Zephir\add_slashes;
 use function Zephir\camelize;
-use function Zephir\escape_class;
 
 final class HelpersTest extends TestCase
 {
-    public function testShouldEscapeClassName(): void
-    {
-        $classname = '\Bar\Foo';
-        $this->assertSame(
-            escape_class($classname),
-            '\\\\Bar\\\\Foo'
-        );
-    }
-
     public function testShouldCamelizeClassName(): void
     {
         $name = 'foo_Bar_Foo_bar';
