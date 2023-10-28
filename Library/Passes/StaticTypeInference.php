@@ -54,7 +54,7 @@ class StaticTypeInference
      * @param string $variable
      * @param string $type
      */
-    public function markVariableIfUnknown($variable, $type)
+    public function markVariableIfUnknown($variable, $type): void
     {
         $this->variables[$variable] = $type;
         $this->infered[$variable] = $type;
@@ -66,7 +66,7 @@ class StaticTypeInference
      * @param string $variable
      * @param string $type
      */
-    public function markVariable($variable, $type)
+    public function markVariable($variable, $type): void
     {
         if (isset($this->variables[$variable])) {
             $currentType = $this->variables[$variable];
@@ -171,7 +171,7 @@ class StaticTypeInference
      *
      * @return bool
      */
-    public function reduce()
+    public function reduce(): bool
     {
         $pass = false;
         foreach ($this->variables as $variable => $type) {

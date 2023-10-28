@@ -50,18 +50,22 @@ class LocalContextPass
 
     public function declareVariables(array $statement): void
     {
-        if (isset($statement['data-type'])) {
-            if ('variable' != $statement['data-type']) {
-                return;
-            }
+        if (isset($statement['data-type']) && 'variable' !== $statement['data-type']) {
+            return;
         }
+
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if ('string' == $variable['expr']['type'] || 'empty-array' == $variable['expr']['type'] || 'array' == $variable['expr']['type']) {
+                if (
+                    'string' === $variable['expr']['type'] ||
+                    'empty-array' === $variable['expr']['type'] ||
+                    'array' === $variable['expr']['type']
+                ) {
                     $this->variables[$variable['variable']] = false;
                     continue;
                 }
             }
+
             if (!isset($this->variables[$variable['variable']])) {
                 $this->variables[$variable['variable']] = true;
             }
@@ -219,9 +223,6 @@ class LocalContextPass
                                     break;
                             }
                             break;
-
-                        default:
-                            // echo '[', $assignment['expr']['type'], ']', PHP_EOL;
                     }
                     break;
 
@@ -241,13 +242,8 @@ class LocalContextPass
                         case 'variable':
                             $this->markVariableNoLocal($assignment['expr']['value']);
                             break;
-                        default:
-                            // echo '[', $assignment['assign-type'], ']';
                     }
                     break;
-
-                default:
-                    // echo $assignment['assign-type'];
             }
         }
     }

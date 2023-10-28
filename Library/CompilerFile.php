@@ -893,16 +893,16 @@ final class CompilerFile implements FileInterface
 
         $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code = ''.PHP_EOL;
+        $code =  PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
         $code .= '#include "'.$separators.'ext_config.h"'.PHP_EOL;
         $code .= '#endif'.PHP_EOL;
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         $code .= '#include <php.h>'.PHP_EOL;
         $code .= '#include "'.$separators.'php_ext.h"'.PHP_EOL;
         $code .= '#include "'.$separators.'ext.h"'.PHP_EOL;
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         if ('class' == $classDefinition->getType()) {
             $code .= '#include <Zend/zend_operators.h>'.PHP_EOL;
@@ -911,7 +911,7 @@ final class CompilerFile implements FileInterface
         } else {
             $code .= '#include <Zend/zend_exceptions.h>'.PHP_EOL;
         }
-        $code .= ''.PHP_EOL;
+        $code .= PHP_EOL;
 
         $code .= '#include "kernel/main.h"'.PHP_EOL;
 
@@ -925,7 +925,7 @@ final class CompilerFile implements FileInterface
             $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
         }
 
-        /*
+        /**
          * Prepend the required files to the header
          */
         $compilationContext->codePrinter->preOutput($code);
@@ -974,7 +974,7 @@ final class CompilerFile implements FileInterface
                 if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
                     $returnsType = array_map(function ($type) {
                         return 'mixed' == ($type = trim($type)) ? 'variable' : $type;
-                    }, (array) explode('|', $annotations[0]->getString()));
+                    }, explode('|', $annotations[0]->getString()));
                 }
 
                 // Clear annotations

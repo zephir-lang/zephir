@@ -523,9 +523,9 @@ class ArithmeticalBaseOperator extends AbstractOperator
      *
      * @return string
      */
-    private function getDynamicTypes(Variable $left, Variable $right)
+    private function getDynamicTypes(Variable $left, Variable $right): string
     {
-        if ('/' == $this->operator) {
+        if ('/' === $this->operator) {
             return 'double';
         }
 
