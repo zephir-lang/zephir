@@ -15,8 +15,6 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
-use function count;
-
 /**
  * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch
  * Same case in 'switch' statements
@@ -95,7 +93,7 @@ class SkipVariantInit
         }
 
         $variables = [];
-        $numberBranches = count($this->branches);
+        $numberBranches = \count($this->branches);
         foreach ($variableStats as $variable => $number) {
             if ($number == $numberBranches) {
                 $variables[] = $variable;

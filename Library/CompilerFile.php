@@ -893,7 +893,7 @@ final class CompilerFile implements FileInterface
 
         $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
 
-        $code =  PHP_EOL;
+        $code = PHP_EOL;
         $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
         $code .= '#include "'.$separators.'ext_config.h"'.PHP_EOL;
         $code .= '#endif'.PHP_EOL;
