@@ -34,7 +34,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         env:
-          PHP_CS_FIXER_VERSION: 3.26.1
+          PHP_CS_FIXER_VERSION: 3.37.0
         with:
           php-version: '8.0'
           coverage: none
