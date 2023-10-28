@@ -27,6 +27,7 @@ use Zephir\GlobalConstant;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function Zephir\add_slashes;
 
 class Backend
@@ -43,8 +44,6 @@ class Backend
 
     /**
      * Resolves the path to the source kernel files of the backend.
-     *
-     * @return string
      */
     public function getInternalKernelPath(): string
     {
@@ -53,10 +52,6 @@ class Backend
 
     /**
      * Resolves the path to the source template file of the backend.
-     *
-     * @param string $filename
-     *
-     * @return string
      */
     public function getTemplateFileContents(string $filename): string
     {
@@ -121,8 +116,8 @@ class Backend
     public function getVariableCode(Variable $variable): string
     {
         if ($variable->isDoublePointer()
-            || \in_array($variable->getName(), ['this_ptr', 'return_value'])
-            || \in_array($variable->getType(), ['int', 'long'])) {
+            || in_array($variable->getName(), ['this_ptr', 'return_value'])
+            || in_array($variable->getType(), ['int', 'long'])) {
             return $variable->getName();
         }
 
@@ -342,7 +337,7 @@ class Backend
 
     public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
     {
-        $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
+        $isComplex = in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
@@ -645,7 +640,7 @@ class Backend
                 $var = $context->symbolTable->getVariableForRead($key->getCode(), $context);
                 $typeKey = $var->getType();
             }
-            if (\in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
+            if (in_array($typeKey, ['int', 'uint', 'long', 'ulong'])) {
                 $keyType = 'index';
             }
         }
@@ -770,16 +765,16 @@ class Backend
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' === $resolvedExpr->getType()) {
                 return new CompiledExpression('bool', 'zephir_array_isset_string_fetch('.$code.', SS("'.$resolvedExpr->getCode().'"), '.$flags.')', $expression);
-            } elseif (\in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
+            } elseif (in_array($resolvedExpr->getType(), ['int', 'uint', 'long'])) {
                 return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$resolvedExpr->getCode().', '.$flags.')', $expression);
             } else {
                 $resolvedExpr = $context->symbolTable->getVariableForRead($resolvedExpr->getCode(), $context);
             }
         }
 
-        if (\in_array($resolvedExpr->getType(), ['int', 'long'])) {
+        if (in_array($resolvedExpr->getType(), ['int', 'long'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_long_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
-        } elseif (\in_array($resolvedExpr->getType(), ['variable', 'mixed', 'string'])) {
+        } elseif (in_array($resolvedExpr->getType(), ['variable', 'mixed', 'string'])) {
             return new CompiledExpression('bool', 'zephir_array_isset_fetch('.$code.', '.$this->getVariableCode($resolvedExpr).', '.$flags.')', $expression);
         }
 
@@ -988,7 +983,7 @@ class Backend
             $value = $this->getVariableCode($tempVariable);
         } else {
             if ($value instanceof CompiledExpression) {
-                if (\in_array($value->getType(), ['array', 'variable', 'mixed'])) {
+                if (in_array($value->getType(), ['array', 'variable', 'mixed'])) {
                     $value = $context->symbolTable->getVariableForWrite($value->getCode(), $context);
                 } else {
                     return $value->getCode();
@@ -1419,7 +1414,7 @@ class Backend
                     $arrayAccess['right']
                 );
         }
-        if ($isVariable && \in_array($index->getType(), ['variable', 'string', 'mixed'])) {
+        if ($isVariable && in_array($index->getType(), ['variable', 'string', 'mixed'])) {
             $output = 'zephir_array_fetch('.$this->getVariableCode($var).', '.$this->getVariableCode($src).', '.$this->getVariableCode($index).', '.$flags.', "'.Compiler::getShortUserPath($arrayAccess['file']).'", '.$arrayAccess['line'].');';
         } else {
             if ($isVariable) {
@@ -1458,7 +1453,7 @@ class Backend
         );
     }
 
-    public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext): void
     {
         list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
@@ -1495,7 +1490,7 @@ class Backend
         );
     }
 
-    public function checkConstructor(Variable $var, CompilationContext $context)
+    public function checkConstructor(Variable $var, CompilationContext $context): void
     {
         $context->codePrinter->output('if (zephir_has_constructor('.$this->getVariableCode($var).')) {');
     }

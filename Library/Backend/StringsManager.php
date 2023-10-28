@@ -24,8 +24,6 @@ class StringsManager extends BaseStringsManager
 {
     /**
      * Adds a concatenation combination to the manager.
-     *
-     * @param string $key
      */
     public function addConcatKey(string $key): void
     {
