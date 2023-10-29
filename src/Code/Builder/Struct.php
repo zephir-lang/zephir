@@ -160,27 +160,12 @@ class Struct
      */
     protected function convertToCType(string $type): string
     {
-        switch ($type) {
-            case 'boolean':
-            case 'bool':
-                return 'zend_bool';
-
-            case 'hash':
-                return 'HashTable* ';
-
-            case 'string':
-                return 'zend_string* ';
-
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'char':
-            case 'uchar':
-            case 'double':
-                return $type;
-
-            default:
-                throw new InvalidArgumentException('Unknown global type: '.$type);
-        }
+        return match ($type) {
+            'boolean', 'bool' => 'zend_bool',
+            'hash' => 'HashTable* ',
+            'string' => 'zend_string* ',
+            'int', 'uint', 'long', 'char', 'uchar', 'double' => $type,
+            default => throw new InvalidArgumentException('Unknown global type: '.$type),
+        };
     }
 }
