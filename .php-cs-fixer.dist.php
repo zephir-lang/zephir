@@ -11,7 +11,7 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-if (!file_exists(__DIR__ . '/src')) {
+if (!file_exists(__DIR__.'/src')) {
     exit(0);
 }
 
