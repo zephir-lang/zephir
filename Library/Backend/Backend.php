@@ -249,52 +249,18 @@ class Backend
     ): string {
         $variableName = $this->getVariableCode($variableVariable);
 
-        switch ($value) {
-            case 'array':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_ARRAY';
-                break;
-
-            case 'object':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_OBJECT';
-                break;
-
-            case 'null':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_NULL';
-                break;
-
-            case 'string':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_STRING';
-                break;
-
-            case 'int':
-            case 'long':
-            case 'integer':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_LONG';
-                break;
-
-            case 'double':
-            case 'float':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_DOUBLE';
-                break;
-
-            case 'boolean':
-            case 'bool':
-                $condition = '((Z_TYPE_P('.$variableName.') == IS_TRUE || Z_TYPE_P('.$variableName.') == IS_FALSE) '.$operator.' 1)';
-                break;
-
-            case 'resource':
-                $condition = 'Z_TYPE_P('.$variableName.') '.$operator.' IS_RESOURCE';
-                break;
-
-            case 'callable':
-                $condition = 'zephir_is_callable('.$variableName.') '.$operator.' 1';
-                break;
-
-            default:
-                throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value));
-        }
-
-        return $condition;
+        return match ($value) {
+            'array' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_ARRAY',
+            'object' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_OBJECT',
+            'null' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_NULL',
+            'string' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_STRING',
+            'int', 'long', 'integer' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_LONG',
+            'double', 'float' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_DOUBLE',
+            'boolean', 'bool' => '((Z_TYPE_P(' . $variableName . ') == IS_TRUE || Z_TYPE_P(' . $variableName . ') == IS_FALSE) ' . $operator . ' 1)',
+            'resource' => 'Z_TYPE_P(' . $variableName . ') ' . $operator . ' IS_RESOURCE',
+            'callable' => 'zephir_is_callable(' . $variableName . ') ' . $operator . ' 1',
+            default => throw new CompilerException(sprintf('Unknown type: "%s" in typeof comparison', $value)),
+        };
     }
 
     public function onPreInitVar(Method $method): string
