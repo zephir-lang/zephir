@@ -49,10 +49,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Zephir\\": "Library"
+            "Zephir\\": "src/"
         },
         "files": [
-            "Library/functions.php"
+            "src/functions.php"
         ]
     },
     "autoload-dev": {

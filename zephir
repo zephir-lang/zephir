@@ -111,7 +111,7 @@ $backend = new Backend($config, $rootPath.'/kernel', $rootPath.'/templates');
 
 $compiler = new Compiler($config, $backend, new Manager($parser), $disk, $compilerFactory);
 $compiler->setPrototypesPath($rootPath.'/prototypes');
-$compiler->setOptimizersPath($rootPath.'/Library/Optimizers');
+$compiler->setOptimizersPath($rootPath.'/src/Optimizers');
 $compiler->setTemplatesPath($rootPath.'/templates');
 $compiler->setLogger($logger);
 

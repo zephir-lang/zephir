@@ -9,7 +9,7 @@
     ],
     "directories": [
        "kernels",
-       "Library",
+       "src",
        "prototypes",
        "templates",
        "vendor"
@@ -32,7 +32,7 @@
             "name": "*.*"
         },
         {
-            "in": "Library",
+            "in": "src",
             "name": "*.*"
         },
         {

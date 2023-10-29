@@ -7,7 +7,7 @@
 >
     <coverage pathCoverage="true">
         <include>
-            <directory suffix=".php">Library</directory>
+            <directory suffix=".php">src</directory>
         </include>
         <report>
             <clover outputFile="tests/output/clover.xml"/>
