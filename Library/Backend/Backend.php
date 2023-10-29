@@ -298,34 +298,30 @@ class Backend
         }
     }
 
-    public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable)
+    public function generateInitCode(&$groupVariables, $type, $pointer, Variable $variable): ?string
     {
         $isComplex = \in_array($type, ['variable', 'string', 'array', 'resource', 'callable', 'object', 'mixed'], true);
 
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
-            switch ($variable->getRealname()) {
-                case '__$null':
-                    return "\t".'ZVAL_NULL(&'.$variable->getName().');';
-                case '__$true':
-                    return "\t".'ZVAL_BOOL(&'.$variable->getName().', 1);';
-                case '__$false':
-                    return "\t".'ZVAL_BOOL(&'.$variable->getName().', 0);';
-                default:
-                    return "\t".'ZVAL_UNDEF(&'.$variable->getName().');';
-            }
+            return match ($variable->getRealname()) {
+                '__$null' => "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');',
+                '__$true' => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);',
+                '__$false' => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);',
+                default => "\t" . 'ZVAL_UNDEF(&' . $variable->getName() . ');',
+            };
         }
 
         if ($variable->isLocalOnly()) {
             $groupVariables[] = $variable->getName();
 
-            return;
+            return null;
         }
 
         if ($variable->isSuperGlobal()) {
             $groupVariables[] = $variable->getName();
 
-            return;
+            return null;
         }
 
         if ($variable->isDoublePointer()) {
@@ -337,7 +333,7 @@ class Backend
                 $groupVariables[] = $ptr.$variable->getName();
             }
 
-            return;
+            return null;
         }
 
         $defaultValue = $variable->getDefaultInitValue();
@@ -369,16 +365,18 @@ class Backend
                     break;
             }
 
-            return;
+            return null;
         }
 
         if ($variable->mustInitNull() && $pointer) {
             $groupVariables[] = $pointer.$variable->getName().' = NULL';
 
-            return;
+            return null;
         }
 
         $groupVariables[] = $pointer.$variable->getName();
+
+        return null;
     }
 
     /**
