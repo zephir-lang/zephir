@@ -1,8 +1,10 @@
 # [![Zephir][zephir logo]][web site]
 
+[![Discord][discord-badge]](https://phalcon.io/discord)
 [![Build on Linux|macOS|Windows][actions main]][actions link]
-[![Nightly Builds on Linux][actions nightly]][actions link]
 [![Latest Stable Version][version badge]][packagist link]
+[![PHP from Packagist][packagist ver]][packagist link]
+[![Packagist][packagist dd]][packagist stats]
 [![MIT License][license badge]](./LICENSE)
 
 [Zephir][web site] - is a high level programming language that eases the creation and maintainability of extensions for PHP.
@@ -56,8 +58,11 @@ Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for mor
 
 [actions link]:     https://github.com/zephir-lang/zephir/actions
 [actions main]:     https://github.com/zephir-lang/zephir/actions/workflows/main.yml/badge.svg
-[actions nightly]:  https://github.com/zephir-lang/zephir/actions/workflows/nightly.yml/badge.svg
 
 [version badge]:    https://poser.pugx.org/phalcon/zephir/v/stable.svg
 [packagist link]:   https://packagist.org/packages/phalcon/zephir
+[packagist dd]:     https://img.shields.io/packagist/dd/phalcon/zephir
+[packagist stats]:  https://packagist.org/packages/phalcon/zephir/stats
+[packagist ver]:    https://img.shields.io/packagist/php-v/phalcon/migrations
 [license badge]:    https://poser.pugx.org/phalcon/zephir/license.svg
+[discord-badge]:    https://img.shields.io/discord/310910488152375297?label=Discord&logo=discord&style=flat-square
