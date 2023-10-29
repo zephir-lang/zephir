@@ -135,12 +135,10 @@ class Backend
 
     public function getTypeDefinition($type): array
     {
-        switch ($type) {
-            case 'zend_ulong':
-                return ['', 'zend_ulong'];
-
-            case 'zend_string':
-                return ['*', 'zend_string'];
+        if ($type === 'zend_ulong') {
+            return ['', 'zend_ulong'];
+        } elseif ($type === 'zend_string') {
+            return ['*', 'zend_string'];
         }
 
         $pointer = null;
