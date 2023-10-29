@@ -21,31 +21,21 @@ use Zephir\FileSystem\FileSystemInterface;
 
 final class CompilerFileFactory
 {
-    private Config $config;
-    private FileSystemInterface $filesystem;
-    private LoggerInterface $logger;
-
-    public function __construct(Config $config, FileSystemInterface $filesystem, LoggerInterface $logger)
-    {
-        $this->config = $config;
-        $this->filesystem = $filesystem;
-        $this->logger = $logger;
+    public function __construct(
+        private Config $config,
+        private FileSystemInterface $filesystem,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
      * Creates CompilerFile instance.
      *
      * NOTE: Each instance of CompilerFile must have its own AliasManager instance.
-     *
-     * @param string $className
-     * @param string $filePath
-     *
-     * @return FileInterface
      */
     public function create(string $className, string $filePath): FileInterface
     {
         $compiler = new CompilerFile($this->config, new AliasManager(), $this->filesystem);
-
         $compiler->setClassName($className);
         $compiler->setFilePath($filePath);
         $compiler->setLogger($this->logger);

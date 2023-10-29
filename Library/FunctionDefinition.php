@@ -13,49 +13,27 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+
 /**
- * FunctionDefinition.
- *
  * Represents a function
  */
-class FunctionDefinition extends ClassMethod
+class FunctionDefinition extends Method
 {
     /**
-     * The namespace of the function.
-     */
-    private string $namespace;
-
-    /**
      * Whether the function is declared in a global or namespaced scope.
-     *
-     * @var bool
      */
     private bool $isGlobal = false;
 
-    /**
-     * FunctionDefinition constructor.
-     *
-     * @param string                     $namespace
-     * @param string                     $name
-     * @param ClassMethodParameters|null $parameters
-     * @param StatementsBlock|null       $statements
-     * @param array|null                 $returnType
-     * @param array|null                 $expression
-     */
     public function __construct(
-        string $namespace,
-        string $name,
-        ClassMethodParameters $parameters = null,
-        StatementsBlock $statements = null,
+        private string $namespace,
+        protected string $name,
+        protected ?Parameters $parameters = null,
+        protected ?StatementsBlock $statements = null,
         array $returnType = null,
-        array $expression = null
+        protected ?array $expression = [],
     ) {
-        $this->namespace = $namespace;
-        $this->name = $name;
-        $this->parameters = $parameters;
-        $this->statements = $statements;
-        $this->expression = $expression;
-
         $this->setReturnTypes($returnType);
     }
 

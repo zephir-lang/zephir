@@ -9,20 +9,20 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Types;
 
 class CharType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_CHAR;
     }
@@ -35,7 +35,10 @@ class CharType extends AbstractType
      * @param Call               $call
      * @param array              $expression
      *
-     * @return bool|mixed|\Zephir\CompiledExpression
+     * @return bool|mixed|CompiledExpression
+     *
+     * @throws \ReflectionException
+     * @throws Exception
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {

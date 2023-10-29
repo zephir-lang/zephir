@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionClass;
-use ReflectionException;
-use Zephir\Classes\Entry;
+use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -23,8 +21,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
 use Zephir\Operators\AbstractOperator;
-
-use function Zephir\escape_class;
 
 /**
  * Creates a new instance of a class
@@ -41,7 +37,7 @@ class NewInstanceOperator extends AbstractOperator
      *
      * @return CompiledExpression
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
@@ -153,12 +149,12 @@ class NewInstanceOperator extends AbstractOperator
                             'Class "'.$className.'" does not exist at compile time',
                             ['nonexistent-class', $expression]
                         );
-                        $classNameToFetch = 'SL("'.escape_class($className).'")';
+                        $classNameToFetch = 'SL("'.Entry::escape($className).'")';
 
                         $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
                         $classEntry = $zendClassEntry->getName();
                     } else {
-                        $reflectionClass = new ReflectionClass($className);
+                        $reflectionClass = new \ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
                         }

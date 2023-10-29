@@ -11,31 +11,18 @@
 
 namespace Zephir\Documentation\File;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\Documentation;
 
 class SourceFile extends ClassFile
 {
-    /**
-     * @var ClassDefinition
-     */
-    protected $class;
+    protected Definition $class;
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'source.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return Documentation::sourceUrl($this->class);

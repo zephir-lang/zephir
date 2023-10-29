@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-
-use function in_array;
 
 /**
  * unset() statement
@@ -30,7 +27,7 @@ class UnsetStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -79,7 +76,7 @@ class UnsetStatement extends StatementAbstract
                 throw new CompilerException('Cannot use expression type: '.$expression['type'].' in "unset"', $expression);
         }
 
-        if (!in_array($variable->getType(), ['variable', 'array'])) {
+        if (!\in_array($variable->getType(), ['variable', 'array'])) {
             throw new CompilerException('Cannot use variable type: '.$variable->gettype().' in "unset"', $expression['left']);
         }
 
@@ -100,7 +97,7 @@ class UnsetStatement extends StatementAbstract
      * @return CompilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     private function generateUnsetPropertyFromObject(array $expression, CompilationContext $compilationContext): CompilationContext
     {

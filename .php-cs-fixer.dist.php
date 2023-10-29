@@ -31,7 +31,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'config/class-entries',
-        'templates/ZendEngine3',
+        'templates/engine',
         'templates/Api',
         'tests/ext-bootstrap',
         'tests/fixtures',

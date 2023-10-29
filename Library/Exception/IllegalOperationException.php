@@ -13,9 +13,6 @@ namespace Zephir\Exception;
 
 use Zephir\TypeAwareInterface;
 
-/**
- * Zephir\Exception\IllegalOperationException.
- */
 class IllegalOperationException extends CompilerException
 {
     /**

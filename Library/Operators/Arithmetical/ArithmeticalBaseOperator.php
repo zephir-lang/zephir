@@ -17,7 +17,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * This is the base operator for commutative, associative and distributive
@@ -82,10 +82,10 @@ class ArithmeticalBaseOperator extends AbstractOperator
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
+     * @return CompiledExpression
+     *
      * @throws Exception
      * @throws CompilerException
-     *
-     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -443,7 +443,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                 }
                                 break;
 
-                            /* a(var) + a(x) */
+                                /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
@@ -468,7 +468,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         );
                                         break;
 
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $variableLeft = $compilationContext->backend->getVariableCode($variableLeft);
@@ -476,7 +476,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         return new CompiledExpression('int', '(zephir_get_numberval('.$variableLeft.') '.$this->operator.' '.$variableRight->getName().')', $expression);
                                         break;
 
-                                    /* a(var) + a(var) */
+                                        /* a(var) + a(var) */
                                     case 'variable':
                                     case 'array':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -523,9 +523,9 @@ class ArithmeticalBaseOperator extends AbstractOperator
      *
      * @return string
      */
-    private function getDynamicTypes(Variable $left, Variable $right)
+    private function getDynamicTypes(Variable $left, Variable $right): string
     {
-        if ('/' == $this->operator) {
+        if ('/' === $this->operator) {
             return 'double';
         }
 

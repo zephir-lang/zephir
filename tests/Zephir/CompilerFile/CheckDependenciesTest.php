@@ -15,10 +15,10 @@ namespace Zephir\Test\CompilerFile;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\Test\TestLogger;
-use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\Backends\ZendEngine3\Backend;
+use Zephir\Backend\Backend;
 use Zephir\Compiler;
+use Zephir\Compiler\CompilerFileFactory;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\FileSystem\HardDisk;
@@ -28,15 +28,15 @@ use Zephir\Parser\Parser;
 final class CheckDependenciesTest extends TestCase
 {
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testExtendsClassThatDoesNotExist(): void
     {
         $logger = new TestLogger();
         $config = new Config();
-        $backend = new Backend($config, 'kernels', 'templates');
+        $backend = new Backend($config, 'kernel', 'templates');
         $disk = new HardDisk(realpath('..').'/tests/output');
-        $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
+        $compilerFactory = new CompilerFileFactory($config, $disk, $logger);
 
         $compiler = new Compiler($config, $backend, new Manager(new Parser()), $disk, $compilerFactory);
 

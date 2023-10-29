@@ -21,9 +21,9 @@ final class ArrayAccessTest extends TestCase
         'key_a' => 'marcin',
         'key_b' => 'paula',
         3 => 'long value',
-        //3.14 => 'double value', // Not supported yet
-        //false => 'bool value', // Not supported yet
-        //null => 'null value', // Not supported yet
+        // 3.14 => 'double value', // Not supported yet
+        // false => 'bool value', // Not supported yet
+        // null => 'null value', // Not supported yet
     ];
 
     public function testTest(): void

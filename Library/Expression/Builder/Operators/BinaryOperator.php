@@ -14,8 +14,6 @@ namespace Zephir\Expression\Builder\Operators;
 use Zephir\Expression\Builder\AbstractBuilder;
 
 /**
- * BinaryOperator.
- *
  * Allows to manually build a binary operator AST node
  */
 class BinaryOperator extends AbstractOperator

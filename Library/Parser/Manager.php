@@ -13,32 +13,14 @@ namespace Zephir\Parser;
 
 class Manager
 {
-    const MINIMUM_PARSER_VERSION = '1.5.0';
-    const PARSER_HOME_PAGE = 'https://github.com/zephir-lang/php-zephir-parser';
+    public const MINIMUM_PARSER_VERSION = '1.5.0';
+    public const PARSER_HOME_PAGE = 'https://github.com/zephir-lang/php-zephir-parser';
 
-    /**
-     * Zephir Parser.
-     *
-     * @var Parser
-     */
-    protected $parser;
-
-    /**
-     * Manager constructor.
-     *
-     * @param Parser $parser The Zephir Parser
-     */
-    public function __construct(Parser $parser)
+    public function __construct(protected Parser $parser)
     {
-        $this->parser = $parser;
     }
 
-    /**
-     * Get Zephir Parser.
-     *
-     * @return Parser
-     */
-    public function getParser()
+    public function getParser(): Parser
     {
         return $this->parser;
     }
@@ -48,21 +30,13 @@ class Manager
      *
      * @return bool
      */
-    public function isAvailable()
+    public function isAvailable(): bool
     {
-        return $this->parser->isAvailable() &&
-            version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
+        return $this->parser->isAvailable()
+            && version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
     }
 
-    /**
-     * @return string|null
-     */
-    public function getParserVersion()
-    {
-        return $this->parser->getVersion();
-    }
-
-    public function requirements()
+    public function requirements(): string
     {
         $template = <<<EOF
 

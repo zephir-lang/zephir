@@ -9,18 +9,17 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
-use Zephir\Exception\IllegalOperationException;
 use Zephir\Expression;
 
 /**
- * StaticProperty.
- *
  * Updates static properties
  */
 class StaticProperty
@@ -34,8 +33,7 @@ class StaticProperty
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
-     * @throws IllegalOperationException
+     * @throws \ReflectionException
      */
     public function assignStatic(
         string $className,

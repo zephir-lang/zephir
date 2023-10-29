@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -35,7 +34,7 @@ class IssetOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -123,7 +122,7 @@ class IssetOperator extends AbstractOperator
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 if ('property-access' === $left['type']) {
-                    return $compilationContext->backend->propertyIsset($variable, $left['right']['value'], $compilationContext);
+                    return $compilationContext->backend->propertyIsset($variable, $left['right']['value']);
                 }
 
                 $expr = new Expression($left['right']);

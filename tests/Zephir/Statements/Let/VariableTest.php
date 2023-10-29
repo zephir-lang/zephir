@@ -20,7 +20,7 @@ use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Statements\Let\Variable;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 final class VariableTest extends TestCase
 {

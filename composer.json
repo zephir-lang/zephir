@@ -21,7 +21,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4.1",
+        "php": ">=8.0",
         "ext-ctype": "*",
         "ext-hash": "*",
         "ext-json": "*",

@@ -14,48 +14,15 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\Optimizers\EvalExpression;
 
-/**
- * Zephir\Statements\StatementAbstract.
- */
 abstract class StatementAbstract
 {
-    protected $statement;
+    protected ?EvalExpression $evalExpression;
 
-    protected $uniqueId;
-
-    /** @var EvalExpression|null */
-    protected $evalExpression;
-
-    protected static $uniqueGenerator;
-
-    /**
-     * StatementAbstract construct.
-     *
-     * @param array $statement
-     */
-    public function __construct(array $statement)
+    public function __construct(protected array $statement)
     {
-        $this->statement = $statement;
     }
 
-    /**
-     * Generates a uniqueId for those instructions that need it.
-     *
-     * @return int
-     */
-    public function getUniqueId()
-    {
-        if (!$this->uniqueId) {
-            $this->uniqueId = self::$uniqueGenerator++;
-        }
-
-        return $this->uniqueId;
-    }
-
-    /**
-     * @return EvalExpression|null
-     */
-    public function getEvalExpression()
+    public function getEvalExpression(): ?EvalExpression
     {
         return $this->evalExpression;
     }

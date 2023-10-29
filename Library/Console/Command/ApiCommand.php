@@ -21,8 +21,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 use Zephir\Config;
 
-use function in_array;
-
 /**
  * Generates an HTML API based on the classes exposed in the extension.
  */
@@ -80,7 +78,7 @@ final class ApiCommand extends AbstractCommand
         $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {
             $allowedOpts = array_keys($defaults);
 
-            return in_array($k, $allowedOpts, true) && null !== $v;
+            return \in_array($k, $allowedOpts, true) && null !== $v;
         }, ARRAY_FILTER_USE_BOTH);
 
         foreach ($options as $option => $value) {
@@ -99,13 +97,6 @@ final class ApiCommand extends AbstractCommand
     {
         return new InputDefinition(
             [
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to generate HTML API for the extension',
-                    'ZendEngine3'
-                ),
                 new InputOption(
                     'path',
                     'p',

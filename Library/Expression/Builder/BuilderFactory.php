@@ -14,9 +14,6 @@ namespace Zephir\Expression\Builder;
 use Zephir\Expression\Builder\Factory\OperatorsFactory;
 use Zephir\Expression\Builder\Factory\StatementsFactory;
 
-/**
- * Zephir\Expression\Builder\BuilderFactory.
- */
 class BuilderFactory
 {
     /** @var OperatorsFactory */
@@ -78,7 +75,7 @@ class BuilderFactory
     }
 
     /**
-     * @param $type
+     * @param      $type
      * @param null $value
      *
      * @return RawExpression

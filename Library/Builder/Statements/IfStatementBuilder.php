@@ -21,29 +21,13 @@ use Zephir\Builder\StatementsBlockBuilder;
  */
 class IfStatementBuilder extends AbstractStatementBuilder
 {
-    private AbstractOperatorBuilder $evalExpr;
-
-    private StatementsBlockBuilder $ifBlock;
-
-    private ?StatementsBlockBuilder $elseBlock;
-
-    /**
-     * @param AbstractOperatorBuilder     $evalExpr
-     * @param StatementsBlockBuilder      $ifBlock
-     * @param StatementsBlockBuilder|null $elseBlock
-     */
-    public function __construct(AbstractOperatorBuilder $evalExpr, StatementsBlockBuilder $ifBlock, StatementsBlockBuilder $elseBlock = null)
-    {
-        $this->evalExpr = $evalExpr;
-        $this->ifBlock = $ifBlock;
-        $this->elseBlock = $elseBlock;
+    public function __construct(
+        private AbstractOperatorBuilder $evalExpr,
+        private StatementsBlockBuilder $ifBlock,
+        private ?StatementsBlockBuilder $elseBlock = null
+    ) {
     }
 
-    /**
-     * Returns a builder definition.
-     *
-     * @return array
-     */
     public function get(): array
     {
         $expression = [

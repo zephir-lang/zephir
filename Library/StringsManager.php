@@ -34,7 +34,7 @@ abstract class StringsManager
      *
      * @param string $key
      */
-    public function addConcatKey(string $key)
+    public function addConcatKey(string $key): void
     {
         $this->concatKeys[$key] = true;
     }
@@ -45,14 +45,4 @@ abstract class StringsManager
      * @return void
      */
     abstract public function genConcatCode(): void;
-
-    /**
-     * Obtains the existing concatenation keys.
-     *
-     * @return array
-     */
-    public function getConcatKeys(): array
-    {
-        return $this->concatKeys;
-    }
 }

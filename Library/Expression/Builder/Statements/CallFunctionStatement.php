@@ -14,8 +14,6 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\FunctionCall;
 
 /**
- * CallFunctionStatement.
- *
  * Allows to manually build a function call AST node
  */
 class CallFunctionStatement extends AbstractStatement
@@ -44,7 +42,7 @@ class CallFunctionStatement extends AbstractStatement
      * @param array|null  $parameters
      * @param int         $typeCall
      */
-    public function __construct($name = null, array $parameters = null, $typeCall = self::TYPE_CALL_DIRECT)
+    public function __construct(string $name = null, array $parameters = null, int $typeCall = self::TYPE_CALL_DIRECT)
     {
         if (null !== $name) {
             $this->setName($name);

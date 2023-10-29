@@ -17,8 +17,6 @@ use Zephir\Expression\Builder\AbstractBuilder;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\AbstractOperator;
 use Zephir\Expression\Builder\Statements\CallFunctionStatement;
-use Zephir\Expression\Builder\Statements\CallMethodStatement;
-use Zephir\Expression\Builder\Statements\CallStaticStatement;
 use Zephir\Expression\Builder\Statements\IfStatement;
 use Zephir\Expression\Builder\Statements\LetStatement;
 use Zephir\Expression\Builder\Statements\RawStatement;
@@ -26,14 +24,8 @@ use Zephir\Expression\Builder\Statements\StatementsBlock;
 
 class StatementsFactory
 {
-    protected BuilderFactory $factory;
-
-    /**
-     * @param BuilderFactory $factory
-     */
-    public function __construct(BuilderFactory $factory)
+    public function __construct(protected BuilderFactory $factory)
     {
-        $this->factory = $factory;
     }
 
     /**
@@ -46,31 +38,6 @@ class StatementsFactory
     public function functionCall($name, $parameters = null, $type = CallFunctionStatement::TYPE_CALL_DIRECT)
     {
         return new CallFunctionStatement($name, $parameters, $type);
-    }
-
-    /**
-     * @param $variable
-     * @param $name
-     * @param null $parameters
-     * @param int  $type
-     *
-     * @return CallMethodStatement
-     */
-    public function methodCall($variable, $name, $parameters = null, $type = CallMethodStatement::TYPE_CALL_DIRECT)
-    {
-        return new CallMethodStatement($variable, $name, $parameters, $type);
-    }
-
-    /**
-     * @param $class
-     * @param $method
-     * @param null $parameters
-     *
-     * @return CallStaticStatement
-     */
-    public function staticCall($class, $method, $parameters = null)
-    {
-        return new CallStaticStatement($class, $method, $parameters);
     }
 
     /**
@@ -114,19 +81,6 @@ class StatementsFactory
     {
         return $this->raw([
             'type' => 'return',
-            'expr' => $expression,
-        ]);
-    }
-
-    /**
-     * @param AbstractBuilder $expression
-     *
-     * @return RawStatement
-     */
-    public function throwX(AbstractBuilder $expression)
-    {
-        return $this->raw([
-            'type' => 'throw',
             'expr' => $expression,
         ]);
     }

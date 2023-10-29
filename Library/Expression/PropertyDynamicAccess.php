@@ -15,25 +15,22 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 use function Zephir\add_slashes;
 
 /**
- * Zephir\Expression\PropertyDynamicAccess.
- *
  * Resolves expressions that read properties with a dynamic variable as property
  */
 class PropertyDynamicAccess
 {
-    protected $expecting = true;
+    protected bool $expecting = true;
 
-    protected $readOnly = false;
+    protected bool $readOnly = false;
 
     protected $expectingVariable;
 
-    /** @var bool */
-    protected $noisy = true;
+    protected bool $noisy = true;
 
     /**
      * Sets if the variable must be resolved into a direct variable symbol
@@ -108,7 +105,7 @@ class PropertyDynamicAccess
                 throw new CompilerException('Variable type: '.$propertyAccess['right']['type'].' cannot be used as object', $propertyAccess['left']);
         }
 
-        /*
+        /**
          * Resolves the symbol that expects the value
          */
         if ($this->expecting) {
@@ -117,14 +114,14 @@ class PropertyDynamicAccess
                 if ('return_value' != $symbolVariable->getName()) {
                     $symbolVariable->observeVariant($compilationContext);
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
             }
         }
 
-        /*
+        /**
          * Variable that receives a property value must be polymorphic
          */
         if ($symbolVariable && !$symbolVariable->isVariable()) {

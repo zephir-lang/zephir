@@ -61,27 +61,6 @@ class Theme
         }
     }
 
-    private function __namespaceTreeHelper(NamespaceHelper $ns)
-    {
-        $output = [
-            'classes' => [],
-            'namespaces' => [],
-        ];
-
-        $subNs = $ns->getNamespaces();
-        $subCs = $ns->getClasses();
-
-        foreach ($subCs as $c) {
-            $output['classes'][] = $c->getClassDefinition()->getCompleteName();
-        }
-
-        foreach ($subNs as $sns) {
-            $output['namespaces'][$sns->getFullNamespace()] = $this->__namespaceTreeHelper($sns);
-        }
-
-        return $output;
-    }
-
     /**
      * from : https://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
      *

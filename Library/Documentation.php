@@ -13,6 +13,7 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Zephir\Class\Definition\Definition;
 use Zephir\Documentation\File;
 use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
@@ -132,7 +133,7 @@ class Documentation
 
         foreach ($this->themesDirectories as $themeDir) {
             $path = rtrim($themeDir, '\\/').\DIRECTORY_SEPARATOR.$name;
-            if (0 !== strpos($path, 'phar://')) {
+            if (!str_starts_with($path, 'phar://')) {
                 $path = realpath($path);
             }
 
@@ -151,7 +152,7 @@ class Documentation
     {
         foreach ($this->classes as $class) {
             // class files (class/ns1/n2/class.html)
-            $cfile = new File\ClassFile($this->config, $class);
+            $cfile = new File\ClassFile($class);
             $this->theme->drawFile($cfile);
 
             // class source file (source/ns1/n2/class.html)
@@ -160,7 +161,7 @@ class Documentation
         }
 
         // classes file (classes.html)
-        $file = new File\ClassesFile($this->config, $this->classes);
+        $file = new File\ClassesFile($this->classes);
         $this->theme->drawFile($file);
 
         $namespaceAccessor = new NamespaceAccessor($this->classes);
@@ -170,7 +171,7 @@ class Documentation
 
         foreach ($byNamespace as $namespaceName => $nh) {
             // namespace files (namespace/ns1/n2/namespace.html)
-            $nfile = new File\NamespaceFile($this->config, $nh);
+            $nfile = new File\NamespaceFile($nh);
             $this->theme->drawFile($nfile);
         }
 
@@ -184,11 +185,11 @@ class Documentation
         $this->theme->drawFile($sitemapFile);
 
         // namespaces files (namespaces.html)
-        $nsfile = new File\NamespacesFile($this->config, $namespaceAccessor);
+        $nsfile = new File\NamespacesFile($namespaceAccessor);
         $this->theme->drawFile($nsfile);
 
         // index (index.html)
-        $indexfile = new File\IndexFile($this->config, $namespaceAccessor);
+        $indexfile = new File\IndexFile($namespaceAccessor);
         $this->theme->drawFile($indexfile);
 
         $this->theme->buildStaticDirectory();
@@ -200,7 +201,7 @@ class Documentation
     public static function classUrl($c)
     {
         $cname = $c;
-        if ($c instanceof ClassDefinition) {
+        if ($c instanceof Definition) {
             $cname = $c->getCompleteName();
         }
 
@@ -212,7 +213,7 @@ class Documentation
         return '/namespace/'.str_replace('\\', '/', $ns).'.html';
     }
 
-    public static function sourceUrl(ClassDefinition $c)
+    public static function sourceUrl(Definition $c)
     {
         return '/source/'.str_replace('\\', '/', $c->getCompleteName()).'.html';
     }
@@ -235,9 +236,9 @@ class Documentation
      * @param array       $themeConfig
      * @param string|null $options
      *
-     * @throws Exception
-     *
      * @return array
+     *
+     * @throws Exception
      */
     private function prepareThemeOptions($themeConfig, $options = null)
     {
@@ -306,10 +307,10 @@ class Documentation
      * @param array       $themeConfig
      * @param string|null $path
      *
+     * @return string|null
+     *
      * @throws InvalidArgumentException
      * @throws ConfigException
-     *
-     * @return string|null
      */
     private function findThemeDirectory($themeConfig, $path = null)
     {

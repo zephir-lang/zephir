@@ -13,9 +13,6 @@ namespace Zephir\Expression\Builder\Statements;
 
 use Zephir\Expression\Builder\AbstractBuilder;
 
-/**
- * Class AbstractStatement.
- */
 abstract class AbstractStatement extends AbstractBuilder
 {
 }

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Logical;
 
-use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -29,11 +28,11 @@ class OrOperator extends LogicalBaseOperator
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
-            throw new Exception('Missing left part of the expression');
+            throw new \Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new Exception('Missing right part of the expression');
+            throw new \Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);

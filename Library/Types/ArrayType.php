@@ -13,19 +13,17 @@ namespace Zephir\Types;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Types;
 
 /**
  * Defines methods of the built-in array type
  */
 class ArrayType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $methodMap = [
+    public array $methodMap = [
         'join' => 'join',
         'reversed' => 'array_reverse',
         'rev' => 'array_reverse',
@@ -71,10 +69,7 @@ class ArrayType extends AbstractType
         'reduce' => 'array_reduce',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_ARRAY;
     }
@@ -87,7 +82,10 @@ class ArrayType extends AbstractType
      * @param Call               $call
      * @param array              $expression
      *
-     * @return bool|\Zephir\CompiledExpression
+     * @return bool|CompiledExpression
+     *
+     * @throws \ReflectionException
+     * @throws Exception
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
@@ -103,15 +101,8 @@ class ArrayType extends AbstractType
         return $expression->compile($compilationContext);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNumberParam($methodName)
+    protected function getNumberParam(string $methodName): int
     {
-        if ('map' == $methodName) {
-            return 1;
-        }
-
-        return 0;
+        return 'map' === $methodName ? 1 : 0;
     }
 }

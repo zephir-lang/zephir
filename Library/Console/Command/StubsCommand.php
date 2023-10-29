@@ -15,7 +15,6 @@ namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
@@ -66,16 +65,6 @@ final class StubsCommand extends AbstractCommand
 
     protected function createDefinition(): InputDefinition
     {
-        return new InputDefinition(
-            [
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to generate stubs for the extension',
-                    'ZendEngine3'
-                ),
-            ]
-        );
+        return new InputDefinition([]);
     }
 }

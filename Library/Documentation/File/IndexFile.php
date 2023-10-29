@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Documentation\FileInterface;
@@ -16,31 +18,15 @@ use Zephir\Documentation\NamespaceAccessor;
 
 class IndexFile implements FileInterface
 {
-    /**
-     * @var NamespaceAccessor
-     */
-    protected $namespaceAccessor;
-
-    public function __construct($config, NamespaceAccessor $namespaceAccessor)
+    public function __construct(protected NamespaceAccessor $namespaceAccessor)
     {
-        $this->namespaceAccessor = $namespaceAccessor;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'index.phtml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         return [
@@ -50,11 +36,6 @@ class IndexFile implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return 'index.html';

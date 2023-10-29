@@ -9,38 +9,35 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
- * BranchManager.
- *
- * Records every branch created within a method allowing analyze conditional variable assignment
+ * Records every branch created within a method allowing to analyze conditional variable assignment
  */
 class BranchManager
 {
-    /** @var Branch|null */
-    protected $currentBranch;
+    protected ?Branch $currentBranch = null;
 
-    protected $level = 0;
+    protected int $level = 0;
 
-    protected $uniqueId = 1;
+    protected int $uniqueId = 1;
 
-    /** @var Branch|null */
-    protected $rootBranch;
+    protected ?Branch $rootBranch;
 
     /**
      * Sets the current active branch in the manager.
      *
      * @param Branch $branch
      */
-    public function addBranch(Branch $branch)
+    public function addBranch(Branch $branch): void
     {
         if ($this->currentBranch) {
             $branch->setParentBranch($this->currentBranch);
-            $this->currentBranch = $branch;
-        } else {
-            $this->currentBranch = $branch;
         }
+
+        $this->currentBranch = $branch;
 
         $branch->setUniqueId($this->uniqueId);
         $branch->setLevel($this->level);
@@ -58,7 +55,7 @@ class BranchManager
      *
      * @param Branch $branch
      */
-    public function removeBranch(Branch $branch)
+    public function removeBranch(Branch $branch): void
     {
         $parentBranch = $branch->getParentBranch();
         $this->currentBranch = $parentBranch;
@@ -70,7 +67,7 @@ class BranchManager
      *
      * @return Branch|null
      */
-    public function getCurrentBranch()
+    public function getCurrentBranch(): ?Branch
     {
         return $this->currentBranch;
     }
@@ -80,16 +77,8 @@ class BranchManager
         return $this->currentBranch->getUniqueId();
     }
 
-    public function setRootBranch(Branch $branch)
+    public function setRootBranch(Branch $branch): void
     {
         $this->rootBranch = $branch;
-    }
-
-    /**
-     * @return Branch|null
-     */
-    public function getRootBranch()
-    {
-        return $this->rootBranch;
     }
 }

@@ -77,7 +77,7 @@ class FunctionCall extends Call
      *
      * @return bool
      */
-    public function isBuiltInFunction($functionName)
+    public function isBuiltInFunction(string $functionName)
     {
         switch ($functionName) {
             case 'memstr':
@@ -141,9 +141,9 @@ class FunctionCall extends Call
      * @param Expression         $expr
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException|Exception
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException|Exception
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
@@ -178,9 +178,9 @@ class FunctionCall extends Call
      * @param string $funcName
      * @param array  $expression
      *
-     * @throws CompilerException
-     *
      * @return bool
+     *
+     * @throws CompilerException
      */
     protected function isReadOnly($funcName, array $expression)
     {
@@ -213,9 +213,9 @@ class FunctionCall extends Call
              * Check if the number of parameters.
              */
             $numberParameters = \count($expression['parameters']);
-            if ('unpack' == $funcName &&
-                (0 == version_compare(PHP_VERSION, '7.1.0') ||
-                    0 == version_compare(PHP_VERSION, '7.1.1'))
+            if ('unpack' == $funcName
+                && (0 == version_compare(PHP_VERSION, '7.1.0')
+                    || 0 == version_compare(PHP_VERSION, '7.1.1'))
             ) {
                 if ($numberParameters < 2) {
                     throw new CompilerException(sprintf($messageFormat, $funcName), $expression);
@@ -269,12 +269,11 @@ class FunctionCall extends Call
             if ($numberParameters > 0) {
                 $n = 1;
                 $funcParameters = $reflector->getParameters();
-                $isZendEngine3 = $compilationContext->backend->isZE3();
                 foreach ($funcParameters as $parameter) {
                     if ($numberParameters >= $n) {
                         if ($parameter->isPassedByReference()) {
                             /* TODO hack, fix this better */
-                            if ($isZendEngine3 && '&' == $parameters[$n - 1][0]) {
+                            if ('&' === $parameters[$n - 1][0]) {
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
 
@@ -309,9 +308,9 @@ class FunctionCall extends Call
      * @param Call               $call
      * @param CompilationContext $compilationContext
      *
-     * @throws Exception
-     *
      * @return bool|mixed
+     *
+     * @throws Exception
      */
     protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
@@ -365,9 +364,9 @@ class FunctionCall extends Call
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws Exception|\Zephir\Exception\CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws Exception|\Zephir\Exception\CompilerException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
@@ -444,7 +443,7 @@ class FunctionCall extends Call
              * We don't know the exact dynamic type returned by the method call
              */
             $symbolVariable->setDynamicTypes('undefined');
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
         }
 
         /**
@@ -558,9 +557,9 @@ class FunctionCall extends Call
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     protected function _callDynamic(array $expression, CompilationContext $compilationContext)
     {

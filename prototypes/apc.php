@@ -120,8 +120,8 @@ function apc_sma_info($limited = false)
 /**
  * @see https://www.php.net/manual/en/function.apc-store.php
  *
- * @param $key
- * @param $var
+ * @param     $key
+ * @param     $var
  * @param int $ttl
  */
 function apc_store($key, $var, $ttl = 0)
@@ -131,7 +131,7 @@ function apc_store($key, $var, $ttl = 0)
 /**
  * @see https://www.php.net/manual/en/function.apc-fetch.php
  *
- * @param $key
+ * @param      $key
  * @param null $success
  *
  * @return mixed
@@ -152,7 +152,7 @@ function apc_delete($key)
 /**
  * @see https://www.php.net/manual/en/function.apc-define-constants.php
  *
- * @param $key
+ * @param       $key
  * @param array $constants
  * @param bool  $case_sensitive
  */
@@ -163,8 +163,8 @@ function apc_define_constants($key, array $constants, $case_sensitive = true)
 /**
  * @see https://www.php.net/manual/en/function.apc-add.php
  *
- * @param $key
- * @param $var
+ * @param     $key
+ * @param     $var
  * @param int $ttl
  */
 function apc_add($key, $var, $ttl = 0)
@@ -174,7 +174,7 @@ function apc_add($key, $var, $ttl = 0)
 /**
  * @see https://www.php.net/manual/en/function.apc-compile-file.php
  *
- * @param $filename
+ * @param      $filename
  * @param bool $atomic
  */
 function apc_compile_file($filename, $atomic = true)
@@ -184,7 +184,7 @@ function apc_compile_file($filename, $atomic = true)
 /**
  * @see https://www.php.net/manual/en/function.apc-load-constants.php
  *
- * @param $key
+ * @param      $key
  * @param bool $case_sensitive
  */
 function apc_load_constants($key, $case_sensitive = true)
@@ -212,7 +212,7 @@ function apc_delete_file($keys)
 /**
  * @see https://www.php.net/manual/en/function.apc-inc.php
  *
- * @param $key
+ * @param      $key
  * @param int  $step
  * @param null $success
  */
@@ -223,7 +223,7 @@ function apc_inc($key, $step = 1, &$success = null)
 /**
  * @see https://www.php.net/manual/en/function.apc-dec.php
  *
- * @param $key
+ * @param      $key
  * @param int  $step
  * @param null $success
  */
@@ -255,9 +255,9 @@ function apc_bin_dump($files = null, $user_vars = null)
 /**
  * @see https://php.net/manual/en/function.apc-bin-dumpfile.php
  *
- * @param $files
- * @param $user_vars
- * @param $filename
+ * @param      $files
+ * @param      $user_vars
+ * @param      $filename
  * @param int  $flags
  * @param null $context
  */
@@ -268,7 +268,7 @@ function apc_bin_dumpfile($files, $user_vars, $filename, $flags = 0, $context = 
 /**
  * @see https://php.net/manual/en/function.apc-bin-load.php
  *
- * @param $data
+ * @param     $data
  * @param int $flags
  */
 function apc_bin_load($data, $flags = 0)
@@ -278,7 +278,7 @@ function apc_bin_load($data, $flags = 0)
 /**
  * @see https://php.net/manual/en/function.apc-bin-loadfile.php
  *
- * @param $filename
+ * @param      $filename
  * @param null $context
  * @param int  $flags
  */

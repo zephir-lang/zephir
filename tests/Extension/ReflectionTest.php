@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionFunction;
-use ReflectionParameter;
 use Stub\Reflection as StubReflection;
 
 final class ReflectionTest extends TestCase
@@ -25,14 +22,14 @@ final class ReflectionTest extends TestCase
     {
         $class = new StubReflection();
 
-        $this->assertInstanceOf(ReflectionClass::class, $class->getReflectionClass());
-        $this->assertInstanceOf(ReflectionFunction::class, $class->getReflectionFunction());
+        $this->assertInstanceOf(\ReflectionClass::class, $class->getReflectionClass());
+        $this->assertInstanceOf(\ReflectionFunction::class, $class->getReflectionFunction());
         $this->assertNull($class->getReflectionParameter());
 
-        $class->setReflectionParameter(new ReflectionParameter(function ($test) {
+        $class->setReflectionParameter(new \ReflectionParameter(function ($test) {
             return 1;
         }, 0));
 
-        $this->assertInstanceOf(ReflectionParameter::class, $class->getReflectionParameter());
+        $this->assertInstanceOf(\ReflectionParameter::class, $class->getReflectionParameter());
     }
 }

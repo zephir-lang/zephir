@@ -19,7 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while' statements
@@ -65,7 +65,7 @@ class EvalExpression
     /**
      * Optimizes expressions.
      *
-     * @param $exprRaw
+     * @param                    $exprRaw
      * @param CompilationContext $compilationContext
      *
      * @return bool|string
@@ -166,7 +166,7 @@ class EvalExpression
                                         break;
 
                                     case 'int':
-                                        if (!(int) ($possibleValue->getCode())) {
+                                        if (!(int) $possibleValue->getCode()) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -174,7 +174,7 @@ class EvalExpression
                                         break;
 
                                     case 'double':
-                                        if (!(float) ($possibleValue->getCode())) {
+                                        if (!(float) $possibleValue->getCode()) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -182,7 +182,7 @@ class EvalExpression
                                         break;
 
                                     default:
-                                        //echo $possibleValue->getType();
+                                        // echo $possibleValue->getType();
                                 }
                             }
                         }

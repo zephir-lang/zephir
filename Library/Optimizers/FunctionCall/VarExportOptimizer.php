@@ -30,9 +30,9 @@ class VarExportOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -99,7 +99,7 @@ class VarExportOptimizer extends OptimizerAbstract
              */
             $variable = $context->symbolTable->getVariableForRead($resolvedParam->getCode(), $context, $expression);
         }
-        $variableSymbol = $context->backend->getVariableCodePointer($variable);
+        $variableSymbol = $context->backend->getVariableCode($variable);
 
         /*
          * let a = var_export(val);

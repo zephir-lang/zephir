@@ -16,8 +16,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 
 /**
- * DeclareStatement.
- *
  * This creates variables in the current symbol table
  */
 class DeclareStatement extends StatementAbstract
@@ -27,7 +25,7 @@ class DeclareStatement extends StatementAbstract
      *
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $statement = $this->statement;
 
@@ -46,11 +44,11 @@ class DeclareStatement extends StatementAbstract
 
             $currentType = $statement['data-type'];
 
-            /*
+            /**
              * Replace original data type by the pre-processed infered type
              */
             if ($typeInference) {
-                if ('variable' == $currentType) {
+                if ('variable' === $currentType) {
                     $type = $typeInference->getInferedType($varName);
                     if (\is_string($type)) {
                         $currentType = $type;
@@ -76,19 +74,16 @@ class DeclareStatement extends StatementAbstract
             $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
             $varName = $symbolVariable->getName();
 
-            /*
+            /**
              * Set the node where the variable is declared
              */
             $symbolVariable->setOriginal($variable);
-
             $symbolVariable->setIsInitialized(true, $compilationContext);
-            //$symbolVariable->increaseMutates();
 
-            if ('variable' == $currentType) {
+            if ('variable' === $currentType) {
                 $symbolVariable->setMustInitNull(true);
                 $symbolVariable->setLocalOnly(false);
             }
-            //$symbolVariable->increaseVariantIfNull();
 
             if (isset($variable['expr'])) {
                 $builder = BuilderFactory::getInstance();
@@ -103,19 +98,5 @@ class DeclareStatement extends StatementAbstract
                 $symbolVariable->enableDefaultAutoInitValue();
             }
         }
-    }
-
-    /**
-     * throw exception for invalid default type.
-     *
-     * @param $defaultType
-     * @param $dateType
-     * @param $variable
-     *
-     * @throws CompilerException
-     */
-    public static function invalidDefaultTypeException($defaultType, $dateType, $variable)
-    {
-        throw new CompilerException('Invalid default type: '.$defaultType.' for data type: '.$dateType, $variable);
     }
 }

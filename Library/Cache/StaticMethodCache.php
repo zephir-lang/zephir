@@ -11,8 +11,6 @@
 
 namespace Zephir\Cache;
 
-use ReflectionMethod;
-use Zephir\ClassMethod;
 use Zephir\CompilationContext;
 
 /**
@@ -36,22 +34,13 @@ class StaticMethodCache
 {
     protected array $cache = [];
 
-    /**
-     * MethodCache.
-     *
-     * @param CompilationContext                $compilationContext
-     * @param ClassMethod|ReflectionMethod|null $method
-     * @param bool                              $allowNtsCache
-     *
-     * @return string
-     */
-    public function get(CompilationContext $compilationContext, $method, bool $allowNtsCache = true): string
+    public function get(CompilationContext $compilationContext, $method): string
     {
         if ($method === null) {
             return 'NULL, 0';
         }
 
-        if (!($method instanceof ReflectionMethod)) {
+        if (!($method instanceof \ReflectionMethod)) {
             $completeName = $method->getClassDefinition()->getCompleteName();
 
             /**
@@ -66,27 +55,13 @@ class StaticMethodCache
             }
         }
 
-        $mustBeCached = false;
-        if (!$compilationContext->insideCycle) {
-            if (!($method instanceof ReflectionMethod)) {
-                $classDefinition = $method->getClassDefinition();
-                if (!$classDefinition->isBundled() && $allowNtsCache) {
-                    $mustBeCached = !$compilationContext->backend->isZE3();
-                } else {
-                    if (!$method->isPrivate() && !$method->isFinal()) {
-                        return 'NULL, 0';
-                    }
-                }
-            } else {
-                if (!$method->isPrivate() && !$method->isFinal()) {
-                    return 'NULL, 0';
-                }
-            }
+        if (!$compilationContext->insideCycle && !$method->isPrivate() && !$method->isFinal()) {
+            return 'NULL, 0';
         }
 
         $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
 
-        if ($method->isPrivate() || $method->isFinal() || $mustBeCached) {
+        if ($method->isPrivate() || $method->isFinal()) {
             $cacheSlot = SlotsCache::getMethodSlot($method);
         } else {
             $cacheSlot = '0';
@@ -95,7 +70,7 @@ class StaticMethodCache
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 
-        if (!($method instanceof ReflectionMethod)) {
+        if (!($method instanceof \ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 

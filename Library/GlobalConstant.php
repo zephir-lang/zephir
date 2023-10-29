@@ -9,44 +9,34 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 /**
- * GlobalConstant.
+ * Creates a new global constant.
  *
  * Global constants are allocated one time at extension initialization
  * and are referenced across the C code saving memory
  */
 class GlobalConstant
 {
-    protected $name;
-
-    /**
-     * Creates a new global constant.
-     *
-     * @param string $name
-     */
-    public function __construct($name)
+    public function __construct(protected string $name)
     {
-        $this->name = $name;
     }
 
     /**
      * Returns global constant name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * Check if the global constant is temporal.
-     *
-     * @return bool
      */
-    public function isTemporal()
+    public function isTemporal(): bool
     {
         return false;
     }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Cache;
 
 use Zephir\CompilationContext;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Classes located in the PHP userland are cached to avoid further relocates
@@ -25,12 +25,6 @@ class ClassEntryCache
 
     /**
      * Retrieves/Creates a class entry cache.
-     *
-     * @param string             $className
-     * @param bool               $dynamic
-     * @param CompilationContext $compilationContext
-     *
-     * @return Variable
      */
     public function get(string $className, bool $dynamic, CompilationContext $compilationContext): Variable
     {

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -67,6 +66,7 @@ use Zephir\Operators\Other\TypeOfOperator;
 use Zephir\Operators\Other\UnlikelyOperator;
 use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
+use Zephir\Variable\Variable;
 
 /**
  * Represents an expression.
@@ -78,17 +78,10 @@ class Expression
     protected bool $expecting = true;
     protected bool $readOnly = false;
     protected bool $evalMode = false;
-    protected array $expression = [];
     protected ?Variable $expectingVariable = null;
 
-    /**
-     * Expression constructor.
-     *
-     * @param array $expression
-     */
-    public function __construct(array $expression)
+    public function __construct(protected array $expression)
     {
-        $this->expression = $expression;
     }
 
     /**
@@ -231,12 +224,11 @@ class Expression
      *
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException|Exception
-     *
      * @return CompiledExpression
      *
+     * @throws CompilerException|Exception
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): CompiledExpression
     {
@@ -477,7 +469,7 @@ class Expression
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
                 if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
-                    if (false !== strpos($resolved->getCode(), ' ')) {
+                    if (str_contains($resolved->getCode(), ' ')) {
                         return new CompiledExpression($resolved->getType(), '('.$resolved->getCode().')', $expression);
                     }
                 }

@@ -15,6 +15,7 @@ namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
+
 use function Zephir\is_windows;
 
 final class ConfigTest extends TestCase

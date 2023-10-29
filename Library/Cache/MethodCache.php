@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
-use ReflectionClass;
-use ReflectionException;
-use Zephir\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
-use Zephir\MethodCallWarmUp;
 use Zephir\Passes\CallGathererPass;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 /**
  * Calls in Zephir implement monomorphic and polymorphic caches to
@@ -42,26 +39,14 @@ class MethodCache
 {
     protected array $cache = [];
 
-    protected ?CallGathererPass $gatherer = null;
-
-    /**
-     * @param CallGathererPass|null $gatherer
-     */
-    public function __construct(CallGathererPass $gatherer = null)
+    public function __construct(protected ?CallGathererPass $gatherer = null)
     {
-        $this->gatherer = $gatherer;
     }
 
     /**
      * Retrieves/Creates a function cache for a method call.
      *
-     * @param CompilationContext $compilationContext
-     * @param string             $methodName
-     * @param Variable           $caller
-     *
-     * @return string
-     *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
     {
@@ -69,7 +54,7 @@ class MethodCache
 
         $numberPoly = 0;
 
-        if ('this' == $caller->getRealName()) {
+        if ('this' === $caller->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
             if ($classDefinition->hasMethod($methodName)) {
                 ++$numberPoly;
@@ -148,14 +133,7 @@ class MethodCache
             $cacheable = false;
         }
 
-        // Recursive methods require warm-up
-        if ($compilationContext->currentMethod == $method) {
-            if (!$compilationContext->methodWarmUp) {
-                $compilationContext->methodWarmUp = new MethodCallWarmUp();
-            }
-        }
-
-        if ('this_ptr' != $caller->getName()) {
+        if ('this_ptr' !== $caller->getName()) {
             $associatedClass = $caller->getAssociatedClass();
             if ($this->isClassCacheable($associatedClass)) {
                 $staticCacheable = true;
@@ -187,22 +165,22 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching.
      *
-     * @param ClassDefinition|ReflectionClass|null $classDefinition
+     * @param Definition|\ReflectionClass|null $classDefinition
      *
      * @return bool
      */
     private function isClassCacheable($classDefinition = null): bool
     {
-        if ($classDefinition instanceof ClassDefinition) {
+        if ($classDefinition instanceof Definition) {
             return true;
         }
 
-        if (!($classDefinition instanceof ReflectionClass)) {
+        if (!($classDefinition instanceof \ReflectionClass)) {
             return false;
         }
 
-        return $classDefinition->isInternal() &&
-               $classDefinition->isInstantiable() &&
-               in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
+        return $classDefinition->isInternal()
+               && $classDefinition->isInstantiable()
+               && in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
     }
 }

@@ -17,8 +17,6 @@ abstract class AbstractStatementBuilder
 {
     /**
      * Returns a builder definition.
-     *
-     * @return array
      */
     abstract public function get(): array;
 }

@@ -11,13 +11,13 @@
 
 namespace Zephir\Statements\Let;
 
-use Zephir\CodePrinter;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 use function Zephir\add_slashes;
 
@@ -112,17 +112,11 @@ class Variable
     /**
      * Performs numeric assignment.
      *
-     * @param CodePrinter        $codePrinter
-     * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doNumericAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         string $variable,
         array $statement,
@@ -350,17 +344,11 @@ class Variable
     /**
      * Performs double assignment.
      *
-     * @param CodePrinter        $codePrinter
-     * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      * @throws IllegalOperationException
      */
     private function doDoubleAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         string $variable,
         array $statement,
@@ -537,18 +525,11 @@ class Variable
     /**
      * Performs string assignment.
      *
-     * @param CodePrinter        $codePrinter
-     * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      * @throws \Zephir\Exception\IllegalOperationException
      */
     private function doStringAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
         string $variable,
@@ -725,7 +706,7 @@ class Variable
     /**
      * Performs array assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param ZephirVariable     $symbolVariable
      * @param string             $variable
@@ -736,7 +717,7 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doArrayAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
         string $variable,
@@ -774,7 +755,7 @@ class Variable
     /**
      * Performs boolean assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param string             $variable
      * @param array              $statement
@@ -784,7 +765,7 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doBoolAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         string $variable,
         array $statement,
@@ -909,7 +890,7 @@ class Variable
     /**
      * Performs variable assignment.
      *
-     * @param CodePrinter        $codePrinter
+     * @param Printer            $codePrinter
      * @param CompiledExpression $resolvedExpr
      * @param ZephirVariable     $symbolVariable
      * @param string             $variable
@@ -921,7 +902,7 @@ class Variable
      * @throws IllegalOperationException
      */
     private function doVariableAssignment(
-        CodePrinter $codePrinter,
+        Printer $codePrinter,
         CompiledExpression $resolvedExpr,
         ZephirVariable $symbolVariable,
         string $variable,

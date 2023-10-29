@@ -14,20 +14,14 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\ClassConstant;
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\CompilerFile;
 use Zephir\Exception;
 
-use function array_key_exists;
-use function in_array;
-
-/**
- * Stubs Generator.
- */
 class Generator
 {
     /**
@@ -43,16 +37,10 @@ class Generator
     ];
 
     /**
-     * @var CompilerFile[]
-     */
-    protected array $files;
-
-    /**
      * @param CompilerFile[] $files
      */
-    public function __construct(array $files)
+    public function __construct(protected array $files)
     {
-        $this->files = $files;
     }
 
     /**
@@ -100,15 +88,15 @@ class Generator
     /**
      * Build class.
      *
-     * @param ClassDefinition $class
-     * @param string          $indent
-     * @param string          $banner
-     *
-     * @throws Exception\RuntimeException
+     * @param Definition $class
+     * @param string     $indent
+     * @param string     $banner
      *
      * @return string
+     *
+     * @throws Exception\RuntimeException
      */
-    protected function buildClass(ClassDefinition $class, string $indent, string $banner): string
+    protected function buildClass(Definition $class, string $indent, string $banner): string
     {
         $source = '<?php'.PHP_EOL.PHP_EOL;
         $source .= '' === $banner ? '' : $banner.PHP_EOL;
@@ -219,12 +207,12 @@ class Generator
     /**
      * Build property.
      *
-     * @param ClassProperty $property
-     * @param string        $indent
+     * @param Property $property
+     * @param string   $indent
      *
      * @return string
      */
-    protected function buildProperty(ClassProperty $property, string $indent): string
+    protected function buildProperty(Property $property, string $indent): string
     {
         $visibility = 'public';
 
@@ -249,12 +237,12 @@ class Generator
     }
 
     /**
-     * @param ClassConstant $constant
-     * @param string        $indent
+     * @param Constant $constant
+     * @param string   $indent
      *
      * @return string
      */
-    protected function buildConstant(ClassConstant $constant, string $indent): string
+    protected function buildConstant(Constant $constant, string $indent): string
     {
         $source = 'const '.$constant->getName();
 
@@ -266,13 +254,13 @@ class Generator
     }
 
     /**
-     * @param ClassMethod $method
-     * @param bool        $isInterface
-     * @param string      $indent
+     * @param Method $method
+     * @param bool   $isInterface
+     * @param string $indent
      *
      * @return string
      */
-    protected function buildMethod(ClassMethod $method, bool $isInterface, string $indent): string
+    protected function buildMethod(Method $method, bool $isInterface, string $indent): string
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
 
@@ -282,7 +270,7 @@ class Generator
 
         $parameters = [];
 
-        if ($methodParameters instanceof ClassMethodParameters) {
+        if ($methodParameters instanceof Parameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
@@ -296,13 +284,13 @@ class Generator
                 } elseif (isset($parameter['data-type']) && 'array' === $parameter['data-type']) {
                     $paramStr .= 'array ';
                 } elseif (isset($parameter['data-type'])) {
-                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                    if (\in_array($parameter['data-type'], ['bool', 'boolean'])) {
                         $paramStr .= 'bool ';
                     } elseif ('double' == $parameter['data-type']) {
                         $paramStr .= 'float ';
-                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                    } elseif (\in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
                         $paramStr .= 'int ';
-                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
+                    } elseif (\in_array($parameter['data-type'], ['char', 'string'])) {
                         $paramStr .= 'string ';
                     }
                 }
@@ -321,7 +309,7 @@ class Generator
         if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (array_key_exists('object', $method->getReturnTypes())) {
+            if (\array_key_exists('object', $method->getReturnTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -346,7 +334,7 @@ class Generator
                 ++$supported;
             }
 
-            if (array_key_exists('array', $method->getReturnTypes())) {
+            if (\array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
                 ++$supported;
             }
@@ -356,7 +344,7 @@ class Generator
             }
 
             // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
+            if ($supported > 1 || \array_key_exists('variable', $method->getReturnTypes())) {
                 $return = '';
             }
         } elseif ($method->isVoid()) {
@@ -387,9 +375,9 @@ class Generator
      *
      * @param array $parameter
      *
-     * @throws Exception\NotImplementedException
-     *
      * @return string
+     *
+     * @throws Exception\NotImplementedException
      */
     protected function wrapPHPValue(array $parameter): string
     {
@@ -454,10 +442,7 @@ class Generator
     private function fetchDocBlock(?string $docBlock, string $indent): string
     {
         $docBlock = (new DocBlock($docBlock, $indent))->__toString();
-        if ($docBlock) {
-            return $docBlock.PHP_EOL;
-        }
 
-        return '';
+        return $docBlock ? $docBlock.PHP_EOL : '';
     }
 }

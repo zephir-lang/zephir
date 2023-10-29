@@ -9,10 +9,13 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Bitwise;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
@@ -20,12 +23,13 @@ use Zephir\Operators\AbstractOperator;
 class BitwiseNotOperator extends AbstractOperator
 {
     /**
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws \ReflectionException
+     * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

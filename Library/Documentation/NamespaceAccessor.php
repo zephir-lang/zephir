@@ -48,7 +48,7 @@ class NamespaceAccessor
         $byNamespace = [];
         $tree = [];
 
-        foreach ($this->classes as $className => $class) {
+        foreach ($this->classes as $class) {
             $ns = explode('\\', $class->getClassDefinition()->getNamespace());
             $actualStr = '';
             foreach ($ns as $n) {

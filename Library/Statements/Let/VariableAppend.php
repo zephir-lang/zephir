@@ -14,7 +14,7 @@ namespace Zephir\Statements\Let;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * VariableAppend.
@@ -26,11 +26,11 @@ class VariableAppend
     /**
      * Compiles foo[] = {expr}.
      *
-     * @param $variable
+     * @param                    $variable
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param $statement
+     * @param                    $statement
      *
      * @throws CompilerException
      */

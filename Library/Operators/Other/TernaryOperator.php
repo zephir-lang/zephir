@@ -27,7 +27,7 @@ class TernaryOperator extends AbstractOperator
     /**
      * Compile ternary operator.
      *
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression

@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
-use Zephir\ClassMethod;
+use Zephir\Class\Method\Method;
 
 /**
  * In order to reduce memory allocation when calling functions and method_exists
@@ -55,10 +55,6 @@ class SlotsCache
 
     /**
      * Returns or creates a cache slot for a function.
-     *
-     * @param string $functionName
-     *
-     * @return int
      */
     public static function getExistingFunctionSlot(string $functionName): int
     {
@@ -67,12 +63,8 @@ class SlotsCache
 
     /**
      * Returns or creates a cache slot for a method.
-     *
-     * @param ClassMethod $method
-     *
-     * @return int
      */
-    public static function getMethodSlot(ClassMethod $method): int
+    public static function getMethodSlot(Method $method): int
     {
         $className = $method->getClassDefinition()->getCompleteName();
         $methodName = $method->getName();
@@ -93,12 +85,8 @@ class SlotsCache
 
     /**
      * Returns a cache slot for a method.
-     *
-     * @param ClassMethod $method
-     *
-     * @return int
      */
-    public static function getExistingMethodSlot(ClassMethod $method): int
+    public static function getExistingMethodSlot(Method $method): int
     {
         $className = $method->getClassDefinition()->getCompleteName();
         $methodName = $method->getName();

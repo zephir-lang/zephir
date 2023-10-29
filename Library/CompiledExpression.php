@@ -13,30 +13,14 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use Closure;
-
 /**
  * This represents a compiled expression, the object can be used to check
  * if the expression type is able to used in certain types of the application.
  */
 class CompiledExpression implements TypeAwareInterface
 {
-    protected string $type;
-
-    protected ?string $code;
-
-    protected ?array $originalExpr;
-
-    /**
-     * @param string      $type
-     * @param string|null $code
-     * @param array|null  $originalExpr
-     */
-    public function __construct(string $type, ?string $code, ?array $originalExpr = null)
+    public function __construct(protected string $type, protected mixed $code, protected ?array $originalExpr = null)
     {
-        $this->type = $type;
-        $this->code = $code;
-        $this->originalExpr = $originalExpr;
     }
 
     /**
@@ -52,9 +36,9 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Returns the code produced by the compiled expression.
      *
-     * @return string|null
+     * @return mixed
      */
-    public function getCode(): ?string
+    public function getCode(): mixed
     {
         return $this->code;
     }
@@ -76,7 +60,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function getBooleanCode(): string
     {
-        if ($this->code && ('true' == $this->code || true === $this->code)) {
+        if ('true' === $this->code || true === $this->code) {
             return '1';
         }
 
@@ -98,16 +82,6 @@ class CompiledExpression implements TypeAwareInterface
     }
 
     /**
-     * Checks if the compiled expression is a char or compatible type.
-     *
-     * @return bool
-     */
-    public function isCharCompatibleType(): bool
-    {
-        return in_array($this->type, ['char', 'uchar'], true);
-    }
-
-    /**
      * Resolves an expression
      *
      * Some code cannot be directly pushed into the generated source
@@ -121,7 +95,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function resolve(?string $result, CompilationContext $compilationContext): string
     {
-        if (!($this->code instanceof Closure)) {
+        if (!($this->code instanceof \Closure)) {
             return $this->code;
         }
 

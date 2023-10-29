@@ -16,7 +16,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function count;
 use function Zephir\add_slashes;
 
 /**
@@ -35,7 +34,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || 1 !== count($expression['parameters'])) {
+        if (!isset($expression['parameters']) || 1 !== \count($expression['parameters'])) {
             return false;
         }
 

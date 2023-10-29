@@ -14,7 +14,7 @@ namespace Zephir\Statements\Let;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Statements\LetStatement;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * ExportSymbol.

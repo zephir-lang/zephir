@@ -9,7 +9,7 @@ source ./setup.sh
 test_expect_success "Should correctly specify ARGINFO" "
   cd $FIXTURESDIR/typehints &&
   zephirc fullclean 2>&1 >/dev/null &&
-  zephirc generate --backend=ZendEngine3 2>&1 >/dev/null &&
+  zephirc generate 2>&1 >/dev/null &&
   test_cmp ext/typehints.c expected3.c &&
   test_cmp ext/typehints/args.zep.h expected_args3.h &&
   test_cmp ext/typehints/retval.zep.h expected_retval3.h &&
@@ -19,7 +19,7 @@ test_expect_success "Should correctly specify ARGINFO" "
 test_expect_success "Life Cycle Test" "
   cd $FIXTURESDIR/lifecycle &&
   zephirc fullclean 2>&1 >/dev/null &&
-  zephirc generate --backend=ZendEngine3 2>&1 >/dev/null &&
+  zephirc generate 2>&1 >/dev/null &&
   test_cmp ext/lifecycle.c expected3.c
 "
 
@@ -27,7 +27,7 @@ test_expect_success "Life Cycle Test" "
 test_expect_success "Should generate valid code with inheritance of prototype interfaces" "
   cd $FIXTURESDIR/protodir &&
   zephirc fullclean 2>&1 >/dev/null &&
-  zephirc generate --backend=ZendEngine3 2>&1 >/dev/null &&
+  zephirc generate 2>&1 >/dev/null &&
   test_cmp ext/protodir/connectionexception.zep.h connectionexception.h
 "
 

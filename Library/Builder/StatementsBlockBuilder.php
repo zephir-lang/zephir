@@ -18,21 +18,10 @@ namespace Zephir\Builder;
  */
 class StatementsBlockBuilder
 {
-    protected array $statements;
-
-    protected bool $raw;
-
-    public function __construct(array $statements, bool $raw = false)
+    public function __construct(protected array $statements, protected bool $raw = false)
     {
-        $this->statements = $statements;
-        $this->raw = $raw;
     }
 
-    /**
-     * Returns a builder definition.
-     *
-     * @return array
-     */
     public function get(): array
     {
         if ($this->raw) {

@@ -9,19 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Types;
+declare(strict_types=1);
 
-use Zephir\Types;
+namespace Zephir\Types;
 
 /**
  * Defines methods of the built-in int type
  */
 class IntType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public $methodMap = [
+    public array $methodMap = [
         'abs' => 'abs',
         'tobinary' => 'decbin',
         'tohex' => 'dechex',
@@ -38,10 +35,7 @@ class IntType extends AbstractType
         'log' => 'log',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return Types::T_INT;
     }

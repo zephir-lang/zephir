@@ -9,31 +9,26 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
 /**
- * SkipVariantInit.
- *
  * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch
  * Same case in 'switch' statements
  */
 class SkipVariantInit
 {
-    protected $branches = [];
+    protected array $branches = [];
 
-    protected $variablesToSkip = [];
-
-    protected $ignoredVariables;
+    protected array $variablesToSkip = [];
 
     /**
      * Do the compilation pass.
-     *
-     * @param int             $branchNumber
-     * @param StatementsBlock $block
      */
-    public function pass($branchNumber, StatementsBlock $block)
+    public function pass(int $branchNumber, StatementsBlock $block): void
     {
         $this->passStatementBlock($branchNumber, $block->getStatements());
         $this->branches[$branchNumber] = 0;
@@ -41,58 +36,53 @@ class SkipVariantInit
 
     /**
      * Check assignment types for possible skip.
-     *
-     * @param int   $branchNumber
-     * @param array $statement
      */
-    public function passLetStatement($branchNumber, $statement)
+    public function passLetStatement(int $branchNumber, array $statement): void
     {
+        $skipTypes = [
+            'variable',
+            'array-access',
+            'property-access',
+            'static-property-access',
+            'fcall',
+            'mcall',
+            'scall',
+        ];
+
         foreach ($statement['assignments'] as $assignment) {
-            if ('variable' == $assignment['assign-type']) {
-                if ('assign' == $assignment['operator']) {
-                    switch ($assignment['expr']['type']) {
-                        case 'variable':
-                        case 'array-access':
-                        case 'property-access':
-                        case 'static-property-access':
-                        case 'fcall':
-                        case 'mcall':
-                        case 'scall':
-                            break;
-                        default:
-                            $this->variablesToSkip[$branchNumber][$assignment['variable']] = 1;
-                            break;
-                    }
-                }
+            if ($assignment['assign-type'] !== 'variable' || $assignment['operator'] !== 'assign') {
+                continue;
             }
+
+            if (in_array($assignment['expr']['type'], $skipTypes, true)) {
+                continue;
+            }
+
+            $this->variablesToSkip[$branchNumber][$assignment['variable']] = 1;
         }
     }
 
-    public function passStatementBlock($branchNumber, array $statements)
+    public function passStatementBlock($branchNumber, array $statements): void
     {
         foreach ($statements as $statement) {
             if (!isset($statement['type'])) {
                 continue;
             }
 
-            switch ($statement['type']) {
-                case 'let':
-                    $this->passLetStatement($branchNumber, $statement);
-                    break;
+            if ($statement['type'] === 'let') {
+                $this->passLetStatement($branchNumber, $statement);
             }
         }
     }
 
     /**
      * Returns a list of variables that are initialized in every analyzed branch.
-     *
-     * @return array
      */
-    public function getVariables()
+    public function getVariables(): array
     {
         $variableStats = [];
 
-        foreach ($this->variablesToSkip as $branchNumber => $variables) {
+        foreach ($this->variablesToSkip as $variables) {
             foreach ($variables as $variable => $one) {
                 if (!isset($variableStats[$variable])) {
                     $variableStats[$variable] = 1;
@@ -113,11 +103,7 @@ class SkipVariantInit
         return $variables;
     }
 
-    /**
-     * @param int   $branchNumber
-     * @param array $variablesToSkip
-     */
-    public function setVariablesToSkip($branchNumber, $variablesToSkip)
+    public function setVariablesToSkip(int $branchNumber, array $variablesToSkip): void
     {
         $this->variablesToSkip[$branchNumber] = $variablesToSkip;
     }

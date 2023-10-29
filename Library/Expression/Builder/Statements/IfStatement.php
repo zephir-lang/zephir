@@ -14,8 +14,6 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\Operators\AbstractOperator;
 
 /**
- * IfStatement.
- *
  * Allows to manually build a 'if' statement AST node
  */
 class IfStatement extends AbstractStatement

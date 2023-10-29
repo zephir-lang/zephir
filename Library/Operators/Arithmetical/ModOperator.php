@@ -333,7 +333,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                 return new CompiledExpression('double', 'zephir_safe_mod_zval_double('.$op1.', '.$op2.')', $expression);
                                 break;
 
-                            /* a(var) + a(x) */
+                                /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
@@ -345,12 +345,12 @@ class ModOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression('double', 'zephir_safe_mod_zval_long('.$op1.', '.$variableRight->getName().')', $expression);
                                         break;
 
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         return new CompiledExpression('int', 'zephir_safe_mod_zval_long('.$op1.', '.$variableRight->getName().')', $expression);
                                         break;
 
-                                    /* a(var) + a(var) */
+                                        /* a(var) + a(var) */
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
                                         $op2 = $compilationContext->backend->getVariableCode($variableRight);

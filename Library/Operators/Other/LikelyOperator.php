@@ -32,6 +32,7 @@ class LikelyOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {

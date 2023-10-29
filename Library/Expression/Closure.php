@@ -13,18 +13,16 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
 use Zephir\Exception;
 use Zephir\StatementsBlock;
-use Zephir\Variable;
-
-use function is_array;
+use Zephir\Variable\Variable;
 
 /**
  * Creates an anonymous function within the extension simulating a closure
@@ -58,7 +56,7 @@ class Closure
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -86,7 +84,7 @@ class Closure
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $classDefinition = new ClassDefinition(
+        $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
             self::$id.'__closure'
         );
@@ -100,20 +98,20 @@ class Closure
 
         $parameters = null;
         if (isset($expression['left'])) {
-            $parameters = new ClassMethodParameters($expression['left']);
+            $parameters = new Parameters($expression['left']);
         }
 
         $block = $expression['right'] ?? [];
 
         $staticVariables = [];
-        if (isset($expression['use']) && is_array($expression['use'])) {
+        if (isset($expression['use']) && \is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
                 $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable($parameter['name']);
             }
         }
 
         foreach ($staticVariables as $var) {
-            $classDefinition->addProperty(new ClassProperty(
+            $classDefinition->addProperty(new Property(
                 $classDefinition,
                 ['public', 'static'],
                 $var->getName(),
@@ -123,7 +121,7 @@ class Closure
             ));
         }
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $classDefinition,
             ['public', 'final'],
             '__invoke',

@@ -13,11 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * Updates object properties dynamically
@@ -34,7 +33,7 @@ class ObjectDynamicProperty
      * @param array              $statement
      *
      * @throws CompilerException
-     * @throws Exception
+     * @throws \Exception
      */
     public function assign(string $variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
     {
@@ -104,7 +103,7 @@ class ObjectDynamicProperty
                 } elseif ('0' == $resolvedExpr->getBooleanCode()) {
                     $value = 'false';
                 } else {
-                    throw new Exception('?');
+                    throw new \Exception('?');
                 }
 
                 $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $value, $compilationContext);

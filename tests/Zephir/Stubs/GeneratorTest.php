@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\ClassConstant;
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
 use Zephir\Stubs\Generator;
 
 use function Zephir\is_windows;
@@ -32,13 +31,13 @@ class GeneratorTest extends TestCase
      */
     private $generatorClass;
     private Generator $testClass;
-    private ClassDefinition $classDefinition;
+    private Definition $classDefinition;
 
     protected function setUp(): void
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
         $this->testClass = new Generator([]);
-        $this->classDefinition = new ClassDefinition('Stub\Stubs', 'StubsBuildClass');
+        $this->classDefinition = new Definition('Stub\Stubs', 'StubsBuildClass');
     }
 
     /**
@@ -48,7 +47,7 @@ class GeneratorTest extends TestCase
      *
      * @return mixed
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     private function getMethod(string $name)
     {
@@ -102,8 +101,8 @@ DOC;
 
         $buildClass = $this->getMethod('buildClass');
 
-        $extendsClassDefinition = new ClassDefinition('Stub\Extendable', 'BaseTestClass');
-        $implementClassDefinition = new ClassDefinition('Stub\Events', 'EventsManagerInterface');
+        $extendsClassDefinition = new Definition('Stub\Extendable', 'BaseTestClass');
+        $implementClassDefinition = new Definition('Stub\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
 
         // Definitions
@@ -129,14 +128,14 @@ DOC;
             ],
         ];
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'init',
-            new ClassMethodParameters($methodParamsDefinition)
+            new Parameters($methodParamsDefinition)
         );
 
-        $constantsDefinition = new ClassConstant(
+        $constantsDefinition = new Constant(
             'DEFAULT_PATH_DELIMITER',
             [
                 'type' => 'string',
@@ -145,7 +144,7 @@ DOC;
             'Default path delimiter'
         );
 
-        $propertyDefinition = new ClassProperty(
+        $propertyDefinition = new Property(
             $this->classDefinition,
             ['public', 'static'],
             'defaultPathDelimiter',
@@ -239,14 +238,15 @@ DOC;
 
     /**
      * @dataProvider propertyProvider
+     *
      * @covers       \Zephir\Stubs\Generator::buildProperty
      *
      * @param array  $visibility
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
@@ -264,7 +264,7 @@ DOC;
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildProperty');
-        $classProperty = new ClassProperty(
+        $classProperty = new Property(
             $this->classDefinition,
             $visibility,
             'testProperty',
@@ -331,10 +331,10 @@ DOC;
      * @dataProvider constantProvider
      *
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
     {
@@ -360,7 +360,7 @@ DOC;
             $extended = $value;
         }
 
-        $classConstant = new ClassConstant(
+        $classConstant = new Constant(
             'TEST',
             [
                 'type' => $type,
@@ -409,7 +409,7 @@ DOC;
                 ],
             ],
         ];
-        $methodParams = new ClassMethodParameters($methodParamsDefinition);
+        $methodParams = new Parameters($methodParamsDefinition);
 
         $returnType = [
             'type' => 'return-type',
@@ -425,7 +425,7 @@ DOC;
 
         $this->classDefinition->setAliasManager(new AliasManager());
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'testName',

@@ -19,6 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
+
 use function Zephir\add_slashes;
 
 /**

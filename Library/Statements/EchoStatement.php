@@ -12,14 +12,13 @@
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 use function Zephir\add_slashes;
 
 /**
- * EchoStatement.
- *
  * Produce output according to the type
  */
 class EchoStatement extends StatementAbstract
@@ -27,9 +26,10 @@ class EchoStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws \ReflectionException
+     * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         foreach ($this->statement['expressions'] as $echoExpr) {
             $expr = new Expression($echoExpr);

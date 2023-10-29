@@ -11,7 +11,6 @@
 
 namespace Zephir;
 
-use ReflectionException;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
@@ -30,7 +29,6 @@ use Zephir\Statements\ThrowStatement;
 use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 use Zephir\Statements\WhileStatement;
-use function count;
 
 /**
  * This represents a single basic block in Zephir.
@@ -38,8 +36,6 @@ use function count;
  */
 class StatementsBlock
 {
-    protected $statements;
-
     protected ?bool $unreachable = null;
 
     protected $debug = false;
@@ -53,15 +49,8 @@ class StatementsBlock
      */
     protected $lastStatement;
 
-    /**
-     * StatementsBlock constructor.
-     *
-     * @param array $statements
-     */
-    public function __construct(array $statements)
+    public function __construct(protected $statements)
     {
-        $this->statements = $statements;
-
         $debug = false;
         if (getenv('ZEPHIR_DEBUG')) {
             // Do not use this feature for typical use case.
@@ -71,22 +60,17 @@ class StatementsBlock
             $debug = getenv('ZEPHIR_DEBUG');
         }
 
-        // TODO: Add container support
-        // elseif ($this->container->has('ZEPHIR_DEBUG')) {
-        //     $debug = $this->container->get('ZEPHIR_DEBUG');
-        // }
-
         $this->debug = filter_var($debug, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
-     * Sets whether the statements blocks belongs to a loop.
+     * Sets whether the statements block belongs to a loop.
      *
      * @param bool $loop
      *
      * @return StatementsBlock
      */
-    public function isLoop($loop)
+    public function isLoop(bool $loop): static
     {
         $this->loop = $loop;
 
@@ -101,9 +85,9 @@ class StatementsBlock
      * @return Branch
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
-    public function compile(CompilationContext $compilationContext, ?bool $unreachable = null, int $branchType = Branch::TYPE_UNKNOWN): Branch
+    public function compile(CompilationContext $compilationContext, bool $unreachable = null, int $branchType = Branch::TYPE_UNKNOWN): Branch
     {
         $compilationContext->codePrinter->increaseLevel();
         ++$compilationContext->currentBranch;
@@ -424,7 +408,7 @@ class StatementsBlock
      */
     public function isEmpty(): bool
     {
-        return 0 === count($this->statements);
+        return 0 === \count($this->statements);
     }
 
     /**

@@ -27,6 +27,7 @@ final class FunctionExistsTest extends TestCase
 
     /**
      * @dataProvider providerInternalFunctions
+     *
      * @issue https://github.com/zephir-lang/zephir/issues/1547
      *
      * @param string $func The internal (built-in) function name

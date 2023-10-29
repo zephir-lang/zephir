@@ -13,25 +13,14 @@ declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
-use DirectoryIterator;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zephir\BaseBackend;
+use Zephir\Backend\Backend;
 use Zephir\Config;
-
-use function chdir;
-use function extension_loaded;
-use function is_dir;
-use function is_readable;
-use function mkdir;
-use function preg_match;
-
-use const DIRECTORY_SEPARATOR;
 
 /**
  * Init Command
@@ -40,11 +29,11 @@ use const DIRECTORY_SEPARATOR;
  */
 final class InitCommand extends AbstractCommand
 {
-    private BaseBackend $backend;
+    private Backend $backend;
     private Config $config;
     private LoggerInterface $logger;
 
-    public function __construct(BaseBackend $backend, Config $config, LoggerInterface $logger)
+    public function __construct(Backend $backend, Config $config, LoggerInterface $logger)
     {
         $this->backend = $backend;
         $this->config = $config;
@@ -53,7 +42,7 @@ final class InitCommand extends AbstractCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('init')
@@ -62,32 +51,31 @@ final class InitCommand extends AbstractCommand
             ->setHelp(sprintf('%s.', $this->getDescription()));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $namespace = $this->sanitizeNamespace($input->getArgument('namespace'));
 
         // Tell the user the name could be reserved by another extension
-        if (extension_loaded($namespace)) {
+        if (\extension_loaded($namespace)) {
             $this->logger->warning('This extension can have conflicts with an existing loaded extension');
         }
 
         $this->config->set('namespace', $namespace);
         $this->config->set('name', $namespace);
 
-        if (!is_dir("{$namespace}/{$namespace}")) {
-            mkdir("{$namespace}/{$namespace}", 0755, true);
+        if (!\is_dir("{$namespace}/{$namespace}")) {
+            \mkdir("{$namespace}/{$namespace}", 0755, true);
         }
 
-        chdir($namespace);
+        \chdir($namespace);
 
         // Create 'kernel'
-        if (!is_dir('ext/kernel')) {
-            mkdir('ext/kernel', 0755, true);
+        if (!\is_dir('ext/kernel')) {
+            \mkdir('ext/kernel', 0755, true);
         }
 
         // Copy the latest kernel files
         $this->recursiveProcess($this->backend->getInternalKernelPath(), 'ext/kernel');
-
         // Dump initial configuration on project creation
         $this->config->dumpToFile();
 
@@ -102,13 +90,6 @@ final class InitCommand extends AbstractCommand
                     'namespace',
                     InputArgument::REQUIRED,
                     'The extension namespace'
-                ),
-                new InputOption(
-                    'backend',
-                    null,
-                    InputOption::VALUE_REQUIRED,
-                    'Used backend to create extension',
-                    'ZendEngine3'
                 ),
             ]
         );
@@ -139,16 +120,16 @@ final class InitCommand extends AbstractCommand
      * @param string|null $pattern
      * @param string      $callback
      *
-     * @return bool
+     * @return void
      */
-    private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): bool
+    private function recursiveProcess(string $src, string $dst, string $pattern = null, string $callback = 'copy'): void
     {
         $success = true;
-        $iterator = new DirectoryIterator($src);
+        $iterator = new \DirectoryIterator($src);
 
         foreach ($iterator as $item) {
             $pathName = $item->getPathname();
-            if (!is_readable($pathName)) {
+            if (!\is_readable($pathName)) {
                 $this->logger->error('File is not readable :'.$pathName);
                 continue;
             }
@@ -157,17 +138,15 @@ final class InitCommand extends AbstractCommand
 
             if ($item->isDir()) {
                 if ('.' != $fileName && '..' != $fileName && '.libs' != $fileName) {
-                    if (!is_dir($dst.DIRECTORY_SEPARATOR.$fileName)) {
-                        mkdir($dst.DIRECTORY_SEPARATOR.$fileName, 0755, true);
+                    if (!\is_dir($dst.\DIRECTORY_SEPARATOR.$fileName)) {
+                        \mkdir($dst.\DIRECTORY_SEPARATOR.$fileName, 0755, true);
                     }
-                    $this->recursiveProcess($pathName, $dst.DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
+                    $this->recursiveProcess($pathName, $dst.\DIRECTORY_SEPARATOR.$fileName, $pattern, $callback);
                 }
-            } elseif ($pattern === null || 1 === preg_match($pattern, $fileName)) {
-                $path = $dst.DIRECTORY_SEPARATOR.$fileName;
+            } elseif ($pattern === null || 1 === \preg_match($pattern, $fileName)) {
+                $path = $dst.\DIRECTORY_SEPARATOR.$fileName;
                 $success = $success && $callback($pathName, $path);
             }
         }
-
-        return $success;
     }
 }

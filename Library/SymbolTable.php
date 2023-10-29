@@ -9,50 +9,36 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
 use Zephir\Exception\CompilerException;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
+use Zephir\Variable\Variable;
 
 /**
- * Zephir\SymbolTable.
- *
  * A symbol table stores all the variables defined in a method, their data types and default values.
  */
 class SymbolTable
 {
-    protected $mustGrownStack = false;
+    protected bool $mustGrownStack = false;
 
-    /** @var Variable[][] */
-    protected $branchVariables = [];
+    protected array $branchVariables = [];
 
-    protected $tempVarCount = 0;
+    protected int $tempVarCount = 0;
 
-    /** @var Variable[][][][] */
-    protected $branchTempVariables = [];
+    protected array $branchTempVariables = [];
 
     /**
      * @var LocalContextPass
      */
     protected $localContext;
 
-    /**
-     * @var CompilationContext
-     */
-    protected $compilationContext;
+    protected Globals $globalsManager;
 
-    /**
-     * @var Globals
-     */
-    protected $globalsManager;
-
-    /**
-     * SymbolTable.
-     *
-     * @param CompilationContext $compilationContext
-     */
-    public function __construct(CompilationContext $compilationContext)
+    public function __construct(protected CompilationContext $compilationContext)
     {
         $this->globalsManager = new Globals();
 
@@ -79,13 +65,13 @@ class SymbolTable
         $this->branchVariables[1]['return_value_ptr'] = $returnValue;
     }
 
-    public function resolveVariableToBranch($name, CompilationContext $compilationContext)
+    public function resolveVariableToBranch($name, CompilationContext $compilationContext): ?Branch
     {
         $currentBranch = $compilationContext->branchManager->getCurrentBranch();
 
         do {
             $currentId = $currentBranch->getUniqueId();
-            if (isset($this->branchVariables[$currentId]) && isset($this->branchVariables[$currentId][$name])) {
+            if (isset($this->branchVariables[$currentId][$name])) {
                 return $currentBranch;
             }
             $currentBranch = $currentBranch->getParentBranch();
@@ -99,7 +85,7 @@ class SymbolTable
      *
      * @param LocalContextPass $localContext
      */
-    public function setLocalContext(LocalContextPass $localContext)
+    public function setLocalContext(LocalContextPass $localContext): void
     {
         $this->localContext = $localContext;
     }
@@ -107,17 +93,17 @@ class SymbolTable
     /**
      * Check if a variable is declared in the current symbol table.
      *
-     * @param string             $name
-     * @param CompilationContext $compilationContext
+     * @param string                  $name
+     * @param CompilationContext|null $compilationContext
      *
      * @return bool
      */
-    public function hasVariable($name, CompilationContext $compilationContext = null)
+    public function hasVariable(string $name, CompilationContext $compilationContext = null): bool
     {
         return false !== $this->getVariable($name, $compilationContext ?: $this->compilationContext);
     }
 
-    public function hasVariableInBranch($name, Branch $compareBranch, CompilationContext $compilationContext = null)
+    public function hasVariableInBranch($name, Branch $compareBranch, CompilationContext $compilationContext = null): bool
     {
         $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
 
@@ -151,7 +137,7 @@ class SymbolTable
 
         $variable = new Variable($type, $varName, $currentBranch);
 
-        /*
+        /**
          * Checks whether a variable can be optimized to be static or not
          */
         if ('variable' == $type && $this->localContext && $this->localContext->shouldBeLocal($name)) {
@@ -174,7 +160,7 @@ class SymbolTable
      *
      * @return Variable
      */
-    public function addRawVariable(Variable $variable)
+    public function addRawVariable(Variable $variable): Variable
     {
         if (!isset($this->branchVariables[1])) {
             $this->branchVariables[1] = [];
@@ -187,8 +173,8 @@ class SymbolTable
     /**
      * Returns a variable in the symbol table.
      *
-     * @param $name
-     * @param CompilationContext $compilationContext
+     * @param                         $name
+     * @param CompilationContext|null $compilationContext
      *
      * @return bool|Variable
      */
@@ -197,7 +183,7 @@ class SymbolTable
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
         if ($pos > -1) {
-            $branchId = (int) (substr($name, $pos + \strlen(Variable::BRANCH_MAGIC)));
+            $branchId = (int) substr($name, $pos + \strlen(Variable::BRANCH_MAGIC));
             $name = substr($name, 0, $pos);
         } else {
             $compilationContext = $compilationContext ?: $this->compilationContext;
@@ -222,22 +208,13 @@ class SymbolTable
     public function getVariables()
     {
         $ret = [];
-        foreach ($this->branchVariables as $branchId => $vars) {
+        foreach ($this->branchVariables as $vars) {
             foreach ($vars as $var) {
                 $ret[$var->getName()] = $var;
             }
         }
 
         return $ret;
-    }
-
-    public function getVariablesByBranch($branchId)
-    {
-        if (isset($this->branchVariables[$branchId])) {
-            return $this->branchVariables[$branchId];
-        }
-
-        return null;
     }
 
     /**
@@ -247,9 +224,9 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
-     *
      * @return Variable
+     *
+     * @throws CompilerException
      */
     public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
     {
@@ -367,28 +344,30 @@ class SymbolTable
                     if (!$found) {
                         /**
                          * Check if last assignment
-                         * Variable was initialized in a sub-branch and it's being used in a parent branch.
+                         * Variable was initialized in a sub-branch, and it's being used in a parent branch.
                          */
-                        $possibleBadAssignment = false;
+                        $possibleBadAssignment = $currentBranch->getLevel() < $branches[0]->getLevel();
+                        if ($possibleBadAssignment && \count($branches) === 1) {
+                            /**
+                             * Variable is assigned just once, and it's assigned in a conditional branch
+                             */
+                            if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+                                $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
 
-                        if ($currentBranch->getLevel() < $branches[0]->getLevel()) {
-                            $possibleBadAssignment = true;
-                        }
-
-                        if ($possibleBadAssignment) {
-                            if (\count($branches) > 1) {
-                                $graph = new BranchGraph();
-                                foreach ($branches as $branch) {
-                                    $graph->addLeaf($branch);
+                                if (true === $evalExpression->isUnreachable()) {
+                                    throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
+                                } else {
+                                    $variable->enableDefaultAutoInitValue();
+                                    $compilationContext->logger->warning(
+                                        "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
+                                        ['conditional-initialization', $statement]
+                                    );
                                 }
                             } else {
-                                /*
-                                 * Variable is assigned just once and it's assigned in a conditional branch
-                                 */
-                                if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
+                                if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
                                     $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
 
-                                    if (true === $evalExpression->isUnreachable()) {
+                                    if (true === $evalExpression->isUnreachableElse()) {
                                         throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
                                     } else {
                                         $variable->enableDefaultAutoInitValue();
@@ -396,20 +375,6 @@ class SymbolTable
                                             "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
                                             ['conditional-initialization', $statement]
                                         );
-                                    }
-                                } else {
-                                    if (Branch::TYPE_CONDITIONAL_FALSE == $branches[0]->getType()) {
-                                        $evalExpression = $branches[0]->getRelatedStatement()->getEvalExpression();
-
-                                        if (true === $evalExpression->isUnreachableElse()) {
-                                            throw new CompilerException("Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration", $statement);
-                                        } else {
-                                            $variable->enableDefaultAutoInitValue();
-                                            $compilationContext->logger->warning(
-                                                "Variable '".$name."' was assigned for the first time in conditional branch, consider initialize it at its declaration",
-                                                ['conditional-initialization', $statement]
-                                            );
-                                        }
                                     }
                                 }
                             }
@@ -435,9 +400,9 @@ class SymbolTable
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws CompilerException
+     * @return bool|\Zephir\Variable\Variable
      *
-     * @return bool|\Zephir\Variable
+     * @throws CompilerException
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {
@@ -470,7 +435,7 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        /*
+        /**
          * Saves the last place where the variable was mutated
          * We discard mutations inside loops because iterations could use the value
          * and Zephir only provides top-down compilation
@@ -486,19 +451,17 @@ class SymbolTable
 
     /**
      * Return a variable in the symbol table, it will be used for a mutating operation
-     * This method implies mutation of one of the members of the variable but no the variables it self.
+     * This method implies mutation of one of the members of the variable but no the variables itself.
      *
      * @param string             $name
      * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
+     * @param array|null         $statement
      *
      * @return Variable
      */
-    public function getVariableForUpdate($name, CompilationContext $compilationContext, array $statement = null)
+    public function getVariableForUpdate(string $name, CompilationContext $compilationContext, array $statement = null)
     {
-        /*
+        /**
          * Create superglobals just in time
          */
         if ($this->globalsManager->isSuperGlobal($name)) {
@@ -527,7 +490,7 @@ class SymbolTable
         $variable->increaseUses();
         $variable->increaseMutates();
 
-        /*
+        /**
          * Saves the last place where the variable was mutated
          * We discard mutations inside loops because iterations could use the value
          * and Zephir only provides top-down compilation
@@ -542,7 +505,7 @@ class SymbolTable
      *
      * @param bool $mustGrownStack
      */
-    public function mustGrownStack($mustGrownStack)
+    public function mustGrownStack(bool $mustGrownStack): void
     {
         $this->mustGrownStack = $mustGrownStack;
     }
@@ -552,7 +515,7 @@ class SymbolTable
      *
      * @return bool
      */
-    public function getMustGrownStack()
+    public function getMustGrownStack(): bool
     {
         return $this->mustGrownStack;
     }
@@ -560,7 +523,7 @@ class SymbolTable
     /**
      * @return int
      */
-    public function getNextTempVar()
+    public function getNextTempVar(): int
     {
         return $this->tempVarCount++;
     }
@@ -591,7 +554,7 @@ class SymbolTable
      *
      * @return Variable
      */
-    public function getTempVariableForWrite($type, CompilationContext $context, $init = true)
+    public function getTempVariableForWrite(string $type, CompilationContext $context, $init = true): Variable
     {
         $variable = $this->reuseTempVariable($type, 'heap');
         if (\is_object($variable)) {
@@ -623,7 +586,7 @@ class SymbolTable
      * Creates a temporary variable to be used to point to a heap variable
      * These kind of variables MUST not be tracked by the Zephir memory manager.
      *
-     * @param $type
+     * @param                    $type
      * @param CompilationContext $context
      * @param bool               $initNonReferenced
      *
@@ -869,13 +832,13 @@ class SymbolTable
             return;
         }
 
-        foreach ($this->branchTempVariables[$branchId] as $location => $typeVariables) {
-            foreach ($typeVariables as $type => $variables) {
+        foreach ($this->branchTempVariables[$branchId] as $typeVariables) {
+            foreach ($typeVariables as $variables) {
                 foreach ($variables as $variable) {
                     $pos = strpos($variable->getName(), Variable::BRANCH_MAGIC);
                     $otherBranchId = 1;
                     if ($pos > -1) {
-                        $otherBranchId = (int) (substr($variable->getName(), $pos + \strlen(Variable::BRANCH_MAGIC)));
+                        $otherBranchId = (int) substr($variable->getName(), $pos + \strlen(Variable::BRANCH_MAGIC));
                     }
                     if ($branchId == $otherBranchId) {
                         $variable->setIdle(true);
@@ -892,7 +855,7 @@ class SymbolTable
      *
      * @return int
      */
-    public function getExpectedMutations($variable)
+    public function getExpectedMutations(string $variable): int
     {
         if ($this->localContext) {
             return $this->localContext->getNumberOfMutations($variable);
@@ -908,7 +871,7 @@ class SymbolTable
      *
      * @return int
      */
-    public function getLastCallLine()
+    public function getLastCallLine(): int
     {
         if ($this->localContext) {
             return $this->localContext->getLastCallLine();
@@ -924,7 +887,7 @@ class SymbolTable
      *
      * @return int
      */
-    public function getLastUnsetLine()
+    public function getLastUnsetLine(): int
     {
         if ($this->localContext) {
             return $this->localContext->getLastUnsetLine();
@@ -941,7 +904,7 @@ class SymbolTable
      * @param Variable           $variable
      * @param CompilationContext $compilationContext
      */
-    protected function registerTempVariable($type, $location, Variable $variable, CompilationContext $compilationContext = null)
+    protected function registerTempVariable($type, $location, Variable $variable, CompilationContext $compilationContext = null): void
     {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId = $compilationContext->branchManager->getCurrentBranchId();
@@ -955,13 +918,13 @@ class SymbolTable
     /**
      * Reuse variables marked as idle after leave a branch.
      *
-     * @param string             $type
-     * @param string             $location
-     * @param CompilationContext $compilationContext
+     * @param string                  $type
+     * @param string                  $location
+     * @param CompilationContext|null $compilationContext
      *
-     * @return Variable
+     * @return Variable|null
      */
-    protected function reuseTempVariable(string $type, $location, CompilationContext $compilationContext = null)
+    protected function reuseTempVariable(string $type, string $location, CompilationContext $compilationContext = null): ?Variable
     {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId = $compilationContext->branchManager->getCurrentBranchId();

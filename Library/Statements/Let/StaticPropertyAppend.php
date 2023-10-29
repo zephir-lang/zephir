@@ -11,7 +11,7 @@
 
 namespace Zephir\Statements\Let;
 
-use Zephir\ClassProperty;
+use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -75,7 +75,7 @@ class StaticPropertyAppend extends ArrayIndex
             throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
         }
 
-        /** @var ClassProperty $propertyDefinition */
+        /** @var Property $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
             throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);

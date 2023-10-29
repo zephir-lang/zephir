@@ -13,21 +13,17 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Detectors\ForValueUseDetector;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 use function Zephir\add_slashes;
 
-/**
- * ForStatement.
- *
- * For statement
- */
 class ForStatement extends StatementAbstract
 {
     /**
@@ -37,8 +33,11 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @return bool
+     *
+     * @throws \ReflectionException
+     * @throws Exception
      */
-    public function compileRange($exprRaw, CompilationContext $compilationContext)
+    public function compileRange(array $exprRaw, CompilationContext $compilationContext): bool
     {
         if (!\count($exprRaw['parameters'])) {
             return false;
@@ -70,7 +69,7 @@ class ForStatement extends StatementAbstract
         $codePrinter = $compilationContext->codePrinter;
         $exprBuilder = BuilderFactory::getInstance();
 
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -93,7 +92,7 @@ class ForStatement extends StatementAbstract
             $tempVariable = $compilationContext->symbolTable->addTemp($rangeVariable->getType(), $compilationContext);
         }
 
-        /*
+        /**
          * Create a copy of the current value in the end of the range to avoid modify the range
          * inside the cycle
          */
@@ -122,7 +121,7 @@ class ForStatement extends StatementAbstract
         $statement->compile($compilationContext);
 
         if ($this->statement['reverse']) {
-            /*
+            /**
              * Create an implicit 'let' operation for the initialize expression
              */
             $builderLet->setAssignments([$exprBuilder->operators()
@@ -136,7 +135,7 @@ class ForStatement extends StatementAbstract
             ]);
             $statement = new LetStatement($builderLet->build());
         } else {
-            /*
+            /**
              * Create an implicit 'let' operation for the initialize expression
              */
             $builderLet->setAssignments([$exprBuilder->operators()
@@ -153,7 +152,7 @@ class ForStatement extends StatementAbstract
 
         $statement->compile($compilationContext);
 
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -181,7 +180,7 @@ class ForStatement extends StatementAbstract
         $codePrinter->output('if ('.$condition.') {');
         $codePrinter->increaseLevel();
 
-        /*
+        /**
          * Inside a cycle
          */
         ++$compilationContext->insideCycle;
@@ -286,11 +285,11 @@ class ForStatement extends StatementAbstract
         $codePrinter->output("\t".$flagVariable->getName().' = 1;');
         $codePrinter->output('}');
 
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
-            /*
+            /**
              * Check for anonymous variables
              */
             if ('_' != $this->statement['key']) {
@@ -326,11 +325,11 @@ class ForStatement extends StatementAbstract
             $statement->compile($compilationContext);
         }
 
-        /*
+        /**
          * Initialize 'value' variable
          */
         if (isset($this->statement['value'])) {
-            /*
+            /**
              * Check for anonymous variables
              */
             if ('_' != $this->statement['value']) {
@@ -368,7 +367,7 @@ class ForStatement extends StatementAbstract
 
         $codePrinter->decreaseLevel();
 
-        /*
+        /**
          * Compile statements in the 'for' block
          */
         if (isset($this->statement['statements'])) {
@@ -381,16 +380,16 @@ class ForStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
-        /*
+        /**
          * Restore the cycle counter
          */
         --$compilationContext->insideCycle;
 
         $codePrinter->output('}');
-
         $codePrinter->decreaseLevel();
-
         $codePrinter->output('}');
+
+        return true;
     }
 
     /**
@@ -399,14 +398,15 @@ class ForStatement extends StatementAbstract
      * @param array              $exprRaw
      * @param CompilationContext $compilationContext
      *
-     * @return bool
+     * @return void
+     *
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public function compileIterator(array $exprRaw, CompilationContext $compilationContext)
+    public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
         $iteratorVariable = $compilationContext->symbolTable->getTempVariableForWrite('zend_object_iterator', $compilationContext);
-
         $compilationContext->headersManager->add('kernel/iterator');
-
         $codePrinter = $compilationContext->codePrinter;
 
         /**
@@ -421,12 +421,8 @@ class ForStatement extends StatementAbstract
         }
 
         $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
-        switch ($exprVariable->getType()) {
-            case 'variable':
-                break;
-        }
 
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -448,7 +444,7 @@ class ForStatement extends StatementAbstract
             $keyVariable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Initialize 'value' variable
          */
         if (isset($this->statement['value'])) {
@@ -470,7 +466,7 @@ class ForStatement extends StatementAbstract
             $variable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
@@ -490,13 +486,14 @@ class ForStatement extends StatementAbstract
             $codePrinter->increaseLevel();
             $codePrinter->output('{');
             $codePrinter->increaseLevel();
-            $compilationContext->backend->forStatementIterator($iteratorVariable, $variable, $compilationContext);
+            $compilationContext->symbolTable->mustGrownStack(true);
+            $compilationContext->codePrinter->output('ZEPHIR_ITERATOR_COPY('.$compilationContext->backend->getVariableCode($variable).', '.$iteratorVariable->getName().');');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
             $codePrinter->decreaseLevel();
         }
 
-        /*
+        /**
          * Compile statements in the 'for' block
          */
         if (isset($this->statement['statements'])) {
@@ -509,7 +506,7 @@ class ForStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
-        /*
+        /**
          * Restore the cycle counter
          */
         --$compilationContext->insideCycle;
@@ -528,6 +525,9 @@ class ForStatement extends StatementAbstract
      * @param array              $expression
      * @param CompilationContext $compilationContext
      * @param Variable           $exprVariable
+     *
+     * @throws Exception
+     * @throws \ReflectionException
      */
     public function compileStringTraverse($expression, CompilationContext $compilationContext, $exprVariable)
     {
@@ -619,12 +619,12 @@ class ForStatement extends StatementAbstract
         $compilationContext->headersManager->add('kernel/operators');
         $codePrinter->output("\t".$variable->getName().' = ZEPHIR_STRING_OFFSET('.$stringVariableCode.', '.$tempVariable->getName().');');
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
 
-        /*
+        /**
          * Compile statements in the 'for' block
          */
         if (isset($this->statement['statements'])) {
@@ -649,13 +649,12 @@ class ForStatement extends StatementAbstract
      * - A key must be a zval
      * - A value must be a zval
      *
-     * @param array              $expression
      * @param CompilationContext $compilationContext
      * @param Variable           $exprVariable
      */
-    public function compileHashTraverse($expression, CompilationContext $compilationContext, Variable $exprVariable)
+    public function compileHashTraverse(CompilationContext $compilationContext, Variable $exprVariable): void
     {
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -673,7 +672,7 @@ class ForStatement extends StatementAbstract
             $keyVariable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Initialize 'value' variable
          */
         if (isset($this->statement['value'])) {
@@ -692,12 +691,10 @@ class ForStatement extends StatementAbstract
             $variable->setDynamicTypes('undefined');
         }
 
-        /*
+        /**
          * Variables are initialized in a different way inside cycle
          */
         ++$compilationContext->insideCycle;
-
-//         $compilationContext->headersManager->add('kernel/hash');
 
         $duplicateHash = '0';
         $duplicateKey = true;
@@ -717,7 +714,7 @@ class ForStatement extends StatementAbstract
                 $duplicateHash = '1';
             }
 
-            /*
+            /**
              * Detect if the key is modified or passed to an external scope
              */
             if (isset($this->statement['key'])) {
@@ -741,7 +738,7 @@ class ForStatement extends StatementAbstract
             $compilationContext
         );
 
-        /*
+        /**
          * Restore the cycle counter
          */
         --$compilationContext->insideCycle;
@@ -750,9 +747,10 @@ class ForStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws \ReflectionException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
 
@@ -796,7 +794,7 @@ class ForStatement extends StatementAbstract
         switch ($exprVariable->getType()) {
             case 'variable':
             case 'array':
-                $this->compileHashTraverse($expression, $compilationContext, $exprVariable);
+                $this->compileHashTraverse($compilationContext, $exprVariable);
                 break;
 
             case 'string':

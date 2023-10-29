@@ -13,13 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\FileSystem;
 
-use FilesystemIterator;
-use Generator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
 use Zephir\Exception\InvalidArgumentException;
-use Zephir\Exception\RuntimeException;
 use Zephir\Zephir;
 
 /**
@@ -29,13 +23,8 @@ use Zephir\Zephir;
  */
 class HardDisk implements FileSystemInterface
 {
-    /** @var string */
-    private string $localPath;
-
     /**
      * Initialize checker
-     *
-     * @var bool
      */
     private bool $initialized = false;
 
@@ -43,20 +32,13 @@ class HardDisk implements FileSystemInterface
      * Root or base path
      *
      * Path to where all cached files and folders are collected.
-     *
-     * @var string
      */
     private string $basePath;
 
     /**
-     * HardDisk constructor.
-     *
-     * @param string $basePath
-     * @param string $localPath
-     *
      * @throws InvalidArgumentException
      */
-    public function __construct(string $basePath, string $localPath = Zephir::VERSION)
+    public function __construct(string $basePath, private string $localPath = Zephir::VERSION)
     {
         $this->basePath = $this->rightTrimPath($basePath);
         $this->localPath = $this->rightTrimPath($localPath);
@@ -66,19 +48,11 @@ class HardDisk implements FileSystemInterface
         }
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
     private function rightTrimPath(string $path): string
     {
         return rtrim($path, '\\/');
     }
 
-    /**
-     * @return bool
-     */
     public function isInitialized(): bool
     {
         return $this->initialized;
@@ -86,19 +60,12 @@ class HardDisk implements FileSystemInterface
 
     /**
      * Start File System
-     *
-     * @throws RuntimeException
      */
-    public function initialize()
+    public function initialize(): void
     {
         $this->initialized = true;
     }
 
-    /**
-     * @param string $path
-     *
-     * @return bool
-     */
     public function exists(string $path): bool
     {
         if ('.' === $path || empty($path)) {
@@ -110,11 +77,6 @@ class HardDisk implements FileSystemInterface
         return is_file($this->basePath.DIRECTORY_SEPARATOR.$path);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return bool
-     */
     public function makeDirectory(string $path): bool
     {
         if ('.' === $path || empty($path)) {
@@ -136,11 +98,6 @@ class HardDisk implements FileSystemInterface
         return is_dir($path);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return array
-     */
     public function file(string $path): array
     {
         $contents = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
@@ -148,49 +105,27 @@ class HardDisk implements FileSystemInterface
         return preg_split("/\r\n|\n|\r/", $contents);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return int
-     */
     public function modificationTime(string $path): int
     {
         return filemtime($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
     public function read(string $path): string
     {
         return file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
-    /**
-     * @param string $path
-     */
-    public function delete(string $path)
+    public function delete(string $path): void
     {
         unlink($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
     }
 
-    /**
-     * @param string $path
-     * @param string $data
-     */
-    public function write(string $path, string $data)
+    public function write(string $path, string $data): void
     {
         file_put_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}", $data);
     }
 
-    /**
-     * @param string $command
-     * @param string $descriptor
-     * @param string $destination
-     */
-    public function system(string $command, string $descriptor, string $destination)
+    public function system(string $command, string $descriptor, string $destination): void
     {
         // fallback
         $redirect = "{$this->localPath}/{$destination}";
@@ -209,12 +144,7 @@ class HardDisk implements FileSystemInterface
         }
     }
 
-    /**
-     * @param string $path
-     *
-     * @return mixed
-     */
-    public function requireFile(string $path)
+    public function requireFile(string $path): mixed
     {
         if (!empty($this->basePath)) {
             return require "{$this->basePath}/{$this->localPath}/{$path}";
@@ -234,9 +164,12 @@ class HardDisk implements FileSystemInterface
             return;
         }
 
-        $contents = $this->listDirectoryRecursively($this->basePath.DIRECTORY_SEPARATOR.$this->localPath, RecursiveIteratorIterator::CHILD_FIRST);
+        $contents = $this->listDirectoryRecursively(
+            $this->basePath.DIRECTORY_SEPARATOR.$this->localPath,
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        );
 
-        /** @var SplFileInfo $file */
+        /** @var \SplFileInfo $file */
         foreach ($contents as $file) {
             $this->deleteFileInfoObject($file);
         }
@@ -287,17 +220,12 @@ class HardDisk implements FileSystemInterface
         return file_get_contents($cacheFile);
     }
 
-    /**
-     * @param string $path
-     *
-     * @return string
-     */
     public function normalizePath(string $path): string
     {
         return str_replace(['\\', ':', '/'], '_', $path);
     }
 
-    protected function deleteFileInfoObject(SplFileInfo $file): bool
+    protected function deleteFileInfoObject(\SplFileInfo $file): bool
     {
         switch ($file->getType()) {
             case 'dir':
@@ -311,10 +239,10 @@ class HardDisk implements FileSystemInterface
 
     private function listDirectoryRecursively(
         string $path,
-        int $mode = RecursiveIteratorIterator::SELF_FIRST
-    ): Generator {
-        yield from new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+        int $mode = \RecursiveIteratorIterator::SELF_FIRST
+    ): \Generator {
+        yield from new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
             $mode
         );
     }

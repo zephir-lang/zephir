@@ -11,7 +11,7 @@
 
 namespace Zephir\Documentation;
 
-use Zephir\ClassDefinition;
+use Zephir\Class\Definition\Definition;
 use Zephir\CompilerFile;
 use Zephir\Config;
 use Zephir\Documentation;
@@ -19,12 +19,8 @@ use Zephir\Exception;
 
 class Template
 {
-    protected $template;
-    protected $data;
-    protected $nestedLevel;
-    protected $pathToRoot = './';
+    protected string $pathToRoot = './';
     protected $themeOptions;
-    protected $theme;
     /**
      * @var Config
      */
@@ -40,22 +36,21 @@ class Template
      *
      * @throws Exception
      */
-    public function __construct(Theme $theme, array $data, string $template, int $nestedLevel = 0)
-    {
+    public function __construct(
+        protected Theme $theme,
+        protected array $data,
+        protected string $template,
+        protected int $nestedLevel = 0,
+    ) {
         // todo clean buffer before exception
         if ($nestedLevel > 800) {
             throw new Exception('Recursive inclusion detected in theme creation');
         }
-
-        $this->theme = $theme;
-        $this->data = $data;
-        $this->template = $template;
-        $this->nestedLevel = $nestedLevel;
     }
 
     private function getTemplatePath($fileName)
     {
-        if ('/' == $fileName[0] || 0 === strpos($fileName, 'phar://')) {
+        if ('/' == $fileName[0] || str_starts_with($fileName, 'phar://')) {
             return $fileName;
         }
 
@@ -69,58 +64,11 @@ class Template
     }
 
     /**
-     * Set a variable that will be accessible in the template.
-     *
-     * @param $name
-     * @param $value
-     */
-    public function setVar($name, $value)
-    {
-        $this->data[$name] = $value;
-    }
-
-    /**
-     * get a variable set with setVar().
-     *
-     * @param $name
-     *
-     * @return bool
-     */
-    public function getVar($name)
-    {
-        return isset($this->data[$name]) ? $this->data[$name] : null;
-    }
-
-    /**
-     * find the value in the project configuration (e.g the version).
-     *
-     * @param string $name the name of the config to get
-     */
-    public function projectConfig($name)
-    {
-        if (isset($this->projectConfig)) {
-            return $this->projectConfig->get($name);
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * find the value of an option of the theme.
-     *
-     * @param string $name the name of the option to get
-     */
-    public function themeOption($name)
-    {
-        return isset($this->themeOptions[$name]) ? $this->themeOptions[$name] : null;
-    }
-
-    /**
      * set the config of the project (it usually wraps the version, the theme config, etc...).
      *
      * @param array $projectConfig
      */
-    public function setProjectConfig($projectConfig)
+    public function setProjectConfig($projectConfig): void
     {
         $this->projectConfig = $projectConfig;
     }
@@ -130,23 +78,9 @@ class Template
      *
      * @param array $themeOptions
      */
-    public function setThemeOptions($themeOptions)
+    public function setThemeOptions($themeOptions): void
     {
         $this->themeOptions = $themeOptions;
-    }
-
-    /**
-     * get a value from the theme config (theme.json file placed inside the theme directory).
-     */
-    public function getAssets()
-    {
-        $css = $this->theme->getThemeInfoExtendAware('css');
-        $js = $this->theme->getThemeInfoExtendAware('javascript');
-
-        return [
-            'css' => $css,
-            'javascript' => $js,
-        ];
     }
 
     /**
@@ -154,7 +88,7 @@ class Template
      *
      * @param string $pathToRoot
      */
-    public function setPathToRoot($pathToRoot)
+    public function setPathToRoot(string $pathToRoot): void
     {
         $this->pathToRoot = $pathToRoot;
     }
@@ -166,7 +100,7 @@ class Template
      *
      * @return string the relative path to the url
      */
-    public function url($url)
+    public function url(string $url): string
     {
         if (\is_string($url)) {
             if ('/' == $url[0]) {
@@ -174,7 +108,7 @@ class Template
             } elseif (\is_string($url)) {
                 return $url;
             }
-        } elseif ($url instanceof ClassDefinition) {
+        } elseif ($url instanceof Definition) {
             return $this->url(Documentation::classUrl($url));
         } elseif ($url instanceof CompilerFile) {
             return $this->url(Documentation::classUrl($url->getClassDefinition()));
@@ -186,17 +120,12 @@ class Template
     /**
      * @return string
      */
-    public function getPathToRoot()
+    public function getPathToRoot(): string
     {
         return $this->pathToRoot;
     }
 
-    public function asset($name)
-    {
-        return $this->getPathToRoot().'asset/'.rtrim($name);
-    }
-
-    public function write($outputFile)
+    public function write($outputFile): void
     {
         $content = $this->parse();
         file_put_contents($outputFile, $content);

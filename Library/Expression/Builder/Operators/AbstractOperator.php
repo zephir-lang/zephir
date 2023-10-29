@@ -13,9 +13,6 @@ namespace Zephir\Expression\Builder\Operators;
 
 use Zephir\Expression\Builder\AbstractBuilder;
 
-/**
- * Class AbstractOperator.
- */
 abstract class AbstractOperator extends AbstractBuilder
 {
 }

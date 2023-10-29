@@ -32,19 +32,14 @@ class WriteDetector
 
     public const DETECT_ALL = 255;
 
-    protected $detectionFlags = 0;
+    protected int $detectionFlags = 0;
 
-    protected $mutations = [];
+    protected array $mutations = [];
 
     /**
      * Do the detection pass on a single variable.
-     *
-     * @param string $variable
-     * @param array  $statements
-     *
-     * @return bool
      */
-    public function detect($variable, array $statements)
+    public function detect(string $variable, array $statements): bool
     {
         $this->passStatementBlock($statements);
 
@@ -53,22 +48,16 @@ class WriteDetector
 
     /**
      * Sets detection flags.
-     *
-     * @param int $flags
      */
-    public function setDetectionFlags($flags)
+    public function setDetectionFlags(int $flags): void
     {
         $this->detectionFlags = $flags;
     }
 
     /**
      * Increase the number of mutations a variable has inside a statement block.
-     *
-     * @param string $variable
-     *
-     * @return WriteDetector
      */
-    public function increaseMutations($variable): self
+    public function increaseMutations(string $variable): self
     {
         if (isset($this->mutations[$variable])) {
             ++$this->mutations[$variable];
@@ -81,26 +70,16 @@ class WriteDetector
 
     /**
      * Returns the number of assignment instructions that mutated a variable.
-     *
-     * @param string $variable
-     *
-     * @return int
      */
-    public function getNumberOfMutations($variable)
+    public function getNumberOfMutations(string $variable): int
     {
-        if (isset($this->mutations[$variable])) {
-            return $this->mutations[$variable];
-        }
-
-        return 0;
+        return $this->mutations[$variable] ?? 0;
     }
 
     /**
      * Pass let statements.
-     *
-     * @param array $statement
      */
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -120,10 +99,8 @@ class WriteDetector
 
     /**
      * Pass call expressions.
-     *
-     * @param array $expression
      */
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -139,10 +116,8 @@ class WriteDetector
 
     /**
      * Pass array expressions.
-     *
-     * @param array $expression
      */
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             $usePass = self::DETECT_ARRAY_USE == ($this->detectionFlags & self::DETECT_ARRAY_USE);
@@ -156,10 +131,8 @@ class WriteDetector
 
     /**
      * Pass "new" expressions.
-     *
-     * @param array $expression
      */
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -175,8 +148,6 @@ class WriteDetector
 
     /**
      * Pass "declare" statement.
-     *
-     * @param array $statement
      */
     public function declareVariables(array $statement): void
     {
@@ -199,10 +170,8 @@ class WriteDetector
 
     /**
      * Pass expressions.
-     *
-     * @param array $expression
      */
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':
@@ -303,10 +272,8 @@ class WriteDetector
 
     /**
      * Pass statement block.
-     *
-     * @param array $statements
      */
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {

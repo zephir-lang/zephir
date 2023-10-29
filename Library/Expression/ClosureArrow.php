@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\ClassMethodParameters;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\CompilerFileAnonymous;
@@ -34,13 +34,13 @@ class ClosureArrow extends Closure
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $classDefinition = new ClassDefinition(
+        $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
             self::$id.'__closure'
         );
@@ -55,7 +55,7 @@ class ClosureArrow extends Closure
         /**
          * Builds parameters using the only parameter available.
          */
-        $parameters = new ClassMethodParameters([
+        $parameters = new Parameters([
             [
                 'type' => 'parameter',
                 'name' => $expression['left']['value'],
@@ -77,7 +77,7 @@ class ClosureArrow extends Closure
 
         $block = $statementBlockBuilder->build();
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $classDefinition,
             ['public', 'final'],
             '__invoke',

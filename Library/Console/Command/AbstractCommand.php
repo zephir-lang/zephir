@@ -22,7 +22,7 @@ abstract class AbstractCommand extends Command
     /**
      * @param bool $mergeArgs
      */
-    public function mergeApplicationDefinition($mergeArgs = true)
+    public function mergeApplicationDefinition(bool $mergeArgs = true): void
     {
         parent::mergeApplicationDefinition($mergeArgs);
 

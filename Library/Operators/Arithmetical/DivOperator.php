@@ -329,7 +329,7 @@ class DivOperator extends ArithmeticalBaseOperator
 
                                 return new CompiledExpression('double', 'zephir_safe_div_zval_double('.$op1.', '.$op2.')', $expression);
 
-                            /* a(var) + a(x) */
+                                /* a(var) + a(x) */
                             case 'variable':
                                 $variableRight = $compilationContext->symbolTable->getVariableForRead($right->resolve(null, $compilationContext), $compilationContext, $expression);
                                 switch ($variableRight->getType()) {
@@ -343,11 +343,11 @@ class DivOperator extends ArithmeticalBaseOperator
                                     case 'double':
                                         return new CompiledExpression('double', 'zephir_safe_div_zval_double('.$op1.', '.$variableRight->getName().')', $expression);
 
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         return new CompiledExpression('int', 'zephir_safe_div_zval_long('.$op1.', '.$variableRight->getName().')', $expression);
 
-                                    /* a(var) + a(var) */
+                                        /* a(var) + a(var) */
                                     case 'variable':
                                         $op2 = $compilationContext->backend->getVariableCode($variableRight);
 

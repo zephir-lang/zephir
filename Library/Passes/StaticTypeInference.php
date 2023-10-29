@@ -54,7 +54,7 @@ class StaticTypeInference
      * @param string $variable
      * @param string $type
      */
-    public function markVariableIfUnknown($variable, $type)
+    public function markVariableIfUnknown($variable, $type): void
     {
         $this->variables[$variable] = $type;
         $this->infered[$variable] = $type;
@@ -66,7 +66,7 @@ class StaticTypeInference
      * @param string $variable
      * @param string $type
      */
-    public function markVariable($variable, $type)
+    public function markVariable($variable, $type): void
     {
         if (isset($this->variables[$variable])) {
             $currentType = $this->variables[$variable];
@@ -171,7 +171,7 @@ class StaticTypeInference
      *
      * @return bool
      */
-    public function reduce()
+    public function reduce(): bool
     {
         $pass = false;
         foreach ($this->variables as $variable => $type) {
@@ -198,7 +198,7 @@ class StaticTypeInference
         if (isset($this->variables[$variable])) {
             $type = $this->variables[$variable];
             if ('variable' != $type && 'undefined' != $type && 'string' != $type && 'istring' != $type && 'array' != $type && 'null' != $type && 'numeric' != $type) {
-                //echo $variable, ' ', $type, PHP_EOL;
+                // echo $variable, ' ', $type, PHP_EOL;
                 return $type;
             }
         }
@@ -457,8 +457,8 @@ class StaticTypeInference
 
             case 'ternary':
             case 'short-ternary':
-                //$right = $this->passExpression($expression['right']);
-                //$extra = $this->passExpression($expression['extra']);
+                // $right = $this->passExpression($expression['right']);
+                // $extra = $this->passExpression($expression['extra']);
                 /*if ($right == $extra) {
                     if ($right != 'string' && $right != 'array') {
                         return $right;
@@ -576,7 +576,7 @@ class StaticTypeInference
                 case 'unset':
                 case 'cblock':
                 case 'comment':
-                // empty statement != empty operator
+                    // empty statement != empty operator
                 case 'empty':
                     break;
 

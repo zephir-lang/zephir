@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use Zephir\AliasManager;
-use Zephir\ClassMethod;
-use Zephir\Types;
+use Zephir\Class\Method\Method;
+use Zephir\Types\Types;
 
 /**
  * Stubs Generator.
@@ -54,9 +54,9 @@ class MethodDocBlock extends DocBlock
     private AliasManager $aliasManager;
 
     /**
-     * @var ClassMethod
+     * @var Method
      */
-    private ClassMethod $classMethod;
+    private Method $classMethod;
 
     /**
      * @var Types
@@ -64,10 +64,10 @@ class MethodDocBlock extends DocBlock
     private Types $types;
 
     public function __construct(
-        ClassMethod $method,
+        Method $method,
         AliasManager $aliasManager,
         string $indent = '    ',
-        ?Types $types = null
+        Types $types = null
     ) {
         parent::__construct($method->getDocBlock(), $indent);
 
@@ -97,7 +97,7 @@ class MethodDocBlock extends DocBlock
         return $this->__toString();
     }
 
-    protected function parseMethodReturnType(ClassMethod $method): void
+    protected function parseMethodReturnType(Method $method): void
     {
         $return = [];
         foreach ($method->getReturnTypes() as $type) {
@@ -247,7 +247,7 @@ class MethodDocBlock extends DocBlock
         }
     }
 
-    private function parseMethodParameters(ClassMethod $method): void
+    private function parseMethodParameters(Method $method): void
     {
         $parameters = $method->getParameters();
         $aliasManager = $method->getClassDefinition()->getAliasManager();

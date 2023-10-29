@@ -16,7 +16,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * ArrayIndex.
@@ -96,9 +96,9 @@ class ArrayIndex
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
      *
-     * @throws CompilerException
-     *
      * @return GlobalConstant|ZephirVariable
+     *
+     * @throws CompilerException
      */
     protected function _getResolvedArrayItem(CompiledExpression $resolvedExpr, CompilationContext $compilationContext)
     {

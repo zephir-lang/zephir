@@ -16,8 +16,6 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use Stub\Requires;
 
-use function defined;
-
 final class RequiresTest extends TestCase
 {
     private Requires $test;
@@ -34,9 +32,9 @@ final class RequiresTest extends TestCase
             $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-1.php')
         );
 
-        $this->assertFalse(defined('REQUIRE_ME'));
+        $this->assertFalse(\defined('REQUIRE_ME'));
         $this->test->requireExternal1(__DIR__.'/../fixtures/require-me-2.php');
-        $this->assertTrue(defined('REQUIRE_ME'));
+        $this->assertTrue(\defined('REQUIRE_ME'));
     }
 
     /**
@@ -88,10 +86,10 @@ final class RequiresTest extends TestCase
             $this->test->requireOnce(__DIR__.'/../fixtures/require-me-before-once.php')
         );
 
-        $this->assertFalse(defined('REQUIRE_ONCE_ME'));
+        $this->assertFalse(\defined('REQUIRE_ONCE_ME'));
         $this->test->requireOnce(__DIR__.'/../fixtures/require-me-once.php');
-        $this->assertTrue(defined('REQUIRE_ONCE_ME'));
+        $this->assertTrue(\defined('REQUIRE_ONCE_ME'));
         $this->test->requireOnce(__DIR__.'/../fixtures/require-me-once.php');
-        $this->assertTrue(defined('REQUIRE_ONCE_ME'));
+        $this->assertTrue(\defined('REQUIRE_ONCE_ME'));
     }
 }

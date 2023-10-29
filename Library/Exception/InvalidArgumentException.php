@@ -11,9 +11,6 @@
 
 namespace Zephir\Exception;
 
-/**
- * Zephir\Exception\InvalidArgumentException.
- */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
     use ExceptionExtraAwareTrait;

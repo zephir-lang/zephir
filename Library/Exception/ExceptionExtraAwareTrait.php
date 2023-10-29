@@ -11,34 +11,25 @@
 
 namespace Zephir\Exception;
 
-/**
- * Zephir\Exception\ExceptionInterface.
- */
 trait ExceptionExtraAwareTrait
 {
     /**
      * Extra info.
-     *
-     * @var array
      */
-    protected $extra = [];
+    protected ?array $extra = [];
 
     /**
-     * {@inheritdoc}
-     *
      * @return array
      */
-    public function getExtra()
+    public function getExtra(): array
     {
         return $this->extra;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return string
      */
-    public function getErrorRegion()
+    public function getErrorRegion(): string
     {
         $region = '';
         $extra = $this->getExtra();

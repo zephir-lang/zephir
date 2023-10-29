@@ -20,8 +20,6 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function count;
-
 /**
  * `globals_set()` internal function.
  *
@@ -34,9 +32,9 @@ class GlobalsSetOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return CompiledExpression
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context): CompiledExpression
     {
@@ -44,7 +42,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
-        if (2 !== count($expression['parameters'])) {
+        if (2 !== \count($expression['parameters'])) {
             throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 

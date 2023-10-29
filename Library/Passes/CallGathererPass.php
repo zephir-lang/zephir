@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\CompilationContext;
@@ -29,16 +31,8 @@ class CallGathererPass
 
     protected array $methodCalls = [];
 
-    protected CompilationContext $compilationContext;
-
-    /**
-     * CallGathererPass constructor.
-     *
-     * @param CompilationContext $compilationContext
-     */
-    public function __construct(CompilationContext $compilationContext)
+    public function __construct(protected CompilationContext $compilationContext)
     {
-        $this->compilationContext = $compilationContext;
     }
 
     /**
@@ -60,11 +54,7 @@ class CallGathererPass
      */
     public function getNumberOfFunctionCalls(string $funcName): int
     {
-        if (isset($this->functionCalls[$funcName])) {
-            return $this->functionCalls[$funcName];
-        }
-
-        return 0;
+        return $this->functionCalls[$funcName] ?? 0;
     }
 
     /**
@@ -77,21 +67,7 @@ class CallGathererPass
      */
     public function getNumberOfMethodCalls(string $className, string $methodName): int
     {
-        if (isset($this->methodCalls[$className][$methodName])) {
-            return $this->methodCalls[$className][$methodName];
-        }
-
-        return 0;
-    }
-
-    /**
-     * Returns all the method calls.
-     *
-     * @return array
-     */
-    public function getAllMethodCalls(): array
-    {
-        return $this->methodCalls;
+        return $this->methodCalls[$className][$methodName] ?? 0;
     }
 
     /**
@@ -99,12 +75,12 @@ class CallGathererPass
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             if (isset($assignment['expr'])) {
@@ -113,7 +89,7 @@ class CallGathererPass
         }
     }
 
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -122,14 +98,14 @@ class CallGathererPass
         }
     }
 
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             $this->passExpression($item['value']);
         }
     }
 
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (!$expression['dynamic']) {
             $className = $this->compilationContext->getFullName($expression['class']);
@@ -147,7 +123,7 @@ class CallGathererPass
         }
     }
 
-    public function passNewType(array $expression)
+    public function passNewType(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -156,7 +132,7 @@ class CallGathererPass
         }
     }
 
-    public function passExpression(array $expression)
+    public function passExpression(array $expression): void
     {
         switch ($expression['type']) {
             case 'bool':
@@ -285,7 +261,7 @@ class CallGathererPass
         }
     }
 
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {

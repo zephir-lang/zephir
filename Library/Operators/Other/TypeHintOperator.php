@@ -22,18 +22,6 @@ use Zephir\Operators\AbstractOperator;
 
 class TypeHintOperator extends AbstractOperator
 {
-    private bool $strict = false;
-
-    /**
-     * Sets if the type hint is strict or not.
-     *
-     * @param $strict
-     */
-    public function setStrict($strict)
-    {
-        $this->strict = (bool) $strict;
-    }
-
     /**
      * Performs type-hint compilation.
      *
@@ -43,6 +31,7 @@ class TypeHintOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -50,7 +39,7 @@ class TypeHintOperator extends AbstractOperator
         $expr->setReadOnly(true);
         $resolved = $expr->compile($compilationContext);
 
-        if ('variable' != $resolved->getType()) {
+        if ('variable' !== $resolved->getType()) {
             throw new CompilerException('Type-Hints only can be applied to dynamic variables.', $expression);
         }
 

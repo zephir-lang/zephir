@@ -37,26 +37,12 @@ class FunctionCache
 {
     protected array $cache = [];
 
-    protected ?CallGathererPass $gatherer = null;
-
-    /**
-     * FunctionCache constructor.
-     *
-     * @param CallGathererPass|null $gatherer
-     */
-    public function __construct(CallGathererPass $gatherer = null)
+    public function __construct(protected ?CallGathererPass $gatherer = null)
     {
-        $this->gatherer = $gatherer;
     }
 
     /**
      * Retrieves/Creates a function cache for a function call.
-     *
-     * @param string             $functionName
-     * @param CompilationContext $compilationContext
-     * @param bool               $exists
-     *
-     * @return string
      */
     public function get(string $functionName, CompilationContext $compilationContext, bool $exists): string
     {

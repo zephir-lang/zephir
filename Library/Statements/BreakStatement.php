@@ -14,11 +14,6 @@ namespace Zephir\Statements;
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 
-/**
- * BreakStatement.
- *
- * Break statement
- */
 class BreakStatement extends StatementAbstract
 {
     /**
@@ -26,7 +21,7 @@ class BreakStatement extends StatementAbstract
      *
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         if ($compilationContext->insideCycle || $compilationContext->insideSwitch) {
             $compilationContext->codePrinter->output('break;');

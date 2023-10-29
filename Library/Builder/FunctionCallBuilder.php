@@ -18,39 +18,16 @@ namespace Zephir\Builder;
  */
 class FunctionCallBuilder
 {
-    protected string $name;
-
-    protected array $parameters;
-
-    protected int $type;
-
-    protected ?string $file;
-
-    protected int $line = 0;
-
-    protected int $char = 0;
-
-    /**
-     * @param string      $name
-     * @param array       $parameters
-     * @param int         $type
-     * @param string|null $file
-     * @param int         $line
-     * @param int         $char
-     */
-    public function __construct(string $name, array $parameters, int $type = 1, ?string $file = null, int $line = 0, int $char = 0)
-    {
-        $this->name = $name;
-        $this->parameters = $parameters;
-        $this->type = $type;
-        $this->file = $file;
-        $this->line = $line;
-        $this->char = $char;
+    public function __construct(
+        protected string $name,
+        protected array $parameters,
+        protected int $type = 1,
+        protected ?string $file = null,
+        protected int $line = 0,
+        protected int $char = 0,
+    ) {
     }
 
-    /**
-     * @return array
-     */
     public function get(): array
     {
         return [

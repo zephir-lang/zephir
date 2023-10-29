@@ -21,8 +21,6 @@ use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
 /**
- * FetchOperator.
- *
  * Fetch is a special operator that checks if an expression 'isset' and then obtain the value
  * without calculating the hash key twice
  */
@@ -136,7 +134,7 @@ class FetchOperator extends AbstractOperator
                 $property = $expression['right']['right']['value'];
 
                 $compilationContext->headersManager->add('kernel/object');
-                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $symbol = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
 
                 return new CompiledExpression('bool', 'zephir_fetch_property('.$symbol.', '.$evalSymbol.', SL("'.$property.'"), PH_SILENT_CC)', $expression);
@@ -178,7 +176,7 @@ class FetchOperator extends AbstractOperator
 
                 $compilationContext->headersManager->add('kernel/object');
 
-                $symbol = $compilationContext->backend->getVariableCodePointer($variable);
+                $symbol = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
                 $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
 

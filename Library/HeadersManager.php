@@ -12,8 +12,6 @@
 namespace Zephir;
 
 /**
- * Class HeadersManager.
- *
  * Manages the c-headers that must be added to a file
  */
 class HeadersManager
@@ -33,21 +31,21 @@ class HeadersManager
      *
      * @var array
      */
-    protected $headers = [];
+    protected array $headers = [];
 
     /**
      * List of headers.
      *
      * @var array
      */
-    protected $headersFirst = [];
+    protected array $headersFirst = [];
 
     /**
      * List of headers.
      *
      * @var array
      */
-    protected $headersLast = [];
+    protected array $headersLast = [];
 
     /**
      * Adds a header path to the manager.
@@ -81,10 +79,8 @@ class HeadersManager
 
     /**
      * Returns a set of headers merged.
-     *
-     * @return array
      */
-    public function get()
+    public function get(): array
     {
         return array_merge($this->headersFirst, $this->headers, $this->headersLast);
     }

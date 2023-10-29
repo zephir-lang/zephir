@@ -29,9 +29,9 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -47,7 +47,7 @@ class ArrayKeyExistsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        //Note: the first parameter is key in php array_key_exists
+        // Note: the first parameter is key in php array_key_exists
         return new CompiledExpression('bool', 'zephir_array_key_exists('.$resolvedParams[1].', '.$resolvedParams[0].')', $expression);
     }
 }

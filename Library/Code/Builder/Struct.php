@@ -16,27 +16,11 @@ namespace Zephir\Code\Builder;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
 
-use function is_string;
-
 /**
  * Represents an internal extension global structure
  */
 class Struct
 {
-    /**
-     * Struct name
-     *
-     * @var string
-     */
-    protected string $name;
-
-    /**
-     * Struct simple name
-     *
-     * @var string
-     */
-    protected string $simpleName;
-
     /**
      * Struct members definition
      *
@@ -45,30 +29,16 @@ class Struct
      *     key value;
      * }
      * ```
-     *
-     * @var array
      */
     protected array $properties = [];
 
-    /**
-     * @param string $name
-     * @param string $simpleName
-     *
-     * @throws InvalidArgumentException
-     */
-    public function __construct(string $name, string $simpleName)
+    public function __construct(protected string $name, protected string $simpleName)
     {
         if (empty($name)) {
             throw new InvalidArgumentException('Struct name must not be empty');
         }
-
-        $this->name = $name;
-        $this->simpleName = $simpleName;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $code = 'typedef struct '.$this->name.' { '.PHP_EOL;
@@ -82,21 +52,17 @@ class Struct
 
     /**
      * @param string $field
-     * @param array  $global
+     * @param string $type
      *
      * @throws InvalidArgumentException
      */
-    public function addProperty(string $field, array $global)
+    public function addProperty(string $field, string $type): void
     {
-        if (!isset($global['type']) || !is_string($global['type'])) {
-            throw new InvalidArgumentException('Property type must be string');
-        }
-
         if (isset($this->properties[$field])) {
             throw new InvalidArgumentException('Property was defined more than once');
         }
 
-        $this->properties[$field] = $this->convertToCType($global['type']);
+        $this->properties[$field] = $this->convertToCType($type);
     }
 
     /**
@@ -106,10 +72,10 @@ class Struct
      * @param array  $global
      * @param string $namespace
      *
+     * @return string
+     *
      * @throws RuntimeException
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     public function getCDefault(string $name, array $global, string $namespace): string
     {
@@ -190,11 +156,7 @@ class Struct
     /**
      * Generates the internal c-type according to the php's type.
      *
-     * @param string $type
-     *
      * @throws InvalidArgumentException
-     *
-     * @return string
      */
     protected function convertToCType(string $type): string
     {

@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 abstract class AbstractOperator
 {
@@ -35,7 +35,7 @@ abstract class AbstractOperator
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -84,30 +84,21 @@ abstract class AbstractOperator
      * @param array              $expression
      * @param bool               $init
      *
-     * @return Variable
+     * @return Variable|null
      */
     public function getExpected(CompilationContext $compilationContext, array $expression, bool $init = true): ?Variable
     {
-        $symbolVariable = $this->expectingVariable;
+        if (!$this->expecting) {
+            return $this->expectingVariable;
+        }
 
-        if ($this->expecting) {
-            if (\is_object($symbolVariable)) {
-                if ('variable' === $symbolVariable->getType()) {
-                    if (!$init) {
-                        return $symbolVariable;
-                    }
-                    $symbolVariable->initVariant($compilationContext);
-                } else {
-                    if (!$this->readOnly) {
-                        if (!$this->literalOnly) {
-                            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-                        } else {
-                            $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
-                        }
-                    } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
-                    }
+        $symbolVariable = $this->expectingVariable;
+        if (\is_object($symbolVariable)) {
+            if ('variable' === $symbolVariable->getType()) {
+                if (!$init) {
+                    return $symbolVariable;
                 }
+                $symbolVariable->initVariant($compilationContext);
             } else {
                 if (!$this->readOnly) {
                     if (!$this->literalOnly) {
@@ -118,6 +109,16 @@ abstract class AbstractOperator
                 } else {
                     $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
                 }
+            }
+        } else {
+            if (!$this->readOnly) {
+                if (!$this->literalOnly) {
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                } else {
+                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
+                }
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
             }
         }
 

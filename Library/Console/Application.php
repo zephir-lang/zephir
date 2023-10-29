@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Console;
 
-use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
@@ -28,9 +27,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Throwable;
 use Zephir\Console\Command\ListCommand;
-use Zephir\EventListener\ConsoleErrorListener;
 use Zephir\Zephir;
 
 final class Application extends BaseApplication
@@ -40,7 +37,7 @@ final class Application extends BaseApplication
         parent::__construct('Zephir', Zephir::VERSION);
 
         $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(ConsoleEvents::ERROR, [new ConsoleErrorListener(), 'onCommandError']);
+        $dispatcher->addListener(ConsoleEvents::ERROR, [new ErrorListener(), 'onCommandError']);
 
         $this->setDispatcher($dispatcher);
     }
@@ -50,7 +47,7 @@ final class Application extends BaseApplication
      *
      * @return string
      */
-    public function getHelp()
+    public function getHelp(): string
     {
         return Zephir::LOGO.parent::getHelp();
     }
@@ -77,7 +74,7 @@ final class Application extends BaseApplication
     {
         $version = explode('-', parent::getVersion());
 
-        if (isset($version[1]) && 0 === strpos($version[1], '$')) {
+        if (isset($version[1]) && str_starts_with($version[1], '$')) {
             return "{$version[0]}-source";
         }
 
@@ -112,9 +109,9 @@ final class Application extends BaseApplication
      *
      * @return int
      *
-     * @throws Exception|Throwable
+     * @throws \Exception|\Throwable
      */
-    public function doRun(InputInterface $input, OutputInterface $output)
+    public function doRun(InputInterface $input, OutputInterface $output): int
     {
         if (true === $input->hasParameterOption(['--dumpversion', '-dumpversion'], true)) {
             $output->writeln($this->getVersion());
@@ -131,7 +128,7 @@ final class Application extends BaseApplication
         try {
             // Makes ArgvInput::getFirstArgument() able to distinguish an option from an argument.
             $input->bind($this->getDefinition());
-        } catch (ExceptionInterface $e) {
+        } catch (ExceptionInterface) {
             // Errors must be ignored, full binding/validation happens later when the command is known.
         }
 
@@ -152,11 +149,7 @@ final class Application extends BaseApplication
 
         try {
             return parent::doRun($input, $output);
-        } catch (CommandNotFoundException $e) {
-            fprintf(STDERR, $e->getMessage().PHP_EOL);
-
-            return 1;
-        } catch (RuntimeException $e) {
+        } catch (CommandNotFoundException | RuntimeException $e) {
             fprintf(STDERR, $e->getMessage().PHP_EOL);
 
             return 1;
@@ -168,7 +161,7 @@ final class Application extends BaseApplication
      *
      * @return Command[] An array of default Command instances
      */
-    protected function getDefaultCommands()
+    protected function getDefaultCommands(): array
     {
         return [new HelpCommand(), new ListCommand()];
     }

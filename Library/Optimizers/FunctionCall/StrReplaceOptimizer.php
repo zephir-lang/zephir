@@ -29,9 +29,9 @@ class StrReplaceOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -70,7 +70,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
             }
         }
 
-        $symbol = $context->backend->getVariableCodePointer($symbolVariable);
+        $symbol = $context->backend->getVariableCode($symbolVariable);
 
         $context->codePrinter->output('zephir_fast_str_replace('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].');');
 

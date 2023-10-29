@@ -29,9 +29,9 @@ class ExitOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @throws CompilerException
-     *
      * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -41,7 +41,7 @@ class ExitOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/exit');
         if (isset($expression['parameters'])) {
-            //TODO: protect resolvedParams[0] from restore
+            // TODO: protect resolvedParams[0] from restore
         }
         if (!isset($expression['parameters'])) {
             $context->codePrinter->output('ZEPHIR_MM_RESTORE();');

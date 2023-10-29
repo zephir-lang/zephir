@@ -11,9 +11,6 @@
 
 namespace Zephir\Expression\Builder\Operators;
 
-/**
- * Class RawOperator.
- */
 class RawOperator extends AbstractOperator
 {
     /**

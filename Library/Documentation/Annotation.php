@@ -12,21 +12,14 @@
 namespace Zephir\Documentation;
 
 /**
- * Annotation.
- *
  * A parsed Annotation
  */
 class Annotation
 {
-    protected $name;
+    protected bool $contentParsed = false;
 
-    protected $string;
-
-    protected $contentParsed = false;
-
-    public function __construct(string $name, string $string)
+    public function __construct(protected string $name, protected string $string)
     {
-        $this->name = $name;
         $this->string = trim($string);
     }
 
@@ -35,7 +28,7 @@ class Annotation
         return $this->string;
     }
 
-    public function setString(string $string)
+    public function setString(string $string): void
     {
         $this->string = $string;
     }

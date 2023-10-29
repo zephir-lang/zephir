@@ -13,7 +13,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
-use Zephir\Variable as ZephirVariable;
+use Zephir\Variable\Variable as ZephirVariable;
 
 /**
  * Incr.

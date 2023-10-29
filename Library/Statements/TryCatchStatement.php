@@ -18,16 +18,11 @@ use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
 
 /**
- * TryCatchStatement.
- *
  * Try/Catch statement the same as in PHP
  */
 class TryCatchStatement extends StatementAbstract
 {
-    /**
-     * @param CompilationContext $compilationContext
-     */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -46,7 +41,7 @@ class TryCatchStatement extends StatementAbstract
         $codePrinter->outputBlankLine();
         $codePrinter->output('try_end_'.$currentTryCatch.':');
 
-        /*
+        /**
          * If 'try' is the latest statement add a 'dummy' statement to avoid compilation errors
          */
         $codePrinter->outputBlankLine();
@@ -54,7 +49,7 @@ class TryCatchStatement extends StatementAbstract
         --$compilationContext->insideTryCatch;
 
         if (isset($this->statement['catches'])) {
-            /*
+            /**
              * Check if there was an exception
              */
             $codePrinter->output('if (EG(exception)) {');
@@ -76,26 +71,18 @@ class TryCatchStatement extends StatementAbstract
                     $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $compilationContext);
                 }
 
-                if ($compilationContext->backend->isZE3()) {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&'.$variable->getName().', &'.$exc_var->getName().');');
-                } else {
-                    $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT('.$variable->getName().', '.$exc_var->getName().');');
-                }
+                $assignExceptionVarStmt = $exprBuilder->statements()->rawC('ZEPHIR_CPY_WRT(&'.$variable->getName().', &'.$exc_var->getName().');');
 
-                /*
+                /**
                  * TODO:, use a builder here
                  */
                 $variable->setIsInitialized(true, $compilationContext);
                 $variable->setMustInitNull(true);
 
-                /*
+                /**
                  * Check if any of the classes in the catch block match the thrown exception
                  */
                 foreach ($catch['classes'] as $class) {
-                    $assignExceptVar = $exprBuilder->statements()->let([
-                        $exprBuilder->operators()->assignVariable($variable->getName(), $exprBuilder->variable($variable->getName())),
-                    ]);
-
                     $ifs[] = $exprBuilder->statements()->ifX()
                         ->setCondition(
                             $exprBuilder->operators()->binary(

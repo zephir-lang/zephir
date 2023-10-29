@@ -12,8 +12,6 @@
 namespace Zephir\Expression\Builder\Statements;
 
 /**
- * LetStatement.
- *
  * Allows to manually build a 'let' statement AST node
  */
 class LetStatement extends AbstractStatement

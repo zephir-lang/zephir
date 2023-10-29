@@ -13,8 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use ReflectionException;
-use Zephir\Classes\Entry;
+use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -22,21 +21,19 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
-use function Zephir\escape_class;
-
 /**
  * Checks if a variable is an instance of a class
  */
 class InstanceOfOperator extends AbstractOperator
 {
     /**
-     * @param $expression
+     * @param                    $expression
      * @param CompilationContext $context
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile($expression, CompilationContext $context): CompiledExpression
     {
@@ -86,13 +83,13 @@ class InstanceOfOperator extends AbstractOperator
                                     $classEntry = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("'.trim(escape_class($className), '\\').'")';
+                                        $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
                                     } else {
                                         $entry = (new Entry($resolvedVariable, $context));
                                         $classEntry = $entry->get();
 
                                         if (!$entry->isInternal()) {
-                                            $code = 'SL("'.trim(escape_class($className), '\\').'")';
+                                            $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
                                         }
                                     }
                                 }
@@ -131,7 +128,7 @@ class InstanceOfOperator extends AbstractOperator
     {
         return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
             ':name' => $variable,
-            ':p' => $context->backend->isZE3() ? '&' : '',
+            ':p' => '&',
         ]);
     }
 }

@@ -11,19 +11,16 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
-use Zephir\Types;
+use Zephir\Types\Types;
 
 use function Zephir\add_slashes;
 
 /**
- * ReturnStatement.
- *
  * Return statement is used to assign variables
  */
 final class ReturnStatement extends StatementAbstract
@@ -32,7 +29,7 @@ final class ReturnStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {

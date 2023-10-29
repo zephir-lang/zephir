@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use ArrayAccess;
-use JsonSerializable;
-
 /**
  * Manages compiler global configuration.
  */
-class Config implements ArrayAccess, JsonSerializable
+class Config implements \ArrayAccess, \JsonSerializable
 {
     /**
      * Is config changed?
@@ -335,7 +332,7 @@ class Config implements ArrayAccess, JsonSerializable
      *
      * @throws Exception
      */
-    protected function populate()
+    protected function populate(): void
     {
         if (!file_exists('config.json')) {
             return;

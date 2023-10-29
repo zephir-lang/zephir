@@ -19,7 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
-use Zephir\Types;
+use Zephir\Types\Types;
 
 /**
  * Inclusive range operator

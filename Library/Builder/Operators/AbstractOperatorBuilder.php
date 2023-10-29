@@ -26,8 +26,6 @@ abstract class AbstractOperatorBuilder
 
     /**
      * Returns a builder definition.
-     *
-     * @return array
      */
     abstract public function get(): array;
 }

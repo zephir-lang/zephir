@@ -31,6 +31,7 @@ class RequireOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
+     * @throws \ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -58,7 +59,7 @@ class RequireOperator extends AbstractOperator
 
         $symbolVariable = false;
         if ($this->isExpecting()) {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext, $expression);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
         }
 
         $compilationContext->headersManager->add('kernel/memory');
@@ -68,7 +69,7 @@ class RequireOperator extends AbstractOperator
 
         if ($symbolVariable) {
             $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
-            $symbol = $compilationContext->backend->getVariableCodePointer($symbolVariable);
+            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
             $codePrinter->output('if (zephir_require_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
         } else {
             $codePrinter->output('if (zephir_require_zval('.$exprVar.') == FAILURE) {');

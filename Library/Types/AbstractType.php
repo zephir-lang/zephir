@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
 use Zephir\Call;
@@ -23,10 +25,8 @@ abstract class AbstractType
 {
     /**
      * The array of methods in zephir mapped to PHP internal methods.
-     *
-     * @var array
      */
-    protected $methodMap = [];
+    protected array $methodMap = [];
 
     /**
      * Intercepts calls to built-in methods.
@@ -39,7 +39,8 @@ abstract class AbstractType
      *
      * @return bool|CompiledExpression
      *
-     * @throws CompilerException|Exception
+     * @throws Exception
+     * @throws \ReflectionException
      */
     public function invokeMethod(
         $methodName,
@@ -48,19 +49,19 @@ abstract class AbstractType
         Call $call,
         array $expression
     ) {
-        /*
+        /**
          * Checks first whether the method exist in the array type definition
          */
         if (method_exists($this, $methodName)) {
             return $this->{$methodName}($caller, $compilationContext, $call, $expression);
         }
 
-        /*
+        /**
          * Check the method map
          */
         if (isset($this->methodMap[$methodName])) {
             $paramNumber = $this->getNumberParam($methodName);
-            if (0 == $paramNumber) {
+            if (0 === $paramNumber) {
                 if (isset($expression['parameters'])) {
                     $parameters = $expression['parameters'];
                     array_unshift($parameters, ['parameter' => $caller]);
@@ -71,7 +72,7 @@ abstract class AbstractType
                 if (isset($expression['parameters'])) {
                     $parameters = [];
                     foreach ($expression['parameters'] as $number => $parameter) {
-                        if ($number == $paramNumber) {
+                        if ($number === $paramNumber) {
                             $parameters[] = null;
                         }
                         $parameters[] = $parameter;
@@ -104,24 +105,17 @@ abstract class AbstractType
      *
      * @return string
      */
-    abstract public function getTypeName();
+    abstract public function getTypeName(): string;
 
-    /**
-     * @return array
-     */
-    public function getMethodMap()
+    public function getMethodMap(): array
     {
         return $this->methodMap;
     }
 
     /**
      * Returns the number of the parameter where the object must be bound.
-     *
-     * @param $methodName
-     *
-     * @return int
      */
-    protected function getNumberParam($methodName)
+    protected function getNumberParam(string $methodName): int
     {
         return 0;
     }
