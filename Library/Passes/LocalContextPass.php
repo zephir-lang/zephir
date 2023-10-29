@@ -56,8 +56,7 @@ class LocalContextPass
 
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if (
-                    'string' === $variable['expr']['type']
+                if ('string' === $variable['expr']['type']
                     || 'empty-array' === $variable['expr']['type']
                     || 'array' === $variable['expr']['type']
                 ) {
