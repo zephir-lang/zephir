@@ -734,7 +734,7 @@ final class Compiler
             // TODO(klay): Make this better. Looks like it is non standard Env. Var
             exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
-            $releaseFolder = windows_release_dir();
+            $releaseFolder = $this->getWindowsReleaseDir();
             if (file_exists($releaseFolder)) {
                 exec('rd /s /q '.$releaseFolder, $output, $exit);
             }
@@ -2159,5 +2159,48 @@ final class Compiler
             },
             $paths
         );
+    }
+
+    private function isZts(): bool
+    {
+        if (\defined('PHP_ZTS') && \PHP_ZTS === 1) {
+            return true;
+        }
+
+        ob_start();
+        phpinfo(\INFO_GENERAL);
+
+        return (bool) preg_match('/Thread\s*Safety\s*enabled/i', strip_tags(ob_get_clean()));
+    }
+
+    private function getWindowsReleaseDir(): string
+    {
+        if ($this->isZts()) {
+            if (\PHP_INT_SIZE === 4) {
+                // 32-bit version of PHP
+                return 'ext\\Release_TS';
+            }
+
+            if (\PHP_INT_SIZE === 8) {
+                // 64-bit version of PHP
+                return 'ext\\x64\\Release_TS';
+            }
+
+            // fallback
+            return 'ext\\Release_TS';
+        }
+
+        if (\PHP_INT_SIZE === 4) {
+            // 32-bit version of PHP
+            return 'ext\\Release';
+        }
+
+        if (\PHP_INT_SIZE === 8) {
+            // 64-bit version of PHP
+            return 'ext\\x64\\Release';
+        }
+
+        // fallback
+        return 'ext\\Release';
     }
 }
