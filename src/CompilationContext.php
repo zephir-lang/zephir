@@ -144,10 +144,6 @@ class CompilationContext
 
     /**
      * Transform class/interface name to FQN format.
-     *
-     * @param string $className
-     *
-     * @return string
      */
     public function getFullName(string $className): string
     {
