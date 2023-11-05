@@ -18,8 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Exception\FileSystemException;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 /**
  * Full Clean Command
@@ -49,7 +48,7 @@ final class FullCleanCommand extends AbstractCommand
          */
         try {
             if (0 === $command->run(new ArrayInput($arguments), $output)) {
-                if (is_windows()) {
+                if (Os::isWindows()) {
                     system('cd ext && phpize --clean');
                 } else {
                     system('cd ext && phpize --clean > /dev/null');

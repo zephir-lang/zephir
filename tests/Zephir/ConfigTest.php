@@ -15,8 +15,7 @@ namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class ConfigTest extends TestCase
 {
@@ -170,7 +169,7 @@ DOC;
      */
     public function testShouldGetDefaultConfigParams($namespace, string $key, $expected)
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -230,7 +229,7 @@ DOC;
 
     public function testShouldGetBannerFromConfig(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 

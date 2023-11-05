@@ -374,7 +374,7 @@ final class Compiler
      */
     public function getGccFlags(bool $development = false): string
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             // TODO
             return '';
         }
@@ -412,7 +412,7 @@ final class Compiler
      */
     public function preCompileHeaders(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             // TODO: Add Windows support
             return;
         }
@@ -731,7 +731,7 @@ final class Compiler
             unlink("$currentDir/ext/modules/{$namespace}.so");
         }
 
-        if (is_windows()) {
+        if (Os::isWindows()) {
             // TODO(klay): Make this better. Looks like it is non standard Env. Var
             exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
 
@@ -796,7 +796,7 @@ final class Compiler
 
         $currentDir = getcwd();
         $this->logger->info('Compiling...');
-        if (is_windows()) {
+        if (Os::isWindows()) {
             exec(
                 'cd ext && nmake 2>'.$currentDir.'\compile-errors.log 1>'.
                 $currentDir.'\compile.log',
@@ -884,7 +884,7 @@ final class Compiler
         $namespace = str_replace('\\', '_', $this->checkDirectory());
         $currentDir = getcwd();
 
-        if (is_windows()) {
+        if (Os::isWindows()) {
             throw new NotImplementedException('Installation is not implemented for Windows yet. Aborting.');
         }
 
@@ -2132,7 +2132,7 @@ final class Compiler
      */
     private function getGccVersion(): string
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             return '0.0.0';
         }
 

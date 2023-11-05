@@ -18,8 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Exception\FileSystemException;
 use Zephir\FileSystem\FileSystemInterface;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 /**
  * Cleans any object files created by the extension.
@@ -56,7 +55,7 @@ final class CleanCommand extends AbstractCommand
             $this->filesystem->clean();
 
             // TODO(klay): Do nothing if there is no Makefile
-            if (is_windows()) {
+            if (Os::isWindows()) {
                 // TODO(klay): Is there an analogue for "> /dev/null" ?
                 system('cd ext && nmake clean-all');
             } else {

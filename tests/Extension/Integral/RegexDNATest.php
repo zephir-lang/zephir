@@ -15,14 +15,13 @@ namespace Extension\Integral;
 
 use PHPUnit\Framework\TestCase;
 use Stub\RegexDNA;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class RegexDNATest extends TestCase
 {
     public function testProcess(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Different strlen() in Windows.');
         }
 

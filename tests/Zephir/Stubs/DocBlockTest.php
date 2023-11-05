@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Os;
 use Zephir\Stubs\DocBlock;
-
-use function Zephir\is_windows;
 
 final class DocBlockTest extends TestCase
 {
@@ -29,7 +28,7 @@ final class DocBlockTest extends TestCase
 
     public function testDescription(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -53,7 +52,7 @@ DOC;
 
     public function testPhpDocs(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -76,7 +75,7 @@ DOC;
 
     public function testPhpDocWithDescription(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -101,7 +100,7 @@ DOC;
 
     public function testPhpDocWithCodeBloc(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -152,7 +151,7 @@ DOC;
 
     public function testPhpDocWithScalarParams(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -210,7 +209,7 @@ DOC;
 
     public function testPhpDocWithVariousDocBlockTags(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -253,7 +252,7 @@ DOC;
 
     public function testPhpDocWithDoubleDollarSymbols(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 

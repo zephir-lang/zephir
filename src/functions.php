@@ -131,13 +131,3 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 
     return $className;
 }
-
-/**
- * Checks if currently running under MS Windows.
- *
- * @return bool
- */
-function is_windows()
-{
-    return 0 === stripos(\PHP_OS, 'WIN');
-}

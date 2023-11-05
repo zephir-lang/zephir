@@ -20,14 +20,13 @@ use Zephir\Documentation\Annotation\ReturnAnnotation;
 use Zephir\Documentation\Annotation\See;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class DocblockParserTest extends TestCase
 {
     public function testShouldParseDocblockFromString(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 

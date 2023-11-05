@@ -15,8 +15,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Strings;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class StringTest extends TestCase
 {
@@ -259,7 +258,7 @@ final class StringTest extends TestCase
 
     public function testMultilineStrings(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('String will contain different line endings.');
         }
 

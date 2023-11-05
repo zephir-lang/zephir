@@ -20,9 +20,8 @@ use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\Class\Property;
+use Zephir\Os;
 use Zephir\Stubs\Generator;
-
-use function Zephir\is_windows;
 
 class GeneratorTest extends TestCase
 {
@@ -59,7 +58,7 @@ class GeneratorTest extends TestCase
 
     public function testShouldBuildClass(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -250,7 +249,7 @@ DOC;
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -338,7 +337,7 @@ DOC;
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -383,7 +382,7 @@ DOC;
 
     public function testShouldBuildMethod(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
