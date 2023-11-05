@@ -14,8 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Backend;
 
 use Zephir\Code\Printer;
-
-use function Zephir\file_put_contents_ex;
+use Zephir\FileSystem\HardDisk;
 
 class FcallManager implements FcallManagerInterface
 {
@@ -156,6 +155,6 @@ HEAD;
         }
 
         $codePrinter->output('#endif');
-        file_put_contents_ex($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
+        HardDisk::persistByHash($codePrinter->getOutput(), 'ext/kernel/fcall_internal.h');
     }
 }

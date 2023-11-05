@@ -31,6 +31,7 @@ use Zephir\Exception\NotImplementedException;
 use Zephir\Exception\ParseException;
 use Zephir\Exception\RuntimeException;
 use Zephir\FileSystem\FileSystemInterface;
+use Zephir\FileSystem\HardDisk;
 use Zephir\Parser\Manager;
 
 final class Compiler
@@ -994,7 +995,7 @@ final class Compiler
             $contentM4 = str_replace($mark, $replace, $contentM4);
         }
 
-        file_put_contents_ex($contentM4, 'ext/config.m4');
+        HardDisk::persistByHash($contentM4, 'ext/config.m4');
 
         /**
          * Generate config.w32.
@@ -1017,7 +1018,7 @@ final class Compiler
             $contentW32 = str_replace($mark, $replace, $contentW32);
         }
 
-        $needConfigure = file_put_contents_ex($contentW32, 'ext/config.w32');
+        $needConfigure = HardDisk::persistByHash($contentW32, 'ext/config.w32');
 
         /**
          * php_ext.h.
@@ -1035,7 +1036,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/php_ext.h');
+        HardDisk::persistByHash($content, 'ext/php_ext.h');
 
         /**
          * ext.h.
@@ -1053,7 +1054,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/ext.h');
+        HardDisk::persistByHash($content, 'ext/ext.h');
 
         /**
          * ext_config.h.
@@ -1071,7 +1072,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/ext_config.h');
+        HardDisk::persistByHash($content, 'ext/ext_config.h');
 
         /**
          * ext_clean.
@@ -1081,7 +1082,7 @@ final class Compiler
             throw new Exception("Clean file doesn't exist");
         }
 
-        if (file_put_contents_ex($content, 'ext/clean')) {
+        if (HardDisk::persistByHash($content, 'ext/clean')) {
             chmod('ext/clean', 0755);
         }
 
@@ -1101,7 +1102,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        if (file_put_contents_ex($content, 'ext/install')) {
+        if (HardDisk::persistByHash($content, 'ext/install')) {
             chmod('ext/install', 0755);
         }
 
@@ -1596,7 +1597,7 @@ final class Compiler
         /**
          * Round 5. Generate and place the entry point of the project
          */
-        file_put_contents_ex($content, 'ext/'.$safeProject.'.c');
+        HardDisk::persistByHash($content, 'ext/'.$safeProject.'.c');
         unset($content);
 
         /**
@@ -1637,7 +1638,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/'.$safeProject.'.h');
+        HardDisk::persistByHash($content, 'ext/'.$safeProject.'.h');
         unset($content);
 
         /**
@@ -1666,7 +1667,7 @@ final class Compiler
             $content = str_replace($mark, $replace, $content);
         }
 
-        file_put_contents_ex($content, 'ext/php_'.$safeProject.'.h');
+        HardDisk::persistByHash($content, 'ext/php_'.$safeProject.'.h');
         unset($content);
 
         return $needConfigure;

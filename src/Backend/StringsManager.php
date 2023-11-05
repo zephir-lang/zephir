@@ -13,9 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
+use Zephir\FileSystem\HardDisk;
 use Zephir\StringsManager as BaseStringsManager;
-
-use function Zephir\file_put_contents_ex;
 
 /**
  * Manages the concatenation keys for the extension and the interned strings
@@ -189,7 +188,7 @@ EOF;
 #endif /* ZEPHIR_KERNEL_CONCAT_H */
 ';
         $contents = $pcodeh.implode(PHP_EOL, $macros).PHP_EOL.PHP_EOL.$codeh;
-        file_put_contents_ex($contents, 'ext/kernel/concat.h');
-        file_put_contents_ex($code, 'ext/kernel/concat.c');
+        HardDisk::persistByHash($contents, 'ext/kernel/concat.h');
+        HardDisk::persistByHash($code, 'ext/kernel/concat.c');
     }
 }

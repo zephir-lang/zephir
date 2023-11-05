@@ -225,6 +225,22 @@ class HardDisk implements FileSystemInterface
         return str_replace(['\\', ':', '/'], '_', $path);
     }
 
+    /**
+     * Checks if the content of the file on the disk is the same as the content.
+     */
+    public static function persistByHash(string $data, string $path): int|bool
+    {
+        if (!file_exists($path)) {
+            return file_put_contents($path, $data);
+        }
+
+        if (md5($data) !== md5_file($path)) {
+            return file_put_contents($path, $data);
+        }
+
+        return false;
+    }
+
     protected function deleteFileInfoObject(\SplFileInfo $file): bool
     {
         switch ($file->getType()) {

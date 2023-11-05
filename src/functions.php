@@ -133,30 +133,6 @@ function fqcn($className, $currentNamespace, AliasManager $aliasManager = null)
 }
 
 /**
- * Checks if the content of the file on the disk is the same as the content.
- *
- * @param string $content
- * @param string $path
- *
- * @return int|bool
- */
-function file_put_contents_ex($content, $path)
-{
-    if (file_exists($path)) {
-        $contentMd5 = md5($content);
-        $existingMd5 = md5_file($path);
-
-        if ($contentMd5 !== $existingMd5) {
-            return file_put_contents($path, $content);
-        }
-    } else {
-        return file_put_contents($path, $content);
-    }
-
-    return false;
-}
-
-/**
  * Checks if currently running under MS Windows.
  *
  * @return bool
