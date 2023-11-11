@@ -14,18 +14,6 @@ namespace Zephir;
 use Zephir\Exception\InvalidArgumentException;
 
 /**
- * Camelize a string.
- *
- * @param string $string
- *
- * @return string
- */
-function camelize($string)
-{
-    return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
-}
-
-/**
  * Prepares a string to be used as a C-string.
  *
  * Should NOT escape next `escape sequences`:

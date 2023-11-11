@@ -987,7 +987,7 @@ final class CompilerFile implements FileInterface
                     $classDefinition->addMethod(new Method(
                         $classDefinition,
                         ['public'],
-                        'get'.camelize($name),
+                        'get'.Name::camelize($name),
                         null,
                         new StatementsBlock([
                             [
@@ -1015,7 +1015,7 @@ final class CompilerFile implements FileInterface
                     $classDefinition->addMethod(new Method(
                         $classDefinition,
                         ['public'],
-                        'set'.camelize($name),
+                        'set'.Name::camelize($name),
                         new Parameters([
                             [
                                 'type' => 'parameter',

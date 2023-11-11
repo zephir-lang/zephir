@@ -16,19 +16,9 @@ namespace Zephir\Test;
 use PHPUnit\Framework\TestCase;
 
 use function Zephir\add_slashes;
-use function Zephir\camelize;
 
 final class HelpersTest extends TestCase
 {
-    public function testShouldCamelizeClassName(): void
-    {
-        $name = 'foo_Bar_Foo_bar';
-        $this->assertSame(
-            camelize($name),
-            'FooBarFooBar'
-        );
-    }
-
     public function cStringProvider(): array
     {
         return [
