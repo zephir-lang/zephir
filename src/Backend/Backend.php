@@ -588,7 +588,7 @@ class Backend
         );
     }
 
-    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true)
+    public function addArrayEntry(Variable $variable, $key, $value, CompilationContext $context, $statement = null, $useCodePrinter = true): void
     {
         $type = null;
         $keyType = 'assoc';
@@ -673,8 +673,6 @@ class Backend
         if ($useCodePrinter) {
             $context->codePrinter->output($output);
         }
-
-        return $output;
     }
 
     public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
