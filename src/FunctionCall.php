@@ -277,7 +277,7 @@ class FunctionCall extends Call
                                 $parameters[$n - 1] = substr($parameters[$n - 1], 1);
                             }
 
-                            if (!preg_match('/^[a-zA-Z0-9$\_]+$/', $parameters[$n - 1])) {
+                            if (!preg_match('/^[a-zA-Z0-9$_]+$/', $parameters[$n - 1])) {
                                 $compilationContext->logger->warning(
                                     'Cannot mark complex expression as reference',
                                     ['invalid-reference', $expression]
