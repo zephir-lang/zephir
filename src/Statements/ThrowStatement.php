@@ -20,9 +20,9 @@ use Zephir\Compiler;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 
 use function Zephir\add_slashes;
-use function Zephir\fqcn;
 
 /**
  * Throws exceptions
@@ -52,7 +52,7 @@ class ThrowStatement extends StatementAbstract
                 && 1 == \count($expr['parameters'])
                 && 'string' == $expr['parameters'][0]['parameter']['type']
             ) {
-                $className = fqcn(
+                $className = Name::fetchFQN(
                     $expr['class'],
                     $compilationContext->classDefinition->getNamespace(),
                     $compilationContext->aliasManager

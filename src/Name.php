@@ -19,4 +19,37 @@ final class Name
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $string)));
     }
+
+    /**
+     * Transform class/interface name to
+     * Fully qualified path name (FQN) format.
+     */
+    public static function fetchFQN(
+        string $class,
+        ?string $namespace = null,
+        ?AliasManager $aliasManager = null
+    ): string {
+        /**
+         * Absolute class/interface name
+         */
+        if ('\\' === $class[0]) {
+            return substr($class, 1);
+        }
+
+        /**
+         * If class/interface name not begin with \
+         * maybe an alias or a sub-namespace
+         */
+        $firstSepPos = strpos($class, '\\');
+        if (false !== $firstSepPos) {
+            $baseName = substr($class, 0, $firstSepPos);
+            if ($aliasManager && $aliasManager->isAlias($baseName)) {
+                return $aliasManager->getAlias($baseName).'\\'.substr($class, $firstSepPos + 1);
+            }
+        } elseif ($aliasManager && $aliasManager->isAlias($class)) {
+            return $aliasManager->getAlias($class);
+        }
+
+        return $namespace ? $namespace.'\\'.$class : $class;
+    }
 }

@@ -150,7 +150,7 @@ class CompilationContext
         $isFunction = $this->currentMethod instanceof FunctionDefinition;
         $namespace = $isFunction ? $this->currentMethod->getNamespace() : $this->classDefinition->getNamespace();
 
-        return fqcn($className, $namespace, $this->aliasManager);
+        return Name::fetchFQN($className, $namespace, $this->aliasManager);
     }
 
     /**

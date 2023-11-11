@@ -1101,23 +1101,14 @@ final class CompilerFile implements FileInterface
 
     /**
      * Transform class/interface name to FQN format.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getFullName(string $name): string
     {
-        return fqcn($name, $this->namespace, $this->aliasManager);
+        return Name::fetchFQN($name, $this->namespace, $this->aliasManager);
     }
 
     /**
      * Create returns type list.
-     *
-     * @param array $types
-     * @param bool  $annotated
-     *
-     * @return array
      */
     protected function createReturnsType(array $types, bool $annotated = false): ?array
     {
