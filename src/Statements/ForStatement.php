@@ -11,7 +11,9 @@
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
 use Zephir\Detectors\ForValueUseDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -23,6 +25,8 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
+use function count;
+
 class ForStatement extends StatementAbstract
 {
     /**
@@ -33,23 +37,23 @@ class ForStatement extends StatementAbstract
      *
      * @return bool
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compileRange(array $exprRaw, CompilationContext $compilationContext): bool
     {
-        if (!\count($exprRaw['parameters'])) {
+        if (!count($exprRaw['parameters'])) {
             return false;
         }
 
-        if (\count($exprRaw['parameters']) > 3) {
+        if (count($exprRaw['parameters']) > 3) {
             return false;
         }
 
         $functionCall = new FunctionCall();
         $parameters = $functionCall->getResolvedParamsAsExpr($exprRaw['parameters'], $compilationContext, $exprRaw);
 
-        if (2 != \count($parameters) && 3 != \count($parameters)) {
+        if (2 != count($parameters) && 3 != count($parameters)) {
             throw new CompilerException('Wrong number of parameters', $this->statement['expr']);
         }
 
@@ -400,7 +404,7 @@ class ForStatement extends StatementAbstract
      * @return void
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
@@ -521,18 +525,17 @@ class ForStatement extends StatementAbstract
      * - Every key must be an integer or compatible
      * - Every value must be a char/integer or compatible.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     * @param Variable           $exprVariable
-     *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function compileStringTraverse($expression, CompilationContext $compilationContext, $exprVariable)
-    {
+    public function compileStringTraverse(
+        CompiledExpression $expression,
+        CompilationContext $compilationContext,
+        ?Variable $exprVariable = null,
+    ): void {
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Initialize 'key' variable
          */
         if (isset($this->statement['key'])) {
@@ -558,7 +561,7 @@ class ForStatement extends StatementAbstract
             $keyVariable->setIsInitialized(true, $compilationContext);
         }
 
-        /*
+        /**
          * Initialize 'value' variable
          */
         if (isset($this->statement['value'])) {
@@ -586,7 +589,7 @@ class ForStatement extends StatementAbstract
 
         $tempVariable = $compilationContext->symbolTable->addTemp('long', $compilationContext);
 
-        /*
+        /**
          * Create a temporary value to store the constant string
          */
         if ('string' == $expression->getType()) {
@@ -596,7 +599,6 @@ class ForStatement extends StatementAbstract
                 $constantVariable,
                 Name::addSlashes($expression->getCode()),
                 $compilationContext,
-                true
             );
 
             $stringVariable = $constantVariable;
@@ -747,7 +749,7 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -756,15 +758,15 @@ class ForStatement extends StatementAbstract
         /*
          * TODO: implement optimizers here
          */
-        if ('fcall' == $exprRaw['type']) {
-            if ('range' == $exprRaw['name']) {
+        if ('fcall' === $exprRaw['type']) {
+            if ('range' === $exprRaw['name']) {
                 $status = $this->compileRange($exprRaw, $compilationContext);
                 if (false !== $status) {
                     return;
                 }
             }
 
-            if ('iterator' == $exprRaw['name']) {
+            if ('iterator' === $exprRaw['name']) {
                 $status = $this->compileIterator($exprRaw, $compilationContext);
                 if (false !== $status) {
                     return;
@@ -776,20 +778,24 @@ class ForStatement extends StatementAbstract
         $expr->setReadOnly(true);
         $expression = $expr->compile($compilationContext);
 
-        /*
+        /**
          * Check for traversing a constant string
          */
-        if ('string' == $expression->getType()) {
-            $this->compileStringTraverse($expression, $compilationContext, null);
+        if ('string' === $expression->getType()) {
+            $this->compileStringTraverse($expression, $compilationContext);
 
             return;
         }
 
-        if ('variable' != $expression->getType() && 'array' != $expression->getType()) {
+        if ('variable' !== $expression->getType() && 'array' !== $expression->getType()) {
             throw new CompilerException('Unknown type: '.$expression->getType(), $exprRaw);
         }
 
-        $exprVariable = $compilationContext->symbolTable->getVariableForRead($expression->getCode(), $compilationContext, $this->statement['expr']);
+        $exprVariable = $compilationContext->symbolTable->getVariableForRead(
+            $expression->getCode(),
+            $compilationContext,
+            $this->statement['expr'],
+        );
         switch ($exprVariable->getType()) {
             case 'variable':
             case 'array':
