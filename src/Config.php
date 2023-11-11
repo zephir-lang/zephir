@@ -20,17 +20,13 @@ class Config implements \ArrayAccess, \JsonSerializable
 {
     /**
      * Is config changed?
-     *
-     * @var bool
      */
-    protected $changed = false;
+    protected bool $changed = false;
 
     /**
      * Default configuration for project.
-     *
-     * @var array
      */
-    private $container = [
+    private array $container = [
         'stubs' => [
             'path' => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
@@ -101,8 +97,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     ];
 
     /**
-     * Config constructor.
-     *
      * @throws Exception
      */
     public function __construct()
@@ -112,8 +106,6 @@ class Config implements \ArrayAccess, \JsonSerializable
 
     /**
      * Returns JSON representation of the project config.
-     *
-     * @return string
      */
     public function __toString()
     {
@@ -122,8 +114,6 @@ class Config implements \ArrayAccess, \JsonSerializable
 
     /**
      * Factory method to create a Config instance from the $_SERVER['argv'].
-     *
-     * @return Config
      */
     public static function fromServer(): self
     {
@@ -312,15 +302,13 @@ class Config implements \ArrayAccess, \JsonSerializable
     /**
      * Writes the configuration if it has been changed.
      */
-    public function dumpToFile()
+    public function dumpToFile(): void
     {
         file_put_contents('config.json', $this);
     }
 
     /**
      * Specify data which should be serialized to JSON.
-     *
-     * @return array
      */
     public function jsonSerialize(): array
     {
