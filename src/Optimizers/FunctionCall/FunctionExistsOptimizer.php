@@ -9,18 +9,17 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function Zephir\add_slashes;
-
 /**
- * FunctionExistsOptimizer.
- *
  * Optimizes calls to 'function_exists' using internal function
  */
 class FunctionExistsOptimizer extends OptimizerAbstract
@@ -39,7 +38,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
         }
 
         if ('string' === $expression['parameters'][0]['parameter']['type']) {
-            $str = add_slashes($expression['parameters'][0]['parameter']['value']);
+            $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
 

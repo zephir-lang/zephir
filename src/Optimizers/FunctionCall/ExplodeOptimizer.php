@@ -15,13 +15,10 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function Zephir\add_slashes;
-
 /**
- * ExplodeOptimizer.
- *
  * Optimizes calls to 'explode' using internal function
  */
 class ExplodeOptimizer extends OptimizerAbstract
@@ -65,7 +62,7 @@ class ExplodeOptimizer extends OptimizerAbstract
         }
 
         if ('string' == $expression['parameters'][0]['parameter']['type']) {
-            $str = add_slashes($expression['parameters'][0]['parameter']['value']);
+            $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
             if (2 == \count($expression['parameters'])) {
                 $limitOffset = 1;

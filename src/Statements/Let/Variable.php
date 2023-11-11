@@ -17,9 +17,8 @@ use Zephir\CompiledExpression;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
+use Zephir\Name;
 use Zephir\Variable\Variable as ZephirVariable;
-
-use function Zephir\add_slashes;
 
 /**
  * Zephir\Statements\Let\Variable.
@@ -1085,7 +1084,7 @@ class Variable
                     case 'assign':
                         $symbolVariable->initVariant($compilationContext);
                         $symbolVariable->setDynamicTypes('string');
-                        $compilationContext->backend->assignString($symbolVariable, add_slashes($resolvedExpr->getCode()), $compilationContext);
+                        $compilationContext->backend->assignString($symbolVariable, Name::addSlashes($resolvedExpr->getCode()), $compilationContext);
                         break;
 
                     case 'concat-assign':

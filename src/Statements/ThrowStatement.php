@@ -22,8 +22,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
 
-use function Zephir\add_slashes;
-
 /**
  * Throws exceptions
  */
@@ -147,7 +145,7 @@ class ThrowStatement extends StatementAbstract
      */
     private function throwStringException(Printer $printer, string $class, string $message, array $expression): void
     {
-        $message = add_slashes($message);
+        $message = Name::addSlashes($message);
         $path = Compiler::getShortUserPath($expression['file']);
         $printer->output(
             sprintf(

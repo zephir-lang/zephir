@@ -15,8 +15,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-
-use function Zephir\add_slashes;
+use Zephir\Name;
 
 /**
  * Produce output according to the type
@@ -60,7 +59,7 @@ class EchoStatement extends StatementAbstract
 
                 case 'string':
                     $compilationContext->codePrinter->output(
-                        'php_printf("%s", "'.add_slashes($resolvedExpr->getCode()).'");'
+                        'php_printf("%s", "'.Name::addSlashes($resolvedExpr->getCode()).'");'
                     );
                     break;
 

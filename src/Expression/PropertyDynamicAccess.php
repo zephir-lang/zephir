@@ -15,9 +15,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Variable\Variable;
-
-use function Zephir\add_slashes;
 
 /**
  * Resolves expressions that read properties with a dynamic variable as property
@@ -135,7 +134,7 @@ class PropertyDynamicAccess
 
         $compilationContext->headersManager->add('kernel/object');
 
-        $property = $propertyVariable ?: add_slashes($expression['right']['value']);
+        $property = $propertyVariable ?: Name::addSlashes($expression['right']['value']);
         $compilationContext->backend->fetchProperty($symbolVariable, $variableVariable, $property, false, $compilationContext);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

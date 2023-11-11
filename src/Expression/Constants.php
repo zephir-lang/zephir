@@ -15,37 +15,24 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\LiteralCompiledExpression;
+use Zephir\Name;
 use Zephir\Variable\Variable;
-
-use function constant;
-use function Zephir\add_slashes;
 
 /**
  * Resolves PHP or Zephir constants into C-Code
  */
 class Constants
 {
-    /**
-     * @var bool
-     */
     protected bool $expecting = true;
 
-    /**
-     * @var bool
-     */
     protected bool $readOnly = false;
 
-    /**
-     * @var Variable|null
-     */
     protected ?Variable $expectingVariable = null;
 
     /**
      * Reserved ENV Constants.
      *
      * @see https://www.php.net/manual/ru/reserved.constants.php
-     *
-     * @var array
      */
     protected array $envConstants = [
         'PHP_VERSION',
@@ -72,8 +59,6 @@ class Constants
      * Magic constants.
      *
      * @see https://php.net/manual/en/language.constants.predefined.php
-     *
-     * @var array
      */
     protected array $magicConstants = [
         '__LINE__',
@@ -95,11 +80,8 @@ class Constants
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null)
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -107,8 +89,6 @@ class Constants
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {
@@ -164,7 +144,7 @@ class Constants
                     return new LiteralCompiledExpression('double', $constantName, $expression);
 
                 case 'string':
-                    return new LiteralCompiledExpression('string', add_slashes($constantName), $expression);
+                    return new LiteralCompiledExpression('string', Name::addSlashes($constantName), $expression);
 
                 case 'object':
                     throw new CompilerException('?');
@@ -178,13 +158,13 @@ class Constants
                 case '__CLASS__':
                     return new CompiledExpression(
                         'string',
-                        add_slashes($compilationContext->classDefinition->getCompleteName()),
+                        Name::addSlashes($compilationContext->classDefinition->getCompleteName()),
                         $expression
                     );
                 case '__NAMESPACE__':
                     return new CompiledExpression(
                         'string',
-                        add_slashes($compilationContext->classDefinition->getNamespace()),
+                        Name::addSlashes($compilationContext->classDefinition->getNamespace()),
                         $expression
                     );
                 case '__METHOD__':

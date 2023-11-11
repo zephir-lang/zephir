@@ -14,13 +14,10 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function Zephir\add_slashes;
-
 /**
- * MethodExistsOptimizer.
- *
  * Optimizes calls to 'method_exists' using internal function
  */
 class MethodExistsOptimizer extends OptimizerAbstract
@@ -43,7 +40,7 @@ class MethodExistsOptimizer extends OptimizerAbstract
         }
 
         if ('string' == $expression['parameters'][1]['parameter']['type']) {
-            $str = add_slashes($expression['parameters'][1]['parameter']['value']);
+            $str = Name::addSlashes($expression['parameters'][1]['parameter']['value']);
             unset($expression['parameters'][1]);
         }
 

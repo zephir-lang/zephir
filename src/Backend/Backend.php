@@ -24,10 +24,9 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
+use Zephir\Name;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
-
-use function Zephir\add_slashes;
 
 class Backend
 {
@@ -442,7 +441,7 @@ class Backend
             case 'string':
             case 'char':
                 if ('string' == $type || 'char' == $type) {
-                    $value = '"'.add_slashes($value).'"';
+                    $value = '"'.Name::addSlashes($value).'"';
                 }
                 $dType = 'string';
                 break;

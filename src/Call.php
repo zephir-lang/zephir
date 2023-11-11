@@ -359,7 +359,7 @@ class Call
 
                     $compilationContext->backend->assignString(
                         $parameterVariable,
-                        add_slashes($compiledExpression->getCode()),
+                        Name::addSlashes($compiledExpression->getCode()),
                         $compilationContext
                     );
 
@@ -510,7 +510,7 @@ class Call
 
                     $compilationContext->backend->assignString(
                         $parameterVariable,
-                        add_slashes($compiledExpression->getCode()),
+                        Name::addSlashes($compiledExpression->getCode()),
                         $compilationContext
                     );
 

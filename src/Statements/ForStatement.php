@@ -18,11 +18,10 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\FunctionCall;
+use Zephir\Name;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
-
-use function Zephir\add_slashes;
 
 class ForStatement extends StatementAbstract
 {
@@ -595,7 +594,7 @@ class ForStatement extends StatementAbstract
 
             $compilationContext->backend->assignString(
                 $constantVariable,
-                add_slashes($expression->getCode()),
+                Name::addSlashes($expression->getCode()),
                 $compilationContext,
                 true
             );

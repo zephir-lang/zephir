@@ -15,13 +15,10 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
 
-use function Zephir\add_slashes;
-
 /**
- * ImplodeOptimizer.
- *
  * Optimizes calls to 'implode' using internal function
  */
 class ImplodeOptimizer extends OptimizerAbstract
@@ -56,7 +53,7 @@ class ImplodeOptimizer extends OptimizerAbstract
         }
 
         if ('string' == $expression['parameters'][0]['parameter']['type']) {
-            $str = add_slashes($expression['parameters'][0]['parameter']['value']);
+            $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
         }
 

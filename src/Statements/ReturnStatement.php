@@ -16,9 +16,8 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Types\Types;
-
-use function Zephir\add_slashes;
 
 /**
  * Return statement is used to assign variables
@@ -212,7 +211,7 @@ final class ReturnStatement extends StatementAbstract
                 case Types::T_STRING:
                 case Types::T_ISTRING:
                     $compilationContext->backend->returnString(
-                        add_slashes($resolvedExpr->getCode()),
+                        Name::addSlashes($resolvedExpr->getCode()),
                         $compilationContext
                     );
                     break;

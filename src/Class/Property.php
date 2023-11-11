@@ -20,10 +20,9 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
+use Zephir\Name;
 use Zephir\StatementsBlock;
 use Zephir\Types\Types;
-
-use function Zephir\add_slashes;
 
 /**
  * Represents a property class
@@ -355,7 +354,7 @@ class Property
                         'zend_declare_property_string(%s, SL("%s"), "%s", %s);',
                         $classEntry,
                         $this->getName(),
-                        add_slashes($value),
+                        Name::addSlashes($value),
                         $this->getVisibilityAccessor()
                     ),
                     false

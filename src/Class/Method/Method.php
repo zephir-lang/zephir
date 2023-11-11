@@ -26,14 +26,13 @@ use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
 use Zephir\Variable\Variable;
-
-use function Zephir\add_slashes;
 
 /**
  * Represents a class method
@@ -1048,7 +1047,7 @@ class Method
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
                         $compilationContext->backend->assignString(
                             $paramVariable,
-                            add_slashes($parameter['default']['value']),
+                            Name::addSlashes($parameter['default']['value']),
                             $compilationContext
                         );
                         break;
@@ -1126,7 +1125,7 @@ class Method
                         $compilationContext->backend->initVar($symbolVariable, $compilationContext);
                         $compilationContext->backend->assignString(
                             $paramVariable,
-                            add_slashes($parameter['default']['value']),
+                            Name::addSlashes($parameter['default']['value']),
                             $compilationContext
                         );
                         break;

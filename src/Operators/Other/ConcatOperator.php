@@ -18,9 +18,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Name;
 use Zephir\Operators\AbstractOperator;
-
-use function Zephir\add_slashes;
 
 /**
  * Perform concatenations and optimizations
@@ -207,7 +206,7 @@ class ConcatOperator extends AbstractOperator
 
                 case 'string':
                     $key .= 's';
-                    $concatParts[] = '"'.add_slashes($compiledExpr->getCode()).'"';
+                    $concatParts[] = '"'.Name::addSlashes($compiledExpr->getCode()).'"';
                     break;
 
                 case 'int':
