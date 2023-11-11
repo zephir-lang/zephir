@@ -228,7 +228,7 @@ class HardDisk implements FileSystemInterface
     /**
      * Checks if the content of the file on the disk is the same as the content.
      */
-    public static function persistByHash(string $data, string $path): int|bool
+    public static function persistByHash(string $data, string $path): int | bool
     {
         if (!file_exists($path)) {
             return file_put_contents($path, $data);

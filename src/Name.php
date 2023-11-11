@@ -13,9 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir;
 
-use function in_array;
-use function strlen;
-
 final class Name
 {
     public static function camelize(string $string): string
@@ -29,8 +26,8 @@ final class Name
      */
     public static function fetchFQN(
         string $class,
-        ?string $namespace = null,
-        ?AliasManager $aliasManager = null
+        string $namespace = null,
+        AliasManager $aliasManager = null
     ): string {
         /**
          * Absolute class/interface name
@@ -85,14 +82,14 @@ final class Name
         ];
 
         $new = '';
-        $last = strlen($string) - 1;
+        $last = \strlen($string) - 1;
 
         for ($i = 0, $next = 1; $i <= $last; ++$i, ++$next) {
             $ch = $string[$i];
             $after = $i !== $last ? $string[$next] : null;
 
             if ($ch === $escape) {
-                if (in_array($after, $controlChar, true) || is_numeric($after)) {
+                if (\in_array($after, $controlChar, true) || is_numeric($after)) {
                     // should not escape native C control chars
                     $new .= $ch.$after;
                     ++$i;

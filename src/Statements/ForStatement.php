@@ -11,7 +11,6 @@
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ForValueUseDetector;
@@ -25,8 +24,6 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
-use function count;
-
 class ForStatement extends StatementAbstract
 {
     /**
@@ -37,23 +34,23 @@ class ForStatement extends StatementAbstract
      *
      * @return bool
      *
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws Exception
      */
     public function compileRange(array $exprRaw, CompilationContext $compilationContext): bool
     {
-        if (!count($exprRaw['parameters'])) {
+        if (!\count($exprRaw['parameters'])) {
             return false;
         }
 
-        if (count($exprRaw['parameters']) > 3) {
+        if (\count($exprRaw['parameters']) > 3) {
             return false;
         }
 
         $functionCall = new FunctionCall();
         $parameters = $functionCall->getResolvedParamsAsExpr($exprRaw['parameters'], $compilationContext, $exprRaw);
 
-        if (2 != count($parameters) && 3 != count($parameters)) {
+        if (2 != \count($parameters) && 3 != \count($parameters)) {
             throw new CompilerException('Wrong number of parameters', $this->statement['expr']);
         }
 
@@ -404,7 +401,7 @@ class ForStatement extends StatementAbstract
      * @return void
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compileIterator(array $exprRaw, CompilationContext $compilationContext): void
     {
@@ -526,12 +523,12 @@ class ForStatement extends StatementAbstract
      * - Every value must be a char/integer or compatible.
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compileStringTraverse(
         CompiledExpression $expression,
         CompilationContext $compilationContext,
-        ?Variable $exprVariable = null,
+        Variable $exprVariable = null,
     ): void {
         $codePrinter = $compilationContext->codePrinter;
 
@@ -749,7 +746,7 @@ class ForStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
