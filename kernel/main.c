@@ -282,7 +282,7 @@ int zephir_fast_count_int(zval *value)
  */
 int zephir_function_exists(const zval *function_name)
 {
-	if (zend_hash_str_exists(CG(function_table), Z_STRVAL_P(function_name), Z_STRLEN_P(function_name)) != NULL) {
+	if (zend_hash_str_exists(CG(function_table), Z_STRVAL_P(function_name), Z_STRLEN_P(function_name))) {
 		return SUCCESS;
 	}
 
