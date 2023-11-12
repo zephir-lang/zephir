@@ -28,14 +28,8 @@ final class ApiCommand extends AbstractCommand
 {
     use ZflagsAwareTrait;
 
-    private Compiler $compiler;
-    private Config $config;
-
-    public function __construct(Compiler $compiler, Config $config)
+    public function __construct(private Compiler $compiler, private Config $config)
     {
-        $this->compiler = $compiler;
-        $this->config = $config;
-
         parent::__construct();
     }
 

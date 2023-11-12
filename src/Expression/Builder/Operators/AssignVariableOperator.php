@@ -16,50 +16,43 @@ use Zephir\Expression\Builder\AbstractBuilder;
 class AssignVariableOperator extends AbstractOperator
 {
     // =
-    const OPERATOR_ASSIGN = 'assign';
+    public const OPERATOR_ASSIGN = 'assign';
 
     // +=
-    const OPERATOR_ADD = 'add-assign';
+    public const OPERATOR_ADD = 'add-assign';
 
     // -=
-    const OPERATOR_SUB = 'sub-assign';
+    public const OPERATOR_SUB = 'sub-assign';
 
     // *=
-    const OPERATOR_MUL = 'mul-assign';
+    public const OPERATOR_MUL = 'mul-assign';
 
     // /=
-    const OPERATOR_DIV = 'div-assign';
+    public const OPERATOR_DIV = 'div-assign';
 
     // .=
-    const OPERATOR_CONCAT = 'concat-assign';
+    public const OPERATOR_CONCAT = 'concat-assign';
 
     // %=
-    const OPERATOR_MOD = 'mod-assign';
+    public const OPERATOR_MOD = 'mod-assign';
 
     // &=
-    const OPERATOR_BITWISE_AND = 'bitwise-and-assign';
+    public const OPERATOR_BITWISE_AND = 'bitwise-and-assign';
 
     // |=
-    const OPERATOR_BITWISE_OR = 'bitwise-or-assign';
+    public const OPERATOR_BITWISE_OR = 'bitwise-or-assign';
 
     // ^=
-    const OPERATOR_BITWISE_XOR = 'bitwise-xor-assign';
+    public const OPERATOR_BITWISE_XOR = 'bitwise-xor-assign';
 
     // <<=
-    const OPERATOR_BITWISE_SHIFTLEFT = 'bitwise-shiftleft-assign';
+    public const OPERATOR_BITWISE_SHIFTLEFT = 'bitwise-shiftleft-assign';
 
     // >>=
-    const OPERATOR_BITWISE_SHIFTRIGHT = 'bitwise-shiftright-assign';
+    public const OPERATOR_BITWISE_SHIFTRIGHT = 'bitwise-shiftright-assign';
+    private string $operator = self::OPERATOR_ASSIGN;
 
-    private $variable;
-    private $operator = self::OPERATOR_ASSIGN;
-    private $expression;
-
-    /**
-     * @param null                 $variable
-     * @param AbstractBuilder|null $expression
-     */
-    public function __construct($variable = null, AbstractBuilder $expression = null)
+    public function __construct(private $variable = null, private ?AbstractBuilder $expression = null)
     {
         if (null !== $variable) {
             $this->setVariable($variable);

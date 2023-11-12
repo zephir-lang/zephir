@@ -20,16 +20,9 @@ class AssignPropertyOperator extends AssignVariableOperator
 
     // a :: property = expr
     public const TYPE_ASSIGN_STATIC_PROPERTY = 'static-property';
+    private string $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
 
-    private $property;
-    private $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
-
-    /**
-     * @param null                 $variable
-     * @param null                 $property
-     * @param AbstractBuilder|null $expression
-     */
-    public function __construct($variable = null, $property = null, AbstractBuilder $expression = null)
+    public function __construct($variable = null, private $property = null, AbstractBuilder $expression = null)
     {
         parent::__construct($variable, $expression);
 
@@ -38,19 +31,11 @@ class AssignPropertyOperator extends AssignVariableOperator
         }
     }
 
-    /**
-     * @return string
-     */
     public function getProperty(): string
     {
         return $this->property;
     }
 
-    /**
-     * @param string $property
-     *
-     * @return $this
-     */
     public function setProperty(string $property): static
     {
         $this->property = $property;
@@ -58,19 +43,11 @@ class AssignPropertyOperator extends AssignVariableOperator
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @param string $type
-     *
-     * @return AssignPropertyOperator
-     */
     public function setType(string $type): static
     {
         $this->type = $type;

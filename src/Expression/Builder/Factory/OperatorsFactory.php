@@ -23,14 +23,8 @@ use Zephir\Expression\Builder\Operators\UnaryOperator;
 
 class OperatorsFactory
 {
-    protected BuilderFactory $factory;
-
-    /**
-     * @param BuilderFactory $factory
-     */
-    public function __construct(BuilderFactory $factory)
+    public function __construct(protected BuilderFactory $factory)
     {
-        $this->factory = $factory;
     }
 
     /**
