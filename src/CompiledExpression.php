@@ -50,7 +50,7 @@ class CompiledExpression implements TypeAwareInterface
     /**
      * Returns a C representation for a boolean constant.
      */
-    public function getBooleanCode(): string
+    public function getBooleanCode(): mixed
     {
         if ('true' === $this->code || true === $this->code) {
             return '1';
