@@ -25,8 +25,6 @@ class CompiledExpression implements TypeAwareInterface
 
     /**
      * Returns the type of the compiled expression.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -35,8 +33,6 @@ class CompiledExpression implements TypeAwareInterface
 
     /**
      * Returns the code produced by the compiled expression.
-     *
-     * @return mixed
      */
     public function getCode(): mixed
     {
@@ -45,8 +41,6 @@ class CompiledExpression implements TypeAwareInterface
 
     /**
      * Original AST code that produced the code.
-     *
-     * @return array|null
      */
     public function getOriginal(): ?array
     {
@@ -55,8 +49,6 @@ class CompiledExpression implements TypeAwareInterface
 
     /**
      * Returns a C representation for a boolean constant.
-     *
-     * @return string
      */
     public function getBooleanCode(): string
     {
@@ -73,8 +65,6 @@ class CompiledExpression implements TypeAwareInterface
 
     /**
      * Checks if the compiled expression is an integer or compatible type.
-     *
-     * @return bool
      */
     public function isIntCompatibleType(): bool
     {
@@ -87,11 +77,6 @@ class CompiledExpression implements TypeAwareInterface
      * Some code cannot be directly pushed into the generated source
      * because it's missing some bound parts, this method resolves the missing parts
      * returning the generated code.
-     *
-     * @param string|null        $result
-     * @param CompilationContext $compilationContext
-     *
-     * @return string
      */
     public function resolve(?string $result, CompilationContext $compilationContext): string
     {
