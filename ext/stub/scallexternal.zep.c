@@ -33,14 +33,13 @@ PHP_METHOD(Stub_ScallExternal, testCall1)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
 
 
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod1", &_0, 0);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod1", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -49,7 +48,6 @@ PHP_METHOD(Stub_ScallExternal, testCall2)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
@@ -68,7 +66,7 @@ PHP_METHOD(Stub_ScallExternal, testCall2)
 	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod4", &_0, 0, a, b);
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_scall_ce, "testmethod4", NULL, 0, a, b);
 	zephir_check_call_status();
 	RETURN_MM();
 }

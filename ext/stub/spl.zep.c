@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 
 
 	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 99, &file);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 101, &file);
 	zephir_check_call_status();
 	RETURN_MM();
 }

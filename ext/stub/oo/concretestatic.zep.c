@@ -52,14 +52,13 @@ PHP_METHOD(Stub_Oo_ConcreteStatic, callParentFunction)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
 	zval *this_ptr = getThis();
 
 
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_RETURN_CALL_PARENT(stub_oo_concretestatic_ce, getThis(), "getcalledclass", &_0, 0);
+	ZEPHIR_RETURN_CALL_PARENT(stub_oo_concretestatic_ce, getThis(), "getcalledclass", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

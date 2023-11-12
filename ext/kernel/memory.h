@@ -175,7 +175,6 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	do { \
 		zval *orig_ptr = z; \
 		ZEPHIR_SEPARATE(orig_ptr); \
-		/*zephir_memory_observe(orig_ptr);*/ \
 	} while (0)
 
 #endif

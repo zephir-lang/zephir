@@ -42,7 +42,6 @@ PHP_METHOD(Stub_Properties_App, __construct)
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_1 = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
@@ -50,7 +49,7 @@ PHP_METHOD(Stub_Properties_App, __construct)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_CALL_CE_STATIC(&_0, stub_properties_staticprivateproperties_ce, "getinstance", &_1, 0);
+	ZEPHIR_CALL_CE_STATIC(&_0, stub_properties_staticprivateproperties_ce, "getinstance", NULL, 0);
 	zephir_check_call_status();
 	zephir_update_property_zval(this_ptr, ZEND_STRL("instance"), &_0);
 	ZEPHIR_MM_RESTORE();

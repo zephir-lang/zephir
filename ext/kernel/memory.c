@@ -306,17 +306,6 @@ int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key
 
 	memcpy(&scope, &ZSTR_VAL(hash_key->key)[(len -1) - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
 
-/*
-#ifndef ZEPHIR_RELEASE
-	{
-		zend_class_entry *cls;
-		memcpy(&cls, &hash_key->arKey[len - sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
-
-		fprintf(stderr, "func: %s, cls: %s, scope: %s [%u]\n", (*entry)->f->common.function_name, (cls ? cls->name : "N/A"), (scope ? scope->name : "N/A"), (uint)(*entry)->times);
-	}
-#endif
-*/
-
 	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
 		return ZEND_HASH_APPLY_REMOVE;
 	}

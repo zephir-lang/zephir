@@ -97,7 +97,8 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_read_property(&_9, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_10, &_9, ZEND_STRL("test2"), PH_NOISY_CC | PH_READONLY);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
-	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
+	ZEPHIR_OBS_VAR(&test1);
+	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC);
 	ZEPHIR_MM_RESTORE();
 }
 

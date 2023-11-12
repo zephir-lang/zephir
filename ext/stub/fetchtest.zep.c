@@ -61,6 +61,7 @@ PHP_METHOD(Stub_FetchTest, getValues)
 
 PHP_METHOD(Stub_FetchTest, testFetchArray1)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *b, b_sub, c;
 	zval *this_ptr = getThis();
 
@@ -76,10 +77,12 @@ PHP_METHOD(Stub_FetchTest, testFetchArray1)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b);
 
 
-	RETURN_BOOL(zephir_array_isset_fetch(&c, a, b, 1));
+	ZEPHIR_OBS_VAR(&c);
+	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, b, 0));
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray2)
@@ -110,6 +113,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray2)
 
 PHP_METHOD(Stub_FetchTest, testFetchArray3)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, c;
 	zval *this_ptr = getThis();
@@ -125,11 +129,13 @@ PHP_METHOD(Stub_FetchTest, testFetchArray3)
 #endif
 
 
-	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
+	ZEPHIR_MM_GROW();
+	zephir_fetch_params(1, 2, 0, &a, &b_param);
 	b = zephir_get_intval(b_param);
 
 
-	RETURN_BOOL(zephir_array_isset_long_fetch(&c, a, b, 1));
+	ZEPHIR_OBS_VAR(&c);
+	RETURN_MM_BOOL(zephir_array_isset_long_fetch(&c, a, b, 0));
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray4)
@@ -183,7 +189,8 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 	zephir_get_strval(&b, b_param);
 
 
-	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 1));
+	ZEPHIR_OBS_VAR(&c);
+	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b, 0));
 }
 
 PHP_METHOD(Stub_FetchTest, testFetchArray6)
@@ -268,6 +275,7 @@ PHP_METHOD(Stub_FetchTest, testFetchObject2)
 
 PHP_METHOD(Stub_FetchTest, testFetchPost)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b, b_sub, _POST, c;
 	zval *this_ptr = getThis();
 
@@ -282,14 +290,16 @@ PHP_METHOD(Stub_FetchTest, testFetchPost)
 #endif
 
 
+	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params_without_memory_grow(1, 0, &b);
+	zephir_fetch_params(1, 1, 0, &b);
 
 
-	if (!(zephir_array_isset_fetch(&c, &_POST, b, 1))) {
-		RETURN_BOOL(0);
+	ZEPHIR_OBS_VAR(&c);
+	if (!(zephir_array_isset_fetch(&c, &_POST, b, 0))) {
+		RETURN_MM_BOOL(0);
 	}
-	RETURN_CTORW(&c);
+	RETURN_CCTOR(&c);
 }
 
 PHP_METHOD(Stub_FetchTest, hasValue)
