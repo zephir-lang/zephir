@@ -76,6 +76,17 @@ class Parameters implements \Countable, \Iterator, \ArrayAccess
         return \count($this->optionalParameters);
     }
 
+    public function hasNullableParameters(): bool
+    {
+        foreach ($this->optionalParameters as $parameter) {
+            if (isset($parameter['default']['type']) && $parameter['default']['type'] === 'null') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function fetchParameters(bool $isMethodInternal): array
     {
         $parameters = [];

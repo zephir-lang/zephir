@@ -1809,7 +1809,10 @@ class Method
          */
         $tempCodePrinter = new Printer();
         if ($this->parameters instanceof Parameters && $this->parameters->count() > 0) {
-            $tempCodePrinter->output("\t".'bool is_null_true = 1;');
+            // Do not declare variable when it is not needed.
+            if ($this->parameters->hasNullableParameters()) {
+                $tempCodePrinter->output("\t".'bool is_null_true = 1;');
+            }
 
             $tempCodePrinter->output(sprintf(
                 "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
