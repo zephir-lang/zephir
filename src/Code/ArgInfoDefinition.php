@@ -81,7 +81,6 @@ class ArgInfoDefinition
             );
         } else {
             if ($this->functionLike->getName() === '__toString') {
-                $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_STRING, %d)',
@@ -91,17 +90,6 @@ class ArgInfoDefinition
                         (int) $this->functionLike->areReturnTypesNullCompatible()
                     )
                 );
-
-                $this->codePrinter->output('#else');
-                $this->codePrinter->output(
-                    sprintf(
-                        'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
-                        $this->name,
-                        (int) $this->returnByRef,
-                        $this->functionLike->getNumberOfRequiredParameters()
-                    )
-                );
-                $this->codePrinter->output('#endif');
             } else {
                 $this->codePrinter->output(
                     sprintf('ZEND_BEGIN_ARG_INFO_EX(%s, 0, 0, 0)', $this->name)
@@ -162,7 +150,6 @@ class ArgInfoDefinition
         }
 
         if ($this->functionLike->isMixed()) {
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, IS_MIXED, %d)',
@@ -172,22 +159,11 @@ class ArgInfoDefinition
                     (int) $this->functionLike->areReturnTypesNullCompatible()
                 )
             );
-            $this->codePrinter->output('#else');
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_INFO_EX(%s, 0, %d, %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                )
-            );
-            $this->codePrinter->output('#endif');
 
             return;
         }
 
         if ($this->functionLike->isReturnTypeNullableObject()) {
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
@@ -197,24 +173,11 @@ class ArgInfoDefinition
                     'MAY_BE_NULL|MAY_BE_OBJECT',
                 )
             );
-            $this->codePrinter->output('#else');
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    'IS_OBJECT',
-                    1,
-                )
-            );
-            $this->codePrinter->output('#endif');
 
             return;
         }
 
         if ($this->functionLike->isReturnTypeObject()) {
-            $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
@@ -224,18 +187,6 @@ class ArgInfoDefinition
                     'MAY_BE_OBJECT',
                 )
             );
-            $this->codePrinter->output('#else');
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
-                    $this->name,
-                    (int) $this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    'IS_OBJECT',
-                    0,
-                )
-            );
-            $this->codePrinter->output('#endif');
 
             return;
         }
@@ -252,7 +203,6 @@ class ArgInfoDefinition
             }
 
             if (\count($types) > 1) {
-                $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
@@ -262,18 +212,6 @@ class ArgInfoDefinition
                         implode('|', $types)
                     )
                 );
-                $this->codePrinter->output('#else');
-                $this->codePrinter->output(
-                    sprintf(
-                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(%s, %d, %d, %s, %d)',
-                        $this->name,
-                        (int) $this->returnByRef,
-                        $this->functionLike->getNumberOfRequiredParameters(),
-                        $this->getReturnType(),
-                        (int) $this->functionLike->areReturnTypesNullCompatible()
-                    )
-                );
-                $this->codePrinter->output('#endif');
 
                 return;
             }
@@ -309,27 +247,15 @@ class ArgInfoDefinition
                             )
                         );
                     } else {
-                        $this->codePrinter->output('#if PHP_VERSION_ID >= 80000');
                         $this->codePrinter->output(
                             sprintf(
-                                "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)",
+                                "ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)",
                                 $this->passByReference($parameter),
                                 $parameter['name'],
                                 (int) $this->allowNull($parameter),
                                 $this->defaultArrayValue($parameter),
                             )
                         );
-                        $this->codePrinter->output('#else');
-                        // `ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE` does not exist in PHP 7.4
-                        $this->codePrinter->output(
-                            sprintf(
-                                "\tZEND_ARG_ARRAY_INFO(%d, %s, %d)",
-                                $this->passByReference($parameter),
-                                $parameter['name'],
-                                (int) $this->allowNull($parameter)
-                            )
-                        );
-                        $this->codePrinter->output('#endif');
                     }
                     break;
                 case '0:variable':
