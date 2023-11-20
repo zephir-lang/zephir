@@ -355,12 +355,7 @@ int zephir_call_user_function(
 	ZVAL_COPY_VALUE(&fci.function_name, function_name);
 	fci.retval      = retval_ptr ? retval_ptr : &local_retval_ptr;
 	fci.param_count = param_count;
-
-#if PHP_VERSION_ID < 80000
-	fci.no_separation = 1;
-#else
 	fci.named_params = NULL;
-#endif
 
 	if (cache_entry && *cache_entry) {
 		/* We have a cache record, initialize scope */
@@ -595,29 +590,6 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 		return FAILURE;
 	}
 
-#if PHP_VERSION_ID < 80000
-	zend_fcall_info_init(handler, 0, &fci, &fci_cache, NULL, &is_callable_error);
-
-	if (is_callable_error) {
-		zend_error(E_WARNING, "%s", is_callable_error);
-		efree(is_callable_error);
-	} else {
-		status = SUCCESS;
-	}
-
-	if (status == SUCCESS) {
-		zend_fcall_info_args(&fci, params);
-
-		fci.retval = return_value;
-		zend_call_function(&fci, &fci_cache);
-
-		zend_fcall_info_args_clear(&fci, 1);
-	}
-
-	if (EG(exception)) {
-		status = SUCCESS;
-	}
-#else
 	zend_execute_data *frame = EG(current_execute_data);
 	if (!zend_is_callable_at_frame(handler, NULL, frame, 0, &fci_cache, &is_callable_error)) {
 		if (is_callable_error) {
@@ -639,7 +611,6 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 	zend_fcall_info_args(&fci, params);
 	status = zend_call_function(&fci, &fci_cache);
 	zend_fcall_info_args_clear(&fci, 1);
-#endif
 
 	return status;
 }

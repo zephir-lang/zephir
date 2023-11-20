@@ -1262,11 +1262,7 @@ int zephir_create_instance(zval *return_value, const zval *class_name)
 			fci.retval           = 0;
 			fci.param_count      = 0;
 			fci.params           = 0;
-#if PHP_VERSION_ID < 80000
-			fci.no_separation = 1;
-#else
-			fci.named_params = NULL;
-#endif
+			fci.named_params 	 = NULL;
 
 			ZVAL_NULL(&fci.function_name);
 
@@ -1324,11 +1320,8 @@ int zephir_create_instance_params(zval *return_value, const zval *class_name, zv
 			fci.retval           = 0;
 			fci.param_count      = 0;
 			fci.params           = 0;
-#if PHP_VERSION_ID < 80000
-			fci.no_separation = 1;
-#else
-			fci.named_params = NULL;
-#endif
+			fci.named_params 	 = NULL;
+
 			ZVAL_NULL(&fci.function_name);
 
 			fcc.object           = obj;
