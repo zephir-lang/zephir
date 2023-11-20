@@ -1809,27 +1809,27 @@ class Method
          */
         $tempCodePrinter = new Printer();
         if ($this->parameters instanceof Parameters && $this->parameters->count() > 0) {
-            $tempCodePrinter->output('bool is_null_true = 1;');
+            $tempCodePrinter->output("\t".'bool is_null_true = 1;');
 
             $tempCodePrinter->output(sprintf(
-                'ZEND_PARSE_PARAMETERS_START(%d, %d)',
+                "\t".'ZEND_PARSE_PARAMETERS_START(%d, %d)',
                 $this->parameters->countRequiredParameters(),
                 $this->parameters->count()
             ));
 
             foreach ($requiredParams as $requiredParam) {
-                $tempCodePrinter->output("\t".$this->detectParam($requiredParam, $compilationContext));
+                $tempCodePrinter->output("\t\t".$this->detectParam($requiredParam, $compilationContext));
             }
 
             if (!empty($optionalParams)) {
-                $tempCodePrinter->output("\t".'Z_PARAM_OPTIONAL');
+                $tempCodePrinter->output("\t\t".'Z_PARAM_OPTIONAL');
 
                 foreach ($optionalParams as $optionalParam) {
-                    $tempCodePrinter->output("\t".$this->detectParam($optionalParam, $compilationContext));
+                    $tempCodePrinter->output("\t\t".$this->detectParam($optionalParam, $compilationContext));
                 }
             }
 
-            $tempCodePrinter->output('ZEND_PARSE_PARAMETERS_END();');
+            $tempCodePrinter->output("\t".'ZEND_PARSE_PARAMETERS_END();');
         }
 
         $codePrinter->preOutput($tempCodePrinter->getOutput());
