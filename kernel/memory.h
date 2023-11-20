@@ -122,9 +122,6 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 	} \
 	ZVAL_DUP(d, v);
 
-#define ZEPHIR_OBS_VAR(z) \
-	zephir_memory_observe(z)
-
 #define ZEPHIR_OBS_VAR_ONCE(z) \
 	if (Z_TYPE_P(z) == IS_UNDEF) { \
 		zephir_memory_observe(z); \
