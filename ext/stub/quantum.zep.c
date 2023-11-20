@@ -97,12 +97,9 @@ PHP_METHOD(Stub_Quantum, harmos)
 	ZVAL_UNDEF(&_8$$4);
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_11$$4);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(x)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

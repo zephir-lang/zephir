@@ -166,12 +166,9 @@ PHP_METHOD(Stub_TryTest, testTry4)
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -241,12 +238,9 @@ PHP_METHOD(Stub_TryTest, testTry5)
 	ZVAL_UNDEF(&_3$$5);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -315,12 +309,9 @@ PHP_METHOD(Stub_TryTest, testTry6)
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -388,12 +379,9 @@ PHP_METHOD(Stub_TryTest, testTry7)
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
 	ZVAL_UNDEF(&_3$$5);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_BOOL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

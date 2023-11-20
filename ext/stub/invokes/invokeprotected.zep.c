@@ -32,12 +32,9 @@ PHP_METHOD(Stub_Invokes_InvokeProtected, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&text);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

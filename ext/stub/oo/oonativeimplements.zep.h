@@ -26,18 +26,10 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, __unserialize);
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_oonativeimplements_count, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_oonativeimplements_current, 0, 0, IS_MIXED, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_oonativeimplements_current, 0, 0, 0)
-#endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 80000
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_oonativeimplements_key, 0, 0, IS_MIXED, 0)
-#else
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_oonativeimplements_key, 0, 0, 0)
-#endif
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_oonativeimplements_next, 0, 0, IS_VOID, 0)

@@ -30,12 +30,9 @@ PHP_METHOD(Stub_Globals, setBoolValueUsingDotNotation)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
@@ -50,12 +47,9 @@ PHP_METHOD(Stub_Globals, setIntValueUsingDotNotation)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
@@ -70,12 +64,9 @@ PHP_METHOD(Stub_Globals, setCharValue)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
@@ -92,12 +83,9 @@ PHP_METHOD(Stub_Globals, setStringValue)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -115,12 +103,9 @@ PHP_METHOD(Stub_Globals, setBoolValue)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
@@ -135,12 +120,9 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCacheLevel)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
@@ -157,12 +139,9 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCachePrefix)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

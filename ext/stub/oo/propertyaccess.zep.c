@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZEPHIR_INIT_VAR(&_6);
 	zephir_create_array(&_6, 4, 0);
 	zephir_read_property(&_7, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&_8);
+	zephir_memory_observe(&_8);
 	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 19);
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -97,7 +97,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_read_property(&_9, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_10, &_9, ZEND_STRL("test2"), PH_NOISY_CC | PH_READONLY);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
-	ZEPHIR_OBS_VAR(&test1);
+	zephir_memory_observe(&test1);
 	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC);
 	ZEPHIR_MM_RESTORE();
 }
@@ -111,12 +111,9 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &value);

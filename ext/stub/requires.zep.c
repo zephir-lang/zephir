@@ -37,12 +37,9 @@ PHP_METHOD(Stub_Requires, requireExternal1)
 
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -62,12 +59,9 @@ PHP_METHOD(Stub_Requires, requireExternal2)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&path_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &path);
@@ -89,12 +83,9 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	ZVAL_UNDEF(&path_sub);
 	ZVAL_UNDEF(&external3);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -122,12 +113,9 @@ PHP_METHOD(Stub_Requires, setContent)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&content_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(content)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &content);
@@ -155,13 +143,10 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_5$$4);
 	ZVAL_UNDEF(&_6$$5);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(templatePath)
 		Z_PARAM_ZVAL(params)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -238,12 +223,9 @@ PHP_METHOD(Stub_Requires, requireOnce)
 
 	ZVAL_UNDEF(&path);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(path)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

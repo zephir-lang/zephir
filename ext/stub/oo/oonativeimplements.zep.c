@@ -112,12 +112,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, seek)
 	zend_long position;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(position)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &position_param);
@@ -140,12 +137,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetExists)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
@@ -159,12 +153,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetGet)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
@@ -179,13 +170,10 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetSet)
 
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(offset)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &offset, &value);
@@ -199,12 +187,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetUnset)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&offset_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
@@ -228,12 +213,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, unserialize)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&serialized);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(serialized)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -261,12 +243,9 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, __unserialize)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&data);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(data)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

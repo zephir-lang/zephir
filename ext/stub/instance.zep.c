@@ -45,8 +45,6 @@ PHP_METHOD(Stub_Instance, __construct)
 	ZVAL_UNDEF(&a9_sub);
 	ZVAL_UNDEF(&a10_sub);
 	ZVAL_UNDEF(&a11_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(11, 11)
 		Z_PARAM_OBJECT_OF_CLASS(a1, stub_arithmetic_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a2, stub_arrayobject_ce)
@@ -60,7 +58,6 @@ PHP_METHOD(Stub_Instance, __construct)
 		Z_PARAM_OBJECT_OF_CLASS(a10, stub_compare_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a11, stub_concat_ce)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
@@ -184,12 +181,9 @@ PHP_METHOD(Stub_Instance, testInstanceCreate)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&className);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(className)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

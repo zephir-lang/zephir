@@ -168,12 +168,9 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&type);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -214,12 +211,9 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 	ZVAL_UNDEF(&name);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -246,13 +240,10 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 	ZVAL_UNDEF(&framework);
 	ZVAL_UNDEF(&language);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(framework)
 		Z_PARAM_STR(language)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -323,22 +314,19 @@ PHP_METHOD(Stub_Exceptions, testMultiException)
 	ZVAL_UNDEF(&_4$$7);
 	ZVAL_UNDEF(&_6$$10);
 	ZVAL_UNDEF(&_8$$13);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(returnValue)
 		Z_PARAM_ZVAL(exception)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
 	zephir_fetch_params(1, 2, 0, &returnValue, &exception);
 
 
-	ZEPHIR_OBS_VAR(&iexc);
+	zephir_memory_observe(&iexc);
 	zephir_read_property(&iexc, this_ptr, ZEND_STRL("internalExceptionCallable"), PH_NOISY_CC);
-	ZEPHIR_OBS_VAR(&exc);
+	zephir_memory_observe(&exc);
 	zephir_read_property(&exc, this_ptr, ZEND_STRL("exceptionCallable"), PH_NOISY_CC);
 
 	/* try_start_1: */

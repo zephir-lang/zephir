@@ -40,12 +40,9 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&message);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

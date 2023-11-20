@@ -125,12 +125,9 @@ PHP_METHOD(Stub_Closures, issue1860)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(abc)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -179,12 +176,9 @@ PHP_METHOD(Stub_Closures, issue1036SetArgument)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&argument_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(argument)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &argument);
@@ -199,12 +193,9 @@ PHP_METHOD(Stub_Closures, issue1036SetFunction)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&func_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(func)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &func);

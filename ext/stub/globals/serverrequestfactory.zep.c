@@ -58,7 +58,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 5)
 		Z_PARAM_OPTIONAL
@@ -68,7 +67,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 		Z_PARAM_ARRAY_OR_NULL(cookies)
 		Z_PARAM_ARRAY_OR_NULL(files)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -167,13 +165,10 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 
 	ZVAL_UNDEF(&source_sub);
 	ZVAL_UNDEF(&super);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(source)
 		Z_PARAM_ARRAY(super)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

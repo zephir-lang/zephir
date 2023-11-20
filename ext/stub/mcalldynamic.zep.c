@@ -69,13 +69,10 @@ PHP_METHOD(Stub_McallDynamic, __call)
 	ZVAL_UNDEF(&method_sub);
 	ZVAL_UNDEF(&arguments_sub);
 	ZVAL_UNDEF(&realMethod);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(method)
 		Z_PARAM_ZVAL(arguments)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

@@ -185,7 +185,7 @@ PHP_METHOD(Stub_Typeoff, testClassPropertyAccess)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "test string");
 	zephir_update_property_zval(this_ptr, ZEND_STRL("property"), &_0);
-	ZEPHIR_OBS_VAR(&_1);
+	zephir_memory_observe(&_1);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("property"), PH_NOISY_CC);
 	RETURN_MM_BOOL(Z_TYPE_P(&_1) == IS_STRING);
 }
@@ -198,12 +198,9 @@ PHP_METHOD(Stub_Typeoff, testUnknownTypeOf)
 
 	ZVAL_UNDEF(&u_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(u)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -221,12 +218,9 @@ PHP_METHOD(Stub_Typeoff, testCallableTypeOf)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&cb_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(cb)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &cb);

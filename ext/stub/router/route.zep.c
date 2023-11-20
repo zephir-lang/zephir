@@ -61,7 +61,6 @@ PHP_METHOD(Stub_Router_Route, __construct)
 	ZVAL_UNDEF(&paths_sub);
 	ZVAL_UNDEF(&httpMethods_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_ZVAL(pattern)
@@ -69,7 +68,6 @@ PHP_METHOD(Stub_Router_Route, __construct)
 		Z_PARAM_ZVAL_OR_NULL(paths)
 		Z_PARAM_ZVAL_OR_NULL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -118,12 +116,9 @@ PHP_METHOD(Stub_Router_Route, compilePattern)
 	ZVAL_UNDEF(&_11$$9);
 	ZVAL_UNDEF(&_12$$9);
 	ZVAL_UNDEF(&_13$$9);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(pattern)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -210,12 +205,9 @@ PHP_METHOD(Stub_Router_Route, via)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
@@ -261,12 +253,9 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 	ZVAL_UNDEF(&_23$$16);
 	ZVAL_UNDEF(&_27$$19);
 	ZVAL_UNDEF(&_28$$28);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(pattern)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -493,14 +482,12 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	ZVAL_UNDEF(&_1$$10);
 	ZVAL_UNDEF(&_2$$19);
 	ZVAL_UNDEF(&_3$$19);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -589,7 +576,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 		if (zephir_memnstr_str(pattern, SL("{"), "stub/router/route.zep", 348)) {
 			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, 0, pattern);
 			zephir_check_call_status();
-			ZEPHIR_OBS_VAR(&pcrePattern);
+			zephir_memory_observe(&pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, &extracted, 0, PH_NOISY, "stub/router/route.zep", 351);
 			ZEPHIR_INIT_VAR(&_2$$19);
 			zephir_array_fetch_long(&_3$$19, &extracted, 1, PH_NOISY | PH_READONLY, "stub/router/route.zep", 352);
@@ -641,12 +628,9 @@ PHP_METHOD(Stub_Router_Route, setName)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
@@ -670,12 +654,9 @@ PHP_METHOD(Stub_Router_Route, beforeMatch)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&callback_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(callback)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &callback);
@@ -835,12 +816,9 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
@@ -880,12 +858,9 @@ PHP_METHOD(Stub_Router_Route, setHostname)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&hostname_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(hostname)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &hostname);
@@ -923,13 +898,10 @@ PHP_METHOD(Stub_Router_Route, convert)
 
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(name)
 		Z_PARAM_ZVAL(converter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &name, &converter);

@@ -49,25 +49,13 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_oodestruct_method_entry) {
 	PHP_ME(Stub_Oo_OoDestruct, getHeight, arginfo_stub_oo_oodestruct_getheight, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoDestruct, getImage, arginfo_stub_oo_oodestruct_getimage, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_OoDestruct, getImage, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_OoDestruct, getImage, arginfo_stub_oo_oodestruct_getimage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoDestruct, getMime, arginfo_stub_oo_oodestruct_getmime, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoDestruct, getRealpath, arginfo_stub_oo_oodestruct_getrealpath, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_OoDestruct, getRealpath, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_OoDestruct, getRealpath, arginfo_stub_oo_oodestruct_getrealpath, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoDestruct, getType, arginfo_stub_oo_oodestruct_gettype, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoDestruct, getWidth, arginfo_stub_oo_oodestruct_getwidth, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoDestruct, __construct, arginfo_stub_oo_oodestruct___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoDestruct, __destruct, arginfo_stub_oo_oodestruct___destruct, ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)
-#else
-	PHP_ME(Stub_Oo_OoDestruct, __destruct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)
-#endif
+PHP_ME(Stub_Oo_OoDestruct, __destruct, arginfo_stub_oo_oodestruct___destruct, ZEND_ACC_PUBLIC|ZEND_ACC_DTOR)
 	PHP_ME(Stub_Oo_OoDestruct, check, arginfo_stub_oo_oodestruct_check, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_Oo_OoDestruct, getVersion, arginfo_stub_oo_oodestruct_getversion, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END

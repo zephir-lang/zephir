@@ -109,11 +109,7 @@ ZEPHIR_INIT_FUNCS(stub_bench_foo_method_entry) {
 	PHP_ME(Stub_Bench_Foo, postDecProp, arginfo_stub_bench_foo_postdecprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, issetProp, arginfo_stub_bench_foo_issetprop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, emptyProp, arginfo_stub_bench_foo_emptyprop, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Bench_Foo, g, arginfo_stub_bench_foo_g, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Bench_Foo, g, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Bench_Foo, g, arginfo_stub_bench_foo_g, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, call, arginfo_stub_bench_foo_call, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, staticMethod, arginfo_stub_bench_foo_staticmethod, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench_Foo, staticMethod1, arginfo_stub_bench_foo_staticmethod1, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)

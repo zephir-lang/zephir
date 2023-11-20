@@ -32,13 +32,10 @@ PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments)
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &start);
@@ -56,14 +53,11 @@ PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments)
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 	ZVAL_UNDEF(&offset_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &str, &start, &offset);

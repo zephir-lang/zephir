@@ -88,12 +88,9 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf4)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
@@ -111,12 +108,9 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf5)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
@@ -156,12 +150,9 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf7)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&test_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(test)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &test);
@@ -180,12 +171,9 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 
 	ZVAL_UNDEF(&test);
 	ZVAL_UNDEF(&a);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -212,13 +200,10 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&test);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT(a)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

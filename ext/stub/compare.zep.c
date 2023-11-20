@@ -34,13 +34,10 @@ PHP_METHOD(Stub_Compare, isLessInt)
 	zend_long a, b;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
@@ -57,13 +54,10 @@ PHP_METHOD(Stub_Compare, isGreaterEqual)
 	zend_long a, b;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
@@ -80,13 +74,10 @@ PHP_METHOD(Stub_Compare, isLessDouble)
 	double a, b;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
@@ -103,12 +94,9 @@ PHP_METHOD(Stub_Compare, isLessThenPi)
 	double a;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
@@ -124,12 +112,9 @@ PHP_METHOD(Stub_Compare, isMoreThenPi)
 	double a;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
@@ -150,12 +135,9 @@ PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -197,12 +179,9 @@ PHP_METHOD(Stub_Compare, testVarEqualsNull)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
@@ -220,12 +199,9 @@ PHP_METHOD(Stub_Compare, testNullEqualsVar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);

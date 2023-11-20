@@ -47,12 +47,9 @@ PHP_METHOD(Stub_Vars, testParam)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_7$$4);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(config)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -140,12 +137,9 @@ PHP_METHOD(Stub_Vars, testVarDump2)
 
 	ZVAL_UNDEF(&ret_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(ret)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -213,14 +207,12 @@ PHP_METHOD(Stub_Vars, test88Issue)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR_OR_NULL(param2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -266,14 +258,11 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 	ZVAL_UNDEF(&param1);
 	ZVAL_UNDEF(&param2);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(param2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -308,13 +297,10 @@ PHP_METHOD(Stub_Vars, testVarDump2param)
 
 	ZVAL_UNDEF(&p1_sub);
 	ZVAL_UNDEF(&p2_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(p1)
 		Z_PARAM_ZVAL(p2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &p1, &p2);
@@ -332,14 +318,11 @@ PHP_METHOD(Stub_Vars, testVarDump3param)
 	ZVAL_UNDEF(&p1_sub);
 	ZVAL_UNDEF(&p2_sub);
 	ZVAL_UNDEF(&p3_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(p1)
 		Z_PARAM_ZVAL(p2)
 		Z_PARAM_ZVAL(p3)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(3, 0, &p1, &p2, &p3);
@@ -359,12 +342,9 @@ PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport)
 	ZVAL_UNDEF(&testVar_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(testVar)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -392,13 +372,10 @@ PHP_METHOD(Stub_Vars, testArrayTypeVarDumpAndExport)
 	ZVAL_UNDEF(&testVar);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(testVar)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

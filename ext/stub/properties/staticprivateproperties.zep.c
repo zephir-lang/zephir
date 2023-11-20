@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance)
 
 	ZEPHIR_MM_GROW();
 
-	ZEPHIR_OBS_VAR(&localInstance);
+	zephir_memory_observe(&localInstance);
 	zephir_read_static_property_ce(&localInstance, stub_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC);
 	if (UNEXPECTED(Z_TYPE_P(&localInstance) != IS_OBJECT)) {
 		ZEPHIR_INIT_NVAR(&localInstance);

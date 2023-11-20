@@ -39,11 +39,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_spropertyaccess_zephir_init_static_propertie
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_spropertyaccess_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_SPropertyAccess, __construct, arginfo_stub_spropertyaccess___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#else
-	PHP_ME(Stub_SPropertyAccess, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#endif
+PHP_ME(Stub_SPropertyAccess, __construct, arginfo_stub_spropertyaccess___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_SPropertyAccess, testArgumentWithUnderscore, arginfo_stub_spropertyaccess_testargumentwithunderscore, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_SPropertyAccess, testArgument, arginfo_stub_spropertyaccess_testargument, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_SPropertyAccess, mutateStringVarInsideCycle, arginfo_stub_spropertyaccess_mutatestringvarinsidecycle, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)

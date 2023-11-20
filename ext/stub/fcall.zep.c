@@ -181,13 +181,10 @@ PHP_METHOD(Stub_Fcall, testCall5)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -239,14 +236,12 @@ PHP_METHOD(Stub_Fcall, zvalFcallWith1Parameter)
 	ZVAL_UNDEF(&callback_sub);
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(callback)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(param1)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -272,13 +267,10 @@ PHP_METHOD(Stub_Fcall, testCall8)
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&x);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -333,12 +325,9 @@ PHP_METHOD(Stub_Fcall, testStrtokVarBySlash)
 
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -359,13 +348,10 @@ PHP_METHOD(Stub_Fcall, testFunctionGetArgs)
 
 	ZVAL_UNDEF(&param1_sub);
 	ZVAL_UNDEF(&param2_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(param1)
 		Z_PARAM_ZVAL(param2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &param1, &param2);
@@ -406,13 +392,10 @@ PHP_METHOD(Stub_Fcall, testFunctionGetArg)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(param1)
 		Z_PARAM_ZVAL(param2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -522,12 +505,9 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 	zval *str, str_sub, _0;
 		ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -549,12 +529,9 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 PHP_FUNCTION(g_stub_zephir_global_method_with_type_casting) {
 	zval *variable, variable_sub;
 		ZVAL_UNDEF(&variable_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &variable);
@@ -571,12 +548,9 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 		ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -599,12 +573,9 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
 	zval *a, a_sub;
 		ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
@@ -616,12 +587,9 @@ PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
 PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
 	zval *variable, variable_sub;
 		ZVAL_UNDEF(&variable_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &variable);
@@ -634,12 +602,9 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
 PHP_FUNCTION(f_Stub_test_call_object_hint) {
 	zval *a, a_sub;
 		ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &a);

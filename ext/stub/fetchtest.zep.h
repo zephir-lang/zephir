@@ -78,11 +78,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_fetchtest_method_entry) {
 	PHP_ME(Stub_FetchTest, setValues, arginfo_stub_fetchtest_setvalues, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_FetchTest, getValues, arginfo_stub_fetchtest_getvalues, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_FetchTest, getValues, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_FetchTest, getValues, arginfo_stub_fetchtest_getvalues, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_FetchTest, testFetchArray1, arginfo_stub_fetchtest_testfetcharray1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_FetchTest, testFetchArray2, arginfo_stub_fetchtest_testfetcharray2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_FetchTest, testFetchArray3, arginfo_stub_fetchtest_testfetcharray3, ZEND_ACC_PUBLIC)

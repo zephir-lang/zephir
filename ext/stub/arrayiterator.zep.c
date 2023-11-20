@@ -87,7 +87,7 @@ PHP_METHOD(Stub_ArrayIterator, current)
 	ZEPHIR_MM_GROW();
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&_2);
+	zephir_memory_observe(&_2);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("position"), PH_NOISY_CC);
 	zephir_array_fetch(&_1, &_0, &_2, PH_NOISY | PH_READONLY, "stub/arrayiterator.zep", 25);
 	RETURN_CTOR(&_1);

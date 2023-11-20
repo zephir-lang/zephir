@@ -94,55 +94,15 @@ ZEPHIR_INIT_FUNCS(stub_globals_method_entry) {
 	PHP_ME(Stub_Globals, setBoolValue, arginfo_stub_globals_setboolvalue, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals, setDefaultGlobalsOrmCacheLevel, arginfo_stub_globals_setdefaultglobalsormcachelevel, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals, setDefaultGlobalsOrmCachePrefix, arginfo_stub_globals_setdefaultglobalsormcacheprefix, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals1, arginfo_stub_globals_getdefaultglobals1, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals1, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals2, arginfo_stub_globals_getdefaultglobals2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals2, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals3, arginfo_stub_globals_getdefaultglobals3, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals3, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals4, arginfo_stub_globals_getdefaultglobals4, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals4, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals5, arginfo_stub_globals_getdefaultglobals5, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals5, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals6, arginfo_stub_globals_getdefaultglobals6, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals6, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals7, arginfo_stub_globals_getdefaultglobals7, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals7, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobals8, arginfo_stub_globals_getdefaultglobals8, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobals8, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheLevel, arginfo_stub_globals_getdefaultglobalsormcachelevel, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheLevel, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals, getDefaultGlobalsOrmCachePrefix, arginfo_stub_globals_getdefaultglobalsormcacheprefix, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals, getDefaultGlobalsOrmCachePrefix, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Globals, getDefaultGlobals1, arginfo_stub_globals_getdefaultglobals1, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals2, arginfo_stub_globals_getdefaultglobals2, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals3, arginfo_stub_globals_getdefaultglobals3, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals4, arginfo_stub_globals_getdefaultglobals4, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals5, arginfo_stub_globals_getdefaultglobals5, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals6, arginfo_stub_globals_getdefaultglobals6, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals7, arginfo_stub_globals_getdefaultglobals7, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobals8, arginfo_stub_globals_getdefaultglobals8, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobalsOrmCacheLevel, arginfo_stub_globals_getdefaultglobalsormcachelevel, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Globals, getDefaultGlobalsOrmCachePrefix, arginfo_stub_globals_getdefaultglobalsormcacheprefix, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

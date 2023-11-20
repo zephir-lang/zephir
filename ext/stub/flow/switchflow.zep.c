@@ -233,13 +233,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 
 	ZVAL_UNDEF(&var1_sub);
 	ZVAL_UNDEF(&var2_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(var1)
 		Z_PARAM_ZVAL(var2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &var1, &var2);
@@ -277,12 +274,9 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -313,13 +307,10 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 	ZVAL_UNDEF(&result_type_sub);
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(result_type)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

@@ -576,12 +576,9 @@ PHP_METHOD(Stub_Assign, testAssign38)
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -655,12 +652,9 @@ PHP_METHOD(Stub_Assign, testAssign41)
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -681,12 +675,9 @@ PHP_METHOD(Stub_Assign, testAssign42)
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -704,12 +695,9 @@ PHP_METHOD(Stub_Assign, testAssign43)
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -727,12 +715,9 @@ PHP_METHOD(Stub_Assign, testAssign44)
 	zend_long num, a = 0;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(num)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &num_param);
@@ -1217,12 +1202,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray4)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1266,12 +1248,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray5)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1390,12 +1369,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray8)
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1438,12 +1414,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray9)
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1488,12 +1461,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray10)
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1540,12 +1510,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray11)
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1593,12 +1560,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray12)
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1614,9 +1578,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray12)
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$null, SL("zza"), 3, index, index);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$false, SL("zza"), 3, index, index);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("myArray"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&temp1);
+	zephir_memory_observe(&temp1);
 	zephir_array_fetch(&temp1, &_2, index, PH_NOISY, "stub/assign.zep", 657);
-	ZEPHIR_OBS_VAR(&temp2);
+	zephir_memory_observe(&temp2);
 	zephir_read_property(&temp2, this_ptr, ZEND_STRL("myArray"), PH_NOISY_CC);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$true, SL("zza"), 3, index, index);
 	ZEPHIR_INIT_VAR(&_3);
@@ -1654,12 +1618,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray13)
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_6);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -1675,9 +1636,9 @@ PHP_METHOD(Stub_Assign, testPropertyArray13)
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$null, SL("za"), 2, index);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$false, SL("za"), 2, index);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("myArray"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_OBS_VAR(&temp1);
+	zephir_memory_observe(&temp1);
 	zephir_array_fetch(&temp1, &_2, index, PH_NOISY, "stub/assign.zep", 674);
-	ZEPHIR_OBS_VAR(&temp2);
+	zephir_memory_observe(&temp2);
 	zephir_read_property(&temp2, this_ptr, ZEND_STRL("myArray"), PH_NOISY_CC);
 	zephir_update_property_array_multi(this_ptr, SL("myArray"), &__$true, SL("za"), 2, index);
 	ZEPHIR_INIT_VAR(&_3);
@@ -1942,12 +1903,9 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArray3)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -2108,12 +2066,9 @@ PHP_METHOD(Stub_Assign, testStaticPropertyArrayMutli3)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(index)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -2245,13 +2200,10 @@ PHP_METHOD(Stub_Assign, testArrayVarAssign1)
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&a);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -2273,13 +2225,10 @@ PHP_METHOD(Stub_Assign, testArrayVarAssign2)
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -2301,13 +2250,10 @@ PHP_METHOD(Stub_Assign, testArrayProperty)
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -2331,13 +2277,10 @@ PHP_METHOD(Stub_Assign, testGlobalVarAssign)
 	ZVAL_UNDEF(&index_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_POST);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(index)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_get_global(&_POST, SL("_POST"));
@@ -2421,13 +2364,10 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

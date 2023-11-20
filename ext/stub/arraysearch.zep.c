@@ -39,15 +39,12 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&haystack);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 3)
 		Z_PARAM_ZVAL(needle)
 		Z_PARAM_ARRAY(haystack)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(strict)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

@@ -42,7 +42,6 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_UNDEF(&attrs_sub);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_STR(dsn)
@@ -51,7 +50,6 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 		Z_PARAM_STR_OR_NULL(password)
 		Z_PARAM_ZVAL(attrs)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

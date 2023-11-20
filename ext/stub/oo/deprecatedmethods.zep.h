@@ -17,20 +17,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_deprecatedmethods_privatedeprecated, 0, 0
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_deprecatedmethods_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_DeprecatedMethods, publicDeprecated, arginfo_stub_oo_deprecatedmethods_publicdeprecated, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#else
-	PHP_ME(Stub_Oo_DeprecatedMethods, publicDeprecated, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_DeprecatedMethods, normalMethod, arginfo_stub_oo_deprecatedmethods_normalmethod, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_DeprecatedMethods, normalMethod, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_DeprecatedMethods, privateDeprecated, arginfo_stub_oo_deprecatedmethods_privatedeprecated, ZEND_ACC_PRIVATE|ZEND_ACC_DEPRECATED)
-#else
-	PHP_ME(Stub_Oo_DeprecatedMethods, privateDeprecated, NULL, ZEND_ACC_PRIVATE|ZEND_ACC_DEPRECATED)
-#endif
+PHP_ME(Stub_Oo_DeprecatedMethods, publicDeprecated, arginfo_stub_oo_deprecatedmethods_publicdeprecated, ZEND_ACC_PUBLIC|ZEND_ACC_DEPRECATED)
+PHP_ME(Stub_Oo_DeprecatedMethods, normalMethod, arginfo_stub_oo_deprecatedmethods_normalmethod, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Oo_DeprecatedMethods, privateDeprecated, arginfo_stub_oo_deprecatedmethods_privatedeprecated, ZEND_ACC_PRIVATE|ZEND_ACC_DEPRECATED)
 	PHP_FE_END
 };

@@ -47,12 +47,9 @@ PHP_METHOD(Stub_Sort, quick)
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_5$$5);
 	ZVAL_UNDEF(&_6$$6);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(arr)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -64,7 +61,7 @@ PHP_METHOD(Stub_Sort, quick)
 	if (length <= 1) {
 		RETURN_CTOR(&arr);
 	}
-	ZEPHIR_OBS_VAR(&_0);
+	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, &arr, 0, PH_NOISY, "stub/sort.zep", 18);
 	pivot = zephir_get_intval(&_0);
 	ZEPHIR_INIT_VAR(&left);

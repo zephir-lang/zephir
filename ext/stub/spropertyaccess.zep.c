@@ -63,7 +63,7 @@ PHP_METHOD(Stub_SPropertyAccess, __construct)
 	ZEPHIR_INIT_VAR(&_3);
 	zephir_substr(&_3, &_0, 0 , 1 , 0);
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("b"), &_3);
-	ZEPHIR_OBS_VAR(&_4);
+	zephir_memory_observe(&_4);
 	zephir_read_static_property_ce(&_4, stub_spropertyaccess_ce, SL("b"), PH_NOISY_CC);
 	zephir_update_static_property_ce(stub_scallexternal_ce, ZEND_STRL("sproperty"), &_4);
 	ZEPHIR_OBS_NVAR(&_4);
@@ -80,13 +80,11 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -116,13 +114,11 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 	ZVAL_UNDEF(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0$$3);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -136,7 +132,7 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 
 
 	if (ZEPHIR_IS_EMPTY(delimiter)) {
-		ZEPHIR_OBS_VAR(&_0$$3);
+		zephir_memory_observe(&_0$$3);
 		zephir_read_static_property_ce(&_0$$3, stub_spropertyaccess_ce, SL("delimiter"), PH_NOISY_CC);
 		ZEPHIR_CPY_WRT(delimiter, &_0$$3);
 	}

@@ -33,12 +33,9 @@ PHP_METHOD(Stub_EvalTest, evalCode)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&code);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

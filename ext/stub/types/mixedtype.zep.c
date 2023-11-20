@@ -99,13 +99,10 @@ PHP_METHOD(Stub_Types_MixedType, returnMixed74)
 	zend_bool diff;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(diff)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(0, 1, &diff_param);
@@ -142,12 +139,9 @@ PHP_METHOD(Stub_Types_MixedType, paramMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
@@ -165,13 +159,10 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedTwo)
 
 	ZVAL_UNDEF(&val1_sub);
 	ZVAL_UNDEF(&val2_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(val1)
 		Z_PARAM_ZVAL(val2)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &val1, &val2);
@@ -195,14 +186,11 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	ZVAL_UNDEF(&mixedVal_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&stringVal);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(intVal)
 		Z_PARAM_STR(stringVal)
 		Z_PARAM_ZVAL(mixedVal)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -230,12 +218,9 @@ PHP_METHOD(Stub_Types_MixedType, paramAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
@@ -255,12 +240,9 @@ PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 
 	ZVAL_UNDEF(&val_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -281,12 +263,9 @@ PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 
 	ZVAL_UNDEF(&val_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -306,12 +285,9 @@ PHP_METHOD(Stub_Types_MixedType, castToIntMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
@@ -329,12 +305,9 @@ PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -355,12 +328,9 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
@@ -378,12 +348,9 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -404,12 +371,9 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);
@@ -427,12 +391,9 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -456,12 +417,9 @@ PHP_METHOD(Stub_Types_MixedType, mixedInCondition)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&val_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &val);

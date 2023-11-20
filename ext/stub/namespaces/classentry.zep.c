@@ -29,12 +29,9 @@ PHP_METHOD(Stub_Namespaces_ClassEntry, setParam)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, stub_namespaces_a_b_sub_ce)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
@@ -50,12 +47,9 @@ PHP_METHOD(Stub_Namespaces_ClassEntry, setParamImported)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, stub_namespaces_a_b_sub_ce)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &param);

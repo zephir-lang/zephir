@@ -36,13 +36,10 @@ PHP_METHOD(Stub_Issue1134, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&config);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(config)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();
@@ -67,13 +64,10 @@ PHP_METHOD(Stub_Issue1134, arrayWithFilledDefaultValue)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someDefaultData);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(someDefaultData)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	ZEPHIR_MM_GROW();

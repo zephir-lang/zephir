@@ -33,14 +33,11 @@ PHP_METHOD(Stub_Exists, testClassExists)
 
 	ZVAL_UNDEF(&className_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(className)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &className, &autoload_param);
@@ -63,14 +60,11 @@ PHP_METHOD(Stub_Exists, testInterfaceExists)
 
 	ZVAL_UNDEF(&interfaceName_sub);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(interfaceName)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(autoload)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 1, &interfaceName, &autoload_param);
@@ -92,13 +86,10 @@ PHP_METHOD(Stub_Exists, testMethodExists)
 
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&methodName_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(obj)
 		Z_PARAM_ZVAL(methodName)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &obj, &methodName);
@@ -113,12 +104,9 @@ PHP_METHOD(Stub_Exists, testFileExists)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&fileName_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(fileName)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(1, 0, &fileName);

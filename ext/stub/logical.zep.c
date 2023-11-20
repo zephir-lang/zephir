@@ -106,13 +106,10 @@ PHP_METHOD(Stub_Logical, testAnd9)
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
@@ -195,13 +192,10 @@ PHP_METHOD(Stub_Logical, testMixed2)
 	ZVAL_UNDEF(&match_sub);
 	ZVAL_UNDEF(&minLength_sub);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(match)
 		Z_PARAM_ZVAL(minLength)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &match, &minLength);
@@ -257,13 +251,10 @@ PHP_METHOD(Stub_Logical, testMixed4)
 	zend_bool a, b, _0, _1, _2;
 	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_BOOL(a)
 		Z_PARAM_BOOL(b)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
 
 
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
