@@ -931,7 +931,7 @@ class Variable implements TypeAwareInterface
                 $this->mustInitNull = true;
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR('.$symbol.');');
             } else {
-                $compilationContext->codePrinter->output('ZEPHIR_OBS_VAR('.$symbol.');');
+                $compilationContext->codePrinter->output('zephir_memory_observe('.$symbol.');');
             }
 
             ++$this->variantInits;
