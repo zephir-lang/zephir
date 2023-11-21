@@ -94,9 +94,6 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value);
 		ZVAL_NULL(z); \
 	} while (0)
 
-/* only removes the value body of the zval */
-#define ZEPHIR_INIT_LNVAR(z) ZEPHIR_INIT_NVAR(&z)
-
 #define ZEPHIR_CPY_WRT(d, v) \
 	Z_TRY_ADDREF_P(v); \
 	if (Z_TYPE_P(d) > IS_UNDEF) { \
