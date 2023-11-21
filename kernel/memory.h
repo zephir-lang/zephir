@@ -17,10 +17,6 @@
 #include "php_ext.h"
 #include "kernel/globals.h"
 
-#if defined(__x86_64__) || defined(__LP64__) || defined(_LP64) || defined(_WIN64)
-	#define ZEPHIR_ENABLE_64BITS 1
-#endif
-
 /** Memory frame */
 typedef struct _zephir_memory_entry {
 	size_t pointer;
