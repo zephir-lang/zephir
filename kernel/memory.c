@@ -292,31 +292,6 @@ int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
 	return SUCCESS;
 }
 
-/**
- * Cleans the function/method cache up
- */
-int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key *hash_key)
-{
-	zephir_fcall_cache_entry **entry = (zephir_fcall_cache_entry**) pDest;
-	zend_class_entry *scope;
-	size_t len = ZSTR_LEN(hash_key->key);
-
-	assert(hash_key->key != NULL);
-	assert(len > 2 * sizeof(zend_class_entry**));
-
-	memcpy(&scope, &ZSTR_VAL(hash_key->key)[(len -1) - 2 * sizeof(zend_class_entry**)], sizeof(zend_class_entry*));
-
-	if ((*entry)->type != ZEND_INTERNAL_FUNCTION || (scope && scope->type != ZEND_INTERNAL_CLASS)) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-
-	if (scope && scope->type == ZEND_INTERNAL_CLASS && scope->info.internal.module->type != MODULE_PERSISTENT) {
-		return ZEND_HASH_APPLY_REMOVE;
-	}
-
-	return ZEND_HASH_APPLY_KEEP;
-}
-
 void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g)
 {
 	zephir_memory_entry *frame = g->active_memory;

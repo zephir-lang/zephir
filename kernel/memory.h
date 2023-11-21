@@ -57,7 +57,6 @@ void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const
 	ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
-int zephir_cleanup_fcache(void *pDest, int num_args, va_list args, zend_hash_key *hash_key);
 void zephir_deinitialize_memory();
 
 #define zephir_ptr_dtor(x) zval_ptr_dtor(x)
