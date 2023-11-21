@@ -274,24 +274,6 @@ int zephir_set_symbol(zval *key_name, zval *value)
 	return SUCCESS;
 }
 
-/**
- * Exports a string symbol to the active symbol table
- */
-int zephir_set_symbol_str(char *key_name, unsigned int key_length, zval *value)
-{
-	zend_array *symbol_table = zend_rebuild_symbol_table();
-
-	if (!symbol_table) {
-		php_error_docref(NULL, E_WARNING, "Cannot find a valid symbol_table");
-		return FAILURE;
-	}
-
-	Z_TRY_ADDREF_P(value);
-	zend_hash_str_update(symbol_table, key_name, key_length, value);
-
-	return SUCCESS;
-}
-
 void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g)
 {
 	zephir_memory_entry *frame = g->active_memory;
