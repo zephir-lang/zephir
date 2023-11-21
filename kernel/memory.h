@@ -21,8 +21,6 @@
 	#define ZEPHIR_ENABLE_64BITS 1
 #endif
 
-#define ZEPHIR_NUM_PREALLOCATED_FRAMES 25
-
 /** Memory frame */
 typedef struct _zephir_memory_entry {
 	size_t pointer;
