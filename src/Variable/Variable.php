@@ -710,7 +710,7 @@ class Variable implements TypeAwareInterface
     public function separate(CompilationContext $compilationContext): void
     {
         if (!\in_array($this->getName(), [self::VAR_THIS_POINTER, self::VAR_RETURN_VALUE], true)) {
-            $compilationContext->codePrinter->output('ZEPHIR_SEPARATE('.$compilationContext->backend->getVariableCode($this).');');
+            $compilationContext->codePrinter->output('SEPARATE_ZVAL('.$compilationContext->backend->getVariableCode($this).');');
         }
     }
 

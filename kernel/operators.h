@@ -159,7 +159,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define ZEPHIR_ADD_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \
-		ZEPHIR_SEPARATE(z);  \
+		SEPARATE_ZVAL(z);  \
 		add_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
 			Z_LVAL_P(z) = Z_LVAL(tmp);  \
@@ -173,7 +173,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define ZEPHIR_SUB_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \
-		ZEPHIR_SEPARATE(z);  \
+		SEPARATE_ZVAL(z);  \
 		sub_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
 			Z_LVAL_P(z) = Z_LVAL(tmp);  \
@@ -187,7 +187,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 #define ZEPHIR_MUL_ASSIGN(z, v)  \
 	{  \
 		zval tmp;  \
-		ZEPHIR_SEPARATE(z);  \
+		SEPARATE_ZVAL(z);  \
 		mul_function(&tmp, z, v);  \
 		if (Z_TYPE(tmp) == IS_LONG) {  \
 			Z_LVAL_P(z) = Z_LVAL(tmp);  \
