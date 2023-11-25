@@ -100,7 +100,7 @@ class Backend
         return $varInitCode;
     }
 
-    public function initVar(Variable $variable, CompilationContext $context, $useCodePrinter = true, $second = false): string
+    public function initVar(Variable $variable, CompilationContext $context, bool $useCodePrinter = true, bool $second = false): string
     {
         $macro = !$second ? 'ZEPHIR_INIT_VAR' : 'ZEPHIR_INIT_NVAR';
         $code = $macro.'('.$this->getVariableCode($variable).');';
