@@ -70,8 +70,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 	zephir_memory_observe(z); \
 	ZVAL_NULL(z);
 
-#define ZEPHIR_INIT_ZVAL_NREF(z) ZVAL_UNDEF(&z);
-
 #define ZEPHIR_INIT_NVAR(z) \
 	do { \
 		if (Z_TYPE_P(z) == IS_UNDEF) { \

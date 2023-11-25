@@ -741,8 +741,7 @@ class Variable implements TypeAwareInterface
      */
     public function initNonReferenced(CompilationContext $compilationContext): void
     {
-        $compilationContext->headersManager->add('kernel/memory');
-        $compilationContext->codePrinter->output('ZEPHIR_INIT_ZVAL_NREF('.$this->getName().');');
+        $compilationContext->codePrinter->output('ZVAL_UNDEF(&'.$this->getName().');');
     }
 
     /**
