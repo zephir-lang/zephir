@@ -55,8 +55,6 @@ void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 void zephir_deinitialize_memory();
 
-#define zephir_ptr_dtor(x) zval_ptr_dtor(x)
-
 void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
 #define zephir_memory_observe(var) zephir_do_memory_observe(var, ZEPHIR_METHOD_GLOBALS_PTR);
 
@@ -92,7 +90,7 @@ int zephir_set_symbol(zval *key_name, zval *value);
 	Z_TRY_ADDREF_P(v); \
 	if (Z_TYPE_P(d) > IS_UNDEF) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
-			zephir_ptr_dtor(d); \
+			zval_ptr_dtor(d); \
 		} \
 	} else { \
 		zephir_memory_observe(d); \
@@ -102,7 +100,7 @@ int zephir_set_symbol(zval *key_name, zval *value);
 #define ZEPHIR_CPY_WRT_CTOR(d, v) \
 	if (d) { \
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
-			zephir_ptr_dtor(d); \
+			zval_ptr_dtor(d); \
 		} \
 	} \
 	ZVAL_DUP(d, v);
@@ -126,7 +124,7 @@ int zephir_set_symbol(zval *key_name, zval *value);
 		if (Z_REFCOUNTED_P(z) && Z_REFCOUNT_P(z) > 1) { \
 			Z_DELREF_P(z); \
 		} else {\
-			zephir_ptr_dtor(z); \
+			zval_ptr_dtor(z); \
 			ZVAL_NULL(z); \
 		} \
 	} else { \
@@ -141,7 +139,7 @@ int zephir_set_symbol(zval *key_name, zval *value);
 		zval *tmp_ = (ppzv); \
 		if (tmp_ != NULL) { \
 			if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
-				zephir_ptr_dtor(tmp_); \
+				zval_ptr_dtor(tmp_); \
 			} else { \
 				zephir_memory_observe(tmp_); \
 			} \

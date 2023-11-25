@@ -284,7 +284,7 @@ int zephir_fetch_parameters(int num_args, int required_args, int optional_args, 
 	    zval _null; \
 		ZVAL_NULL(&_null); \
 		ZVAL_COPY(return_value, &_null); \
-		zephir_ptr_dtor(&_null); \
+		zval_ptr_dtor(&_null); \
 	} else { \
 	    ZVAL_COPY(return_value, _constant_ptr); \
 	} \

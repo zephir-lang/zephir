@@ -740,7 +740,7 @@ int zephir_update_property_array(zval *object, const char *property, uint32_t pr
 
 	if (separated) {
 		zephir_update_property_zval(object, property, property_length, &tmp);
-		zephir_ptr_dtor(&tmp);
+		zval_ptr_dtor(&tmp);
 	}
 
 	return SUCCESS;
@@ -828,7 +828,7 @@ int zephir_update_property_array_append(zval *object, char *property, unsigned i
 
 	if (separated) {
 		zephir_update_property_zval(object, property, property_length, &tmp);
-		zephir_ptr_dtor(&tmp);
+		zval_ptr_dtor(&tmp);
 	}
 
 	return SUCCESS;
@@ -890,7 +890,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 
 		if (separated) {
 			zephir_update_property_zval(object, property, property_length, &tmp_arr);
-			zephir_ptr_dtor(&tmp_arr);
+			zval_ptr_dtor(&tmp_arr);
 		}
 	}
 
