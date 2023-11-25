@@ -47,10 +47,6 @@ typedef struct _zephir_method_globals {
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const char *func);
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func);
 
-#define ZEPHIR_MM_GROW()  \
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0); \
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 #define ZEPHIR_MM_RESTORE() \
 	zephir_memory_restore_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__); \
 	pefree(ZEPHIR_METHOD_GLOBALS_PTR, 0); \

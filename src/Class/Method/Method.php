@@ -1735,7 +1735,10 @@ class Method
                 $methodGlobals->setReadOnly(true);
                 $compilationContext->symbolTable->addRawVariable($methodGlobals);
             }
-            $codePrinter->preOutput("\t".'ZEPHIR_MM_GROW();');
+
+            // #define ZEPHIR_MM_GROW()
+            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);');
+            $codePrinter->preOutput("\t".'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
         }
 
         /**
