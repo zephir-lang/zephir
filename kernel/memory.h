@@ -105,13 +105,10 @@ int zephir_set_symbol(zval *key_name, zval *value);
 	} \
 	ZVAL_DUP(d, v);
 
-#define ZEPHIR_OBS_VAR_ONCE(z) \
+#define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
 	if (Z_TYPE_P(z) == IS_UNDEF) { \
 		zephir_memory_observe(z); \
-	}
-
-#define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
-	ZEPHIR_OBS_VAR_ONCE(z); \
+	} \
 	ZVAL_COPY(z, v);
 
 #define ZEPHIR_HASH_COPY(z, v) \
