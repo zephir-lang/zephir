@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
@@ -43,7 +43,7 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
             }
         }
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -59,10 +59,8 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
 
+        // TODO: Still needed?
         $context->symbolTable->mustGrownStack(true);
-
-        $context->codePrinter->output('ZEPHIR_CREATE_SYMBOL_TABLE();');
-        $context->codePrinter->output('');
 
         return new CompiledExpression('null', null, $expression);
     }
