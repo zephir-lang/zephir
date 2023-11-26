@@ -70,9 +70,7 @@ final class FunctionExistsTest extends TestCase
         shuffle($allFunctions['internal']);
 
         $functions = array_map(
-            function ($value) {
-                return [$value];
-            },
+            fn ($value) => [$value],
             $allFunctions['internal']
         );
 

@@ -413,9 +413,7 @@ final class StringTest extends TestCase
             [0],
             [[]],
             [
-                function () {
-                    return '-';
-                },
+                fn () => '-',
             ],
             [new \stdClass()],
         ];

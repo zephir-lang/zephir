@@ -563,7 +563,7 @@ class MethodCall extends Call
                 $expression['parameters'],
                 $compilationContext,
                 $expression,
-                isset($method) ? $method : null
+                $method ?? null
             );
 
             if (\count($references)) {

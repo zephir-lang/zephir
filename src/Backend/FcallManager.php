@@ -66,7 +66,7 @@ HEAD;
 
         ksort($this->requiredMacros);
         foreach ($this->requiredMacros as $name => $info) {
-            list($scope, $mode, $paramCount) = $info;
+            [$scope, $mode, $paramCount] = $info;
             $paramsStr = '';
             $retParam = '';
             $retValueUsed = '0';

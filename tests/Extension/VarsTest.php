@@ -62,9 +62,7 @@ final class VarsTest extends TestCase
     public function testVarDumpWithThreeParams(): void
     {
         $this->setOutputCallback(
-            function ($output) {
-                return str_replace(["\n", ' '], '', $output);
-            }
+            fn ($output) => str_replace(["\n", ' '], '', $output)
         );
 
         $this->expectOutputString(
@@ -80,9 +78,7 @@ final class VarsTest extends TestCase
     public function testVarExport(): void
     {
         $this->setOutputCallback(
-            function ($output) {
-                return str_replace(["\n", ' '], '', $output);
-            }
+            fn ($output) => str_replace(["\n", ' '], '', $output)
         );
 
         $this->expectOutputString(
@@ -123,9 +119,7 @@ final class VarsTest extends TestCase
     public function testArrayTypeVarDumpAndExport(): void
     {
         $this->setOutputCallback(
-            function ($output) {
-                return str_replace(["\n", ' '], '', $output);
-            }
+            fn ($output) => str_replace(["\n", ' '], '', $output)
         );
 
         $this->expectOutputString(

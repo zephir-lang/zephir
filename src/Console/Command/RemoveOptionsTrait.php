@@ -23,9 +23,7 @@ trait RemoveOptionsTrait
         /** @var InputDefinition $definition */
         $definition = $this->getDefinition();
 
-        $filtered = \array_filter($definition->getOptions(), function (InputOption $option) use ($names) {
-            return !\in_array($option->getName(), $names, true);
-        });
+        $filtered = \array_filter($definition->getOptions(), fn (InputOption $option) => !\in_array($option->getName(), $names, true));
 
         $definition->setOptions($filtered);
     }

@@ -26,9 +26,7 @@ final class ReflectionTest extends TestCase
         $this->assertInstanceOf(\ReflectionFunction::class, $class->getReflectionFunction());
         $this->assertNull($class->getReflectionParameter());
 
-        $class->setReflectionParameter(new \ReflectionParameter(function ($test) {
-            return 1;
-        }, 0));
+        $class->setReflectionParameter(new \ReflectionParameter(fn ($test) => 1, 0));
 
         $this->assertInstanceOf(\ReflectionParameter::class, $class->getReflectionParameter());
     }

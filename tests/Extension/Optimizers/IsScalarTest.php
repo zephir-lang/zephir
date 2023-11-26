@@ -50,7 +50,7 @@ final class IsScalarTest extends TestCase
         $this->assertFalse($this->test->testVarParameter($this));
         $this->assertFalse(
             $this->test->testVarParameter(
-                function () {
+                function (): void {
                 }
             )
         );

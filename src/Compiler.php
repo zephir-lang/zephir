@@ -940,18 +940,14 @@ final class Compiler
 
         $safeProject = 'zend' === $project ? 'zend_' : $project;
 
-        $compiledFiles = array_map(function ($file) {
-            return str_replace('.c', '.zep.c', $file);
-        }, $this->compiledFiles);
+        $compiledFiles = array_map(fn ($file) => str_replace('.c', '.zep.c', $file), $this->compiledFiles);
 
         /**
          * If export-classes is enabled all headers are copied to include/php/ext.
          */
         $exportClasses = $this->config->get('export-classes', 'extra');
         if ($exportClasses) {
-            $compiledHeaders = array_map(function ($file) {
-                return str_replace('.c', '.zep.h', $file);
-            }, $this->compiledFiles);
+            $compiledHeaders = array_map(fn ($file) => str_replace('.c', '.zep.h', $file), $this->compiledFiles);
         } else {
             $compiledHeaders = ['php_'.strtoupper($project).'.h'];
         }
@@ -1464,7 +1460,7 @@ final class Compiler
         /**
          * Round 3. Process extension globals
          */
-        list($globalCode, $globalStruct, $globalsDefault, $initEntries) = $this->processExtensionGlobals($project);
+        [$globalCode, $globalStruct, $globalsDefault, $initEntries] = $this->processExtensionGlobals($project);
         if ('zend' == $project) {
             $safeProject = 'zend_';
         } else {
@@ -1479,7 +1475,7 @@ final class Compiler
         /**
          * Round 5. Generate Function entries (FE)
          */
-        list($feHeader, $feEntries) = $this->generateFunctionInformation();
+        [$feHeader, $feEntries] = $this->generateFunctionInformation();
 
         /**
          * Check if there are module/request/global destructors.
@@ -1537,9 +1533,7 @@ final class Compiler
             }
         }
 
-        $modRequires = array_map(function ($mod) {
-            return sprintf('ZEND_MOD_REQUIRED("%s")', strtolower($mod));
-        }, $this->config->get('extensions', 'requires') ?: []);
+        $modRequires = array_map(fn ($mod) => sprintf('ZEND_MOD_REQUIRED("%s")', strtolower($mod)), $this->config->get('extensions', 'requires') ?: []);
 
         $toReplace = [
             '%PROJECT_LOWER_SAFE%' => strtolower($safeProject),
@@ -2155,9 +2149,7 @@ final class Compiler
     private function toUnixPaths(array $paths): array
     {
         return array_map(
-            static function (string $path): string {
-                return str_replace(\DIRECTORY_SEPARATOR, '/', $path);
-            },
+            static fn (string $path): string => str_replace(\DIRECTORY_SEPARATOR, '/', $path),
             $paths
         );
     }

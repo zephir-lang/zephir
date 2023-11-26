@@ -373,7 +373,7 @@ class StaticCall extends Call
          * Check if the  method call can have an inline cache.
          */
         $methodCache = $compilationContext->cacheManager->getStaticMethodCache();
-        $cachePointer = $methodCache->get($compilationContext, isset($method) ? $method : null);
+        $cachePointer = $methodCache->get($compilationContext, $method ?? null);
 
         $params = [];
         if (isset($expression['parameters']) && \count($expression['parameters'])) {
@@ -516,7 +516,7 @@ class StaticCall extends Call
      */
     protected function callFromDynamicClass(string $methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, CompilationContext $compilationContext): void
     {
-        list($params, $classEntry) = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
+        [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
 
         if ($symbolVariable) {
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
@@ -567,7 +567,7 @@ class StaticCall extends Call
      */
     protected function callFromDynamicClassDynamicMethod(array $expression, $symbolVariable, bool $mustInit, bool $isExpecting, CompilationContext $compilationContext): void
     {
-        list($params, $classEntry) = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
+        [$params, $classEntry] = $this->fetchClassParams($expression, $compilationContext, $symbolVariable, $mustInit);
 
         /**
          * Obtain the method name from the variable.
