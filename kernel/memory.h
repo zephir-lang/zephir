@@ -50,9 +50,6 @@ void zephir_deinitialize_memory();
 
 int zephir_set_symbol(zval *key_name, zval *value);
 
-#define ZEPHIR_INIT_VAR(z) \
-	ZVAL_NULL(z);
-
 #define ZEPHIR_INIT_NVAR(z) \
 	do { \
 		if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \

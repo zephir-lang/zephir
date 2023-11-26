@@ -776,7 +776,7 @@ class Variable implements TypeAwareInterface
         }
 
         /**
-         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
+         * Variables are allocated for the first time using ZVAL_NULL
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
@@ -809,7 +809,7 @@ class Variable implements TypeAwareInterface
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZVAL_NULL(&'.$this->getName().');');
                 }
             }
 
@@ -832,7 +832,7 @@ class Variable implements TypeAwareInterface
         }
 
         /**
-         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
+         * Variables are allocated for the first time using ZVAL_NULL
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
@@ -895,7 +895,7 @@ class Variable implements TypeAwareInterface
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&'.$this->getName().');');
                 } else {
-                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
+                    $compilationContext->codePrinter->output('ZVAL_NULL(&'.$this->getName().');');
                 }
             }
 

@@ -229,7 +229,7 @@ long zephir_safe_mod_double_zval(double op1, zval *op2);
 		if (Z_TYPE_P(right) == IS_STRING) { \
 			ZEPHIR_CPY_WRT(left, right); \
 		} else if (Z_TYPE_P(right) == IS_NULL) { \
-		    ZEPHIR_INIT_VAR(left); \
+		    ZVAL_NULL(left); \
 		} else { \
 			use_copy_right = zephir_make_printable_zval(right, &right_tmp); \
 			if (use_copy_right) { \
