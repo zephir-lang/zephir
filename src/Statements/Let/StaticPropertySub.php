@@ -44,7 +44,7 @@ class StaticPropertySub
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         array $statement
-    ) {
+    ): void {
         $classDefinition = $compilationContext->classLookup($className);
 
         if (!$propertyDefinition = $classDefinition->getProperty($property)) {

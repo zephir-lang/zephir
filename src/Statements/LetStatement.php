@@ -55,7 +55,7 @@ class LetStatement extends StatementAbstract
      *
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $readDetector = new ReadDetector();
 

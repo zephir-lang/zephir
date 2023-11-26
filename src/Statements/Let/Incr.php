@@ -34,7 +34,7 @@ class Incr
      *
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement): void
     {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);

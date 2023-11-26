@@ -29,7 +29,7 @@ class RequireStatement extends StatementAbstract
      *
      * @throws CompilerException
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $expression = [
             'type' => 'require',

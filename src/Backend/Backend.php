@@ -420,7 +420,7 @@ class Backend
         return $codePrinter->getOutput();
     }
 
-    public function declareConstant($type, $name, $value, CompilationContext $context)
+    public function declareConstant($type, $name, $value, CompilationContext $context): void
     {
         $ce = $context->classDefinition->getClassEntry($context);
 
@@ -538,7 +538,7 @@ class Backend
      * @param string             $code
      * @param CompilationContext $context
      */
-    public function assignZval(Variable $variable, $code, CompilationContext $context)
+    public function assignZval(Variable $variable, $code, CompilationContext $context): void
     {
         $code = $this->resolveValue($code, $context);
         if (!$variable->isDoublePointer()) {
@@ -580,7 +580,7 @@ class Backend
         return $output;
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context)
+    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context): void
     {
         $symbol = $this->getVariableCode($variable);
         $context->codePrinter->output(
@@ -745,7 +745,7 @@ class Backend
         return new CompiledExpression('bool', 'zephir_isset_property('.$this->getVariableCode($var).', SL("'.$key.'"))', null);
     }
 
-    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context)
+    public function arrayUnset(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
     {
         $context->headersManager->add('kernel/array');
         $variableCode = $this->getVariableCode($variable);
@@ -758,7 +758,7 @@ class Backend
         $this->arrayUnset2($variable, $exprIndex, $flags, $context);
     }
 
-    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context)
+    public function arrayUnset2(Variable $variable, $exprIndex, $flags, CompilationContext $context): void
     {
         $context->headersManager->add('kernel/array');
         $variableCode = $this->getVariableCode($variable);
@@ -811,7 +811,7 @@ class Backend
         return $output;
     }
 
-    public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context)
+    public function fetchClass(Variable $zendClassEntry, $className, $guarded, CompilationContext $context): void
     {
         $context->headersManager->add('kernel/object');
         if ($guarded) {
@@ -838,7 +838,7 @@ class Backend
         $property,
         $readOnly,
         CompilationContext $context
-    ) {
+    ): void {
         $flags = 'PH_NOISY_CC';
         if ($readOnly) {
             $flags .= ' | PH_READONLY';
@@ -1069,7 +1069,7 @@ class Backend
         }
     }
 
-    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext)
+    public function forStatement(Variable $exprVariable, $keyVariable, $variable, $duplicateKey, $duplicateHash, $statement, $statementBlock, CompilationContext $compilationContext): void
     {
         /**
          * Create a temporary zval to fetch the items from the hash.
@@ -1280,14 +1280,14 @@ class Backend
         $context->codePrinter->output($output);
     }
 
-    public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context)
+    public function concatSelf(Variable $variable, Variable $itemVariable, CompilationContext $context): void
     {
         $variable = $this->getVariableCode($variable);
         $itemVariable = $this->getVariableCode($itemVariable);
         $context->codePrinter->output('zephir_concat_self('.$variable.', '.$itemVariable.');');
     }
 
-    public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null)
+    public function updateArray(Variable $symbolVariable, $key, $value, CompilationContext $compilationContext, $flags = null): void
     {
         $value = $this->resolveValue($value, $compilationContext, true);
         if (!isset($flags)) {
@@ -1394,7 +1394,7 @@ class Backend
         return $output;
     }
 
-    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
+    public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext): void
     {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
@@ -1430,7 +1430,7 @@ class Backend
         );
     }
 
-    public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
+    public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext): void
     {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
@@ -1454,7 +1454,7 @@ class Backend
         $context->codePrinter->output('if (zephir_has_constructor('.$this->getVariableCode($var).')) {');
     }
 
-    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = [], $cache = 'NULL', $cacheSlot = 0)
+    public function callDynamicFunction($symbolVariable, Variable $variable, CompilationContext $context, $params = [], $cache = 'NULL', $cacheSlot = 0): void
     {
         $paramStr = null != $params ? ', '.implode(', ', $params) : '';
         if (!isset($symbolVariable)) {
@@ -1466,7 +1466,7 @@ class Backend
         }
     }
 
-    public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext)
+    public function zvalOperator($zvalOperator, Variable $expected, Variable $variableLeft, Variable $variableRight, CompilationContext $compilationContext): void
     {
         $expected = $this->getVariableCode($expected);
         $op1 = $this->getVariableCode($variableLeft);
@@ -1475,7 +1475,7 @@ class Backend
         $compilationContext->codePrinter->output($zvalOperator.'('.$expected.', '.$op1.', '.$op2.');');
     }
 
-    public function checkStrictType($type, $var, CompilationContext $context)
+    public function checkStrictType($type, $var, CompilationContext $context): void
     {
         $codePrinter = $context->codePrinter;
         $conditions = [];

@@ -27,7 +27,7 @@ class WhileStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $exprRaw = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;

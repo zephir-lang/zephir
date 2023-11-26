@@ -49,7 +49,7 @@ class Variable
         ReadDetector $readDetector,
         CompilationContext $compilationContext,
         array $statement
-    ) {
+    ): void {
         if ($symbolVariable->isReadOnly()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
         }
@@ -122,7 +122,7 @@ class Variable
         string $variable,
         array $statement,
         CompilationContext $compilationContext
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -354,7 +354,7 @@ class Variable
         string $variable,
         array $statement,
         CompilationContext $compilationContext
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -536,7 +536,7 @@ class Variable
         string $variable,
         array $statement,
         CompilationContext $compilationContext
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -724,7 +724,7 @@ class Variable
         string $variable,
         array $statement,
         CompilationContext $compilationContext
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'variable':
             case 'array':
@@ -771,7 +771,7 @@ class Variable
         string $variable,
         array $statement,
         CompilationContext $compilationContext
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {
@@ -910,7 +910,7 @@ class Variable
         array $statement,
         CompilationContext $compilationContext,
         ReadDetector $readDetector
-    ) {
+    ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
                 switch ($statement['operator']) {

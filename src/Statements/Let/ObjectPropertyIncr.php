@@ -33,7 +33,7 @@ class ObjectPropertyIncr
      * @param CompilationContext $compilationContext
      * @param array              $statement
      */
-    public function assign($variable, $property, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement)
+    public function assign($variable, $property, ZephirVariable $symbolVariable, CompilationContext $compilationContext, $statement): void
     {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);

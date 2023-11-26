@@ -29,7 +29,7 @@ class RequireOnceStatement extends StatementAbstract
      *
      * @throws Exception
      */
-    public function compile(CompilationContext $compilationContext)
+    public function compile(CompilationContext $compilationContext): void
     {
         $expression = [
             'type' => 'require_once',

@@ -37,7 +37,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      *
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
     {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
@@ -68,7 +68,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      *
      * @throws CompilerException
      */
-    protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
+    protected function _assignPropertyArraySingleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement): void
     {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');

@@ -45,7 +45,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         array $statement
-    ) {
+    ): void {
         $compiler = $compilationContext->compiler;
         if (!\in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
@@ -112,7 +112,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         $statement
-    ) {
+    ): void {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 

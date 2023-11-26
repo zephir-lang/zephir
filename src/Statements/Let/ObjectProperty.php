@@ -42,7 +42,7 @@ class ObjectProperty
         Expression $expression,
         Context $context,
         array $statement
-    ) {
+    ): void {
         if (!$symbolVariable->isInitialized()) {
             throw new Exception(
                 "Cannot mutate variable '{$variable}' because it is not initialized",

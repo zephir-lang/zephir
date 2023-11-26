@@ -34,7 +34,7 @@ class ExportSymbolString
      * @param CompilationContext $compilationContext,
      * @param array              $statement
      */
-    public function assign($variable, ZephirVariable $symbolVariable = null, CompiledExpression $resolvedExpr = null, CompilationContext $compilationContext = null, $statement = null)
+    public function assign($variable, ZephirVariable $symbolVariable = null, CompiledExpression $resolvedExpr = null, CompilationContext $compilationContext = null, $statement = null): void
     {
         $codePrinter = $compilationContext->codePrinter;
 
