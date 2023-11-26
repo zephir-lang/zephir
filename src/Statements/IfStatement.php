@@ -74,7 +74,7 @@ class IfStatement extends StatementAbstract
 
             $symbolTable = $compilationContext->symbolTable;
             foreach ($skipVariantInit->getVariables() as $variable) {
-                if ($symbolTable->hasVariable($variable)) {
+                if ($symbolTable->hasVariable((string)$variable)) {
                     $symbolVariable = $symbolTable->getVariable($variable);
                     if ('variable' === $symbolVariable->getType()) {
                         if (!$readDetector->detect($variable, $exprRaw)) {
