@@ -55,7 +55,7 @@ class HeadersManager
      *
      * @throws \InvalidArgumentException
      */
-    public function add($path, $position = 0)
+    public function add($path, $position = 0): void
     {
         if (!\is_string($path)) {
             throw new \InvalidArgumentException('$path must be only string type');

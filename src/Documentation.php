@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Zephir.
  *
@@ -78,7 +80,7 @@ class Documentation
      * @throws ConfigException
      * @throws Exception
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         $themeConfig = $this->config->get('theme', 'api');
 
@@ -148,7 +150,7 @@ class Documentation
     /**
      * @throws Exception
      */
-    public function build()
+    public function build(): void
     {
         foreach ($this->classes as $class) {
             // class files (class/ns1/n2/class.html)

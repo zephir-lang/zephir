@@ -84,7 +84,7 @@ final class CompilerFileAnonymous implements FileInterface
      * @throws Exception
      * @throws \ReflectionException
      */
-    private function compileClass(CompilationContext $compilationContext)
+    private function compileClass(CompilationContext $compilationContext): void
     {
         $classDefinition = $this->classDefinition;
 
@@ -137,7 +137,7 @@ final class CompilerFileAnonymous implements FileInterface
      *
      * @throws Exception
      */
-    public function compile(Compiler $compiler, StringsManager $stringsManager)
+    public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
         /**
          * Compilation context stores common objects required by compilation entities.
@@ -237,7 +237,7 @@ final class CompilerFileAnonymous implements FileInterface
      *
      * @param Compiler $compiler
      */
-    public function preCompile(Compiler $compiler)
+    public function preCompile(Compiler $compiler): void
     {
         // nothing to do
     }

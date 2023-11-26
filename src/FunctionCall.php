@@ -165,7 +165,7 @@ class FunctionCall extends Call
      *
      * @param string $directory
      */
-    public static function addOptimizerDir($directory)
+    public static function addOptimizerDir($directory): void
     {
         self::$optimizerDirectories[] = $directory;
     }
@@ -258,7 +258,7 @@ class FunctionCall extends Call
         CompilationContext $compilationContext,
         &$references,
         $expression
-    ) {
+    ): void {
         if ($this->isBuiltInFunction($funcName)) {
             return;
         }

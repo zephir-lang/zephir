@@ -243,7 +243,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * @param mixed $value
      */
     #[\ReturnTypeWillChange]
-    public function offsetSet($key, $value)
+    public function offsetSet($key, $value): void
     {
         if (!\is_array($key)) {
             $this->container[$key] = $value;
@@ -269,7 +269,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * @param mixed $key
      */
     #[\ReturnTypeWillChange]
-    public function offsetUnset($key)
+    public function offsetUnset($key): void
     {
         unset($this->container[$key]);
     }
@@ -294,7 +294,7 @@ class Config implements \ArrayAccess, \JsonSerializable
      * @param mixed $value
      * @param mixed $namespace
      */
-    public function set($key, $value, $namespace = null)
+    public function set($key, $value, $namespace = null): void
     {
         null !== $namespace ? $this->offsetSet([$namespace => $key], $value) : $this->offsetSet($key, $value);
     }

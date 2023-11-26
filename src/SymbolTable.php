@@ -823,7 +823,7 @@ class SymbolTable
      *
      * @param CompilationContext $compilationContext
      */
-    public function markTemporalVariablesIdle(CompilationContext $compilationContext)
+    public function markTemporalVariablesIdle(CompilationContext $compilationContext): void
     {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId = $compilationContext->branchManager->getCurrentBranchId();
