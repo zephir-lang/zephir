@@ -426,7 +426,7 @@ class StaticCall extends Call
      *
      * @throws Exception
      */
-    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method)
+    protected function callFromClass($methodName, array $expression, $symbolVariable, $mustInit, $isExpecting, Definition $classDefinition, CompilationContext $compilationContext, Method $method): void
     {
         $codePrinter = $compilationContext->codePrinter;
 
