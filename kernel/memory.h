@@ -45,9 +45,6 @@ typedef struct _zephir_method_globals {
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 void zephir_deinitialize_memory();
-
-#define zephir_safe_zval_ptr_dtor(pzval)
-
 int zephir_set_symbol(zval *key_name, zval *value);
 
 #define ZEPHIR_INIT_NVAR(z) \
