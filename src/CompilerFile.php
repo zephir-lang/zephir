@@ -119,7 +119,7 @@ final class CompilerFile implements FileInterface
     /**
      * @param string $filePath
      */
-    public function setFilePath(string $filePath)
+    public function setFilePath(string $filePath): void
     {
         $this->filePath = $filePath;
     }
@@ -127,7 +127,7 @@ final class CompilerFile implements FileInterface
     /**
      * @param string $className
      */
-    public function setClassName(string $className)
+    public function setClassName(string $className): void
     {
         $this->className = $className;
     }
@@ -171,7 +171,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    public function addFunction(Compiler $compiler, FunctionDefinition $func, array $statement = [])
+    public function addFunction(Compiler $compiler, FunctionDefinition $func, array $statement = []): void
     {
         $compiler->addFunction($func, $statement);
         $funcName = strtolower($func->getInternalName());
@@ -240,7 +240,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws Exception
      */
-    public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition)
+    public function compileFunction(CompilationContext $compilationContext, FunctionDefinition $functionDefinition): void
     {
         /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
         $bakClassDefinition = $compilationContext->classDefinition;
@@ -264,7 +264,7 @@ final class CompilerFile implements FileInterface
      * @param CompilationContext $compilationContext
      * @param array              $topStatement
      */
-    public function compileComment(CompilationContext $compilationContext, $topStatement)
+    public function compileComment(CompilationContext $compilationContext, $topStatement): void
     {
         $compilationContext->codePrinter->output('/'.$topStatement['value'].'/');
     }
@@ -276,7 +276,7 @@ final class CompilerFile implements FileInterface
      * @param array  $topStatement
      * @param array  $docblock
      */
-    public function preCompileInterface($namespace, $topStatement, $docblock)
+    public function preCompileInterface($namespace, $topStatement, $docblock): void
     {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -342,7 +342,7 @@ final class CompilerFile implements FileInterface
      * @param array              $topStatement
      * @param array              $docblock
      */
-    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock)
+    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock): void
     {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -452,7 +452,7 @@ final class CompilerFile implements FileInterface
      * @throws IllegalStateException
      * @throws ParseException
      */
-    public function preCompile(Compiler $compiler)
+    public function preCompile(Compiler $compiler): void
     {
         $ir = $this->genIR($compiler);
 
@@ -649,7 +649,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws \ReflectionException
      */
-    public function checkDependencies(Compiler $compiler)
+    public function checkDependencies(Compiler $compiler): void
     {
         $classDefinition = $this->classDefinition;
 
@@ -740,7 +740,7 @@ final class CompilerFile implements FileInterface
      *
      * @throws CompilerException
      */
-    public function compile(Compiler $compiler, StringsManager $stringsManager)
+    public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
         if (!$this->ir) {
             throw new CompilerException('Unable to locate the intermediate representation of the compiled file');
@@ -887,7 +887,7 @@ final class CompilerFile implements FileInterface
         $this->ir = null;
     }
 
-    public function applyClassHeaders(CompilationContext $compilationContext)
+    public function applyClassHeaders(CompilationContext $compilationContext): void
     {
         $classDefinition = $this->classDefinition;
 
@@ -972,9 +972,7 @@ final class CompilerFile implements FileInterface
                 $docBlockParsed = $docBlockParser->parse();
 
                 if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
-                    $returnsType = array_map(function ($type) {
-                        return 'mixed' == ($type = trim($type)) ? 'variable' : $type;
-                    }, explode('|', $annotations[0]->getString()));
+                    $returnsType = array_map(fn ($type) => 'mixed' == ($type = trim($type)) ? 'variable' : $type, explode('|', $annotations[0]->getString()));
                 }
 
                 // Clear annotations
