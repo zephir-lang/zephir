@@ -32,7 +32,6 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
-use Zephir\Variable\Variable;
 
 /**
  * Represents a class method
