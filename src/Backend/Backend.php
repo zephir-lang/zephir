@@ -72,7 +72,7 @@ class Backend
         $additionalCode = $method ? $this->onPreInitVar($method) : '';
 
         foreach ($typeToVariables as $type => $variables) {
-            list($pointer, $code) = $this->getTypeDefinition($type);
+            [$pointer, $code] = $this->getTypeDefinition($type);
             $code .= ' ';
             $groupVariables = [];
 
@@ -1396,7 +1396,7 @@ class Backend
 
     public function assignArrayMulti(Variable $variable, $symbolVariable, $offsetExprs, CompilationContext $compilationContext)
     {
-        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
         $symbol = $this->resolveValue($symbolVariable, $compilationContext, true);
         $varCode = $this->getVariableCode($variable);
@@ -1414,7 +1414,7 @@ class Backend
 
     public function assignPropertyArrayMulti(Variable $variable, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext): void
     {
-        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
 
         $compilationContext->codePrinter->output(
@@ -1432,7 +1432,7 @@ class Backend
 
     public function assignStaticPropertyArrayMulti($classEntry, $valueVariable, $propertyName, $offsetExprs, CompilationContext $compilationContext)
     {
-        list($keys, $offsetItems, $numberParams) = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
+        [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
         $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
 
         $offsetStr = $offsetItems ? ', '.implode(', ', $offsetItems) : '';
