@@ -17,32 +17,6 @@
 #include "php_ext.h"
 #include "kernel/globals.h"
 
-/** Memory frame */
-typedef struct _zephir_memory_entry {
-	size_t pointer;
-	size_t capacity;
-	zval **addresses;
-#ifndef ZEPHIR_RELEASE
-	int permanent;
-	const char *func;
-#endif
-} zephir_memory_entry;
-
-/** Virtual Symbol Table */
-typedef struct _zephir_symbol_table {
-	struct _zephir_memory_entry *scope;
-	zend_array *symbol_table;
-	struct _zephir_symbol_table *prev;
-} zephir_symbol_table;
-
-typedef struct _zephir_method_globals {
-	/* Memory */
-	zephir_memory_entry *active_memory; /**< The current memory frame */
-
-	/* Virtual Symbol Tables */
-	zephir_symbol_table *active_symbol_table;
-} zephir_method_globals;
-
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 void zephir_deinitialize_memory();
 int zephir_set_symbol(zval *key_name, zval *value);

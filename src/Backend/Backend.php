@@ -220,11 +220,6 @@ class Backend
                 $code = 'zephir_fcall_cache_entry';
                 break;
 
-            case 'zephir_method_globals':
-                $pointer = '*';
-                $code = 'zephir_method_globals';
-                break;
-
             default:
                 throw new CompilerException('Unsupported type in declare: '.$type);
         }
