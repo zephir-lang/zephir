@@ -1150,7 +1150,7 @@ final class Definition extends AbstractDefinition
                             $codePrinter->output(
                                 sprintf(
                                     // TODO: Rename to ZEND_ME
-                                    "PHP_ME(%s_%s, %s, %s, %s)",
+                                    'PHP_ME(%s_%s, %s, %s, %s)',
                                     $this->getCNamespace(),
                                     $this->getName(),
                                     $method->getName(),
@@ -1175,7 +1175,7 @@ final class Definition extends AbstractDefinition
                         } else {
                             $codePrinter->output(
                                 sprintf(
-                                    "ZEND_FENTRY(%s, NULL, %s, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)",
+                                    'ZEND_FENTRY(%s, NULL, %s, ZEND_ACC_STATIC|ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)',
                                     $method->getName(),
                                     $method->getArgInfoName($this)
                                 )
