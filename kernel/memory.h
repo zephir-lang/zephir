@@ -43,9 +43,6 @@ typedef struct _zephir_method_globals {
 	zephir_symbol_table *active_symbol_table;
 } zephir_method_globals;
 
-/* Memory Frames */
-void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func);
-
 #define ZEPHIR_MM_RESTORE() do { /* dummy code */ } while (0)
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
