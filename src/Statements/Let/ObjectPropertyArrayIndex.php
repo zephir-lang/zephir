@@ -277,7 +277,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
      *
      * @throws CompilerException
      */
-    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement)
+    protected function _assignPropertyArrayMultipleIndex($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement): void
     {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
