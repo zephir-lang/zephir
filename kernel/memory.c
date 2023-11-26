@@ -36,15 +36,6 @@
  * Not all methods must grow/restore the zephir_memory_entry.
  */
 
-static zend_always_inline zend_execute_data* find_symbol_table(zend_execute_data* ex)
-{
-    while (ex && (!ex->func || !ZEND_USER_CODE(ex->func->common.type))) {
-        ex = ex->prev_execute_data;
-    }
-
-    return ex;
-}
-
 /**
  * Pre-allocates memory for further use in execution
  */
