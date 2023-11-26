@@ -239,12 +239,12 @@ class Method
             }
         }
 
-        if (count($castTypes) > 0) {
+        if (\count($castTypes) > 0) {
             $types['object'] = [];
             $this->returnClassTypes = $castTypes;
         }
 
-        if (count($types) > 0) {
+        if (\count($types) > 0) {
             $this->returnTypes = $types;
         }
     }
@@ -290,47 +290,47 @@ class Method
      */
     public function checkVisibility(array $visibility, string $name, array $original = null): void
     {
-        if (count($visibility) > 1) {
-            if (in_array('public', $visibility) && in_array('protected', $visibility)) {
+        if (\count($visibility) > 1) {
+            if (\in_array('public', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('private', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('private', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'public' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('protected', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('protected', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'protected' and 'private' at the same time", $original);
             }
 
-            if (in_array('private', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('private', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'private' at the same time", $original);
             }
 
-            if (in_array('protected', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('protected', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'protected' at the same time", $original);
             }
 
-            if (in_array('public', $visibility) && in_array('internal', $visibility)) {
+            if (\in_array('public', $visibility) && \in_array('internal', $visibility)) {
                 throw new CompilerException("Method '$name' cannot be 'internal' and 'public' at the same time", $original);
             }
         }
 
         if ('__construct' === $name) {
-            if (in_array('static', $visibility)) {
+            if (\in_array('static', $visibility)) {
                 throw new CompilerException("Constructors cannot be 'static'", $original);
             }
         } elseif ('__destruct' === $name) {
-            if (in_array('static', $visibility)) {
+            if (\in_array('static', $visibility)) {
                 throw new CompilerException("Destructors cannot be 'static'", $original);
             }
         }
 
-        $this->isAbstract = in_array('abstract', $visibility);
-        $this->isStatic = in_array('static', $visibility);
-        $this->isFinal = in_array('final', $visibility);
-        $this->isPublic = in_array('public', $visibility);
-        $this->isInternal = in_array('internal', $visibility);
+        $this->isAbstract = \in_array('abstract', $visibility);
+        $this->isStatic = \in_array('static', $visibility);
+        $this->isFinal = \in_array('final', $visibility);
+        $this->isPublic = \in_array('public', $visibility);
+        $this->isInternal = \in_array('internal', $visibility);
     }
 
     /**
