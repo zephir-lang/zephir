@@ -241,9 +241,9 @@ final class IsPhpVersionTest extends TestCase
      *
      * @throws \Exception
      */
-    private function isPhpVersion($version): bool
+    private function isPhpVersion(float|int|string $version): bool
     {
-        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', (string)$version, $matches);
         if (!\count($matches)) {
             throw new \Exception('Could not parse PHP version');
         }
