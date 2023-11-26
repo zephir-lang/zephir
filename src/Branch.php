@@ -117,7 +117,7 @@ class Branch
     /**
      * @param $uniqueId
      */
-    public function setUniqueId($uniqueId)
+    public function setUniqueId($uniqueId): void
     {
         $this->uniqueId = $uniqueId;
     }
