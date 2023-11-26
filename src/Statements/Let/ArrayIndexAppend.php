@@ -37,7 +37,7 @@ class ArrayIndexAppend extends ArrayIndex
      *
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
     {
         /*
          * Arrays must be stored in the HEAP
@@ -91,7 +91,7 @@ class ArrayIndexAppend extends ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array              $statement
      */
-    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement)
+    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
     {
         $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {

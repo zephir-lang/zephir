@@ -44,7 +44,7 @@ class Link extends Annotation
         return $this->linkText;
     }
 
-    protected function parseContent()
+    protected function parseContent(): void
     {
         $spaceIndex = strpos($this->string, ' ');
 

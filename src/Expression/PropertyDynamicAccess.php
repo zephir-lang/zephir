@@ -40,7 +40,7 @@ class PropertyDynamicAccess
      * @param bool     $expecting
      * @param Variable $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null)
+    public function setExpectReturn($expecting, Variable $expectingVariable = null): void
     {
         $this->expecting = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -51,7 +51,7 @@ class PropertyDynamicAccess
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly($readOnly): void
     {
         $this->readOnly = $readOnly;
     }
@@ -61,7 +61,7 @@ class PropertyDynamicAccess
      *
      * @param bool $noisy
      */
-    public function setNoisy($noisy)
+    public function setNoisy($noisy): void
     {
         $this->noisy = $noisy;
     }

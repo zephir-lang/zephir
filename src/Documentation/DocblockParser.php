@@ -54,7 +54,7 @@ class DocblockParser
     /**
      * check if there is a currently parsed annotation, registers it, and stops the current annotation parsing.
      */
-    private function __tryRegisterAnnotation()
+    private function __tryRegisterAnnotation(): void
     {
         if (($this->annotationNameOpen || $this->annotationOpen) && $this->currentAnnotationStr !== '') {
             $annotation = $this->__createAnnotation($this->currentAnnotationStr, $this->currentAnnotationContentStr);

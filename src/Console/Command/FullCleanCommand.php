@@ -27,7 +27,7 @@ use Zephir\Os;
  */
 final class FullCleanCommand extends AbstractCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('fullclean')

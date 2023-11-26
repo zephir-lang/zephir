@@ -92,7 +92,7 @@ class Docblock
     /**
      * @param Annotation $annotation
      */
-    public function addAnnotation(Annotation $annotation)
+    public function addAnnotation(Annotation $annotation): void
     {
         $this->annotations[] = $annotation;
     }

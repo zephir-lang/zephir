@@ -50,7 +50,7 @@ class PropertyAccess
      *
      * @param bool $readOnly
      */
-    public function setReadOnly($readOnly)
+    public function setReadOnly($readOnly): void
     {
         $this->readOnly = $readOnly;
     }

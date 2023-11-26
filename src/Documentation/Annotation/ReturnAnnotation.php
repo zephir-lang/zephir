@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
@@ -39,7 +41,7 @@ class ReturnAnnotation extends Annotation
         return $this->description;
     }
 
-    protected function parseContent()
+    protected function parseContent(): void
     {
         $spaceIndex = strpos($this->string, ' ');
 

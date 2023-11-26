@@ -28,7 +28,7 @@ final class BuildCommand extends AbstractCommand
     use DevelopmentModeAwareTrait;
     use ZflagsAwareTrait;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('build')

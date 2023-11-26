@@ -68,7 +68,7 @@ class Theme
      * @param $dst
      * @param $files
      */
-    private function __copyDir($src, $dst, &$files = null)
+    private function __copyDir($src, $dst, &$files = null): void
     {
         $dir = opendir($src);
         @mkdir($dst);
@@ -94,7 +94,7 @@ class Theme
      *
      * @throws Exception
      */
-    public function drawFile(FileInterface $file)
+    public function drawFile(FileInterface $file): void
     {
         $outputFile = ltrim($file->getOutputFile(), '/');
 
@@ -164,7 +164,7 @@ class Theme
     /**
      * copy the static directory of the theme into the output directory.
      */
-    public function buildStaticDirectory()
+    public function buildStaticDirectory(): void
     {
         $outputStt = $this->getOutputPath('asset');
 
@@ -248,7 +248,7 @@ class Theme
         return json_encode($output);
     }
 
-    public function createFile($path, $content)
+    public function createFile($path, $content): void
     {
         $outputFile = $this->getOutputPath($path);
         touch($outputFile);

@@ -30,12 +30,12 @@ class StaticTypeInference
      *
      * @param StatementsBlock $block
      */
-    public function pass(StatementsBlock $block)
+    public function pass(StatementsBlock $block): void
     {
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function declareVariables(array $statement)
+    public function declareVariables(array $statement): void
     {
         foreach ($statement['variables'] as $variable) {
             if (!isset($this->variables[$variable['variable']])) {
@@ -208,7 +208,7 @@ class StaticTypeInference
         return false;
     }
 
-    public function passLetStatement(array $statement)
+    public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
             switch ($assignment['assign-type']) {
@@ -237,7 +237,7 @@ class StaticTypeInference
         }
     }
 
-    public function passCall(array $expression)
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -246,14 +246,14 @@ class StaticTypeInference
         }
     }
 
-    public function passArray(array $expression)
+    public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
             $this->passExpression($item['value']);
         }
     }
 
-    public function passNew(array $expression)
+    public function passNew(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -474,7 +474,7 @@ class StaticTypeInference
         }
     }
 
-    public function passStatementBlock(array $statements)
+    public function passStatementBlock(array $statements): void
     {
         foreach ($statements as $statement) {
             switch ($statement['type']) {

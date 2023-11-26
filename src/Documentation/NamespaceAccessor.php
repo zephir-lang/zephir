@@ -43,7 +43,7 @@ class NamespaceAccessor
         return $this->namespaceTree;
     }
 
-    public function build()
+    public function build(): void
     {
         $byNamespace = [];
         $tree = [];

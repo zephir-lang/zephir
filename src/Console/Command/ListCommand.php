@@ -27,7 +27,7 @@ final class ListCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
@@ -39,7 +39,7 @@ final class ListCommand extends Command
      *
      * @param bool $mergeArgs
      */
-    public function mergeApplicationDefinition($mergeArgs = true)
+    public function mergeApplicationDefinition($mergeArgs = true): void
     {
         parent::mergeApplicationDefinition($mergeArgs);
 

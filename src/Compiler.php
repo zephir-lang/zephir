@@ -903,7 +903,7 @@ final class Compiler
             ]
         );
 
-        array_map(function ($entry) {
+        array_map(function ($entry): void {
             if (!empty($entry)) {
                 $this->logger->debug(trim($entry));
             }
@@ -1919,7 +1919,7 @@ final class Compiler
      * @param string $path Directory to deletes files
      * @param string $mask Regular expression to deletes files
      */
-    private function recursiveDeletePath($path, $mask)
+    private function recursiveDeletePath($path, $mask): void
     {
         if (!file_exists($path) || !is_dir($path) || !is_readable($path)) {
             $this->logger->warning("Directory '{$path}' is not readable. Skip...");
@@ -1946,7 +1946,7 @@ final class Compiler
      *
      * @throws Exception
      */
-    private function loadConstantsSources(array $constantsSources)
+    private function loadConstantsSources(array $constantsSources): void
     {
         foreach ($constantsSources as $constantsSource) {
             if (!file_exists($constantsSource)) {

@@ -38,7 +38,7 @@ final class StubsCommand extends AbstractCommand
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('stubs')
