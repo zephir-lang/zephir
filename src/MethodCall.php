@@ -27,17 +27,17 @@ class MethodCall extends Call
     /**
      * Function is called using a normal method name.
      */
-    const CALL_NORMAL = 1;
+    public const CALL_NORMAL = 1;
 
     /**
      * Function is called using a dynamic variable as method name.
      */
-    const CALL_DYNAMIC = 2;
+    public const CALL_DYNAMIC = 2;
 
     /**
      * Function is called using a dynamic string as method name.
      */
-    const CALL_DYNAMIC_STRING = 3;
+    public const CALL_DYNAMIC_STRING = 3;
 
     /**
      * Compiles a method call.

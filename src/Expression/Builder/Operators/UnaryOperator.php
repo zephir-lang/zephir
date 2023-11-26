@@ -21,46 +21,46 @@ use Zephir\Expression\Builder\AbstractBuilder;
 class UnaryOperator extends AbstractOperator
 {
     // y = &a
-    const OPERATOR_REFERENCE = 'reference';
+    public const OPERATOR_REFERENCE = 'reference';
 
     // y = !a
-    const OPERATOR_NOT = 'not';
+    public const OPERATOR_NOT = 'not';
 
     // y = ~a
-    const OPERATOR_BITWISE_NOT = 'bitwise_not';
+    public const OPERATOR_BITWISE_NOT = 'bitwise_not';
 
     // y = -a
-    const OPERATOR_MINUS = 'minus';
+    public const OPERATOR_MINUS = 'minus';
 
     // y = +a
-    const OPERATOR_PLUS = 'plus';
+    public const OPERATOR_PLUS = 'plus';
 
     // y = isset a
-    const OPERATOR_ISSET = 'isset';
+    public const OPERATOR_ISSET = 'isset';
 
     // y = require a
-    const OPERATOR_REQUIRE = 'require';
+    public const OPERATOR_REQUIRE = 'require';
 
     // y = require_once a
-    const OPERATOR_REQUIRE_ONCE = 'require_once';
+    public const OPERATOR_REQUIRE_ONCE = 'require_once';
 
     // y = clone a
-    const OPERATOR_CLONE = 'clone';
+    public const OPERATOR_CLONE = 'clone';
 
     // y = empty a
-    const OPERATOR_EMPTY = 'empty';
+    public const OPERATOR_EMPTY = 'empty';
 
     // y = likely a
-    const OPERATOR_LIKELY = 'likely';
+    public const OPERATOR_LIKELY = 'likely';
 
     // y = unlikely a
-    const OPERATOR_UNLIKELY = 'unlikely';
+    public const OPERATOR_UNLIKELY = 'unlikely';
 
     // y = list a
-    const OPERATOR_LIST = 'list';
+    public const OPERATOR_LIST = 'list';
 
     // y = typeof a
-    const OPERATOR_TYPEOF = 'typeof';
+    public const OPERATOR_TYPEOF = 'typeof';
 
     private $operator;
     private $expression;

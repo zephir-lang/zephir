@@ -23,17 +23,17 @@ class CallFunctionStatement extends AbstractStatement
     /**
      * f(x, y, ... , N).
      */
-    const TYPE_CALL_DIRECT = FunctionCall::CALL_NORMAL;
+    public const TYPE_CALL_DIRECT = FunctionCall::CALL_NORMAL;
 
     /**
      * {f}(x, y, ... , N).
      */
-    const TYPE_CALL_DYNAMIC = FunctionCall::CALL_DYNAMIC;
+    public const TYPE_CALL_DYNAMIC = FunctionCall::CALL_DYNAMIC;
 
     /**
      * {"f"}(x, y, ... , N).
      */
-    const TYPE_CALL_DYNAMIC_STRING = FunctionCall::CALL_DYNAMIC_STRING;
+    public const TYPE_CALL_DYNAMIC_STRING = FunctionCall::CALL_DYNAMIC_STRING;
 
     private $name;
     private $arguments;

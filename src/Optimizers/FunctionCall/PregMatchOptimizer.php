@@ -28,7 +28,7 @@ use Zephir\Variable\Variable;
  */
 class PregMatchOptimizer extends OptimizerAbstract
 {
-    const GLOBAL_MATCH = 0;
+    public const GLOBAL_MATCH = 0;
 
     /**
      * {@inheritdoc}

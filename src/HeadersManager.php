@@ -21,12 +21,12 @@ class HeadersManager
     /**
      * Insert the header at the beginning of the header list.
      */
-    const POSITION_FIRST = 1;
+    public const POSITION_FIRST = 1;
 
     /**
      * Insert the header at the end of the header list.
      */
-    const POSITION_LAST = 2;
+    public const POSITION_LAST = 2;
 
     /**
      * List of headers.
