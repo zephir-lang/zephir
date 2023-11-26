@@ -1718,7 +1718,7 @@ class Method
         /**
          * Grow the stack if needed
          */
-        if ($symbolTable->getMustGrownStack()) {
+        /*if ($symbolTable->getMustGrownStack()) {
             $compilationContext->headersManager->add('kernel/memory');
             if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_METHOD_GLOBALS_PTR')) {
                 $methodGlobals = new Variable('zephir_method_globals', 'ZEPHIR_METHOD_GLOBALS_PTR', $compilationContext->branchManager->getCurrentBranch());
@@ -1730,9 +1730,9 @@ class Method
             }
 
             // #define ZEPHIR_MM_GROW()
-            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);');
+            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);'.PHP_EOL);
             $codePrinter->preOutput("\t".'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
-        }
+        }*/
 
         /**
          * Check if there are unused variables.
@@ -1860,10 +1860,10 @@ class Method
             $lastType = $this->statements->getLastStatementType();
 
             if ('return' !== $lastType && 'throw' !== $lastType && !$this->hasChildReturnStatementType($statement)) {
-                if ($symbolTable->getMustGrownStack()) {
+                /*if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
                     $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
-                }
+                }*/
 
                 /**
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement

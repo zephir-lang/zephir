@@ -123,7 +123,7 @@ class ThrowStatement extends StatementAbstract
         );
 
         if (!$compilationContext->insideTryCatch) {
-            $codePrinter->output('ZEPHIR_MM_RESTORE();');
+            // $codePrinter->output('ZEPHIR_MM_RESTORE();');
             $codePrinter->output('return;');
         } else {
             $codePrinter->output('goto try_end_'.$compilationContext->currentTryCatch.';');

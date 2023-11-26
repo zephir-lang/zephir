@@ -47,34 +47,28 @@ typedef struct _zephir_method_globals {
 void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const char *func);
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func);
 
-#define ZEPHIR_MM_RESTORE() \
-	zephir_memory_restore_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__); \
-	pefree(ZEPHIR_METHOD_GLOBALS_PTR, 0); \
-	ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+#define ZEPHIR_MM_RESTORE() do { /* dummy code */ } while (0)
 
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 void zephir_deinitialize_memory();
 
 void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
-#define zephir_memory_observe(var) zephir_do_memory_observe(var, ZEPHIR_METHOD_GLOBALS_PTR);
+#define zephir_memory_observe(var) do { /* dummy code */ } while (0)
 
 #define zephir_safe_zval_ptr_dtor(pzval)
 
 void zephir_create_symbol_table(zephir_method_globals *g);
 
-#define ZEPHIR_CREATE_SYMBOL_TABLE() zephir_create_symbol_table(ZEPHIR_METHOD_GLOBALS_PTR);
+#define ZEPHIR_CREATE_SYMBOL_TABLE() do { /* dummy code */ } while (0)
 
 int zephir_set_symbol(zval *key_name, zval *value);
 
 #define ZEPHIR_INIT_VAR(z) \
-	zephir_memory_observe(z); \
 	ZVAL_NULL(z);
 
 #define ZEPHIR_INIT_NVAR(z) \
 	do { \
-		if (Z_TYPE_P(z) == IS_UNDEF) { \
-			zephir_memory_observe(z); \
-		} else if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
+		if (Z_REFCOUNTED_P(z) && !Z_ISREF_P(z)) { \
 			if (Z_REFCOUNT_P(z) > 1) { \
 				Z_DELREF_P(z); \
 			} else { \
@@ -90,8 +84,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 		if (Z_REFCOUNTED_P(d) && Z_REFCOUNT_P(d) > 0) { \
 			zval_ptr_dtor(d); \
 		} \
-	} else { \
-		zephir_memory_observe(d); \
 	} \
 	ZVAL_COPY_VALUE(d, v);
 
@@ -104,9 +96,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 	ZVAL_DUP(d, v);
 
 #define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
-	if (Z_TYPE_P(z) == IS_UNDEF) { \
-		zephir_memory_observe(z); \
-	} \
 	ZVAL_COPY(z, v);
 
 #define ZEPHIR_HASH_COPY(z, v) \
@@ -122,8 +111,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 			zval_ptr_dtor(z); \
 			ZVAL_NULL(z); \
 		} \
-	} else { \
-		zephir_memory_observe(z); \
 	}
 
 /* TODO: this might causes troubles, since we cannot observe here, since we aren't using double pointers
@@ -135,8 +122,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 		if (tmp_ != NULL) { \
 			if (Z_TYPE_P(tmp_) != IS_UNDEF) { \
 				zval_ptr_dtor(tmp_); \
-			} else { \
-				zephir_memory_observe(tmp_); \
 			} \
 			ZVAL_NULL(tmp_); \
 		} \

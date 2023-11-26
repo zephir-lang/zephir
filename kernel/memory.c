@@ -52,9 +52,7 @@ void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const ch
 {
 	if (g->active_memory == NULL) {
 		zephir_memory_entry *active_memory;
-
 		active_memory = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 0);
-
 		active_memory->addresses = pecalloc(24, sizeof(zval*), 0);
 		active_memory->capacity  = 24;
 
