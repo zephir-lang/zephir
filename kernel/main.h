@@ -157,9 +157,6 @@ extern zend_string* i_self;
 	zephir_return_property(return_value, object, SL(member_name)); \
 	return;
 
-/** Return without change return_value */
-#define RETURN_MM()                 { return; }
-
 /** Return null restoring memory frame */
 #define RETURN_MM_BOOL(value)       { RETVAL_BOOL(value); return; }
 
@@ -178,7 +175,7 @@ extern zend_string* i_self;
  */
 #define RETURN_MM_MEMBER(object, member_name) \
   zephir_return_property(return_value, object, SL(member_name)); \
-  RETURN_MM();
+  return;
 
 #define RETURN_ON_FAILURE(what) \
 	do { \

@@ -222,7 +222,7 @@ final class ReturnStatement extends StatementAbstract
                     if ('return_value' != $resolvedExpr->getCode()) {
                         $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
                     } else {
-                        $codePrinter->output('RETURN_MM();');
+                        $codePrinter->output('return;');
                     }
                     break;
 
@@ -300,10 +300,10 @@ final class ReturnStatement extends StatementAbstract
                                                 $compilationContext->backend->getVariableCode($symbolVariable)
                                             )
                                         );
-                                        $codePrinter->output('RETURN_MM();');
+                                        $codePrinter->output('return;');
                                     }
                                 } else {
-                                    $codePrinter->output('RETURN_MM();');
+                                    $codePrinter->output('return;');
                                 }
                             }
                             if ($symbolVariable->isTemporal()) {
