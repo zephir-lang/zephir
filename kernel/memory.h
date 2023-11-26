@@ -52,8 +52,6 @@ void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_glo
 
 void zephir_create_symbol_table(zephir_method_globals *g);
 
-#define ZEPHIR_CREATE_SYMBOL_TABLE() do { /* dummy code */ } while (0)
-
 int zephir_set_symbol(zval *key_name, zval *value);
 
 #define ZEPHIR_INIT_VAR(z) \
