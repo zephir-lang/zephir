@@ -46,8 +46,6 @@ typedef struct _zephir_method_globals {
 void zephir_initialize_memory(zend_zephir_globals_def *zephir_globals_ptr);
 void zephir_deinitialize_memory();
 
-void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_globals *g);
-
 #define zephir_safe_zval_ptr_dtor(pzval)
 
 int zephir_set_symbol(zval *key_name, zval *value);
