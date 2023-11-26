@@ -50,8 +50,6 @@ void ZEPHIR_FASTCALL zephir_do_memory_observe(zval *var, const zephir_method_glo
 
 #define zephir_safe_zval_ptr_dtor(pzval)
 
-void zephir_create_symbol_table(zephir_method_globals *g);
-
 int zephir_set_symbol(zval *key_name, zval *value);
 
 #define ZEPHIR_INIT_VAR(z) \

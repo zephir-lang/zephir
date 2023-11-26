@@ -76,47 +76,6 @@ void zephir_deinitialize_memory()
 }
 
 /**
- * Creates a virtual symbol tables dynamically
- */
-void zephir_create_symbol_table(zephir_method_globals *gptr)
-{
-	zephir_symbol_table *entry;
-	zend_array *symbol_table;
-
-#ifndef ZEPHIR_RELEASE
-	if (!gptr->active_memory) {
-		fprintf(stderr, "ERROR: Trying to create a virtual symbol table without a memory frame");
-		zephir_print_backtrace();
-		return;
-	}
-#endif
-
-	zend_execute_data* ex = find_symbol_table(EG(current_execute_data));
-#ifndef ZEPHIR_RELEASE
-    if (UNEXPECTED(!ex)) {
-        fprintf(stderr, "ERROR: unable to find a symbol table");
-        zephir_print_backtrace();
-        return;
-    }
-#endif
-
-	zend_rebuild_symbol_table();
-	zend_detach_symbol_table(ex);
-
-	entry               = (zephir_symbol_table*)emalloc(sizeof(zephir_symbol_table));
-	entry->scope        = gptr->active_memory;
-	entry->symbol_table = ex->symbol_table;
-	entry->prev         = gptr->active_symbol_table;
-
-	symbol_table = (zend_array*)emalloc(sizeof(zend_array));
-	zend_hash_init(symbol_table, 0, NULL, ZVAL_PTR_DTOR, 0);
-	zend_hash_real_init(symbol_table, 0);
-
-	ex->symbol_table          = symbol_table;
-	gptr->active_symbol_table = entry;
-}
-
-/**
  * Exports symbols to the active symbol table
  */
 int zephir_set_symbol(zval *key_name, zval *value)
