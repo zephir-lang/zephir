@@ -1231,7 +1231,8 @@ class Method
             case 'uint':
             case 'long':
             case 'ulong':
-                return "\t".$parameter['name'].' = zephir_get_intval('.$parameterCode.');'.PHP_EOL;
+                // Value already passed in `Z_PARAM_LONG()`
+                return '';
 
             case 'char':
                 return "\t".$parameter['name'].' = zephir_get_charval('.$parameterCode.');'.PHP_EOL;
