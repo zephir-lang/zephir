@@ -1716,25 +1716,6 @@ class Method
         }
 
         /**
-         * Grow the stack if needed
-         */
-        /*if ($symbolTable->getMustGrownStack()) {
-            $compilationContext->headersManager->add('kernel/memory');
-            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_METHOD_GLOBALS_PTR')) {
-                $methodGlobals = new Variable('zephir_method_globals', 'ZEPHIR_METHOD_GLOBALS_PTR', $compilationContext->branchManager->getCurrentBranch());
-                $methodGlobals->setMustInitNull(true);
-                $methodGlobals->increaseUses();
-                $methodGlobals->setReusable(false);
-                $methodGlobals->setReadOnly(true);
-                $compilationContext->symbolTable->addRawVariable($methodGlobals);
-            }
-
-            // #define ZEPHIR_MM_GROW()
-            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);'.PHP_EOL);
-            $codePrinter->preOutput("\t".'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
-        }*/
-
-        /**
          * Check if there are unused variables.
          */
         $usedVariables = [];
