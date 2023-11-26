@@ -249,7 +249,7 @@ class ArgInfoDefinition
                     } else {
                         $this->codePrinter->output(
                             sprintf(
-                                "ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)",
+                                'ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_ARRAY, %d, %s)',
                                 $this->passByReference($parameter),
                                 $parameter['name'],
                                 (int) $this->allowNull($parameter),
