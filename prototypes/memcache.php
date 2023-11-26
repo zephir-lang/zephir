@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
 define('MEMCACHE_HAVE_SESSION', 1);
 define('MEMCACHE_COMPRESSED', 2);
 

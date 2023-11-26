@@ -122,7 +122,7 @@ class PropertyAccess
                 $classType = current($variableVariable->getClassTypes());
                 $compiler = $compilationContext->compiler;
 
-                if ($compiler->isClass($classType)) {
+                if ($classType !== false && $compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
                         throw new CompilerException('Cannot locate class definition for class: '.$classType, $expression);

@@ -151,7 +151,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
             }
         } else {
-            /*
+            /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -159,7 +159,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 $classType = current($symbolVariable->getClassTypes());
                 $compiler = $compilationContext->compiler;
 
-                if ($compiler->isClass($classType)) {
+                if ($classType !== false && $compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
                         throw new CompilerException('Cannot locate class definition for class: '.$classType, $statement);

@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
 if (!class_exists('APCIterator', false)) {
     // See: https://github.com/php/pecl-caching-apc/blob/master/apc_bin.h
     defined('APC_BIN_VERIFY_CRC32') || define('APC_BIN_VERIFY_CRC32', 1 << 1);
