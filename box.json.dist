@@ -8,7 +8,7 @@
         "the LICENSE file that was distributed with this source code."
     ],
     "directories": [
-       "kernels",
+       "kernel",
        "src",
        "prototypes",
        "templates",
@@ -28,7 +28,7 @@
             "name": "*.*"
         },
         {
-            "in": "kernels",
+            "in": "kernel",
             "name": "*.*"
         },
         {
