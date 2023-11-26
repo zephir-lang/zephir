@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is part of the Zephir.
  *
@@ -18,5 +20,5 @@ namespace Zephir\Optimizers\FunctionCall;
  */
 class PregMatchAllOptimizer extends PregMatchOptimizer
 {
-    const GLOBAL_MATCH = 1;
+    public const GLOBAL_MATCH = 1;
 }
