@@ -51,7 +51,7 @@ final class Types
         }
 
         $isProcessedReturnType = null !== $returnTypes;
-        $returnTypes = $returnTypes ?? $method->getReturnTypes();
+        $returnTypes ??= $method->getReturnTypes();
         $typesCount = \count($returnTypes);
 
         $isDynamic = \in_array('var', array_keys($returnTypes));

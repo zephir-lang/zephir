@@ -64,7 +64,7 @@ class PregMatchOptimizer extends OptimizerAbstract
         }
 
         $matches = $this->createMatches($expression, $context);
-        list($flags, $offset) = $this->processOptionals($expression, $call, $context);
+        [$flags, $offset] = $this->processOptionals($expression, $call, $context);
 
         /*
          * Process the expected symbol to be returned

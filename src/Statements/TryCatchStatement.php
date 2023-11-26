@@ -98,7 +98,7 @@ class TryCatchStatement extends StatementAbstract
                                 $exprBuilder->statements()->rawC('zend_clear_exception();'),
                                 $assignExceptionVarStmt,
                             ],
-                            isset($catch['statements']) ? $catch['statements'] : []
+                            $catch['statements'] ?? []
                         )));
                 }
             }

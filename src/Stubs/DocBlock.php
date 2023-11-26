@@ -108,9 +108,7 @@ class DocBlock
         }
 
         if (!empty($this->lines)) {
-            $lines = array_map(function ($line) use ($indent) {
-                return "$indent * $line";
-            }, $this->lines);
+            $lines = array_map(fn ($line) => "$indent * $line", $this->lines);
 
             if (!empty($doc)) {
                 $doc .= "\n$indent *";

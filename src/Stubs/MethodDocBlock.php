@@ -240,7 +240,7 @@ class MethodDocBlock extends DocBlock
     private function appendReturnLine(): void
     {
         if (!isset($this->predefinedParams['return'])) {
-            list($type, $description) = $this->return;
+            [$type, $description] = $this->return;
 
             $return = $this->aliasManager->getAliasForClassName($type).' '.$description;
             $this->lines[] = '@return '.trim($return, ' ');
@@ -281,7 +281,7 @@ class MethodDocBlock extends DocBlock
             }
 
             if (!isset($this->predefinedParams[trim($name, '$')])) {
-                list($type, $description) = $parameter;
+                [$type, $description] = $parameter;
 
                 $param = $type.' '.$name.' '.$description;
                 $this->lines[] = '@param '.trim($param, ' ');
