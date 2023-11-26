@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension\Optimizers;
 
 use PHPUnit\Framework\TestCase;
@@ -21,8 +23,8 @@ use Stub\Issue1404;
  */
 final class IsPhpVersionTest extends TestCase
 {
-    const PHP_RELEASES_LIMIT = 17;
-    const PHP_MINOR_LIMIT = 3;
+    public const PHP_RELEASES_LIMIT = 17;
+    public const PHP_MINOR_LIMIT = 3;
 
     protected $test;
 
@@ -63,7 +65,7 @@ final class IsPhpVersionTest extends TestCase
      */
     public function testOptimizer($version, $expected): void
     {
-        $isPhpVersion = (bool) $this->isPhpVersion($version);
+        $isPhpVersion = $this->isPhpVersion($version);
 
         $this->assertEquals($expected, $isPhpVersion);
     }

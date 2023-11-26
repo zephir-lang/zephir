@@ -44,21 +44,19 @@ final class VariableTest extends TestCase
             'immutable variable' => [
                 [],
                 'Cannot mutate variable \'foo\' because it is read only',
-                function (ZephirVariable $var) {
+                function (ZephirVariable $var): void {
                     $var->setReadOnly(true);
                 },
             ],
             'not initialized variable' => [
                 ['operator' => 'concat'],
                 'Cannot mutate variable \'foo\' because it is not initialized',
-                function (ZephirVariable $var) {
-                    return;
-                },
+                fn (ZephirVariable $var) => null,
             ],
             'unknown variable type' => [
                 ['operator' => 'assign'],
                 'Unknown type: prototype',
-                function (ZephirVariable $var) {
+                function (ZephirVariable $var): void {
                     $var->setType('prototype');
                 },
             ],

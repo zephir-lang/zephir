@@ -211,7 +211,7 @@ final class VariableTest extends TestCase
             'variable', 'string', 'array',
         ];
 
-        $delegate = function (Variable $zephirVar, string $type) {
+        $delegate = function (Variable $zephirVar, string $type): void {
             $zephirVar->setDefaultInitValue('default');
             $zephirVar->setType($type);
             $zephirVar->enableDefaultAutoInitValue();

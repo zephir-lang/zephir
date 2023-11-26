@@ -31,19 +31,19 @@ final class DocblockParserTest extends TestCase
         }
 
         $test = <<<DOC
-/**
- * This file is part of the Zephir.
- *
- * Helper to parse raw docblocks to structured object.
- *
- * @link https://github.com/zephir-lang/zephir - Zephir
- * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
- *
- * @param array \$annotation - custom annotation
- *
- * @return Docblock the parsed docblock
- */
-DOC;
+            /**
+             * This file is part of the Zephir.
+             *
+             * Helper to parse raw docblocks to structured object.
+             *
+             * @link https://github.com/zephir-lang/zephir - Zephir
+             * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
+             *
+             * @param array \$annotation - custom annotation
+             *
+             * @return Docblock the parsed docblock
+             */
+            DOC;
 
         $link = new Link('link', 'https://github.com/zephir-lang/zephir - Zephir');
         $link->getLinkText();
