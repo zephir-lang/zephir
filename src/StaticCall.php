@@ -318,14 +318,14 @@ class StaticCall extends Call
             $ce = $method->getClassDefinition()->getClassEntry($compilationContext);
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, true, $paramCount);
+                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
                     $codePrinter->output($macro.'('.$ce.', '.$method->getInternalName().$paramsStr.');');
                 } else {
                     $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 2, $paramCount);
                     $codePrinter->output($macro.'('.$symbol.', '.$ce.', '.$method->getInternalName().$paramsStr.');');
                 }
             } else {
-                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, false, $paramCount);
+                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 0, $paramCount);
                 $codePrinter->output($macro.'('.$ce.', '.$method->getInternalName().$paramsStr.');');
             }
         }
@@ -472,14 +472,14 @@ class StaticCall extends Call
             $ce = $classDefinition->getClassEntry($compilationContext);
             if ($isExpecting) {
                 if ('return_value' == $symbolVariable->getName()) {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, true, $paramCount);
+                    $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 1, $paramCount);
                     $codePrinter->output($macro.'('.$ce.', '.$method->getInternalName().$paramsStr.');');
                 } else {
                     $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 2, $paramCount);
                     $codePrinter->output($macro.'('.$symbol.', '.$ce.', '.$method->getInternalName().$paramsStr.');');
                 }
             } else {
-                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, false, $paramCount);
+                $macro = $compilationContext->backend->getFcallManager()->getMacro(true, 0, $paramCount);
                 $codePrinter->output($macro.'('.$ce.', '.$method->getInternalName().$paramsStr.');');
             }
         } else {
