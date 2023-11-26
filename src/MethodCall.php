@@ -759,7 +759,7 @@ class MethodCall extends Call
 
                 if ($isExpecting) {
                     if ('return_value' == $symbolVariable->getName()) {
-                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, true, $paramCount);
+                        $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 1, $paramCount);
                         $codePrinter->output($macro.'('.$variableCode.', '.$method->getInternalName().$paramsStr.');');
                     } else {
                         $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 2, $paramCount);
@@ -768,7 +768,7 @@ class MethodCall extends Call
                         );
                     }
                 } else {
-                    $macro = $compilationContext->backend->getFcallManager()->getMacro(false, false, $paramCount);
+                    $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 0, $paramCount);
                     $codePrinter->output($macro.'('.$variableCode.', '.$method->getInternalName().$paramsStr.');');
                 }
             }
