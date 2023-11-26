@@ -820,6 +820,8 @@ class Method
 
     /**
      * Replace macros.
+     *
+     * @deprecated
      */
     public function removeMemoryStackReferences(SymbolTable $symbolTable, string $containerCode): string
     {
@@ -1841,11 +1843,6 @@ class Method
             $lastType = $this->statements->getLastStatementType();
 
             if ('return' !== $lastType && 'throw' !== $lastType && !$this->hasChildReturnStatementType($statement)) {
-                /*if ($symbolTable->getMustGrownStack()) {
-                    $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
-                }*/
-
                 /**
                  * If a method has return-type hints we need to ensure the last statement is a 'return' statement
                  */

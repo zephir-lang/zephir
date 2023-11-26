@@ -20,8 +20,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 /**
- * ExitOptimizer.
- *
  * Optimizes calls to 'exit' using internal function
  */
 class ExitOptimizer extends OptimizerAbstract
@@ -46,11 +44,9 @@ class ExitOptimizer extends OptimizerAbstract
             // TODO: protect resolvedParams[0] from restore
         }
         if (!isset($expression['parameters'])) {
-            // $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
             $context->codePrinter->output('zephir_exit_empty();');
         } else {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            // $context->codePrinter->output('ZEPHIR_MM_RESTORE();');
             $context->codePrinter->output('zephir_exit('.$resolvedParams[0].');');
         }
 
