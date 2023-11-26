@@ -32,7 +32,7 @@ jobs:
           fetch-depth: 1
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@v2
+        uses: shivammathur/setup-php@a36e1e52ff4a1c9e9c9be31551ee4712a6cb6bd0
         env:
           PHP_CS_FIXER_VERSION: 3.37.0
         with:
