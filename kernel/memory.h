@@ -86,9 +86,6 @@ int zephir_set_symbol(zval *key_name, zval *value);
 	} \
 	ZVAL_DUP(d, v);
 
-#define ZEPHIR_OBS_COPY_OR_DUP(z, v) \
-	ZVAL_COPY(z, v);
-
 #define ZEPHIR_HASH_COPY(z, v) \
 	if (Z_TYPE_P(z) == IS_ARRAY && Z_TYPE_P(v) == IS_ARRAY) { \
 		zend_hash_copy(Z_ARRVAL_P(z), Z_ARRVAL_P(v), (copy_ctor_func_t) zval_add_ref); \
