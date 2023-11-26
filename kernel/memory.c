@@ -45,28 +45,6 @@ static zend_always_inline zend_execute_data* find_symbol_table(zend_execute_data
     return ex;
 }
 
-/**
- * Adds a memory frame in the current executed method
- */
-void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const char *func)
-{
-	if (g->active_memory == NULL) {
-		zephir_memory_entry *active_memory;
-		active_memory = (zephir_memory_entry *) pecalloc(1, sizeof(zephir_memory_entry), 0);
-		active_memory->addresses = pecalloc(24, sizeof(zval*), 0);
-		active_memory->capacity  = 24;
-
-		g->active_memory = active_memory;
-	}
-
-	assert(g->active_memory != NULL);
-	assert(g->active_memory->pointer == 0);
-
-#ifndef ZEPHIR_RELEASE
-	g->active_memory->func = func;
-#endif
-}
-
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func)
 {
 	size_t i;

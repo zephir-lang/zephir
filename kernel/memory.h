@@ -44,7 +44,6 @@ typedef struct _zephir_method_globals {
 } zephir_method_globals;
 
 /* Memory Frames */
-void ZEPHIR_FASTCALL zephir_memory_grow_stack(zephir_method_globals *g, const char *func);
 void ZEPHIR_FASTCALL zephir_memory_restore_stack(zephir_method_globals *g, const char *func);
 
 #define ZEPHIR_MM_RESTORE() do { /* dummy code */ } while (0)
