@@ -45,7 +45,7 @@ class SymbolTable
     /**
      * @var LocalContextPass
      */
-    protected LocalContextPass $localContext;
+    protected ?LocalContextPass $localContext = null;
 
     /**
      * @var bool
