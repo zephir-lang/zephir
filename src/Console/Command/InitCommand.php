@@ -29,7 +29,6 @@ use function is_dir;
 use function is_readable;
 use function mkdir;
 use function preg_match;
-
 use function preg_replace;
 use function sprintf;
 use function strtolower;

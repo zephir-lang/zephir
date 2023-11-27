@@ -39,7 +39,6 @@ use function file_put_contents;
 use function filemtime;
 use function implode;
 use function is_array;
-
 use function is_dir;
 use function json_decode;
 use function json_encode;

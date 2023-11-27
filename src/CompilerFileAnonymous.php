@@ -22,7 +22,6 @@ use Zephir\Compiler\FileInterface;
 
 use function count;
 use function dirname;
-
 use function explode;
 use function file_exists;
 use function file_put_contents;

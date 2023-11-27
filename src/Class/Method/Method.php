@@ -1167,11 +1167,11 @@ class Method
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
                 $initCode  .= "\t" . $compilationContext->backend->ifVariableValueUndefined(
-                        $targetVar,
-                        $compilationContext,
-                        false,
-                        false
-                    ) . PHP_EOL;
+                    $targetVar,
+                    $compilationContext,
+                    false,
+                    false
+                ) . PHP_EOL;
 
                 if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                     $substituteVar = $substituteVars[$parameter['name']];

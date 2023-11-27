@@ -25,7 +25,6 @@ use function function_exists;
 use function implode;
 use function is_array;
 use function is_object;
-
 use function preg_match;
 use function sprintf;
 use function str_replace;

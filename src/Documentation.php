@@ -26,7 +26,6 @@ use function file_exists;
 use function file_get_contents;
 use function getcwd;
 use function is_array;
-
 use function is_dir;
 use function is_writable;
 use function json_decode;
