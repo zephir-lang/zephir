@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -26,11 +27,13 @@ use Zephir\Types\Types;
  */
 final class ReturnStatement extends StatementAbstract
 {
+    private const RETURN_RETURN = 'return;';
+
     /**
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -222,7 +225,7 @@ final class ReturnStatement extends StatementAbstract
                     if ('return_value' != $resolvedExpr->getCode()) {
                         $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
                     } else {
-                        $codePrinter->output('return;');
+                        $codePrinter->output(self::RETURN_RETURN);
                     }
                     break;
 
@@ -300,10 +303,10 @@ final class ReturnStatement extends StatementAbstract
                                                 $compilationContext->backend->getVariableCode($symbolVariable)
                                             )
                                         );
-                                        $codePrinter->output('return;');
+                                        $codePrinter->output(self::RETURN_RETURN);
                                     }
                                 } else {
-                                    $codePrinter->output('return;');
+                                    $codePrinter->output(self::RETURN_RETURN);
                                 }
                             }
                             if ($symbolVariable->isTemporal()) {
