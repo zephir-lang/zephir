@@ -1845,8 +1845,7 @@ class Method
              * If a method has return-type hints we need to ensure the last
              * statement is a 'return' statement
              */
-            if (
-                'return' !== $lastType &&
+            if ('return' !== $lastType &&
                 'throw' !== $lastType &&
                 !$this->hasChildReturnStatementType($statement) &&
                 $this->hasReturnTypes()

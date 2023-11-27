@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
-use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -33,7 +32,7 @@ final class ReturnStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
