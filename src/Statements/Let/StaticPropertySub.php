@@ -19,6 +19,8 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 
+use function sprintf;
+
 /**
  * StaticPropertySub.
  *

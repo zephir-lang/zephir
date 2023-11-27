@@ -23,7 +23,21 @@ use Zephir\Compiler\FileInterface;
 use function count;
 use function dirname;
 
+use function explode;
+use function file_exists;
+use function file_put_contents;
+use function hash_file;
+use function implode;
+use function is_dir;
+use function md5;
+use function mkdir;
+use function str_repeat;
+use function str_replace;
+use function strpos;
+use function strtolower;
+
 use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 
 /**
  * This class represents an anonymous file created to dump

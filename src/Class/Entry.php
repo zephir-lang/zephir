@@ -148,9 +148,9 @@ class Entry
     private function isInternalClass(string $className): bool
     {
         $this->isInternal = preg_match(
-            '/^' . $className . '/',
-            $this->compilationContext->classDefinition->getNamespace()
-        ) === 1;
+                '/^' . $className . '/',
+                $this->compilationContext->classDefinition->getNamespace()
+            ) === 1;
 
         return $this->isInternal;
     }

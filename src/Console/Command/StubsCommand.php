@@ -20,6 +20,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
 use Zephir\Exception\ExceptionInterface;
 
+use function sprintf;
+
+use const PHP_EOL;
+
 /**
  * Stubs Command
  *

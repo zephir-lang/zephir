@@ -22,6 +22,9 @@ use Zephir\Exception\FileSystemException;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Os;
 
+use function sprintf;
+use function system;
+
 /**
  * Cleans any object files created by the extension.
  */

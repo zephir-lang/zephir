@@ -15,6 +15,8 @@ namespace Zephir;
 
 use Closure;
 
+use function in_array;
+
 /**
  * This represents a compiled expression, the object can be used to check
  * if the expression type is able to used in certain types of the application.

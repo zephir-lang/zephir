@@ -19,6 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 
 use function count;
+use function sprintf;
 
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {

@@ -18,6 +18,8 @@ use Zephir\CompilerFile;
 use Zephir\Documentation;
 use Zephir\Documentation\FileInterface;
 
+use function explode;
+
 class ClassFile implements FileInterface
 {
     protected Definition $class;

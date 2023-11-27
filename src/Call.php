@@ -17,9 +17,13 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 
+use function array_keys;
+use function array_merge;
 use function count;
+use function implode;
 use function is_array;
 use function is_object;
+use function sprintf;
 
 /**
  * Base class for common functionality in functions/calls

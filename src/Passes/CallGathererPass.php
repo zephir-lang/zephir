@@ -17,6 +17,8 @@ use Zephir\CompilationContext;
 use Zephir\FunctionCall;
 use Zephir\StatementsBlock;
 
+use const PHP_EOL;
+
 /**
  * This pass counts how many times the same function is called inside a
  * statements block. It also counts how many times a method is calling

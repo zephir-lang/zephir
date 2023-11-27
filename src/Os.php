@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function stripos;
+
 use const PHP_OS;
 
 class Os

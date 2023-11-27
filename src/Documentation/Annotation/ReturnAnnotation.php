@@ -15,6 +15,9 @@ namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
 
+use function strpos;
+use function substr;
+
 /**
  * A return annotation that looks like  `(@)return type description`.
  */

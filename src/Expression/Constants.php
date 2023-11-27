@@ -20,10 +20,12 @@ use Zephir\LiteralCompiledExpression;
 use Zephir\Name;
 use Zephir\Variable\Variable;
 
+use function array_merge;
 use function constant;
 use function defined;
 use function gettype;
 use function in_array;
+use function strtolower;
 
 /**
  * Resolves PHP or Zephir constants into C-Code

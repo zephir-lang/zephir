@@ -21,6 +21,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+use const PHP_EOL;
+
 /**
  * Generates/Compiles/Installs a Zephir extension.
  */

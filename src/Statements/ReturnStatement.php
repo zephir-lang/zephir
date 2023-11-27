@@ -22,6 +22,8 @@ use Zephir\Expression;
 use Zephir\Name;
 use Zephir\Types\Types;
 
+use function sprintf;
+
 /**
  * Return statement is used to assign variables
  */

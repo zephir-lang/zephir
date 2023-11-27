@@ -22,10 +22,25 @@ use Zephir\Class\Property;
 use Zephir\CompilerFile;
 use Zephir\Exception;
 
+use function addslashes;
+use function array_diff;
 use function array_key_exists;
+use function file_put_contents;
+use function implode;
 use function in_array;
 
+use function is_dir;
+use function key;
+use function mkdir;
+use function realpath;
+use function sprintf;
+use function str_ireplace;
+use function str_replace;
+use function trim;
+use function ucfirst;
+
 use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 
 class Generator
 {
@@ -74,15 +89,15 @@ class Generator
 
             $filename = ucfirst($class->getName()) . '.php';
             $filePath = $path
-            . str_ireplace(
-                $namespace,
-                '',
-                str_replace(
-                    $namespace . '\\\\',
-                    DIRECTORY_SEPARATOR,
-                    $class->getNamespace()
-                )
-            );
+                . str_ireplace(
+                    $namespace,
+                    '',
+                    str_replace(
+                        $namespace . '\\\\',
+                        DIRECTORY_SEPARATOR,
+                        $class->getNamespace()
+                    )
+                );
             $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
             $filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
 

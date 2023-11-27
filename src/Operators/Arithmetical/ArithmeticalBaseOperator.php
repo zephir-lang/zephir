@@ -21,6 +21,8 @@ use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Variable\Variable;
 
+use function sprintf;
+
 /**
  * This is the base operator for commutative, associative and distributive
  * arithmetic operators

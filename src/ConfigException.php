@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use const PHP_EOL;
+
 class ConfigException extends \Exception
 {
     public function __construct($message = '', $code = 0, \Exception $previous = null)

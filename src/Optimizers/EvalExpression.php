@@ -21,6 +21,8 @@ use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Variable\Variable;
 
+use function end;
+use function is_numeric;
 use function is_object;
 
 /**

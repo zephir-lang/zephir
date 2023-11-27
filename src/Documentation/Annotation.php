@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Documentation;
 
+use function trim;
+
 /**
  * A parsed Annotation
  */

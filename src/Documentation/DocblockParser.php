@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace Zephir\Documentation;
 
 use function strlen;
+use function trim;
+
+use const PHP_EOL;
 
 /**
  * Helper to parse raw docblocks to structured object.

@@ -16,8 +16,27 @@ namespace Zephir\Documentation;
 use Zephir\Documentation;
 use Zephir\Exception;
 
+use function array_unshift;
+use function closedir;
+use function copy;
 use function count;
+use function explode;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use function is_array;
+use function is_dir;
+use function json_decode;
+use function json_encode;
+use function ltrim;
+use function mkdir;
+use function opendir;
+use function pathinfo;
+use function readdir;
+use function str_repeat;
+use function str_replace;
+use function strpos;
+use function touch;
 
 class Theme
 {

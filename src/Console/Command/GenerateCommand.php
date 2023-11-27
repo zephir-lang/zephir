@@ -23,6 +23,10 @@ use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
 
 use function extension_loaded;
+use function ini_get;
+use function sprintf;
+
+use const PHP_EOL;
 
 /**
  * Generate Command

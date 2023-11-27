@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Exception;
 
+use function file;
+use function file_exists;
+use function sprintf;
+use function str_repeat;
+use function str_replace;
+
 trait ExceptionExtraAwareTrait
 {
     /**

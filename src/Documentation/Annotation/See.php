@@ -15,6 +15,9 @@ namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
 
+use function strpos;
+use function substr;
+
 /**
  * A link annotation that looks like  `(@)link uri text`.
  */

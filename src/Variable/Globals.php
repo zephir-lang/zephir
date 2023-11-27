@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Variable;
 
+use function in_array;
+
 /**
  * Represents a central knowledge base on global variables.
  */

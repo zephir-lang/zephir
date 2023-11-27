@@ -15,6 +15,7 @@ namespace Zephir\Expression\Builder;
 
 use function is_array;
 use function is_object;
+use function is_scalar;
 
 abstract class AbstractBuilder
 {

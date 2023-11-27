@@ -22,9 +22,14 @@ use Zephir\Types\AbstractType;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
+use function class_exists;
 use function count;
+use function implode;
 use function is_array;
 use function is_object;
+use function sprintf;
+use function strtolower;
+use function ucfirst;
 
 /**
  * Call methods in a non-static context

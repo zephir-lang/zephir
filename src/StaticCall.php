@@ -21,9 +21,14 @@ use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 
 use function count;
+use function implode;
 use function in_array;
 use function is_object;
 use function is_string;
+use function sprintf;
+use function str_replace;
+use function strtolower;
+use function strtoupper;
 
 /**
  * Call methods in a static context

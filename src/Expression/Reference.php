@@ -21,6 +21,8 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable\Variable;
 
+use function in_array;
+
 /**
  * Expression Reference
  *

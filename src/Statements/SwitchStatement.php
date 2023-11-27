@@ -22,6 +22,7 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 
 use function count;
+use function implode;
 
 /**
  * Switch statement, the same as in PHP/C

@@ -19,6 +19,8 @@ use function constant;
 use function defined;
 use function gettype;
 
+use const PHP_EOL;
+
 /**
  * This pass tries to check whether variables only do exist in the local context of the method block
  * or if they're used externally which will un allow variables to be placed in the stack

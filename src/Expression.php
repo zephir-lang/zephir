@@ -69,7 +69,11 @@ use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 use Zephir\Variable\Variable;
 
+use function str_replace;
 use function strlen;
+use function substr;
+
+use const PHP_EOL;
 
 /**
  * Represents an expression.

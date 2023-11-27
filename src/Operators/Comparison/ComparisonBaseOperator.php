@@ -21,6 +21,8 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
 
+use function strtolower;
+
 /**
  * This is the base operator for comparison operators
  */

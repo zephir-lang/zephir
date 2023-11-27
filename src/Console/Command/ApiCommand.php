@@ -21,7 +21,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 use Zephir\Config;
 
+use function array_filter;
+use function array_keys;
+use function array_merge;
 use function in_array;
+use function preg_match;
+use function sprintf;
+
+use const ARRAY_FILTER_USE_BOTH;
+use const PHP_EOL;
 
 /**
  * Generates an HTML API based on the classes exposed in the extension.

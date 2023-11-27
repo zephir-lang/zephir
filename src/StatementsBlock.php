@@ -33,7 +33,13 @@ use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 use Zephir\Statements\WhileStatement;
 
+use function array_pop;
 use function count;
+use function filter_var;
+use function getenv;
+use function sprintf;
+
+use const FILTER_VALIDATE_BOOLEAN;
 
 /**
  * This represents a single basic block in Zephir.

@@ -15,7 +15,10 @@ namespace Zephir\Detectors;
 
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function is_array;
+use function strpos;
+use function substr;
 
 /**
  * Detects if a variable is used in a given expression context

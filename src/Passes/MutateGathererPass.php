@@ -15,6 +15,8 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
+use const PHP_EOL;
+
 /**
  * Counts variables mutated inside a specific statement block
  * Non-mutated variables can be promoted to use an inline cache

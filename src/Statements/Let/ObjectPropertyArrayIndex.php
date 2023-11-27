@@ -20,6 +20,7 @@ use Zephir\Expression;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function count;
+use function current;
 
 /**
  * ObjectPropertyArrayIndex.

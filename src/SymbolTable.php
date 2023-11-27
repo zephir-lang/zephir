@@ -18,9 +18,12 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
+use function array_reverse;
 use function count;
 use function is_object;
 use function strlen;
+use function strpos;
+use function substr;
 
 /**
  * A symbol table stores all the variables defined in a method, their data types and default values.

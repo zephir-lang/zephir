@@ -14,7 +14,12 @@ declare(strict_types=1);
 namespace Zephir;
 
 use function in_array;
+use function is_numeric;
+use function str_replace;
 use function strlen;
+use function strpos;
+use function substr;
+use function ucwords;
 
 final class Name
 {

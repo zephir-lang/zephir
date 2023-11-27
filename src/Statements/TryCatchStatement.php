@@ -19,6 +19,7 @@ use Zephir\Expression\Builder\BuilderFactory;
 use Zephir\Expression\Builder\Operators\BinaryOperator;
 use Zephir\StatementsBlock;
 
+use function array_merge;
 use function count;
 
 /**

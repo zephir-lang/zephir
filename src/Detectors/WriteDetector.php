@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Detectors;
 
+use const PHP_EOL;
+
 /**
  * Detects whether a variable is mutated in a given context
  * If a variable is not modified in a local context (method block) we can avoid allocate

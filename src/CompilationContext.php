@@ -25,6 +25,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Passes\StaticTypeInference;
 
 use function in_array;
+use function sprintf;
 
 /**
  * This class encapsulates important entities required during compilation

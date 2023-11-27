@@ -17,6 +17,8 @@ use Zephir\StatementsBlock;
 
 use function is_string;
 
+use const PHP_EOL;
+
 /**
  * This pass try to infer typing on dynamic variables so the compiler
  * can replace them by low level types automatically

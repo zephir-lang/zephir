@@ -15,7 +15,10 @@ namespace Zephir\Documentation;
 
 use Zephir\CompilerFile;
 
+use function array_pop;
 use function count;
+use function explode;
+use function implode;
 
 class NamespaceHelper
 {

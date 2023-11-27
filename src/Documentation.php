@@ -21,7 +21,22 @@ use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
 use Zephir\Exception\InvalidArgumentException;
 
+use function array_merge;
+use function file_exists;
+use function file_get_contents;
+use function getcwd;
 use function is_array;
+
+use function is_dir;
+use function is_writable;
+use function json_decode;
+use function ksort;
+use function mkdir;
+use function realpath;
+use function rtrim;
+use function sprintf;
+use function str_replace;
+use function trim;
 
 use const DIRECTORY_SEPARATOR;
 

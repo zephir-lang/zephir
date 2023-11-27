@@ -22,6 +22,7 @@ use Zephir\GlobalConstant;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function count;
+use function sprintf;
 
 /**
  * ArrayIndex.

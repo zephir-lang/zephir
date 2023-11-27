@@ -32,6 +32,16 @@ use Throwable;
 use Zephir\Console\Command\ListCommand;
 use Zephir\Zephir;
 
+use function explode;
+use function fprintf;
+use function implode;
+use function sprintf;
+use function strtolower;
+use function trim;
+
+use const PHP_EOL;
+use const STDERR;
+
 final class Application extends BaseApplication
 {
     public function __construct()

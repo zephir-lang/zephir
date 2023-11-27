@@ -20,6 +20,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Exception\FileSystemException;
 use Zephir\Os;
 
+use function sprintf;
+use function system;
+
 /**
  * Full Clean Command
  *

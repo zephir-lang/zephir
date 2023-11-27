@@ -18,12 +18,23 @@ use ReflectionFunction;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function class_exists;
 use function count;
+use function file_exists;
 use function function_exists;
+use function implode;
 use function is_array;
 use function is_object;
 
+use function preg_match;
+use function sprintf;
+use function str_replace;
+use function strtolower;
+use function substr;
+use function version_compare;
+
 use const DIRECTORY_SEPARATOR;
+use const PHP_VERSION;
 
 /**
  * Call functions. By default, functions are called in the PHP userland if an optimizer

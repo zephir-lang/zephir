@@ -19,7 +19,13 @@ use Zephir\Config;
 use Zephir\Documentation;
 use Zephir\Exception;
 
+use function array_merge;
+use function file_exists;
+use function file_put_contents;
 use function is_string;
+use function ltrim;
+use function ob_get_clean;
+use function ob_start;
 
 class Template
 {

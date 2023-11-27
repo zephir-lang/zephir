@@ -22,6 +22,10 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 
+use function array_unshift;
+use function method_exists;
+use function sprintf;
+
 abstract class AbstractType
 {
     /**

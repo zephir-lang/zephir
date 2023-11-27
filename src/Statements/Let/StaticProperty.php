@@ -20,6 +20,8 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
+use function sprintf;
+
 /**
  * Updates static properties
  */

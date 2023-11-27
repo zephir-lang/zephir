@@ -21,6 +21,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 use function in_array;
+use function sprintf;
 
 /**
  * StaticPropertyArrayIndexAppend.

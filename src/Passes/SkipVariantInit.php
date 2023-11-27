@@ -16,6 +16,7 @@ namespace Zephir\Passes;
 use Zephir\StatementsBlock;
 
 use function count;
+use function in_array;
 
 /**
  * In 'if'/'else' statements sometimes dynamical variables are initialized in every branch

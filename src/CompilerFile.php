@@ -30,11 +30,34 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
 
+use function array_map;
 use function count;
 use function dirname;
+use function explode;
+use function file_exists;
+use function file_put_contents;
+use function filemtime;
+use function implode;
 use function is_array;
 
+use function is_dir;
+use function json_decode;
+use function json_encode;
+use function md5;
+use function mkdir;
+use function preg_match;
+use function realpath;
+use function sprintf;
+use function str_repeat;
+use function str_replace;
+use function strpos;
+use function strtolower;
+use function substr;
+use function trim;
+
 use const DIRECTORY_SEPARATOR;
+use const JSON_PRETTY_PRINT;
+use const PHP_EOL;
 
 /**
  * This class represents every file compiled in a project.

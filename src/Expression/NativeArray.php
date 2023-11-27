@@ -24,6 +24,8 @@ use Zephir\Variable\Variable;
 
 use function count;
 use function function_exists;
+use function gmp_nextprime;
+use function gmp_strval;
 
 /**
  * Resolves expressions that create arrays

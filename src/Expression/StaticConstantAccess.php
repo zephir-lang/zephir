@@ -23,6 +23,7 @@ use Zephir\Variable\Variable;
 
 use function gettype;
 use function in_array;
+use function sprintf;
 
 /**
  * Resolves class constants

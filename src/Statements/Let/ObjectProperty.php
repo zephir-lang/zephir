@@ -18,6 +18,8 @@ use Zephir\CompiledExpression as Expression;
 use Zephir\Exception\CompilerException as Exception;
 use Zephir\Variable\Variable as ZephirVariable;
 
+use function sprintf;
+
 /**
  * Adds/Updates an array index
  */
@@ -26,15 +28,13 @@ class ObjectProperty
     /**
      * Compiles foo->x = {expr}.
      *
-     * @param string $variable
+     * @param string         $variable
      * @param ZephirVariable $symbolVariable
-     * @param Expression $expression
-     * @param Context $context
-     * @param array $statement
+     * @param Expression     $expression
+     * @param Context        $context
+     * @param array          $statement
      *
      * @return void
-     *
-     * @throws Exception
      */
     public function assign(
         string $variable,

@@ -24,6 +24,9 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\NotImplementedException;
 
 use function extension_loaded;
+use function sprintf;
+
+use const PHP_EOL;
 
 /**
  * Install Command

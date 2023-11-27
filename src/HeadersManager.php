@@ -15,6 +15,7 @@ namespace Zephir;
 
 use InvalidArgumentException;
 
+use function array_merge;
 use function is_string;
 
 /**

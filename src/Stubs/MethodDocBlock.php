@@ -17,6 +17,13 @@ use Zephir\AliasManager;
 use Zephir\Class\Method\Method;
 use Zephir\Types\Types;
 
+use function array_keys;
+use function array_merge;
+use function array_unique;
+use function preg_match;
+use function str_replace;
+use function trim;
+
 /**
  * Stubs Generator.
  *

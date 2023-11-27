@@ -19,6 +19,8 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable\Variable;
 
+use function current;
+
 /**
  * Resolves expressions that read properties
  */

@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Zephir\Parser;
 
+use function sprintf;
+use function version_compare;
+
 class Manager
 {
     public const MINIMUM_PARSER_VERSION = '1.5.0';

@@ -15,6 +15,8 @@ namespace Zephir\Exception;
 
 use Zephir\TypeAwareInterface;
 
+use function sprintf;
+
 class IllegalOperationException extends CompilerException
 {
     /**

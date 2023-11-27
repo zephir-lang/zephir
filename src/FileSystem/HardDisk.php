@@ -21,6 +21,28 @@ use SplFileInfo;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Zephir;
 
+use function chmod;
+use function escapeshellarg;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function filemtime;
+use function hash_file;
+use function is_dir;
+use function is_file;
+use function md5;
+use function md5_file;
+use function mkdir;
+use function preg_split;
+use function rmdir;
+use function rtrim;
+use function sprintf;
+use function str_replace;
+use function system;
+use function unlink;
+
+use const DIRECTORY_SEPARATOR;
+
 /**
  * Local Hard Disk
  *

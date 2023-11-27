@@ -18,7 +18,16 @@ use Zephir\Config;
 
 use function array_key_exists;
 use function count;
+use function file;
+use function file_exists;
 use function is_array;
+use function preg_replace;
+use function str_repeat;
+use function str_replace;
+use function strtolower;
+use function ucfirst;
+
+use const PHP_EOL;
 
 /**
  * Formatter for warnings/notices/errors generated in compilation.

@@ -15,6 +15,8 @@ namespace Zephir\Documentation\File;
 
 use Zephir\Documentation\FileInterface;
 
+use function rtrim;
+
 use const DIRECTORY_SEPARATOR;
 
 class Sitemap implements FileInterface

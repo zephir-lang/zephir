@@ -21,6 +21,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Zephir\Compiler;
 use Zephir\Exception\CompilerException;
 
+use const PHP_EOL;
+
 /**
  * Compile a Zephir extension.
  */

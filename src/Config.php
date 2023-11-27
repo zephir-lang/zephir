@@ -18,8 +18,26 @@ use JsonSerializable;
 use ReturnTypeWillChange;
 
 use function array_key_exists;
+use function array_values;
 use function count;
+use function current;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
 use function is_array;
+use function json_decode;
+use function json_encode;
+use function json_last_error;
+use function key;
+use function preg_match;
+
+use const JSON_ERROR_CTRL_CHAR;
+use const JSON_ERROR_DEPTH;
+use const JSON_ERROR_NONE;
+use const JSON_ERROR_STATE_MISMATCH;
+use const JSON_ERROR_SYNTAX;
+use const JSON_ERROR_UTF8;
+use const JSON_PRETTY_PRINT;
 
 /**
  * Manages compiler global configuration.

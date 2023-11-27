@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Documentation;
 
+use function explode;
+use function trim;
+
+use const PHP_EOL;
+
 /**
  * A parsed Annotation
  */

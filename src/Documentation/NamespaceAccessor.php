@@ -15,6 +15,8 @@ namespace Zephir\Documentation;
 
 use Zephir\CompilerFile;
 
+use function explode;
+
 class NamespaceAccessor
 {
     protected $byNamespace;

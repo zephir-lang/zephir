@@ -17,6 +17,8 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable as ZephirVariable;
 
+use function current;
+
 /**
  * ObjectPropertyIncr.
  *

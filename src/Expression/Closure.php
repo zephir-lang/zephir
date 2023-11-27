@@ -24,6 +24,7 @@ use Zephir\Exception;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
+use function in_array;
 use function is_array;
 
 /**

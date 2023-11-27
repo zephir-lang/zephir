@@ -17,6 +17,11 @@ use Symfony\Component\Console\Event\ConsoleErrorEvent;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\ExceptionInterface;
 
+use function filter_var;
+use function getenv;
+
+use const FILTER_VALIDATE_BOOLEAN;
+
 class ErrorListener
 {
     public function onCommandError(ConsoleErrorEvent $event): void

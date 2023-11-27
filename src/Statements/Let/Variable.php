@@ -22,6 +22,8 @@ use Zephir\Exception\IllegalOperationException;
 use Zephir\Name;
 use Zephir\Variable\Variable as ZephirVariable;
 
+use function array_keys;
+
 /**
  * Zephir\Statements\Let\Variable.
  *

@@ -13,7 +13,18 @@ declare(strict_types=1);
 
 namespace Zephir\Stubs;
 
+use function array_map;
+use function array_pop;
+use function array_reverse;
+use function array_shift;
 use function count;
+use function explode;
+use function implode;
+use function preg_match;
+use function preg_replace;
+use function rtrim;
+use function str_replace;
+use function trim;
 
 /**
  * @author Gusakov Nikita <dev@nkt.me>

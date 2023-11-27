@@ -18,6 +18,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable as ZephirVariable;
 
+use function current;
+
 /**
  * ObjectPropertyAppend.
  *
