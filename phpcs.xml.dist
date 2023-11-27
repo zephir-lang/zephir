@@ -18,7 +18,7 @@
     <arg value="s"/>
 
     <!-- Use PSR-2 as a base -->
-    <rule ref="PSR2"/>
+    <rule ref="PSR12"/>
 
     <!-- Uncomment to use colors in progress or report -->
     <arg name="colors" />
