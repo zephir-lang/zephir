@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Statements;
 
@@ -24,24 +24,25 @@ class IfStatement extends AbstractStatement
      * @var AbstractOperator
      */
     private $condition;
-
+    /**
+     * @var StatementsBlock
+     */
+    private $elseStatements;
     /**
      * @var StatementsBlock
      */
     private $statements;
 
     /**
-     * @var StatementsBlock
-     */
-    private $elseStatements;
-
-    /**
      * @param AbstractOperator|null $condition
      * @param StatementsBlock|null  $statements
      * @param StatementsBlock|null  $elseStatements
      */
-    public function __construct(AbstractOperator $condition = null, StatementsBlock $statements = null, StatementsBlock $elseStatements = null)
-    {
+    public function __construct(
+        AbstractOperator $condition = null,
+        StatementsBlock $statements = null,
+        StatementsBlock $elseStatements = null
+    ) {
         if (null !== $condition) {
             $this->setCondition($condition);
         }
@@ -64,15 +65,11 @@ class IfStatement extends AbstractStatement
     }
 
     /**
-     * @param $condition
-     *
-     * @return $this
+     * @return StatementsBlock
      */
-    public function setCondition(AbstractOperator $condition)
+    public function getElseStatements()
     {
-        $this->condition = $condition;
-
-        return $this;
+        return $this->elseStatements;
     }
 
     /**
@@ -84,23 +81,15 @@ class IfStatement extends AbstractStatement
     }
 
     /**
-     * @param StatementsBlock $statements
+     * @param $condition
      *
      * @return $this
      */
-    public function setStatements(StatementsBlock $statements)
+    public function setCondition(AbstractOperator $condition)
     {
-        $this->statements = $statements;
+        $this->condition = $condition;
 
         return $this;
-    }
-
-    /**
-     * @return StatementsBlock
-     */
-    public function getElseStatements()
-    {
-        return $this->elseStatements;
     }
 
     /**
@@ -116,13 +105,25 @@ class IfStatement extends AbstractStatement
     }
 
     /**
+     * @param StatementsBlock $statements
+     *
+     * @return $this
+     */
+    public function setStatements(StatementsBlock $statements)
+    {
+        $this->statements = $statements;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function preBuild()
     {
         $expression = [
-            'type' => 'if',
-            'expr' => $this->getCondition(),
+            'type'       => 'if',
+            'expr'       => $this->getCondition(),
             'statements' => $this->getStatements(),
         ];
 

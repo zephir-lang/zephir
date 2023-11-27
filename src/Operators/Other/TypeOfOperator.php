@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -33,7 +34,7 @@ class TypeOfOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -42,7 +43,7 @@ class TypeOfOperator extends AbstractOperator
         }
 
         $functionCall = BuilderFactory::getInstance()->statements()->functionCall('gettype', [$expression['left']]);
-        $expression = new Expression($functionCall->build());
+        $expression   = new Expression($functionCall->build());
 
         return $expression->compile($compilationContext);
     }

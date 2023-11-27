@@ -49,7 +49,10 @@ class ShortTernaryOperator extends AbstractOperator
         $returnVariable->setLocalOnly(false);
 
         if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
-            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext
+            );
             if ($returnVariable->isTemporal()) {
                 $returnVariable->skipInitVariant(2);
             }
@@ -66,12 +69,12 @@ class ShortTernaryOperator extends AbstractOperator
                  */
                 new LetStatementBuilder([
                     'assign-type' => 'variable',
-                    'variable' => $returnVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $expression['extra'],
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char'],
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['extra'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 ], $expression['extra']),
             ]),
             new StatementsBlockBuilder([
@@ -80,12 +83,12 @@ class ShortTernaryOperator extends AbstractOperator
                  */
                 new LetStatementBuilder([
                     'assign-type' => 'variable',
-                    'variable' => $returnVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $expression['left'],
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char'],
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['left'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 ], $expression['extra']),
             ])
         );

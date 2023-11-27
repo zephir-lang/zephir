@@ -26,11 +26,11 @@ class ObjectProperty
     /**
      * Compiles foo->x = {expr}.
      *
-     * @param string         $variable
+     * @param string $variable
      * @param ZephirVariable $symbolVariable
-     * @param Expression     $expression
-     * @param Context        $context
-     * @param array          $statement
+     * @param Expression $expression
+     * @param Context $context
+     * @param array $statement
      *
      * @return void
      *
@@ -58,7 +58,7 @@ class ObjectProperty
         }
 
         $propertyName = $statement['property'];
-        $className = $context->classDefinition->getCompleteName();
+        $className    = $context->classDefinition->getCompleteName();
 
         if (!$symbolVariable->isInitialized()) {
             throw new Exception(
@@ -79,7 +79,10 @@ class ObjectProperty
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new Exception('Cannot use non-initialized variable as an object', $statement);
+            throw new Exception(
+                'Cannot use non-initialized variable as an object',
+                $statement
+            );
         }
 
         /*
@@ -135,8 +138,18 @@ class ObjectProperty
 
                         $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
                         $context->backend->assignLong($resolvedVariable, $expression->getBooleanCode(), $context);
-                        $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
-                        $codePrinter->output($functionName.'('.$context->backend->getVariableCode($tempVariable).', '.$context->backend->getVariableCode($resolvedVariable).')');
+                        $context->backend->fetchProperty(
+                            $tempVariable,
+                            $symbolVariable,
+                            $propertyName,
+                            false,
+                            $context
+                        );
+                        $codePrinter->output(
+                            $functionName . '(' . $context->backend->getVariableCode(
+                                $tempVariable
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                        );
                         break;
 
                     case 'assign':
@@ -145,7 +158,13 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new Exception("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
+                        throw new Exception(
+                            "Operator '"
+                            . $statement['operator']
+                            . "' is not supported for object property: "
+                            . $tempVariable->getType(),
+                            $statement
+                        );
                 }
 
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
@@ -157,11 +176,21 @@ class ObjectProperty
                 switch ($statement['operator']) {
                     case 'assign':
                         $tempVariable->initNonReferenced($context);
-                        $context->backend->assignLong($tempVariable, '\''.$expression->getBooleanCode().'\'', $context);
+                        $context->backend->assignLong(
+                            $tempVariable,
+                            '\'' . $expression->getBooleanCode() . '\'',
+                            $context
+                        );
                         break;
 
                     default:
-                        throw new Exception("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
+                        throw new Exception(
+                            "Operator '"
+                            . $statement['operator']
+                            . "' is not supported for object property: "
+                            . $tempVariable->getType(),
+                            $statement
+                        );
                 }
 
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
@@ -188,8 +217,18 @@ class ObjectProperty
 
                         $resolvedVariable = $context->symbolTable->getTempVariableForWrite('variable', $context);
                         $context->backend->assignDouble($resolvedVariable, $expression->getBooleanCode(), $context);
-                        $context->backend->fetchProperty($tempVariable, $symbolVariable, $propertyName, false, $context);
-                        $codePrinter->output($functionName.'('.$context->backend->getVariableCode($tempVariable).', '.$context->backend->getVariableCode($resolvedVariable).')');
+                        $context->backend->fetchProperty(
+                            $tempVariable,
+                            $symbolVariable,
+                            $propertyName,
+                            false,
+                            $context
+                        );
+                        $codePrinter->output(
+                            $functionName . '(' . $context->backend->getVariableCode(
+                                $tempVariable
+                            ) . ', ' . $context->backend->getVariableCode($resolvedVariable) . ')'
+                        );
                         break;
 
                     case 'assign':
@@ -198,7 +237,13 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new Exception("Operator '".$statement['operator']."' is not supported for object property: ".$tempVariable->getType(), $statement);
+                        throw new Exception(
+                            "Operator '"
+                            . $statement['operator']
+                            . "' is not supported for object property: "
+                            . $tempVariable->getType(),
+                            $statement
+                        );
                 }
 
                 $context->backend->updateProperty($symbolVariable, $propertyName, $tempVariable, $context);
@@ -210,7 +255,15 @@ class ObjectProperty
 
                 switch ($statement['operator']) {
                     case 'concat-assign':
-                        $codePrinter->output('zephir_concat_self_str(&'.$tempVariable->getName().', "'.$expression->getCode().'", sizeof("'.$expression->getCode().'") - 1);');
+                        $codePrinter->output(
+                            'zephir_concat_self_str(&'
+                            . $tempVariable->getName()
+                            . ', "'
+                            . $expression->getCode()
+                            . '", sizeof("'
+                            . $expression->getCode()
+                            . '") - 1);'
+                        );
                         break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
@@ -228,7 +281,7 @@ class ObjectProperty
                 break;
 
             case 'bool':
-                $codePrinter->output('if ('.$expression->getBooleanCode().') {');
+                $codePrinter->output('if (' . $expression->getBooleanCode() . ') {');
                 $codePrinter->increaseLevel();
                 $context->backend->updateProperty($symbolVariable, $propertyName, 'true', $context);
                 $codePrinter->decreaseLevel();
@@ -239,7 +292,7 @@ class ObjectProperty
                 $codePrinter->output('}');
                 break;
 
-                /* unreachable code */
+            /* unreachable code */
             case 'empty-array':
                 $tempVariable = $context->symbolTable->getTempNonTrackedVariable('variable', $context);
 
@@ -249,7 +302,11 @@ class ObjectProperty
                 break;
 
             case 'variable':
-                $variableVariable = $context->symbolTable->getVariableForRead($expression->getCode(), $context, $statement);
+                $variableVariable = $context->symbolTable->getVariableForRead(
+                    $expression->getCode(),
+                    $context,
+                    $statement
+                );
                 switch ($variableVariable->getType()) {
                     case 'int':
                     case 'uint':
@@ -271,7 +328,7 @@ class ObjectProperty
                         break;
 
                     case 'bool':
-                        $codePrinter->output('if ('.$variableVariable->getName().') {');
+                        $codePrinter->output('if (' . $variableVariable->getName() . ') {');
                         $codePrinter->increaseLevel();
                         $context->backend->updateProperty($symbolVariable, $propertyName, 'true', $context);
                         $codePrinter->decreaseLevel();
@@ -293,7 +350,7 @@ class ObjectProperty
                         break;
 
                     default:
-                        throw new Exception('Unknown type '.$variableVariable->getType(), $statement);
+                        throw new Exception('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 

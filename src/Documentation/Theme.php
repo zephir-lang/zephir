@@ -9,36 +9,39 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation;
 
 use Zephir\Documentation;
 use Zephir\Exception;
 
+use function count;
+use function is_array;
+
 class Theme
 {
-    protected $themeDir;
-    protected $outputDir;
-    protected $themeConfig;
-    protected $options;
-    protected $projectConfig;
     /**
      * @var Documentation
      */
     protected $documentation;
-
     /**
      * @var Theme
      */
     protected $extendedTheme;
-
+    protected $options;
+    protected $outputDir;
+    protected $projectConfig;
+    protected $themeConfig;
+    protected $themeDir;
     protected $themeInfos = [];
 
     public function __construct($themeDir, $outputDir, $themeConfig, $config, Documentation $documentation)
     {
-        $this->outputDir = $outputDir;
-        $this->themeConfig = $themeConfig;
-        $this->themeDir = $themeDir;
-        $this->options = $themeConfig['options'];
+        $this->outputDir     = $outputDir;
+        $this->themeConfig   = $themeConfig;
+        $this->themeDir      = $themeDir;
+        $this->options       = $themeConfig['options'];
         $this->projectConfig = $config;
         $this->documentation = $documentation;
 
@@ -52,7 +55,7 @@ class Theme
                 if (isset($themeInfos['extends'])) {
                     $extThemePath = $documentation->findThemePathByName($themeInfos['extends']);
                     if (!$extThemePath) {
-                        throw new Exception('Unable to find extended theme '.$themeInfos['extends']);
+                        throw new Exception('Unable to find extended theme ' . $themeInfos['extends']);
                     }
 
                     $this->extendedTheme = new self($extThemePath, $outputDir, $themeConfig, $config, $documentation);
@@ -61,30 +64,98 @@ class Theme
         }
     }
 
-    /**
-     * from : https://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
-     *
-     * @param $src
-     * @param $dst
-     * @param $files
-     */
-    private function __copyDir($src, $dst, &$files = null): void
+    public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
     {
-        $dir = opendir($src);
-        @mkdir($dst);
-        while (false !== ($file = readdir($dir))) {
-            if (('.' != $file) && ('..' != $file)) {
-                if (is_dir($src.'/'.$file)) {
-                    $this->__copyDir($src.'/'.$file, $dst.'/'.$file, $files);
-                } else {
-                    copy($src.'/'.$file, $dst.'/'.$file);
-                    if (\is_array($files)) {
-                        $files[] = $dst.'/'.$file;
-                    }
+        $output = [
+            'allClasses'    => [],
+            'allNamespaces' => [],
+            'classes'       => [],
+            'namespaces'    => [],
+        ];
+
+        foreach ($classList as $class) {
+            $cDef  = $class->getClassDefinition();
+            $cName = $cDef->getCompleteName();
+
+            $output['allClasses'][$cName] = [
+                'type'      => $cDef->getType(),
+                'name'      => $cName,
+                'shortname' => $cDef->getName(),
+            ];
+
+            if (!strpos($cName, '\\') > 0) {
+                $output['classes'][] = $cName;
+            }
+        }
+
+        $namespaces = $nsA->getByNamespace();
+
+        foreach ($namespaces as $ns) {
+            $subclasses    = [];
+            $subnamespaces = [];
+
+            foreach ($ns->getClasses() as $scs) {
+                $subclasses[] = $scs->getClassDefinition()->getCompleteName();
+            }
+
+            foreach ($ns->getNamespaces() as $sns) {
+                $subnamespaces[] = $sns->getFullNamespace();
+            }
+
+            $output['allNamespaces'][$ns->getFullNamespace()] = [
+                'name'       => $ns->getFullNamespace(),
+                'shortName'  => $ns->getShortName(),
+                'parentName' => $ns->getParentName(),
+                'classes'    => $subclasses,
+                'namespaces' => $subnamespaces,
+            ];
+
+            if (!strpos($ns->getFullNamespace(), '\\') > 0) {
+                $output['namespaces'][] = $ns->getFullNamespace();
+            }
+        }
+
+        return json_encode($output);
+    }
+
+    /**
+     * copy the static directory of the theme into the output directory.
+     */
+    public function buildStaticDirectory(): void
+    {
+        $outputStt = $this->getOutputPath('asset');
+
+        if (!file_exists($outputStt)) {
+            mkdir($outputStt, 0777, true);
+        }
+
+        if ($this->extendedTheme) {
+            $this->extendedTheme->buildStaticDirectory();
+        }
+
+        $themeStt = $this->getThemePath('static');
+
+        if ($themeStt) {
+            $files = [];
+
+            $this->__copyDir($themeStt, $outputStt . '/static', $files);
+
+            foreach ($files as $f) {
+                foreach ($this->options as $optName => $opt) {
+                    $fcontent = file_get_contents($f);
+                    $fcontent = str_replace('%_' . $optName . '_%', $opt, $fcontent);
+
+                    file_put_contents($f, $fcontent);
                 }
             }
         }
-        closedir($dir);
+    }
+
+    public function createFile($path, $content): void
+    {
+        $outputFile = $this->getOutputPath($path);
+        touch($outputFile);
+        file_put_contents($outputFile, $content);
     }
 
     /**
@@ -98,17 +169,17 @@ class Theme
     {
         $outputFile = ltrim($file->getOutputFile(), '/');
 
-        $output = pathinfo($this->outputDir.'/'.$outputFile);
-        $outputDirname = $output['dirname'];
+        $output         = pathinfo($this->outputDir . '/' . $outputFile);
+        $outputDirname  = $output['dirname'];
         $outputBasename = $output['basename'];
-        $outputFilename = $outputDirname.'/'.$outputBasename;
+        $outputFilename = $outputDirname . '/' . $outputBasename;
 
         // todo : check if writable
         if (!file_exists($outputDirname)) {
             mkdir($outputDirname, 0777, true);
         }
 
-        $subDirNumber = \count(explode('/', $outputFile)) - 1;
+        $subDirNumber = count(explode('/', $outputFile)) - 1;
 
         if ($subDirNumber > 0) {
             $pathToRoot = str_repeat('../', $subDirNumber);
@@ -123,6 +194,16 @@ class Theme
 
         touch($outputFilename);
         $template->write($outputFilename);
+    }
+
+    public function getOutputPath($path)
+    {
+        $path         = pathinfo($this->outputDir . '/' . $path);
+        $pathDirname  = $path['dirname'];
+        $pathBasename = $path['basename'];
+        $pathFilename = $pathDirname . '/' . $pathBasename;
+
+        return $pathFilename;
     }
 
     /**
@@ -162,97 +243,24 @@ class Theme
     }
 
     /**
-     * copy the static directory of the theme into the output directory.
+     * find the path to a file in the theme.
+     *
+     * @param $path
+     *
+     * @return string
      */
-    public function buildStaticDirectory(): void
+    public function getThemePath($path)
     {
-        $outputStt = $this->getOutputPath('asset');
+        $path         = pathinfo($this->themeDir . '/' . $path);
+        $pathDirname  = $path['dirname'];
+        $pathBasename = $path['basename'];
+        $pathFilename = $pathDirname . '/' . $pathBasename;
 
-        if (!file_exists($outputStt)) {
-            mkdir($outputStt, 0777, true);
+        if (!file_exists($pathFilename)) {
+            return null;
         }
 
-        if ($this->extendedTheme) {
-            $this->extendedTheme->buildStaticDirectory();
-        }
-
-        $themeStt = $this->getThemePath('static');
-
-        if ($themeStt) {
-            $files = [];
-
-            $this->__copyDir($themeStt, $outputStt.'/static', $files);
-
-            foreach ($files as $f) {
-                foreach ($this->options as $optName => $opt) {
-                    $fcontent = file_get_contents($f);
-                    $fcontent = str_replace('%_'.$optName.'_%', $opt, $fcontent);
-
-                    file_put_contents($f, $fcontent);
-                }
-            }
-        }
-    }
-
-    public function buildJsonClassDefinition($classList, NamespaceAccessor $nsA)
-    {
-        $output = [
-            'allClasses' => [],
-            'allNamespaces' => [],
-            'classes' => [],
-            'namespaces' => [],
-        ];
-
-        foreach ($classList as $class) {
-            $cDef = $class->getClassDefinition();
-            $cName = $cDef->getCompleteName();
-
-            $output['allClasses'][$cName] = [
-                'type' => $cDef->getType(),
-                'name' => $cName,
-                'shortname' => $cDef->getName(),
-            ];
-
-            if (!strpos($cName, '\\') > 0) {
-                $output['classes'][] = $cName;
-            }
-        }
-
-        $namespaces = $nsA->getByNamespace();
-
-        foreach ($namespaces as $ns) {
-            $subclasses = [];
-            $subnamespaces = [];
-
-            foreach ($ns->getClasses() as $scs) {
-                $subclasses[] = $scs->getClassDefinition()->getCompleteName();
-            }
-
-            foreach ($ns->getNamespaces() as $sns) {
-                $subnamespaces[] = $sns->getFullNamespace();
-            }
-
-            $output['allNamespaces'][$ns->getFullNamespace()] = [
-                'name' => $ns->getFullNamespace(),
-                'shortName' => $ns->getShortName(),
-                'parentName' => $ns->getParentName(),
-                'classes' => $subclasses,
-                'namespaces' => $subnamespaces,
-            ];
-
-            if (!strpos($ns->getFullNamespace(), '\\') > 0) {
-                $output['namespaces'][] = $ns->getFullNamespace();
-            }
-        }
-
-        return json_encode($output);
-    }
-
-    public function createFile($path, $content): void
-    {
-        $outputFile = $this->getOutputPath($path);
-        touch($outputFile);
-        file_put_contents($outputFile, $content);
+        return $pathFilename;
     }
 
     /**
@@ -275,33 +283,28 @@ class Theme
     }
 
     /**
-     * find the path to a file in the theme.
+     * from : https://stackoverflow.com/questions/2050859/copy-entire-contents-of-a-directory-to-another-using-php.
      *
-     * @param $path
-     *
-     * @return string
+     * @param $src
+     * @param $dst
+     * @param $files
      */
-    public function getThemePath($path)
+    private function __copyDir($src, $dst, &$files = null): void
     {
-        $path = pathinfo($this->themeDir.'/'.$path);
-        $pathDirname = $path['dirname'];
-        $pathBasename = $path['basename'];
-        $pathFilename = $pathDirname.'/'.$pathBasename;
-
-        if (!file_exists($pathFilename)) {
-            return null;
+        $dir = opendir($src);
+        @mkdir($dst);
+        while (false !== ($file = readdir($dir))) {
+            if (('.' != $file) && ('..' != $file)) {
+                if (is_dir($src . '/' . $file)) {
+                    $this->__copyDir($src . '/' . $file, $dst . '/' . $file, $files);
+                } else {
+                    copy($src . '/' . $file, $dst . '/' . $file);
+                    if (is_array($files)) {
+                        $files[] = $dst . '/' . $file;
+                    }
+                }
+            }
         }
-
-        return $pathFilename;
-    }
-
-    public function getOutputPath($path)
-    {
-        $path = pathinfo($this->outputDir.'/'.$path);
-        $pathDirname = $path['dirname'];
-        $pathBasename = $path['basename'];
-        $pathFilename = $pathDirname.'/'.$pathBasename;
-
-        return $pathFilename;
+        closedir($dir);
     }
 }

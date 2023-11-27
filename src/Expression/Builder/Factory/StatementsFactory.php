@@ -29,6 +29,16 @@ class StatementsFactory
     }
 
     /**
+     * @param array|null $statements
+     *
+     * @return StatementsBlock
+     */
+    public function block(array $statements = null)
+    {
+        return new StatementsBlock($statements);
+    }
+
+    /**
      * @param string     $name
      * @param array|null $parameters
      * @param int        $type
@@ -41,13 +51,18 @@ class StatementsFactory
     }
 
     /**
-     * @param array|null $statements
+     * @param AbstractOperator|null $condition
+     * @param StatementsBlock|null  $statements
+     * @param StatementsBlock|null  $elseStatements
      *
-     * @return StatementsBlock
+     * @return IfStatement
      */
-    public function block(array $statements = null)
-    {
-        return new StatementsBlock($statements);
+    public function ifX(
+        AbstractOperator $condition = null,
+        StatementsBlock $statements = null,
+        StatementsBlock $elseStatements = null
+    ) {
+        return new IfStatement($condition, $statements, $elseStatements);
     }
 
     /**
@@ -61,15 +76,26 @@ class StatementsFactory
     }
 
     /**
-     * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null  $statements
-     * @param StatementsBlock|null  $elseStatements
+     * @param array $expression
      *
-     * @return IfStatement
+     * @return RawStatement
      */
-    public function ifX(AbstractOperator $condition = null, StatementsBlock $statements = null, StatementsBlock $elseStatements = null)
+    public function raw(array $expression)
     {
-        return new IfStatement($condition, $statements, $elseStatements);
+        return new RawStatement($expression);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return RawStatement
+     */
+    public function rawC($value)
+    {
+        return $this->raw([
+            'type'  => 'cblock',
+            'value' => $value,
+        ]);
     }
 
     /**
@@ -83,28 +109,5 @@ class StatementsFactory
             'type' => 'return',
             'expr' => $expression,
         ]);
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return RawStatement
-     */
-    public function rawC($value)
-    {
-        return $this->raw([
-            'type' => 'cblock',
-            'value' => $value,
-        ]);
-    }
-
-    /**
-     * @param array $expression
-     *
-     * @return RawStatement
-     */
-    public function raw(array $expression)
-    {
-        return new RawStatement($expression);
     }
 }

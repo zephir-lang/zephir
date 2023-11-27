@@ -25,7 +25,7 @@ use Zephir\Operators\AbstractOperator;
 class RequireOnceOperator extends AbstractOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
@@ -40,8 +40,12 @@ class RequireOnceOperator extends AbstractOperator
 
         $exprPath = $expr->compile($compilationContext);
         if ('variable' === $exprPath->getType()) {
-            $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
-            $exprVar = $compilationContext->backend->getVariableCode($exprVariable);
+            $exprVariable = $compilationContext->symbolTable->getVariableForRead(
+                $exprPath->getCode(),
+                $compilationContext,
+                $expression
+            );
+            $exprVar      = $compilationContext->backend->getVariableCode($exprVariable);
             if ('variable' === $exprVariable->getType()) {
                 if ($exprVariable->hasDifferentDynamicType(['undefined', 'string'])) {
                     $compilationContext->logger->warning(
@@ -51,14 +55,21 @@ class RequireOnceOperator extends AbstractOperator
                 }
             }
         } else {
-            $exprVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            $exprVar = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
             $compilationContext->backend->assignString($exprVar, $exprPath->getCode(), $compilationContext);
             $exprVar = $compilationContext->backend->getVariableCode($exprVar);
         }
 
         $symbolVariable = false;
         if ($this->isExpecting()) {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
+                'variable',
+                $compilationContext
+            );
         }
 
         $compilationContext->headersManager->add('kernel/memory');
@@ -67,13 +78,13 @@ class RequireOnceOperator extends AbstractOperator
         $codePrinter = $compilationContext->codePrinter;
 
         if ($symbolVariable) {
-            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
+            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&' . $symbolVariable->getName() . ');');
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-            $codePrinter->output('if (zephir_require_once_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_once_zval_ret(' . $symbol . ', ' . $exprVar . ') == FAILURE) {');
         } else {
-            $codePrinter->output('if (zephir_require_once_zval('.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_once_zval(' . $exprVar . ') == FAILURE) {');
         }
-        $codePrinter->output("\t".'RETURN_MM_NULL();');
+        $codePrinter->output("\t" . 'RETURN_MM_NULL();');
         $codePrinter->output('}');
 
         if ($symbolVariable) {

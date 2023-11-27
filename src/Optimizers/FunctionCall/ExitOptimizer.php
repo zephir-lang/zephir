@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Optimizes calls to 'exit' using internal function
@@ -35,7 +37,7 @@ class ExitOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (isset($expression['parameters']) && \count($expression['parameters']) > 1) {
+        if (isset($expression['parameters']) && count($expression['parameters']) > 1) {
             return false;
         }
 
@@ -47,7 +49,7 @@ class ExitOptimizer extends OptimizerAbstract
             $context->codePrinter->output('zephir_exit_empty();');
         } else {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-            $context->codePrinter->output('zephir_exit('.$resolvedParams[0].');');
+            $context->codePrinter->output('zephir_exit(' . $resolvedParams[0] . ');');
         }
 
         return new CompiledExpression('void ', '', $expression);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * JsonEncodeOptimizer.
@@ -59,9 +61,9 @@ class JsonEncodeOptimizer extends OptimizerAbstract
         /*
          * Process encode options
          */
-        if (\count($resolvedParams) >= 2) {
+        if (count($resolvedParams) >= 2) {
             $context->headersManager->add('kernel/operators');
-            $options = 'zephir_get_intval('.$resolvedParams[1].') ';
+            $options = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
         } else {
             $options = '0 ';
         }
@@ -71,7 +73,9 @@ class JsonEncodeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_json_encode('.$symbol.', '.$resolvedParams[0].', '.$options.');');
+        $context->codePrinter->output(
+            'zephir_json_encode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $options . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

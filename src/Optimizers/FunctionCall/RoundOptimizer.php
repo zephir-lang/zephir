@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * RoundOptimizer.
@@ -42,7 +44,7 @@ class RoundOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) > 4) {
+        if (count($expression['parameters']) > 4) {
             return false;
         }
 
@@ -53,7 +55,10 @@ class RoundOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         $context->headersManager->add('kernel/math');
@@ -66,28 +71,28 @@ class RoundOptimizer extends OptimizerAbstract
         /* Todo: move var return type -> double as with round, floor */
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        switch (\count($expression['parameters'])) {
+        switch (count($expression['parameters'])) {
             /*
              * Only float $val
              */
             case 1:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', NULL, NULL);'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', NULL, NULL);'
                 );
                 break;
 
-                /*
-                 * float $val, int $mode
-                 */
+            /*
+             * float $val, int $mode
+             */
             case 2:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', NULL);'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL);'
                 );
                 break;
 
             default:
                 $context->codePrinter->output(
-                    'zephir_round('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].');'
+                    'zephir_round(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ');'
                 );
                 break;
         }

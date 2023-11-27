@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Exception;
@@ -28,7 +29,7 @@ class LoopStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
@@ -44,7 +45,10 @@ class LoopStatement extends StatementAbstract
          * Compile statements in the 'loop' block
          */
         if (!isset($this->statement['statements'])) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
+            throw new CompilerException(
+                "Infinite loop without at least a 'break' statement is not allowed",
+                $this->statement
+            );
         }
 
         $st = new StatementsBlock($this->statement['statements']);
@@ -55,7 +59,10 @@ class LoopStatement extends StatementAbstract
         $loopBreakPass = new LoopBreakPass();
         $loopBreakPass->pass($st);
         if (!$loopBreakPass->hasBreak()) {
-            throw new CompilerException("Infinite loop without at least a 'break' statement is not allowed", $this->statement);
+            throw new CompilerException(
+                "Infinite loop without at least a 'break' statement is not allowed",
+                $this->statement
+            );
         }
 
         $st->isLoop(true);

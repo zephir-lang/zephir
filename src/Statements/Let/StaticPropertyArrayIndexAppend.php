@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
 use Zephir\Class\Property;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+
+use function in_array;
 
 /**
  * StaticPropertyArrayIndexAppend.
@@ -47,7 +49,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         array $statement
     ): void {
         $compiler = $compilationContext->compiler;
-        if (!\in_array($className, ['self', 'static', 'parent'])) {
+        if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -55,18 +57,28 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '".$className."'", $statement);
+                    throw new CompilerException(
+                        "Cannot locate class '" . $className . "'",
+                        $statement
+                    );
                 }
             }
         } else {
-            if (\in_array($className, ['self', 'static'])) {
+            if (in_array($className, ['self', 'static'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } else {
                 if ('parent' == $className) {
                     $classDefinition = $compilationContext->classDefinition;
-                    $extendsClass = $classDefinition->getExtendsClass();
+                    $extendsClass    = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot assign static property "'.$property.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $statement);
+                        throw new CompilerException(
+                            'Cannot assign static property "'
+                            . $property
+                            . '" on parent because class '
+                            . $classDefinition->getCompleteName()
+                            . ' does not extend any class',
+                            $statement
+                        );
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -75,24 +87,50 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
         }
 
         if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
+            throw new CompilerException(
+                "Class '" . $classDefinition->getCompleteName(
+                ) . "' does not have a property called: '"
+                . $property
+                . "'",
+                $statement
+            );
         }
 
         /** @var Property $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);
+            throw new CompilerException(
+                "Cannot access non-static property '"
+                . $classDefinition->getCompleteName()
+                . '::'
+                . $property
+                . "'",
+                $statement
+            );
         }
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException("Cannot access private static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $statement);
+                throw new CompilerException(
+                    "Cannot access private static property '"
+                    . $classDefinition->getCompleteName()
+                    . '::'
+                    . $property
+                    . "' out of its declaring context",
+                    $statement
+                );
             }
         }
 
         $compilationContext->headersManager->add('kernel/object');
         $classEntry = $classDefinition->getClassEntry($compilationContext);
-        $this->_assignStaticPropertyArrayMultipleIndex($classEntry, $property, $resolvedExpr, $compilationContext, $statement);
+        $this->_assignStaticPropertyArrayMultipleIndex(
+            $classEntry,
+            $property,
+            $resolvedExpr,
+            $compilationContext,
+            $statement
+        );
     }
 
     /**
@@ -101,7 +139,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
      * @param string             $classEntry
      * @param string             $property
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext ,
      * @param array              $statement
      *
      * @throws Exception
@@ -139,7 +177,10 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
                     break;
                 default:
                     throw new CompilerException(
-                        sprintf('Expression: %s cannot be used as index without cast', $resolvedIndex->getType()),
+                        sprintf(
+                            'Expression: %s cannot be used as index without cast',
+                            $resolvedIndex->getType()
+                        ),
                         $statement['index-expr']
                     );
             }

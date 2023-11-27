@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function count;
+use function in_array;
+
 /**
  * Manage aliases in a file
  */
@@ -35,18 +38,6 @@ final class AliasManager
     }
 
     /**
-     * Checks if a class name is an existing alias.
-     *
-     * @param string $alias
-     *
-     * @return bool
-     */
-    public function isAlias(string $alias): bool
-    {
-        return isset($this->aliases[$alias]);
-    }
-
-    /**
      * Returns the class name according to an existing alias.
      *
      * @param string $alias
@@ -56,16 +47,6 @@ final class AliasManager
     public function getAlias(string $alias): string
     {
         return $this->aliases[$alias];
-    }
-
-    /**
-     * Returns key-value pair of aliases.
-     *
-     * @return array
-     */
-    public function getAliases(): array
-    {
-        return $this->aliases;
     }
 
     /**
@@ -79,11 +60,50 @@ final class AliasManager
     {
         $keys = array_keys($this->aliases, trim($className, '\\'));
 
-        if (1 === \count($keys)) {
+        if (1 === count($keys)) {
             return $keys[0];
         }
 
         return $className;
+    }
+
+    /**
+     * Returns key-value pair of aliases.
+     *
+     * @return array
+     */
+    public function getAliases(): array
+    {
+        return $this->aliases;
+    }
+
+    /**
+     * Checks if a class name is an existing alias.
+     *
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function isAlias(string $alias): bool
+    {
+        return isset($this->aliases[$alias]);
+    }
+
+    /**
+     * Check if class name has explicit alias in `use` declaration.
+     *
+     * @param string $className - fully qualified class name
+     *
+     * @return bool
+     */
+    public function isAliasPresentFor(string $className): bool
+    {
+        $extractAlias = $this->implicitAlias($className);
+
+        $isClassDeclared = in_array($className, $this->aliases);
+        $classAlias      = array_flip($this->aliases)[$className] ?? null;
+
+        return $isClassDeclared && $classAlias !== $extractAlias;
     }
 
     /**
@@ -105,23 +125,6 @@ final class AliasManager
     }
 
     /**
-     * Check if class name has explicit alias in `use` declaration.
-     *
-     * @param string $className - fully qualified class name
-     *
-     * @return bool
-     */
-    public function isAliasPresentFor(string $className): bool
-    {
-        $extractAlias = $this->implicitAlias($className);
-
-        $isClassDeclared = \in_array($className, $this->aliases);
-        $classAlias = array_flip($this->aliases)[$className] ?? null;
-
-        return $isClassDeclared && $classAlias !== $extractAlias;
-    }
-
-    /**
      * Extract implicit alias from use statement.
      *
      * @param string $className - FQCN or simple class name from use statement
@@ -132,6 +135,6 @@ final class AliasManager
     {
         $parts = explode('\\', $className);
 
-        return $parts[\count($parts) - 1];
+        return $parts[count($parts) - 1];
     }
 }

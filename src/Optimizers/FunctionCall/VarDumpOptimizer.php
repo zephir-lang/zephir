@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
@@ -61,22 +61,22 @@ class VarDumpOptimizer extends OptimizerAbstract
                 $variable->initVariant($context);
 
                 $statement = new LetStatement([
-                    'type' => 'let',
+                    'type'        => 'let',
                     'assignments' => [
                         [
                             'assign-type' => $type,
-                            'variable' => $variable->getName(),
-                            'operator' => 'assign',
-                            'expr' => [
-                                'type' => $resolvedParam->getType(),
+                            'variable'    => $variable->getName(),
+                            'operator'    => 'assign',
+                            'expr'        => [
+                                'type'  => $resolvedParam->getType(),
                                 'value' => $resolvedParam->getCode(),
-                                'file' => $expression['file'],
-                                'line' => $expression['line'],
-                                'char' => $expression['char'],
+                                'file'  => $expression['file'],
+                                'line'  => $expression['line'],
+                                'char'  => $expression['char'],
                             ],
-                            'file' => $expression['file'],
-                            'line' => $expression['line'],
-                            'char' => $expression['char'],
+                            'file'        => $expression['file'],
+                            'line'        => $expression['line'],
+                            'char'        => $expression['char'],
                         ],
                     ],
                 ]);
@@ -89,7 +89,7 @@ class VarDumpOptimizer extends OptimizerAbstract
             }
 
             $symbol = $context->backend->getVariableCode($variable);
-            $context->codePrinter->output('zephir_var_dump('.$symbol.');');
+            $context->codePrinter->output('zephir_var_dump(' . $symbol . ');');
         }
 
         return new CompiledExpression('null', 'null', $expression);

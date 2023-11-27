@@ -43,12 +43,19 @@ class CloneOperator extends AbstractOperator
 
         $exprCompiledVariable = $exprVariable->compile($compilationContext);
         if ('variable' !== $exprCompiledVariable->getType()) {
-            throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $expression);
+            throw new CompilerException(
+                'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array',
+                $expression
+            );
         }
 
-        $clonedVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression);
+        $clonedVariable = $compilationContext->symbolTable->getVariableForRead(
+            $exprCompiledVariable->getCode(),
+            $compilationContext,
+            $expression
+        );
         if ('variable' !== $clonedVariable->getType()) {
-            throw new CompilerException('Variable type: '.$exprVariable->getType().' cannot be cloned');
+            throw new CompilerException('Variable type: ' . $exprVariable->getType() . ' cannot be cloned');
         }
 
         if ($clonedVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -70,11 +77,13 @@ class CloneOperator extends AbstractOperator
         $symbolVariable->setDynamicTypes($clonedVariable->getDynamicTypes());
         $symbolVariable->setClassTypes($clonedVariable->getClassTypes());
 
-        $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+        $symbol       = $compilationContext->backend->getVariableCode($symbolVariable);
         $clonedSymbol = $compilationContext->backend->getVariableCode($clonedVariable);
 
-        $compilationContext->codePrinter->output('if (zephir_clone('.$symbol.', '.$clonedSymbol.') == FAILURE) {');
-        $compilationContext->codePrinter->output("\t".'return;');
+        $compilationContext->codePrinter->output(
+            'if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ') == FAILURE) {'
+        );
+        $compilationContext->codePrinter->output("\t" . 'return;');
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

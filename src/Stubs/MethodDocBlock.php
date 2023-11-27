@@ -24,40 +24,33 @@ use Zephir\Types\Types;
  */
 class MethodDocBlock extends DocBlock
 {
+    /**
+     * @var AliasManager
+     */
+    private AliasManager $aliasManager;
+    /**
+     * @var Method
+     */
+    private Method $classMethod;
+    /**
+     * @var bool
+     */
+    private bool  $deprecated;
     private array $parameters = [];
-
     /**
      * Parameters which are described by User into docblock
      *
      * @var array
      */
     private array $predefinedParams = [];
-
     /**
      * @var array
      */
     private array $return = [];
-
     /**
      * @var string|mixed
      */
     private string $shortcutName;
-
-    /**
-     * @var bool
-     */
-    private bool $deprecated;
-
-    /**
-     * @var AliasManager
-     */
-    private AliasManager $aliasManager;
-
-    /**
-     * @var Method
-     */
-    private Method $classMethod;
-
     /**
      * @var Types
      */
@@ -71,11 +64,11 @@ class MethodDocBlock extends DocBlock
     ) {
         parent::__construct($method->getDocBlock(), $indent);
 
-        $this->deprecated = $method->isDeprecated();
+        $this->deprecated   = $method->isDeprecated();
         $this->aliasManager = $aliasManager;
         $this->shortcutName = $method->isShortcut() ? $method->getShortcutName() : '';
-        $this->classMethod = $method;
-        $this->types = $types ?? new Types();
+        $this->classMethod  = $method;
+        $this->types        = $types ?? new Types();
     }
 
     /**
@@ -95,66 +88,6 @@ class MethodDocBlock extends DocBlock
         }
 
         return $this->__toString();
-    }
-
-    protected function parseMethodReturnType(Method $method): void
-    {
-        $return = [];
-        foreach ($method->getReturnTypes() as $type) {
-            if (isset($type['data-type'])) {
-                $dataType = 'variable' === $type['data-type'] ? 'mixed' : $type['data-type'];
-                $return[$dataType] = $dataType;
-            }
-        }
-
-        $returnClassTypes = $method->getReturnClassTypes();
-        if ($returnClassTypes) {
-            foreach ($returnClassTypes as $key => $returnClassType) {
-                if ($this->aliasManager->isAlias($returnClassType)) {
-                    $returnClassTypes[$key] = '\\'.$this->aliasManager->getAlias($returnClassType);
-                }
-            }
-
-            $return = array_merge($return, $returnClassTypes);
-        }
-
-        /**
-         * Prepare return types for Collections compatible types.
-         * Only for complex types.
-         */
-        $collections = [];
-        if ($method->hasReturnTypesRaw()) {
-            $returnClassTypes = $method->getReturnTypesRaw();
-
-            if (!empty($returnClassTypes['list'])) {
-                foreach ($returnClassTypes['list'] as $returnType) {
-                    if (empty($returnType['cast']) || !$returnType['collection']) {
-                        continue;
-                    }
-
-                    $key = $returnType['cast']['value'];
-                    $type = $key;
-
-                    if ($this->aliasManager->isAlias($type)) {
-                        $type = '\\'.$this->aliasManager->getAlias($type);
-                    }
-
-                    $return[$key] = $type.'[]';
-                    $collections[$type.'[]'] = $returnType;
-                }
-            }
-        }
-
-        $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
-        $returnType = $this->types->getReturnTypeAnnotation(
-            $this->classMethod,
-            $processedTypes ?: array_merge($method->getReturnTypes(), $collections)
-        );
-
-        if (!empty($returnType)) {
-            // Empty line in array - it's an empty description. Don't remove it!
-            $this->return = [$returnType, ''];
-        }
     }
 
     /**
@@ -181,12 +114,12 @@ class MethodDocBlock extends DocBlock
 
         foreach ($this->lines as $line) {
             $parsedLine = $this->parseDocBlockParam($line);
-            $docType = $parsedLine['doctype'] ?? null;
+            $docType    = $parsedLine['doctype'] ?? null;
 
-            $dollar = $parsedLine['dollar'] ?? '';
-            $identifier = $parsedLine['name'] ?? false;
+            $dollar      = $parsedLine['dollar'] ?? '';
+            $identifier  = $parsedLine['name'] ?? false;
             $description = $parsedLine['description'] ?? '';
-            $type = $parsedLine['type'] ?? '';
+            $type        = $parsedLine['type'] ?? '';
 
             // Remember docblock @param to avoid param duplication when parse input args.
             if ($identifier) {
@@ -201,11 +134,11 @@ class MethodDocBlock extends DocBlock
                 $this->predefinedParams['return'] = true;
 
                 $mixed = str_replace('var', 'mixed', $type);
-                $line = str_replace($type, $mixed, $line);
+                $line  = str_replace($type, $mixed, $line);
             }
 
             if ('$' !== $dollar && $identifier && 'return' !== $docType) {
-                $line = '@'.$docType.' '.trim($type).' $'.trim($identifier.' '.$description);
+                $line = '@' . $docType . ' ' . trim($type) . ' $' . trim($identifier . ' ' . $description);
             }
 
             if ('var' === $docType) {
@@ -214,12 +147,12 @@ class MethodDocBlock extends DocBlock
 
             if ('var' === $docType && 'set' === $this->shortcutName) {
                 $docType = 'param';
-                $name = array_keys($this->parameters);
-                $name = $name[0];
+                $name    = array_keys($this->parameters);
+                $name    = $name[0];
             } elseif ('var' == $docType && 'get' == $this->shortcutName) {
                 $docType = 'return';
             } else {
-                $name = $identifier ? '$'.trim($identifier, '$') : '';
+                $name = $identifier ? '$' . trim($identifier, '$') : '';
             }
 
             switch ($docType) {
@@ -237,39 +170,63 @@ class MethodDocBlock extends DocBlock
         $this->lines = $lines;
     }
 
-    private function appendReturnLine(): void
+    protected function parseMethodReturnType(Method $method): void
     {
-        if (!isset($this->predefinedParams['return'])) {
-            [$type, $description] = $this->return;
-
-            $return = $this->aliasManager->getAliasForClassName($type).' '.$description;
-            $this->lines[] = '@return '.trim($return, ' ');
-        }
-    }
-
-    private function parseMethodParameters(Method $method): void
-    {
-        $parameters = $method->getParameters();
-        $aliasManager = $method->getClassDefinition()->getAliasManager();
-
-        if ($parameters === null) {
-            return;
+        $return = [];
+        foreach ($method->getReturnTypes() as $type) {
+            if (isset($type['data-type'])) {
+                $dataType          = 'variable' === $type['data-type'] ? 'mixed' : $type['data-type'];
+                $return[$dataType] = $dataType;
+            }
         }
 
-        foreach ($parameters as $parameter) {
-            if (isset($parameter['cast'])) {
-                if ($aliasManager->isAlias($parameter['cast']['value'])) {
-                    $type = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
-                } else {
-                    $type = $parameter['cast']['value'];
+        $returnClassTypes = $method->getReturnClassTypes();
+        if ($returnClassTypes) {
+            foreach ($returnClassTypes as $key => $returnClassType) {
+                if ($this->aliasManager->isAlias($returnClassType)) {
+                    $returnClassTypes[$key] = '\\' . $this->aliasManager->getAlias($returnClassType);
                 }
-            } elseif (isset($parameter['data-type'])) {
-                $type = 'variable' === $parameter['data-type'] ? 'mixed' : $parameter['data-type'];
-            } else {
-                $type = 'mixed';
             }
 
-            $this->parameters['$'.trim($parameter['name'], '$')] = [$type, ''];
+            $return = array_merge($return, $returnClassTypes);
+        }
+
+        /**
+         * Prepare return types for Collections compatible types.
+         * Only for complex types.
+         */
+        $collections = [];
+        if ($method->hasReturnTypesRaw()) {
+            $returnClassTypes = $method->getReturnTypesRaw();
+
+            if (!empty($returnClassTypes['list'])) {
+                foreach ($returnClassTypes['list'] as $returnType) {
+                    if (empty($returnType['cast']) || !$returnType['collection']) {
+                        continue;
+                    }
+
+                    $key  = $returnType['cast']['value'];
+                    $type = $key;
+
+                    if ($this->aliasManager->isAlias($type)) {
+                        $type = '\\' . $this->aliasManager->getAlias($type);
+                    }
+
+                    $return[$key]              = $type . '[]';
+                    $collections[$type . '[]'] = $returnType;
+                }
+            }
+        }
+
+        $processedTypes = !empty($method->getReturnClassTypes()) ? $return : null;
+        $returnType     = $this->types->getReturnTypeAnnotation(
+            $this->classMethod,
+            $processedTypes ?: array_merge($method->getReturnTypes(), $collections)
+        );
+
+        if (!empty($returnType)) {
+            // Empty line in array - it's an empty description. Don't remove it!
+            $this->return = [$returnType, ''];
         }
     }
 
@@ -283,8 +240,8 @@ class MethodDocBlock extends DocBlock
             if (!isset($this->predefinedParams[trim($name, '$')])) {
                 [$type, $description] = $parameter;
 
-                $param = $type.' '.$name.' '.$description;
-                $this->lines[] = '@param '.trim($param, ' ');
+                $param         = $type . ' ' . $name . ' ' . $description;
+                $this->lines[] = '@param ' . trim($param, ' ');
             }
         }
 
@@ -293,5 +250,41 @@ class MethodDocBlock extends DocBlock
         }
 
         $this->lines = array_unique($this->lines);
+    }
+
+    private function appendReturnLine(): void
+    {
+        if (!isset($this->predefinedParams['return'])) {
+            [$type, $description] = $this->return;
+
+            $return        = $this->aliasManager->getAliasForClassName($type) . ' ' . $description;
+            $this->lines[] = '@return ' . trim($return, ' ');
+        }
+    }
+
+    private function parseMethodParameters(Method $method): void
+    {
+        $parameters   = $method->getParameters();
+        $aliasManager = $method->getClassDefinition()->getAliasManager();
+
+        if ($parameters === null) {
+            return;
+        }
+
+        foreach ($parameters as $parameter) {
+            if (isset($parameter['cast'])) {
+                if ($aliasManager->isAlias($parameter['cast']['value'])) {
+                    $type = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
+                } else {
+                    $type = $parameter['cast']['value'];
+                }
+            } elseif (isset($parameter['data-type'])) {
+                $type = 'variable' === $parameter['data-type'] ? 'mixed' : $parameter['data-type'];
+            } else {
+                $type = 'mixed';
+            }
+
+            $this->parameters['$' . trim($parameter['name'], '$')] = [$type, ''];
+        }
     }
 }

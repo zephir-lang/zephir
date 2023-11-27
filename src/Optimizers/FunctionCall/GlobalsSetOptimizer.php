@@ -20,6 +20,9 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+use function is_string;
+
 /**
  * `globals_set()` internal function.
  *
@@ -42,7 +45,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
-        if (2 !== \count($expression['parameters'])) {
+        if (2 !== count($expression['parameters'])) {
             throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 
@@ -63,9 +66,9 @@ class GlobalsSetOptimizer extends OptimizerAbstract
 
         try {
             $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
-            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+            $resolvedParams   = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !\is_string($resolvedParams[0])) {
+            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !is_string($resolvedParams[0])) {
                 throw new CompilerException(
                     "Unable to reslove value for '{$globalName}' global variable.",
                     $expression
@@ -80,7 +83,12 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             }
 
             $internalAccessor = $this->resolveInternalAccessor($globalName);
-            $internalValue = $this->resolveInternalValue($globalDefinition, $expression, $globalName, $resolvedParams[0]);
+            $internalValue    = $this->resolveInternalValue(
+                $globalDefinition,
+                $expression,
+                $globalName,
+                $resolvedParams[0]
+            );
 
             $context->codePrinter->output("{$internalAccessor} = {$internalValue};");
 

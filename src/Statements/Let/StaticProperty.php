@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -33,7 +34,7 @@ class StaticProperty
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function assignStatic(
         string $className,
@@ -96,9 +97,22 @@ class StaticProperty
             case 'int':
             case 'uint':
             case 'long':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignLong(
+                    $tempVariable,
+                    $resolvedExpr->getBooleanCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
@@ -106,18 +120,44 @@ class StaticProperty
 
             case 'char':
             case 'uchar':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignLong(
+                    $tempVariable,
+                    '\'' . $resolvedExpr->getCode() . '\'',
+                    $compilationContext
+                );
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
                 break;
 
             case 'double':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignDouble($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignDouble(
+                    $tempVariable,
+                    $resolvedExpr->getCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
@@ -133,36 +173,69 @@ class StaticProperty
                     );
                 }
 
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
                 $tempVariable->initVariant($compilationContext);
 
                 if ($resolvedExpr->getCode()) {
-                    $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
+                    $compilationContext->backend->assignString(
+                        $tempVariable,
+                        $resolvedExpr->getCode(),
+                        $compilationContext
+                    );
                 } else {
-                    $codePrinter->output('ZVAL_EMPTY_STRING('.$tempVariable->getName().');');
+                    $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
                 }
 
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
 
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'bool':
                 if ('1' == $resolvedExpr->getBooleanCode()) {
-                    $compilationContext->backend->updateStaticProperty($classEntry, $property, 'true', $compilationContext);
+                    $compilationContext->backend->updateStaticProperty(
+                        $classEntry,
+                        $property,
+                        'true',
+                        $compilationContext
+                    );
                 } else {
                     if ('0' == $resolvedExpr->getBooleanCode()) {
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, 'false', $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            'false',
+                            $compilationContext
+                        );
                     } else {
-                        $codePrinter->output('if ('.$resolvedExpr->getBooleanCode().') {');
+                        $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, 'true', $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            'true',
+                            $compilationContext
+                        );
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('} else {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, 'false', $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            'false',
+                            $compilationContext
+                        );
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('}');
                     }
@@ -170,16 +243,30 @@ class StaticProperty
                 break;
 
             case 'empty-array':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
                 $compilationContext->backend->initArray($tempVariable, $compilationContext);
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
                 break;
 
             case 'array':
-                $compilationContext->backend->updateStaticProperty($classEntry, $property, $resolvedExpr, $compilationContext);
+                $compilationContext->backend->updateStaticProperty(
+                    $classEntry,
+                    $property,
+                    $resolvedExpr,
+                    $compilationContext
+                );
                 break;
 
             case 'variable':
@@ -212,7 +299,12 @@ class StaticProperty
                         );
 
                         $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
 
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
@@ -235,8 +327,17 @@ class StaticProperty
                             true
                         );
 
-                        $compilationContext->backend->assignDouble($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->assignDouble(
+                            $tempVariable,
+                            $variableVariable,
+                            $compilationContext
+                        );
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
 
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
@@ -244,9 +345,18 @@ class StaticProperty
                         break;
 
                     case 'bool':
-                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                            'variable',
+                            $compilationContext,
+                            true
+                        );
                         $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
                         }
@@ -260,9 +370,9 @@ class StaticProperty
                                     'variable',
                                     $compilationContext
                                 );
-                                $expression = new Expression([
-                                    'type' => 'static-property-access',
-                                    'left' => [
+                                $expression   = new Expression([
+                                    'type'  => 'static-property-access',
+                                    'left'  => [
                                         'value' => $statement['variable'],
                                     ],
                                     'right' => [
@@ -277,13 +387,24 @@ class StaticProperty
                                     throw new CompilerException($e->getMessage(), $statement, $e->getCode(), $e);
                                 }
 
-                                $variableVariableCode = $compilationContext->backend->getVariableCode($variableVariable);
-                                $tempVariableCode = $compilationContext->backend->getVariableCode($tempVariable);
-                                $compilationContext->codePrinter->output('SEPARATE_ZVAL('.$variableVariableCode.');');
-                                $compilationContext->codePrinter->output('zephir_concat_function('.$variableVariableCode.', '.$tempVariableCode.', '.$variableVariableCode.');');
-                                // no break
+                                $variableVariableCode = $compilationContext->backend->getVariableCode(
+                                    $variableVariable
+                                );
+                                $tempVariableCode     = $compilationContext->backend->getVariableCode($tempVariable);
+                                $compilationContext->codePrinter->output(
+                                    'SEPARATE_ZVAL(' . $variableVariableCode . ');'
+                                );
+                                $compilationContext->codePrinter->output(
+                                    'zephir_concat_function(' . $variableVariableCode . ', ' . $tempVariableCode . ', ' . $variableVariableCode . ');'
+                                );
+                            // no break
                             case 'assign':
-                                $compilationContext->backend->updateStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
+                                $compilationContext->backend->updateStaticProperty(
+                                    $classEntry,
+                                    $property,
+                                    $variableVariable,
+                                    $compilationContext
+                                );
                                 if ($variableVariable->isTemporal()) {
                                     $variableVariable->setIdle(true);
                                 }
@@ -298,19 +419,24 @@ class StaticProperty
                         break;
                     case 'variable':
                     case 'array':
-                        $compilationContext->backend->updateStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
+                        $compilationContext->backend->updateStaticProperty(
+                            $classEntry,
+                            $property,
+                            $variableVariable,
+                            $compilationContext
+                        );
                         if ($variableVariable->isTemporal()) {
                             $variableVariable->setIdle(true);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

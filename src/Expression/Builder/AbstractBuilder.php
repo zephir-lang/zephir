@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,103 +9,18 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder;
+
+use function is_array;
+use function is_object;
 
 abstract class AbstractBuilder
 {
+    private $char;
     private $file;
     private $line;
-    private $char;
-
-    /**
-     * @param string $file
-     * @param int    $line
-     * @param null   $char
-     *
-     * @return $this
-     */
-    public function setParseInfo($file, $line, $char = null)
-    {
-        $this->setFile($file);
-        $this->setLine($line);
-
-        if (null !== $char) {
-            $this->setChar($char);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return AbstractBuilder
-     */
-    public function setFile($file)
-    {
-        $this->file = $file;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * @param string $line
-     *
-     * @return AbstractBuilder
-     */
-    public function setLine($line)
-    {
-        $this->line = $line;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLine()
-    {
-        return $this->line;
-    }
-
-    /**
-     * @param int $char
-     *
-     * @return AbstractBuilder
-     */
-    public function setChar($char)
-    {
-        $this->char = $char;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getChar()
-    {
-        return $this->char;
-    }
-
-    /**
-     * @return array
-     *
-     * @deprecated since version 0.8.0, to be removed in 1.0.
-     *             Use {@link \Zephir\Builder\AbstractBuilder::build()}
-     */
-    public function get()
-    {
-        return $this->build();
-    }
 
     /**
      * @return array
@@ -133,6 +46,96 @@ abstract class AbstractBuilder
 
     /**
      * @return array
+     *
+     * @deprecated since version 0.8.0, to be removed in 1.0.
+     *             Use {@link \Zephir\Builder\AbstractBuilder::build()}
+     */
+    public function get()
+    {
+        return $this->build();
+    }
+
+    /**
+     * @return int
+     */
+    public function getChar()
+    {
+        return $this->char;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLine()
+    {
+        return $this->line;
+    }
+
+    /**
+     * @param int $char
+     *
+     * @return AbstractBuilder
+     */
+    public function setChar($char)
+    {
+        $this->char = $char;
+
+        return $this;
+    }
+
+    /**
+     * @param string $file
+     *
+     * @return AbstractBuilder
+     */
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    /**
+     * @param string $line
+     *
+     * @return AbstractBuilder
+     */
+    public function setLine($line)
+    {
+        $this->line = $line;
+
+        return $this;
+    }
+
+    /**
+     * @param string $file
+     * @param int    $line
+     * @param null   $char
+     *
+     * @return $this
+     */
+    public function setParseInfo($file, $line, $char = null)
+    {
+        $this->setFile($file);
+        $this->setLine($line);
+
+        if (null !== $char) {
+            $this->setChar($char);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
      */
     abstract protected function preBuild();
 
@@ -143,7 +146,7 @@ abstract class AbstractBuilder
      */
     protected function resolve($expr)
     {
-        if (\is_array($expr)) {
+        if (is_array($expr)) {
             foreach ($expr as &$value) {
                 if (!is_scalar($value)) {
                     $value = $this->resolve($value);
@@ -153,7 +156,7 @@ abstract class AbstractBuilder
             return $expr;
         }
 
-        if (\is_object($expr) && $expr instanceof self) {
+        if (is_object($expr) && $expr instanceof self) {
             return $expr->build();
         }
 

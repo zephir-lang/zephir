@@ -13,10 +13,18 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use ArrayAccess;
+use JsonSerializable;
+use ReturnTypeWillChange;
+
+use function array_key_exists;
+use function count;
+use function is_array;
+
 /**
  * Manages compiler global configuration.
  */
-class Config implements \ArrayAccess, \JsonSerializable
+class Config implements ArrayAccess, JsonSerializable
 {
     /**
      * Is config changed?
@@ -27,71 +35,71 @@ class Config implements \ArrayAccess, \JsonSerializable
      * Default configuration for project.
      */
     private array $container = [
-        'stubs' => [
-            'path' => 'ide/%version%/%namespace%/',
+        'stubs'         => [
+            'path'                     => 'ide/%version%/%namespace%/',
             'stubs-run-after-generate' => false,
-            'banner' => '',
+            'banner'                   => '',
         ],
-        'api' => [
-            'path' => 'doc/%version%',
+        'api'           => [
+            'path'  => 'doc/%version%',
             'theme' => [
-                'name' => 'zephir',
+                'name'    => 'zephir',
                 'options' => [
-                    'github' => null,
-                    'analytics' => null,
-                    'main_color' => '#3E6496',
-                    'link_color' => '#3E6496',
+                    'github'           => null,
+                    'analytics'        => null,
+                    'main_color'       => '#3E6496',
+                    'link_color'       => '#3E6496',
                     'link_hover_color' => '#5F9AE7',
                 ],
             ],
         ],
-        'warnings' => [
-            'unused-variable' => true,
-            'unused-variable-external' => false,
-            'possible-wrong-parameter' => true,
+        'warnings'      => [
+            'unused-variable'                    => true,
+            'unused-variable-external'           => false,
+            'possible-wrong-parameter'           => true,
             'possible-wrong-parameter-undefined' => false,
-            'nonexistent-function' => true,
-            'nonexistent-class' => true,
-            'non-valid-isset' => true,
-            'non-array-update' => true,
-            'non-valid-objectupdate' => true,
-            'non-valid-fetch' => true,
-            'invalid-array-index' => true,
-            'non-array-append' => true,
-            'invalid-return-type' => true,
-            'unreachable-code' => true,
-            'nonexistent-constant' => true,
-            'not-supported-magic-constant' => true,
-            'non-valid-decrement' => true,
-            'non-valid-increment' => true,
-            'non-valid-clone' => true,
-            'non-valid-new' => true,
-            'non-array-access' => true,
-            'invalid-reference' => true,
-            'invalid-typeof-comparison' => true,
-            'conditional-initialization' => true,
+            'nonexistent-function'               => true,
+            'nonexistent-class'                  => true,
+            'non-valid-isset'                    => true,
+            'non-array-update'                   => true,
+            'non-valid-objectupdate'             => true,
+            'non-valid-fetch'                    => true,
+            'invalid-array-index'                => true,
+            'non-array-append'                   => true,
+            'invalid-return-type'                => true,
+            'unreachable-code'                   => true,
+            'nonexistent-constant'               => true,
+            'not-supported-magic-constant'       => true,
+            'non-valid-decrement'                => true,
+            'non-valid-increment'                => true,
+            'non-valid-clone'                    => true,
+            'non-valid-new'                      => true,
+            'non-array-access'                   => true,
+            'invalid-reference'                  => true,
+            'invalid-typeof-comparison'          => true,
+            'conditional-initialization'         => true,
         ],
         'optimizations' => [
-            'static-type-inference' => true,
+            'static-type-inference'             => true,
             'static-type-inference-second-pass' => true,
-            'local-context-pass' => true,
-            'constant-folding' => true,
-            'static-constant-class-folding' => true,
-            'call-gatherer-pass' => true,
-            'check-invalid-reads' => false,
-            'internal-call-transformation' => false,
+            'local-context-pass'                => true,
+            'constant-folding'                  => true,
+            'static-constant-class-folding'     => true,
+            'call-gatherer-pass'                => true,
+            'check-invalid-reads'               => false,
+            'internal-call-transformation'      => false,
         ],
-        'extra' => [
-            'indent' => 'spaces',
+        'extra'         => [
+            'indent'         => 'spaces',
             'export-classes' => false,
         ],
-        'namespace' => '',
-        'name' => '',
-        'description' => '',
-        'author' => 'Phalcon Team',
-        'version' => '0.0.1',
-        'verbose' => false,
-        'requires' => [
+        'namespace'     => '',
+        'name'          => '',
+        'description'   => '',
+        'author'        => 'Phalcon Team',
+        'version'       => '0.0.1',
+        'verbose'       => false,
+        'requires'      => [
             'extensions' => [],
         ],
     ];
@@ -109,7 +117,15 @@ class Config implements \ArrayAccess, \JsonSerializable
      */
     public function __toString()
     {
-        return (string) json_encode($this, JSON_PRETTY_PRINT);
+        return (string)json_encode($this, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * Writes the configuration if it has been changed.
+     */
+    public function dumpToFile(): void
+    {
+        file_put_contents('config.json', $this);
     }
 
     /**
@@ -190,88 +206,10 @@ class Config implements \ArrayAccess, \JsonSerializable
             }
 
             $_SERVER['argv'] = array_values($argv);
-            $_SERVER['argc'] = \count($argv);
+            $_SERVER['argc'] = count($argv);
         }
 
         return $config;
-    }
-
-    /**
-     * Allows to check whether a $key is defined.
-     *
-     * @param mixed $key
-     *
-     * @return bool
-     */
-    public function offsetExists($key): bool
-    {
-        return isset($this->container[$key]) || \array_key_exists($key, $this->container);
-    }
-
-    /**
-     * Gets a $key from the internal container.
-     *
-     * @param mixed $offset
-     *
-     * @return mixed|null
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
-    {
-        if (!\is_array($offset)) {
-            return $this->offsetExists($offset) ? $this->container[$offset] : null;
-        }
-
-        $namespace = key($offset);
-        $offset = current($offset);
-
-        if (!$this->offsetExists($namespace) || !\is_array($this->container[$namespace])) {
-            return null;
-        }
-
-        if (isset($this->container[$namespace][$offset]) || \array_key_exists($offset, $this->container[$namespace])) {
-            return $this->container[$namespace][$offset];
-        }
-
-        return null;
-    }
-
-    /**
-     * Sets a configuration value.
-     *
-     * @param mixed $key
-     * @param mixed $value
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($key, $value): void
-    {
-        if (!\is_array($key)) {
-            $this->container[$key] = $value;
-
-            return;
-        }
-
-        $namespace = key($key);
-        $key = current($key);
-
-        if (!\array_key_exists($namespace, $this->container)) {
-            $this->container[$namespace] = [];
-        }
-
-        $this->container[$namespace][$key] = $value;
-    }
-
-    /**
-     * Unsets a $key from internal container.
-     *
-     * @deprecated
-     *
-     * @param mixed $key
-     */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($key): void
-    {
-        unset($this->container[$key]);
     }
 
     /**
@@ -288,6 +226,93 @@ class Config implements \ArrayAccess, \JsonSerializable
     }
 
     /**
+     * Specify data which should be serialized to JSON.
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->container;
+    }
+
+    /**
+     * Allows to check whether a $key is defined.
+     *
+     * @param mixed $key
+     *
+     * @return bool
+     */
+    public function offsetExists($key): bool
+    {
+        return isset($this->container[$key]) || array_key_exists($key, $this->container);
+    }
+
+    /**
+     * Gets a $key from the internal container.
+     *
+     * @param mixed $offset
+     *
+     * @return mixed|null
+     */
+    #[ReturnTypeWillChange]
+    public function offsetGet($offset)
+    {
+        if (!is_array($offset)) {
+            return $this->offsetExists($offset) ? $this->container[$offset] : null;
+        }
+
+        $namespace = key($offset);
+        $offset    = current($offset);
+
+        if (!$this->offsetExists($namespace) || !is_array($this->container[$namespace])) {
+            return null;
+        }
+
+        if (isset($this->container[$namespace][$offset]) || array_key_exists($offset, $this->container[$namespace])) {
+            return $this->container[$namespace][$offset];
+        }
+
+        return null;
+    }
+
+    /**
+     * Sets a configuration value.
+     *
+     * @param mixed $key
+     * @param mixed $value
+     */
+    #[ReturnTypeWillChange]
+    public function offsetSet($key, $value): void
+    {
+        if (!is_array($key)) {
+            $this->container[$key] = $value;
+
+            return;
+        }
+
+        $namespace = key($key);
+        $key       = current($key);
+
+        if (!array_key_exists($namespace, $this->container)) {
+            $this->container[$namespace] = [];
+        }
+
+        $this->container[$namespace][$key] = $value;
+    }
+
+    /**
+     * Unsets a $key from internal container.
+     *
+     * @param mixed $key
+     *
+     * @deprecated
+     *
+     */
+    #[ReturnTypeWillChange]
+    public function offsetUnset($key): void
+    {
+        unset($this->container[$key]);
+    }
+
+    /**
      * Changes a configuration setting.
      *
      * @param mixed $key
@@ -297,22 +322,6 @@ class Config implements \ArrayAccess, \JsonSerializable
     public function set($key, $value, $namespace = null): void
     {
         null !== $namespace ? $this->offsetSet([$namespace => $key], $value) : $this->offsetSet($key, $value);
-    }
-
-    /**
-     * Writes the configuration if it has been changed.
-     */
-    public function dumpToFile(): void
-    {
-        file_put_contents('config.json', $this);
-    }
-
-    /**
-     * Specify data which should be serialized to JSON.
-     */
-    public function jsonSerialize(): array
-    {
-        return $this->container;
     }
 
     /**
@@ -326,7 +335,7 @@ class Config implements \ArrayAccess, \JsonSerializable
             return;
         }
 
-        $config = json_decode(file_get_contents('config.json'), true);
+        $config  = json_decode(file_get_contents('config.json'), true);
         $message = 'The config.json file is invalid';
 
         switch (json_last_error()) {

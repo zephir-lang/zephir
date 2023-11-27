@@ -80,24 +80,6 @@ class CallGathererPass
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function passLetStatement(array $statement): void
-    {
-        foreach ($statement['assignments'] as $assignment) {
-            if (isset($assignment['expr'])) {
-                $this->passExpression($assignment['expr']);
-            }
-        }
-    }
-
-    public function passCall(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $this->passExpression($parameter['parameter']);
-            }
-        }
-    }
-
     public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
@@ -105,25 +87,7 @@ class CallGathererPass
         }
     }
 
-    public function passNew(array $expression): void
-    {
-        if (!$expression['dynamic']) {
-            $className = $this->compilationContext->getFullName($expression['class']);
-            if (!isset($this->methodCalls[$className]['__construct'])) {
-                $this->methodCalls[$className]['__construct'] = 1;
-            } else {
-                ++$this->methodCalls[$className]['__construct'];
-            }
-        }
-
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $this->passExpression($parameter['parameter']);
-            }
-        }
-    }
-
-    public function passNewType(array $expression): void
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -208,7 +172,7 @@ class CallGathererPass
                 if (isset($expression['variable']['value'])) {
                     if ('this' == $expression['variable']['value']) {
                         $methodName = $expression['name'];
-                        $className = $this->compilationContext->classDefinition->getCompleteName();
+                        $className  = $this->compilationContext->classDefinition->getCompleteName();
                         if (!isset($this->methodCalls[$className][$methodName])) {
                             $this->methodCalls[$className][$methodName] = 1;
                         } else {
@@ -258,6 +222,42 @@ class CallGathererPass
             default:
                 echo 'CGP=', $expression['type'], PHP_EOL;
                 break;
+        }
+    }
+
+    public function passLetStatement(array $statement): void
+    {
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
+            }
+        }
+    }
+
+    public function passNew(array $expression): void
+    {
+        if (!$expression['dynamic']) {
+            $className = $this->compilationContext->getFullName($expression['class']);
+            if (!isset($this->methodCalls[$className]['__construct'])) {
+                $this->methodCalls[$className]['__construct'] = 1;
+            } else {
+                ++$this->methodCalls[$className]['__construct'];
+            }
+        }
+
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
+        }
+    }
+
+    public function passNewType(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
         }
     }
 

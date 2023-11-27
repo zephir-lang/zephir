@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Operators;
 
@@ -21,49 +21,48 @@ use Zephir\Expression\Builder\AbstractBuilder;
 class UnaryOperator extends AbstractOperator
 {
     // y = &a
-    public const OPERATOR_REFERENCE = 'reference';
-
-    // y = !a
-    public const OPERATOR_NOT = 'not';
-
-    // y = ~a
     public const OPERATOR_BITWISE_NOT = 'bitwise_not';
 
-    // y = -a
-    public const OPERATOR_MINUS = 'minus';
-
-    // y = +a
-    public const OPERATOR_PLUS = 'plus';
-
-    // y = isset a
-    public const OPERATOR_ISSET = 'isset';
-
-    // y = require a
-    public const OPERATOR_REQUIRE = 'require';
-
-    // y = require_once a
-    public const OPERATOR_REQUIRE_ONCE = 'require_once';
-
-    // y = clone a
+    // y = !a
     public const OPERATOR_CLONE = 'clone';
 
-    // y = empty a
+    // y = ~a
     public const OPERATOR_EMPTY = 'empty';
 
-    // y = likely a
+    // y = -a
+    public const OPERATOR_ISSET = 'isset';
+
+    // y = +a
     public const OPERATOR_LIKELY = 'likely';
 
-    // y = unlikely a
-    public const OPERATOR_UNLIKELY = 'unlikely';
-
-    // y = list a
+    // y = isset a
     public const OPERATOR_LIST = 'list';
 
-    // y = typeof a
+    // y = require a
+    public const OPERATOR_MINUS = 'minus';
+
+    // y = require_once a
+    public const OPERATOR_NOT = 'not';
+
+    // y = clone a
+    public const OPERATOR_PLUS = 'plus';
+
+    // y = empty a
+    public const OPERATOR_REFERENCE = 'reference';
+
+    // y = likely a
+    public const OPERATOR_REQUIRE = 'require';
+
+    // y = unlikely a
+    public const OPERATOR_REQUIRE_ONCE = 'require_once';
+
+    // y = list a
     public const OPERATOR_TYPEOF = 'typeof';
 
-    private $operator;
+    // y = typeof a
+    public const OPERATOR_UNLIKELY = 'unlikely';
     private $expression;
+    private $operator;
 
     /**
      * @param null                 $operator
@@ -83,29 +82,17 @@ class UnaryOperator extends AbstractOperator
     /**
      * @return mixed
      */
-    public function getOperator()
+    public function getExpression()
     {
-        return $this->operator;
-    }
-
-    /**
-     * @param $operator
-     *
-     * @return $this
-     */
-    public function setOperator($operator)
-    {
-        $this->operator = $operator;
-
-        return $this;
+        return $this->expression;
     }
 
     /**
      * @return mixed
      */
-    public function getExpression()
+    public function getOperator()
     {
-        return $this->expression;
+        return $this->operator;
     }
 
     /**
@@ -116,6 +103,18 @@ class UnaryOperator extends AbstractOperator
     public function setExpression(AbstractBuilder $expression)
     {
         $this->expression = $expression;
+
+        return $this;
+    }
+
+    /**
+     * @param $operator
+     *
+     * @return $this
+     */
+    public function setOperator($operator)
+    {
+        $this->operator = $operator;
 
         return $this;
     }

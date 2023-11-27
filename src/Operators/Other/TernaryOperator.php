@@ -44,15 +44,18 @@ class TernaryOperator extends AbstractOperator
         $returnVariable->setLocalOnly(false);
 
         if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
-            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext
+            );
             if ($returnVariable->isTemporal()) {
                 $returnVariable->skipInitVariant(2);
             }
         }
 
-        $expr = new EvalExpression();
+        $expr      = new EvalExpression();
         $condition = $expr->optimize($expression['left'], $compilationContext);
-        $compilationContext->codePrinter->output('if ('.$condition.') {');
+        $compilationContext->codePrinter->output('if (' . $condition . ') {');
 
         $compilationContext->codePrinter->increaseLevel();
 
@@ -60,16 +63,16 @@ class TernaryOperator extends AbstractOperator
          * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => [
                 [
                     'assign-type' => 'variable',
-                    'variable' => $returnVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $expression['right'],
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char'],
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['right'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 ],
             ],
         ]);
@@ -83,16 +86,16 @@ class TernaryOperator extends AbstractOperator
          * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => [
                 [
                     'assign-type' => 'variable',
-                    'variable' => $returnVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $expression['extra'],
-                    'file' => $expression['file'],
-                    'line' => $expression['line'],
-                    'char' => $expression['char'],
+                    'variable'    => $returnVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $expression['extra'],
+                    'file'        => $expression['file'],
+                    'line'        => $expression['line'],
+                    'char'        => $expression['char'],
                 ],
             ],
         ]);

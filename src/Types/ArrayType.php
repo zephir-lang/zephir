@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Types;
 
+use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -26,49 +27,49 @@ use Zephir\Expression\Builder\BuilderFactory;
 class ArrayType extends AbstractType
 {
     public array $methodMap = [
-        'join' => 'join',
-        'reversed' => 'array_reverse',
-        'rev' => 'array_reverse',
-        'diff' => 'array_diff',
-        'flip' => 'array_flip',
-        'fill' => 'array_fill',
-        'walk' => 'array_walk',
-        'haskey' => 'array_key_exists',
-        'keys' => 'array_keys',
-        'values' => 'array_values',
-        'split' => 'array_chunk',
-        'combine' => 'array_combine',
-        'intersect' => 'array_intersect',
-        'merge' => 'array_merge',
-        'mergerecursive' => 'array_merge_recursive',
-        'pad' => 'array_pad',
-        'pop' => 'array_pop',
-        'push' => 'array_push',
-        'rand' => 'array_rand',
-        'replace' => 'array_replace',
-        'map' => 'array_map',
+        'join'             => 'join',
+        'reversed'         => 'array_reverse',
+        'rev'              => 'array_reverse',
+        'diff'             => 'array_diff',
+        'flip'             => 'array_flip',
+        'fill'             => 'array_fill',
+        'walk'             => 'array_walk',
+        'haskey'           => 'array_key_exists',
+        'keys'             => 'array_keys',
+        'values'           => 'array_values',
+        'split'            => 'array_chunk',
+        'combine'          => 'array_combine',
+        'intersect'        => 'array_intersect',
+        'merge'            => 'array_merge',
+        'mergerecursive'   => 'array_merge_recursive',
+        'pad'              => 'array_pad',
+        'pop'              => 'array_pop',
+        'push'             => 'array_push',
+        'rand'             => 'array_rand',
+        'replace'          => 'array_replace',
+        'map'              => 'array_map',
         'replacerecursive' => 'array_replace_recursive',
-        'shift' => 'array_shift',
-        'slice' => 'array_slice',
-        'splice' => 'array_splice',
-        'sum' => 'array_sum',
-        'unique' => 'array_unique',
-        'prepend' => 'array_unshift',
-        'count' => 'count',
-        'current' => 'current',
-        'each' => 'each',
-        'end' => 'end',
-        'key' => 'key',
-        'next' => 'next',
-        'prev' => 'prev',
-        'reset' => 'reset',
-        'sort' => 'sort',
-        'sortbykey' => 'ksort',
-        'reversesort' => 'rsort',
+        'shift'            => 'array_shift',
+        'slice'            => 'array_slice',
+        'splice'           => 'array_splice',
+        'sum'              => 'array_sum',
+        'unique'           => 'array_unique',
+        'prepend'          => 'array_unshift',
+        'count'            => 'count',
+        'current'          => 'current',
+        'each'             => 'each',
+        'end'              => 'end',
+        'key'              => 'key',
+        'next'             => 'next',
+        'prev'             => 'prev',
+        'reset'            => 'reset',
+        'sort'             => 'sort',
+        'sortbykey'        => 'ksort',
+        'reversesort'      => 'rsort',
         'reversesortbykey' => 'krsort',
-        'shuffle' => 'shuffle',
-        'tojson' => 'json_encode',
-        'reduce' => 'array_reduce',
+        'shuffle'          => 'shuffle',
+        'tojson'           => 'json_encode',
+        'reduce'           => 'array_reduce',
     ];
 
     public function getTypeName(): string
@@ -86,17 +87,18 @@ class ArrayType extends AbstractType
      *
      * @return bool|CompiledExpression
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function join($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
         $functionCall = BuilderFactory::getInstance()->statements()
-            ->functionCall('join', $expression['parameters'])
-            ->addArgument($caller)
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+                                      ->functionCall('join', $expression['parameters'])
+                                      ->addArgument($caller)
+                                      ->setFile($expression['file'])
+                                      ->setLine($expression['line'])
+                                      ->setChar($expression['char'])
+        ;
 
         $expression = new Expression($functionCall->build());
 

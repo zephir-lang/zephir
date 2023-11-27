@@ -31,13 +31,13 @@ class FunctionCallBuilder
     public function get(): array
     {
         return [
-            'type' => 'fcall',
-            'name' => $this->name,
-            'call-type' => $this->type,
+            'type'       => 'fcall',
+            'name'       => $this->name,
+            'call-type'  => $this->type,
             'parameters' => $this->parameters,
-            'file' => $this->file,
-            'line' => $this->line,
-            'char' => $this->char,
+            'file'       => $this->file,
+            'line'       => $this->line,
+            'char'       => $this->char,
         ];
     }
 }

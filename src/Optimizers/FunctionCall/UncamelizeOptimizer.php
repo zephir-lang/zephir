@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * UncamelizeOptimizer.
@@ -41,12 +43,12 @@ class UncamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) < 1 || \count($expression['parameters']) > 2) {
+        if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
             throw new CompilerException("'uncamelize' only accepts one or two parameters");
         }
 
         $delimiter = 'NULL ';
-        if (2 == \count($expression['parameters'])) {
+        if (2 == count($expression['parameters'])) {
             if ('null' == $expression['parameters'][1]['parameter']['type']) {
                 unset($expression['parameters'][1]);
             }
@@ -59,7 +61,10 @@ class UncamelizeOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         $context->headersManager->add('kernel/string');
@@ -77,7 +82,9 @@ class UncamelizeOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_uncamelize('.$symbol.', '.$resolvedParams[0].', '.$delimiter.' );');
+        $context->codePrinter->output(
+            'zephir_uncamelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

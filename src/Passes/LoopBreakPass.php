@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Passes;
 
@@ -22,6 +22,11 @@ use Zephir\StatementsBlock;
 class LoopBreakPass
 {
     protected bool $hasBreak = false;
+
+    public function hasBreak(): bool
+    {
+        return $this->hasBreak;
+    }
 
     /**
      * Do the compilation pass.
@@ -53,10 +58,5 @@ class LoopBreakPass
                     break;
             }
         }
-    }
-
-    public function hasBreak(): bool
-    {
-        return $this->hasBreak;
     }
 }

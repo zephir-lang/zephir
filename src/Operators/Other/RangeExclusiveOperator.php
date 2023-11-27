@@ -49,8 +49,11 @@ class RangeExclusiveOperator extends AbstractOperator
         /**
          * Implicit type coercing.
          */
-        $castBuilder = $exprBuilder->operators()->cast('array', $exprBuilder->statements()
-            ->functionCall('range', [$expression['left'], $expression['right']]));
+        $castBuilder = $exprBuilder->operators()->cast(
+            'array',
+            $exprBuilder->statements()
+                        ->functionCall('range', [$expression['left'], $expression['right']])
+        );
 
         $expression = new Expression($castBuilder->build());
         $expression->setReadOnly($this->readOnly);

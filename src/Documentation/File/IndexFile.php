@@ -22,22 +22,22 @@ class IndexFile implements FileInterface
     {
     }
 
-    public function getTemplateName(): string
-    {
-        return 'index.phtml';
-    }
-
     public function getData(): array
     {
         return [
             'namespaceAccessor' => $this->namespaceAccessor,
-            'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
-            'namespaces' => $this->namespaceAccessor->getByNamespace(),
+            'namespacesTree'    => $this->namespaceAccessor->getNamespaceTree(),
+            'namespaces'        => $this->namespaceAccessor->getByNamespace(),
         ];
     }
 
     public function getOutputFile(): string
     {
         return 'index.html';
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'index.phtml';
     }
 }

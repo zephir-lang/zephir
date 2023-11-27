@@ -19,20 +19,20 @@ namespace Zephir\Types;
 class IntType extends AbstractType
 {
     public array $methodMap = [
-        'abs' => 'abs',
+        'abs'      => 'abs',
         'tobinary' => 'decbin',
-        'tohex' => 'dechex',
-        'tooctal' => 'decoct',
-        'pow' => 'pow',
-        'sqrt' => 'sqrt',
-        'exp' => 'exp',
-        'sin' => 'sin',
-        'cos' => 'cos',
-        'tan' => 'tan',
-        'asin' => 'asin',
-        'acos' => 'acos',
-        'atan' => 'atan',
-        'log' => 'log',
+        'tohex'    => 'dechex',
+        'tooctal'  => 'decoct',
+        'pow'      => 'pow',
+        'sqrt'     => 'sqrt',
+        'exp'      => 'exp',
+        'sin'      => 'sin',
+        'cos'      => 'cos',
+        'tan'      => 'tan',
+        'asin'     => 'asin',
+        'acos'     => 'acos',
+        'atan'     => 'atan',
+        'log'      => 'log',
     ];
 
     public function getTypeName(): string

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,12 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Parser;
 
 class Manager
 {
     public const MINIMUM_PARSER_VERSION = '1.5.0';
-    public const PARSER_HOME_PAGE = 'https://github.com/zephir-lang/php-zephir-parser';
+    public const PARSER_HOME_PAGE       = 'https://github.com/zephir-lang/php-zephir-parser';
 
     public function __construct(protected Parser $parser)
     {

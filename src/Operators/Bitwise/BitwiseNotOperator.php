@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Bitwise;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -28,7 +29,7 @@ class BitwiseNotOperator extends AbstractOperator
      *
      * @return CompiledExpression
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext)
@@ -47,30 +48,38 @@ class BitwiseNotOperator extends AbstractOperator
             case 'uint':
             case 'long':
             case 'ulong':
-                return new CompiledExpression('int', '~('.$left->getCode().')', $expression);
+                return new CompiledExpression('int', '~(' . $left->getCode() . ')', $expression);
 
             case 'variable':
-                $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $left->getCode(),
+                    $compilationContext,
+                    $expression['left']
+                );
                 switch ($variable->getType()) {
                     case 'bool':
                     case 'int':
                     case 'uint':
                     case 'long':
-                        return new CompiledExpression('int', '~'.$variable->getName(), $expression);
+                        return new CompiledExpression('int', '~' . $variable->getName(), $expression);
 
                     case 'variable':
                     case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
 
-                        return new CompiledExpression('int', '~zephir_get_intval('.$variable->getName().')', $expression);
+                        return new CompiledExpression(
+                            'int',
+                            '~zephir_get_intval(' . $variable->getName() . ')',
+                            $expression
+                        );
 
                     default:
-                        throw new CompilerException('Unknown type: '.$variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: '.$left->getType(), $expression);
+                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
         }
     }
 }

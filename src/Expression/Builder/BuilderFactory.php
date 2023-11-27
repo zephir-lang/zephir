@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder;
 
 use Zephir\Expression\Builder\Factory\OperatorsFactory;
@@ -18,14 +18,12 @@ use Zephir\Expression\Builder\Factory\StatementsFactory;
 
 class BuilderFactory
 {
-    /** @var OperatorsFactory */
-    protected $operatorsFactory;
-
-    /** @var StatementsFactory */
-    protected $statementsFactory;
-
     /** @var self */
     protected static $instance;
+    /** @var OperatorsFactory */
+    protected $operatorsFactory;
+    /** @var StatementsFactory */
+    protected $statementsFactory;
 
     /**
      * @return self
@@ -40,6 +38,20 @@ class BuilderFactory
     }
 
     /**
+     * @param      $type
+     * @param null $value
+     *
+     * @return RawExpression
+     */
+    public function literal($type, $value = null)
+    {
+        return $this->raw([
+            'type'  => $type,
+            'value' => $value,
+        ]);
+    }
+
+    /**
      * @return OperatorsFactory
      */
     public function operators()
@@ -49,6 +61,16 @@ class BuilderFactory
         }
 
         return $this->operatorsFactory;
+    }
+
+    /**
+     * @param $expression
+     *
+     * @return RawExpression
+     */
+    public function raw($expression)
+    {
+        return new RawExpression($expression);
     }
 
     /**
@@ -71,32 +93,8 @@ class BuilderFactory
     public function variable($name)
     {
         return $this->raw([
-            'type' => 'variable',
+            'type'  => 'variable',
             'value' => $name,
         ]);
-    }
-
-    /**
-     * @param      $type
-     * @param null $value
-     *
-     * @return RawExpression
-     */
-    public function literal($type, $value = null)
-    {
-        return $this->raw([
-            'type' => $type,
-            'value' => $value,
-        ]);
-    }
-
-    /**
-     * @param $expression
-     *
-     * @return RawExpression
-     */
-    public function raw($expression)
-    {
-        return new RawExpression($expression);
     }
 }

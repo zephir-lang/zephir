@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Cache;
 
+use ReflectionMethod;
 use Zephir\CompilationContext;
 
 /**
@@ -42,7 +43,7 @@ class StaticMethodCache
             return 'NULL, 0';
         }
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             $completeName = $method->getClassDefinition()->getCompleteName();
 
             /**
@@ -53,7 +54,10 @@ class StaticMethodCache
             }
 
             if (isset($this->cache[$completeName][$method->getName()])) {
-                return '&'.$this->cache[$completeName][$method->getName()]->getName().', '.SlotsCache::getExistingMethodSlot($method);
+                return '&'
+                    . $this->cache[$completeName][$method->getName()]->getName()
+                    . ', '
+                    . SlotsCache::getExistingMethodSlot($method);
             }
         }
 
@@ -61,7 +65,10 @@ class StaticMethodCache
             return 'NULL, 0';
         }
 
-        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite(
+            'zephir_fcall_cache_entry',
+            $compilationContext
+        );
 
         if ($method->isPrivate() || $method->isFinal()) {
             $cacheSlot = SlotsCache::getMethodSlot($method);
@@ -72,10 +79,10 @@ class StaticMethodCache
         $functionCache->setMustInitNull(true);
         $functionCache->setReusable(false);
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 
-        return '&'.$functionCache->getName().', '.$cacheSlot;
+        return '&' . $functionCache->getName() . ', ' . $cacheSlot;
     }
 }

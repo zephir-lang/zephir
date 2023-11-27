@@ -24,6 +24,8 @@ use Zephir\Exception;
 use Zephir\StatementsBlock;
 use Zephir\Variable\Variable;
 
+use function is_array;
+
 /**
  * Creates an anonymous function within the extension simulating a closure
  */
@@ -33,44 +35,18 @@ class Closure
      * @var bool
      */
     protected bool $expecting = true;
-
-    /**
-     * @var bool
-     */
-    protected bool $readOnly = false;
-
     /**
      * @var Variable|null
      */
     protected ?Variable $expectingVariable = null;
-
     /**
      * Unique closure ID.
      */
     protected static $id = 0;
-
     /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
+     * @var bool
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
+    protected bool $readOnly = false;
 
     /**
      * Creates a closure.
@@ -86,7 +62,7 @@ class Closure
     {
         $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
-            self::$id.'__closure'
+            self::$id . '__closure'
         );
 
         $classDefinition->setIsFinal(true);
@@ -104,21 +80,25 @@ class Closure
         $block = $expression['right'] ?? [];
 
         $staticVariables = [];
-        if (isset($expression['use']) && \is_array($expression['use'])) {
+        if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
-                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable($parameter['name']);
+                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
+                    $parameter['name']
+                );
             }
         }
 
         foreach ($staticVariables as $var) {
-            $classDefinition->addProperty(new Property(
-                $classDefinition,
-                ['public', 'static'],
-                $var->getName(),
-                null,
-                null,
-                null
-            ));
+            $classDefinition->addProperty(
+                new Property(
+                    $classDefinition,
+                    ['public', 'static'],
+                    $var->getName(),
+                    null,
+                    null,
+                    null
+                )
+            );
         }
 
         $classMethod = new Method(
@@ -140,10 +120,18 @@ class Closure
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
             }
         } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
         }
 
         $symbolVariable->initVariant($compilationContext);
@@ -152,11 +140,20 @@ class Closure
 
         foreach ($staticVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
-                $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $var, $compilationContext);
+                $compilationContext->backend->updateStaticProperty(
+                    $classDefinition->getClassEntry(),
+                    $var->getName(),
+                    $var,
+                    $compilationContext
+                );
                 continue;
             }
 
-            $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+            $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                'variable',
+                $compilationContext,
+                true
+            );
 
             switch ($var->getType()) {
                 case 'int':
@@ -180,11 +177,39 @@ class Closure
                     break;
             }
 
-            $compilationContext->backend->updateStaticProperty($classDefinition->getClassEntry(), $var->getName(), $tempVariable, $compilationContext);
+            $compilationContext->backend->updateStaticProperty(
+                $classDefinition->getClassEntry(),
+                $var->getName(),
+                $tempVariable,
+                $compilationContext
+            );
         }
 
         ++self::$id;
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
+     *
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
+     */
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    {
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     *
+     * @param bool $readOnly
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 }

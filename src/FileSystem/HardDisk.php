@@ -13,6 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\FileSystem;
 
+use FilesystemIterator;
+use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Zephir;
 
@@ -24,23 +29,22 @@ use Zephir\Zephir;
 class HardDisk implements FileSystemInterface
 {
     /**
-     * Initialize checker
-     */
-    private bool $initialized = false;
-
-    /**
      * Root or base path
      *
      * Path to where all cached files and folders are collected.
      */
     private string $basePath;
+    /**
+     * Initialize checker
+     */
+    private bool $initialized = false;
 
     /**
      * @throws InvalidArgumentException
      */
     public function __construct(string $basePath, private string $localPath = Zephir::VERSION)
     {
-        $this->basePath = $this->rightTrimPath($basePath);
+        $this->basePath  = $this->rightTrimPath($basePath);
         $this->localPath = $this->rightTrimPath($localPath);
 
         if (empty($this->localPath)) {
@@ -48,22 +52,33 @@ class HardDisk implements FileSystemInterface
         }
     }
 
-    private function rightTrimPath(string $path): string
-    {
-        return rtrim($path, '\\/');
-    }
-
-    public function isInitialized(): bool
-    {
-        return $this->initialized;
-    }
-
     /**
-     * Start File System
+     * Recursive directory clean
      */
-    public function initialize(): void
+    public function clean(): void
     {
-        $this->initialized = true;
+        if (!is_dir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath)) {
+            return;
+        }
+
+        $contents = $this->listDirectoryRecursively(
+            $this->basePath . DIRECTORY_SEPARATOR . $this->localPath,
+            RecursiveIteratorIterator::CHILD_FIRST,
+        );
+
+        /** @var SplFileInfo $file */
+        foreach ($contents as $file) {
+            $this->deleteFileInfoObject($file);
+        }
+
+        unset($contents);
+
+        rmdir($this->basePath . DIRECTORY_SEPARATOR . $this->localPath);
+    }
+
+    public function delete(string $path): void
+    {
+        unlink($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}");
     }
 
     public function exists(string $path): bool
@@ -74,109 +89,14 @@ class HardDisk implements FileSystemInterface
             $path = "{$this->localPath}/{$path}";
         }
 
-        return is_file($this->basePath.DIRECTORY_SEPARATOR.$path);
-    }
-
-    public function makeDirectory(string $path): bool
-    {
-        if ('.' === $path || empty($path)) {
-            $path = $this->localPath;
-        } else {
-            $path = "{$this->localPath}/{$path}";
-        }
-
-        $dir = $this->basePath.DIRECTORY_SEPARATOR.$path;
-
-        if (is_dir($dir)) {
-            chmod($dir, 0755);
-
-            return true;
-        }
-
-        mkdir($this->basePath.DIRECTORY_SEPARATOR.$path, 0755, true);
-
-        return is_dir($path);
+        return is_file($this->basePath . DIRECTORY_SEPARATOR . $path);
     }
 
     public function file(string $path): array
     {
-        $contents = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
+        $contents = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}");
 
         return preg_split("/\r\n|\n|\r/", $contents);
-    }
-
-    public function modificationTime(string $path): int
-    {
-        return filemtime($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
-    }
-
-    public function read(string $path): string
-    {
-        return file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
-    }
-
-    public function delete(string $path): void
-    {
-        unlink($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
-    }
-
-    public function write(string $path, string $data): void
-    {
-        file_put_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}", $data);
-    }
-
-    public function system(string $command, string $descriptor, string $destination): void
-    {
-        // fallback
-        $redirect = "{$this->localPath}/{$destination}";
-        if (!empty($this->basePath)) {
-            $redirect = "{$this->basePath}/{$this->localPath}/{$destination}";
-        }
-
-        switch ($descriptor) {
-            default:
-            case 'stdout':
-                system("{$command} > ".escapeshellarg($redirect));
-                break;
-            case 'stderr':
-                system("{$command} 2> ".escapeshellarg($redirect));
-                break;
-        }
-    }
-
-    public function requireFile(string $path): mixed
-    {
-        if (!empty($this->basePath)) {
-            return require "{$this->basePath}/{$this->localPath}/{$path}";
-        }
-
-        $code = file_get_contents($this->basePath.DIRECTORY_SEPARATOR.$this->localPath."/{$path}");
-
-        return eval(str_replace('<?php ', '', $code));
-    }
-
-    /**
-     * Recursive directory clean
-     */
-    public function clean(): void
-    {
-        if (!is_dir($this->basePath.DIRECTORY_SEPARATOR.$this->localPath)) {
-            return;
-        }
-
-        $contents = $this->listDirectoryRecursively(
-            $this->basePath.DIRECTORY_SEPARATOR.$this->localPath,
-            \RecursiveIteratorIterator::CHILD_FIRST,
-        );
-
-        /** @var \SplFileInfo $file */
-        foreach ($contents as $file) {
-            $this->deleteFileInfoObject($file);
-        }
-
-        unset($contents);
-
-        rmdir($this->basePath.DIRECTORY_SEPARATOR.$this->localPath);
     }
 
     /**
@@ -220,6 +140,45 @@ class HardDisk implements FileSystemInterface
         return file_get_contents($cacheFile);
     }
 
+    /**
+     * Start File System
+     */
+    public function initialize(): void
+    {
+        $this->initialized = true;
+    }
+
+    public function isInitialized(): bool
+    {
+        return $this->initialized;
+    }
+
+    public function makeDirectory(string $path): bool
+    {
+        if ('.' === $path || empty($path)) {
+            $path = $this->localPath;
+        } else {
+            $path = "{$this->localPath}/{$path}";
+        }
+
+        $dir = $this->basePath . DIRECTORY_SEPARATOR . $path;
+
+        if (is_dir($dir)) {
+            chmod($dir, 0755);
+
+            return true;
+        }
+
+        mkdir($this->basePath . DIRECTORY_SEPARATOR . $path, 0755, true);
+
+        return is_dir($path);
+    }
+
+    public function modificationTime(string $path): int
+    {
+        return filemtime($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}");
+    }
+
     public function normalizePath(string $path): string
     {
         return str_replace(['\\', ':', '/'], '_', $path);
@@ -228,7 +187,7 @@ class HardDisk implements FileSystemInterface
     /**
      * Checks if the content of the file on the disk is the same as the content.
      */
-    public static function persistByHash(string $data, string $path): int | bool
+    public static function persistByHash(string $data, string $path): int|bool
     {
         if (!file_exists($path)) {
             return file_put_contents($path, $data);
@@ -241,25 +200,70 @@ class HardDisk implements FileSystemInterface
         return false;
     }
 
-    protected function deleteFileInfoObject(\SplFileInfo $file): bool
+    public function read(string $path): string
+    {
+        return file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}");
+    }
+
+    public function requireFile(string $path): mixed
+    {
+        if (!empty($this->basePath)) {
+            return require "{$this->basePath}/{$this->localPath}/{$path}";
+        }
+
+        $code = file_get_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}");
+
+        return eval(str_replace('<?php ', '', $code));
+    }
+
+    public function system(string $command, string $descriptor, string $destination): void
+    {
+        // fallback
+        $redirect = "{$this->localPath}/{$destination}";
+        if (!empty($this->basePath)) {
+            $redirect = "{$this->basePath}/{$this->localPath}/{$destination}";
+        }
+
+        switch ($descriptor) {
+            default:
+            case 'stdout':
+                system("{$command} > " . escapeshellarg($redirect));
+                break;
+            case 'stderr':
+                system("{$command} 2> " . escapeshellarg($redirect));
+                break;
+        }
+    }
+
+    public function write(string $path, string $data): void
+    {
+        file_put_contents($this->basePath . DIRECTORY_SEPARATOR . $this->localPath . "/{$path}", $data);
+    }
+
+    protected function deleteFileInfoObject(SplFileInfo $file): bool
     {
         switch ($file->getType()) {
             case 'dir':
-                return @rmdir((string) $file->getRealPath());
+                return @rmdir((string)$file->getRealPath());
             case 'link':
                 return @unlink($file->getPathname());
             default:
-                return @unlink((string) $file->getRealPath());
+                return @unlink((string)$file->getRealPath());
         }
     }
 
     private function listDirectoryRecursively(
         string $path,
-        int $mode = \RecursiveIteratorIterator::SELF_FIRST
-    ): \Generator {
-        yield from new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS),
+        int $mode = RecursiveIteratorIterator::SELF_FIRST
+    ): Generator {
+        yield from new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
             $mode
         );
+    }
+
+    private function rightTrimPath(string $path): string
+    {
+        return rtrim($path, '\\/');
     }
 }

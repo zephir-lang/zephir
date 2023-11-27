@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -28,13 +29,13 @@ class IssetOperator extends AbstractOperator
     /**
      * Compiles an 'isset' operator.
      *
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -50,17 +51,27 @@ class IssetOperator extends AbstractOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if (!in_array($exprCompiledVariable->getType(), ['variable', 'array'], true)) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $left['left']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array',
+                        $left['left']
+                    );
                 }
 
-                $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariable->getCode(),
+                    $compilationContext,
+                    $left['left']
+                );
                 switch ($variable->getType()) {
                     case 'array':
                     case 'variable':
                         break;
 
                     default:
-                        throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as array', $left['left']);
+                        throw new CompilerException(
+                            'Variable type: ' . $variable->getType() . ' cannot be used as array',
+                            $left['left']
+                        );
                         break;
                 }
 
@@ -82,17 +93,31 @@ class IssetOperator extends AbstractOperator
                     case 'int':
                     case 'long':
                     case 'string':
-                        return $compilationContext->backend->arrayIsset($variable, $resolvedExpr, $left['right'], $compilationContext);
+                        return $compilationContext->backend->arrayIsset(
+                            $variable,
+                            $resolvedExpr,
+                            $left['right'],
+                            $compilationContext
+                        );
 
                     case 'variable':
                     case 'mixed':
-                        $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
+                        $indexVariable = $compilationContext->symbolTable->getVariableForRead(
+                            $resolvedExpr->getCode(),
+                            $compilationContext,
+                            $left['right']
+                        );
 
-                        return $compilationContext->backend->arrayIsset($variable, $indexVariable, $left['right'], $compilationContext);
+                        return $compilationContext->backend->arrayIsset(
+                            $variable,
+                            $indexVariable,
+                            $left['right'],
+                            $compilationContext
+                        );
                         break;
 
                     default:
-                        throw new CompilerException('['.$left['right']['type'].']', $expression);
+                        throw new CompilerException('[' . $left['right']['type'] . ']', $expression);
                 }
                 break;
 
@@ -105,12 +130,22 @@ class IssetOperator extends AbstractOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ('variable' !== $exprCompiledVariable->getType()) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as object', $left['left']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
+                        $left['left']
+                    );
                 }
 
-                $variable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $left['left']);
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariable->getCode(),
+                    $compilationContext,
+                    $left['left']
+                );
                 if ('variable' !== $variable->getType()) {
-                    throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as object', $left['left']);
+                    throw new CompilerException(
+                        'Variable type: ' . $variable->getType() . ' cannot be used as object',
+                        $left['left']
+                    );
                 }
 
                 if ($variable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -132,22 +167,30 @@ class IssetOperator extends AbstractOperator
 
                 switch ($resolvedExpr->getType()) {
                     case 'variable':
-                        $indexVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $left['right']);
+                        $indexVariable = $compilationContext->symbolTable->getVariableForRead(
+                            $resolvedExpr->getCode(),
+                            $compilationContext,
+                            $left['right']
+                        );
                         switch ($indexVariable->getType()) {
                             case 'variable':
                             case 'mixed':
                             case 'string':
                                 $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
 
-                                return new CompiledExpression('bool', 'zephir_isset_property_zval('.$variableCode.', '.$indexVariableCode.')', $left['right']);
+                                return new CompiledExpression(
+                                    'bool',
+                                    'zephir_isset_property_zval(' . $variableCode . ', ' . $indexVariableCode . ')',
+                                    $left['right']
+                                );
 
                             default:
-                                throw new CompilerException('['.$indexVariable->getType().']', $expression);
+                                throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('['.$expression['left']['right']['type'].']', $expression);
+                        throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
                 }
                 break;
 

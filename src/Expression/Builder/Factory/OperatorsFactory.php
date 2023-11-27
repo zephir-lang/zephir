@@ -29,24 +29,16 @@ class OperatorsFactory
 
     /**
      * @param null                 $variable
-     * @param AbstractBuilder|null $expression
-     *
-     * @return AssignVariableOperator
-     */
-    public function assignVariable($variable = null, AbstractBuilder $expression = null): AssignVariableOperator
-    {
-        return new AssignVariableOperator($variable, $expression);
-    }
-
-    /**
-     * @param null                 $variable
      * @param null                 $property
      * @param AbstractBuilder|null $expression
      *
      * @return AssignPropertyOperator
      */
-    public function assignProperty($variable = null, $property = null, AbstractBuilder $expression = null): AssignPropertyOperator
-    {
+    public function assignProperty(
+        $variable = null,
+        $property = null,
+        AbstractBuilder $expression = null
+    ): AssignPropertyOperator {
         $assignProperty = new AssignPropertyOperator($variable, $property, $expression);
         $assignProperty->setType($assignProperty::TYPE_ASSIGN_OBJECT_PROPERTY);
 
@@ -60,12 +52,26 @@ class OperatorsFactory
      *
      * @return AssignPropertyOperator
      */
-    public function assignStaticProperty($variable = null, $property = null, AbstractBuilder $expression = null): AssignPropertyOperator
-    {
+    public function assignStaticProperty(
+        $variable = null,
+        $property = null,
+        AbstractBuilder $expression = null
+    ): AssignPropertyOperator {
         $assignProperty = $this->assignProperty($variable, $property, $expression);
         $assignProperty->setType($assignProperty::TYPE_ASSIGN_STATIC_PROPERTY);
 
         return $assignProperty;
+    }
+
+    /**
+     * @param null                 $variable
+     * @param AbstractBuilder|null $expression
+     *
+     * @return AssignVariableOperator
+     */
+    public function assignVariable($variable = null, AbstractBuilder $expression = null): AssignVariableOperator
+    {
+        return new AssignVariableOperator($variable, $expression);
     }
 
     /**
@@ -75,20 +81,12 @@ class OperatorsFactory
      *
      * @return BinaryOperator
      */
-    public function binary($operator = null, AbstractBuilder $leftExpression = null, AbstractBuilder $rightExpression = null)
-    {
+    public function binary(
+        $operator = null,
+        AbstractBuilder $leftExpression = null,
+        AbstractBuilder $rightExpression = null
+    ) {
         return new BinaryOperator($operator, $leftExpression, $rightExpression);
-    }
-
-    /**
-     * @param string|null          $operator
-     * @param AbstractBuilder|null $expression
-     *
-     * @return UnaryOperator
-     */
-    public function unary($operator = null, AbstractBuilder $expression = null)
-    {
-        return new UnaryOperator($operator, $expression);
     }
 
     /**
@@ -100,8 +98,8 @@ class OperatorsFactory
     public function cast($type, AbstractBuilder $expression)
     {
         return $this->raw([
-            'type' => BinaryOperator::OPERATOR_CAST,
-            'left' => $type,
+            'type'  => BinaryOperator::OPERATOR_CAST,
+            'left'  => $type,
             'right' => $expression,
         ]);
     }
@@ -115,8 +113,8 @@ class OperatorsFactory
     public function hint($type, AbstractBuilder $expression)
     {
         return $this->raw([
-            'type' => BinaryOperator::OPERATOR_TYPE_HINT,
-            'left' => $type,
+            'type'  => BinaryOperator::OPERATOR_TYPE_HINT,
+            'left'  => $type,
             'right' => $expression,
         ]);
     }
@@ -129,5 +127,16 @@ class OperatorsFactory
     public function raw(array $expression)
     {
         return new RawOperator($expression);
+    }
+
+    /**
+     * @param string|null          $operator
+     * @param AbstractBuilder|null $expression
+     *
+     * @return UnaryOperator
+     */
+    public function unary($operator = null, AbstractBuilder $expression = null)
+    {
+        return new UnaryOperator($operator, $expression);
     }
 }

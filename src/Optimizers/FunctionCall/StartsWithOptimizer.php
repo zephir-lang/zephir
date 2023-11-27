@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,12 +9,16 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * StartsWithOptimizer.
@@ -38,7 +40,7 @@ class StartsWithOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters']) && 3 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters']) && 3 != count($expression['parameters'])) {
             return false;
         }
 
@@ -52,13 +54,25 @@ class StartsWithOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
 
         if (isset($str)) {
-            return new CompiledExpression('bool', 'zephir_start_with_str('.$resolvedParams[0].', SL("'.$str.'"))', $expression);
+            return new CompiledExpression(
+                'bool',
+                'zephir_start_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))',
+                $expression
+            );
         }
 
-        if (2 == \count($expression['parameters'])) {
-            return new CompiledExpression('bool', 'zephir_start_with('.$resolvedParams[0].', '.$resolvedParams[1].', NULL)', $expression);
+        if (2 == count($expression['parameters'])) {
+            return new CompiledExpression(
+                'bool',
+                'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL)',
+                $expression
+            );
         } else {
-            return new CompiledExpression('bool', 'zephir_start_with('.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].')', $expression);
+            return new CompiledExpression(
+                'bool',
+                'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')',
+                $expression
+            );
         }
     }
 }

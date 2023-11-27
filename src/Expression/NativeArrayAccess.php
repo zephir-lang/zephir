@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -25,46 +26,10 @@ use Zephir\Variable\Variable;
  */
 class NativeArrayAccess
 {
-    protected bool $expecting = true;
-
-    protected bool $readOnly = false;
-
+    protected bool      $expecting = true;
     protected ?Variable $expectingVariable;
-
-    protected bool $noisy = true;
-
-    /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
-     */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
-
-    /**
-     * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
-     */
-    public function setNoisy(bool $noisy): void
-    {
-        $this->noisy = $noisy;
-    }
+    protected bool      $noisy     = true;
+    protected bool      $readOnly  = false;
 
     /**
      * Compiles foo[x] = {expr}.
@@ -75,7 +40,7 @@ class NativeArrayAccess
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
@@ -91,7 +56,11 @@ class NativeArrayAccess
          */
         switch ($exprVariable->getType()) {
             case 'variable':
-                $variableVariable = $compilationContext->symbolTable->getVariableForRead($exprVariable->getCode(), $compilationContext, $expression);
+                $variableVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprVariable->getCode(),
+                    $compilationContext,
+                    $expression
+                );
                 switch ($variableVariable->getType()) {
                     case 'variable':
                     case 'array':
@@ -99,12 +68,18 @@ class NativeArrayAccess
                         break;
 
                     default:
-                        throw new CompilerException('Variable type: '.$variableVariable->getType().' cannot be used as array', $expression['left']);
+                        throw new CompilerException(
+                            'Variable type: ' . $variableVariable->getType() . ' cannot be used as array',
+                            $expression['left']
+                        );
                 }
                 break;
 
             default:
-                throw new CompilerException('Cannot use expression: '.$exprVariable->getType().' as an array', $expression['left']);
+                throw new CompilerException(
+                    'Cannot use expression: ' . $exprVariable->getType() . ' as an array',
+                    $expression['left']
+                );
         }
 
         /**
@@ -121,64 +96,36 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array              $expression
-     * @param Variable           $variableVariable
-     * @param CompilationContext $compilationContext
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
      *
-     * @return CompiledExpression
-     *
-     * @throws \ReflectionException
-     * @throws Exception
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
-    protected function accessStringOffset(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
     {
-        if ($this->expecting) {
-            if ($this->expectingVariable) {
-                $symbolVariable = $this->expectingVariable;
-                if ('char' != $symbolVariable->getType() && 'uchar' != $symbolVariable->getType()) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('uchar', $compilationContext);
-                }
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('uchar', $compilationContext);
-            }
-        }
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
 
-        /**
-         * Right part of expression is the index.
-         */
-        $expr = new Expression($expression['right']);
-        $exprIndex = $expr->compile($compilationContext);
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode.
+     *
+     * @param bool $noisy
+     */
+    public function setNoisy(bool $noisy): void
+    {
+        $this->noisy = $noisy;
+    }
 
-        $codePrinter = $compilationContext->codePrinter;
-        $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
-
-        switch ($exprIndex->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-                $compilationContext->headersManager->add('kernel/operators');
-                $codePrinter->output($symbolVariable->getName().' = ZEPHIR_STRING_OFFSET('.$variableCode.', '.$exprIndex->getCode().');');
-                break;
-
-            case 'variable':
-                $variableIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
-                switch ($variableIndex->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                        $codePrinter->output($symbolVariable->getName().' = ZEPHIR_STRING_OFFSET('.$variableCode.', '.$variableIndex->getName().');');
-                        break;
-
-                    default:
-                        throw new CompilerException('Cannot use index type '.$variableIndex->getType().' as offset', $expression['right']);
-                }
-                break;
-
-            default:
-                throw new CompilerException('Cannot use index type '.$exprIndex->getType().' as offset', $expression['right']);
-        }
-
-        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     *
+     * @param bool $readOnly
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 
     /**
@@ -189,10 +136,13 @@ class NativeArrayAccess
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    protected function accessDimensionArray(array $expression, Variable $variableVariable, CompilationContext $compilationContext): CompiledExpression
-    {
+    protected function accessDimensionArray(
+        array $expression,
+        Variable $variableVariable,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
         $arrayAccess = $expression;
 
         if ('variable' == $variableVariable->getType()) {
@@ -214,7 +164,7 @@ class NativeArrayAccess
         /**
          * Resolves the symbol that expects the value.
          */
-        $readOnly = false;
+        $readOnly       = false;
         $symbolVariable = $this->expectingVariable;
 
         if ($this->readOnly) {
@@ -226,7 +176,9 @@ class NativeArrayAccess
                 if ('return_value' != $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
                     if (false === $line || ($line > 0 && $line < $expression['line'])) {
-                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
+                            $symbolVariable->getName()
+                        );
                         if (1 == $numberMutations) {
                             if ($symbolVariable->getNumberMutations() == $numberMutations) {
                                 $symbolVariable->setMemoryTracked(false);
@@ -244,11 +196,19 @@ class NativeArrayAccess
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
+                            'variable',
+                            $compilationContext,
+                            $expression
+                        );
                     }
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable('variable', $compilationContext, $expression);
+                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
             }
         } else {
             if ($this->expecting && $this->expectingVariable) {
@@ -259,7 +219,9 @@ class NativeArrayAccess
                 if ('return_value' !== $symbolVariable->getName()) {
                     $line = $compilationContext->symbolTable->getLastCallLine();
                     if (false === $line || ($line > 0 && $line < $expression['line'])) {
-                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations($symbolVariable->getName());
+                        $numberMutations = $compilationContext->symbolTable->getExpectedMutations(
+                            $symbolVariable->getName()
+                        );
                         if (1 == $numberMutations) {
                             if ($symbolVariable->getNumberMutations() == $numberMutations) {
                                 $symbolVariable->setMemoryTracked(false);
@@ -277,11 +239,17 @@ class NativeArrayAccess
                         $symbolVariable->observeVariant($compilationContext);
                         $this->readOnly = false;
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve(
+                            'variable',
+                            $compilationContext
+                        );
                     }
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve('variable', $compilationContext);
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserve(
+                    'variable',
+                    $compilationContext
+                );
             }
         }
 
@@ -289,7 +257,10 @@ class NativeArrayAccess
          * Variable that receives property accesses must be polymorphic
          */
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign array index', $expression);
+            throw new CompilerException(
+                'Cannot use variable: ' . $symbolVariable->getType() . ' to assign array index',
+                $expression
+            );
         }
 
         /**
@@ -306,16 +277,113 @@ class NativeArrayAccess
         /**
          * Right part of expression is the index.
          */
-        $expr = new Expression($arrayAccess['right']);
+        $expr      = new Expression($arrayAccess['right']);
         $exprIndex = $expr->compile($compilationContext);
         $compilationContext->headersManager->add('kernel/array');
 
         if ('variable' === $exprIndex->getType()) {
-            $exprIndex = $compilationContext->symbolTable->getVariableForRead($exprIndex->getCode(), $compilationContext, $expression);
+            $exprIndex = $compilationContext->symbolTable->getVariableForRead(
+                $exprIndex->getCode(),
+                $compilationContext,
+                $expression
+            );
         }
 
-        $compilationContext->backend->arrayFetch($symbolVariable, $variableVariable, $exprIndex, $flags, $arrayAccess, $compilationContext);
+        $compilationContext->backend->arrayFetch(
+            $symbolVariable,
+            $variableVariable,
+            $exprIndex,
+            $flags,
+            $arrayAccess,
+            $compilationContext
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param array              $expression
+     * @param Variable           $variableVariable
+     * @param CompilationContext $compilationContext
+     *
+     * @return CompiledExpression
+     *
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    protected function accessStringOffset(
+        array $expression,
+        Variable $variableVariable,
+        CompilationContext $compilationContext
+    ): CompiledExpression {
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
+                if ('char' != $symbolVariable->getType() && 'uchar' != $symbolVariable->getType()) {
+                    $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                        'uchar',
+                        $compilationContext
+                    );
+                }
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'uchar',
+                    $compilationContext
+                );
+            }
+        }
+
+        /**
+         * Right part of expression is the index.
+         */
+        $expr      = new Expression($expression['right']);
+        $exprIndex = $expr->compile($compilationContext);
+
+        $codePrinter  = $compilationContext->codePrinter;
+        $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
+
+        switch ($exprIndex->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $compilationContext->headersManager->add('kernel/operators');
+                $codePrinter->output(
+                    $symbolVariable->getName(
+                    ) . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $exprIndex->getCode() . ');'
+                );
+                break;
+
+            case 'variable':
+                $variableIndex = $compilationContext->symbolTable->getVariableForRead(
+                    $exprIndex->getCode(),
+                    $compilationContext,
+                    $expression
+                );
+                switch ($variableIndex->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                        $codePrinter->output(
+                            $symbolVariable->getName(
+                            ) . ' = ZEPHIR_STRING_OFFSET(' . $variableCode . ', ' . $variableIndex->getName() . ');'
+                        );
+                        break;
+
+                    default:
+                        throw new CompilerException(
+                            'Cannot use index type ' . $variableIndex->getType() . ' as offset',
+                            $expression['right']
+                        );
+                }
+                break;
+
+            default:
+                throw new CompilerException(
+                    'Cannot use index type ' . $exprIndex->getType() . ' as offset',
+                    $expression['right']
+                );
+        }
+
+        return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
     }
 }

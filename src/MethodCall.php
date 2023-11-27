@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,13 +9,22 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
+use ReflectionException;
+use ReflectionMethod;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Types\AbstractType;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
+
+use function count;
+use function is_array;
+use function is_object;
 
 /**
  * Call methods in a non-static context
@@ -25,19 +32,17 @@ use Zephir\Variable\Variable;
 class MethodCall extends Call
 {
     /**
-     * Function is called using a normal method name.
-     */
-    public const CALL_NORMAL = 1;
-
-    /**
      * Function is called using a dynamic variable as method name.
      */
     public const CALL_DYNAMIC = 2;
-
     /**
      * Function is called using a dynamic string as method name.
      */
     public const CALL_DYNAMIC_STRING = 3;
+    /**
+     * Function is called using a normal method name.
+     */
+    public const CALL_NORMAL = 1;
 
     /**
      * Compiles a method call.
@@ -48,7 +53,7 @@ class MethodCall extends Call
      * @return mixed|CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext): mixed
     {
@@ -72,16 +77,16 @@ class MethodCall extends Call
                         break;
                     default:
                         /* Check if there is a built-in type optimizer available */
-                        $builtInTypeClass = 'Zephir\Types\\'.ucfirst($variableVariable->getType()).'Type';
+                        $builtInTypeClass = 'Zephir\Types\\' . ucfirst($variableVariable->getType()) . 'Type';
                         if (class_exists($builtInTypeClass)) {
                             /**
-                             * @var \Zephir\Types\AbstractType
+                             * @var AbstractType
                              */
                             $builtInType = new $builtInTypeClass();
-                            $caller = $exprCompiledVariable;
+                            $caller      = $exprCompiledVariable;
                         } else {
                             throw new CompilerException(
-                                'Methods cannot be called on variable type: '.$variableVariable->getType(),
+                                'Methods cannot be called on variable type: ' . $variableVariable->getType(),
                                 $expression
                             );
                         }
@@ -89,13 +94,13 @@ class MethodCall extends Call
                 break;
             default:
                 /* Check if there is a built-in type optimizer available */
-                $builtInTypeClass = 'Zephir\Types\\'.ucfirst($exprCompiledVariable->getType()).'Type';
+                $builtInTypeClass = 'Zephir\Types\\' . ucfirst($exprCompiledVariable->getType()) . 'Type';
                 if (class_exists($builtInTypeClass)) {
                     $builtInType = new $builtInTypeClass();
-                    $caller = $exprCompiledVariable;
+                    $caller      = $exprCompiledVariable;
                 } else {
                     throw new CompilerException(
-                        'Cannot use expression: '.$exprCompiledVariable->getType().' as method caller',
+                        'Cannot use expression: ' . $exprCompiledVariable->getType() . ' as method caller',
                         $expression['variable']
                     );
                 }
@@ -117,16 +122,16 @@ class MethodCall extends Call
                 $expression
             );
 
-            if (\is_object($builtInType)) {
+            if (is_object($builtInType)) {
                 throw new CompilerException(
-                    'Dynamic method invocation for type: '.$variableMethod->getType().' is not supported',
+                    'Dynamic method invocation for type: ' . $variableMethod->getType() . ' is not supported',
                     $expression
                 );
             }
 
             if ($variableMethod->isNotVariableAndString()) {
                 throw new CompilerException(
-                    'Cannot use variable type: '.$variableMethod->getType().' as dynamic method name',
+                    'Cannot use variable type: ' . $variableMethod->getType() . ' as dynamic method name',
                     $expression
                 );
             }
@@ -137,11 +142,11 @@ class MethodCall extends Call
         /**
          * Create temporary variable if needed.
          */
-        $mustInit = false;
+        $mustInit    = false;
         $isExpecting = $expr->isExpectingReturn();
         if ($isExpecting) {
             $symbolVariable = $expr->getExpectingVariable();
-            if (\is_object($symbolVariable)) {
+            if (is_object($symbolVariable)) {
                 $readDetector = new ReadDetector();
                 if ($caller == $symbolVariable || $readDetector->detect($symbolVariable->getName(), $expression)) {
                     $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
@@ -201,7 +206,7 @@ class MethodCall extends Call
                             $interfaces = null;
                         }
 
-                        if (\is_array($interfaces)) {
+                        if (is_array($interfaces)) {
                             $compiler = $compilationContext->compiler;
                             foreach ($interfaces as $interface) {
                                 $classInterfaceDefinition = $compiler->getClassDefinition($interface);
@@ -210,14 +215,14 @@ class MethodCall extends Call
                                     $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
                                     if (!$classInterfaceDefinition) {
                                         throw new CompilerException(
-                                            "Couldn't locate internal or external interface: ".$interface,
+                                            "Couldn't locate internal or external interface: " . $interface,
                                             $expression
                                         );
                                     }
                                 }
 
                                 if ($classInterfaceDefinition->hasMethod($methodName)) {
-                                    $found = true;
+                                    $found       = true;
                                     $classMethod = $classInterfaceDefinition->getMethod($methodName);
                                     break;
                                 }
@@ -261,7 +266,7 @@ class MethodCall extends Call
                     if ($classMethod->isPrivate()) {
                         if ($classMethod->getClassDefinition() !== $classDefinition) {
                             throw new CompilerException(
-                                "Cannot call private method '".$expression['name']."' out of its scope",
+                                "Cannot call private method '" . $expression['name'] . "' out of its scope",
                                 $expression
                             );
                         }
@@ -271,7 +276,7 @@ class MethodCall extends Call
                      * Try to produce an exception if method is called with a wrong number of parameters
                      */
                     if (isset($expression['parameters'])) {
-                        $callNumberParameters = \count($expression['parameters']);
+                        $callNumberParameters = count($expression['parameters']);
                     } else {
                         $callNumberParameters = 0;
                     }
@@ -282,7 +287,7 @@ class MethodCall extends Call
                         if ($callNumberParameters > $numberParameters) {
                             throw new CompilerException(
                                 sprintf(
-                                    "Method '%s::%s' called with a wrong number of parameters, ".
+                                    "Method '%s::%s' called with a wrong number of parameters, " .
                                     'the method has: %d, passed: %d',
                                     $classDefinition->getCompleteName(),
                                     $expression['name'],
@@ -297,7 +302,7 @@ class MethodCall extends Call
                     if ($callNumberParameters < $expectedNumberParameters) {
                         throw new CompilerException(
                             sprintf(
-                                "Method '%s::%s' called with a wrong number of parameters, ".
+                                "Method '%s::%s' called with a wrong number of parameters, " .
                                 'the method has: %d, passed: %d',
                                 $classDefinition->getCompleteName(),
                                 $expression['name'],
@@ -318,14 +323,15 @@ class MethodCall extends Call
                 if ($check && $variableVariable->hasAnyDynamicType('object')) {
                     $classTypes = $variableVariable->getClassTypes();
 
-                    if (\count($classTypes)) {
+                    if (count($classTypes)) {
                         $numberImplemented = 0;
-                        $compiler = $compilationContext->compiler;
+                        $compiler          = $compilationContext->compiler;
                         foreach ($classTypes as $classType) {
-                            if ($compiler->isClass($classType)
-                                || $compiler->isInterface($classType)
-                                || $compiler->isBundledClass($classType)
-                                || $compiler->isBundledInterface($classType)
+                            if (
+                                $compiler->isClass($classType) ||
+                                $compiler->isInterface($classType) ||
+                                $compiler->isBundledClass($classType) ||
+                                $compiler->isBundledInterface($classType)
                             ) {
                                 if ($compiler->isClass($classType) || $compiler->isInterface($classType)) {
                                     $classDefinition = $compiler->getClassDefinition($classType);
@@ -335,14 +341,14 @@ class MethodCall extends Call
 
                                 if (!$classDefinition) {
                                     throw new CompilerException(
-                                        'Cannot locate class definition for class '.$classType,
+                                        'Cannot locate class definition for class ' . $classType,
                                         $expression
                                     );
                                 }
 
                                 if (!$classDefinition->hasMethod($methodName)) {
                                     if (!$classDefinition->isInterface()) {
-                                        if (1 == \count($classTypes)) {
+                                        if (1 == count($classTypes)) {
                                             throw new CompilerException(
                                                 sprintf(
                                                     "Class '%s' does not implement method: '%s'",
@@ -376,9 +382,10 @@ class MethodCall extends Call
                                 /*
                                  * Check visibility for protected methods
                                  */
-                                if ($method->isProtected()
-                                    && $method->getClassDefinition() != $classDefinition
-                                    && $method->getClassDefinition() != $classDefinition->getExtendsClass()
+                                if (
+                                    $method->isProtected() &&
+                                    $method->getClassDefinition() != $classDefinition &&
+                                    $method->getClassDefinition() != $classDefinition->getExtendsClass()
                                 ) {
                                     throw new CompilerException(
                                         sprintf(
@@ -396,12 +403,12 @@ class MethodCall extends Call
                                  */
                                 if ($method instanceof Method && !$method->isBundled()) {
                                     if (isset($expression['parameters'])) {
-                                        $callNumberParameters = \count($expression['parameters']);
+                                        $callNumberParameters = count($expression['parameters']);
                                     } else {
                                         $callNumberParameters = 0;
                                     }
 
-                                    $classMethod = $classDefinition->getMethod($methodName);
+                                    $classMethod              = $classDefinition->getMethod($methodName);
                                     $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
 
                                     if (!$expectedNumberParameters && $callNumberParameters > 0) {
@@ -410,7 +417,7 @@ class MethodCall extends Call
                                             $className = $classDefinition->getCompleteName();
                                             throw new CompilerException(
                                                 sprintf(
-                                                    "Method '%s::%s' called with a wrong number of parameters, ".
+                                                    "Method '%s::%s' called with a wrong number of parameters, " .
                                                     'the method has: %d, passed: %s',
                                                     $className,
                                                     $expression['name'],
@@ -425,7 +432,7 @@ class MethodCall extends Call
                                     if ($callNumberParameters < $expectedNumberParameters) {
                                         throw new CompilerException(
                                             sprintf(
-                                                "Method '%s::%s' called with a wrong number of parameters, ".
+                                                "Method '%s::%s' called with a wrong number of parameters, " .
                                                 'the method has: %d, passed: %d',
                                                 $classDefinition->getCompleteName(),
                                                 $expression['name'],
@@ -446,7 +453,7 @@ class MethodCall extends Call
                             } else {
                                 ++$numberImplemented;
                                 $compilationContext->logger->warning(
-                                    'Class "'.$classType.'" does not exist at compile time',
+                                    'Class "' . $classType . '" does not exist at compile time',
                                     ['nonexistent-class', $expression]
                                 );
                             }
@@ -454,7 +461,7 @@ class MethodCall extends Call
 
                         if (0 == $numberImplemented) {
                             if (!$classDefinition->isInterface()) {
-                                if (\count($classTypes) > 1) {
+                                if (count($classTypes) > 1) {
                                     throw new CompilerException(
                                         sprintf(
                                             "None of classes: '%s' implement method: '%s'",
@@ -531,7 +538,7 @@ class MethodCall extends Call
             $references = [];
             if (self::CALL_NORMAL == $type || self::CALL_DYNAMIC_STRING == $type) {
                 if (isset($method)) {
-                    if ($method instanceof \ReflectionMethod) {
+                    if ($method instanceof ReflectionMethod) {
                         $position = 0;
                         foreach ($method->getParameters() as $parameter) {
                             if ($parameter->isPassedByReference()) {
@@ -566,10 +573,10 @@ class MethodCall extends Call
                 $method ?? null
             );
 
-            if (\count($references)) {
+            if (count($references)) {
                 foreach ($params as $position => $param) {
                     if (isset($references[$position])) {
-                        $compilationContext->codePrinter->output('Z_SET_ISREF_P('.$param.');');
+                        $compilationContext->codePrinter->output('Z_SET_ISREF_P(' . $param . ');');
                     }
                 }
             }
@@ -577,7 +584,7 @@ class MethodCall extends Call
             // We check here if a correct parameter type is passed to the called method
             if (self::CALL_NORMAL == $type) {
                 if (isset($method) && $method instanceof Method && isset($expression['parameters'])) {
-                    $resolvedTypes = $this->getResolvedTypes();
+                    $resolvedTypes        = $this->getResolvedTypes();
                     $resolvedDynamicTypes = $this->getResolvedDynamicTypes();
 
                     foreach ($method->getParameters() as $n => $parameter) {
@@ -591,7 +598,7 @@ class MethodCall extends Call
                              */
                             if ($resolvedTypes[$n] != $parameter['data-type']) {
                                 $template = sprintf(
-                                    'Passing possible incorrect type for parameter: %s::%s(%s), '.
+                                    'Passing possible incorrect type for parameter: %s::%s(%s), ' .
                                     'passing: %s, expecting: %s',
                                     $classDefinition->getCompleteName(),
                                     $method->getName(),
@@ -675,16 +682,16 @@ class MethodCall extends Call
                                         }
                                         break;
 
-                                        /**
-                                         * Passing polymorphic variables to static typed parameters
-                                         * could lead to potential unexpected type coercions
-                                         */
+                                    /**
+                                     * Passing polymorphic variables to static typed parameters
+                                     * could lead to potential unexpected type coercions
+                                     */
                                     case 'variable':
                                         if ($resolvedDynamicTypes[$n] != $parameter['data-type']) {
                                             if ('undefined' == $resolvedDynamicTypes[$n]) {
                                                 $compilationContext->logger->warning(
                                                     sprintf(
-                                                        'Passing possible incorrect type for parameter: %s::%s(%s), '.
+                                                        'Passing possible incorrect type for parameter: %s::%s(%s), ' .
                                                         'passing: undefined, expecting: %s',
                                                         $classDefinition->getCompleteName(),
                                                         $method->getName(),
@@ -718,13 +725,13 @@ class MethodCall extends Call
             $realMethod = $this->getRealCalledMethod($compilationContext, $variableVariable, $methodName);
 
             $isInternal = false;
-            if (\is_object($realMethod[1])) {
+            if (is_object($realMethod[1])) {
                 $realMethod[1] = $realMethod[1]->getOptimizedMethod();
-                $method = $realMethod[1];
-                $isInternal = $realMethod[1]->isInternal();
+                $method        = $realMethod[1];
+                $isInternal    = $realMethod[1]->isInternal();
                 if ($isInternal && $realMethod[0] > 1) {
                     throw new CompilerException(
-                        "Cannot resolve method: '".$expression['name']."' in polymorphic variable",
+                        "Cannot resolve method: '" . $expression['name'] . "' in polymorphic variable",
                         $expression
                     );
                 }
@@ -745,7 +752,7 @@ class MethodCall extends Call
                     $variableVariable,
                     $methodName,
                     $cachePointer,
-                    \count($params) ? $params : null,
+                    count($params) ? $params : null,
                     $compilationContext
                 );
             } else {
@@ -754,22 +761,27 @@ class MethodCall extends Call
                     $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
                 }
                 $variableCode = $compilationContext->backend->getVariableCode($variableVariable);
-                $paramCount = \count($params);
-                $paramsStr = $paramCount ? ', '.implode(', ', $params) : '';
+                $paramCount   = count($params);
+                $paramsStr    = $paramCount ? ', ' . implode(', ', $params) : '';
 
                 if ($isExpecting) {
                     if ('return_value' == $symbolVariable->getName()) {
                         $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 1, $paramCount);
-                        $codePrinter->output($macro.'('.$variableCode.', '.$method->getInternalName().$paramsStr.');');
+                        $codePrinter->output(
+                            $macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');'
+                        );
                     } else {
                         $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 2, $paramCount);
                         $codePrinter->output(
-                            $macro.'('.$symbolCode.', '.$variableCode.', '.$method->getInternalName().$paramsStr.');'
+                            $macro . '(' . $symbolCode . ', ' . $variableCode . ', ' . $method->getInternalName(
+                            ) . $paramsStr . ');'
                         );
                     }
                 } else {
                     $macro = $compilationContext->backend->getFcallManager()->getMacro(false, 0, $paramCount);
-                    $codePrinter->output($macro.'('.$variableCode.', '.$method->getInternalName().$paramsStr.');');
+                    $codePrinter->output(
+                        $macro . '(' . $variableCode . ', ' . $method->getInternalName() . $paramsStr . ');'
+                    );
                 }
             }
         } else {
@@ -791,7 +803,7 @@ class MethodCall extends Call
                     $variableVariable,
                     $variableMethod,
                     $cachePointer,
-                    \count($params) ? $params : null,
+                    count($params) ? $params : null,
                     $compilationContext
                 );
             }
@@ -799,7 +811,7 @@ class MethodCall extends Call
 
         // Temporary variables must be copied if they have more than one reference
         foreach ($this->getMustCheckForCopyVariables() as $checkVariable) {
-            $codePrinter->output('zephir_check_temp_parameter('.$checkVariable.');');
+            $codePrinter->output('zephir_check_temp_parameter(' . $checkVariable . ');');
         }
 
         // We can mark temporary variables generated as idle
@@ -809,10 +821,10 @@ class MethodCall extends Call
 
         // Release parameters marked as references
         if (isset($expression['parameters'])) {
-            if (\count($references)) {
+            if (count($references)) {
                 foreach ($params as $position => $param) {
                     if (isset($references[$position])) {
-                        $compilationContext->codePrinter->output('Z_UNSET_ISREF_P('.$param.');');
+                        $compilationContext->codePrinter->output('Z_UNSET_ISREF_P(' . $param . ');');
                     }
                 }
             }
@@ -836,14 +848,17 @@ class MethodCall extends Call
      *
      * @return array
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    private function getRealCalledMethod(CompilationContext $compilationContext, Variable $caller, string $methodName): array
-    {
+    private function getRealCalledMethod(
+        CompilationContext $compilationContext,
+        Variable $caller,
+        string $methodName
+    ): array {
         $compiler = $compilationContext->compiler;
 
         $numberPoly = 0;
-        $method = null;
+        $method     = null;
 
         if ('this' == $caller->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
@@ -858,9 +873,10 @@ class MethodCall extends Call
                     continue;
                 }
 
-                if ($compiler->isClass($classType)
-                    || $compiler->isBundledClass($classType)
-                    || $compiler->isBundledInterface($classType)
+                if (
+                    $compiler->isClass($classType) ||
+                    $compiler->isBundledClass($classType) ||
+                    $compiler->isBundledInterface($classType)
                 ) {
                     if ($compiler->isClass($classType)) {
                         $classDefinition = $compiler->getClassDefinition($classType);

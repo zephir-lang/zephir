@@ -49,7 +49,7 @@ class See extends Annotation
 
         if (false !== $spaceIndex) {
             $this->resource = substr($this->string, 0, $spaceIndex);
-            $this->text = substr($this->string, $spaceIndex + 1);
+            $this->text     = substr($this->string, $spaceIndex + 1);
         }
 
         $this->contentParsed = true;

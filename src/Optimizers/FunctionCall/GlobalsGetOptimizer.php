@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * `globals_get()` internal function.
  *
@@ -41,7 +43,7 @@ class GlobalsGetOptimizer extends OptimizerAbstract
             return null;
         }
 
-        if (1 !== \count($expression['parameters'])) {
+        if (1 !== count($expression['parameters'])) {
             throw new CompilerException("'globals_get' only accepts one parameter", $expression);
         }
 
@@ -52,7 +54,10 @@ class GlobalsGetOptimizer extends OptimizerAbstract
         $globalName = $expression['parameters'][0]['parameter']['value'];
 
         if (!$context->compiler->isExtensionGlobal($globalName)) {
-            throw new CompilerException("Global '".$globalName."' cannot be read because it isn't defined", $expression);
+            throw new CompilerException(
+                "Global '" . $globalName . "' cannot be read because it isn't defined",
+                $expression
+            );
         }
 
         $type = $context->compiler->getExtensionGlobal($globalName)['type'];
@@ -60,9 +65,9 @@ class GlobalsGetOptimizer extends OptimizerAbstract
         if (str_contains($globalName, '.')) {
             $parts = explode('.', $globalName);
 
-            return new CompiledExpression($type, 'ZEPHIR_GLOBAL('.$parts[0].').'.$parts[1], $expression);
+            return new CompiledExpression($type, 'ZEPHIR_GLOBAL(' . $parts[0] . ').' . $parts[1], $expression);
         }
 
-        return new CompiledExpression($type, 'ZEPHIR_GLOBAL('.$globalName.')', $expression);
+        return new CompiledExpression($type, 'ZEPHIR_GLOBAL(' . $globalName . ')', $expression);
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,7 +9,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
+
+use InvalidArgumentException;
+
+use function is_string;
 
 /**
  * Manages the c-headers that must be added to a file
@@ -55,12 +59,12 @@ class HeadersManager
      * @param string $path
      * @param int    $position
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function add($path, $position = 0): void
     {
-        if (!\is_string($path)) {
-            throw new \InvalidArgumentException('$path must be only string type');
+        if (!is_string($path)) {
+            throw new InvalidArgumentException('$path must be only string type');
         }
 
         if (!$position) {

@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 
+use function count;
+
 abstract class MathOptimizer extends OptimizerAbstract
 {
     /**
@@ -42,7 +44,7 @@ abstract class MathOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) > 1) {
+        if (count($expression['parameters']) > 1) {
             return false;
         }
 
@@ -53,7 +55,7 @@ abstract class MathOptimizer extends OptimizerAbstract
         /**
          * Get CompiledExpression(s) for resolved var(s).
          */
-        $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
+        $resolvedParams     = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
         $compiledExpression = $resolvedParams[0];
 
         switch ($compiledExpression->getType()) {
@@ -83,7 +85,9 @@ abstract class MathOptimizer extends OptimizerAbstract
 
                         return new CompiledExpression(
                             'double',
-                            'zephir_'.$this->getFunctionName().'('.$context->backend->getVariableCode($variable).')',
+                            'zephir_' . $this->getFunctionName() . '(' . $context->backend->getVariableCode(
+                                $variable
+                            ) . ')',
                             $expression
                         );
                         break;
@@ -104,7 +108,7 @@ abstract class MathOptimizer extends OptimizerAbstract
     {
         return new CompiledExpression(
             'double',
-            $this->getFunctionName().'('.$compiledExpression->getCode().')',
+            $this->getFunctionName() . '(' . $compiledExpression->getCode() . ')',
             $expression
         );
     }

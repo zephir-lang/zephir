@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Statements;
 
@@ -26,8 +26,12 @@ class CallMethodStatement extends CallFunctionStatement
      * @param array|null $parameters
      * @param int        $type
      */
-    public function __construct($variable = null, $name = null, array $parameters = null, $type = self::TYPE_CALL_DIRECT)
-    {
+    public function __construct(
+        $variable = null,
+        $name = null,
+        array $parameters = null,
+        $type = self::TYPE_CALL_DIRECT
+    ) {
         parent::__construct($name, $parameters, $type);
 
         if (null !== $name) {
@@ -60,8 +64,8 @@ class CallMethodStatement extends CallFunctionStatement
      */
     protected function preBuild()
     {
-        $expression = parent::preBuild();
-        $expression['type'] = 'mcall';
+        $expression             = parent::preBuild();
+        $expression['type']     = 'mcall';
         $expression['variable'] = $this->getVariable();
 
         return $expression;

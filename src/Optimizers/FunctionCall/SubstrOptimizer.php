@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * SubstrOptimizer.
@@ -41,7 +43,7 @@ class SubstrOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) < 2 || \count($expression['parameters']) > 3) {
+        if (count($expression['parameters']) < 2 || count($expression['parameters']) > 3) {
             throw new CompilerException("'substr' require two or three parameters");
         }
 
@@ -49,8 +51,8 @@ class SubstrOptimizer extends OptimizerAbstract
          * Process parameters.
          */
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $params = [];
-        $flags = '0';
+        $params         = [];
+        $flags          = '0';
 
         for ($param = 1; $param <= 2; ++$param) {
             if (!isset($expression['parameters'][$param])) {
@@ -61,10 +63,10 @@ class SubstrOptimizer extends OptimizerAbstract
                 continue;
             }
             if ('int' == $expression['parameters'][$param]['parameter']['type']) {
-                $params[] = $expression['parameters'][$param]['parameter']['value'].' ';
+                $params[] = $expression['parameters'][$param]['parameter']['value'] . ' ';
             } else {
                 $context->headersManager->add('kernel/operators');
-                $params[] = 'zephir_get_intval('.$resolvedParams[$param].')';
+                $params[] = 'zephir_get_intval(' . $resolvedParams[$param] . ')';
             }
         }
 
@@ -75,7 +77,10 @@ class SubstrOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         $context->headersManager->add('kernel/string');
@@ -86,7 +91,9 @@ class SubstrOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_substr('.$symbol.', '.$resolvedParams[0].', '.$params[0].', '.$params[1].', '.$flags.');');
+        $context->codePrinter->output(
+            'zephir_substr(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] . ', ' . $flags . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

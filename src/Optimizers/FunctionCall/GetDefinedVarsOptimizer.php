@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
@@ -50,7 +50,7 @@ class GetDefinedVarsOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/variables');
-        $context->codePrinter->output('zephir_get_defined_vars('.$symbol.');');
+        $context->codePrinter->output('zephir_get_defined_vars(' . $symbol . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

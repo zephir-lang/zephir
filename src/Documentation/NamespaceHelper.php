@@ -9,22 +9,25 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation;
 
 use Zephir\CompilerFile;
 
+use function count;
+
 class NamespaceHelper
 {
+    protected array  $classes    = [];
     protected string $endNamespace;
+    protected array  $namespaces = [];
     protected string $parentName;
-
-    protected array $classes = [];
-    protected array $namespaces = [];
 
     public function __construct(protected string $fullNamespace)
     {
-        $ex = explode('\\', $fullNamespace);
-        $this->endNamespace = $ex[\count($ex) - 1];
+        $ex                 = explode('\\', $fullNamespace);
+        $this->endNamespace = $ex[count($ex) - 1];
 
         array_pop($ex);
 
@@ -36,14 +39,19 @@ class NamespaceHelper
         $this->classes[] = $c;
     }
 
+    public function getClasses(): array
+    {
+        return $this->classes;
+    }
+
     public function getFullNamespace(): string
     {
         return $this->fullNamespace;
     }
 
-    public function getShortName(): string
+    public function getNamespaces(): array
     {
-        return $this->endNamespace;
+        return $this->namespaces;
     }
 
     public function getParentName(): string
@@ -51,13 +59,8 @@ class NamespaceHelper
         return $this->parentName;
     }
 
-    public function getClasses(): array
+    public function getShortName(): string
     {
-        return $this->classes;
-    }
-
-    public function getNamespaces(): array
-    {
-        return $this->namespaces;
+        return $this->endNamespace;
     }
 }

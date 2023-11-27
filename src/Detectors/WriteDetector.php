@@ -22,129 +22,14 @@ namespace Zephir\Detectors;
  */
 class WriteDetector
 {
-    public const DETECT_NONE = 0;
-
-    public const DETECT_PARAM_PASS = 1;
-
-    public const DETECT_ARRAY_USE = 2;
-
+    public const DETECT_ALL                 = 255;
+    public const DETECT_ARRAY_USE           = 2;
+    public const DETECT_NONE                = 0;
+    public const DETECT_PARAM_PASS          = 1;
     public const DETECT_VALUE_IN_ASSIGNMENT = 4;
-
-    public const DETECT_ALL = 255;
-
     protected int $detectionFlags = 0;
 
     protected array $mutations = [];
-
-    /**
-     * Do the detection pass on a single variable.
-     */
-    public function detect(string $variable, array $statements): bool
-    {
-        $this->passStatementBlock($statements);
-
-        return $this->getNumberOfMutations($variable) > 0;
-    }
-
-    /**
-     * Sets detection flags.
-     */
-    public function setDetectionFlags(int $flags): void
-    {
-        $this->detectionFlags = $flags;
-    }
-
-    /**
-     * Increase the number of mutations a variable has inside a statement block.
-     */
-    public function increaseMutations(string $variable): self
-    {
-        if (isset($this->mutations[$variable])) {
-            ++$this->mutations[$variable];
-        } else {
-            $this->mutations[$variable] = 1;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of assignment instructions that mutated a variable.
-     */
-    public function getNumberOfMutations(string $variable): int
-    {
-        return $this->mutations[$variable] ?? 0;
-    }
-
-    /**
-     * Pass let statements.
-     */
-    public function passLetStatement(array $statement): void
-    {
-        foreach ($statement['assignments'] as $assignment) {
-            if (isset($assignment['expr'])) {
-                $this->passExpression($assignment['expr']);
-            }
-            $this->increaseMutations($assignment['variable']);
-            if (self::DETECT_VALUE_IN_ASSIGNMENT == ($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT)) {
-                if (isset($assignment['expr'])) {
-                    if ('variable' == $assignment['expr']['type']) {
-                        $this->increaseMutations($assignment['expr']['value']);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Pass call expressions.
-     */
-    public function passCall(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
-                if ($usePass && 'variable' == $parameter['parameter']['type']) {
-                    $this->increaseMutations($parameter['parameter']['value']);
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
-            }
-        }
-    }
-
-    /**
-     * Pass array expressions.
-     */
-    public function passArray(array $expression): void
-    {
-        foreach ($expression['left'] as $item) {
-            $usePass = self::DETECT_ARRAY_USE == ($this->detectionFlags & self::DETECT_ARRAY_USE);
-            if ($usePass && 'variable' == $item['value']['type']) {
-                $this->increaseMutations($item['value']['value']);
-            } else {
-                $this->passExpression($item['value']);
-            }
-        }
-    }
-
-    /**
-     * Pass "new" expressions.
-     */
-    public function passNew(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
-                if ($usePass && 'variable' == $parameter['parameter']['type']) {
-                    $this->increaseMutations($parameter['parameter']['value']);
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
-            }
-        }
-    }
 
     /**
      * Pass "declare" statement.
@@ -165,6 +50,70 @@ class WriteDetector
             }
 
             $this->increaseMutations($variable['variable']);
+        }
+    }
+
+    /**
+     * Do the detection pass on a single variable.
+     */
+    public function detect(string $variable, array $statements): bool
+    {
+        $this->passStatementBlock($statements);
+
+        return $this->getNumberOfMutations($variable) > 0;
+    }
+
+    /**
+     * Returns the number of assignment instructions that mutated a variable.
+     */
+    public function getNumberOfMutations(string $variable): int
+    {
+        return $this->mutations[$variable] ?? 0;
+    }
+
+    /**
+     * Increase the number of mutations a variable has inside a statement block.
+     */
+    public function increaseMutations(string $variable): self
+    {
+        if (isset($this->mutations[$variable])) {
+            ++$this->mutations[$variable];
+        } else {
+            $this->mutations[$variable] = 1;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Pass array expressions.
+     */
+    public function passArray(array $expression): void
+    {
+        foreach ($expression['left'] as $item) {
+            $usePass = self::DETECT_ARRAY_USE == ($this->detectionFlags & self::DETECT_ARRAY_USE);
+            if ($usePass && 'variable' == $item['value']['type']) {
+                $this->increaseMutations($item['value']['value']);
+            } else {
+                $this->passExpression($item['value']);
+            }
+        }
+    }
+
+    /**
+     * Pass call expressions.
+     */
+    public function passCall(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
+                if ($usePass && 'variable' == $parameter['parameter']['type']) {
+                    $this->increaseMutations($parameter['parameter']['value']);
+                } else {
+                    $this->passExpression($parameter['parameter']);
+                }
+            }
         }
     }
 
@@ -267,6 +216,44 @@ class WriteDetector
             default:
                 echo 'ForValueUseDetectorType=', $expression['type'], PHP_EOL;
                 break;
+        }
+    }
+
+    /**
+     * Pass let statements.
+     */
+    public function passLetStatement(array $statement): void
+    {
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
+            }
+            $this->increaseMutations($assignment['variable']);
+            if (self::DETECT_VALUE_IN_ASSIGNMENT == ($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT)) {
+                if (isset($assignment['expr'])) {
+                    if ('variable' == $assignment['expr']['type']) {
+                        $this->increaseMutations($assignment['expr']['value']);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Pass "new" expressions.
+     */
+    public function passNew(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $usePass = self::DETECT_PARAM_PASS == ($this->detectionFlags & self::DETECT_PARAM_PASS);
+                if ($usePass && 'variable' == $parameter['parameter']['type']) {
+                    $this->increaseMutations($parameter['parameter']['value']);
+                } else {
+                    $this->passExpression($parameter['parameter']);
+                }
+            }
         }
     }
 
@@ -414,5 +401,13 @@ class WriteDetector
                     echo 'WriteDetectorStatement=', $statement['type'], PHP_EOL;
             }
         }
+    }
+
+    /**
+     * Sets detection flags.
+     */
+    public function setDetectionFlags(int $flags): void
+    {
+        $this->detectionFlags = $flags;
     }
 }

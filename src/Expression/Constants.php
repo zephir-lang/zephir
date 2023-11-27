@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression;
 
@@ -20,23 +20,22 @@ use Zephir\LiteralCompiledExpression;
 use Zephir\Name;
 use Zephir\Variable\Variable;
 
+use function constant;
+use function defined;
+use function gettype;
+use function in_array;
+
 /**
  * Resolves PHP or Zephir constants into C-Code
  */
 class Constants
 {
-    protected bool $expecting = true;
-
-    protected bool $readOnly = false;
-
-    protected ?Variable $expectingVariable = null;
-
     /**
      * Reserved ENV Constants.
      *
      * @see https://www.php.net/manual/ru/reserved.constants.php
      */
-    protected array $envConstants = [
+    protected array     $envConstants      = [
         'PHP_VERSION',
         'PHP_MAJOR_VERSION',
         'PHP_MINOR_VERSION',
@@ -56,7 +55,8 @@ class Constants
         'PHP_LIBDIR',
         'PHP_DATADIR',
     ];
-
+    protected bool      $expecting         = true;
+    protected ?Variable $expectingVariable = null;
     /**
      * Magic constants.
      *
@@ -72,30 +72,12 @@ class Constants
         '__METHOD__',
         '__NAMESPACE__',
     ];
-
-    protected array $resources = [
+    protected bool  $readOnly       = false;
+    protected array $resources      = [
         'STDIN',
         'STDOUT',
         'STDERR',
     ];
-
-    /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only.
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
 
     /**
      * Resolves a PHP constant value into C-code.
@@ -109,16 +91,16 @@ class Constants
      */
     public function compile(array $expression, CompilationContext $compilationContext)
     {
-        $isPhpConstant = false;
+        $isPhpConstant    = false;
         $isZephirConstant = false;
 
         $constantName = $expression['value'];
 
         $mergedConstants = array_merge($this->envConstants, $this->magicConstants, $this->resources);
-        if (!\defined($expression['value']) && !\in_array($constantName, $mergedConstants)) {
+        if (!defined($expression['value']) && !in_array($constantName, $mergedConstants)) {
             if (!$compilationContext->compiler->isConstant($constantName)) {
                 $compilationContext->logger->warning(
-                    "Constant '".$constantName."' does not exist at compile time",
+                    "Constant '" . $constantName . "' does not exist at compile time",
                     ['nonexistent-constant', $expression]
                 );
             } else {
@@ -128,15 +110,15 @@ class Constants
             $isPhpConstant = !str_contains($constantName, 'VERSION');
         }
 
-        if ($isZephirConstant && !\in_array($constantName, $this->resources)) {
+        if ($isZephirConstant && !in_array($constantName, $this->resources)) {
             $constant = $compilationContext->compiler->getConstant($constantName);
 
             return new LiteralCompiledExpression($constant[0], $constant[1], $expression);
         }
 
-        if ($isPhpConstant && !\in_array($constantName, $mergedConstants)) {
-            $constantName = \constant($constantName);
-            $type = strtolower(\gettype($constantName));
+        if ($isPhpConstant && !in_array($constantName, $mergedConstants)) {
+            $constantName = constant($constantName);
+            $type         = strtolower(gettype($constantName));
 
             switch ($type) {
                 case 'integer':
@@ -155,7 +137,7 @@ class Constants
             }
         }
 
-        if (\in_array($constantName, $this->magicConstants)) {
+        if (in_array($constantName, $this->magicConstants)) {
             switch ($constantName) {
                 case '__CLASS__':
                     return new CompiledExpression(
@@ -172,7 +154,8 @@ class Constants
                 case '__METHOD__':
                     return new CompiledExpression(
                         'string',
-                        $compilationContext->classDefinition->getName().':'.$compilationContext->currentMethod->getName(),
+                        $compilationContext->classDefinition->getName(
+                        ) . ':' . $compilationContext->currentMethod->getName(),
                         $expression
                     );
                 case '__FUNCTION__':
@@ -184,7 +167,7 @@ class Constants
             }
 
             $compilationContext->logger->warning(
-                "Magic constant '".$constantName."' is not supported",
+                "Magic constant '" . $constantName . "' is not supported",
                 ['not-supported-magic-constant', $expression]
             );
 
@@ -198,15 +181,46 @@ class Constants
             $symbolVariable->setMustInitNull(true);
             $symbolVariable->initVariant($compilationContext);
         } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Cannot use variable: '.$symbolVariable->getType().' to assign property value', $expression);
+            throw new CompilerException(
+                'Cannot use variable: '
+                . $symbolVariable->getType()
+                . ' to assign property value',
+                $expression
+            );
         }
 
-        $compilationContext->codePrinter->output('ZEPHIR_GET_CONSTANT('.$compilationContext->backend->getVariableCode($symbolVariable).', "'.$expression['value'].'");');
+        $compilationContext->codePrinter->output(
+            'ZEPHIR_GET_CONSTANT(' . $compilationContext->backend->getVariableCode(
+                $symbolVariable
+            ) . ', "' . $expression['value'] . '");'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    }
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
+     */
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    {
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 }

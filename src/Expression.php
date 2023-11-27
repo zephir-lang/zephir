@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Closure;
 use Zephir\Expression\ClosureArrow;
@@ -68,155 +69,22 @@ use Zephir\Operators\Unary\MinusOperator;
 use Zephir\Operators\Unary\NotOperator;
 use Zephir\Variable\Variable;
 
+use function strlen;
+
 /**
  * Represents an expression.
  * Most language constructs in a language are expressions.
  */
 class Expression
 {
-    protected bool $noisy = true;
-    protected bool $expecting = true;
-    protected bool $readOnly = false;
-    protected bool $evalMode = false;
+    protected bool      $evalMode          = false;
+    protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
+    protected bool      $noisy             = true;
+    protected bool      $readOnly          = false;
 
     public function __construct(protected array $expression)
     {
-    }
-
-    /**
-     * Returns the original expression.
-     *
-     * @return array
-     */
-    public function getExpression(): array
-    {
-        return $this->expression;
-    }
-
-    /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
-     */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
-
-    /**
-     * Checks if the result of the evaluated expression is read only.
-     *
-     * @return bool
-     */
-    public function isReadOnly(): bool
-    {
-        return $this->readOnly;
-    }
-
-    /**
-     * Checks if the returned value by the expression
-     * is expected to be assigned to an external symbol.
-     *
-     * @return bool
-     */
-    public function isExpectingReturn(): bool
-    {
-        return $this->expecting;
-    }
-
-    /**
-     * Returns the variable which is expected to return the
-     * result of the expression evaluation.
-     *
-     * @return Variable|null
-     */
-    public function getExpectingVariable(): ?Variable
-    {
-        return $this->expectingVariable;
-    }
-
-    /**
-     * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
-     */
-    public function setNoisy(bool $noisy): void
-    {
-        $this->noisy = $noisy;
-    }
-
-    /**
-     * Checks whether the expression must be resolved in "noisy" mode.
-     *
-     * @return bool
-     */
-    public function isNoisy(): bool
-    {
-        return $this->noisy;
-    }
-
-    /**
-     * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
-     *
-     * @param bool $evalMode
-     */
-    public function setEvalMode(bool $evalMode): void
-    {
-        $this->evalMode = $evalMode;
-    }
-
-    /**
-     * Compiles foo = [].
-     *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     */
-    public function emptyArray(array $expression, CompilationContext $compilationContext): CompiledExpression
-    {
-        /**
-         * Resolves the symbol that expects the value
-         */
-        if ($this->expecting) {
-            if ($this->expectingVariable) {
-                $symbolVariable = &$this->expectingVariable;
-                $symbolVariable->initVariant($compilationContext);
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-            }
-        } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-        }
-
-        /**
-         * Variable that receives property accesses must be polymorphic
-         */
-        if (!$symbolVariable->isVariable() && 'array' != $symbolVariable->getType()) {
-            throw new CompilerException('Cannot use variable: '.$symbolVariable->getName().'('.$symbolVariable->getType().') to create empty array', $expression);
-        }
-
-        /**
-         * Mark the variable as an 'array'
-         */
-        $symbolVariable->setDynamicTypes('array');
-        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
-
-        return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
     }
 
     /**
@@ -228,12 +96,12 @@ class Expression
      *
      * @throws CompilerException|Exception
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): CompiledExpression
     {
         $expression = $this->expression;
-        $type = $expression['type'];
+        $type       = $expression['type'];
 
         switch ($type) {
             case 'null':
@@ -249,19 +117,37 @@ class Expression
                 return new LiteralCompiledExpression($type, $expression['value'], $expression);
 
             case 'string':
-                return new LiteralCompiledExpression('string', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
+                return new LiteralCompiledExpression(
+                    'string',
+                    str_replace(PHP_EOL, '\\n', $expression['value']),
+                    $expression
+                );
             case 'istring':
-                return new LiteralCompiledExpression('istring', str_replace(PHP_EOL, '\\n', $expression['value']), $expression);
+                return new LiteralCompiledExpression(
+                    'istring',
+                    str_replace(PHP_EOL, '\\n', $expression['value']),
+                    $expression
+                );
 
             case 'char':
-                if (!\strlen($expression['value'])) {
+                if (!strlen($expression['value'])) {
                     throw new CompilerException('Invalid empty char literal', $expression);
                 }
-                if (\strlen($expression['value']) > 2) {
-                    if (\strlen($expression['value']) > 10) {
-                        throw new CompilerException("Invalid char literal: '".substr($expression['value'], 0, 10)."...'", $expression);
+                if (strlen($expression['value']) > 2) {
+                    if (strlen($expression['value']) > 10) {
+                        throw new CompilerException(
+                            "Invalid char literal: '"
+                            . substr($expression['value'], 0, 10)
+                            . "...'",
+                            $expression
+                        );
                     } else {
-                        throw new CompilerException("Invalid char literal: '".$expression['value']."'", $expression);
+                        throw new CompilerException(
+                            "Invalid char literal: '"
+                            . $expression['value']
+                            . "'",
+                            $expression
+                        );
                     }
                 }
 
@@ -465,12 +351,16 @@ class Expression
                     );
                 }
                 $numberPrints = $compilationContext->codePrinter->getNumberPrints();
-                $expr = new self($expression['left']);
+                $expr         = new self($expression['left']);
                 $expr->setExpectReturn($this->expecting, $this->expectingVariable);
                 $resolved = $expr->compile($compilationContext);
                 if (($compilationContext->codePrinter->getNumberPrints() - $numberPrints) <= 1) {
                     if (str_contains($resolved->getCode(), ' ')) {
-                        return new CompiledExpression($resolved->getType(), '('.$resolved->getCode().')', $expression);
+                        return new CompiledExpression(
+                            $resolved->getType(),
+                            '(' . $resolved->getCode() . ')',
+                            $expression
+                        );
                     }
                 }
 
@@ -508,7 +398,10 @@ class Expression
 
             case 'likely':
                 if (!$this->evalMode) {
-                    throw new CompilerException("'likely' operator can only be used in evaluation expressions", $expression);
+                    throw new CompilerException(
+                        "'likely' operator can only be used in evaluation expressions",
+                        $expression
+                    );
                 }
                 $expr = new LikelyOperator();
                 $expr->setReadOnly($this->isReadOnly());
@@ -517,7 +410,10 @@ class Expression
 
             case 'unlikely':
                 if (!$this->evalMode) {
-                    throw new CompilerException("'unlikely' operator can only be used in evaluation expressions", $expression);
+                    throw new CompilerException(
+                        "'unlikely' operator can only be used in evaluation expressions",
+                        $expression
+                    );
                 }
                 $expr = new UnlikelyOperator();
                 $expr->setReadOnly($this->isReadOnly());
@@ -549,12 +445,162 @@ class Expression
                 break;
 
             default:
-                throw new CompilerException('Unknown expression: '.$type, $expression);
+                throw new CompilerException('Unknown expression: ' . $type, $expression);
         }
 
         $compilableExpression->setReadOnly($this->isReadOnly());
         $compilableExpression->setExpectReturn($this->expecting, $this->expectingVariable);
 
         return $compilableExpression->compile($expression, $compilationContext);
+    }
+
+    /**
+     * Compiles foo = [].
+     *
+     * @param array              $expression
+     * @param CompilationContext $compilationContext
+     *
+     * @return CompiledExpression
+     */
+    public function emptyArray(array $expression, CompilationContext $compilationContext): CompiledExpression
+    {
+        /**
+         * Resolves the symbol that expects the value
+         */
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = &$this->expectingVariable;
+                $symbolVariable->initVariant($compilationContext);
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
+            }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
+        }
+
+        /**
+         * Variable that receives property accesses must be polymorphic
+         */
+        if (!$symbolVariable->isVariable() && 'array' != $symbolVariable->getType()) {
+            throw new CompilerException(
+                'Cannot use variable: '
+                . $symbolVariable->getName()
+                . '('
+                . $symbolVariable->getType()
+                . ') to create empty array',
+                $expression
+            );
+        }
+
+        /**
+         * Mark the variable as an 'array'
+         */
+        $symbolVariable->setDynamicTypes('array');
+        $compilationContext->backend->initArray($symbolVariable, $compilationContext);
+
+        return new CompiledExpression('array', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * Returns the variable which is expected to return the
+     * result of the expression evaluation.
+     *
+     * @return Variable|null
+     */
+    public function getExpectingVariable(): ?Variable
+    {
+        return $this->expectingVariable;
+    }
+
+    /**
+     * Returns the original expression.
+     *
+     * @return array
+     */
+    public function getExpression(): array
+    {
+        return $this->expression;
+    }
+
+    /**
+     * Checks if the returned value by the expression
+     * is expected to be assigned to an external symbol.
+     *
+     * @return bool
+     */
+    public function isExpectingReturn(): bool
+    {
+        return $this->expecting;
+    }
+
+    /**
+     * Checks whether the expression must be resolved in "noisy" mode.
+     *
+     * @return bool
+     */
+    public function isNoisy(): bool
+    {
+        return $this->noisy;
+    }
+
+    /**
+     * Checks if the result of the evaluated expression is read only.
+     *
+     * @return bool
+     */
+    public function isReadOnly(): bool
+    {
+        return $this->readOnly;
+    }
+
+    /**
+     * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
+     *
+     * @param bool $evalMode
+     */
+    public function setEvalMode(bool $evalMode): void
+    {
+        $this->evalMode = $evalMode;
+    }
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
+     *
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
+     */
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    {
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets whether the expression must be resolved in "noisy" mode.
+     *
+     * @param bool $noisy
+     */
+    public function setNoisy(bool $noisy): void
+    {
+        $this->noisy = $noisy;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     *
+     * @param bool $readOnly
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 }

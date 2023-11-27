@@ -16,65 +16,15 @@ namespace Zephir\Operators;
 use Zephir\CompilationContext;
 use Zephir\Variable\Variable;
 
+use function is_object;
+
 abstract class AbstractOperator
 {
-    protected string $operator;
-
-    protected bool $expecting = true;
-
-    protected bool $readOnly = false;
-
-    protected bool $literalOnly = true;
-
+    protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
-
-    /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
-     */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Returns the expected variable for assignment or creates a temporary variable to
-     * store the result. This method returns a variable that is always stored in the heap.
-     *
-     * @param CompilationContext $compilationContext
-     * @param array              $expression
-     * @param bool               $init
-     *
-     * @return Variable|null
-     */
-    public function getExpectedNonLiteral(CompilationContext $compilationContext, array $expression, bool $init = true): ?Variable
-    {
-        $symbolVariable = $this->expectingVariable;
-
-        if (!$this->expecting) {
-            return $symbolVariable;
-        }
-
-        if ($symbolVariable !== null) {
-            if ('variable' === $symbolVariable->getType() && !$symbolVariable->isLocalOnly()) {
-                if (!$init) {
-                    return $symbolVariable;
-                }
-
-                $symbolVariable->initVariant($compilationContext);
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-            }
-        } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-        }
-
-        return $symbolVariable;
-    }
+    protected bool      $literalOnly       = true;
+    protected string    $operator;
+    protected bool      $readOnly          = false;
 
     /**
      * Returns the expected variable for assignment or creates a temporary variable to
@@ -93,7 +43,7 @@ abstract class AbstractOperator
         }
 
         $symbolVariable = $this->expectingVariable;
-        if (\is_object($symbolVariable)) {
+        if (is_object($symbolVariable)) {
             if ('variable' === $symbolVariable->getType()) {
                 if (!$init) {
                     return $symbolVariable;
@@ -102,23 +52,43 @@ abstract class AbstractOperator
             } else {
                 if (!$this->readOnly) {
                     if (!$this->literalOnly) {
-                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                        $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $expression
+                        );
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
+                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite(
+                            'variable',
+                            $compilationContext
+                        );
                     }
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                        'variable',
+                        $compilationContext
+                    );
                 }
             }
         } else {
             if (!$this->readOnly) {
                 if (!$this->literalOnly) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+                    $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                        'variable',
+                        $compilationContext,
+                        $expression
+                    );
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite('variable', $compilationContext);
+                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite(
+                        'variable',
+                        $compilationContext
+                    );
                 }
             } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite('variable', $compilationContext);
+                $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
             }
         }
 
@@ -135,28 +105,88 @@ abstract class AbstractOperator
      *
      * @return Variable
      */
-    public function getExpectedComplexLiteral(CompilationContext $compilationContext, string $type = 'variable'): ?Variable
-    {
+    public function getExpectedComplexLiteral(
+        CompilationContext $compilationContext,
+        string $type = 'variable'
+    ): ?Variable {
         $symbolVariable = $this->expectingVariable;
 
         if ($this->expecting) {
-            if (\is_object($symbolVariable)) {
+            if (is_object($symbolVariable)) {
                 if ($symbolVariable->getType() === $type || 'return_value' === $symbolVariable->getName()) {
                     $symbolVariable->initVariant($compilationContext);
                 } else {
                     if (!$this->readOnly) {
-                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext);
+                        $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite(
+                            $type,
+                            $compilationContext
+                        );
                     } else {
-                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
+                        $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                            $type,
+                            $compilationContext
+                        );
                     }
                 }
             } else {
                 if (!$this->readOnly) {
-                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite($type, $compilationContext);
+                    $symbolVariable = $compilationContext->symbolTable->getTempComplexLiteralVariableForWrite(
+                        $type,
+                        $compilationContext
+                    );
                 } else {
-                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite($type, $compilationContext);
+                    $symbolVariable = $compilationContext->symbolTable->getTempLocalVariableForWrite(
+                        $type,
+                        $compilationContext
+                    );
                 }
             }
+        }
+
+        return $symbolVariable;
+    }
+
+    /**
+     * Returns the expected variable for assignment or creates a temporary variable to
+     * store the result. This method returns a variable that is always stored in the heap.
+     *
+     * @param CompilationContext $compilationContext
+     * @param array              $expression
+     * @param bool               $init
+     *
+     * @return Variable|null
+     */
+    public function getExpectedNonLiteral(
+        CompilationContext $compilationContext,
+        array $expression,
+        bool $init = true
+    ): ?Variable {
+        $symbolVariable = $this->expectingVariable;
+
+        if (!$this->expecting) {
+            return $symbolVariable;
+        }
+
+        if ($symbolVariable !== null) {
+            if ('variable' === $symbolVariable->getType() && !$symbolVariable->isLocalOnly()) {
+                if (!$init) {
+                    return $symbolVariable;
+                }
+
+                $symbolVariable->initVariant($compilationContext);
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
+            }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
         }
 
         return $symbolVariable;
@@ -173,16 +203,6 @@ abstract class AbstractOperator
     }
 
     /**
-     * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
-
-    /**
      * Checks if the result of the evaluated expression is read only.
      *
      * @return bool
@@ -190,5 +210,28 @@ abstract class AbstractOperator
     public function isReadOnly(): bool
     {
         return $this->readOnly;
+    }
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
+     *
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
+     */
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    {
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     *
+     * @param bool $readOnly
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 }

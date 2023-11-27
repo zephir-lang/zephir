@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,13 +9,18 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Zephir\Optimizers\FunctionCall\EvalOptimizer.
@@ -34,11 +37,11 @@ class EvalOptimizer extends OptimizerAbstract
      * @return bool|CompiledExpression|mixed
      *
      * @throws CompilerException
-     * @throws \Zephir\Exception
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || \count($expression['parameters']) > 1) {
+        if (!isset($expression['parameters']) || count($expression['parameters']) > 1) {
             return false;
         }
 
@@ -64,9 +67,9 @@ class EvalOptimizer extends OptimizerAbstract
         }
 
         $evalContext = str_replace(
-            [getcwd().'\\', getcwd().'/'],
+            [getcwd() . '\\', getcwd() . '/'],
             '',
-            $expression['file'].':'.$expression['line']
+            $expression['file'] . ':' . $expression['line']
         );
 
         $symbol = $context->backend->getVariableCode($symbolVariable);

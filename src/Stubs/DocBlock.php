@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Stubs;
 
+use function count;
+
 /**
  * @author Gusakov Nikita <dev@nkt.me>
  */
@@ -21,13 +23,11 @@ class DocBlock
     /**
      * @var string
      */
-    protected string $indent;
-
+    protected string $description = '';
     /**
      * @var string
      */
-    protected string $description = '';
-
+    protected string $indent;
     /**
      * @var array
      */
@@ -40,8 +40,8 @@ class DocBlock
     public function __construct(?string $source, string $indent = '    ')
     {
         $this->indent = $indent;
-        $lines = explode("\n", trim($source ?: ''));
-        $count = \count($lines);
+        $lines        = explode("\n", trim($source ?: ''));
+        $count        = count($lines);
 
         foreach ($lines as $i => $line) {
             $line = preg_replace('#^([\s\t]+)?/?([*]+)([\s\t]+)?$#im', '', rtrim($line));
@@ -58,11 +58,11 @@ class DocBlock
                 $this->lines[] = $cleaned;
             } else {
                 $line = preg_replace('#([\s\t]+)?[*]#', '', $line);
-                $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * '.$line);
+                $line = preg_replace('#([\s\t]+)?[*]([\s\t]){1,2}#', '$1* ', ' * ' . $line);
                 $line = preg_replace('#[*]([\s\t])+$#', '*', $line);
                 $line = preg_replace('#\t#', $indent, $line);
 
-                $this->lines[] = array_pop($this->lines)."\n{$this->indent}".$line;
+                $this->lines[] = array_pop($this->lines) . "\n{$this->indent}" . $line;
             }
         }
 
@@ -71,7 +71,7 @@ class DocBlock
             $description = explode("\n", $description);
 
             $cleaned = [];
-            $empty = 0;
+            $empty   = 0;
             foreach ($description as $i => $line) {
                 if (preg_match('#^([\s\t]+)?[*]([\s\t]+)?$#', $line)) {
                     ++$empty;
@@ -100,7 +100,7 @@ class DocBlock
      */
     public function __toString(): string
     {
-        $doc = '';
+        $doc    = '';
         $indent = $this->indent;
 
         if (!empty($this->description)) {
@@ -108,13 +108,13 @@ class DocBlock
         }
 
         if (!empty($this->lines)) {
-            $lines = array_map(fn ($line) => "$indent * $line", $this->lines);
+            $lines = array_map(fn($line) => "$indent * $line", $this->lines);
 
             if (!empty($doc)) {
                 $doc .= "\n$indent *";
             }
 
-            $doc .= "\n".implode("\n", $lines);
+            $doc .= "\n" . implode("\n", $lines);
         }
 
         return '' === $doc ? '' : "$indent/**$doc\n$indent */";

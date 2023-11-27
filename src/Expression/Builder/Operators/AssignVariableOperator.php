@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder\Operators;
 
 use Zephir\Expression\Builder\AbstractBuilder;
@@ -18,40 +18,40 @@ use Zephir\Expression\Builder\AbstractBuilder;
 class AssignVariableOperator extends AbstractOperator
 {
     // =
-    public const OPERATOR_ASSIGN = 'assign';
-
-    // +=
     public const OPERATOR_ADD = 'add-assign';
 
+    // +=
+    public const OPERATOR_ASSIGN = 'assign';
+
     // -=
-    public const OPERATOR_SUB = 'sub-assign';
-
-    // *=
-    public const OPERATOR_MUL = 'mul-assign';
-
-    // /=
-    public const OPERATOR_DIV = 'div-assign';
-
-    // .=
-    public const OPERATOR_CONCAT = 'concat-assign';
-
-    // %=
-    public const OPERATOR_MOD = 'mod-assign';
-
-    // &=
     public const OPERATOR_BITWISE_AND = 'bitwise-and-assign';
 
-    // |=
+    // *=
     public const OPERATOR_BITWISE_OR = 'bitwise-or-assign';
 
-    // ^=
-    public const OPERATOR_BITWISE_XOR = 'bitwise-xor-assign';
-
-    // <<=
+    // /=
     public const OPERATOR_BITWISE_SHIFTLEFT = 'bitwise-shiftleft-assign';
 
-    // >>=
+    // .=
     public const OPERATOR_BITWISE_SHIFTRIGHT = 'bitwise-shiftright-assign';
+
+    // %=
+    public const OPERATOR_BITWISE_XOR = 'bitwise-xor-assign';
+
+    // &=
+    public const OPERATOR_CONCAT = 'concat-assign';
+
+    // |=
+    public const OPERATOR_DIV = 'div-assign';
+
+    // ^=
+    public const OPERATOR_MOD = 'mod-assign';
+
+    // <<=
+    public const OPERATOR_MUL = 'mul-assign';
+
+    // >>=
+    public const OPERATOR_SUB = 'sub-assign';
     private string $operator = self::OPERATOR_ASSIGN;
 
     public function __construct(private $variable = null, private ?AbstractBuilder $expression = null)
@@ -66,23 +66,11 @@ class AssignVariableOperator extends AbstractOperator
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getVariable()
+    public function getExpression()
     {
-        return $this->variable;
-    }
-
-    /**
-     * @param string $variable
-     *
-     * @return $this
-     */
-    public function setVariable($variable)
-    {
-        $this->variable = $variable;
-
-        return $this;
+        return $this->expression;
     }
 
     /**
@@ -94,11 +82,11 @@ class AssignVariableOperator extends AbstractOperator
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getExpression()
+    public function getVariable()
     {
-        return $this->expression;
+        return $this->variable;
     }
 
     /**
@@ -114,15 +102,27 @@ class AssignVariableOperator extends AbstractOperator
     }
 
     /**
+     * @param string $variable
+     *
+     * @return $this
+     */
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function preBuild()
     {
         return [
             'assign-type' => 'variable',
-            'variable' => $this->getVariable(),
-            'operator' => $this->getOperator(),
-            'expr' => $this->getExpression(),
+            'variable'    => $this->getVariable(),
+            'operator'    => $this->getOperator(),
+            'expr'        => $this->getExpression(),
         ];
     }
 }

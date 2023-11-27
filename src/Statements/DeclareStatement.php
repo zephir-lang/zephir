@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,15 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
+
+use function is_string;
 
 /**
  * This creates variables in the current symbol table
@@ -36,12 +38,12 @@ class DeclareStatement extends StatementAbstract
         }
 
         $typeInference = $compilationContext->typeInference;
-        $symbolTable = $compilationContext->symbolTable;
+        $symbolTable   = $compilationContext->symbolTable;
 
         foreach ($statement['variables'] as $variable) {
             $varName = $variable['variable'];
             if ($symbolTable->hasVariableInBranch($varName, $compilationContext->branchManager->getCurrentBranch())) {
-                throw new CompilerException("Variable '".$varName."' is already defined", $variable);
+                throw new CompilerException("Variable '" . $varName . "' is already defined", $variable);
             }
 
             $currentType = $statement['data-type'];
@@ -52,7 +54,7 @@ class DeclareStatement extends StatementAbstract
             if ($typeInference) {
                 if ('variable' === $currentType) {
                     $type = $typeInference->getInferedType($varName);
-                    if (\is_string($type)) {
+                    if (is_string($type)) {
                         $currentType = $type;
                     }
                 }
@@ -74,7 +76,7 @@ class DeclareStatement extends StatementAbstract
              * Variables are added to the symbol table.
              */
             $symbolVariable = $symbolTable->addVariable($currentType, $varName, $compilationContext);
-            $varName = $symbolVariable->getName();
+            $varName        = $symbolVariable->getName();
 
             /**
              * Set the node where the variable is declared
@@ -88,10 +90,10 @@ class DeclareStatement extends StatementAbstract
             }
 
             if (isset($variable['expr'])) {
-                $builder = BuilderFactory::getInstance();
+                $builder    = BuilderFactory::getInstance();
                 $letBuilder = $builder->statements()->let([
                     $builder->operators()
-                        ->assignVariable($varName, $builder->raw($variable['expr'])),
+                            ->assignVariable($varName, $builder->raw($variable['expr'])),
                 ]);
 
                 $letStatement = new LetStatement($letBuilder->build());

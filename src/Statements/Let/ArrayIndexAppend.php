@@ -37,36 +37,59 @@ class ArrayIndexAppend extends ArrayIndex
      *
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
-    {
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ): void {
         /*
          * Arrays must be stored in the HEAP
          */
         if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is local only", $statement);
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is local only",
+                $statement
+            );
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is not initialized",
+                $statement
+            );
         }
 
         if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is read only",
+                $statement
+            );
         }
 
         if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is local only", $statement);
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is local only",
+                $statement
+            );
         }
 
         /*
          * Only dynamic variables and arrays can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
-            throw new CompilerException("Cannot use variable type: '".$symbolVariable->getType()."' as array", $statement);
+            throw new CompilerException(
+                "Cannot use variable type: '" . $symbolVariable->getType() . "' as array",
+                $statement
+            );
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
+            throw new CompilerException(
+                'Cannot use non-initialized variable as an object',
+                $statement
+            );
         }
 
         /*
@@ -91,8 +114,13 @@ class ArrayIndexAppend extends ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array              $statement
      */
-    protected function _assignArrayIndexMultiple($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
-    {
+    protected function _assignArrayIndexMultiple(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ): void {
         $offsetExprs = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $expression = new Expression($indexExpr);
@@ -108,7 +136,12 @@ class ArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException('Index: '.$exprIndex->getType().' cannot be used as array index in assignment without cast', $indexExpr);
+                    throw new CompilerException(
+                        'Index: '
+                        . $exprIndex->getType()
+                        . ' cannot be used as array index in assignment without cast',
+                        $indexExpr
+                    );
             }
 
             $offsetExprs[] = $exprIndex;
@@ -120,9 +153,18 @@ class ArrayIndexAppend extends ArrayIndex
          * Create a temporal zval (if needed).
          */
         $symbolVariable = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
-        $targetVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $statement);
+        $targetVariable = $compilationContext->symbolTable->getVariableForWrite(
+            $variable,
+            $compilationContext,
+            $statement
+        );
 
         $offsetExprs[] = 'a';
-        $compilationContext->backend->assignArrayMulti($targetVariable, $symbolVariable, $offsetExprs, $compilationContext);
+        $compilationContext->backend->assignArrayMulti(
+            $targetVariable,
+            $symbolVariable,
+            $offsetExprs,
+            $compilationContext
+        );
     }
 }

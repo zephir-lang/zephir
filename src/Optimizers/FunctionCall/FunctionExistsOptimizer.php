@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * Optimizes calls to 'function_exists' using internal function
  */
@@ -33,7 +35,7 @@ class FunctionExistsOptimizer extends OptimizerAbstract
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || 1 !== \count($expression['parameters'])) {
+        if (!isset($expression['parameters']) || 1 !== count($expression['parameters'])) {
             return false;
         }
 
@@ -48,14 +50,14 @@ class FunctionExistsOptimizer extends OptimizerAbstract
         if (isset($str)) {
             return new CompiledExpression(
                 'bool',
-                '(zephir_function_exists_ex(ZEND_STRL("'.strtolower($str).'")) == SUCCESS)',
+                '(zephir_function_exists_ex(ZEND_STRL("' . strtolower($str) . '")) == SUCCESS)',
                 $expression
             );
         }
 
         return new CompiledExpression(
             'bool',
-            '(zephir_function_exists('.$resolvedParams[0].') == SUCCESS)',
+            '(zephir_function_exists(' . $resolvedParams[0] . ') == SUCCESS)',
             $expression
         );
     }

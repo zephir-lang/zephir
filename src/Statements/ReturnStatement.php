@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
@@ -32,7 +33,7 @@ final class ReturnStatement extends StatementAbstract
      * @param CompilationContext $compilationContext
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -64,7 +65,7 @@ final class ReturnStatement extends StatementAbstract
                             /**
                              * If the property is accessed on 'this', we check if the property does exist.
                              */
-                            $property = $statement['expr']['right']['value'];
+                            $property        = $statement['expr']['right']['value'];
                             $classDefinition = $compilationContext->classDefinition;
                             if (!$classDefinition->hasProperty($property)) {
                                 throw new CompilerException(
@@ -78,7 +79,7 @@ final class ReturnStatement extends StatementAbstract
                             }
 
                             $compilationContext->headersManager->add('kernel/object');
-                            $codePrinter->output('RETURN_MM_MEMBER(getThis(), "'.$property.'");');
+                            $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
 
                             return;
                         }
@@ -119,7 +120,11 @@ final class ReturnStatement extends StatementAbstract
                         break;
 
                     case Types::T_BOOL:
-                        if (!$currentMethod->areReturnTypesBoolCompatible() && !$currentMethod->isMixed() && !$currentMethod->areReturnTypesFalseCompatible()) {
+                        if (
+                            !$currentMethod->areReturnTypesBoolCompatible() &&
+                            !$currentMethod->isMixed() &&
+                            !$currentMethod->areReturnTypesFalseCompatible()
+                        ) {
                             throw new InvalidTypeException($resolvedExpr->getType(), $statement['expr']);
                         }
                         break;
@@ -201,15 +206,15 @@ final class ReturnStatement extends StatementAbstract
                 case Types::T_ULONG:
                 case Types::T_CHAR:
                 case Types::T_UCHAR:
-                    $codePrinter->output('RETURN_MM_LONG('.$resolvedExpr->getCode().');');
+                    $codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
                     break;
 
                 case Types::T_BOOL:
-                    $codePrinter->output('RETURN_MM_BOOL('.$resolvedExpr->getBooleanCode().');');
+                    $codePrinter->output('RETURN_MM_BOOL(' . $resolvedExpr->getBooleanCode() . ');');
                     break;
 
                 case Types::T_DOUBLE:
-                    $codePrinter->output('RETURN_MM_DOUBLE('.$resolvedExpr->getCode().');');
+                    $codePrinter->output('RETURN_MM_DOUBLE(' . $resolvedExpr->getCode() . ');');
                     break;
 
                 case Types::T_STRING:
@@ -222,7 +227,7 @@ final class ReturnStatement extends StatementAbstract
 
                 case Types::T_ARRAY:
                     if ('return_value' != $resolvedExpr->getCode()) {
-                        $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
+                        $codePrinter->output('RETURN_CTOR(' . $resolvedExpr->getCode() . ');');
                     } else {
                         $codePrinter->output(self::RETURN_RETURN);
                     }
@@ -245,23 +250,23 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_ULONG:
                         case Types::T_CHAR:
                         case Types::T_UCHAR:
-                            $codePrinter->output('RETURN_MM_LONG('.$symbolVariable->getName().');');
+                            $codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');
                             break;
 
                         case Types::T_DOUBLE:
-                            $codePrinter->output('RETURN_MM_DOUBLE('.$symbolVariable->getName().');');
+                            $codePrinter->output('RETURN_MM_DOUBLE(' . $symbolVariable->getName() . ');');
                             break;
 
                         case Types::T_STRING:
                         case Types::T_ISTRING:
                         case Types::T_ARRAY:
                             $codePrinter->output(
-                                'RETURN_CTOR('.$compilationContext->backend->getVariableCode($symbolVariable).');'
+                                'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
                             );
                             break;
 
                         case Types::T_BOOL:
-                            $codePrinter->output('RETURN_MM_BOOL('.$symbolVariable->getName().');');
+                            $codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');
                             break;
 
                         case Types::T_VARIABLE:
@@ -322,7 +327,7 @@ final class ReturnStatement extends StatementAbstract
                     break;
 
                 default:
-                    throw new CompilerException("Cannot return '".$resolvedExpr->getType()."'", $statement['expr']);
+                    throw new CompilerException("Cannot return '" . $resolvedExpr->getType() . "'", $statement['expr']);
             }
 
             return;

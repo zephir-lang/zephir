@@ -47,7 +47,7 @@ class FunctionCache
     public function get(string $functionName, CompilationContext $compilationContext, bool $exists): string
     {
         if (isset($this->cache[$functionName])) {
-            return $this->cache[$functionName].', '.SlotsCache::getExistingFunctionSlot($functionName);
+            return $this->cache[$functionName] . ', ' . SlotsCache::getExistingFunctionSlot($functionName);
         }
 
         if (!$exists) {
@@ -60,21 +60,24 @@ class FunctionCache
         if (!$compilationContext->insideCycle && $this->gatherer !== null) {
             $number = $this->gatherer->getNumberOfFunctionCalls($functionName);
             if ($number <= 1) {
-                return 'NULL, '.$cacheSlot;
+                return 'NULL, ' . $cacheSlot;
             }
         }
 
         if ($compilationContext->insideCycle || $number > 1) {
-            $functionCacheVariable = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $functionCacheVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'zephir_fcall_cache_entry',
+                $compilationContext
+            );
             $functionCacheVariable->setMustInitNull(true);
             $functionCacheVariable->setReusable(false);
-            $functionCache = '&'.$functionCacheVariable->getName();
+            $functionCache = '&' . $functionCacheVariable->getName();
         } else {
             $functionCache = 'NULL';
         }
 
         $this->cache[$functionName] = $functionCache;
 
-        return $functionCache.', '.$cacheSlot;
+        return $functionCache . ', ' . $cacheSlot;
     }
 }

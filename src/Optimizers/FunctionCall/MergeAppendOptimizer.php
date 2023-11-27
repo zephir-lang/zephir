@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * MergeAppendOptimizer.
@@ -41,7 +43,7 @@ class MergeAppendOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             return false;
         }
 
@@ -53,7 +55,7 @@ class MergeAppendOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/array');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        $context->codePrinter->output('zephir_merge_append('.$resolvedParams[0].', '.$resolvedParams[1].');');
+        $context->codePrinter->output('zephir_merge_append(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');');
 
         return new CompiledExpression('null', null, $expression);
     }

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Class\Definition\Definition;
@@ -18,11 +20,6 @@ class ClassesFile implements FileInterface
 {
     public function __construct(protected Definition $classes)
     {
-    }
-
-    public function getTemplateName(): string
-    {
-        return 'classes.phtml';
     }
 
     public function getData(): array
@@ -35,5 +32,10 @@ class ClassesFile implements FileInterface
     public function getOutputFile(): string
     {
         return 'classes.html';
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'classes.phtml';
     }
 }

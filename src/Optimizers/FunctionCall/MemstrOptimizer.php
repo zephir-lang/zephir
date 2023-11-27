@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Compiler;
 use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * MemnstrOptimizer.
@@ -40,7 +42,7 @@ class MemstrOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             return false;
         }
 
@@ -54,9 +56,21 @@ class MemstrOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
 
         if (isset($str)) {
-            return new CompiledExpression('bool', 'zephir_memnstr_str('.$resolvedParams[0].', SL("'.$str.'"), "'.Compiler::getShortUserPath($expression['file']).'", '.$expression['line'].')', $expression);
+            return new CompiledExpression(
+                'bool',
+                'zephir_memnstr_str(' . $resolvedParams[0] . ', SL("' . $str . '"), "' . Compiler::getShortUserPath(
+                    $expression['file']
+                ) . '", ' . $expression['line'] . ')',
+                $expression
+            );
         }
 
-        return new CompiledExpression('bool', 'zephir_memnstr('.$resolvedParams[0].', '.$resolvedParams[1].', "'.Compiler::getShortUserPath($expression['file']).'", '.$expression['line'].')', $expression);
+        return new CompiledExpression(
+            'bool',
+            'zephir_memnstr(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', "' . Compiler::getShortUserPath(
+                $expression['file']
+            ) . '", ' . $expression['line'] . ')',
+            $expression
+        );
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -25,13 +26,13 @@ use Zephir\Operators\AbstractOperator;
 class RequireOperator extends AbstractOperator
 {
     /**
-     * @param array              $expression
+     * @param array $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -41,8 +42,12 @@ class RequireOperator extends AbstractOperator
 
         $exprPath = $expr->compile($compilationContext);
         if ('variable' === $exprPath->getType()) {
-            $exprVariable = $compilationContext->symbolTable->getVariableForRead($exprPath->getCode(), $compilationContext, $expression);
-            $exprVar = $compilationContext->backend->getVariableCode($exprVariable);
+            $exprVariable = $compilationContext->symbolTable->getVariableForRead(
+                $exprPath->getCode(),
+                $compilationContext,
+                $expression
+            );
+            $exprVar      = $compilationContext->backend->getVariableCode($exprVariable);
             if ('variable' === $exprVariable->getType()) {
                 if ($exprVariable->hasDifferentDynamicType(['undefined', 'string'])) {
                     $compilationContext->logger->warning(
@@ -52,14 +57,21 @@ class RequireOperator extends AbstractOperator
                 }
             }
         } else {
-            $exprVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
+            $exprVar = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
             $compilationContext->backend->assignString($exprVar, $exprPath->getCode(), $compilationContext);
             $exprVar = $compilationContext->backend->getVariableCode($exprVar);
         }
 
         $symbolVariable = false;
         if ($this->isExpecting()) {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify('variable', $compilationContext);
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
+                'variable',
+                $compilationContext
+            );
         }
 
         $compilationContext->headersManager->add('kernel/memory');
@@ -68,13 +80,13 @@ class RequireOperator extends AbstractOperator
         $codePrinter = $compilationContext->codePrinter;
 
         if ($symbolVariable) {
-            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&'.$symbolVariable->getName().');');
+            $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&' . $symbolVariable->getName() . ');');
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-            $codePrinter->output('if (zephir_require_zval_ret('.$symbol.', '.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_zval_ret(' . $symbol . ', ' . $exprVar . ') == FAILURE) {');
         } else {
-            $codePrinter->output('if (zephir_require_zval('.$exprVar.') == FAILURE) {');
+            $codePrinter->output('if (zephir_require_zval(' . $exprVar . ') == FAILURE) {');
         }
-        $codePrinter->output("\t".'RETURN_MM_NULL();');
+        $codePrinter->output("\t" . 'RETURN_MM_NULL();');
         $codePrinter->output('}');
 
         if ($symbolVariable) {

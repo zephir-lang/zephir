@@ -20,17 +20,8 @@ use Zephir\Documentation\Annotation;
  */
 class ReturnAnnotation extends Annotation
 {
-    protected string $returnType;
     protected string $description;
-
-    public function getReturnType(): string
-    {
-        if (!$this->contentParsed) {
-            $this->parseContent();
-        }
-
-        return $this->returnType;
-    }
+    protected string $returnType;
 
     public function getDescription(): string
     {
@@ -41,6 +32,15 @@ class ReturnAnnotation extends Annotation
         return $this->description;
     }
 
+    public function getReturnType(): string
+    {
+        if (!$this->contentParsed) {
+            $this->parseContent();
+        }
+
+        return $this->returnType;
+    }
+
     protected function parseContent(): void
     {
         $spaceIndex = strpos($this->string, ' ');
@@ -48,7 +48,7 @@ class ReturnAnnotation extends Annotation
         $this->returnType = $this->string;
 
         if (false !== $spaceIndex) {
-            $this->returnType = substr($this->string, 0, $spaceIndex);
+            $this->returnType  = substr($this->string, 0, $spaceIndex);
             $this->description = substr($this->string, $spaceIndex + 1);
         }
 

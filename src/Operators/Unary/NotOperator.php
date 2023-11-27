@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Unary;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -29,7 +30,7 @@ class NotOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -47,31 +48,35 @@ class NotOperator extends AbstractOperator
             case 'uint':
             case 'long':
             case 'ulong':
-                return new CompiledExpression('bool', '!('.$left->getCode().')', $expression);
+                return new CompiledExpression('bool', '!(' . $left->getCode() . ')', $expression);
 
             case 'variable':
-                $variable = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+                $variable = $compilationContext->symbolTable->getVariableForRead(
+                    $left->getCode(),
+                    $compilationContext,
+                    $expression['left']
+                );
                 switch ($variable->getType()) {
                     case 'bool':
                     case 'int':
                     case 'uint':
                     case 'long':
-                        return new CompiledExpression('bool', '!'.$variable->getName(), $expression);
+                        return new CompiledExpression('bool', '!' . $variable->getName(), $expression);
 
                     case 'variable':
                     case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
                         $symbol = $compilationContext->backend->getVariableCode($variable);
 
-                        return new CompiledExpression('bool', '!zephir_is_true('.$symbol.')', $expression);
+                        return new CompiledExpression('bool', '!zephir_is_true(' . $symbol . ')', $expression);
 
                     default:
-                        throw new CompilerException('Unknown type: '.$variable->getType(), $expression);
+                        throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: '.$left->getType(), $expression);
+                throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
         }
     }
 }

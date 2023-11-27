@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Zephir\Optimizers\FunctionCall\IsPrivatePropertyOptimizer.
@@ -42,7 +44,7 @@ class IsPrivatePropertyOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != \count($expression['parameters'])) {
+        if (1 != count($expression['parameters'])) {
             return false;
         }
 
@@ -51,7 +53,7 @@ class IsPrivatePropertyOptimizer extends OptimizerAbstract
         try {
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            return new CompiledExpression('bool', 'zephir_is_private_prop('.$resolvedParams[0].')', $expression);
+            return new CompiledExpression('bool', 'zephir_is_private_prop(' . $resolvedParams[0] . ')', $expression);
         } catch (Exception $e) {
             throw new CompilerException($e->getMessage(), $expression);
         }

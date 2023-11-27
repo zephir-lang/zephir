@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
@@ -99,9 +99,22 @@ class StaticPropertySub
             case 'int':
             case 'uint':
             case 'long':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignLong(
+                    $tempVariable,
+                    $resolvedExpr->getBooleanCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
@@ -109,54 +122,113 @@ class StaticPropertySub
 
             case 'char':
             case 'uchar':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignLong($tempVariable, '\''.$resolvedExpr->getCode().'\'', $compilationContext);
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignLong(
+                    $tempVariable,
+                    '\'' . $resolvedExpr->getCode() . '\'',
+                    $compilationContext
+                );
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
                 break;
 
             case 'double':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
-                $compilationContext->backend->assignDouble($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
+                $compilationContext->backend->assignDouble(
+                    $tempVariable,
+                    $resolvedExpr->getCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
                 break;
 
             case 'string':
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, true);
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
                 $tempVariable->initVariant($compilationContext);
 
                 if ($resolvedExpr->getCode()) {
-                    $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
+                    $compilationContext->backend->assignString(
+                        $tempVariable,
+                        $resolvedExpr->getCode(),
+                        $compilationContext
+                    );
                 } else {
-                    $codePrinter->output('ZVAL_EMPTY_STRING('.$tempVariable->getName().');');
+                    $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
                 }
 
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
 
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'bool':
                 if ('1' == $resolvedExpr->getBooleanCode()) {
-                    $compilationContext->backend->subStaticProperty($classEntry, $property, 'true', $compilationContext);
+                    $compilationContext->backend->subStaticProperty(
+                        $classEntry,
+                        $property,
+                        'true',
+                        $compilationContext
+                    );
                 } else {
                     if ('0' == $resolvedExpr->getBooleanCode()) {
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, 'false', $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            'false',
+                            $compilationContext
+                        );
                     } else {
-                        $codePrinter->output('if ('.$resolvedExpr->getBooleanCode().') {');
+                        $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, 'true', $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            'true',
+                            $compilationContext
+                        );
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('} else {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, 'false', $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            'false',
+                            $compilationContext
+                        );
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('}');
                     }
@@ -164,16 +236,30 @@ class StaticPropertySub
                 break;
 
             case 'empty-array':
-                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                    'variable',
+                    $compilationContext,
+                    true
+                );
                 $compilationContext->backend->initArray($tempVariable, $compilationContext);
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $tempVariable,
+                    $compilationContext
+                );
                 if ($tempVariable->isTemporal()) {
                     $tempVariable->setIdle(true);
                 }
                 break;
 
             case 'array':
-                $compilationContext->backend->subStaticProperty($classEntry, $property, $resolvedExpr, $compilationContext);
+                $compilationContext->backend->subStaticProperty(
+                    $classEntry,
+                    $property,
+                    $resolvedExpr,
+                    $compilationContext
+                );
                 break;
 
             case 'variable':
@@ -197,7 +283,12 @@ class StaticPropertySub
                         );
 
                         $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
 
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
@@ -211,8 +302,17 @@ class StaticPropertySub
                             true
                         );
 
-                        $compilationContext->backend->assignDouble($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->assignDouble(
+                            $tempVariable,
+                            $variableVariable,
+                            $compilationContext
+                        );
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
 
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
@@ -220,15 +320,29 @@ class StaticPropertySub
                         break;
 
                     case 'bool':
-                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable('variable', $compilationContext, true);
+                        $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
+                            'variable',
+                            $compilationContext,
+                            true
+                        );
                         $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, $tempVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            $tempVariable,
+                            $compilationContext
+                        );
                         if ($tempVariable->isTemporal()) {
                             $tempVariable->setIdle(true);
                         }
                         break;
                     default:
-                        $compilationContext->backend->subStaticProperty($classEntry, $property, $variableVariable, $compilationContext);
+                        $compilationContext->backend->subStaticProperty(
+                            $classEntry,
+                            $property,
+                            $variableVariable,
+                            $compilationContext
+                        );
                         if ($variableVariable->isTemporal()) {
                             $variableVariable->setIdle(true);
                         }
@@ -238,7 +352,7 @@ class StaticPropertySub
                 break;
 
             default:
-                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

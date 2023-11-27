@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Optimizes calls to 'explode' using internal function
@@ -39,7 +41,7 @@ class ExplodeOptimizer extends OptimizerAbstract
         if (!isset($expression['parameters'])) {
             return false;
         }
-        if (\count($expression['parameters']) < 2) {
+        if (count($expression['parameters']) < 2) {
             throw new CompilerException("'explode' require two parameter");
         }
 
@@ -50,23 +52,26 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
         if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
+            throw new CompilerException(
+                'Returned values by functions can only be assigned to variant variables',
+                $expression
+            );
         }
 
         /**
          * Process limit.
          */
-        $limit = 'LONG_MAX';
+        $limit       = 'LONG_MAX';
         $limitOffset = 2;
-        if (3 == \count($expression['parameters']) && 'int' == $expression['parameters'][2]['parameter']['type']) {
-            $limit = $expression['parameters'][2]['parameter']['value'].' ';
+        if (3 == count($expression['parameters']) && 'int' == $expression['parameters'][2]['parameter']['type']) {
+            $limit = $expression['parameters'][2]['parameter']['value'] . ' ';
             unset($expression['parameters'][2]);
         }
 
         if ('string' == $expression['parameters'][0]['parameter']['type']) {
             $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
             unset($expression['parameters'][0]);
-            if (2 == \count($expression['parameters'])) {
+            if (2 == count($expression['parameters'])) {
                 $limitOffset = 1;
             }
         }
@@ -75,7 +80,7 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         if (isset($resolvedParams[$limitOffset])) {
             $context->headersManager->add('kernel/operators');
-            $limit = 'zephir_get_intval('.$resolvedParams[$limitOffset].') ';
+            $limit = 'zephir_get_intval(' . $resolvedParams[$limitOffset] . ') ';
         }
 
         $context->headersManager->add('kernel/string');
@@ -86,12 +91,16 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
-            $context->codePrinter->output('zephir_fast_explode_str('.$symbol.', SL("'.$str.'"), '.$resolvedParams[0].', '.$limit.');');
+            $context->codePrinter->output(
+                'zephir_fast_explode_str(' . $symbol . ', SL("' . $str . '"), ' . $resolvedParams[0] . ', ' . $limit . ');'
+            );
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_fast_explode('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$limit.');');
+        $context->codePrinter->output(
+            'zephir_fast_explode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $limit . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

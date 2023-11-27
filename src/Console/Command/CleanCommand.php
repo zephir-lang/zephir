@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
+use Exception;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use Zephir\Exception\FileSystemException;
 use Zephir\FileSystem\FileSystemInterface;
 use Zephir\Os;
@@ -39,7 +41,8 @@ final class CleanCommand extends AbstractCommand
         $this
             ->setName('clean')
             ->setDescription('Cleans any object files created by the extension')
-            ->setHelp(sprintf('%s.', $this->getDescription()));
+            ->setHelp(sprintf('%s.', $this->getDescription()))
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -64,16 +67,16 @@ final class CleanCommand extends AbstractCommand
         } catch (FileSystemException $e) {
             $io->getErrorStyle()->error(
                 sprintf(
-                    "For reasons beyond Zephir's control, a filesystem error has occurred. ".
-                    'Please note: On Linux/Unix systems the current user must have the delete and execute '.
-                    'permissions on the internal cache directory,  For more information see chmod(1) and chown(1). '.
+                    "For reasons beyond Zephir's control, a filesystem error has occurred. " .
+                    'Please note: On Linux/Unix systems the current user must have the delete and execute ' .
+                    'permissions on the internal cache directory,  For more information see chmod(1) and chown(1). ' .
                     'System error was: %s',
                     $e->getMessage()
                 )
             );
 
             return 1;
-        } catch (\Exception | \Throwable $e) {
+        } catch (Exception | Throwable $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;

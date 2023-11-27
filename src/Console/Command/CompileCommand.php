@@ -47,14 +47,20 @@ final class CompileCommand extends AbstractCommand
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Compile the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Compile the extension in production mode')
             ->addOption('jobs', 'j', InputOption::VALUE_REQUIRED, 'Set make -j (job slots)')
-            ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp())
+        ;
+    }
+
+    protected function createDefinition(): InputDefinition
+    {
+        return new InputDefinition([]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $jobs = $input->hasOption('jobs') ? (int) $input->getOption('jobs') : null;
+        $jobs = $input->hasOption('jobs') ? (int)$input->getOption('jobs') : null;
 
         try {
             // TODO: Move all the stuff from the compiler
@@ -69,11 +75,6 @@ final class CompileCommand extends AbstractCommand
         }
 
         return 0;
-    }
-
-    protected function createDefinition(): InputDefinition
-    {
-        return new InputDefinition([]);
     }
 
     /**

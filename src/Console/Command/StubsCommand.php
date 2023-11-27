@@ -44,7 +44,13 @@ final class StubsCommand extends AbstractCommand
             ->setName('stubs')
             ->setDescription('Generates stubs that can be used in a PHP IDE')
             ->setDefinition($this->createDefinition())
-            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()) . PHP_EOL . PHP_EOL . $this->getZflagsHelp())
+        ;
+    }
+
+    protected function createDefinition(): InputDefinition
+    {
+        return new InputDefinition([]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -61,10 +67,5 @@ final class StubsCommand extends AbstractCommand
         }
 
         return 0;
-    }
-
-    protected function createDefinition(): InputDefinition
-    {
-        return new InputDefinition([]);
     }
 }

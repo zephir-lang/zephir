@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Logical;
 
+use Exception;
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -21,9 +23,8 @@ use Zephir\Statements\LetStatement;
 
 class AndOperator extends LogicalBaseOperator
 {
-    protected string $operator = '&&';
-
     protected string $bitOperator = '&&';
+    protected string $operator    = '&&';
 
     /**
      * @param                    $expression
@@ -31,17 +32,17 @@ class AndOperator extends LogicalBaseOperator
      *
      * @return CompiledExpression
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws \Zephir\Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
-            throw new \Exception('Missing left part of the expression');
+            throw new Exception('Missing left part of the expression');
         }
 
         if (!isset($expression['right'])) {
-            throw new \Exception('Missing right part of the expression');
+            throw new Exception('Missing right part of the expression');
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -61,19 +62,19 @@ class AndOperator extends LogicalBaseOperator
             case 'uint':
             case 'uchar':
                 $assignExprLeft = [
-                    'type' => $left->getType(),
+                    'type'  => $left->getType(),
                     'value' => $left->getCode(),
                 ];
                 break;
             case 'variable':
                 $assignExprLeft = [
-                    'type' => 'variable',
+                    'type'  => 'variable',
                     'value' => $left->getCode(),
                 ];
                 break;
             case 'null':
                 $assignExprLeft = [
-                    'type' => 'null',
+                    'type'  => 'null',
                     'value' => null,
                 ];
                 break;
@@ -87,22 +88,22 @@ class AndOperator extends LogicalBaseOperator
          * Create an implicit 'let' operation to update the evaluated left operator.
          */
         $statement = new LetStatement([
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => [
                 [
                     'assign-type' => 'variable',
-                    'variable' => $flagVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $assignExprLeft,
-                    'file' => $expression['left']['file'],
-                    'line' => $expression['left']['line'],
-                    'char' => $expression['left']['char'],
+                    'variable'    => $flagVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $assignExprLeft,
+                    'file'        => $expression['left']['file'],
+                    'line'        => $expression['left']['line'],
+                    'char'        => $expression['left']['char'],
                 ],
             ],
         ]);
         $statement->compile($compilationContext);
 
-        $compilationContext->codePrinter->output('if ('.$flagVariable->getName().') {');
+        $compilationContext->codePrinter->output('if (' . $flagVariable->getName() . ') {');
         $compilationContext->codePrinter->increaseLevel();
 
         $rightExpr = new Expression($expression['right']);
@@ -117,19 +118,19 @@ class AndOperator extends LogicalBaseOperator
             case 'uint':
             case 'uchar':
                 $assignExprRight = [
-                    'type' => $right->getType(),
+                    'type'  => $right->getType(),
                     'value' => $right->getCode(),
                 ];
                 break;
             case 'variable':
                 $assignExprRight = [
-                    'type' => 'variable',
+                    'type'  => 'variable',
                     'value' => $right->getCode(),
                 ];
                 break;
             case 'null':
                 $assignExprRight = [
-                    'type' => 'null',
+                    'type'  => 'null',
                     'value' => null,
                 ];
                 break;
@@ -143,16 +144,16 @@ class AndOperator extends LogicalBaseOperator
          * Create an implicit 'let' operation to update the evaluated right operator.
          */
         $statement = new LetStatement([
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => [
                 [
                     'assign-type' => 'variable',
-                    'variable' => $flagVariable->getName(),
-                    'operator' => 'assign',
-                    'expr' => $assignExprRight,
-                    'file' => $expression['right']['file'],
-                    'line' => $expression['right']['line'],
-                    'char' => $expression['right']['char'],
+                    'variable'    => $flagVariable->getName(),
+                    'operator'    => 'assign',
+                    'expr'        => $assignExprRight,
+                    'file'        => $expression['right']['file'],
+                    'line'        => $expression['right']['line'],
+                    'char'        => $expression['right']['char'],
                 ],
             ],
         ]);

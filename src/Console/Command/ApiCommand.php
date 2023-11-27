@@ -21,6 +21,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zephir\Compiler;
 use Zephir\Config;
 
+use function in_array;
+
 /**
  * Generates an HTML API based on the classes exposed in the extension.
  */
@@ -39,52 +41,8 @@ final class ApiCommand extends AbstractCommand
             ->setName('api')
             ->setDescription('Generates a HTML API based on the classes exposed in the extension')
             ->setDefinition($this->createDefinition())
-            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
-    }
-
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        $options = array_merge(
-            $this->getDefaultOptions(),
-            $this->sanitizeOptionsFromInput($input)
-        );
-
-        // TODO: Move all the stuff from the compiler
-        $this->compiler->api($options);
-
-        return 0;
-    }
-
-    protected function getDefaultOptions(): array
-    {
-        return [
-            'path' => null,
-            'output' => $this->config->get('path', 'api'),
-            'options' => null,
-            'url' => $this->config->get('base-url', 'api'),
-        ];
-    }
-
-    protected function sanitizeOptionsFromInput(InputInterface $input): array
-    {
-        $defaults = $this->getDefaultOptions();
-
-        $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {
-            $allowedOpts = array_keys($defaults);
-
-            return \in_array($k, $allowedOpts, true) && null !== $v;
-        }, ARRAY_FILTER_USE_BOTH);
-
-        foreach ($options as $option => $value) {
-            // Prevent "" values
-            if (empty($value) || !preg_match('/.+/', $value)) {
-                throw new InvalidArgumentException(
-                    sprintf('The "--%s" option requires a value.', $option)
-                );
-            }
-        }
-
-        return $options;
+            ->setHelp(sprintf('%s.', $this->getDescription()) . PHP_EOL . PHP_EOL . $this->getZflagsHelp())
+        ;
     }
 
     protected function createDefinition(): InputDefinition
@@ -117,5 +75,50 @@ final class ApiCommand extends AbstractCommand
                 ),
             ]
         );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $options = array_merge(
+            $this->getDefaultOptions(),
+            $this->sanitizeOptionsFromInput($input)
+        );
+
+        // TODO: Move all the stuff from the compiler
+        $this->compiler->api($options);
+
+        return 0;
+    }
+
+    protected function getDefaultOptions(): array
+    {
+        return [
+            'path'    => null,
+            'output'  => $this->config->get('path', 'api'),
+            'options' => null,
+            'url'     => $this->config->get('base-url', 'api'),
+        ];
+    }
+
+    protected function sanitizeOptionsFromInput(InputInterface $input): array
+    {
+        $defaults = $this->getDefaultOptions();
+
+        $options = array_filter($input->getOptions(), function ($v, $k) use ($defaults) {
+            $allowedOpts = array_keys($defaults);
+
+            return in_array($k, $allowedOpts, true) && null !== $v;
+        }, ARRAY_FILTER_USE_BOTH);
+
+        foreach ($options as $option => $value) {
+            // Prevent "" values
+            if (empty($value) || !preg_match('/.+/', $value)) {
+                throw new InvalidArgumentException(
+                    sprintf('The "--%s" option requires a value.', $option)
+                );
+            }
+        }
+
+        return $options;
     }
 }
