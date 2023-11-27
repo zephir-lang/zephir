@@ -1847,7 +1847,8 @@ class Method
              */
             if (
                 'return' !== $lastType &&
-                'throw' !== $lastType && !$this->hasChildReturnStatementType($statement) &&
+                'throw' !== $lastType &&
+                !$this->hasChildReturnStatementType($statement) &&
                 $this->hasReturnTypes()
             ) {
                 throw new CompilerException(
