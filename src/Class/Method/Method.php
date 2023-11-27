@@ -1845,10 +1845,10 @@ class Method
              * If a method has return-type hints we need to ensure the last
              * statement is a 'return' statement
              */
-            if ('return' !== $lastType &&
-                'throw' !== $lastType &&
-                !$this->hasChildReturnStatementType($statement) &&
-                $this->hasReturnTypes()
+            if ('return' !== $lastType
+                && 'throw' !== $lastType
+                && !$this->hasChildReturnStatementType($statement)
+                && $this->hasReturnTypes()
             ) {
                 throw new CompilerException(
                     'Reached end of the method without returning a valid type specified in the return-type hints',
