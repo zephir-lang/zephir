@@ -13,40 +13,40 @@ class redis
     /**
      * Options.
      */
-    public public const OPT_SERIALIZER = 1;
-    public public const OPT_PREFIX = 2;
-    public public const OPT_READ_TIMEOUT = 3;
-    public public const OPT_SCAN = 4;
+    public const OPT_SERIALIZER = 1;
+    public const OPT_PREFIX = 2;
+    public const OPT_READ_TIMEOUT = 3;
+    public const OPT_SCAN = 4;
 
     /**
      * Serializers.
      */
-    public public const SERIALIZER_NONE = 0;
-    public public const SERIALIZER_PHP = 1;
-    public public const SERIALIZER_IGBINARY = 2;
+    public const SERIALIZER_NONE = 0;
+    public const SERIALIZER_PHP = 1;
+    public const SERIALIZER_IGBINARY = 2;
 
     /**
      * Multi.
      */
-    public public const ATOMIC = 0;
-    public public const MULTI = 1;
-    public public const PIPELINE = 2;
+    public const ATOMIC = 0;
+    public const MULTI = 1;
+    public const PIPELINE = 2;
 
     /**
      * Type.
      */
-    public public const REDIS_NOT_FOUND = 0;
-    public public const REDIS_STRING = 1;
-    public public const REDIS_SET = 2;
-    public public const REDIS_LIST = 3;
-    public public const REDIS_ZSET = 4;
-    public public const REDIS_HASH = 5;
+    public const REDIS_NOT_FOUND = 0;
+    public const REDIS_STRING = 1;
+    public const REDIS_SET = 2;
+    public const REDIS_LIST = 3;
+    public const REDIS_ZSET = 4;
+    public const REDIS_HASH = 5;
 
     /**
      * Scan.
      */
-    public public const SCAN_NORETRY = 0;
-    public public const SCAN_RETRY = 1;
+    public const SCAN_NORETRY = 0;
+    public const SCAN_RETRY = 1;
 
     public function connect($host, $port = 6379, $timeout = 0.0)
     {
