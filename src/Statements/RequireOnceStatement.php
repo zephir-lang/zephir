@@ -22,25 +22,7 @@ use Zephir\Expression;
  *
  * Require once statement is used to execute PHP scripts in a given path
  */
-class RequireOnceStatement extends StatementAbstract
+class RequireOnceStatement extends RequireStatement
 {
-    /**
-     * @param CompilationContext $compilationContext
-     *
-     * @throws Exception
-     */
-    public function compile(CompilationContext $compilationContext): void
-    {
-        $expression = [
-            'type' => 'require_once',
-            'left' => $this->statement['expr'],
-            'file' => $this->statement['file'],
-            'line' => $this->statement['line'],
-            'char' => $this->statement['char'],
-        ];
-
-        $expr = new Expression($expression);
-        $expr->setExpectReturn(false, null);
-        $expr->compile($compilationContext);
-    }
+    protected string $methodName = 'require_once';
 }

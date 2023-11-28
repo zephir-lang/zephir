@@ -131,7 +131,8 @@ final class Application extends BaseApplication
 
         return trim(
             sprintf(
-                '%s <info>%s</info> by <comment>Andres Gutierrez</comment> and <comment>Serghei Iakovlev</comment> %s',
+                '%s <info>%s</info> by the <comment>Phalcon Team</comment>' . PHP_EOL .
+                'Thanks to the work by: <comment>Andres Gutierrez</comment> and <comment>Serghei Iakovlev</comment> %s',
                 $this->getName(),
                 $version[0],
                 $commit

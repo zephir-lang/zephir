@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
@@ -24,6 +25,8 @@ use Zephir\Expression;
  */
 class RequireStatement extends StatementAbstract
 {
+    protected string $methodName = 'require';
+
     /**
      * @param CompilationContext $compilationContext
      *
@@ -32,7 +35,7 @@ class RequireStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext): void
     {
         $expression = [
-            'type' => 'require',
+            'type' => $this->methodName,
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
@@ -40,7 +43,7 @@ class RequireStatement extends StatementAbstract
         ];
 
         $expr = new Expression($expression);
-        $expr->setExpectReturn(false, null);
+        $expr->setExpectReturn(false);
         $expr->compile($compilationContext);
     }
 }
