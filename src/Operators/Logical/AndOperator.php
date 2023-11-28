@@ -20,8 +20,6 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Statements\LetStatement;
-use Zephir\Types\Types;
-use Zephir\Variable\Variable;
 
 class AndOperator extends LogicalBaseOperator
 {
@@ -56,29 +54,35 @@ class AndOperator extends LogicalBaseOperator
          */
         $flagVariable = $compilationContext->symbolTable->getTempVariableForWrite('bool', $compilationContext);
 
-        $assignExprLeft = match ($left->getType()) {
-            Types::T_INT,
-            Types::T_BOOL,
-            Types::T_CHAR,
-            Types::T_DOUBLE,
-            Types::T_UINT,
-            Types::T_UCHAR    => [
-                'type'  => $left->getType(),
-                'value' => $left->getCode(),
-            ],
-            Types::T_VARIABLE => [
-                'type'  => 'variable',
-                'value' => $left->getCode(),
-            ],
-            Types::T_NULL     => [
-                'type'  => 'null',
-                'value' => null,
-            ],
-            default           => throw new CompilerException(
-                $left->getType(),
-                $expression['left']
-            ),
-        };
+        switch ($left->getType()) {
+            case 'int':
+            case 'bool':
+            case 'char':
+            case 'double':
+            case 'uint':
+            case 'uchar':
+                $assignExprLeft = [
+                    'type'  => $left->getType(),
+                    'value' => $left->getCode(),
+                ];
+                break;
+            case 'variable':
+                $assignExprLeft = [
+                    'type'  => 'variable',
+                    'value' => $left->getCode(),
+                ];
+                break;
+            case 'null':
+                $assignExprLeft = [
+                    'type'  => 'null',
+                    'value' => null,
+                ];
+                break;
+        }
+
+        if (!isset($assignExprLeft)) {
+            throw new CompilerException($left->getType(), $expression['left']);
+        }
 
         /**
          * Create an implicit 'let' operation to update the evaluated left operator.
@@ -99,36 +103,42 @@ class AndOperator extends LogicalBaseOperator
         ]);
         $statement->compile($compilationContext);
 
-        $compilationContext->codePrinter->output($this->getOutput($flagVariable));
+        $compilationContext->codePrinter->output('if (' . $flagVariable->getName() . ') {');
         $compilationContext->codePrinter->increaseLevel();
 
         $rightExpr = new Expression($expression['right']);
         $rightExpr->setReadOnly($this->readOnly);
         $right = $rightExpr->compile($compilationContext);
 
-        $assignExprRight = match ($right->getType()) {
-            Types::T_INT,
-            Types::T_BOOL,
-            Types::T_CHAR,
-            Types::T_DOUBLE,
-            Types::T_UINT,
-            Types::T_UCHAR    => [
-                'type'  => $right->getType(),
-                'value' => $right->getCode(),
-            ],
-            Types::T_VARIABLE => [
-                'type'  => 'variable',
-                'value' => $right->getCode(),
-            ],
-            Types::T_NULL     => [
-                'type'  => 'null',
-                'value' => null,
-            ],
-            default           => throw new CompilerException(
-                $right->getType(),
-                $expression['right']
-            ),
-        };
+        switch ($right->getType()) {
+            case 'int':
+            case 'bool':
+            case 'char':
+            case 'double':
+            case 'uint':
+            case 'uchar':
+                $assignExprRight = [
+                    'type'  => $right->getType(),
+                    'value' => $right->getCode(),
+                ];
+                break;
+            case 'variable':
+                $assignExprRight = [
+                    'type'  => 'variable',
+                    'value' => $right->getCode(),
+                ];
+                break;
+            case 'null':
+                $assignExprRight = [
+                    'type'  => 'null',
+                    'value' => null,
+                ];
+                break;
+        }
+
+        if (!isset($assignExprRight)) {
+            throw new CompilerException($right->getType(), $expression['right']);
+        }
 
         /**
          * Create an implicit 'let' operation to update the evaluated right operator.
@@ -153,15 +163,5 @@ class AndOperator extends LogicalBaseOperator
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('bool', $flagVariable->getName(), $expression);
-    }
-
-    /**
-     * @param Variable $variable
-     *
-     * @return string
-     */
-    protected function getOutput(Variable $variable): string
-    {
-        return 'if (!(' . $variable->getName() . ')) {';
     }
 }

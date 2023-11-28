@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 
 use function is_object;
@@ -234,39 +233,5 @@ abstract class AbstractOperator
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
-    }
-
-    /**
-     * @param array $expression
-     *
-     * @return void
-     */
-    protected function checkLeftOperator(array $expression): void
-    {
-        if (!isset($expression['left'])) {
-            throw new CompilerException(
-                'Missing left part of the expression',
-                $expression
-            );
-        }
-
-        if (!isset($expression['right'])) {
-            throw new CompilerException('Missing right part of the expression', $expression);
-        }
-    }
-
-    /**
-     * @param array $expression
-     *
-     * @return void
-     */
-    protected function checkRightOperator(array $expression): void
-    {
-        if (!isset($expression['right'])) {
-            throw new CompilerException(
-                'Missing right part of the expression',
-                $expression
-            );
-        }
     }
 }

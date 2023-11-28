@@ -26,8 +26,6 @@ use function current;
  */
 class ObjectPropertyDecr
 {
-    protected string $zephirMethod = 'zephir_property_decr';
-
     /**
      * Compiles obj->x--.
      *
@@ -46,9 +44,7 @@ class ObjectPropertyDecr
     ): void {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException(
-                "Cannot mutate variable '"
-                . $variable
-                . "' because it is not initialized",
+                "Cannot mutate variable '" . $variable . "' because it is not initialized",
                 $statement
             );
         }
@@ -58,18 +54,14 @@ class ObjectPropertyDecr
          */
         if ($symbolVariable->isLocalOnly()) {
             throw new CompilerException(
-                "Cannot mutate variable '"
-                . $variable
-                . "' because it is local only",
+                "Cannot mutate variable '" . $variable . "' because it is local only",
                 $statement
             );
         }
 
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException(
-                "Cannot mutate variable '"
-                . $variable
-                . "' because it is not initialized",
+                "Cannot mutate variable '" . $variable . "' because it is not initialized",
                 $statement
             );
         }
@@ -79,9 +71,7 @@ class ObjectPropertyDecr
          */
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException(
-                "Cannot use variable type: '"
-                . $symbolVariable->getType()
-                . "' as array",
+                "Cannot use variable type: '" . $symbolVariable->getType() . "' as array",
                 $statement
             );
         }
@@ -110,11 +100,8 @@ class ObjectPropertyDecr
             $classDefinition = $compilationContext->classDefinition;
             if (!$classDefinition->hasProperty($property)) {
                 throw new CompilerException(
-                    "Class '"
-                    . $classDefinition->getCompleteName()
-                    . "' does not have a property called: '"
-                    . $property
-                    . "'",
+                    "Class '" . $classDefinition->getCompleteName(
+                    ) . "' does not have a property called: '" . $property . "'",
                     $statement
                 );
             }
@@ -138,11 +125,7 @@ class ObjectPropertyDecr
 
                     if (!$classDefinition->hasProperty($property)) {
                         throw new CompilerException(
-                            "Class '"
-                            . $classType
-                            . "' does not have a property called: '"
-                            . $property
-                            . "'",
+                            "Class '" . $classType . "' does not have a property called: '" . $property . "'",
                             $statement
                         );
                     }
@@ -152,11 +135,7 @@ class ObjectPropertyDecr
 
         $compilationContext->headersManager->add('kernel/object');
         $compilationContext->codePrinter->output(
-            'RETURN_ON_FAILURE(' . $this->zephirMethod . '('
-            . $symbolVariable->getName()
-            . ', SL("'
-            . $property
-            . '")));'
+            'RETURN_ON_FAILURE(zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '")));'
         );
     }
 }

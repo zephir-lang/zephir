@@ -26,8 +26,6 @@ use Zephir\Exception\IllegalOperationException;
  */
 class StaticPropertyAdd
 {
-    protected string $methodName = 'addStaticProperty';
-
     /**
      * Compiles ClassName::foo = {expr}.
      *
@@ -48,7 +46,6 @@ class StaticPropertyAdd
         array $statement
     ): void {
         $classDefinition = $compilationContext->classLookup($className);
-        $methodName      = $this->methodName;
 
         if (!$propertyDefinition = $classDefinition->getProperty($property)) {
             throw new CompilerException(
@@ -96,12 +93,7 @@ class StaticPropertyAdd
 
         switch ($resolvedExpr->getType()) {
             case 'null':
-                $compilationContext->backend->updateStaticProperty(
-                    $classEntry,
-                    $property,
-                    'null',
-                    $compilationContext
-                );
+                $compilationContext->backend->updateStaticProperty($classEntry, $property, 'null', $compilationContext);
                 break;
 
             case 'int':
@@ -117,7 +109,7 @@ class StaticPropertyAdd
                     $resolvedExpr->getBooleanCode(),
                     $compilationContext
                 );
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -140,7 +132,7 @@ class StaticPropertyAdd
                     '\'' . $resolvedExpr->getCode() . '\'',
                     $compilationContext
                 );
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -162,7 +154,7 @@ class StaticPropertyAdd
                     $resolvedExpr->getCode(),
                     $compilationContext
                 );
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -195,7 +187,7 @@ class StaticPropertyAdd
                     $tempVariable->setIdle(true);
                 }
 
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -205,7 +197,7 @@ class StaticPropertyAdd
 
             case 'bool':
                 if ('1' == $resolvedExpr->getBooleanCode()) {
-                    $compilationContext->backend->$methodName(
+                    $compilationContext->backend->addStaticProperty(
                         $classEntry,
                         $property,
                         'true',
@@ -213,7 +205,7 @@ class StaticPropertyAdd
                     );
                 } else {
                     if ('0' == $resolvedExpr->getBooleanCode()) {
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             'false',
@@ -222,7 +214,7 @@ class StaticPropertyAdd
                     } else {
                         $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             'true',
@@ -231,7 +223,7 @@ class StaticPropertyAdd
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('} else {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             'false',
@@ -250,7 +242,7 @@ class StaticPropertyAdd
                     true
                 );
                 $compilationContext->backend->initArray($tempVariable, $compilationContext);
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -262,7 +254,7 @@ class StaticPropertyAdd
                 break;
 
             case 'array':
-                $compilationContext->backend->$methodName(
+                $compilationContext->backend->addStaticProperty(
                     $classEntry,
                     $property,
                     $resolvedExpr,
@@ -290,12 +282,8 @@ class StaticPropertyAdd
                             true
                         );
 
-                        $compilationContext->backend->assignLong(
-                            $tempVariable,
-                            $variableVariable,
-                            $compilationContext
-                        );
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -319,7 +307,7 @@ class StaticPropertyAdd
                             $variableVariable,
                             $compilationContext
                         );
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -337,12 +325,8 @@ class StaticPropertyAdd
                             $compilationContext,
                             true
                         );
-                        $compilationContext->backend->assignBool(
-                            $tempVariable,
-                            $variableVariable,
-                            $compilationContext
-                        );
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -353,7 +337,7 @@ class StaticPropertyAdd
                         }
                         break;
                     default:
-                        $compilationContext->backend->$methodName(
+                        $compilationContext->backend->addStaticProperty(
                             $classEntry,
                             $property,
                             $variableVariable,

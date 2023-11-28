@@ -28,8 +28,6 @@ use function count;
  */
 class CamelizeOptimizer extends OptimizerAbstract
 {
-    protected string $zephirMethod = 'zephir_camelize';
-
     /**
      * @param array              $expression
      * @param Call               $call
@@ -85,7 +83,7 @@ class CamelizeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );'
+            'zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );'
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

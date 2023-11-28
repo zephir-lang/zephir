@@ -28,8 +28,6 @@ use function count;
  */
 class CallUserFuncOptimizer extends OptimizerAbstract
 {
-    protected string $zephirMethod = 'ZEPHIR_CALL_USER_FUNC';
-
     /**
      * @param array              $expression
      * @param Call               $call
@@ -84,23 +82,9 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output(
-            $this->getOutput($symbol, $resolvedParams)
-        );
+        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC(' . $symbol . ', ' . $resolvedParams[0] . ');');
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
-    }
-
-    /**
-     * @param string $symbol
-     * @param array  $resolvedParams
-     *
-     * @return string
-     */
-    protected function getOutput(string $symbol, array $resolvedParams): string
-    {
-        return $this->zephirMethod
-            . '(' . $symbol . ', ' . $resolvedParams[0] . ');';
     }
 }
