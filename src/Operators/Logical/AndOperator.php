@@ -23,8 +23,6 @@ use Zephir\Statements\LetStatement;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
-use function delete;
-
 class AndOperator extends LogicalBaseOperator
 {
     protected string $bitOperator = '&&';
@@ -41,8 +39,13 @@ class AndOperator extends LogicalBaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $this->checkLeftOperator($expression);
-        $this->checkRightOperator($expression);
+        if (!isset($expression['left'])) {
+            throw new Exception('Missing left part of the expression');
+        }
+
+        if (!isset($expression['right'])) {
+            throw new Exception('Missing right part of the expression');
+        }
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly($this->readOnly);
@@ -122,7 +125,8 @@ class AndOperator extends LogicalBaseOperator
                 'value' => null,
             ],
             default           => throw new CompilerException(
-                $right->getType(), $expression['right']
+                $right->getType(),
+                $expression['right']
             ),
         };
 

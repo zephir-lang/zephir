@@ -36,8 +36,13 @@ class ModOperator extends ArithmeticalBaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        $this->checkLeftOperator($expression);
-        $this->checkRightOperator($expression);
+        if (!isset($expression['left'])) {
+            throw new Exception('Missing left part of the expression');
+        }
+
+        if (!isset($expression['right'])) {
+            throw new Exception('Missing right part of the expression');
+        }
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly(true);

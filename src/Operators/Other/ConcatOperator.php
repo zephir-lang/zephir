@@ -40,8 +40,13 @@ class ConcatOperator extends AbstractOperator
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $this->checkLeftOperator($expression);
-        $this->checkRightOperator($expression);
+        if (!isset($expression['left'])) {
+            throw new CompilerException('Missing left part of the expression', $expression);
+        }
+
+        if (!isset($expression['right'])) {
+            throw new CompilerException('Missing right part of the expression', $expression);
+        }
 
         $compilationContext->headersManager->add('kernel/concat');
 

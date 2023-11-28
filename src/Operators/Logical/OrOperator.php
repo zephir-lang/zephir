@@ -13,12 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Logical;
 
-use Exception;
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
-use Zephir\Expression;
-use Zephir\Statements\LetStatement;
 use Zephir\Variable\Variable;
 
 class OrOperator extends LogicalBaseOperator

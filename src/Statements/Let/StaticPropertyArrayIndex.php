@@ -55,7 +55,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '".$className."'", $statement);
+                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
                 }
             }
         } else {
@@ -66,7 +66,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
                     $classDefinition = $compilationContext->classDefinition;
                     $extendsClass = $classDefinition->getExtendsClass();
                     if (!$extendsClass) {
-                        throw new CompilerException('Cannot assign static property "'.$property.'" on parent because class '.$classDefinition->getCompleteName().' does not extend any class', $statement);
+                        throw new CompilerException('Cannot assign static property "' . $property . '" on parent because class ' . $classDefinition->getCompleteName() . ' does not extend any class', $statement);
                     } else {
                         $classDefinition = $classDefinition->getExtendsClassDefinition();
                     }
@@ -75,18 +75,18 @@ class StaticPropertyArrayIndex extends ArrayIndex
         }
 
         if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
+            throw new CompilerException("Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '" . $property . "'", $statement);
         }
 
         /** @var Property $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
         if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException("Cannot access non-static property '".$classDefinition->getCompleteName().'::'.$property."'", $statement);
+            throw new CompilerException("Cannot access non-static property '" . $classDefinition->getCompleteName() . '::' . $property . "'", $statement);
         }
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException("Cannot access private static property '".$classDefinition->getCompleteName().'::'.$property."' out of its declaring context", $statement);
+                throw new CompilerException("Cannot access private static property '" . $classDefinition->getCompleteName() . '::' . $property . "' out of its declaring context", $statement);
             }
         }
 
