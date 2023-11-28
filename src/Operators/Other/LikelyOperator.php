@@ -79,7 +79,7 @@ class LikelyOperator extends AbstractOperator
 
                     return new CompiledExpression(
                         'bool',
-                        'UNEXPECTED(zephir_is_true(' . $symbol . '))',
+                        $this->expressionName . '(zephir_is_true(' . $symbol . '))',
                         $expression
                     );
             }

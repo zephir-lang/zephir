@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -43,8 +44,8 @@ class StaticPropertyArrayIndex extends ArrayIndex
      * @throws CompilerException
      */
     public function assignStatic(
-        $className,
-        $property,
+        string $className,
+        string $property,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         array $statement
@@ -58,7 +59,10 @@ class StaticPropertyArrayIndex extends ArrayIndex
                 if ($compiler->isBundledClass($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
+                    throw new CompilerException(
+                        "Cannot locate class '" . $className . "'",
+                        $statement
+                    );
                 }
             }
         } else {
@@ -146,7 +150,7 @@ class StaticPropertyArrayIndex extends ArrayIndex
         $property,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
-        $statement
+        array $statement
     ): void {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
@@ -156,6 +160,35 @@ class StaticPropertyArrayIndex extends ArrayIndex
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
+        /**
+         * Only string/variable/int.
+         */
+        $offsetExpressions = $this->getExpressions($statement, $compilationContext);
+        $compilationContext->backend->assignStaticPropertyArrayMulti(
+            $classEntry,
+            $variableExpr,
+            $property,
+            $offsetExpressions,
+            $compilationContext
+        );
+
+        if ($variableExpr->isTemporal()) {
+            $variableExpr->setIdle(true);
+        }
+    }
+
+    /**
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return array
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    protected function getExpressions(
+        array $statement,
+        CompilationContext $compilationContext
+    ): array {
         /**
          * Only string/variable/int.
          */
@@ -185,16 +218,6 @@ class StaticPropertyArrayIndex extends ArrayIndex
             $offsetExpressions[] = $resolvedIndex;
         }
 
-        $compilationContext->backend->assignStaticPropertyArrayMulti(
-            $classEntry,
-            $variableExpr,
-            $property,
-            $offsetExpressions,
-            $compilationContext
-        );
-
-        if ($variableExpr->isTemporal()) {
-            $variableExpr->setIdle(true);
-        }
+        return $offsetExpressions;
     }
 }

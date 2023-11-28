@@ -77,8 +77,8 @@
     "cs": "./vendor/bin/phpcs --standard=phpcs.xml.dist",
     "cs-fix": "./vendor/bin/phpcbf --standard=phpcs.xml.dist",
     "test": "./vendor/bin/phpunit --testsuite Zephir",
-    "test-coverage": "./vendor/bin/phpunit --testsuite Zephir --coverage-html ./tests/output/coverage",
-    "test-coverage-html": "./vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/coverage/coverage.xml"
+    "test-coverage": "./vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/coverage/coverage.xml",
+    "test-coverage-html": "./vendor/bin/phpunit --testsuite Zephir --coverage-html ./tests/output/coverage"
   },
   "scripts-descriptions": {
     "cs": "Run PHPCS",

@@ -27,6 +27,9 @@ use function count;
  */
 class StartsWithOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethodStr = 'zephir_start_with_str';
+    protected string $zephirMethod    = 'zephir_start_with';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -40,7 +43,10 @@ class StartsWithOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != count($expression['parameters']) && 3 != count($expression['parameters'])) {
+        if (
+            2 != count($expression['parameters']) &&
+            3 != count($expression['parameters'])
+        ) {
             return false;
         }
 
@@ -49,14 +55,18 @@ class StartsWithOptimizer extends OptimizerAbstract
             unset($expression['parameters'][1]);
         }
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         $context->headersManager->add('kernel/string');
 
         if (isset($str)) {
             return new CompiledExpression(
                 'bool',
-                'zephir_start_with_str(' . $resolvedParams[0] . ', SL("' . $str . '"))',
+                $this->zephirMethodStr . '(' . $resolvedParams[0] . ', SL("' . $str . '"))',
                 $expression
             );
         }
@@ -64,13 +74,15 @@ class StartsWithOptimizer extends OptimizerAbstract
         if (2 == count($expression['parameters'])) {
             return new CompiledExpression(
                 'bool',
-                'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL)',
+                $this->zephirMethod . '(' . $resolvedParams[0] . ', '
+                . $resolvedParams[1] . ', NULL)',
                 $expression
             );
         } else {
             return new CompiledExpression(
                 'bool',
-                'zephir_start_with(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')',
+                $this->zephirMethod . '(' . $resolvedParams[0] . ', '
+                . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')',
                 $expression
             );
         }
