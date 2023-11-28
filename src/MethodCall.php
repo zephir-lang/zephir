@@ -18,6 +18,7 @@ use ReflectionMethod;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Types\AbstractType;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
@@ -36,6 +37,8 @@ use function ucfirst;
  */
 class MethodCall extends Call
 {
+    use VariablesTrait;
+
     /**
      * Function is called using a dynamic variable as method name.
      */
@@ -174,12 +177,7 @@ class MethodCall extends Call
          */
         if (!$builtInType) {
             if ($isExpecting) {
-                if (!$symbolVariable->isVariable()) {
-                    throw new CompilerException(
-                        'Returned values by functions can only be assigned to variant variables',
-                        $expression
-                    );
-                }
+                $this->checkNotVariable($symbolVariable, $expression);
 
                 /*
                  * At this point, we don't know the exact dynamic type returned by the method call

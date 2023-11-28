@@ -18,6 +18,8 @@ use ReflectionFunction;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use Zephir\Traits\VariablesTrait;
+
 use function class_exists;
 use function count;
 use function file_exists;
@@ -41,6 +43,8 @@ use const PHP_VERSION;
  */
 class FunctionCall extends Call
 {
+    use VariablesTrait;
+
     /**
      * Function is called using a dynamic variable as method name.
      */
@@ -232,16 +236,11 @@ class FunctionCall extends Call
 
         /**
          * At this point the function will be called in the PHP userland.
-         * PHP functions only return zvals so we need to validate the target variable is also a zval.
+         * PHP functions only return zvals, so we need to validate the target variable is also a zval.
          */
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
+            $this->checkNotVariable($symbolVariable, $expression);
 
             /**
              * We don't know the exact dynamic type returned by the method call
@@ -404,12 +403,7 @@ class FunctionCall extends Call
          */
         $symbolVariable = $this->getSymbolVariable();
         if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
+            $this->checkNotVariable($symbolVariable, $expression);
 
             /**
              * We don't know the exact dynamic type returned by the method call

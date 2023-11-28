@@ -48,14 +48,7 @@ class VarExportOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
-        }
+        $this->checkNotVariable($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/variables');
         $resolvedParams = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);

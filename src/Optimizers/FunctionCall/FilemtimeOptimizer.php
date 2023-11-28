@@ -55,14 +55,7 @@ class FilemtimeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable) {
-            if ($symbolVariable->isNotVariableAndString()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         if ($call->mustInitSymbolVariable()) {

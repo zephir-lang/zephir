@@ -51,12 +51,7 @@ class ExplodeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException(
-                'Returned values by functions can only be assigned to variant variables',
-                $expression
-            );
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         /**
          * Process limit.

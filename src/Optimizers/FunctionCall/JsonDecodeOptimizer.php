@@ -47,14 +47,8 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
-        } else {
+        $this->checkNotVariable($symbolVariable, $expression);
+        if (!$symbolVariable) {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
             $symbolVariable->initVariant($context);
         }

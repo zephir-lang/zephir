@@ -28,6 +28,8 @@ use function count;
  */
 class StrtoupperOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_fast_strtoupper';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -53,23 +55,24 @@ class StrtoupperOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException(
-                'Returned values by functions can only be assigned to variant variables',
-                $expression
-            );
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('string');
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         if ($call->mustInitSymbolVariable()) {
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_strtoupper(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

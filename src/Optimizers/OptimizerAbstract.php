@@ -15,9 +15,12 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\Traits\VariablesTrait;
 
 abstract class OptimizerAbstract
 {
+    use VariablesTrait;
+
     /**
      * @param array              $expression
      * @param Call               $call

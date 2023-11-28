@@ -28,6 +28,9 @@ use function count;
  */
 class CallUserFuncOptimizer extends OptimizerAbstract
 {
+    protected int    $parameterCount = 1;
+    protected string $zephirMethod   = 'ZEPHIR_CALL_USER_FUNC';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -41,7 +44,7 @@ class CallUserFuncOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != count($expression['parameters'])) {
+        if ($this->parameterCount != count($expression['parameters'])) {
             return false;
         }
 
@@ -51,14 +54,8 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
-        } else {
+        $this->checkNotVariable($symbolVariable, $expression);
+        if (!$symbolVariable) {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
             $symbolVariable->initVariant($context);
         }
@@ -68,7 +65,11 @@ class CallUserFuncOptimizer extends OptimizerAbstract
          */
         $call->addCallStatusFlag($context);
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         $context->headersManager->add('kernel/fcall');
 
@@ -82,7 +83,9 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

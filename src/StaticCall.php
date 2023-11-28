@@ -18,6 +18,7 @@ use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
 use function count;
@@ -35,6 +36,8 @@ use function strtoupper;
  */
 class StaticCall extends Call
 {
+    use VariablesTrait;
+
     /**
      * Compiles a static method call.
      *
@@ -88,13 +91,7 @@ class StaticCall extends Call
              * At this point, we don't know the exact dynamic type returned by the static method call
              */
             $symbolVariable->setDynamicTypes('undefined');
-
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException(
-                    'Returned values by functions can only be assigned to variant variables',
-                    $expression
-                );
-            }
+            $this->checkNotVariable($symbolVariable, $expression);
         }
 
         /**
