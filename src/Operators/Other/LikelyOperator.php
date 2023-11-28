@@ -26,6 +26,9 @@ use Zephir\Operators\AbstractOperator;
  */
 class LikelyOperator extends AbstractOperator
 {
+    protected string $expressionName = 'EXPECTED';
+    protected string $operatorName   = 'likely';
+
     /**
      * @param array              $expression
      * @param CompilationContext $compilationContext
@@ -38,7 +41,10 @@ class LikelyOperator extends AbstractOperator
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Invalid 'left' operand for 'likely' expression", $expression['left']);
+            throw new CompilerException(
+                "Invalid 'left' operand for '" . $this->operatorName . "' expression",
+                $expression['left']
+            );
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -46,7 +52,11 @@ class LikelyOperator extends AbstractOperator
         $left = $leftExpr->compile($compilationContext);
 
         if ('bool' === $left->getType()) {
-            return new CompiledExpression('bool', 'EXPECTED(' . $left->getCode() . ')', $expression);
+            return new CompiledExpression(
+                'bool',
+                $this->expressionName . '(' . $left->getCode() . ')',
+                $expression
+            );
         }
 
         if ('variable' === $left->getType()) {
@@ -57,18 +67,30 @@ class LikelyOperator extends AbstractOperator
             );
             switch ($variable->getType()) {
                 case 'bool':
-                    return new CompiledExpression('bool', 'EXPECTED(' . $variable->getName() . ')', $expression);
+                    return new CompiledExpression(
+                        'bool',
+                        $this->expressionName . '(' . $variable->getName() . ')',
+                        $expression
+                    );
 
                 default:
                     $compilationContext->headersManager->add('kernel/operators');
                     $symbol = $compilationContext->backend->getVariableCode($variable);
 
-                    return new CompiledExpression('bool', 'UNEXPECTED(zephir_is_true(' . $symbol . '))', $expression);
+                    return new CompiledExpression(
+                        'bool',
+                        'UNEXPECTED(zephir_is_true(' . $symbol . '))',
+                        $expression
+                    );
             }
         }
 
         throw new CompilerException(
-            "Cannot use expression type: '" . $left->getType() . "' in 'likely' operator",
+            "Cannot use expression type: '"
+            . $left->getType()
+            . "' in '"
+            . $this->operatorName
+            . "' operator",
             $expression['left']
         );
     }

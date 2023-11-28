@@ -13,12 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Exception;
-use Zephir\Expression;
-use Zephir\Operators\AbstractOperator;
-
 /**
  * Includes once a plain PHP file
  */
