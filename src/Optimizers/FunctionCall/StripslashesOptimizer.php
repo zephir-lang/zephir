@@ -28,6 +28,8 @@ use function count;
  */
 class StripslashesOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'stripslashes';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -70,7 +72,9 @@ class StripslashesOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_stripslashes(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -15,6 +15,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
@@ -24,6 +25,11 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class Decr
 {
+    protected string $operator = '--';
+    protected string $verb = 'decrement';
+    protected string $warningName = 'non-valid-decrement';
+    protected string $zephirMethod = 'zephir_decrement';
+
     /**
      * Compiles x--.
      *
@@ -38,18 +44,25 @@ class Decr
         $variable,
         ZephirVariable $symbolVariable,
         CompilationContext $compilationContext,
-        $statement
+        array $statement
     ): void {
         if (!$symbolVariable->isInitialized()) {
             throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
+                "Cannot mutate variable '"
+                . $variable
+                . "' because it is not initialized",
                 $statement
             );
         }
 
         if ($symbolVariable->isReadOnly()) {
+            /*
+             * TODO: implement increment of objects members
+             */
             throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is read only",
+                "Cannot mutate variable '"
+                . $variable
+                . "' because it is read only",
                 $statement
             );
         }
@@ -57,31 +70,34 @@ class Decr
         $codePrinter = $compilationContext->codePrinter;
 
         switch ($symbolVariable->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-            case 'double':
-            case 'char':
-            case 'uchar':
-                $codePrinter->output($variable . '--;');
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+            case Types::T_ULONG:
+            case Types::T_DOUBLE:
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
+                $codePrinter->output($variable . $this->operator . ';');
                 break;
 
-            case 'variable':
-                /*
+            case Types::T_VARIABLE:
+                /**
                  * Variable is probably not initialized here
                  */
                 if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                    throw new CompilerException('Attempt to decrement uninitialized variable', $statement);
+                    throw new CompilerException(
+                        'Attempt to decrement uninitialized variable',
+                        $statement
+                    );
                 }
 
-                /*
-                 * Decrement non-numeric variables could be expensive
+                /**
+                 * Increment/Decrement non-numeric variables could be expensive
                  */
                 if (!$symbolVariable->hasAnyDynamicType(['undefined', 'int', 'long', 'double', 'uint'])) {
                     $compilationContext->logger->warning(
-                        'Possible attempt to decrement non-numeric dynamic variable',
-                        ['non-valid-decrement', $statement]
+                        'Possible attempt to ' . $this->verb . ' non-numeric dynamic variable',
+                        [$this->warningName, $statement]
                     );
                 }
 
@@ -90,12 +106,18 @@ class Decr
                     $symbolVariable->separate($compilationContext);
                 }
                 $codePrinter->output(
-                    'zephir_decrement(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+                    $this->zephirMethod
+                    . '(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
                 );
+
                 break;
 
             default:
-                throw new CompilerException('Cannot decrement variable: ' . $symbolVariable->getType(), $statement);
+                throw new CompilerException(
+                    'Cannot ' . $this->verb . ' variable: '
+                    . $symbolVariable->getType(),
+                    $statement
+                );
         }
     }
 }

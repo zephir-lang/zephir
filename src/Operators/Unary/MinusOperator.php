@@ -36,9 +36,7 @@ class MinusOperator extends AbstractOperator
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        if (!isset($expression['left'])) {
-            throw new CompilerException('Missing left part of the expression');
-        }
+        $this->checkLeftOperator($expression);
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly($this->readOnly);

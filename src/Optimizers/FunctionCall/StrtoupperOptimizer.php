@@ -28,6 +28,8 @@ use function count;
  */
 class StrtoupperOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_fast_strtoupper';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -69,7 +71,9 @@ class StrtoupperOptimizer extends OptimizerAbstract
             $symbolVariable->initVariant($context);
         }
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_strtoupper(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
