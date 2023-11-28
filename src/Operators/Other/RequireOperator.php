@@ -25,6 +25,11 @@ use Zephir\Operators\AbstractOperator;
  */
 class RequireOperator extends AbstractOperator
 {
+    protected string $operatorName = 'require';
+    protected string $warningName  = 'non-valid-require';
+    protected string $zvalName     = 'zephir_require_zval';
+    protected string $zvalNameRet  = 'zephir_require_zval_ret';
+
     /**
      * @param array $expression
      * @param CompilationContext $compilationContext
@@ -51,8 +56,10 @@ class RequireOperator extends AbstractOperator
             if ('variable' === $exprVariable->getType()) {
                 if ($exprVariable->hasDifferentDynamicType(['undefined', 'string'])) {
                     $compilationContext->logger->warning(
-                        'Possible attempt to use invalid type as path in "require" operator',
-                        ['non-valid-require', $expression]
+                        'Possible attempt to use invalid type as path in "'
+                        . $this->operatorName
+                        . '" operator',
+                        [$this->warningName, $expression]
                     );
                 }
             }
@@ -82,9 +89,13 @@ class RequireOperator extends AbstractOperator
         if ($symbolVariable) {
             $codePrinter->output('ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&' . $symbolVariable->getName() . ');');
             $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-            $codePrinter->output('if (zephir_require_zval_ret(' . $symbol . ', ' . $exprVar . ') == FAILURE) {');
+            $codePrinter->output(
+                'if (' . $this->zvalNameRet . '(' . $symbol . ', ' . $exprVar . ') == FAILURE) {'
+            );
         } else {
-            $codePrinter->output('if (zephir_require_zval(' . $exprVar . ') == FAILURE) {');
+            $codePrinter->output(
+                'if (' . $this->zvalName . '(' . $exprVar . ') == FAILURE) {'
+            );
         }
         $codePrinter->output("\t" . 'RETURN_MM_NULL();');
         $codePrinter->output('}');
