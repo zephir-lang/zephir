@@ -89,6 +89,34 @@ class CompilerException extends RuntimeException
     }
 
     /**
+     * Class does not have a property called
+     *
+     * @param string                   $className
+     * @param string                   $property
+     * @param array|null               $extra
+     * @param int                      $code
+     * @param Exception|Throwable|null $previous
+     *
+     * @return self
+     */
+    public static function classDoesNotHaveProperty(
+        string $className,
+        string $property,
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            "Class '"
+            . $className
+            . "' does not have a property called: '" . $property . "'",
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
      * @param string $operator
      * @param string $dataType
      * @param array  $statement

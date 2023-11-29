@@ -17,6 +17,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
 use function current;
@@ -26,6 +27,8 @@ use function current;
  */
 class PropertyAccess
 {
+    use VariablesTrait;
+
     protected bool      $expecting = true;
     protected ?Variable $expectingVariable;
     protected bool      $noisy     = true;
@@ -84,16 +87,11 @@ class PropertyAccess
          */
         if ('this' == $variableVariable->getRealName()) {
             $classDefinition = $currentClassDefinition;
-            if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException(
-                    "Class '"
-                    . $classDefinition->getCompleteName()
-                    . "' does not have a property called: '"
-                    . $property
-                    . "'",
-                    $expression
-                );
-            }
+            $this->checkClassHasProperty(
+                $classDefinition,
+                $property,
+                $expression
+            );
 
             $propertyDefinition = $classDefinition->getProperty($property);
         } else {
@@ -114,12 +112,12 @@ class PropertyAccess
                         );
                     }
 
-                    if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException(
-                            "Class '" . $classType . "' does not have a property called: '" . $property . "'",
-                            $expression
-                        );
-                    }
+                    $this->checkClassHasProperty(
+                        $classDefinition,
+                        $property,
+                        $expression,
+                        $classType
+                    );
 
                     $propertyDefinition = $classDefinition->getProperty($property);
                 }

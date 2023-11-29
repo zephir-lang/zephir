@@ -20,6 +20,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\InvalidTypeException;
 use Zephir\Expression;
 use Zephir\Name;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Types\Types;
 
 use function sprintf;
@@ -29,6 +30,8 @@ use function sprintf;
  */
 final class ReturnStatement extends StatementAbstract
 {
+    use VariablesTrait;
+
     private const RETURN_RETURN = 'return;';
 
     /**
@@ -69,16 +72,11 @@ final class ReturnStatement extends StatementAbstract
                              */
                             $property        = $statement['expr']['right']['value'];
                             $classDefinition = $compilationContext->classDefinition;
-                            if (!$classDefinition->hasProperty($property)) {
-                                throw new CompilerException(
-                                    sprintf(
-                                        "Class '%s' does not have a property called: '%s'",
-                                        $classDefinition->getCompleteName(),
-                                        $property
-                                    ),
-                                    $statement['expr']['right']
-                                );
-                            }
+                            $this->checkClassHasProperty(
+                                $classDefinition,
+                                $property,
+                                $statement['expr']['right']
+                            );
 
                             $compilationContext->headersManager->add('kernel/object');
                             $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');

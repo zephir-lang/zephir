@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Logical;
 
-use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;

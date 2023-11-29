@@ -19,6 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
 use function in_array;
@@ -28,6 +29,8 @@ use function in_array;
  */
 class StaticPropertyAccess
 {
+    use VariablesTrait;
+
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
@@ -81,29 +84,20 @@ class StaticPropertyAccess
             }
         }
 
-        if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException(
-                "Class '"
-                . $classDefinition->getCompleteName()
-                . "' does not have a property called: '"
-                . $property
-                . "'",
-                $expression
-            );
-        }
+        $this->checkClassHasProperty(
+            $classDefinition,
+            $property,
+            $expression
+        );
 
         /** @var Property $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
-        if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException(
-                "Cannot access non-static property '"
-                . $classDefinition->getCompleteName()
-                . '::'
-                . $property
-                . "'",
-                $expression
-            );
-        }
+        $this->checkAccessNonStaticProperty(
+            $propertyDefinition,
+            $classDefinition,
+            $property,
+            $expression
+        );
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {

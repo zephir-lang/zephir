@@ -83,13 +83,11 @@ class ObjectPropertyDecr
          */
         if ('this' == $symbolVariable->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
-            if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException(
-                    "Class '" . $classDefinition->getCompleteName(
-                    ) . "' does not have a property called: '" . $property . "'",
-                    $statement
-                );
-            }
+            $this->checkClassHasProperty(
+                $classDefinition,
+                $property,
+                $statement
+            );
         } else {
             /*
              * If we know the class related to a variable we could check if the property
@@ -108,12 +106,12 @@ class ObjectPropertyDecr
                         );
                     }
 
-                    if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException(
-                            "Class '" . $classType . "' does not have a property called: '" . $property . "'",
-                            $statement
-                        );
-                    }
+                    $this->checkClassHasProperty(
+                        $classDefinition,
+                        $property,
+                        $statement,
+                        $classType
+                    );
                 }
             }
         }

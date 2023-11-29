@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Logical;
 
-use Exception;
 use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Statements\LetStatement;
@@ -33,7 +33,7 @@ class AndOperator extends LogicalBaseOperator
      * @return CompiledExpression
      *
      * @throws ReflectionException
-     * @throws \Zephir\Exception
+     * @throws Exception
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {

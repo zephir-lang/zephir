@@ -32,7 +32,6 @@ class CallUserFuncArrayOptimizer extends CallUserFuncOptimizer
     protected function getOutput(string $symbol, array $resolvedParams): string
     {
         return $this->zephirMethod
-            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
-        ;
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');';
     }
 }

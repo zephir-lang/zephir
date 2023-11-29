@@ -87,27 +87,20 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
             }
         }
 
-        if (!$classDefinition->hasProperty($property)) {
-            throw new CompilerException(
-                "Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '"
-                . $property
-                . "'",
-                $statement
-            );
-        }
+        $this->checkClassHasProperty(
+            $classDefinition,
+            $property,
+            $statement
+        );
 
         /** @var Property $propertyDefinition */
         $propertyDefinition = $classDefinition->getProperty($property);
-        if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException(
-                "Cannot access non-static property '"
-                . $classDefinition->getCompleteName()
-                . '::'
-                . $property
-                . "'",
-                $statement
-            );
-        }
+        $this->checkAccessNonStaticProperty(
+            $propertyDefinition,
+            $classDefinition,
+            $property,
+            $statement
+        );
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition != $compilationContext->classDefinition) {

@@ -903,12 +903,12 @@ final class Definition extends AbstractDefinition
         $parts = explode('\\', $this->namespace);
 
         return 'ext/' . strtolower(
-            $parts[0] . DIRECTORY_SEPARATOR . str_replace(
-                '\\',
-                DIRECTORY_SEPARATOR,
-                $this->namespace
-            ) . DIRECTORY_SEPARATOR . $this->name
-        ) . '.zep';
+                $parts[0] . DIRECTORY_SEPARATOR . str_replace(
+                    '\\',
+                    DIRECTORY_SEPARATOR,
+                    $this->namespace
+                ) . DIRECTORY_SEPARATOR . $this->name
+            ) . '.zep';
     }
 
     /**

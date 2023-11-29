@@ -14,12 +14,66 @@ declare(strict_types=1);
 namespace Zephir\Traits;
 
 use Exception;
+use Zephir\Class\Definition\AbstractDefinition;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Property;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 use Zephir\Variable\Variable as ZephirVariable;
 
 trait VariablesTrait
 {
+    /**
+     * Check whether a class has a property
+     *
+     * @param Definition $classDefinition
+     * @param string     $property
+     * @param array      $statement
+     *
+     * @return void
+     */
+    protected function checkAccessNonStaticProperty(
+        Property $propertyDefinition,
+        AbstractDefinition $classDefinition,
+        string $property,
+        array $statement
+    ): void {
+        if (!$propertyDefinition->isStatic()) {
+            throw new CompilerException(
+                "Cannot access non-static property '"
+                . $classDefinition->getCompleteName()
+                . '::'
+                . $property
+                . "'",
+                $statement
+            );
+        }
+    }
+
+    /**
+     * Check whether a class has a property
+     *
+     * @param Definition $classDefinition
+     * @param string     $property
+     * @param array      $statement
+     *
+     * @return void
+     */
+    protected function checkClassHasProperty(
+        Definition $classDefinition,
+        string $property,
+        array $statement,
+        string $className = ''
+    ): void {
+        if (!$classDefinition->hasProperty($property)) {
+            throw CompilerException::classDoesNotHaveProperty(
+                (empty($className) ? $classDefinition->getCompleteName() : $className),
+                $property,
+                $statement
+            );
+        }
+    }
+
     /**
      * @param array      $expression
      * @param string     $exception
@@ -34,23 +88,6 @@ trait VariablesTrait
     ): void {
         if (!isset($expression['left'])) {
             throw new $exception('Missing left part of the expression', $extra);
-        }
-    }
-
-    /**
-     * @param array      $expression
-     * @param string     $exception
-     * @param array|null $extra
-     *
-     * @return void
-     */
-    protected function checkRight(
-        array $expression,
-        string $exception = Exception::class,
-        ?array $extra = null
-    ): void {
-        if (!isset($expression['right'])) {
-            throw new $exception('Missing right part of the expression', $extra);
         }
     }
 
@@ -81,6 +118,23 @@ trait VariablesTrait
     ): void {
         if (null !== $variable && $variable->isNotVariableAndString()) {
             throw CompilerException::returnValuesVariantVars($expression);
+        }
+    }
+
+    /**
+     * @param array      $expression
+     * @param string     $exception
+     * @param array|null $extra
+     *
+     * @return void
+     */
+    protected function checkRight(
+        array $expression,
+        string $exception = Exception::class,
+        ?array $extra = null
+    ): void {
+        if (!isset($expression['right'])) {
+            throw new $exception('Missing right part of the expression', $extra);
         }
     }
 

@@ -17,7 +17,6 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
-use Zephir\Variable\Variable;
 
 use function count;
 
@@ -98,7 +97,6 @@ class CallUserFuncOptimizer extends OptimizerAbstract
     protected function getOutput(string $symbol, array $resolvedParams): string
     {
         return $this->zephirMethod
-            . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
-        ;
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ');';
     }
 }

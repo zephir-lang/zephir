@@ -19,6 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Traits\VariablesTrait;
 
 use function sprintf;
 
@@ -27,6 +28,8 @@ use function sprintf;
  */
 class StaticProperty
 {
+    use VariablesTrait;
+
     /**
      * Compiles ClassName::foo = {expr}.
      *
@@ -48,26 +51,19 @@ class StaticProperty
         $classDefinition = $compilationContext->classLookup($className);
 
         if (!$propertyDefinition = $classDefinition->getProperty($property)) {
-            throw new CompilerException(
-                sprintf(
-                    "Class '%s' does not have a property called: '%s",
-                    $classDefinition->getCompleteName(),
-                    $property
-                ),
+            throw CompilerException::classDoesNotHaveProperty(
+                $classDefinition->getCompleteName(),
+                $property,
                 $statement
             );
         }
 
-        if (!$propertyDefinition->isStatic()) {
-            throw new CompilerException(
-                sprintf(
-                    "Cannot access non-static property '%s::%s",
-                    $classDefinition->getCompleteName(),
-                    $property
-                ),
-                $statement
-            );
-        }
+        $this->checkAccessNonStaticProperty(
+            $propertyDefinition,
+            $classDefinition,
+            $property,
+            $statement
+        );
 
         if ($propertyDefinition->isPrivate()) {
             if ($classDefinition->getCompleteName() != $compilationContext->classDefinition->getCompleteName()) {
