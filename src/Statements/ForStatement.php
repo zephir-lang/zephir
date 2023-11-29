@@ -14,9 +14,11 @@ declare(strict_types=1);
 namespace Zephir\Statements;
 
 use ReflectionException;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Detectors\ForValueUseDetector;
+use Zephir\Detectors\WriteDetector;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
@@ -201,7 +203,7 @@ class ForStatement extends StatementAbstract
              */
             if (isset($this->statement['key'])) {
                 if (!$keyVariable->isTemporal()) {
-                    $detector->setDetectionFlags(ForValueUseDetector::DETECT_ALL);
+                    $detector->setDetectionFlags(WriteDetector::DETECT_ALL);
                     if ($detector->detect($keyVariable->getName(), $this->statement['statements'])) {
                         $duplicateKey = true;
                     }
@@ -389,22 +391,7 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
-        if (isset($this->statement['statements'])) {
-            $st = new StatementsBlock($this->statement['statements']);
-            $st->isLoop(true);
-            if (isset($this->statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->statement['key']);
-            }
-            $st->getMutateGatherer()->increaseMutations($this->statement['value']);
-            $st->compile($compilationContext);
-        }
-
-        /**
-         * Restore the cycle counter
-         */
-        --$compilationContext->insideCycle;
-
-        $codePrinter->output('}');
+        $this->compileStatementsForBlock($compilationContext, $codePrinter);
 
         $compilationContext->backend->destroyIterator($iteratorVariable, $compilationContext);
     }
@@ -549,7 +536,6 @@ class ForStatement extends StatementAbstract
                             ->setLine($this->statement['line'])
                             ->setChar($this->statement['char']),
             ]);
-            $statement = new LetStatement($builderLet->build());
         } else {
             /**
              * Create an implicit 'let' operation for the initialize expression
@@ -567,9 +553,9 @@ class ForStatement extends StatementAbstract
                             ->setLine($this->statement['line'])
                             ->setChar($this->statement['char']),
             ]);
-            $statement = new LetStatement($builderLet->build());
         }
 
+        $statement = new LetStatement($builderLet->build());
         $statement->compile($compilationContext);
 
         /**
@@ -721,28 +707,7 @@ class ForStatement extends StatementAbstract
             /**
              * Create an implicit 'let' operation, TODO: use a builder.
              */
-            $statement = new LetStatement([
-                'type'        => 'let',
-                'assignments' => [
-                    [
-                        'assign-type' => 'variable',
-                        'variable'    => $keyVariableName,
-                        'operator'    => 'assign',
-                        'expr'        => [
-                            'type'  => 'variable',
-                            'value' => $keyVariable->getName(),
-                            'file'  => $this->statement['file'],
-                            'line'  => $this->statement['line'],
-                            'char'  => $this->statement['char'],
-                        ],
-                        'file'        => $this->statement['file'],
-                        'line'        => $this->statement['line'],
-                        'char'        => $this->statement['char'],
-                    ],
-                ],
-            ]);
-
-            $statement->compile($compilationContext);
+            $this->getLetStatement($keyVariableName, $keyVariable, $compilationContext);
         }
 
         /**
@@ -761,28 +726,7 @@ class ForStatement extends StatementAbstract
             /**
              * Create an implicit 'let' operation, TODO: use a builder.
              */
-            $statement = new LetStatement([
-                'type'        => 'let',
-                'assignments' => [
-                    [
-                        'assign-type' => 'variable',
-                        'variable'    => $valueVariable,
-                        'operator'    => 'assign',
-                        'expr'        => [
-                            'type'  => 'variable',
-                            'value' => $tempVariable->getName(),
-                            'file'  => $this->statement['file'],
-                            'line'  => $this->statement['line'],
-                            'char'  => $this->statement['char'],
-                        ],
-                        'file'        => $this->statement['file'],
-                        'line'        => $this->statement['line'],
-                        'char'        => $this->statement['char'],
-                    ],
-                ],
-            ]);
-
-            $statement->compile($compilationContext);
+            $this->getLetStatement($valueVariable, $tempVariable, $compilationContext);
         }
 
         $codePrinter->decreaseLevel();
@@ -790,22 +734,7 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
-        if (isset($this->statement['statements'])) {
-            $st = new StatementsBlock($this->statement['statements']);
-            $st->isLoop(true);
-            if (isset($this->statement['key'])) {
-                $st->getMutateGatherer()->increaseMutations($this->statement['key']);
-            }
-            $st->getMutateGatherer()->increaseMutations($this->statement['value']);
-            $st->compile($compilationContext);
-        }
-
-        /**
-         * Restore the cycle counter
-         */
-        --$compilationContext->insideCycle;
-
-        $codePrinter->output('}');
+        $this->compileStatementsForBlock($compilationContext, $codePrinter);
         $codePrinter->decreaseLevel();
         $codePrinter->output('}');
 
@@ -975,6 +904,21 @@ class ForStatement extends StatementAbstract
         /**
          * Compile statements in the 'for' block
          */
+        $this->compileStatementsForBlock($compilationContext, $codePrinter);
+    }
+
+    /**
+     * @param CompilationContext $compilationContext
+     * @param Printer|null $codePrinter
+     *
+     * @return void
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function compileStatementsForBlock(
+        CompilationContext $compilationContext,
+        ?Printer $codePrinter
+    ): void {
         if (isset($this->statement['statements'])) {
             $st = new StatementsBlock($this->statement['statements']);
             $st->isLoop(true);
@@ -985,8 +929,47 @@ class ForStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
+        /**
+         * Restore the cycle counter
+         */
         --$compilationContext->insideCycle;
 
         $codePrinter->output('}');
+    }
+
+    /**
+     * @param mixed              $keyVariableName
+     * @param Variable           $keyVariable
+     * @param CompilationContext $compilationContext
+     *
+     * @return LetStatement
+     */
+    private function getLetStatement(
+        mixed $keyVariableName,
+        Variable $keyVariable,
+        CompilationContext $compilationContext
+    ): void {
+        $statement = new LetStatement([
+            'type'        => 'let',
+            'assignments' => [
+                [
+                    'assign-type' => 'variable',
+                    'variable'    => $keyVariableName,
+                    'operator'    => 'assign',
+                    'expr'        => [
+                        'type'  => 'variable',
+                        'value' => $keyVariable->getName(),
+                        'file'  => $this->statement['file'],
+                        'line'  => $this->statement['line'],
+                        'char'  => $this->statement['char'],
+                    ],
+                    'file'        => $this->statement['file'],
+                    'line'        => $this->statement['line'],
+                    'char'        => $this->statement['char'],
+                ],
+            ],
+        ]);
+
+        $statement->compile($compilationContext);
     }
 }

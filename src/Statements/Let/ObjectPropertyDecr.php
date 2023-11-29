@@ -28,15 +28,17 @@ use function current;
 class ObjectPropertyDecr
 {
     use VariablesTrait;
+    
+    protected string $zephirMethod = 'zephir_property_decr';
 
     /**
-     * Compiles obj->x--.
+     * Compiles obj->x++/obj->x--.
      *
      * @param string             $variable
+     * @param string             $property
      * @param ZephirVariable     $symbolVariable
      * @param CompilationContext $compilationContext
      * @param array              $statement
-     * @param mixed              $property
      */
     public function assign(
         $variable,
@@ -118,7 +120,7 @@ class ObjectPropertyDecr
 
         $compilationContext->headersManager->add('kernel/object');
         $compilationContext->codePrinter->output(
-            'RETURN_ON_FAILURE(zephir_property_decr(' . $symbolVariable->getName() . ', SL("' . $property . '")));'
+            'RETURN_ON_FAILURE(' . $this->zephirMethod . '(' . $symbolVariable->getName() . ', SL("' . $property . '")));'
         );
     }
 }

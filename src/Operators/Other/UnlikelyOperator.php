@@ -26,10 +26,13 @@ use Zephir\Operators\AbstractOperator;
  */
 class UnlikelyOperator extends AbstractOperator
 {
+    protected string $operator     = 'unlikely';
+    protected string $zephirMethod = 'UNEXPECTED';
+
     /**
-     * Compile unlikely operator
+     * Compile likely/unlikely operator
      *
-     * @param                    $expression
+     * @param array              $expression
      * @param CompilationContext $compilationContext
      *
      * @return CompiledExpression
@@ -40,7 +43,10 @@ class UnlikelyOperator extends AbstractOperator
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
-            throw new CompilerException("Invalid 'left' operand for 'unlikely' expression", $expression['left']);
+            throw new CompilerException(
+                "Invalid 'left' operand for '" . $this->operator . "' expression",
+                $expression['left']
+            );
         }
 
         $leftExpr = new Expression($expression['left']);
@@ -48,7 +54,11 @@ class UnlikelyOperator extends AbstractOperator
         $left = $leftExpr->compile($compilationContext);
 
         if ('bool' === $left->getType()) {
-            return new CompiledExpression('bool', 'UNEXPECTED(' . $left->getCode() . ')', $expression);
+            return new CompiledExpression(
+                'bool',
+                $this->zephirMethod . '(' . $left->getCode() . ')',
+                $expression
+            );
         }
 
         if ('variable' === $left->getType()) {
@@ -59,7 +69,11 @@ class UnlikelyOperator extends AbstractOperator
             );
             switch ($variable->getType()) {
                 case 'bool':
-                    return new CompiledExpression('bool', 'UNEXPECTED(' . $variable->getName() . ')', $expression);
+                    return new CompiledExpression(
+                        'bool',
+                        $this->zephirMethod . '(' . $variable->getName() . ')',
+                        $expression
+                    );
 
                 default:
                     $compilationContext->headersManager->add('kernel/operators');
@@ -70,7 +84,7 @@ class UnlikelyOperator extends AbstractOperator
         }
 
         throw new CompilerException(
-            "Cannot use expression type: '" . $left->getType() . "' in 'unlikely' operator",
+            "Cannot use expression type: '" . $left->getType() . "' in '" . $this->operator . "' operator",
             $expression['left']
         );
     }
