@@ -1031,13 +1031,11 @@ class Variable
     ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $symbolVariable->initVariant($compilationContext);
-                        $symbolVariable->setDynamicTypes('null');
+                if ($statement['operator'] == 'assign') {
+                    $symbolVariable->initVariant($compilationContext);
+                    $symbolVariable->setDynamicTypes('null');
 
-                        $compilationContext->backend->assignNull($symbolVariable, $compilationContext);
-                        break;
+                    $compilationContext->backend->assignNull($symbolVariable, $compilationContext);
                 }
                 break;
 

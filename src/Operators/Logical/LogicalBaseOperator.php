@@ -166,28 +166,22 @@ class LogicalBaseOperator extends AbstractOperator
                 }
                 break;
             case 'double':
-                switch ($right->getType()) {
-                    case 'double':
-                    case 'int':
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'bool':
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getBooleanCode() . ')',
-                            $expression
-                        );
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot compare 'double' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
+                return match ($right->getType()) {
+                    'double', 'int' => new CompiledExpression(
+                        'bool',
+                        '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getCode() . ')',
+                        $expression
+                    ),
+                    'bool'          => new CompiledExpression(
+                        'bool',
+                        '(' . $left->getCode() . ' ' . $this->operator . ' ' . $right->getBooleanCode() . ')',
+                        $expression
+                    ),
+                    default         => throw new CompilerException(
+                        "Cannot compare 'double' with '" . $right->getType() . "'",
+                        $expression
+                    ),
+                };
                 break;
 
             case 'string':

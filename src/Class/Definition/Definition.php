@@ -1147,10 +1147,8 @@ final class Definition extends AbstractDefinition
     public function hasMethod(string $methodName): bool
     {
         $methodNameLower = strtolower($methodName);
-        foreach ($this->methods as $name => $method) {
-            if ($methodNameLower === $name) {
-                return true;
-            }
+        if (array_key_exists($methodNameLower, $this->methods)) {
+            return true;
         }
 
         $extendsClassDefinition = $this->getExtendsClassDefinition();

@@ -373,10 +373,8 @@ class LocalContextPass
 
                 case 'variable-append':
                     $this->markVariableNoLocal($assignment['variable']);
-                    switch ($assignment['expr']['type']) {
-                        case 'variable':
-                            $this->markVariableNoLocal($assignment['expr']['value']);
-                            break;
+                    if ($assignment['expr']['type'] == 'variable') {
+                        $this->markVariableNoLocal($assignment['expr']['value']);
                     }
                     break;
             }

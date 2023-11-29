@@ -376,35 +376,30 @@ class CastOperator extends AbstractOperator
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
-                        switch ($symbolVariable->getType()) {
-                            case Types::T_INT:
-                            case Types::T_CHAR:
-                            case Types::T_UCHAR:
-                                return new CompiledExpression(
-                                    'bool',
-                                    sprintf('(zend_bool) %s', $symbolVariable->getName()),
-                                    $expression
-                                );
-
-                            case Types::T_VARIABLE:
-                            case Types::T_MIXED:
-                                return new CompiledExpression(
-                                    'bool',
-                                    sprintf('zephir_get_boolval(%s)', $symbol),
-                                    $expression
-                                );
-
-                            default:
-                                throw new CompilerException(
-                                    sprintf(
-                                        'Cannot cast: %s(%s) to %s',
-                                        $resolved->getType(),
-                                        $symbolVariable->getType(),
-                                        $expression['left']
-                                    ),
-                                    $expression
-                                );
-                        }
+                        return match ($symbolVariable->getType()) {
+                            Types::T_INT,
+                            Types::T_CHAR,
+                            Types::T_UCHAR => new CompiledExpression(
+                                'bool',
+                                sprintf('(zend_bool) %s', $symbolVariable->getName()),
+                                $expression
+                            ),
+                            Types::T_VARIABLE,
+                            Types::T_MIXED => new CompiledExpression(
+                                'bool',
+                                sprintf('zephir_get_boolval(%s)', $symbol),
+                                $expression
+                            ),
+                            default        => throw new CompilerException(
+                                sprintf(
+                                    'Cannot cast: %s(%s) to %s',
+                                    $resolved->getType(),
+                                    $symbolVariable->getType(),
+                                    $expression['left']
+                                ),
+                                $expression
+                            ),
+                        };
                         break;
 
                     default:

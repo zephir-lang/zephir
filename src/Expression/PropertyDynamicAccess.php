@@ -69,23 +69,18 @@ class PropertyDynamicAccess
                 );
         }
 
-        switch ($propertyAccess['right']['type']) {
-            case 'variable':
-                $propertyVariable = $compilationContext->symbolTable->getVariableForRead(
-                    $propertyAccess['right']['value'],
-                    $compilationContext,
-                    $expression
-                );
-                break;
-            case 'string':
-                $propertyVariable = null;
-                break;
-            default:
-                throw new CompilerException(
-                    'Variable type: ' . $propertyAccess['right']['type'] . ' cannot be used as object',
-                    $propertyAccess['left']
-                );
-        }
+        $propertyVariable = match ($propertyAccess['right']['type']) {
+            'variable' => $compilationContext->symbolTable->getVariableForRead(
+                $propertyAccess['right']['value'],
+                $compilationContext,
+                $expression
+            ),
+            'string'   => null,
+            default    => throw new CompilerException(
+                'Variable type: ' . $propertyAccess['right']['type'] . ' cannot be used as object',
+                $propertyAccess['left']
+            ),
+        };
 
         /**
          * Resolves the symbol that expects the value

@@ -173,8 +173,7 @@ class StaticPropertySub
             case 'string':
                 $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
                     'variable',
-                    $compilationContext,
-                    true
+                    $compilationContext
                 );
                 $tempVariable->initVariant($compilationContext);
 

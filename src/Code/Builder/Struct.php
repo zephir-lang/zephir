@@ -88,24 +88,14 @@ class Struct
             throw new RuntimeException('Field "' . $name . '" does not have a default value');
         }
 
-        switch ($global['type']) {
-            case 'boolean':
-            case 'bool':
-                return '';
-
-            case 'string':
-                return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ZSTR_VAL(zend_string_init(ZEND_STRL("' . $global['default'] . '"), 0));';
-
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'double':
-            case 'hash':
-                return "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ' . $global['default'] . ';';
-
-            default:
-                throw new InvalidArgumentException('Unknown global type: ' . $global['type']);
-        }
+        return match ($global['type']) {
+            'boolean', 'bool' => '',
+            'string' => "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ZSTR_VAL(zend_string_init(ZEND_STRL("' . $global['default'] . '"), 0));',
+            'int', 'uint', 'long', 'double', 'hash' => "\t" . $namespace . '_globals->' . $this->simpleName . '.' . $name . ' = ' . $global['default'] . ';',
+            default => throw new InvalidArgumentException(
+                'Unknown global type: ' . $global['type']
+            ),
+        };
     }
 
     /**
@@ -126,36 +116,30 @@ class Struct
         $iniName    = $iniEntry['name'] ?? $namespace . '.' . $structName;
         $scope      = $iniEntry['scope'] ?? 'PHP_INI_ALL';
 
-        switch ($global['type']) {
-            case 'boolean':
-            case 'bool':
-                return
-                    'STD_PHP_INI_BOOLEAN("' .
-                    $iniName .
-                    '", "' .
-                    (int)(true === $global['default']) .
-                    '", ' .
-                    $scope .
-                    ', OnUpdateBool, ' .
-                    $structName .
-                    ', zend_' .
-                    $namespace .
-                    '_globals, ' .
-                    $namespace . '_globals)';
-
-            case 'string':
-                return sprintf(
-                    'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                    '"' . $iniName . '"',
-                    '"' . $global['default'] . '"',
-                    $scope,
-                    $structName,
-                    'zend_' . $namespace . '_globals',
-                    $namespace . '_globals',
-                );
-        }
-
-        return '';
+        return match ($global['type']) {
+            'boolean', 'bool' => 'STD_PHP_INI_BOOLEAN("' .
+                $iniName .
+                '", "' .
+                (int)(true === $global['default']) .
+                '", ' .
+                $scope .
+                ', OnUpdateBool, ' .
+                $structName .
+                ', zend_' .
+                $namespace .
+                '_globals, ' .
+                $namespace . '_globals)',
+            'string'          => sprintf(
+                'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
+                '"' . $iniName . '"',
+                '"' . $global['default'] . '"',
+                $scope,
+                $structName,
+                'zend_' . $namespace . '_globals',
+                $namespace . '_globals',
+            ),
+            default           => '',
+        };
     }
 
     /**

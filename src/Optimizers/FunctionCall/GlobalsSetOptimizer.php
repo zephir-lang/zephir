@@ -123,32 +123,26 @@ class GlobalsSetOptimizer extends OptimizerAbstract
     {
         $type = $definition['type'];
 
-        switch ($type) {
-            case 'boolean':
-            case 'bool':
-                return strtr('zend_is_true(:v)', [':v' => $value]);
-            case 'int':
-            case 'uint':
-            case 'integer':
-            case 'long':
-            case 'ulong':
-                return strtr('zval_get_long(:v)', [':v' => $value]);
-            case 'string':
-                return strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]);
-            case 'char':
-            case 'uchar':
-                return strtr(
-                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : zval_get_long(:v))',
-                    [':v' => $value]
-                );
-            case 'double':
-            case 'float':
-                return strtr('zval_get_double(:v)', [':v' => $value]);
-            default:
-                throw new CompilerException(
-                    "Unknown type '{$type}' to setting global variable '{$name}'.",
-                    $expression
-                );
-        }
+        return match ($type) {
+            'boolean',
+            'bool'   => strtr('zend_is_true(:v)', [':v' => $value]),
+            'int',
+            'uint',
+            'integer',
+            'long',
+            'ulong'  => strtr('zval_get_long(:v)', [':v' => $value]),
+            'string' => strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]),
+            'char',
+            'uchar'  => strtr(
+                '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : zval_get_long(:v))',
+                [':v' => $value]
+            ),
+            'double',
+            'float'  => strtr('zval_get_double(:v)', [':v' => $value]),
+            default  => throw new CompilerException(
+                "Unknown type '{$type}' to setting global variable '{$name}'.",
+                $expression
+            ),
+        };
     }
 }

@@ -85,14 +85,11 @@ class FunctionCall extends Call
         $this->expression = $expr;
         $expression       = $expr->getExpression();
 
-        switch ($expression['call-type']) {
-            case self::CALL_NORMAL:
-                return $this->_callNormal($expression, $compilationContext);
-            case self::CALL_DYNAMIC:
-                return $this->_callDynamic($expression, $compilationContext);
-        }
-
-        return new CompiledExpression('null', null, $expression);
+        return match ($expression['call-type']) {
+            self::CALL_NORMAL  => $this->_callNormal($expression, $compilationContext),
+            self::CALL_DYNAMIC => $this->_callDynamic($expression, $compilationContext),
+            default            => new CompiledExpression('null', null, $expression),
+        };
     }
 
     /**
@@ -167,26 +164,24 @@ class FunctionCall extends Call
      */
     public function isBuiltInFunction(string $functionName)
     {
-        switch ($functionName) {
-            case 'memstr':
-            case 'get_class_ns':
-            case 'get_ns_class':
-            case 'camelize':
-            case 'uncamelize':
-            case 'starts_with':
-            case 'ends_with':
-            case 'prepare_virtual_path':
-            case 'create_instance':
-            case 'create_instance_params':
-            case 'create_symbol_table':
-            case 'globals_get':
-            case 'globals_set':
-            case 'merge_append':
-            case 'get_class_lower':
-                return true;
-        }
-
-        return false;
+        return match ($functionName) {
+            'memstr',
+            'get_class_ns',
+            'get_ns_class',
+            'camelize',
+            'uncamelize',
+            'starts_with',
+            'ends_with',
+            'prepare_virtual_path',
+            'create_instance',
+            'create_instance_params',
+            'create_symbol_table',
+            'globals_get',
+            'globals_set',
+            'merge_append',
+            'get_class_lower' => true,
+            default           => false,
+        };
     }
 
     /**

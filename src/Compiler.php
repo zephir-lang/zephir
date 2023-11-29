@@ -690,7 +690,7 @@ final class Compiler
          */
         $destructors = $this->config->get('destructors');
         if (is_array($destructors)) {
-            $invokeRequestDestructors = $this->processCodeInjection($destructors, 'request');
+            $invokeRequestDestructors = $this->processCodeInjection($destructors);
             $includes                 .= PHP_EOL . $invokeRequestDestructors[0];
             $reqDestructors           = $invokeRequestDestructors[1];
 
@@ -712,7 +712,7 @@ final class Compiler
          */
         $initializers = $this->config->get('initializers');
         if (is_array($initializers)) {
-            $invokeRequestInitializers = $this->processCodeInjection($initializers, 'request');
+            $invokeRequestInitializers = $this->processCodeInjection($initializers);
             $includes                  .= PHP_EOL . $invokeRequestInitializers[0];
             $reqInitializers           = $invokeRequestInitializers[1];
 
