@@ -909,7 +909,7 @@ class ForStatement extends StatementAbstract
 
     /**
      * @param CompilationContext $compilationContext
-     * @param Printer|null $codePrinter
+     * @param Printer|null       $codePrinter
      *
      * @return void
      * @throws Exception

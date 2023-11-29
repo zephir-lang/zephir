@@ -13,21 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
-use Zephir\Traits\VariablesTrait;
-use Zephir\Variable\Variable as ZephirVariable;
-
-use function current;
-
 /**
  * ObjectPropertyIncr.
  *
  * Increments an object property
  */
-class ObjectPropertyIncr
+class ObjectPropertyIncr extends ObjectPropertyDecr
 {
-    use VariablesTrait;
-    
     protected string $zephirMethod = 'zephir_property_incr';
 }
