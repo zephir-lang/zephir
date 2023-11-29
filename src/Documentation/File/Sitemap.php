@@ -24,7 +24,7 @@ class Sitemap implements FileInterface
     protected $baseUrl;
     protected $classes;
     protected $namespaces;
-    private   $baseDir;
+    private $baseDir;
 
     public function __construct($baseDir, $baseUrl, $classList, $namespaceList)
     {
