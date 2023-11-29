@@ -22,4 +22,17 @@ class CallUserFuncArrayOptimizer extends CallUserFuncOptimizer
 {
     protected int    $parameterCount = 2;
     protected string $zephirMethod   = 'ZEPHIR_CALL_USER_FUNC_ARRAY';
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, array $resolvedParams): string
+    {
+        return $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+        ;
+    }
 }

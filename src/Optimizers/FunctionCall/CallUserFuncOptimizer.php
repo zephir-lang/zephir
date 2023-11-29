@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use Zephir\Variable\Variable;
+
 use function count;
 
 /**
@@ -43,7 +45,7 @@ class CallUserFuncOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if ($this->parameterCount != count($expression['parameters'])) {
+        if ($this->parameterCount !== count($expression['parameters'])) {
             return false;
         }
 
@@ -82,11 +84,22 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output(
-            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
-        );
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, array $resolvedParams): string
+    {
+        return $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        ;
     }
 }
