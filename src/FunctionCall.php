@@ -17,7 +17,6 @@ use ReflectionException;
 use ReflectionFunction;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
-
 use Zephir\Traits\VariablesTrait;
 
 use function class_exists;

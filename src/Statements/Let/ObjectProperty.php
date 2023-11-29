@@ -15,6 +15,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext as Context;
 use Zephir\CompiledExpression as Expression;
+use Zephir\Exception\CompilerException;
 use Zephir\Exception\CompilerException as Exception;
 use Zephir\Variable\Variable as ZephirVariable;
 
@@ -28,11 +29,11 @@ class ObjectProperty
     /**
      * Compiles foo->x = {expr}.
      *
-     * @param string         $variable
+     * @param string $variable
      * @param ZephirVariable $symbolVariable
-     * @param Expression     $expression
-     * @param Context        $context
-     * @param array          $statement
+     * @param Expression $expression
+     * @param Context $context
+     * @param array $statement
      *
      * @return void
      */
@@ -79,10 +80,7 @@ class ObjectProperty
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new Exception(
-                'Cannot use non-initialized variable as an object',
-                $statement
-            );
+            throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
         /*

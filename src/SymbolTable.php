@@ -58,7 +58,7 @@ class SymbolTable
     /**
      * @var int
      */
-    protected int $tempVarCount   = 0;
+    protected int $tempVarCount = 0;
 
     public function __construct(protected CompilationContext $compilationContext)
     {

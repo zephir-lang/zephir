@@ -170,8 +170,7 @@ class Backend
                 . Compiler::getShortUserPath($statement['file'])
                 . '", '
                 . $statement['line']
-                . ');'
-            ;
+                . ');';
         } else {
             $output = 'add_index_'
                 . $type
@@ -181,8 +180,7 @@ class Backend
                 . $keyStr
                 . ', '
                 . $valueStr
-                . ');'
-            ;
+                . ');';
         }
 
         if ($useCodePrinter) {
@@ -1774,7 +1772,7 @@ class Backend
      *
      * @throws CompilerException
      */
-    public function resolveValue($value, CompilationContext $context): Variable|bool|string
+    public function resolveValue($value, CompilationContext $context): Variable | bool | string
     {
         if ($value instanceof GlobalConstant) {
             switch ($value->getName()) {

@@ -129,8 +129,7 @@ class MethodCache
             if (isset($this->cache[$completeName][$method->getName()])) {
                 return $this->cache[$completeName][$method->getName()]
                     . ', '
-                    . SlotsCache::getExistingMethodSlot($method)
-                ;
+                    . SlotsCache::getExistingMethodSlot($method);
             }
 
             $gatherer = $this->gatherer;

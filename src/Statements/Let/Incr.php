@@ -13,10 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
-use Zephir\Variable\Variable as ZephirVariable;
-
 /**
  * Incr.
  *
@@ -24,10 +20,10 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class Incr extends Decr
 {
-    protected string $operator = '++';
+    protected string $operator     = '++';
+    protected string $warningText  = 'increment';
+    protected string $warningType  = 'non-valid-increment';
     protected string $zephirMethod = 'zephir_increment';
-    protected string $warningText = 'increment';
-    protected string $warningType = 'non-valid-increment';
 //    /**
 //     * Compiles x++.
 //     *

@@ -13,10 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
-use Zephir\CompilationContext;
-use Zephir\Exception;
-use Zephir\Expression;
-
 /**
  * RequireOnceStatement.
  *

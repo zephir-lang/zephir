@@ -15,13 +15,10 @@ namespace Zephir\Traits;
 
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
-
-use function session_cache_limiter;
+use Zephir\Variable\Variable as ZephirVariable;
 
 trait VariablesTrait
 {
-    protected string $returnValueMessage = 'Returned values by functions can only be assigned to variant variables';
-
     /**
      * @param Variable|null $variable
      * @param array         $expression
@@ -33,7 +30,7 @@ trait VariablesTrait
         array $expression
     ): void {
         if (null !== $variable && $variable->isNotVariable()) {
-            throw new CompilerException($this->returnValueMessage, $expression);
+            throw CompilerException::returnValuesVariantVars($expression);
         }
     }
 
@@ -48,7 +45,67 @@ trait VariablesTrait
         array $expression
     ): void {
         if (null !== $variable && $variable->isNotVariableAndString()) {
-            throw new CompilerException($this->returnValueMessage, $expression);
+            throw CompilerException::returnValuesVariantVars($expression);
+        }
+    }
+
+    /**
+     * @param string         $variable
+     * @param ZephirVariable $symbolVariable
+     * @param array          $statement
+     *
+     * @return void
+     */
+    protected function checkVariableInitialized(
+        string $variable,
+        ZephirVariable $symbolVariable,
+        array $statement
+    ): void {
+        if (true !== $symbolVariable->isInitialized()) {
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is not initialized",
+                $statement
+            );
+        }
+    }
+
+    /**
+     * @param string         $variable
+     * @param ZephirVariable $symbolVariable
+     * @param array          $statement
+     *
+     * @return void
+     */
+    protected function checkVariableLocalOnly(
+        string $variable,
+        ZephirVariable $symbolVariable,
+        array $statement
+    ): void {
+        if ($symbolVariable->isLocalOnly()) {
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is local only",
+                $statement
+            );
+        }
+    }
+
+    /**
+     * @param string         $variable
+     * @param ZephirVariable $symbolVariable
+     * @param array          $statement
+     *
+     * @return void
+     */
+    protected function checkVariableReadOnly(
+        string $variable,
+        ZephirVariable $symbolVariable,
+        array $statement
+    ): void {
+        if ($symbolVariable->isReadOnly()) {
+            throw new CompilerException(
+                "Cannot mutate variable '" . $variable . "' because it is read only",
+                $statement
+            );
         }
     }
 }

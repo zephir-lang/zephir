@@ -33,10 +33,10 @@ class Variable implements TypeAwareInterface
     public const BRANCH_MAGIC     = '$$';
     public const VAR_RETURN_VALUE = 'return_value';
     public const VAR_THIS_POINTER = 'this_ptr';
-    protected Definition|ReflectionClass|null $associatedClass  = null;
-    protected array                           $classTypes       = [];
-    protected mixed                           $defaultInitValue = null;
-    protected bool                            $doublePointer    = false;
+    protected Definition | ReflectionClass | null $associatedClass  = null;
+    protected array                               $classTypes       = [];
+    protected mixed                               $defaultInitValue = null;
+    protected bool                                $doublePointer    = false;
     /**
      * Current dynamic type of the variable.
      *
@@ -155,7 +155,7 @@ class Variable implements TypeAwareInterface
     /**
      * Returns the class related to the variable.
      */
-    public function getAssociatedClass(): Definition|ReflectionClass|null
+    public function getAssociatedClass(): Definition | ReflectionClass | null
     {
         return $this->associatedClass;
     }
@@ -337,7 +337,7 @@ class Variable implements TypeAwareInterface
      *
      * @return bool
      */
-    public function hasAnyDynamicType(array|string $types): bool
+    public function hasAnyDynamicType(array | string $types): bool
     {
         if (is_string($types)) {
             $types = [$types];
@@ -819,7 +819,7 @@ class Variable implements TypeAwareInterface
      *
      * @param ReflectionClass|Definition $associatedClass
      */
-    public function setAssociatedClass(ReflectionClass|Definition $associatedClass): void
+    public function setAssociatedClass(ReflectionClass | Definition $associatedClass): void
     {
         $this->associatedClass = $associatedClass;
     }
@@ -829,7 +829,7 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $classTypes
      */
-    public function setClassTypes(array|string $classTypes): void
+    public function setClassTypes(array | string $classTypes): void
     {
         if (is_string($classTypes)) {
             if (!in_array($classTypes, $this->classTypes)) {
@@ -861,7 +861,7 @@ class Variable implements TypeAwareInterface
      *
      * @param array|string $types
      */
-    public function setDynamicTypes(array|string $types): void
+    public function setDynamicTypes(array | string $types): void
     {
         unset($this->dynamicTypes['unknown']);
 

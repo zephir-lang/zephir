@@ -28,6 +28,8 @@ use function sprintf;
  */
 class StaticPropertySub
 {
+    protected string $methodName = 'subStaticProperty';
+
     /**
      * Compiles ClassName::foo = {expr}.
      *
@@ -48,6 +50,7 @@ class StaticPropertySub
         array $statement
     ): void {
         $classDefinition = $compilationContext->classLookup($className);
+        $method          = $this->methodName;
 
         if (!$propertyDefinition = $classDefinition->getProperty($property)) {
             throw new CompilerException(
@@ -111,7 +114,7 @@ class StaticPropertySub
                     $resolvedExpr->getBooleanCode(),
                     $compilationContext
                 );
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -134,7 +137,7 @@ class StaticPropertySub
                     '\'' . $resolvedExpr->getCode() . '\'',
                     $compilationContext
                 );
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -156,7 +159,7 @@ class StaticPropertySub
                     $resolvedExpr->getCode(),
                     $compilationContext
                 );
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -189,7 +192,7 @@ class StaticPropertySub
                     $tempVariable->setIdle(true);
                 }
 
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -199,7 +202,7 @@ class StaticPropertySub
 
             case 'bool':
                 if ('1' == $resolvedExpr->getBooleanCode()) {
-                    $compilationContext->backend->subStaticProperty(
+                    $compilationContext->backend->$method(
                         $classEntry,
                         $property,
                         'true',
@@ -207,7 +210,7 @@ class StaticPropertySub
                     );
                 } else {
                     if ('0' == $resolvedExpr->getBooleanCode()) {
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             'false',
@@ -216,7 +219,7 @@ class StaticPropertySub
                     } else {
                         $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             'true',
@@ -225,7 +228,7 @@ class StaticPropertySub
                         $codePrinter->decreaseLevel();
                         $codePrinter->output('} else {');
                         $codePrinter->increaseLevel();
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             'false',
@@ -244,7 +247,7 @@ class StaticPropertySub
                     true
                 );
                 $compilationContext->backend->initArray($tempVariable, $compilationContext);
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $tempVariable,
@@ -256,7 +259,7 @@ class StaticPropertySub
                 break;
 
             case 'array':
-                $compilationContext->backend->subStaticProperty(
+                $compilationContext->backend->$method(
                     $classEntry,
                     $property,
                     $resolvedExpr,
@@ -285,7 +288,7 @@ class StaticPropertySub
                         );
 
                         $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -309,7 +312,7 @@ class StaticPropertySub
                             $variableVariable,
                             $compilationContext
                         );
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -328,7 +331,7 @@ class StaticPropertySub
                             true
                         );
                         $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             $tempVariable,
@@ -339,7 +342,7 @@ class StaticPropertySub
                         }
                         break;
                     default:
-                        $compilationContext->backend->subStaticProperty(
+                        $compilationContext->backend->$method(
                             $classEntry,
                             $property,
                             $variableVariable,

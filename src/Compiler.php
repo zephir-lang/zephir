@@ -625,16 +625,14 @@ final class Compiler
                     . $classDefinition->getCNamespace()
                     . '_'
                     . $classDefinition->getName()
-                    . ');'
-                ;
+                    . ');';
             } else {
                 $interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
                 $interfaceInits[$dependencyRank][]   = 'ZEPHIR_INIT('
                     . $classDefinition->getCNamespace()
                     . '_'
                     . $classDefinition->getName()
-                    . ');'
-                ;
+                    . ');';
             }
         }
 
@@ -1057,8 +1055,7 @@ final class Compiler
                     . $classDefinition->getClassEntry()
                     . '['
                     . implode('|', $methods)
-                    . ']'
-                ;
+                    . ']';
             }
         }
 
@@ -1076,8 +1073,7 @@ final class Compiler
                     . $method->getName()
                     . ':'
                     . implode('-', $method->getVisibility())
-                    . ']'
-                ;
+                    . ']';
             }
 
             $files[] = $compiledFile;
@@ -1088,8 +1084,7 @@ final class Compiler
                 . $classDefinition->getClassEntry()
                 . '['
                 . implode('|', $methods)
-                . ']'
-            ;
+                . ']';
         }
 
         $hash                = md5($hash);
@@ -1282,7 +1277,7 @@ final class Compiler
     /**
      * Returns class the class definition from a given class name.
      */
-    public function getClassDefinition(string $className): Definition|bool
+    public function getClassDefinition(string $className): Definition | bool
     {
         foreach ($this->definitions as $key => $value) {
             if (!strcasecmp($key, $className)) {
@@ -2137,8 +2132,7 @@ final class Compiler
                 . implode(' ', $files)
                 . '", "'
                 . $project
-                . '");'
-            ;
+                . '");';
         }
 
         return $groups;

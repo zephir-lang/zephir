@@ -25,10 +25,10 @@ use Zephir\Variable\Variable;
  */
 class PropertyDynamicAccess
 {
-    protected bool      $expecting = true;
+    protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
-    protected bool      $noisy     = true;
-    protected bool      $readOnly  = false;
+    protected bool      $noisy             = true;
+    protected bool      $readOnly          = false;
 
     /**
      * Resolves the access to a property in an object.

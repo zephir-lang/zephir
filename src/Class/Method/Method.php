@@ -1167,11 +1167,11 @@ class Method
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
                 $initCode  .= "\t" . $compilationContext->backend->ifVariableValueUndefined(
-                    $targetVar,
-                    $compilationContext,
-                    false,
-                    false
-                ) . PHP_EOL;
+                        $targetVar,
+                        $compilationContext,
+                        false,
+                        false
+                    ) . PHP_EOL;
 
                 if ($targetVar->isDoublePointer() && isset($substituteVars[$parameter['name']])) {
                     $substituteVar = $substituteVars[$parameter['name']];
@@ -1180,8 +1180,7 @@ class Method
                         . ' = &'
                         . $substituteVar->getName()
                         . ';'
-                        . PHP_EOL
-                    ;
+                        . PHP_EOL;
                 }
                 $initCode .= $this->assignDefaultValue($parameter, $compilationContext);
 
@@ -1218,8 +1217,7 @@ class Method
                         . ', '
                         . implode(', ', $params)
                         . ');'
-                        . PHP_EOL
-                    ;
+                        . PHP_EOL;
                 } else {
                     $code .= "\t"
                         . 'zephir_fetch_params_without_memory_grow('
@@ -1229,8 +1227,7 @@ class Method
                         . ', '
                         . implode(', ', $params)
                         . ');'
-                        . PHP_EOL
-                    ;
+                        . PHP_EOL;
                 }
             } else {
                 foreach ($params as $param) {

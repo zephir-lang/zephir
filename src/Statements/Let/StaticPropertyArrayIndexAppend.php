@@ -89,8 +89,7 @@ class StaticPropertyArrayIndexAppend extends ArrayIndex
 
         if (!$classDefinition->hasProperty($property)) {
             throw new CompilerException(
-                "Class '" . $classDefinition->getCompleteName(
-                ) . "' does not have a property called: '"
+                "Class '" . $classDefinition->getCompleteName() . "' does not have a property called: '"
                 . $property
                 . "'",
                 $statement

@@ -330,7 +330,7 @@ class Property
         }
     }
 
-    protected function getBooleanCode($value): bool|string
+    protected function getBooleanCode($value): bool | string
     {
         if ('true' == $value || true === $value) {
             return '1';

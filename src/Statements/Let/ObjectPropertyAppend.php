@@ -16,6 +16,7 @@ namespace Zephir\Statements\Let;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function current;
@@ -27,6 +28,8 @@ use function current;
  */
 class ObjectPropertyAppend
 {
+    use VariablesTrait;
+
     /**
      * Compiles x->y[] = foo.
      *
@@ -45,12 +48,7 @@ class ObjectPropertyAppend
         CompilationContext $compilationContext,
         array $statement
     ): void {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                $statement
-            );
-        }
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
 
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException(

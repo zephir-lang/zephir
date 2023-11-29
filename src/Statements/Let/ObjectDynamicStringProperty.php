@@ -17,6 +17,7 @@ use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function gettype;
@@ -27,6 +28,8 @@ use function is_string;
  */
 class ObjectDynamicStringProperty
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo->{"x"} = {expr}.
      *
@@ -46,12 +49,7 @@ class ObjectDynamicStringProperty
         CompilationContext $compilationContext,
         array $statement
     ): void {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                $statement
-            );
-        }
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
 
         if ('variable' !== $symbolVariable->getType()) {
             throw new CompilerException(
@@ -85,7 +83,7 @@ class ObjectDynamicStringProperty
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
+            throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
         /**

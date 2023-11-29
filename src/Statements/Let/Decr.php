@@ -15,6 +15,7 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable as ZephirVariable;
 
@@ -25,10 +26,12 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class Decr
 {
+    use VariablesTrait;
+
     protected string $operator     = '--';
-    protected string $zephirMethod = 'zephir_decrement';
     protected string $warningText  = 'decrement';
     protected string $warningType  = 'non-valid-decrement';
+    protected string $zephirMethod = 'zephir_decrement';
 
     /**
      * Compiles x++/x--.
@@ -55,17 +58,10 @@ class Decr
             );
         }
 
-        if ($symbolVariable->isReadOnly()) {
-            /*
-             * TODO: implement increment of objects members
-             */
-            throw new CompilerException(
-                "Cannot mutate variable '"
-                . $variable
-                . "' because it is read only",
-                $statement
-            );
-        }
+        /*
+         * TODO: implement increment of objects members
+         */
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
 
         $codePrinter = $compilationContext->codePrinter;
 

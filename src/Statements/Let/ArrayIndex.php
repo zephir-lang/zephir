@@ -19,6 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function count;
@@ -31,6 +32,8 @@ use function sprintf;
  */
 class ArrayIndex
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo[y] = {expr}.
      *
@@ -52,49 +55,23 @@ class ArrayIndex
         /*
          * Arrays must be stored in the HEAP
          */
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is local only",
-                $statement
-            );
-        }
-
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '"
-                . $variable
-                . "' because it is read only",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is local only",
-                $statement
-            );
-        }
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
+        $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
         /*
          * Only dynamic variables can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
-            throw new CompilerException(
-                "Cannot use variable type: '" . $symbolVariable->getType() . "' as array",
+            throw CompilerException::cannotUseAsArray(
+                $symbolVariable->getType(),
                 $statement
             );
         }
 
         if ('variable' == $symbolVariable->getType()) {
             if ($symbolVariable->hasAnyDynamicType('unknown')) {
-                throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
+                throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
             }
 
             /*

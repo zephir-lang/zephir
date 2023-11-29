@@ -16,6 +16,7 @@ namespace Zephir\Statements\Let;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
@@ -25,6 +26,8 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class VariableAppend
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo[] = {expr}.
      *
@@ -43,26 +46,9 @@ class VariableAppend
         CompilationContext $compilationContext,
         $statement
     ): void {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is read only",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is local only",
-                $statement
-            );
-        }
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
+        $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
         /*
          * Only dynamic variables and arrays can be used as arrays

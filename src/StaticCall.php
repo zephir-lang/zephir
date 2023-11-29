@@ -211,8 +211,7 @@ class StaticCall extends Call
                             $numberParameters = $classMethod->getNumberOfParameters();
                             if ($callNumberParameters > $numberParameters) {
                                 throw new CompilerException(
-                                    "Method '" . $classDefinition->getCompleteName(
-                                    ) . '::' . $expression['name']
+                                    "Method '" . $classDefinition->getCompleteName() . '::' . $expression['name']
                                     . "' called with a wrong number of parameters, the method has: "
                                     . $expectedNumberParameters
                                     . ', passed: '

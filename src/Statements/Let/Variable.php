@@ -20,6 +20,7 @@ use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Name;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function array_keys;
@@ -31,6 +32,8 @@ use function array_keys;
  */
 class Variable
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo = {expr}
      * Changes the value of a mutable variable.
@@ -52,12 +55,7 @@ class Variable
         CompilationContext $compilationContext,
         array $statement
     ): void {
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is read only",
-                $statement
-            );
-        }
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
 
         $codePrinter = $compilationContext->codePrinter;
 
@@ -67,12 +65,7 @@ class Variable
         if ('assign' == $statement['operator']) {
             $symbolVariable->setIsInitialized(true, $compilationContext);
         } else {
-            if (!$symbolVariable->isInitialized()) {
-                throw new CompilerException(
-                    "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                    $statement
-                );
-            }
+            $this->checkVariableInitialized($variable, $symbolVariable, $statement);
         }
 
         /*

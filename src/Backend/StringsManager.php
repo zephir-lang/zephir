@@ -107,8 +107,7 @@ class StringsManager extends BaseStringsManager
                 . $key
                 . '(result, '
                 . implode(', ', $lparams)
-                . ', 0);'
-            ;
+                . ', 0);';
             $macros[] = '#define ZEPHIR_SCONCAT_'
                 . strtoupper($key)
                 . '(result, '
@@ -120,16 +119,14 @@ class StringsManager extends BaseStringsManager
                 . $key
                 . '(result, '
                 . implode(', ', $lparams)
-                . ', 1);'
-            ;
+                . ', 1);';
             $macros[] = '';
 
             $proto = 'void zephir_concat_'
                 . $key
                 . '(zval *result, '
                 . implode(', ', $params)
-                . ', int self_var)'
-            ;
+                . ', int self_var)';
 
             $codeh .= $proto . ';' . PHP_EOL;
 

@@ -42,6 +42,59 @@ class CompilerException extends RuntimeException
         parent::__construct($message, $code, $previous);
     }
 
+    /**
+     * Cannot use variable type as array
+     *
+     * @param string                   $type     the variable type
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Exception|Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function cannotUseAsArray(
+        string $type,
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            "Cannot use variable type: '" . $type . "' as array",
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
+     * Cannot use non-initialized variable as an object
+     *
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Exception|Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function cannotUseNonInitializedVariableAsObject(
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            'Cannot use non-initialized variable as an object',
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
+     * @param string $operator
+     * @param string $dataType
+     * @param array  $statement
+     *
+     * @return self
+     */
     public static function illegalOperationTypeOnStaticVariable(
         string $operator,
         string $dataType,
@@ -50,6 +103,28 @@ class CompilerException extends RuntimeException
         return new self(
             "Operator '{$operator}' isn't supported for static variables and {$dataType} typed expressions",
             $statement
+        );
+    }
+
+    /**
+     * Returned Values can only be assigned to variant variables
+     *
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Exception|Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function returnValuesVariantVars(
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            'Returned values by functions can only be assigned to variant variables',
+            $extra,
+            $code,
+            $previous
         );
     }
 }

@@ -47,49 +47,22 @@ class ArrayIndexAppend extends ArrayIndex
         /*
          * Arrays must be stored in the HEAP
          */
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is local only",
-                $statement
-            );
-        }
-
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is not initialized",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is read only",
-                $statement
-            );
-        }
-
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException(
-                "Cannot mutate variable '" . $variable . "' because it is local only",
-                $statement
-            );
-        }
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
+        $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
         /*
          * Only dynamic variables and arrays can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
-            throw new CompilerException(
-                "Cannot use variable type: '" . $symbolVariable->getType() . "' as array",
+            throw CompilerException::cannotUseAsArray(
+                $symbolVariable->getType(),
                 $statement
             );
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException(
-                'Cannot use non-initialized variable as an object',
-                $statement
-            );
+            throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
         /*
