@@ -148,7 +148,7 @@ class PregMatchOptimizer extends OptimizerAbstract
                 );
             }
 
-            if (!$variable->isInitialized()) {
+            if (false == $variable->isInitialized()) {
                 $variable->initVariant($context);
                 $variable->setIsInitialized(true, $context);
             }

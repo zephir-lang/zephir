@@ -324,7 +324,7 @@ class ArgInfoDefinition
         $compatibilityClasses  = require_once __DIR__ . '/../../config/phalcon-compatibility-headers.php';
         $classDefinition       = $this->functionLike->getClassDefinition();
         $implementedInterfaces = $classDefinition !== null ? $classDefinition->getImplementedInterfaces() : [];
-        $extendsClass          = $classDefinition?->getExtendsClass();
+        $extendsClass          = $classDefinition !== null ? $classDefinition->getExtendsClass() : null;
 
         if (empty($implementedInterfaces) && $extendsClass === null) {
             return false;

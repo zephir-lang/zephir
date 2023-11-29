@@ -82,10 +82,19 @@ class Parameters implements Countable, Iterator, ArrayAccess
             $name     = $parameter['name'];
             $dataType = $parameter['data-type'] ?? 'variable';
 
-            $parameters[] = match ($dataType) {
-                'object', 'callable', 'resource', 'variable', 'mixed' => $isMethodInternal ? $name : '&' . $name,
-                default                                               => ($isMethodInternal ? $name : '&' . $name) . '_param',
-            };
+            switch ($dataType) {
+                case 'object':
+                case 'callable':
+                case 'resource':
+                case 'variable':
+                case 'mixed':
+                    $parameters[] = $isMethodInternal ? $name : '&' . $name;
+                    break;
+
+                default:
+                    $parameters[] = ($isMethodInternal ? $name : '&' . $name) . '_param';
+                    break;
+            }
 
             if (isset($parameter['default'])) {
                 $this->optionalParameters[] = $parameter;

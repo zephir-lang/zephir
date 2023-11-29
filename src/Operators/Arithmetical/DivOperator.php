@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Arithmetical;
 
+use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
@@ -131,26 +132,32 @@ class DivOperator extends ArithmeticalBaseOperator
                 break;
 
             case 'bool':
-                return match ($right->getType()) {
-                    'int',
-                    'uint',
-                    'long',
-                    'ulong',
-                    'double' => new CompiledExpression(
-                        'long',
-                        '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')',
-                        $expression
-                    ),
-                    'bool'   => new CompiledExpression(
-                        'bool',
-                        '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')',
-                        $expression
-                    ),
-                    default  => throw new CompilerException(
-                        "Cannot operate 'bool' with '" . $right->getType() . "'",
-                        $expression
-                    ),
-                };
+                switch ($right->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                    case 'double':
+                        return new CompiledExpression(
+                            'long',
+                            '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')',
+                            $expression
+                        );
+
+                    case 'bool':
+                        return new CompiledExpression(
+                            'bool',
+                            '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
+                            ) . ')',
+                            $expression
+                        );
+
+                    default:
+                        throw new CompilerException(
+                            "Cannot operate 'bool' with '" . $right->getType() . "'",
+                            $expression
+                        );
+                }
                 break;
 
             case 'double':
@@ -236,10 +243,14 @@ class DivOperator extends ArithmeticalBaseOperator
 
             case 'string':
             case 'array':
-                throw new CompilerException(
-                    'Operation is not supported between ' . $right->getType(),
-                    $expression
-                );
+                switch ($right->getType()) {
+                    default:
+                        throw new CompilerException(
+                            'Operation is not supported between ' . $right->getType(),
+                            $expression
+                        );
+                }
+                break;
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(

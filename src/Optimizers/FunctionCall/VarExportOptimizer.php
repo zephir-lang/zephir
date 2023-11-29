@@ -58,10 +58,14 @@ class VarExportOptimizer extends OptimizerAbstract
             /*
              * Complex expressions require a temporary variable
              */
-            $type = match ($resolvedParam->getType()) {
-                'array' => 'array',
-                default => 'variable',
-            };
+            switch ($resolvedParam->getType()) {
+                case 'array':
+                    $type = 'array';
+                    break;
+                default:
+                    $type = 'variable';
+                    break;
+            }
 
             $variable = $context->symbolTable->addTemp($type, $context);
             $variable->initVariant($context);

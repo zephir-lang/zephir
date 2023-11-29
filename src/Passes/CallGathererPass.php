@@ -215,6 +215,7 @@ class CallGathererPass
 
             case 'cast':
             case 'type-hint':
+            case 'short-ternary':
             case 'ternary':
             case 'fetch':
                 $this->passExpression($expression['right']);

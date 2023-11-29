@@ -225,9 +225,6 @@ class StaticTypeInference
 
             case 'closure':
             case 'closure-arrow':
-            case 'erange':
-            case 'empty-array':
-            case 'require_once':
             case 'static-constant-access':
                 return 'variable';
 
@@ -300,7 +297,6 @@ class StaticTypeInference
                 return 'int';
 
             case 'and':
-            case 'less-equal':
             case 'or':
                 return 'bool';
 
@@ -314,9 +310,11 @@ class StaticTypeInference
             case 'less':
             case 'greater':
             case 'greater-equal':
+            case 'less-equal':
                 return 'bool';
 
             case 'irange':
+            case 'erange':
                 return 'variable';
 
             case 'typeof':
@@ -330,7 +328,6 @@ class StaticTypeInference
                 return 'variable';
 
             case 'not':
-            case 'unlikely':
             case 'bitwise_not':
                 $this->passExpression($expression['left']);
 
@@ -346,6 +343,9 @@ class StaticTypeInference
             case 'array':
                 $this->passArray($expression);
 
+                return 'variable';
+
+            case 'empty-array':
                 return 'variable';
 
             case 'new':
@@ -373,6 +373,7 @@ class StaticTypeInference
             case 'empty':
             case 'instanceof':
             case 'likely':
+            case 'unlikely':
                 $this->passExpression($expression['left']);
 
                 return 'bool';
@@ -398,6 +399,7 @@ class StaticTypeInference
 
             case 'clone':
             case 'require':
+            case 'require_once':
                 return 'variable';
 
             case 'ternary':
@@ -432,8 +434,11 @@ class StaticTypeInference
                 case 'array-index':
                 case 'object-property-array-index':
                 case 'object-property-append':
-                case 'variable-append':
                 case 'static-property-access':
+                    $this->markVariable($assignment['variable'], 'variable');
+                    break;
+
+                case 'variable-append':
                     $this->markVariable($assignment['variable'], 'variable');
                     break;
 

@@ -127,7 +127,7 @@ final class Application extends BaseApplication
     public function getLongVersion(): string
     {
         $version = explode('-', $this->getVersion());
-        $commit  = "($version[1])";
+        $commit  = "({$version[1]})";
 
         return trim(
             sprintf(
@@ -163,7 +163,7 @@ final class Application extends BaseApplication
         $version = explode('-', parent::getVersion());
 
         if (isset($version[1]) && str_starts_with($version[1], '$')) {
-            return "$version[0]-source";
+            return "{$version[0]}-source";
         }
 
         return implode('-', $version);

@@ -74,7 +74,9 @@ class Template
         $path = $this->getTemplatePath($this->template);
         ob_start();
         include $path;
-        return ob_get_clean();
+        $content = ob_get_clean();
+
+        return $content;
     }
 
     public function partial(string $fileName, array $data = [])

@@ -214,18 +214,26 @@ class Backend
         $context->headersManager->add('kernel/array');
         $isVariable = $index instanceof Variable;
 
-        $type = match ($index->getType()) {
-            'int',
-            'uint',
-            'long'   => 'long',
-            'variable',
-            'mixed',
-            'string' => $index->getType(),
-            default  => throw new CompilerException(
-                sprintf('Variable type: %s cannot be used as array index without cast', $index->getType()),
-                $arrayAccess['right']
-            ),
-        };
+        switch ($index->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+                $type = 'long';
+                break;
+
+            /* Types which map to the same */
+            case 'variable':
+            case 'mixed':
+            case 'string':
+                $type = $index->getType();
+                break;
+
+            default:
+                throw new CompilerException(
+                    sprintf('Variable type: %s cannot be used as array index without cast', $index->getType()),
+                    $arrayAccess['right']
+                );
+        }
         if ($isVariable && in_array($index->getType(), ['variable', 'string', 'mixed'])) {
             $output = 'zephir_array_fetch('
                 . $this->getVariableCode($var)
@@ -1387,18 +1395,23 @@ class Backend
         $parameters          = $method->getParameters();
         if (is_object($parameters)) {
             foreach ($parameters->getParameters() as $parameter) {
-                $signatureParameters[] = match ($parameter['data-type']) {
-                    'int',
-                    'uint',
-                    'long',
-                    'double',
-                    'bool',
-                    'char',
-                    'uchar',
-                    'string',
-                    'array' => 'zval *' . $parameter['name'] . '_param_ext',
-                    default => 'zval *' . $parameter['name'] . '_ext ',
-                };
+                switch ($parameter['data-type']) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'double':
+                    case 'bool':
+                    case 'char':
+                    case 'uchar':
+                    case 'string':
+                    case 'array':
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_param_ext';
+                        break;
+
+                    default:
+                        $signatureParameters[] = 'zval *' . $parameter['name'] . '_ext ';
+                        break;
+                }
             }
         }
 
@@ -1762,12 +1775,19 @@ class Backend
     public function resolveValue($value, CompilationContext $context): Variable | bool | string
     {
         if ($value instanceof GlobalConstant) {
-            $value = match ($value->getName()) {
-                'ZEPHIR_GLOBAL(global_null)'  => 'null',
-                'ZEPHIR_GLOBAL(global_true)'  => 'true',
-                'ZEPHIR_GLOBAL(global_false)' => 'false',
-                default                       => throw new CompilerException('Unknown constant ' . $value->getName()),
-            };
+            switch ($value->getName()) {
+                case 'ZEPHIR_GLOBAL(global_null)':
+                    $value = 'null';
+                    break;
+                case 'ZEPHIR_GLOBAL(global_true)':
+                    $value = 'true';
+                    break;
+                case 'ZEPHIR_GLOBAL(global_false)':
+                    $value = 'false';
+                    break;
+                default:
+                    throw new CompilerException('Unknown constant ' . $value->getName());
+            }
         }
 
         if ('null' == $value || 'true' == $value || 'false' == $value) {

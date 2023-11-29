@@ -68,28 +68,36 @@ class LetStatement extends StatementAbstract
             /*
              * Get the symbol from the symbol table if necessary
              */
-            $symbolVariable = match ($assignment['assign-type']) {
-                'static-property',
-                'static-property-append',
-                'static-property-array-index',
-                'static-property-array-index-append',
-                'dynamic-variable-string'          => null,
-                'array-index',
-                'variable-append',
-                'object-property',
-                'array-index-append',
-                'string-dynamic-object-property',
-                'variable-dynamic-object-property' => $compilationContext->symbolTable->getVariableForUpdate(
-                    $variable,
-                    $compilationContext,
-                    $assignment
-                ),
-                default                            => $compilationContext->symbolTable->getVariableForWrite(
-                    $variable,
-                    $compilationContext,
-                    $assignment
-                ),
-            };
+            switch ($assignment['assign-type']) {
+                case 'static-property':
+                case 'static-property-append':
+                case 'static-property-array-index':
+                case 'static-property-array-index-append':
+                case 'dynamic-variable-string':
+                    $symbolVariable = null;
+                    break;
+
+                case 'array-index':
+                case 'variable-append':
+                case 'object-property':
+                case 'array-index-append':
+                case 'string-dynamic-object-property':
+                case 'variable-dynamic-object-property':
+                    $symbolVariable = $compilationContext->symbolTable->getVariableForUpdate(
+                        $variable,
+                        $compilationContext,
+                        $assignment
+                    );
+                    break;
+
+                default:
+                    $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
+                        $variable,
+                        $compilationContext,
+                        $assignment
+                    );
+                    break;
+            }
 
             /*
              * Incr/Decr assignments don't require an expression
@@ -103,24 +111,26 @@ class LetStatement extends StatementAbstract
 
                 $expr = new Expression($assignment['expr']);
 
-                if ($assignment['assign-type'] == 'variable') {
-                    if (!$readDetector->detect($variable, $assignment['expr'])) {
-                        if (isset($assignment['operator'])) {
-                            if ('assign' == $assignment['operator']) {
+                switch ($assignment['assign-type']) {
+                    case 'variable':
+                        if (!$readDetector->detect($variable, $assignment['expr'])) {
+                            if (isset($assignment['operator'])) {
+                                if ('assign' == $assignment['operator']) {
+                                    $expr->setExpectReturn(true, $symbolVariable);
+                                }
+                            } else {
                                 $expr->setExpectReturn(true, $symbolVariable);
                             }
                         } else {
-                            $expr->setExpectReturn(true, $symbolVariable);
-                        }
-                    } else {
-                        if (isset($assignment['operator'])) {
-                            if ('assign' == $assignment['operator']) {
+                            if (isset($assignment['operator'])) {
+                                if ('assign' == $assignment['operator']) {
+                                    $expr->setExpectReturn(true);
+                                }
+                            } else {
                                 $expr->setExpectReturn(true);
                             }
-                        } else {
-                            $expr->setExpectReturn(true);
                         }
-                    }
+                        break;
                 }
 
                 switch ($assignment['expr']['type']) {
@@ -184,11 +194,16 @@ class LetStatement extends StatementAbstract
                 case 'static-property':
                     $let = new LetStaticProperty();
                     if (isset($assignment['operator'])) {
-                        $let = match ($assignment['operator']) {
-                            'add-assign' => new LetStaticPropertyAdd(),
-                            'sub-assign' => new LetStaticPropertySub(),
-                            default      => new LetStaticProperty(),
-                        };
+                        switch ($assignment['operator']) {
+                            case 'add-assign':
+                                $let = new LetStaticPropertyAdd();
+                                break;
+                            case 'sub-assign':
+                                $let = new LetStaticPropertySub();
+                                break;
+                            default:
+                                $let = new LetStaticProperty();
+                        }
                     }
 
                     $let->assignStatic(

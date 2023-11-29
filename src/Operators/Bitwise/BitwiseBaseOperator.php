@@ -304,7 +304,11 @@ class BitwiseBaseOperator extends AbstractOperator
                 break;
 
             case 'string':
-                throw new CompilerException('Operation is not supported between strings', $expression);
+                switch ($right->getType()) {
+                    default:
+                        throw new CompilerException('Operation is not supported between strings', $expression);
+                }
+                break;
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -609,6 +613,16 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
+                                        $compilationContext->headersManager->add('kernel/operators');
+
+                                        return new CompiledExpression(
+                                            'int',
+                                            '((int) (zephir_get_numberval(' . $symbol . ')) ' . $this->operator . ' ' . $variableRight->getName(
+                                            ) . ')',
+                                            $expression
+                                        );
+                                        break;
+
                                     /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
@@ -619,7 +633,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             ) . ')',
                                             $expression
                                         );
-
+                                        break;
 
                                     /* a(var) + a(var) */
                                     case 'variable':
@@ -717,33 +731,43 @@ class BitwiseBaseOperator extends AbstractOperator
         /*
          * Return value will be always int
          */
-        return match ($this->operator) {
-            '&'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] & $expression['right']['value'],
-                $expression
-            ),
-            '|'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] | $expression['right']['value'],
-                $expression
-            ),
-            '^'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] ^ $expression['right']['value'],
-                $expression
-            ),
-            '<<'    => new CompiledExpression(
-                'int',
-                $expression['left']['value'] << $expression['right']['value'],
-                $expression
-            ),
-            '>>'    => new CompiledExpression(
-                'int',
-                $expression['left']['value'] >> $expression['right']['value'],
-                $expression
-            ),
-            default => null,
-        };
+        switch ($this->operator) {
+            case '&':
+                return new CompiledExpression(
+                    'int',
+                    $expression['left']['value'] & $expression['right']['value'],
+                    $expression
+                );
+
+            case '|':
+                return new CompiledExpression(
+                    'int',
+                    $expression['left']['value'] | $expression['right']['value'],
+                    $expression
+                );
+
+            case '^':
+                return new CompiledExpression(
+                    'int',
+                    $expression['left']['value'] ^ $expression['right']['value'],
+                    $expression
+                );
+
+            case '<<':
+                return new CompiledExpression(
+                    'int',
+                    $expression['left']['value'] << $expression['right']['value'],
+                    $expression
+                );
+
+            case '>>':
+                return new CompiledExpression(
+                    'int',
+                    $expression['left']['value'] >> $expression['right']['value'],
+                    $expression
+                );
+        }
+
+        return null;
     }
 }

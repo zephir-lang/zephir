@@ -316,7 +316,8 @@ class ComparisonBaseOperator extends AbstractOperator
                 $compilationContext->backend->assignString(
                     $variableLeft,
                     $left->getCode(),
-                    $compilationContext
+                    $compilationContext,
+                    true
                 );
                 switch ($right->getType()) {
                     case 'null':
@@ -325,6 +326,7 @@ class ComparisonBaseOperator extends AbstractOperator
                             $this->zvalNullOperator . '(' . $variableLeftCode . ')',
                             $expression['left']
                         );
+                        break;
 
                     case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -334,6 +336,7 @@ class ComparisonBaseOperator extends AbstractOperator
                             $this->zvalStringOperator . '(' . $variableLeftCode . ', "' . $right->getCode() . '")',
                             $expression['left']
                         );
+                        break;
 
                     case 'variable':
                         $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -353,6 +356,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     $this->zvalOperator . '(' . $variableLeftCode . ', ' . $variableRight . ')',
                                     $expression
                                 );
+                                break;
 
                             default:
                                 throw new CompilerException(
@@ -360,10 +364,12 @@ class ComparisonBaseOperator extends AbstractOperator
                                     $expression['right']
                                 );
                         }
+                        break;
 
                     default:
                         throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                 }
+                break;
 
             case 'variable':
                 $variable     = $compilationContext->symbolTable->getVariableForRead(
@@ -448,6 +454,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException(
@@ -455,6 +462,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
+                        break;
 
                     case 'double':
                         switch ($right->getType()) {
@@ -523,6 +531,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException(
@@ -530,6 +539,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
+                        break;
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -596,6 +606,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException(
@@ -603,6 +614,7 @@ class ComparisonBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
+                        break;
 
                     case 'array':
                         switch ($right->getType()) {
@@ -639,10 +651,12 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
+                        break;
 
                     case 'string':
                         $compilationContext->headersManager->add('kernel/operators');
@@ -687,10 +701,12 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
+                        break;
 
                     case 'variable':
                     case 'mixed':
@@ -794,14 +810,17 @@ class ComparisonBaseOperator extends AbstractOperator
                                             $expression['right']
                                         );
                                 }
+                                break;
 
                             default:
                                 throw new CompilerException('Unknown type: ' . $right->getType(), $expression['left']);
                         }
+                        break;
 
                     default:
                         throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
+                break;
 
             default:
                 throw new CompilerException('Unknown type: ' . $left->getType(), $expression);
@@ -866,40 +885,69 @@ class ComparisonBaseOperator extends AbstractOperator
 
         switch ($variableVariable->getType()) {
             case 'double':
-                $condition = match ($value) {
-                    'double', 'float' => '1 ' . $operator . ' 1',
-                    default           => '1 ' . $operator . ' 0',
-                };
+                switch ($value) {
+                    case 'double':
+                    case 'float':
+                        $condition = '1 ' . $operator . ' 1';
+                        break;
+
+                    default:
+                        $condition = '1 ' . $operator . ' 0';
+                        break;
+                }
                 break;
 
             case 'int':
             case 'integer':
             case 'long':
-                $condition = match ($value) {
-                    'int', 'integer', 'long' => '1 ' . $operator . ' 1',
-                    default                  => '1 ' . $operator . ' 0',
-                };
+                switch ($value) {
+                    case 'int':
+                    case 'integer':
+                    case 'long':
+                        $condition = '1 ' . $operator . ' 1';
+                        break;
+
+                    default:
+                        $condition = '1 ' . $operator . ' 0';
+                        break;
+                }
                 break;
 
             case 'bool':
-                $condition = match ($value) {
-                    'bool', 'boolean' => '1 ' . $operator . ' 1',
-                    default           => '1 ' . $operator . ' 0',
-                };
+                switch ($value) {
+                    case 'bool':
+                    case 'boolean':
+                        $condition = '1 ' . $operator . ' 1';
+                        break;
+
+                    default:
+                        $condition = '1 ' . $operator . ' 0';
+                        break;
+                }
                 break;
 
             case 'array':
-                $condition = match ($value) {
-                    'array' => '1 ' . $operator . ' 1',
-                    default => '1 ' . $operator . ' 0',
-                };
+                switch ($value) {
+                    case 'array':
+                        $condition = '1 ' . $operator . ' 1';
+                        break;
+
+                    default:
+                        $condition = '1 ' . $operator . ' 0';
+                        break;
+                }
                 break;
 
             case 'string':
-                $condition = match ($value) {
-                    'string' => '1 ' . $operator . ' 1',
-                    default  => '1 ' . $operator . ' 0',
-                };
+                switch ($value) {
+                    case 'string':
+                        $condition = '1 ' . $operator . ' 1';
+                        break;
+
+                    default:
+                        $condition = '1 ' . $operator . ' 0';
+                        break;
+                }
                 break;
 
             case 'variable':

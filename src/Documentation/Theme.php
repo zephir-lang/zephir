@@ -148,7 +148,9 @@ class Theme
             mkdir($outputStt, 0777, true);
         }
 
-        $this->extendedTheme?->buildStaticDirectory();
+        if ($this->extendedTheme) {
+            $this->extendedTheme->buildStaticDirectory();
+        }
 
         $themeStt = $this->getThemePath('static');
 
@@ -218,8 +220,9 @@ class Theme
         $path         = pathinfo($this->outputDir . '/' . $path);
         $pathDirname  = $path['dirname'];
         $pathBasename = $path['basename'];
+        $pathFilename = $pathDirname . '/' . $pathBasename;
 
-        return $pathDirname . '/' . $pathBasename;
+        return $pathFilename;
     }
 
     /**
