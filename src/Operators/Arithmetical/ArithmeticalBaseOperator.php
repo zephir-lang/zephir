@@ -44,13 +44,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        if (!isset($expression['left'])) {
-            throw new CompilerException('Missing left part of the expression', $expression);
-        }
-
-        if (!isset($expression['right'])) {
-            throw new CompilerException('Missing right part of the expression', $expression);
-        }
+        $this->checkLeft($expression, CompilerException::class, $expression);
+        $this->checkRight($expression, CompilerException::class, $expression);
 
         // Check for constant folding optimizations
         if ($optimized = $this->optimizeConstantFolding($expression, $compilationContext)) {

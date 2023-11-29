@@ -34,9 +34,7 @@ class BitwiseNotOperator extends AbstractOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        if (!isset($expression['left'])) {
-            throw new CompilerException('Missing left part of the expression', $expression);
-        }
+        $this->checkLeft($expression, CompilerException::class, $expression);
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly($this->readOnly);

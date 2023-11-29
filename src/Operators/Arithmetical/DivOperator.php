@@ -36,13 +36,8 @@ class DivOperator extends ArithmeticalBaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        if (!isset($expression['left'])) {
-            throw new Exception('Missing left part of the expression');
-        }
-
-        if (!isset($expression['right'])) {
-            throw new Exception('Missing right part of the expression');
-        }
+        $this->checkLeft($expression);
+        $this->checkRight($expression);
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly(true);

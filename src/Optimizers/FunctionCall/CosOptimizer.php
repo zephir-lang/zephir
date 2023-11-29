@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class CosOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'cos';
-    }
+    protected string $zephirMethod = 'cos';
 }

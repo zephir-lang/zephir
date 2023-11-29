@@ -48,13 +48,8 @@ class ComparisonBaseOperator extends AbstractOperator
             return $conditions;
         }
 
-        if (!isset($expression['left'])) {
-            throw new CompilerException('Missing left part of the expression', $expression);
-        }
-
-        if (!isset($expression['right'])) {
-            throw new CompilerException('Missing right part of the expression', $expression);
-        }
+        $this->checkLeft($expression, CompilerException::class, $expression);
+        $this->checkRight($expression, CompilerException::class, $expression);
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly(true);

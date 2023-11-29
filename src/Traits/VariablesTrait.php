@@ -13,12 +13,47 @@ declare(strict_types=1);
 
 namespace Zephir\Traits;
 
+use Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 use Zephir\Variable\Variable as ZephirVariable;
 
 trait VariablesTrait
 {
+    /**
+     * @param array      $expression
+     * @param string     $exception
+     * @param array|null $extra
+     *
+     * @return void
+     */
+    protected function checkLeft(
+        array $expression,
+        string $exception = Exception::class,
+        ?array $extra = null
+    ): void {
+        if (!isset($expression['left'])) {
+            throw new $exception('Missing left part of the expression', $extra);
+        }
+    }
+
+    /**
+     * @param array      $expression
+     * @param string     $exception
+     * @param array|null $extra
+     *
+     * @return void
+     */
+    protected function checkRight(
+        array $expression,
+        string $exception = Exception::class,
+        ?array $extra = null
+    ): void {
+        if (!isset($expression['right'])) {
+            throw new $exception('Missing right part of the expression', $extra);
+        }
+    }
+
     /**
      * @param Variable|null $variable
      * @param array         $expression

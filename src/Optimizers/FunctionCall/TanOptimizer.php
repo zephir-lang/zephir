@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class TanOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'tan';
-    }
+    protected string $zephirMethod = 'tan';
 }

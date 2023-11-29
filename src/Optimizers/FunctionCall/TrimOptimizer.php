@@ -28,7 +28,7 @@ use function count;
  */
 class TrimOptimizer extends OptimizerAbstract
 {
-    protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
+    protected string $trimWhere = 'ZEPHIR_TRIM_BOTH';
 
     /**
      * @param array              $expression
@@ -76,7 +76,10 @@ class TrimOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            'zephir_fast_trim(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $charlist . ', ' . static::$TRIM_WHERE . ');'
+            'zephir_fast_trim(' . $symbol . ', '
+            . $resolvedParams[0] . ', '
+            . $charlist . ', '
+            . $this->trimWhere . ');'
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

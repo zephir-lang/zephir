@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class ASinOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'asin';
-    }
+    protected string $zephirMethod = 'asin';
 }

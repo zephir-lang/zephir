@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class SinOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'sin';
-    }
+    protected string $zephirMethod = 'sin';
 }

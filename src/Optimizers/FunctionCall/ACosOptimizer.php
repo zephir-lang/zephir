@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class ACosOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'acos';
-    }
+    protected string $zephirMethod = 'acos';
 }

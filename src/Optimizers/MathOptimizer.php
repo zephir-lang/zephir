@@ -22,12 +22,7 @@ use function count;
 
 abstract class MathOptimizer extends OptimizerAbstract
 {
-    /**
-     * Gets function name.
-     *
-     * @return string
-     */
-    abstract public function getFunctionName();
+    protected string $zephirMethod = '';
 
     /**
      * @param array              $expression
@@ -55,7 +50,11 @@ abstract class MathOptimizer extends OptimizerAbstract
         /**
          * Get CompiledExpression(s) for resolved var(s).
          */
-        $resolvedParams     = $call->getResolvedParamsAsExpr($expression['parameters'], $context, $expression);
+        $resolvedParams     = $call->getResolvedParamsAsExpr(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
         $compiledExpression = $resolvedParams[0];
 
         switch ($compiledExpression->getType()) {
@@ -85,14 +84,11 @@ abstract class MathOptimizer extends OptimizerAbstract
 
                         return new CompiledExpression(
                             'double',
-                            'zephir_' . $this->getFunctionName() . '(' . $context->backend->getVariableCode(
-                                $variable
-                            ) . ')',
+                            'zephir_' . $this->zephirMethod
+                            . '(' . $context->backend->getVariableCode($variable) . ')',
                             $expression
                         );
-                        break;
                 }
-                break;
         }
 
         return false;
@@ -108,7 +104,7 @@ abstract class MathOptimizer extends OptimizerAbstract
     {
         return new CompiledExpression(
             'double',
-            $this->getFunctionName() . '(' . $compiledExpression->getCode() . ')',
+            $this->zephirMethod . '(' . $compiledExpression->getCode() . ')',
             $expression
         );
     }

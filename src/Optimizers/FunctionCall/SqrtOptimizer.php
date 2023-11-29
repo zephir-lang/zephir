@@ -22,8 +22,5 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class SqrtOptimizer extends MathOptimizer
 {
-    public function getFunctionName()
-    {
-        return 'sqrt';
-    }
+    protected string $zephirMethod = 'sqrt';
 }

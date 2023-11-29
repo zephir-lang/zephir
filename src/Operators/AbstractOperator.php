@@ -14,12 +14,15 @@ declare(strict_types=1);
 namespace Zephir\Operators;
 
 use Zephir\CompilationContext;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
 use function is_object;
 
 abstract class AbstractOperator
 {
+    use VariablesTrait;
+
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $literalOnly       = true;
