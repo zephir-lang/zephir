@@ -17,7 +17,6 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
-
 use Zephir\Variable\Variable;
 
 use function count;
