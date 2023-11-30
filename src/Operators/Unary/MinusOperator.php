@@ -73,7 +73,6 @@ class MinusOperator extends AbstractOperator
                             "Cannot operate minus with variable of '" . $left->getType() . "' type"
                         );
                 }
-                break;
 
             default:
                 throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");

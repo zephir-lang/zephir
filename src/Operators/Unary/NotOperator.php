@@ -71,7 +71,6 @@ class NotOperator extends AbstractOperator
                     default:
                         throw new CompilerException('Unknown type: ' . $variable->getType(), $expression);
                 }
-                break;
 
             default:
                 throw new CompilerException('Unknown type: ' . $left->getType(), $expression);

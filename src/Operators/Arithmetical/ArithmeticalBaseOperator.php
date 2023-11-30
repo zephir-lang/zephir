@@ -141,7 +141,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
 
                     default:
                         throw new CompilerException(
@@ -149,7 +148,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
 
             case 'bool':
                 switch ($right->getType()) {
@@ -178,7 +176,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
 
             case 'double':
                 switch ($right->getType()) {
@@ -254,7 +251,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -262,14 +259,14 @@ class ArithmeticalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'string':
                 switch ($right->getType()) {
                     default:
                         throw new CompilerException('Operation is not supported between strings', $expression);
                 }
-                break;
+
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -342,7 +339,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -350,7 +347,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'char':
                         switch ($right->getType()) {
@@ -403,7 +400,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -411,7 +408,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -481,7 +478,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -489,7 +486,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'double':
                         switch ($right->getType()) {
@@ -571,7 +568,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -579,7 +576,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
@@ -627,9 +624,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
                         }
-                        break;
+
 
                     case 'variable':
                         switch ($right->getType()) {
@@ -657,7 +653,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         $expression
                                     );
                                 }
-                                break;
+
 
                             /* a(var) + a(x) */
                             case 'variable':
@@ -686,7 +682,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             ),
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(bool) */
                                     case 'bool':
@@ -699,7 +695,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(var) */
                                     case 'variable':
@@ -735,7 +731,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -743,12 +739,12 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
-                break;
+
 
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);

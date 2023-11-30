@@ -72,7 +72,6 @@ class IssetOperator extends AbstractOperator
                             'Variable type: ' . $variable->getType() . ' cannot be used as array',
                             $left['left']
                         );
-                        break;
                 }
 
                 if ('variable' === $variable->getType()) {
@@ -114,12 +113,12 @@ class IssetOperator extends AbstractOperator
                             $left['right'],
                             $compilationContext
                         );
-                        break;
+
 
                     default:
                         throw new CompilerException('[' . $left['right']['type'] . ']', $expression);
                 }
-                break;
+
 
             case 'property-access':
             case 'property-dynamic-access':
@@ -187,12 +186,12 @@ class IssetOperator extends AbstractOperator
                             default:
                                 throw new CompilerException('[' . $indexVariable->getType() . ']', $expression);
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException('[' . $expression['left']['right']['type'] . ']', $expression);
                 }
-                break;
+
 
             case 'property-string-access':
             case 'static-property-access':

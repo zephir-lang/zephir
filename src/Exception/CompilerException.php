@@ -31,7 +31,11 @@ class CompilerException extends RuntimeException
      * @param int                 $code     the Exception code [optional]
      * @param Exception|Throwable $previous the previous throwable used for the exception chaining [optional]
      */
-    public function __construct(string $message = '', $extra = null, $code = 0, $previous = null)
+    public function __construct(
+        string $message = '',
+        ?array $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null)
     {
         if (is_array($extra) && isset($extra['file'])) {
             $message .= ' in ' . $extra['file'] . ' on line ' . $extra['line'];
@@ -129,7 +133,7 @@ class CompilerException extends RuntimeException
         array $statement
     ): self {
         return new self(
-            "Operator '{$operator}' isn't supported for static variables and {$dataType} typed expressions",
+            "Operator '$operator' isn't supported for static variables and $dataType typed expressions",
             $statement
         );
     }

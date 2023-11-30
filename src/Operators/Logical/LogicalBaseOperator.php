@@ -95,7 +95,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -103,7 +103,7 @@ class LogicalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'bool':
                 switch ($right->getType()) {
@@ -156,7 +156,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -164,7 +164,7 @@ class LogicalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
             case 'double':
                 switch ($right->getType()) {
                     case 'double':
@@ -188,11 +188,11 @@ class LogicalBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'string':
                 throw new CompilerException('Operation is not supported between strings', $expression);
-                break;
+
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -246,7 +246,7 @@ class LogicalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -254,7 +254,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -313,7 +313,7 @@ class LogicalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -321,7 +321,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'double':
                         switch ($right->getType()) {
@@ -388,7 +388,7 @@ class LogicalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -396,7 +396,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'string':
                         switch ($right->getType()) {
@@ -475,7 +475,7 @@ class LogicalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -483,7 +483,7 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'variable':
                         $variableLeftCode = $compilationContext->backend->getVariableCode($variableLeft);
@@ -553,7 +553,7 @@ class LogicalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -561,12 +561,12 @@ class LogicalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
-                break;
+
 
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);

@@ -23,12 +23,12 @@ interface ExceptionInterface
      *
      * @return string
      */
-    public function getErrorRegion();
+    public function getErrorRegion(): string;
 
     /**
      * Gets extra info.
      *
-     * @return array
+     * @return array|null
      */
-    public function getExtra();
+    public function getExtra(): array | null;
 }

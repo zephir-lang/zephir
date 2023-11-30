@@ -134,7 +134,6 @@ class FetchOperator extends AbstractOperator
                     $expression,
                     $compilationContext
                 );
-                break;
 
             case 'property-access':
                 $exprVariable = new Expression($expression['right']['left']);

@@ -125,7 +125,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     ) . ' ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
                                     $expression
                                 );
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -133,14 +133,14 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
                     default:
                         throw new CompilerException(
                             "Cannot operate 'int' with '" . $right->getType() . "'",
                             $expression
                         );
                 }
-                break;
+
 
             case 'bool':
                 switch ($right->getType()) {
@@ -201,7 +201,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     ) . ') ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
                                     $expression
                                 );
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -209,7 +209,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -217,7 +217,7 @@ class BitwiseBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'double':
                 switch ($right->getType()) {
@@ -284,7 +284,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     ) . ') ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
                                     $expression
                                 );
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -293,7 +293,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -301,14 +301,14 @@ class BitwiseBaseOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'string':
                 switch ($right->getType()) {
                     default:
                         throw new CompilerException('Operation is not supported between strings', $expression);
                 }
-                break;
+
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -376,7 +376,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             ) . ' ' . $this->operator . ' (int) (zephir_get_numberval(' . $symbol . ')))',
                                             $expression
                                         );
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -385,7 +385,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -393,7 +393,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -459,7 +459,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             ) . ' ' . $this->operator . ' zephir_get_numberval(' . $symbol . '))',
                                             $expression
                                         );
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -468,7 +468,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -476,7 +476,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'double':
                         switch ($right->getType()) {
@@ -551,7 +551,6 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $expression
                                         );
 
-                                        break;
 
                                     default:
                                         throw new CompilerException(
@@ -560,7 +559,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -568,7 +567,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
@@ -597,7 +596,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                         $expression
                                     );
                                 }
-                                break;
+
 
                             /* a(var) + a(x) */
                             case 'variable':
@@ -621,7 +620,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(bool) */
                                     case 'bool':
@@ -633,7 +632,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(var) */
                                     case 'variable':
@@ -663,7 +662,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -671,12 +670,12 @@ class BitwiseBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
-                break;
+
 
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
@@ -712,7 +711,6 @@ class BitwiseBaseOperator extends AbstractOperator
                 break;
             default:
                 return null;
-                break;
         }
 
         switch ($expression['right']['type']) {
@@ -725,7 +723,6 @@ class BitwiseBaseOperator extends AbstractOperator
                 break;
             default:
                 return null;
-                break;
         }
 
         /*

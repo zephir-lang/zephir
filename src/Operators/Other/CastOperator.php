@@ -156,7 +156,7 @@ class CastOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -164,7 +164,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_LONG:
                 switch ($resolved->getType()) {
@@ -240,7 +240,7 @@ class CastOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -248,7 +248,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_DOUBLE:
                 switch ($resolved->getType()) {
@@ -334,7 +334,7 @@ class CastOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -342,7 +342,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_BOOL:
                 switch ($resolved->getType()) {
@@ -376,36 +376,31 @@ class CastOperator extends AbstractOperator
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
-                        switch ($symbolVariable->getType()) {
-                            case Types::T_INT:
-                            case Types::T_CHAR:
-                            case Types::T_UCHAR:
-                                return new CompiledExpression(
-                                    'bool',
-                                    sprintf('(zend_bool) %s', $symbolVariable->getName()),
-                                    $expression
-                                );
+                        return match ($symbolVariable->getType()) {
+                            Types::T_INT,
+                            Types::T_CHAR,
+                            Types::T_UCHAR => new CompiledExpression(
+                                'bool',
+                                sprintf('(zend_bool) %s', $symbolVariable->getName()),
+                                $expression
+                            ),
+                            Types::T_VARIABLE,
+                            Types::T_MIXED => new CompiledExpression(
+                                'bool',
+                                sprintf('zephir_get_boolval(%s)', $symbol),
+                                $expression
+                            ),
+                            default        => throw new CompilerException(
+                                sprintf(
+                                    'Cannot cast: %s(%s) to %s',
+                                    $resolved->getType(),
+                                    $symbolVariable->getType(),
+                                    $expression['left']
+                                ),
+                                $expression
+                            ),
+                        };
 
-                            case Types::T_VARIABLE:
-                            case Types::T_MIXED:
-                                return new CompiledExpression(
-                                    'bool',
-                                    sprintf('zephir_get_boolval(%s)', $symbol),
-                                    $expression
-                                );
-
-                            default:
-                                throw new CompilerException(
-                                    sprintf(
-                                        'Cannot cast: %s(%s) to %s',
-                                        $resolved->getType(),
-                                        $symbolVariable->getType(),
-                                        $expression['left']
-                                    ),
-                                    $expression
-                                );
-                        }
-                        break;
 
                     default:
                         throw new CompilerException(
@@ -413,7 +408,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_CHAR:
                 switch ($resolved->getType()) {
@@ -462,7 +457,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_STRING:
                 switch ($resolved->getType()) {
@@ -530,14 +525,14 @@ class CastOperator extends AbstractOperator
                                 );
                         }
 
-                        break;
+
                     default:
                         throw new CompilerException(
                             sprintf('Cannot cast: %s to %s', $resolved->getType(), $expression['left']),
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_ARRAY:
                 switch ($resolved->getType()) {
@@ -577,7 +572,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             case Types::T_OBJECT:
                 switch ($resolved->getType()) {
@@ -638,7 +633,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                 }
-                break;
+
 
             default:
                 throw new CompilerException(

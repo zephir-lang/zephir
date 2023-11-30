@@ -254,13 +254,13 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Allows to check whether a $key is defined.
      *
-     * @param mixed $key
+     * @param mixed $offset
      *
      * @return bool
      */
-    public function offsetExists($key): bool
+    public function offsetExists($offset): bool
     {
-        return isset($this->container[$key]) || array_key_exists($key, $this->container);
+        return isset($this->container[$offset]) || array_key_exists($offset, $this->container);
     }
 
     /**
@@ -294,40 +294,40 @@ class Config implements ArrayAccess, JsonSerializable
     /**
      * Sets a configuration value.
      *
-     * @param mixed $key
+     * @param mixed $offset
      * @param mixed $value
      */
     #[ReturnTypeWillChange]
-    public function offsetSet($key, $value): void
+    public function offsetSet($offset, $value): void
     {
-        if (!is_array($key)) {
+        if (!is_array($offset)) {
             $this->container[$key] = $value;
 
             return;
         }
 
-        $namespace = key($key);
-        $key       = current($key);
+        $namespace = key($offset);
+        $offset    = current($offset);
 
         if (!array_key_exists($namespace, $this->container)) {
             $this->container[$namespace] = [];
         }
 
-        $this->container[$namespace][$key] = $value;
+        $this->container[$namespace][$offset] = $value;
     }
 
     /**
      * Unsets a $key from internal container.
      *
-     * @param mixed $key
+     * @param mixed $offset
      *
      * @deprecated
      *
      */
     #[ReturnTypeWillChange]
-    public function offsetUnset($key): void
+    public function offsetUnset($offset): void
     {
-        unset($this->container[$key]);
+        unset($this->container[$offset]);
     }
 
     /**

@@ -120,7 +120,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -128,7 +128,7 @@ class DivOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'bool':
                 switch ($right->getType()) {
@@ -157,7 +157,7 @@ class DivOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'double':
                 switch ($right->getType()) {
@@ -221,7 +221,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ')',
                                     $expression
                                 );
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -230,7 +230,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -238,7 +238,7 @@ class DivOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'string':
             case 'array':
@@ -249,7 +249,7 @@ class DivOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -328,7 +328,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                                 $expression
                                             );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -337,7 +337,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -345,7 +345,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -422,7 +422,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                                 $expression
                                             );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -431,7 +431,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -439,7 +439,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'double':
                         switch ($right->getType()) {
@@ -514,7 +514,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -522,7 +522,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
@@ -616,7 +616,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -624,7 +624,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'variable':
                         $op1 = $compilationContext->backend->getVariableCode($variableLeft);
@@ -731,7 +731,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                                     $expression
                                                 );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -740,7 +740,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -748,12 +748,12 @@ class DivOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
-                break;
+
 
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);

@@ -106,7 +106,7 @@ abstract class AbstractOperator
      * @param CompilationContext $compilationContext
      * @param string             $type
      *
-     * @return Variable
+     * @return Variable|null
      */
     public function getExpectedComplexLiteral(
         CompilationContext $compilationContext,

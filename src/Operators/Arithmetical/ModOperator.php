@@ -121,7 +121,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                         $expression
                                     );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -129,7 +129,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -137,7 +137,7 @@ class ModOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'bool':
                 switch ($right->getType()) {
@@ -166,7 +166,7 @@ class ModOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'double':
                 switch ($right->getType()) {
@@ -238,7 +238,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                         $expression
                                     );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -248,7 +248,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -256,7 +256,7 @@ class ModOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'string':
             case 'array':
@@ -267,7 +267,7 @@ class ModOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -341,7 +341,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                                 $expression
                                             );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -351,7 +351,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -359,7 +359,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'bool':
                         switch ($right->getType()) {
@@ -449,7 +449,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                                 $expression
                                             );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -459,7 +459,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -467,7 +467,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'double':
                         switch ($right->getType()) {
@@ -541,7 +541,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                                 $expression
                                             );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -550,7 +550,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -558,7 +558,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'string':
                     case 'array':
@@ -581,7 +581,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     'zephir_safe_mod_zval_long(' . $op1 . ', ' . $op2 . ')',
                                     $expression
                                 );
-                                break;
+
 
                             case 'double':
                                 $op2 = $right->getCode();
@@ -591,7 +591,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     'zephir_safe_mod_zval_double(' . $op1 . ', ' . $op2 . ')',
                                     $expression
                                 );
-                                break;
+
 
                             /* a(var) + a(x) */
                             case 'variable':
@@ -612,7 +612,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(bool) */
                                     case 'bool':
@@ -622,7 +622,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     /* a(var) + a(var) */
                                     case 'variable':
@@ -655,7 +655,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -663,7 +663,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     case 'variable':
                         $op1 = $compilationContext->backend->getVariableCode($variableLeft);
@@ -709,7 +709,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             ) . ')',
                                             $expression
                                         );
-                                        break;
+
 
                                     case 'variable':
                                         $variableRight = $compilationContext->symbolTable->getVariableForRead(
@@ -763,7 +763,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                                     $expression
                                                 );
                                         }
-                                        break;
+
 
                                     default:
                                         throw new CompilerException(
@@ -772,7 +772,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                             $expression
                                         );
                                 }
-                                break;
+
 
                             default:
                                 throw new CompilerException(
@@ -780,7 +780,7 @@ class ModOperator extends ArithmeticalBaseOperator
                                     $expression
                                 );
                         }
-                        break;
+
 
                     default:
                         throw new CompilerException(
@@ -788,7 +788,7 @@ class ModOperator extends ArithmeticalBaseOperator
                             $expression
                         );
                 }
-                break;
+
 
             default:
                 throw new CompilerException(
