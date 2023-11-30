@@ -301,7 +301,7 @@ class Config implements ArrayAccess, JsonSerializable
     public function offsetSet($offset, $value): void
     {
         if (!is_array($offset)) {
-            $this->container[$key] = $value;
+            $this->container[$offset] = $value;
 
             return;
         }
@@ -364,19 +364,19 @@ class Config implements ArrayAccess, JsonSerializable
 
                 return;
             case JSON_ERROR_DEPTH:
-                $message = "{$message}: Maximum stack depth exceeded";
+                $message = "$message: Maximum stack depth exceeded";
                 break;
             case JSON_ERROR_STATE_MISMATCH:
-                $message = "{$message}: Underflow or the modes mismatch";
+                $message = "$message: Underflow or the modes mismatch";
                 break;
             case JSON_ERROR_CTRL_CHAR:
-                $message = "{$message}: Unexpected control character found";
+                $message = "$message: Unexpected control character found";
                 break;
             case JSON_ERROR_SYNTAX:
-                $message = "{$message}: Syntax error, malformed JSON";
+                $message = "$message: Syntax error, malformed JSON";
                 break;
             case JSON_ERROR_UTF8:
-                $message = "{$message}: Malformed UTF-8 characters, possibly incorrectly encoded";
+                $message = "$message: Malformed UTF-8 characters, possibly incorrectly encoded";
                 break;
             default:
                 break;
