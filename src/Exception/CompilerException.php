@@ -35,8 +35,8 @@ class CompilerException extends RuntimeException
         string $message = '',
         ?array $extra = null,
         int $code = 0,
-        Exception | Throwable $previous = null)
-    {
+        Exception | Throwable $previous = null
+    ) {
         if (is_array($extra) && isset($extra['file'])) {
             $message .= ' in ' . $extra['file'] . ' on line ' . $extra['line'];
         }

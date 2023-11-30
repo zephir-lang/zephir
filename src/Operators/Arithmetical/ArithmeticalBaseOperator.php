@@ -266,7 +266,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                     default:
                         throw new CompilerException('Operation is not supported between strings', $expression);
                 }
-
+                // no break
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -576,7 +576,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-
+                        // no break
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
