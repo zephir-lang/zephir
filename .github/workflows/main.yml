@@ -213,8 +213,7 @@ jobs:
             -v $(pwd)/res:/data/results/ \
             -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
             jetbrains/qodana-php:latest \
-            --show-report
-            //--show-report --baseline=qodana.sarif.json
+            --show-report --baseline=qodana.sarif.json
 
 
       - name: Upload Code Coverage Report
