@@ -266,7 +266,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                     default:
                         throw new CompilerException('Operation is not supported between strings', $expression);
                 }
-                // no break
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -339,7 +338,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $expression
                                         );
                                 }
-                                // no break
 
                             default:
                                 throw new CompilerException(
@@ -347,7 +345,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        // no break
 
                     case 'char':
                         switch ($right->getType()) {
@@ -576,11 +573,11 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                     $expression
                                 );
                         }
-                        // no break
+
 
                     case 'string':
                         throw new CompilerException("Cannot operate string variables'", $expression);
-                        // no break
+
                     case 'array':
                         switch ($right->getType()) {
                             /* a(var) + a(x) */
@@ -626,7 +623,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         );
                                 }
                         }
-
+                        // no break
 
                     case 'variable':
                         switch ($right->getType()) {
@@ -745,7 +742,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                     default:
                         throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
                 }
-
+            // no break
 
             default:
                 throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);

@@ -28,7 +28,8 @@
 
     <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength.TooLong"/>
-        <exclude name="PSR12.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR2.Classes.PropertyDeclaration.SpacingAfterType"/>
     </rule>
 
     <!--
