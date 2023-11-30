@@ -143,7 +143,8 @@ class AndOperator extends LogicalBaseOperator
                 'value' => null,
             ],
             default           => throw new CompilerException(
-                $left->getType(), $expression
+                $left->getType(),
+                $expression
             ),
         };
     }
