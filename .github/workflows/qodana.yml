@@ -1,7 +1,6 @@
-name: Zephir CI
+name: Qodana Analysis
 
 on:
-  schedule:
   push:
     paths-ignore:
       - '**.md'
