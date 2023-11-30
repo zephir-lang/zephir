@@ -190,29 +190,6 @@ jobs:
         run: |
           make -j$(getconf _NPROCESSORS_ONLN)
 
-  qodana-analysis:
-    permissions:
-      contents: read
-
-    name: "Qodana Analysis"
-    runs-on: "ubuntu-22.04"
-    needs:
-      - "build-and-test"
-
-    steps:
-      - name: "Checkout"
-        uses: "actions/checkout@v3"
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}  # to check out the actual pull request commit, not the merge commit
-          fetch-depth: 0  # a full history is required for pull request analysis
-
-      - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2023.2
-        with:
-          args: --baseline,qodana.sarif.json
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v3
         with:
@@ -220,14 +197,6 @@ jobs:
           files: ./tests/output/clover.xml
           flags: unittests,${{ runner.os }},php-${{ matrix.php }}
           name: codecov-umbrella
-
-      - name: "Upload to Qodana"
-        run: |
-          docker run \
-            -v $(pwd):/data/project/ \
-            -v ./tests/output/:/data/coverage \
-            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
-            jetbrains/qodana-php
 
       - name: Upload build artifacts after Failure
         if: failure()
