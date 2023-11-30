@@ -26,10 +26,9 @@
     <!-- Show progress of the run -->
     <arg value="p"/>
 
-    <rule ref="PSR2">
+    <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength.TooLong"/>
-        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
-        <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+        <exclude name="PSR12.Methods.MethodDeclaration.Underscore"/>
     </rule>
 
     <!--
