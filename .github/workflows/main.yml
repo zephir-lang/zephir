@@ -208,7 +208,6 @@ jobs:
       - name: "Qodana Analysis"
         run: |
           docker run \
-            -p 8080:8080 \
             -v $(pwd):/data/project \
             -v $(pwd)/tests/output/:/data/results/ \
             -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
