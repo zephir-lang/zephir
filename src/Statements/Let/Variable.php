@@ -157,29 +157,14 @@ class Variable
         switch ($resolvedExpr->getType()) {
             case 'variable':
             case 'array':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        if ($variable != $resolvedExpr->getCode()) {
-                            $symbolVariable->setMustInitNull(true);
-                            $compilationContext->symbolTable->mustGrownStack(true);
-
-                            /* Inherit the dynamic type data from the assigned value */
-                            $symbolVariable->setDynamicTypes('array');
-                            $symbolVariable->increaseVariantIfNull();
-                            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-
-                            $codePrinter->output(
-                                'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
-                                    $resolvedExpr,
-                                    $compilationContext
-                                ) . ');'
-                            );
-                        }
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
-                }
+                $this->doArrayAssignmentProcess(
+                    $statement,
+                    $resolvedExpr,
+                    $variable,
+                    $symbolVariable,
+                    $compilationContext,
+                    $codePrinter
+                );
                 break;
 
             default:
@@ -187,6 +172,49 @@ class Variable
                     "Cannot '" . $statement['operator'] . "' " . $resolvedExpr->getType() . ' for array type',
                     $resolvedExpr->getOriginal()
                 );
+        }
+    }
+
+    /**
+     * @param array              $statement
+     * @param CompiledExpression $resolvedExpr
+     * @param string             $variable
+     * @param ZephirVariable     $symbolVariable
+     * @param CompilationContext $compilationContext
+     * @param Printer            $codePrinter
+     *
+     * @return void
+     */
+    private function doArrayAssignmentProcess(
+        array $statement,
+        CompiledExpression $resolvedExpr,
+        string $variable,
+        ZephirVariable $symbolVariable,
+        CompilationContext $compilationContext,
+        Printer $codePrinter
+    ): void {
+        switch ($statement['operator']) {
+            case 'assign':
+                if ($variable != $resolvedExpr->getCode()) {
+                    $symbolVariable->setMustInitNull(true);
+                    $compilationContext->symbolTable->mustGrownStack(true);
+
+                    /* Inherit the dynamic type data from the assigned value */
+                    $symbolVariable->setDynamicTypes('array');
+                    $symbolVariable->increaseVariantIfNull();
+                    $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
+
+                    $codePrinter->output(
+                        'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
+                            $resolvedExpr,
+                            $compilationContext
+                        ) . ');'
+                    );
+                }
+                break;
+
+            default:
+                throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
         }
     }
 
@@ -492,29 +520,14 @@ class Variable
                     case 'variable':
                     case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $exprVariableCode = $compilationContext->backend->getVariableCode($itemVariable);
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
-                                break;
-                            case 'add-assign':
-                                $codePrinter->output(
-                                    $variable . ' += zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-                            case 'sub-assign':
-                                $codePrinter->output(
-                                    $variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-                            case 'mul-assign':
-                                $codePrinter->output(
-                                    $variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $this->processDoNumericAssignmentMixed(
+                            $compilationContext,
+                            $itemVariable,
+                            $statement,
+                            $codePrinter,
+                            $variable,
+                            $itemVariable
+                        );
                         break;
 
                     default:
@@ -729,37 +742,18 @@ class Variable
                     case 'variable':
                     case 'mixed':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $exprVariable     = $compilationContext->symbolTable->getVariableForWrite(
+                        $exprVariable = $compilationContext->symbolTable->getVariableForWrite(
                             $resolvedExpr->resolve(null, $compilationContext),
                             $compilationContext
                         );
-                        $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
-                                break;
-
-                            case 'add-assign':
-                                $codePrinter->output(
-                                    $variable . ' += zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-
-                            case 'sub-assign':
-                                $codePrinter->output(
-                                    $variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-
-                            case 'mul-assign':
-                                $codePrinter->output(
-                                    $variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');'
-                                );
-                                break;
-
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $this->processDoNumericAssignmentMixed(
+                            $compilationContext,
+                            $exprVariable,
+                            $statement,
+                            $codePrinter,
+                            $variable,
+                            $itemVariable
+                        );
                         break;
 
                     default:
@@ -1109,27 +1103,14 @@ class Variable
                         break;
 
                     case 'div-assign':
-                        $symbolVariable->setDynamicTypes('double');
-                        if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-                            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                                'double',
-                                $compilationContext
-                            );
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
-                            $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignDouble(
-                                $symbolVariable,
-                                $tempVariable,
-                                $compilationContext
-                            );
-                        } else {
-                            $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignDouble(
-                                $symbolVariable,
-                                $resolvedExpr->getCode(),
-                                $compilationContext
-                            );
-                        }
+                        $this->processDoVariableAssignmentAssign(
+                            $symbolVariable,
+                            $readDetector,
+                            $variable,
+                            $resolvedExpr,
+                            $compilationContext,
+                            $codePrinter
+                        );
                         break;
 
                     default:
@@ -1209,27 +1190,14 @@ class Variable
                         break;
 
                     case 'assign':
-                        $symbolVariable->setDynamicTypes('double');
-                        if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
-                            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                                'double',
-                                $compilationContext
-                            );
-                            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
-                            $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignDouble(
-                                $symbolVariable,
-                                $tempVariable,
-                                $compilationContext
-                            );
-                        } else {
-                            $symbolVariable->initVariant($compilationContext);
-                            $compilationContext->backend->assignDouble(
-                                $symbolVariable,
-                                $resolvedExpr->getCode(),
-                                $compilationContext
-                            );
-                        }
+                        $this->processDoVariableAssignmentAssign(
+                            $symbolVariable,
+                            $readDetector,
+                            $variable,
+                            $resolvedExpr,
+                            $compilationContext,
+                            $codePrinter
+                        );
                         break;
                     default:
                         throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
@@ -1303,29 +1271,14 @@ class Variable
                 break;
 
             case 'array':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        if ($variable != $resolvedExpr->getCode()) {
-                            $symbolVariable->setMustInitNull(true);
-                            $compilationContext->symbolTable->mustGrownStack(true);
-
-                            /* Inherit the dynamic type data from the assigned value */
-                            $symbolVariable->setDynamicTypes('array');
-                            $symbolVariable->increaseVariantIfNull();
-                            $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-
-                            $codePrinter->output(
-                                'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
-                                    $resolvedExpr,
-                                    $compilationContext
-                                ) . ');'
-                            );
-                        }
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr, $resolvedExpr->getOriginal());
-                }
+                $this->doArrayAssignmentProcess(
+                    $statement,
+                    $resolvedExpr,
+                    $variable,
+                    $symbolVariable,
+                    $compilationContext,
+                    $codePrinter
+                );
                 break;
 
             case 'variable':
@@ -1431,57 +1384,25 @@ class Variable
                         break;
 
                     case 'array':
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                if ($variable != $resolvedExpr->getCode()) {
-                                    $symbolVariable->setMustInitNull(true);
-                                    $compilationContext->symbolTable->mustGrownStack(true);
-
-                                    /* Inherit the dynamic type data from the assigned value */
-                                    $symbolVariable->setDynamicTypes('array');
-                                    $symbolVariable->increaseVariantIfNull();
-                                    $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-
-                                    $codePrinter->output(
-                                        'ZEPHIR_CPY_WRT(' . $symbol . ', ' . $compilationContext->backend->resolveValue(
-                                            $resolvedExpr,
-                                            $compilationContext
-                                        ) . ');'
-                                    );
-                                }
-                                break;
-
-                            default:
-                                throw new IllegalOperationException(
-                                    $statement,
-                                    $resolvedExpr,
-                                    $resolvedExpr->getOriginal()
-                                );
-                        }
+                        $this->doArrayAssignmentProcess(
+                            $statement,
+                            $resolvedExpr,
+                            $variable,
+                            $symbolVariable,
+                            $compilationContext,
+                            $codePrinter
+                        );
                         break;
 
                     case 'variable':
                         switch ($statement['operator']) {
                             case 'assign':
-                                if ($itemVariable->getName() != $variable) {
-                                    $symbolVariable->setMustInitNull(true);
-                                    $compilationContext->symbolTable->mustGrownStack(true);
-
-                                    /* Inherit the dynamic type data from the assigned value */
-                                    $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
-
-                                    $symbolVariable->setClassTypes($itemVariable->getClassTypes());
-                                    $symbolVariable->increaseVariantIfNull();
-
-                                    $compilationContext->backend->copyOnWrite(
-                                        $symbolVariable,
-                                        $itemVariable,
-                                        $compilationContext
-                                    );
-                                    if ($itemVariable->isTemporal()) {
-                                        $itemVariable->setIdle(true);
-                                    }
-                                }
+                                $this->processDoVariableAssignmentVariableString(
+                                    $itemVariable,
+                                    $variable,
+                                    $symbolVariable,
+                                    $compilationContext
+                                );
                                 break;
 
                             case 'concat-assign':
@@ -1521,24 +1442,12 @@ class Variable
                     case 'string':
                         switch ($statement['operator']) {
                             case 'assign':
-                                if ($itemVariable->getName() != $variable) {
-                                    $symbolVariable->setMustInitNull(true);
-                                    $compilationContext->symbolTable->mustGrownStack(true);
-
-                                    /* Inherit the dynamic type data from the assigned value */
-                                    $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
-                                    $symbolVariable->setClassTypes($itemVariable->getClassTypes());
-                                    $symbolVariable->increaseVariantIfNull();
-
-                                    $compilationContext->backend->copyOnWrite(
-                                        $symbolVariable,
-                                        $itemVariable,
-                                        $compilationContext
-                                    );
-                                    if ($itemVariable->isTemporal()) {
-                                        $itemVariable->setIdle(true);
-                                    }
-                                }
+                                $this->processDoVariableAssignmentVariableString(
+                                    $itemVariable,
+                                    $variable,
+                                    $symbolVariable,
+                                    $compilationContext
+                                );
                                 break;
 
                             case 'concat-assign':
@@ -1565,6 +1474,128 @@ class Variable
 
             default:
                 throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+        }
+    }
+
+    /**
+     * @param CompilationContext  $compilationContext
+     * @param ZephirVariable|bool $exprVariable
+     * @param array               $statement
+     * @param Printer             $codePrinter
+     * @param string              $variable
+     * @param ZephirVariable|bool $itemVariable
+     *
+     * @return void
+     */
+    private function processDoNumericAssignmentMixed(
+        CompilationContext $compilationContext,
+        ZephirVariable | bool $exprVariable,
+        array $statement,
+        Printer $codePrinter,
+        string $variable,
+        ZephirVariable | bool $itemVariable
+    ): void {
+        $exprVariableCode = $compilationContext->backend->getVariableCode($exprVariable);
+        switch ($statement['operator']) {
+            case 'assign':
+                $codePrinter->output($variable . ' = zephir_get_numberval(' . $exprVariableCode . ');');
+                break;
+
+            case 'add-assign':
+                $codePrinter->output(
+                    $variable . ' += zephir_get_numberval(' . $exprVariableCode . ');'
+                );
+                break;
+
+            case 'sub-assign':
+                $codePrinter->output(
+                    $variable . ' -= zephir_get_numberval(' . $exprVariableCode . ');'
+                );
+                break;
+
+            case 'mul-assign':
+                $codePrinter->output(
+                    $variable . ' *= zephir_get_numberval(' . $exprVariableCode . ');'
+                );
+                break;
+
+            default:
+                throw new IllegalOperationException($statement, $itemVariable);
+        }
+    }
+
+    /**
+     * @param ZephirVariable     $symbolVariable
+     * @param ReadDetector       $readDetector
+     * @param string             $variable
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param Printer            $codePrinter
+     *
+     * @return void
+     */
+    private function processDoVariableAssignmentAssign(
+        ZephirVariable $symbolVariable,
+        ReadDetector $readDetector,
+        string $variable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        Printer $codePrinter
+    ): void {
+        $symbolVariable->setDynamicTypes('double');
+        if ($readDetector->detect($variable, $resolvedExpr->getOriginal())) {
+            $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'double',
+                $compilationContext
+            );
+            $codePrinter->output($tempVariable->getName() . ' = ' . $resolvedExpr->getCode() . ';');
+            $symbolVariable->initVariant($compilationContext);
+            $compilationContext->backend->assignDouble(
+                $symbolVariable,
+                $tempVariable,
+                $compilationContext
+            );
+        } else {
+            $symbolVariable->initVariant($compilationContext);
+            $compilationContext->backend->assignDouble(
+                $symbolVariable,
+                $resolvedExpr->getCode(),
+                $compilationContext
+            );
+        }
+    }
+
+    /**
+     * @param ZephirVariable|bool $itemVariable
+     * @param string              $variable
+     * @param ZephirVariable      $symbolVariable
+     * @param CompilationContext  $compilationContext
+     *
+     * @return void
+     */
+    private function processDoVariableAssignmentVariableString(
+        ZephirVariable | bool $itemVariable,
+        string $variable,
+        ZephirVariable $symbolVariable,
+        CompilationContext $compilationContext
+    ): void {
+        if ($itemVariable->getName() != $variable) {
+            $symbolVariable->setMustInitNull(true);
+            $compilationContext->symbolTable->mustGrownStack(true);
+
+            /* Inherit the dynamic type data from the assigned value */
+            $symbolVariable->setDynamicTypes(array_keys($itemVariable->getDynamicTypes()));
+            $symbolVariable->setClassTypes($itemVariable->getClassTypes());
+            $symbolVariable->increaseVariantIfNull();
+
+            $compilationContext->backend->copyOnWrite(
+                $symbolVariable,
+                $itemVariable,
+                $compilationContext
+            );
+            if ($itemVariable->isTemporal()) {
+                $itemVariable->setIdle(true);
+            }
         }
     }
 }
