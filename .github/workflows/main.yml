@@ -210,11 +210,10 @@ jobs:
           docker run \
             -p 8080:8080 \
             -v $(pwd):/data/project \
-            -v $(pwd)/res:/data/results/ \
+            -v $(pwd)/tests/output/:/data/results/ \
             -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
             jetbrains/qodana-php:latest \
             --show-report --baseline=qodana.sarif.json
-
 
       - name: Upload Code Coverage Report
         uses: codecov/codecov-action@v3
