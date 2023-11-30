@@ -39,7 +39,24 @@ class ShortTernaryOperator extends AbstractOperator
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $returnVariable = $this->processTenary($compilationContext, $expression);
+        /**
+         * This variable is used to check if the compound and expression is evaluated as true or false:
+         * Ensure that newly allocated variables are local-only (setReadOnly)
+         */
+        $this->setReadOnly(false);
+        $returnVariable = $this->getExpected($compilationContext, $expression, false);
+        /* Make sure that passed variables (passed symbol variables) are promoted */
+        $returnVariable->setLocalOnly(false);
+
+        if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
+            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext
+            );
+            if ($returnVariable->isTemporal()) {
+                $returnVariable->skipInitVariant(2);
+            }
+        }
 
         $ifBuilder = new IfStatementBuilder(
             new UnaryOperatorBuilder(

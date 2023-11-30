@@ -237,38 +237,4 @@ abstract class AbstractOperator
     {
         $this->readOnly = $readOnly;
     }
-
-    /**
-     * @param CompilationContext $compilationContext
-     * @param array              $expression
-     *
-     * @return Variable|null
-     */
-    protected function processTenary(
-        CompilationContext $compilationContext,
-        array $expression
-    ): ?Variable {
-        /**
-         * This variable is used to check if the compound and expression is
-         * evaluated as true or false:
-         *
-         * Ensure that newly allocated variables are local-only (setReadOnly)
-         */
-        $this->setReadOnly(false);
-        $returnVariable = $this->processTenary($compilationContext, $expression, false);
-        /* Make sure that passed variables (passed symbol variables) are promoted */
-        $returnVariable->setLocalOnly(false);
-
-        if ('variable' != $returnVariable->getType() || 'return_value' == $returnVariable->getName()) {
-            $returnVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                'variable',
-                $compilationContext
-            );
-            if ($returnVariable->isTemporal()) {
-                $returnVariable->skipInitVariant(2);
-            }
-        }
-
-        return $returnVariable;
-    }
 }
