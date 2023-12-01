@@ -175,7 +175,7 @@ jobs:
       - name: Unit Tests (Stub Extension)
         shell: pwsh
         run: |
-          php vendor/bin/phpunit -c phpunit.ext.xml --coverage-php ./tests/output/ext-clover.xml
+          php vendor/bin/phpunit -c phpunit.ext.xml
         env:
           XDEBUG_MODE: coverage
 
@@ -189,7 +189,7 @@ jobs:
         uses: "actions/upload-artifact@v3"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
-          path: "tests/output/*.xml"
+          path: "tests/output/clover.xml"
 
       - name: Black-box Testing
         if: always() && runner.os != 'Windows'
