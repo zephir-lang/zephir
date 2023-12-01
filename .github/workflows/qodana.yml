@@ -26,10 +26,10 @@ jobs:
         with:
           fetch-depth: 5
 
-      - name: Install PHP 8.0
+      - name: Install PHP 8.1
         uses: shivammathur/setup-php@develop
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
