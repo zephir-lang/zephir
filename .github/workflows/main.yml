@@ -213,7 +213,14 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: "Display structure of downloaded files"
+      - name: 'Qodana Scan'
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: --baseline,qodana.sarif.json
+
+      - name: "Create download folder"
         run: |
           mkdir -p reports
 
