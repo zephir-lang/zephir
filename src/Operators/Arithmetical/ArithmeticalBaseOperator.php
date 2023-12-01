@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Arithmetical;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
+use Zephir\Exception as ZephirException;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
@@ -876,5 +878,32 @@ class ArithmeticalBaseOperator extends AbstractOperator
                 $expression
             ),
         };
+    }
+
+    /**
+     * @param array              $expression
+     * @param CompilationContext $compilationContext
+     *
+     * @return array
+     * @throws ReflectionException
+     * @throws ZephirException
+     */
+    protected function preCompileChecks(
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        $this->checkLeft($expression);
+        $this->checkRight($expression);
+
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly(true);
+        $left = $leftExpr->compile($compilationContext);
+
+        $rightExpr = new Expression($expression['right']);
+        $rightExpr->setReadOnly(true);
+        $right = $rightExpr->compile($compilationContext);
+
+        $compilationContext->headersManager->add('kernel/operators');
+        return [$left, $right];
     }
 }

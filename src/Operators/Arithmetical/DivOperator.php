@@ -36,18 +36,7 @@ class DivOperator extends ArithmeticalBaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        $this->checkLeft($expression);
-        $this->checkRight($expression);
-
-        $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly(true);
-        $left = $leftExpr->compile($compilationContext);
-
-        $rightExpr = new Expression($expression['right']);
-        $rightExpr->setReadOnly(true);
-        $right = $rightExpr->compile($compilationContext);
-
-        $compilationContext->headersManager->add('kernel/operators');
+        [$left, $right] = $this->preCompileChecks($expression, $compilationContext);
 
         switch ($left->getType()) {
             case 'int':

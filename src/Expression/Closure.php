@@ -113,30 +113,14 @@ class Closure
             $expression,
             $staticVariables
         );
-        $classDefinition->addMethod($classMethod, $block);
 
-        $compilationContext->headersManager->add('kernel/object');
-
-        if ($this->expecting) {
-            if ($this->expectingVariable) {
-                $symbolVariable = $this->expectingVariable;
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                    'variable',
-                    $compilationContext,
-                    $expression
-                );
-            }
-        } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                'variable',
-                $compilationContext,
-                $expression
-            );
-        }
-
-        $symbolVariable->initVariant($compilationContext);
-        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
+        $symbolVariable = $this->generateClosure(
+            $classDefinition,
+            $classMethod,
+            $block,
+            $compilationContext,
+            $expression
+        );
         $compilationContext->headersManager->add('kernel/object');
 
         foreach ($staticVariables as $var) {
@@ -212,5 +196,49 @@ class Closure
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * @param Definition $classDefinition
+     * @param Method $classMethod
+     * @param mixed $block
+     * @param CompilationContext $compilationContext
+     * @param array $expression
+     *
+     * @return Variable|null
+     */
+    protected function generateClosure(
+        Definition $classDefinition,
+        Method $classMethod,
+        mixed $block,
+        CompilationContext $compilationContext,
+        array $expression
+    ): ?Variable {
+        $classDefinition->addMethod($classMethod, $block);
+
+        $compilationContext->headersManager->add('kernel/object');
+
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
+            }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
+        }
+
+        $symbolVariable->initVariant($compilationContext);
+        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
+
+        return $symbolVariable;
     }
 }

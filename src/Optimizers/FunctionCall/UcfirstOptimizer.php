@@ -16,7 +16,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 
 use function count;
@@ -33,9 +33,8 @@ class UcfirstOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @return false|CompiledExpression
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -47,22 +46,12 @@ class UcfirstOptimizer extends OptimizerAbstract
             return false;
         }
 
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
+        [$symbolVariable, $resolvedParams, $symbol] = $this->processStringOptimizer(
+            $call,
+            $context,
+            $expression
+        );
 
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        $this->checkNotVariableString($symbolVariable, $expression);
-
-        $context->headersManager->add('kernel/string');
-        $symbolVariable->setDynamicTypes('string');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_ucfirst(' . $symbol . ', ' . $resolvedParams[0] . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

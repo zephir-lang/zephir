@@ -16,7 +16,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 
 use function count;
@@ -28,6 +28,8 @@ use function count;
  */
 class ArrayKeysOptimizer extends OptimizerAbstract
 {
+    protected int $parameterCount = 1;
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -35,7 +37,8 @@ class ArrayKeysOptimizer extends OptimizerAbstract
      *
      * @return bool|CompiledExpression|mixed
      *
-     * @throws CompilerException
+     * @return false|CompiledExpression
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -43,7 +46,7 @@ class ArrayKeysOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != count($expression['parameters'])) {
+        if ($this->parameterCount !== count($expression['parameters'])) {
             return false;
         }
 
@@ -65,8 +68,24 @@ class ArrayKeysOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_array_keys(' . $symbol . ', ' . $resolvedParams[0] . ');');
+
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, $resolvedParams): string
+    {
+        return sprintf(
+            'zephir_array_keys(%s, %s);',
+            $symbol,
+            $resolvedParams[0]
+        );
     }
 }

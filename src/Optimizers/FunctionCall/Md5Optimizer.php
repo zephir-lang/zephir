@@ -47,23 +47,12 @@ class Md5Optimizer extends OptimizerAbstract
             return false;
         }
 
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
+        [$symbolVariable, $resolvedParams, $symbol] = $this->processStringOptimizer(
+            $call,
+            $context,
+            $expression
+        );
 
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        $this->checkNotVariableString($symbolVariable, $expression);
-
-        $context->headersManager->add('kernel/string');
-        $symbolVariable->setDynamicTypes('string');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-        $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_md5(' . $symbol . ', ' . $resolvedParams[0] . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
