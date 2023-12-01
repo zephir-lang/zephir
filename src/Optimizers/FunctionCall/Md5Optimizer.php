@@ -13,12 +13,48 @@ declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
+use Zephir\Call;
+use Zephir\CompilationContext;
+use Zephir\CompiledExpression;
+use Zephir\Exception\CompilerException;
+use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
+
 /**
  * MD5Optimizer.
  *
  * Optimizes calls to 'md5' using internal function
  */
-class Md5Optimizer extends UcfirstOptimizer
+class Md5Optimizer extends OptimizerAbstract
 {
-    protected string $zephirMethod = 'zephir_md5';
+    /**
+     * @param array              $expression
+     * @param Call               $call
+     * @param CompilationContext $context
+     *
+     * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
+     */
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
+
+        if (1 != count($expression['parameters'])) {
+            return false;
+        }
+
+        [$symbolVariable, $resolvedParams, $symbol] = $this->processStringOptimizer(
+            $call,
+            $context,
+            $expression
+        );
+
+        $context->codePrinter->output('zephir_md5(' . $symbol . ', ' . $resolvedParams[0] . ');');
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
 }
