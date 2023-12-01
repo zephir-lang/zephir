@@ -17,6 +17,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
 
 use function count;
 
@@ -27,6 +28,11 @@ use function count;
  */
 class JsonDecodeOptimizer extends OptimizerAbstract
 {
+    /**
+     * @var string
+     */
+    protected string $zephirMethod = 'zephir_json_decode';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -47,10 +53,7 @@ class JsonDecodeOptimizer extends OptimizerAbstract
 
         $symbolVariable = $call->getSymbolVariable();
         $this->checkNotVariable($symbolVariable, $expression);
-        if (!$symbolVariable) {
-            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
-            $symbolVariable->initVariant($context);
-        }
+        $symbolVariable = $this->checkSymbolVariable($symbolVariable, $context);
 
         $context->headersManager->add('kernel/string');
 
@@ -76,5 +79,22 @@ class JsonDecodeOptimizer extends OptimizerAbstract
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return Variable|null
+     */
+    protected function checkSymbolVariable(
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): ?Variable {
+        if (!$symbolVariable) {
+            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
+            $symbolVariable->initVariant($context);
+        }
+        return $symbolVariable;
     }
 }

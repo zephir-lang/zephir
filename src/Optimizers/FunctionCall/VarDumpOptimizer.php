@@ -51,7 +51,7 @@ class VarDumpOptimizer extends OptimizerAbstract
                  */
                 $type = match ($resolvedParam->getType()) {
                     Types::T_ARRAY => 'array',
-                    default => 'variable',
+                    default        => 'variable',
                 };
 
                 $variable = $context->symbolTable->addTemp($type, $context);
