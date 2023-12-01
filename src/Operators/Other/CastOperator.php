@@ -592,7 +592,7 @@ class CastOperator extends AbstractOperator
 
                         /**
                          * zephir_convert_to_object use zval variable
-                         * before use with it we create a new variable and assign value of literal.
+                         * before use it we create a new variable and assign value of literal.
                          */
                         $let                  = new LetVariable();
                         $original             = $resolved->getOriginal();

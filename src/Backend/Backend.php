@@ -938,7 +938,7 @@ class Backend
             $groupVariables = [];
 
             /**
-             * @var Variable[]
+             * @var Variable[] $variable
              */
             foreach ($variables as $variable) {
                 $nextCode = $this->generateInitCode($groupVariables, $type, $pointer, $variable);

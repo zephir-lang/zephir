@@ -18,6 +18,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 /**
@@ -69,23 +70,18 @@ class PropertyDynamicAccess
                 );
         }
 
-        switch ($propertyAccess['right']['type']) {
-            case 'variable':
-                $propertyVariable = $compilationContext->symbolTable->getVariableForRead(
-                    $propertyAccess['right']['value'],
-                    $compilationContext,
-                    $expression
-                );
-                break;
-            case 'string':
-                $propertyVariable = null;
-                break;
-            default:
-                throw new CompilerException(
-                    'Variable type: ' . $propertyAccess['right']['type'] . ' cannot be used as object',
-                    $propertyAccess['left']
-                );
-        }
+        $propertyVariable = match ($propertyAccess['right']['type']) {
+            Types::T_VARIABLE => $compilationContext->symbolTable->getVariableForRead(
+                $propertyAccess['right']['value'],
+                $compilationContext,
+                $expression
+            ),
+            Types::T_STRING   => null,
+            default           => throw new CompilerException(
+                'Variable type: ' . $propertyAccess['right']['type'] . ' cannot be used as object',
+                $propertyAccess['left']
+            ),
+        };
 
         /**
          * Resolves the symbol that expects the value
@@ -144,8 +140,8 @@ class PropertyDynamicAccess
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
      *
-     * @param bool     $expecting
-     * @param Variable $expectingVariable
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
      */
     public function setExpectReturn($expecting, Variable $expectingVariable = null): void
     {

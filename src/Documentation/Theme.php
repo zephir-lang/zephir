@@ -148,9 +148,7 @@ class Theme
             mkdir($outputStt, 0777, true);
         }
 
-        if ($this->extendedTheme) {
-            $this->extendedTheme->buildStaticDirectory();
-        }
+        $this->extendedTheme?->buildStaticDirectory();
 
         $themeStt = $this->getThemePath('static');
 

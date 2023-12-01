@@ -46,7 +46,7 @@ class SymbolTable
     protected Globals $globalsManager;
 
     /**
-     * @var LocalContextPass
+     * @var LocalContextPass|null
      */
     protected ?LocalContextPass $localContext = null;
 
@@ -539,9 +539,9 @@ class SymbolTable
     /**
      * Return a variable in the symbol table, it will be used for a read operation.
      *
-     * @param string             $name
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param string                  $name
+     * @param CompilationContext|null $compilationContext
+     * @param array|null              $statement
      *
      * @return Variable
      *
@@ -616,8 +616,7 @@ class SymbolTable
                     $initBranches = $variable->getInitBranches();
 
                     $currentBranch = $compilationContext->branchManager->getCurrentBranch();
-                    /** @var Branch[] $branches */
-                    $branches = array_reverse($initBranches);
+                    $branches      = array_reverse($initBranches);
 
                     if (1 == count($branches)) {
                         if (Branch::TYPE_CONDITIONAL_TRUE == $branches[0]->getType()) {
@@ -786,7 +785,7 @@ class SymbolTable
      *
      * @param string             $name
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array|null         $statement
      *
      * @return bool|Variable
      *
@@ -946,10 +945,10 @@ class SymbolTable
     /**
      * Register a variable as temporal.
      *
-     * @param string             $type
-     * @param string             $location
-     * @param Variable           $variable
-     * @param CompilationContext $compilationContext
+     * @param string                  $type
+     * @param string                  $location
+     * @param Variable                $variable
+     * @param CompilationContext|null $compilationContext
      */
     protected function registerTempVariable(
         $type,

@@ -23,7 +23,6 @@ trait RemoveOptionsTrait
 {
     protected function removeOptions(array $names): void
     {
-        /** @var InputDefinition $definition */
         $definition = $this->getDefinition();
 
         $filtered = array_filter(

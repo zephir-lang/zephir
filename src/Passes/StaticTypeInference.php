@@ -226,6 +226,12 @@ class StaticTypeInference
             case 'closure':
             case 'closure-arrow':
             case 'static-constant-access':
+            case 'irange':
+            case 'erange':
+            case 'empty-array':
+            case 'clone':
+            case 'require':
+            case 'require_once':
                 return 'variable';
 
             case 'reference':
@@ -296,13 +302,12 @@ class StaticTypeInference
 
                 return 'int';
 
-            case 'and':
-            case 'or':
-                return 'bool';
 
             case 'concat':
                 return 'string';
 
+            case 'and':
+            case 'or':
             case 'equals':
             case 'identical':
             case 'not-identical':
@@ -312,10 +317,6 @@ class StaticTypeInference
             case 'greater-equal':
             case 'less-equal':
                 return 'bool';
-
-            case 'irange':
-            case 'erange':
-                return 'variable';
 
             case 'typeof':
                 $this->passExpression($expression['left']);
@@ -329,6 +330,11 @@ class StaticTypeInference
 
             case 'not':
             case 'bitwise_not':
+            case 'isset':
+            case 'empty':
+            case 'instanceof':
+            case 'likely':
+            case 'unlikely':
                 $this->passExpression($expression['left']);
 
                 return 'bool';
@@ -343,9 +349,6 @@ class StaticTypeInference
             case 'array':
                 $this->passArray($expression);
 
-                return 'variable';
-
-            case 'empty-array':
                 return 'variable';
 
             case 'new':
@@ -369,15 +372,6 @@ class StaticTypeInference
 
                 return 'bool';
 
-            case 'isset':
-            case 'empty':
-            case 'instanceof':
-            case 'likely':
-            case 'unlikely':
-                $this->passExpression($expression['left']);
-
-                return 'bool';
-
             case 'list':
                 return $this->passExpression($expression['left']);
 
@@ -396,11 +390,6 @@ class StaticTypeInference
 
             case 'constant':
                 return null;
-
-            case 'clone':
-            case 'require':
-            case 'require_once':
-                return 'variable';
 
             case 'ternary':
             case 'short-ternary':
@@ -435,9 +424,6 @@ class StaticTypeInference
                 case 'object-property-array-index':
                 case 'object-property-append':
                 case 'static-property-access':
-                    $this->markVariable($assignment['variable'], 'variable');
-                    break;
-
                 case 'variable-append':
                     $this->markVariable($assignment['variable'], 'variable');
                     break;

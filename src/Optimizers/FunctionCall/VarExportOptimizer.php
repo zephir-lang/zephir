@@ -19,6 +19,7 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
+use Zephir\Types\Types;
 
 /**
  * VarExportOptimizer.
@@ -58,14 +59,10 @@ class VarExportOptimizer extends OptimizerAbstract
             /*
              * Complex expressions require a temporary variable
              */
-            switch ($resolvedParam->getType()) {
-                case 'array':
-                    $type = 'array';
-                    break;
-                default:
-                    $type = 'variable';
-                    break;
-            }
+            $type = match ($resolvedParam->getType()) {
+                Types::T_ARRAY => 'array',
+                default => 'variable',
+            };
 
             $variable = $context->symbolTable->addTemp($type, $context);
             $variable->initVariant($context);

@@ -390,7 +390,7 @@ class StaticCall extends Call
         $codePrinter = $compilationContext->codePrinter;
 
         /**
-         * Call static methods must grown the stack
+         * Call static methods must grow the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -502,7 +502,7 @@ class StaticCall extends Call
         }
 
         /**
-         * Call static methods must grown the stack
+         * Call static methods must grow the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -768,7 +768,7 @@ class StaticCall extends Call
         $classCe     = $classDefinition->getClassEntry($compilationContext);
 
         /**
-         * Call static methods must grown the stack
+         * Call static methods must grow the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 

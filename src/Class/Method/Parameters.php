@@ -18,6 +18,8 @@ use Countable;
 use Iterator;
 use Zephir\Exception\CompilerException;
 
+use Zephir\Types\Types;
+
 use function count;
 
 /**
@@ -82,19 +84,14 @@ class Parameters implements Countable, Iterator, ArrayAccess
             $name     = $parameter['name'];
             $dataType = $parameter['data-type'] ?? 'variable';
 
-            switch ($dataType) {
-                case 'object':
-                case 'callable':
-                case 'resource':
-                case 'variable':
-                case 'mixed':
-                    $parameters[] = $isMethodInternal ? $name : '&' . $name;
-                    break;
-
-                default:
-                    $parameters[] = ($isMethodInternal ? $name : '&' . $name) . '_param';
-                    break;
-            }
+            $parameters[] = match ($dataType) {
+                Types::T_OBJECT,
+                Types::T_CALLABLE,
+                Types::T_RESOURCE,
+                Types::T_VARIABLE,
+                Types::T_MIXED => $isMethodInternal ? $name : '&' . $name,
+                default        => ($isMethodInternal ? $name : '&' . $name) . '_param',
+            };
 
             if (isset($parameter['default'])) {
                 $this->optionalParameters[] = $parameter;

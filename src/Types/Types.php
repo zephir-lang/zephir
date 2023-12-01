@@ -23,12 +23,15 @@ final class Types
 {
     public const T_ARRAY     = 'array';
     public const T_BOOL      = 'bool';
+    public const T_BOOLEAN   = 'boolean';
     public const T_CALLABLE  = 'callable';
     public const T_CHAR      = 'char';
     public const T_DOUBLE    = 'double';
     public const T_FALSE     = 'false';
     public const T_FLOAT     = 'float';
+    public const T_HASH      = 'hash';
     public const T_INT       = 'int';
+    public const T_INTEGER   = 'integer';
     public const T_ISTRING   = 'istring';
     public const T_ITERABLE  = 'iterable';
     public const T_LONG      = 'long';
@@ -157,7 +160,7 @@ final class Types
      */
     private function areReturnTypesBoolCompatible(array $types): bool
     {
-        return $this->areReturnTypesCompatible($types, [self::T_BOOL]);
+        return $this->areReturnTypesCompatible($types, [self::T_BOOL, self::T_BOOLEAN]);
     }
 
     /**
@@ -234,6 +237,7 @@ final class Types
             $types,
             [
                 self::T_INT,
+                self::T_INTEGER,
                 self::T_UINT,
                 self::T_CHAR,
                 self::T_UCHAR,

@@ -88,7 +88,7 @@ class MethodCall extends Call
                         $builtInTypeClass = 'Zephir\Types\\' . ucfirst($variableVariable->getType()) . 'Type';
                         if (class_exists($builtInTypeClass)) {
                             /**
-                             * @var AbstractType
+                             * @var AbstractType $builtInType
                              */
                             $builtInType = new $builtInTypeClass();
                             $caller      = $exprCompiledVariable;
@@ -173,7 +173,7 @@ class MethodCall extends Call
         }
 
         /*
-         * Method calls only return zvals so we need to validate the target variable is also a zval
+         * Method calls only return zvals, so we need to validate the target variable is also a zval
          */
         if (!$builtInType) {
             if ($isExpecting) {

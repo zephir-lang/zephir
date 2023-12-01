@@ -17,6 +17,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
+use Zephir\Types\Types;
 
 /**
  * Generates an arithmetical operation according to the operands
@@ -140,33 +141,7 @@ class ModOperator extends ArithmeticalBaseOperator
 
 
             case 'bool':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                    case 'double':
-                        return new CompiledExpression(
-                            'long',
-                            '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'bool':
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                            ) . ')',
-                            $expression
-                        );
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'bool' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
-
+                return $this->processLeftBoolean($left, $right, $expression);
 
             case 'double':
                 switch ($right->getType()) {
@@ -260,13 +235,12 @@ class ModOperator extends ArithmeticalBaseOperator
 
             case 'string':
             case 'array':
-                switch ($right->getType()) {
-                    default:
-                        throw new CompilerException(
-                            'Operation is not supported between ' . $right->getType(),
-                            $expression
-                        );
-                }
+                throw match ($right->getType()) {
+                    default => new CompilerException(
+                        'Operation is not supported between ' . $right->getType(),
+                        $expression
+                    ),
+                };
 
 
             case 'variable':

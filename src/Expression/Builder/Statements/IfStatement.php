@@ -81,7 +81,7 @@ class IfStatement extends AbstractStatement
     }
 
     /**
-     * @param $condition
+     * @param AbstractOperator $condition
      *
      * @return $this
      */

@@ -942,7 +942,7 @@ class ForStatement extends StatementAbstract
      * @param Variable           $keyVariable
      * @param CompilationContext $compilationContext
      *
-     * @return LetStatement
+     * @return void
      */
     private function getLetStatement(
         mixed $keyVariableName,

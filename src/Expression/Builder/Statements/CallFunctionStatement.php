@@ -97,7 +97,7 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @param array $arguments
+     * @param array|null $arguments
      *
      * @return $this
      */

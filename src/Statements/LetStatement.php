@@ -68,36 +68,28 @@ class LetStatement extends StatementAbstract
             /*
              * Get the symbol from the symbol table if necessary
              */
-            switch ($assignment['assign-type']) {
-                case 'static-property':
-                case 'static-property-append':
-                case 'static-property-array-index':
-                case 'static-property-array-index-append':
-                case 'dynamic-variable-string':
-                    $symbolVariable = null;
-                    break;
-
-                case 'array-index':
-                case 'variable-append':
-                case 'object-property':
-                case 'array-index-append':
-                case 'string-dynamic-object-property':
-                case 'variable-dynamic-object-property':
-                    $symbolVariable = $compilationContext->symbolTable->getVariableForUpdate(
-                        $variable,
-                        $compilationContext,
-                        $assignment
-                    );
-                    break;
-
-                default:
-                    $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                        $variable,
-                        $compilationContext,
-                        $assignment
-                    );
-                    break;
-            }
+            $symbolVariable = match ($assignment['assign-type']) {
+                'static-property',
+                'static-property-append',
+                'static-property-array-index',
+                'static-property-array-index-append',
+                'dynamic-variable-string'     => null,
+                'array-index',
+                'variable-append',
+                'object-property',
+                'array-index-append',
+                'string-dynamic-object-property',
+                'variable-dynamic-object-property' => $compilationContext->symbolTable->getVariableForUpdate(
+                    $variable,
+                    $compilationContext,
+                    $assignment
+                ),
+                default                                                                                                                                         => $compilationContext->symbolTable->getVariableForWrite(
+                    $variable,
+                    $compilationContext,
+                    $assignment
+                ),
+            };
 
             /*
              * Incr/Decr assignments don't require an expression
@@ -144,7 +136,7 @@ class LetStatement extends StatementAbstract
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 /*
-                 * Bad implemented operators could return values different than objects
+                 * Bad implemented operators could return values different from objects
                  */
                 if (!is_object($resolvedExpr)) {
                     throw new CompilerException('Resolved expression is not valid', $assignment['expr']);
@@ -194,16 +186,11 @@ class LetStatement extends StatementAbstract
                 case 'static-property':
                     $let = new LetStaticProperty();
                     if (isset($assignment['operator'])) {
-                        switch ($assignment['operator']) {
-                            case 'add-assign':
-                                $let = new LetStaticPropertyAdd();
-                                break;
-                            case 'sub-assign':
-                                $let = new LetStaticPropertySub();
-                                break;
-                            default:
-                                $let = new LetStaticProperty();
-                        }
+                        $let = match ($assignment['operator']) {
+                            'add-assign' => new LetStaticPropertyAdd(),
+                            'sub-assign' => new LetStaticPropertySub(),
+                            default      => new LetStaticProperty(),
+                        };
                     }
 
                     $let->assignStatic(

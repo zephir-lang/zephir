@@ -151,7 +151,7 @@ class Documentation
     /**
      * Search a theme by its name.
      *
-     * Return the path to it if it exists. Otherwise NULL.
+     * Return the path to it if it exists, otherwise NULL.
      *
      * @param string $name
      *
@@ -247,7 +247,7 @@ class Documentation
      *
      * output directory is checked in this order :
      *  => check if the command line argument --output-directory was given
-     *  => if not ; check if config config[api][path] was given
+     *  => if not ; check if config[api][path] was given
      *
      * @param string $outputDir
      *

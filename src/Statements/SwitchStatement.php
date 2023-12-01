@@ -111,15 +111,13 @@ class SwitchStatement extends StatementAbstract
                         'left'  => $tempLeft,
                         'right' => $clause['expr'],
                     ];
-                    if (!isset($clause['statements'])) {
-                        $exprStack[] = $expr;
-                    } else {
-                        $exprStack[] = $expr;
-                        $blocks[]    = [
+                    $exprStack[] = $expr;
+                    if (isset($clause['statements'])) {
+                        $blocks[]  = [
                             'expr'  => $exprStack,
                             'block' => $clause['statements'],
                         ];
-                        $exprStack   = [];
+                        $exprStack = [];
                     }
                 } else {
                     if ('default' == $clause['type']) {

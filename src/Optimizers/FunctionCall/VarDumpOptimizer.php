@@ -18,6 +18,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
+use Zephir\Types\Types;
 
 /**
  * VarDumpOptimizer.
@@ -48,14 +49,10 @@ class VarDumpOptimizer extends OptimizerAbstract
                 /*
                  * Complex expressions require a temporary variable
                  */
-                switch ($resolvedParam->getType()) {
-                    case 'array':
-                        $type = 'array';
-                        break;
-                    default:
-                        $type = 'variable';
-                        break;
-                }
+                $type = match ($resolvedParam->getType()) {
+                    Types::T_ARRAY => 'array',
+                    default => 'variable',
+                };
 
                 $variable = $context->symbolTable->addTemp($type, $context);
                 $variable->initVariant($context);

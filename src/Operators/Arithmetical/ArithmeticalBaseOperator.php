@@ -19,6 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Operators\AbstractOperator;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 use function sprintf;
@@ -101,13 +102,6 @@ class ArithmeticalBaseOperator extends AbstractOperator
                             case 'uint':
                             case 'long':
                             case 'ulong':
-                                return new CompiledExpression(
-                                    'int',
-                                    '(' . $left->getCode() . ' ' . $this->operator . ' ' . $variableRight->getName(
-                                    ) . ')',
-                                    $expression
-                                );
-
                             case 'bool':
                                 return new CompiledExpression(
                                     'int',
@@ -150,32 +144,26 @@ class ArithmeticalBaseOperator extends AbstractOperator
                 }
 
             case 'bool':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                    case 'double':
-                        return new CompiledExpression(
-                            'long',
-                            '(' . $left->getBooleanCode() . ' + ' . $right->getCode() . ')',
-                            $expression
-                        );
-
-                    case 'bool':
-                        return new CompiledExpression(
-                            'bool',
-                            '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode(
-                            ) . ')',
-                            $expression
-                        );
-
-                    default:
-                        throw new CompilerException(
-                            "Cannot operate 'bool' with '" . $right->getType() . "'",
-                            $expression
-                        );
-                }
+                return match ($right->getType()) {
+                    Types::T_INT,
+                    Types::T_UINT,
+                    Types::T_LONG,
+                    Types::T_ULONG,
+                    Types::T_DOUBLE => new CompiledExpression(
+                        'long',
+                        '(' . $left->getBooleanCode() . ' + ' . $right->getCode() . ')',
+                        $expression
+                    ),
+                    Types::T_BOOL   => new CompiledExpression(
+                        'bool',
+                        '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')',
+                        $expression
+                    ),
+                    default         => throw new CompilerException(
+                        "Cannot operate 'bool' with '" . $right->getType() . "'",
+                        $expression
+                    ),
+                };
 
             case 'double':
                 switch ($right->getType()) {
@@ -262,10 +250,12 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
 
             case 'string':
-                switch ($right->getType()) {
-                    default:
-                        throw new CompilerException('Operation is not supported between strings', $expression);
-                }
+                throw match ($right->getType()) {
+                    default => new CompilerException(
+                        'Operation is not supported between strings',
+                        $expression
+                    ),
+                };
 
             case 'variable':
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -852,5 +842,39 @@ class ArithmeticalBaseOperator extends AbstractOperator
         }
 
         return 'double';
+    }
+
+    /**
+     * @param CompiledExpression $right
+     * @param CompiledExpression $left
+     * @param array              $expression
+     *
+     * @return CompiledExpression
+     */
+    protected function processLeftBoolean(
+        CompiledExpression $right,
+        CompiledExpression $left,
+        array $expression
+    ): CompiledExpression {
+        return match ($right->getType()) {
+            Types::T_INT,
+            Types::T_UINT,
+            Types::T_LONG,
+            Types::T_ULONG,
+            Types::T_DOUBLE => new CompiledExpression(
+                'long',
+                '(' . $left->getBooleanCode() . ' - ' . $right->getCode() . ')',
+                $expression
+            ),
+            Types::T_BOOL   => new CompiledExpression(
+                'bool',
+                '(' . $left->getBooleanCode() . ' ' . $this->bitOperator . ' ' . $right->getBooleanCode() . ')',
+                $expression
+            ),
+            default         => throw new CompilerException(
+                "Cannot operate 'bool' with '" . $right->getType() . "'",
+                $expression
+            ),
+        };
     }
 }
