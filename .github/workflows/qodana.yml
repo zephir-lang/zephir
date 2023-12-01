@@ -101,7 +101,6 @@ jobs:
         run: |
           make -j$(getconf _NPROCESSORS_ONLN)
 
-
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2023.2
         with:
