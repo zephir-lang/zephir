@@ -17,7 +17,6 @@ use ArrayAccess;
 use Countable;
 use Iterator;
 use Zephir\Exception\CompilerException;
-
 use Zephir\Types\Types;
 
 use function count;
