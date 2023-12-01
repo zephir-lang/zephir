@@ -28,6 +28,10 @@ use function count;
  */
 class CreateInstanceOptimizer extends OptimizerAbstract
 {
+    protected string $exceptionMessage = 'This function only accepts one parameter';
+    protected int    $parameterCount   = 1;
+    protected string $zephirMethod     = 'zephir_create_instance';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -43,8 +47,11 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (1 != count($expression['parameters'])) {
-            throw new CompilerException('This function only requires one parameter', $expression);
+        if ($this->parameterCount !== count($expression['parameters'])) {
+            throw new CompilerException(
+                $this->exceptionMessage,
+                $expression
+            );
         }
 
         /*
@@ -77,12 +84,24 @@ class CreateInstanceOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            'ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ');'
+            'ZEPHIR_LAST_CALL_STATUS = '
+            . $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
         );
 
-        $call->checkTempParameters($context);
+        $this->getTempParameters($call, $context);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function getTempParameters(Call $call, CompilationContext $context): void
+    {
+        $call->checkTempParameters($context);
     }
 }

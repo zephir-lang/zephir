@@ -16,7 +16,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
 
 use function count;
@@ -28,6 +28,8 @@ use function count;
  */
 class BasenameOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_basename';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -35,7 +37,8 @@ class BasenameOptimizer extends OptimizerAbstract
      *
      * @return bool|CompiledExpression|mixed
      *
-     * @throws CompilerException
+     * @return false|CompiledExpression
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -64,7 +67,9 @@ class BasenameOptimizer extends OptimizerAbstract
         }
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_basename(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
