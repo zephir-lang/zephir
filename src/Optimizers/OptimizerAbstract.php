@@ -58,10 +58,7 @@ abstract class OptimizerAbstract
             $expression
         );
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
+        $this->symbolVariablePre($call, $symbolVariable, $context);
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
         return [$symbolVariable, $resolvedParams, $symbol];
