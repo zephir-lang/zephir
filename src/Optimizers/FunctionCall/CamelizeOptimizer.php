@@ -18,7 +18,6 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
-use Zephir\Variable\Variable;
 
 use function count;
 
@@ -29,10 +28,6 @@ use function count;
  */
 class CamelizeOptimizer extends OptimizerAbstract
 {
-    protected string $trimWhere    = '';
-    protected string $warningName  = 'camelize';
-    protected string $zephirMethod = 'zephir_camelize';
-
     /**
      * @param array              $expression
      * @param Call               $call
@@ -48,9 +43,11 @@ class CamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $this->checkParameters($expression['parameters']);
+        if (count($expression['parameters']) < 1 || count($expression['parameters']) > 2) {
+            throw new CompilerException("'camelize' only accepts one or two parameters");
+        }
 
-        $charlist = 'NULL ';
+        $delimiter = 'NULL ';
         if (2 == count($expression['parameters'])) {
             if ('null' == $expression['parameters'][1]['parameter']['type']) {
                 unset($expression['parameters'][1]);
@@ -65,7 +62,9 @@ class CamelizeOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariableString($symbolVariable, $expression);
 
-        $this->symbolVariablePre($call, $symbolVariable, $context);
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
 
         $context->headersManager->add('kernel/string');
 
@@ -74,65 +73,14 @@ class CamelizeOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         if (isset($resolvedParams[1])) {
-            $charlist = $resolvedParams[1];
+            $delimiter = $resolvedParams[1];
         }
-
-        $this->symbolVariablePost($call, $symbolVariable, $context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            'zephir_fast_trim(' . $symbol . ', '
-            . $resolvedParams[0] . ', '
-            . $charlist . ', '
-            . $this->trimWhere . ');'
+            'zephir_camelize(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $delimiter . ' );'
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-    }
-
-    /**
-     * @param $parameters
-     *
-     * @return void
-     */
-    protected function checkParameters($parameters): void
-    {
-        if (count($parameters) < 1 || count($parameters) > 2) {
-            throw new CompilerException(
-                "'" . $this->warningName . "' only accepts one or two parameters"
-            );
-        }
-    }
-
-    /**
-     * @param Call               $call
-     * @param Variable|null      $symbolVariable
-     * @param CompilationContext $context
-     *
-     * @return void
-     */
-    protected function symbolVariablePost(
-        Call $call,
-        ?Variable $symbolVariable,
-        CompilationContext $context
-    ): void {
-        // empty
-    }
-
-    /**
-     * @param Call               $call
-     * @param Variable|null      $symbolVariable
-     * @param CompilationContext $context
-     *
-     * @return void
-     */
-    protected function symbolVariablePre(
-        Call $call,
-        ?Variable $symbolVariable,
-        CompilationContext $context
-    ): void {
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
     }
 }

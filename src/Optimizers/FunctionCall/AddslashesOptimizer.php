@@ -16,7 +16,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception;
+use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 use function count;
@@ -33,8 +33,9 @@ class AddslashesOptimizer extends OptimizerAbstract
      * @param Call               $call
      * @param CompilationContext $context
      *
-     * @return false|CompiledExpression
-     * @throws Exception
+     * @return bool|CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -46,12 +47,25 @@ class AddslashesOptimizer extends OptimizerAbstract
             return false;
         }
 
-        [$symbolVariable, $resolvedParams, $symbol] = $this->processStringOptimizer(
-            $call,
-            $context,
-            $expression
-        );
+        /*
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
 
+        $symbolVariable = $call->getSymbolVariable(true, $context);
+        $this->checkNotVariableString($symbolVariable, $expression);
+
+        $context->headersManager->add('kernel/string');
+
+        $symbolVariable->setDynamicTypes('string');
+
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_addslashes(' . $symbol . ', ' . $resolvedParams[0] . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

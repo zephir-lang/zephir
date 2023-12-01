@@ -28,7 +28,6 @@ use function count;
  */
 class StrtoupperOptimizer extends OptimizerAbstract
 {
-    protected string $type         = 'string';
     protected string $zephirMethod = 'zephir_fast_strtoupper';
 
     /**
@@ -59,7 +58,7 @@ class StrtoupperOptimizer extends OptimizerAbstract
         $this->checkNotVariableString($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/string');
-        $symbolVariable->setDynamicTypes($this->type);
+        $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams(
             $expression['parameters'],

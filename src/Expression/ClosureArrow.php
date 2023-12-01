@@ -87,14 +87,30 @@ class ClosureArrow extends Closure
             null,
             $expression
         );
+        $classDefinition->addMethod($classMethod, $block);
 
-        $symbolVariable = $this->generateClosure(
-            $classDefinition,
-            $classMethod,
-            $block,
-            $compilationContext,
-            $expression
-        );
+        $compilationContext->headersManager->add('kernel/object');
+
+        if ($this->expecting) {
+            if ($this->expectingVariable) {
+                $symbolVariable = $this->expectingVariable;
+            } else {
+                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext,
+                    $expression
+                );
+            }
+        } else {
+            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                'variable',
+                $compilationContext,
+                $expression
+            );
+        }
+
+        $symbolVariable->initVariant($compilationContext);
+        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
 
         ++self::$id;
 

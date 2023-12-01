@@ -36,7 +36,18 @@ class ModOperator extends ArithmeticalBaseOperator
      */
     public function compile($expression, CompilationContext $compilationContext)
     {
-        [$left, $right] = $this->preCompileChecks($expression, $compilationContext);
+        $this->checkLeft($expression);
+        $this->checkRight($expression);
+
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly(true);
+        $left = $leftExpr->compile($compilationContext);
+
+        $rightExpr = new Expression($expression['right']);
+        $rightExpr->setReadOnly(true);
+        $right = $rightExpr->compile($compilationContext);
+
+        $compilationContext->headersManager->add('kernel/operators');
 
         switch ($left->getType()) {
             case 'int':

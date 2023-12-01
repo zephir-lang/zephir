@@ -29,7 +29,6 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\ParseException;
 use Zephir\FileSystem\FileSystemInterface;
-use Zephir\Traits\CompilerTrait;
 
 use function array_map;
 use function count;
@@ -48,6 +47,7 @@ use function mkdir;
 use function preg_match;
 use function realpath;
 use function sprintf;
+use function str_repeat;
 use function str_replace;
 use function strpos;
 use function strtolower;
@@ -64,7 +64,6 @@ use const PHP_EOL;
  */
 final class CompilerFile implements FileInterface
 {
-    use CompilerTrait;
     use LoggerAwareTrait;
 
     /**
@@ -162,7 +161,18 @@ final class CompilerFile implements FileInterface
     {
         $classDefinition = $this->classDefinition;
 
-        $code = $this->generateCodeHeadersPre($classDefinition);
+        $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);
+
+        $code = PHP_EOL;
+        $code .= '#ifdef HAVE_CONFIG_H' . PHP_EOL;
+        $code .= '#include "' . $separators . 'ext_config.h"' . PHP_EOL;
+        $code .= '#endif' . PHP_EOL;
+        $code .= PHP_EOL;
+
+        $code .= '#include <php.h>' . PHP_EOL;
+        $code .= '#include "' . $separators . 'php_ext.h"' . PHP_EOL;
+        $code .= '#include "' . $separators . 'ext.h"' . PHP_EOL;
+        $code .= PHP_EOL;
 
         if ('class' == $classDefinition->getType()) {
             $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
@@ -171,8 +181,24 @@ final class CompilerFile implements FileInterface
         } else {
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         }
+        $code .= PHP_EOL;
 
-        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
+        $code .= '#include "kernel/main.h"' . PHP_EOL;
+
+        if ('class' == $classDefinition->getType()) {
+            foreach ($compilationContext->headersManager->get() as $header => $one) {
+                $code .= '#include "' . $header . '.h"' . PHP_EOL;
+            }
+        }
+
+        if (count($this->headerCBlocks) > 0) {
+            $code .= implode(PHP_EOL, $this->headerCBlocks) . PHP_EOL;
+        }
+
+        /**
+         * Prepend the required files to the header
+         */
+        $compilationContext->codePrinter->preOutput($code);
     }
 
     /**
@@ -373,7 +399,17 @@ final class CompilerFile implements FileInterface
 
         $completeName = $classDefinition->getCompleteName();
 
-        [$path, $filePath, $filePathHeader] = $this->calculatePaths($completeName);
+        $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
+
+        $filePath       = 'ext/' . $path . '.zep.c';
+        $filePathHeader = 'ext/' . $path . '.zep.h';
+
+        if (strpos($path, DIRECTORY_SEPARATOR)) {
+            $dirname = dirname($filePath);
+            if (!is_dir($dirname)) {
+                mkdir($dirname, 0755, true);
+            }
+        }
 
         /**
          * If the file does not exist we create it for the first time
