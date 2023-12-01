@@ -28,6 +28,8 @@ use function count;
  */
 class UcfirstOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_ucfirst';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -52,7 +54,10 @@ class UcfirstOptimizer extends OptimizerAbstract
             $expression
         );
 
-        $context->codePrinter->output('zephir_ucfirst(' . $symbol . ', ' . $resolvedParams[0] . ');');
+        $context->codePrinter->output(
+            $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
