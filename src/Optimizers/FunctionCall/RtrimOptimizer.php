@@ -20,5 +20,5 @@ namespace Zephir\Optimizers\FunctionCall;
  */
 class RtrimOptimizer extends TrimOptimizer
 {
-    protected string $trimWhere = ', ZEPHIR_TRIM_RIGHT';
+    protected string $trimWhere = 'ZEPHIR_TRIM_RIGHT';
 }

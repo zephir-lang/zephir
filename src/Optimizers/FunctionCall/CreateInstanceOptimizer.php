@@ -88,19 +88,18 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             . $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
         );
 
-        $this->getTempParameters($call, $context);
+        $this->getTempParameters($context);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
     /**
-     * @param Call               $call
      * @param CompilationContext $context
      *
      * @return void
      */
-    protected function getTempParameters(Call $call, CompilationContext $context): void
+    protected function getTempParameters(CompilationContext $context): void
     {
         $call->checkTempParameters($context);
     }
