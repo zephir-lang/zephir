@@ -28,8 +28,6 @@ use function count;
  */
 class GetClassOptimizer extends OptimizerAbstract
 {
-    protected string $zephirMethod = 'zephir_get_class';
-
     /**
      * @param array              $expression
      * @param Call               $call
@@ -45,7 +43,10 @@ class GetClassOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $this->checkParameters($expression);
+        $numberParameters = count($expression['parameters']);
+        if (1 != $numberParameters && 2 != $numberParameters) {
+            throw new CompilerException("'get_class' only accepts one or two parameters", $expression);
+        }
 
         /*
          * Process the expected symbol to be returned
@@ -66,26 +67,8 @@ class GetClassOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->codePrinter->output(
-            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ', 0);'
-        );
+        $context->codePrinter->output('zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', 0);');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
-    }
-
-    /**
-     * @param array $expression
-     *
-     * @return void
-     */
-    protected function checkParameters(array $expression): void
-    {
-        $numberParameters = count($expression['parameters']);
-        if (1 != $numberParameters && 2 != $numberParameters) {
-            throw new CompilerException(
-                "'get_class' only accepts one or two parameters",
-                $expression
-            );
-        }
     }
 }
