@@ -13,67 +13,30 @@ declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
-use Zephir\Optimizers\OptimizerAbstract;
-
-use function count;
+use function sprintf;
 
 /**
  * ArrayMergeOptimizer.
  *
  * Optimizes calls to 'array_merge' using internal function
  */
-class ArrayMergeOptimizer extends OptimizerAbstract
+class ArrayMergeOptimizer extends ArrayKeysOptimizer
 {
+    protected int $parameterCount = 2;
+
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
+     * @param string $symbol
+     * @param array  $resolvedParams
      *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @return string
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    protected function getOutput(string $symbol, $resolvedParams): string
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        if (2 != count($expression['parameters'])) {
-            return false;
-        }
-
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        $this->checkNotVariable($symbolVariable, $expression);
-
-        $context->headersManager->add('kernel/array');
-
-        $symbolVariable->setDynamicTypes('array');
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
-
-
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-
-        $context->codePrinter->output(
-            sprintf(
-                'zephir_fast_array_merge(%s, %s, %s);',
-                $symbol,
-                $resolvedParams[0],
-                $resolvedParams[1]
-            )
+        return sprintf(
+            'zephir_fast_array_merge(%s, %s, %s);',
+            $symbol,
+            $resolvedParams[0],
+            $resolvedParams[1]
         );
-
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
