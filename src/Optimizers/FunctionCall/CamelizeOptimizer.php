@@ -130,8 +130,6 @@ class CamelizeOptimizer extends OptimizerAbstract
         ?Variable $symbolVariable,
         CompilationContext $context
     ): void {
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
     }
 }

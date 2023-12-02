@@ -28,10 +28,17 @@ use function count;
  */
 class CreateInstanceParamsOptimizer extends OptimizerAbstract
 {
+    protected string $exceptionMessage = 'This function only requires two parameter';
+    protected int    $parameterCount   = 2;
+
     /**
      * @param array              $expression
      * @param Call               $call
      * @param CompilationContext $context
+     *
+     * @return CompiledExpression|mixed
+     *
+     * @throws CompilerException
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -39,8 +46,11 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
             throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (2 != count($expression['parameters'])) {
-            throw new CompilerException('This function only requires two parameter', $expression);
+        if ($this->parameterCount !== count($expression['parameters'])) {
+            throw new CompilerException(
+                $this->exceptionMessage,
+                $expression
+            );
         }
 
         /*
@@ -62,21 +72,42 @@ class CreateInstanceParamsOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         /*
          * Add the last call status to the current symbol table
          */
         $call->addCallStatusFlag($context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output(
-            'ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
-        );
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
 
+        $this->getTempParameters($call, $context);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, array $resolvedParams): string
+    {
+        return 'ZEPHIR_LAST_CALL_STATUS = '
+            . 'zephir_create_instance_params(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+        ;
+    }
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function getTempParameters(Call $call, CompilationContext $context): void
+    {
+        // Not needed here
     }
 }

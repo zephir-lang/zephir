@@ -45,9 +45,8 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariableString($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/main');
         $context->codePrinter->output('zephir_get_args(' . $symbol . ');');

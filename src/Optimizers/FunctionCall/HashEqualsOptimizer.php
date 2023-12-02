@@ -58,9 +58,8 @@ class HashEqualsOptimizer extends OptimizerAbstract
          */
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         return new CompiledExpression(
             'bool',

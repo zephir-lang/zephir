@@ -67,9 +67,8 @@ class StrtoupperOptimizer extends OptimizerAbstract
             $expression
         );
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
             $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'

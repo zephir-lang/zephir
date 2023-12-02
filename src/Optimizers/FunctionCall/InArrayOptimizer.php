@@ -28,6 +28,7 @@ class InArrayOptimizer extends ArrayKeyExistsOptimizer
     protected function getCode(array $resolvedParams): string
     {
         return 'zephir_fast_in_array('
-            . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')';
+            . $resolvedParams[0] . ', '
+            . $resolvedParams[1] . ')';
     }
 }

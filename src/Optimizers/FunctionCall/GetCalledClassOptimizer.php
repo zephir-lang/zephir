@@ -54,9 +54,8 @@ class GetCalledClassOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariableString($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $context->headersManager->add('kernel/object');
 

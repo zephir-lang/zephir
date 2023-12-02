@@ -58,9 +58,8 @@ class FileGetContentsOptimizer extends OptimizerAbstract
         $this->checkNotVariableString($symbolVariable, $expression);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         if ($symbolVariable) {
             $symbol = $context->backend->getVariableCode($symbolVariable);
             $context->codePrinter->output('zephir_file_get_contents(' . $symbol . ', ' . $resolvedParams[0] . ');');

@@ -80,9 +80,8 @@ class ExplodeOptimizer extends OptimizerAbstract
 
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('array');
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {

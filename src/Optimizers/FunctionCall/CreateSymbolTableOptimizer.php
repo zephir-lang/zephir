@@ -53,9 +53,8 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariable($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         // TODO: Still needed?
         $context->symbolTable->mustGrownStack(true);

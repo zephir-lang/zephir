@@ -17,6 +17,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Variable\Variable;
 
 abstract class OptimizerAbstract
 {
@@ -58,12 +59,27 @@ abstract class OptimizerAbstract
             $expression
         );
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
         return [$symbolVariable, $resolvedParams, $symbol];
+    }
+
+    /**
+     * @param Call               $call
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function checkInitSymbolVariable(
+        Call $call,
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): void {
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
     }
 }

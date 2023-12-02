@@ -68,9 +68,8 @@ class CreateArrayOptimizer extends OptimizerAbstract
             $resolvedParams = null;
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if ($resolvedParams) {

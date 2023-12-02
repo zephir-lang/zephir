@@ -60,9 +60,8 @@ class RoundOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('double');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         /* Todo: move var return type -> double as with round, floor */
         $symbol = $context->backend->getVariableCode($symbolVariable);
 

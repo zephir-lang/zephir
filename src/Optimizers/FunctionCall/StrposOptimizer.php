@@ -73,9 +73,8 @@ class StrposOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('int');
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
             'zephir_fast_strpos(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $offset . ');'

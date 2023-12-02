@@ -60,9 +60,7 @@ class ArrayKeysOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('array');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_array_keys(' . $symbol . ', ' . $resolvedParams[0] . ');');

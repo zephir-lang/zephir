@@ -82,9 +82,8 @@ class SubstrOptimizer extends OptimizerAbstract
 
         $symbolVariable->setDynamicTypes('string');
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
             'zephir_substr(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $params[0] . ', ' . $params[1] . ', ' . $flags . ');'

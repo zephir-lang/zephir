@@ -59,9 +59,8 @@ class PowOptimizer extends OptimizerAbstract
         $symbolVariable->setDynamicTypes('variable');
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
             'zephir_pow_function(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'

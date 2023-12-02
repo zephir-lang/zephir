@@ -77,9 +77,8 @@ class CallUserFuncOptimizer extends OptimizerAbstract
          */
         $call->addCallStatusFlag($context);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));

@@ -39,9 +39,7 @@ class UncamelizeOptimizer extends CamelizeOptimizer
         ?Variable $symbolVariable,
         CompilationContext $context
     ): void {
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
     }
 
     /**

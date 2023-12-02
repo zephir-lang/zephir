@@ -52,9 +52,8 @@ class TimeOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/time');
         $symbolVariable->setDynamicTypes('long');
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output('zephir_time(' . $symbol . ');');
 
