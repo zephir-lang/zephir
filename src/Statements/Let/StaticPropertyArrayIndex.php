@@ -13,143 +13,31 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
-use Zephir\Class\Property;
+use ReflectionException;
 use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
-
-use function in_array;
-use function sprintf;
 
 /**
  * Zephir\Statements\Let\StaticPropertyArrayIndex.
  *
  * Updates object properties dynamically.
  */
-class StaticPropertyArrayIndex extends ArrayIndex
+class StaticPropertyArrayIndex extends StaticPropertyAppend
 {
     /**
-     * Compiles ClassName::foo[index] = {expr}.
-     *
-     * @param string             $className
-     * @param string             $property
-     * @param CompiledExpression $resolvedExpr
+     * @param array              $statement
      * @param CompilationContext $compilationContext
-     * @param array              $statement
      *
+     * @return array
+     * @throws ReflectionException
      * @throws Exception
-     * @throws CompilerException
      */
-    public function assignStatic(
-        $className,
-        $property,
-        CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext,
-        array $statement
-    ): void {
-        $compiler = $compilationContext->compiler;
-        if (!in_array($className, ['self', 'static', 'parent'])) {
-            $className = $compilationContext->getFullName($className);
-            if ($compiler->isClass($className)) {
-                $classDefinition = $compiler->getClassDefinition($className);
-            } else {
-                if ($compiler->isBundledClass($className)) {
-                    $classDefinition = $compiler->getInternalClassDefinition($className);
-                } else {
-                    throw new CompilerException("Cannot locate class '" . $className . "'", $statement);
-                }
-            }
-        } else {
-            if (in_array($className, ['self', 'static'])) {
-                $classDefinition = $compilationContext->classDefinition;
-            } else {
-                if ('parent' == $className) {
-                    $classDefinition = $compilationContext->classDefinition;
-                    $extendsClass    = $classDefinition->getExtendsClass();
-                    if (!$extendsClass) {
-                        throw new CompilerException(
-                            'Cannot assign static property "'
-                            . $property
-                            . '" on parent because class '
-                            . $classDefinition->getCompleteName()
-                            . ' does not extend any class',
-                            $statement
-                        );
-                    } else {
-                        $classDefinition = $classDefinition->getExtendsClassDefinition();
-                    }
-                }
-            }
-        }
-
-        $this->checkClassHasProperty(
-            $classDefinition,
-            $property,
-            $statement
-        );
-
-        /** @var Property $propertyDefinition */
-        $propertyDefinition = $classDefinition->getProperty($property);
-        $this->checkAccessNonStaticProperty(
-            $propertyDefinition,
-            $classDefinition,
-            $property,
-            $statement
-        );
-
-        if ($propertyDefinition->isPrivate()) {
-            if ($classDefinition != $compilationContext->classDefinition) {
-                throw new CompilerException(
-                    "Cannot access private static property '"
-                    . $classDefinition->getCompleteName()
-                    . '::'
-                    . $property
-                    . "' out of its declaring context",
-                    $statement
-                );
-            }
-        }
-
-        $compilationContext->headersManager->add('kernel/object');
-        $classEntry = $classDefinition->getClassEntry($compilationContext);
-        $this->_assignStaticPropertyArrayMultipleIndex(
-            $classEntry,
-            $property,
-            $resolvedExpr,
-            $compilationContext,
-            $statement
-        );
-    }
-
-    /**
-     * Compiles x::y[a][b] = {expr} (multiple offset assignment).
-     *
-     * @param string             $classEntry
-     * @param string             $property
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext ,
-     * @param array              $statement
-     *
-     * @throws Exception
-     * @throws CompilerException
-     */
-    protected function _assignStaticPropertyArrayMultipleIndex(
-        $classEntry,
-        $property,
-        CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext,
-        $statement
-    ): void {
-        $property = $statement['property'];
-        $compilationContext->headersManager->add('kernel/object');
-
-        /**
-         * Create a temporal zval (if needed).
-         */
-        $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
-
+    protected function getOffsetExpressions(
+        array $statement,
+        CompilationContext $compilationContext
+    ): array {
         /**
          * Only string/variable/int.
          */
@@ -179,16 +67,6 @@ class StaticPropertyArrayIndex extends ArrayIndex
             $offsetExpressions[] = $resolvedIndex;
         }
 
-        $compilationContext->backend->assignStaticPropertyArrayMulti(
-            $classEntry,
-            $variableExpr,
-            $property,
-            $offsetExpressions,
-            $compilationContext
-        );
-
-        if ($variableExpr->isTemporal()) {
-            $variableExpr->setIdle(true);
-        }
+        return $offsetExpressions;
     }
 }

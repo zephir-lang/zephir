@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\Class\Property;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -132,7 +133,7 @@ class StaticPropertyAppend extends ArrayIndex
      */
     protected function _assignStaticPropertyArrayMultipleIndex(
         $classEntry,
-        $property,
+        string $property,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         array $statement
@@ -143,9 +144,9 @@ class StaticPropertyAppend extends ArrayIndex
         /**
          * Create a temporal zval (if needed).
          */
-        $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+        $variableExpr      = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
+        $offsetExpressions = $this->getOffsetExpressions($statement, $compilationContext);
 
-        $offsetExpressions[] = 'a';
         $compilationContext->backend->assignStaticPropertyArrayMulti(
             $classEntry,
             $variableExpr,
@@ -157,5 +158,22 @@ class StaticPropertyAppend extends ArrayIndex
         if ($variableExpr->isTemporal()) {
             $variableExpr->setIdle(true);
         }
+    }
+
+    /**
+     * @param array              $statement
+     * @param CompilationContext $compilationContext
+     *
+     * @return array
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    protected function getOffsetExpressions(
+        array $statement,
+        CompilationContext $compilationContext
+    ): array {
+        $offsetExpressions[] = 'a';
+
+        return $offsetExpressions;
     }
 }
