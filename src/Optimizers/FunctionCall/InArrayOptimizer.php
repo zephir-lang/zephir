@@ -13,48 +13,21 @@ declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
-use Zephir\Optimizers\OptimizerAbstract;
-
-use function count;
-
 /**
  * InArrayOptimizer.
  *
  * Optimizes calls to 'in_array' using internal function
  */
-class InArrayOptimizer extends OptimizerAbstract
+class InArrayOptimizer extends ArrayKeyExistsOptimizer
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
+     * @param array $resolvedParams
      *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @return string
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    protected function getCode(array $resolvedParams): string
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        if (2 != count($expression['parameters'])) {
-            return false;
-        }
-
-        $context->headersManager->add('kernel/array');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        return new CompiledExpression(
-            'bool',
-            'zephir_fast_in_array(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')',
-            $expression
-        );
+        return 'zephir_fast_in_array('
+            . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')';
     }
 }
