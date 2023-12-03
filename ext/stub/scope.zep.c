@@ -49,7 +49,8 @@ PHP_METHOD(Stub_Scope, getDyStr)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &g_param);
 	g = zephir_get_intval(g_param);
 
@@ -73,7 +74,8 @@ PHP_METHOD(Stub_Scope, test1)
 	ZVAL_UNDEF(&k$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
@@ -104,7 +106,8 @@ PHP_METHOD(Stub_Scope, test2)
 	ZVAL_UNDEF(&_4$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	p = 15;
 	ZEPHIR_INIT_VAR(&k);
@@ -154,7 +157,8 @@ PHP_METHOD(Stub_Scope, test3)
 	ZVAL_UNDEF(&str$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&k);
 	ZVAL_STRING(&k, "");

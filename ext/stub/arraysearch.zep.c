@@ -47,7 +47,8 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 1, &needle, &haystack_param, &strict_param);
 	zephir_get_arrval(&haystack, haystack_param);
 	if (!strict_param) {
@@ -77,7 +78,8 @@ PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir)
 	ZVAL_UNDEF(&pos);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&itoA64);
 	zephir_create_array(&itoA64, 9, 0);

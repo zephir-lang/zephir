@@ -40,7 +40,8 @@ PHP_METHOD(Stub_Globals_Server, f1)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
 	zephir_array_fetch_string(&_0, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 10);

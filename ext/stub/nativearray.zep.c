@@ -39,7 +39,8 @@ PHP_METHOD(Stub_NativeArray, testArray1)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -56,7 +57,8 @@ PHP_METHOD(Stub_NativeArray, testArray2)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -82,7 +84,8 @@ PHP_METHOD(Stub_NativeArray, testArray3)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -109,7 +112,8 @@ PHP_METHOD(Stub_NativeArray, testArray4)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -129,7 +133,8 @@ PHP_METHOD(Stub_NativeArray, testArray5)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -149,7 +154,8 @@ PHP_METHOD(Stub_NativeArray, testArray6)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -176,7 +182,8 @@ PHP_METHOD(Stub_NativeArray, testArray7)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 1;
 	b = 2;
@@ -206,7 +213,8 @@ PHP_METHOD(Stub_NativeArray, testArray8)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = (double) (1);
 	b = (double) (2);
@@ -236,7 +244,8 @@ PHP_METHOD(Stub_NativeArray, testArray9)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 1;
 	b = 0;
@@ -268,7 +277,8 @@ PHP_METHOD(Stub_NativeArray, testArray10)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "hello1");
@@ -296,7 +306,8 @@ PHP_METHOD(Stub_NativeArray, testArray11)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -339,7 +350,8 @@ PHP_METHOD(Stub_NativeArray, testArray12)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -370,7 +382,8 @@ PHP_METHOD(Stub_NativeArray, testArray13)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -389,7 +402,8 @@ PHP_METHOD(Stub_NativeArray, testArray14)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -410,7 +424,8 @@ PHP_METHOD(Stub_NativeArray, testArray15)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -429,7 +444,8 @@ PHP_METHOD(Stub_NativeArray, testArray16)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -449,7 +465,8 @@ PHP_METHOD(Stub_NativeArray, testArray17)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -468,7 +485,8 @@ PHP_METHOD(Stub_NativeArray, testArray18)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -489,7 +507,8 @@ PHP_METHOD(Stub_NativeArray, testArray19)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -508,7 +527,8 @@ PHP_METHOD(Stub_NativeArray, testArray20)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -528,7 +548,8 @@ PHP_METHOD(Stub_NativeArray, testArray21)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -547,7 +568,8 @@ PHP_METHOD(Stub_NativeArray, testArray22)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -568,7 +590,8 @@ PHP_METHOD(Stub_NativeArray, testArray23)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	b = 0;
 	ZEPHIR_INIT_VAR(&a);
@@ -596,7 +619,8 @@ PHP_METHOD(Stub_NativeArray, testArray24)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	b = 0.0;
 	ZEPHIR_INIT_VAR(&a);
@@ -624,7 +648,8 @@ PHP_METHOD(Stub_NativeArray, testArray25)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	b = 0;
 	ZEPHIR_INIT_VAR(&a);
@@ -651,7 +676,8 @@ PHP_METHOD(Stub_NativeArray, testArray26)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_NULL(&b);
@@ -674,7 +700,8 @@ PHP_METHOD(Stub_NativeArray, testArray27)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "hello");
@@ -697,7 +724,8 @@ PHP_METHOD(Stub_NativeArray, testArray28)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "hello");
@@ -719,7 +747,8 @@ PHP_METHOD(Stub_NativeArray, testArray29)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	b = 1;
 	ZEPHIR_INIT_VAR(&a);
@@ -739,7 +768,8 @@ PHP_METHOD(Stub_NativeArray, testArray30)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "hello");
@@ -760,7 +790,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess1)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -788,7 +819,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess2)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -812,7 +844,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess3)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -843,7 +876,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess4)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -868,7 +902,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess5)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -894,7 +929,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAccess6)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -921,7 +957,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess1)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
@@ -950,7 +987,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess2)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
@@ -985,7 +1023,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess3)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
@@ -1024,7 +1063,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess4)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
@@ -1062,7 +1102,8 @@ PHP_METHOD(Stub_NativeArray, testArrayMultipleAccess5)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
@@ -1091,7 +1132,8 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate1)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -1121,7 +1163,8 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate2)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -1153,7 +1196,8 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate3)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -1187,7 +1231,8 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate4)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -1214,7 +1259,8 @@ PHP_METHOD(Stub_NativeArray, testArrayUpdate5)
 	ZVAL_UNDEF(&_3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 3, 0);
@@ -1279,7 +1325,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAppend1)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1328,7 +1375,8 @@ PHP_METHOD(Stub_NativeArray, testArrayAppend2)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "hello");
@@ -1375,7 +1423,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate1)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1393,7 +1442,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate2)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1411,7 +1461,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate3)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1429,7 +1480,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate4)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1447,7 +1499,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate5)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1465,7 +1518,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate6)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1484,7 +1538,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate7)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1505,7 +1560,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate8)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1527,7 +1583,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate9)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1549,7 +1606,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate10)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1571,7 +1629,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate11)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "y");
@@ -1596,7 +1655,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate12)
 	ZVAL_UNDEF(&d);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "y");
@@ -1626,7 +1686,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayUpdate13)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&d);
 	zephir_create_array(&d, 3, 0);
@@ -1663,7 +1724,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend1)
 	ZVAL_UNDEF(&b);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1686,7 +1748,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend2)
 	ZVAL_UNDEF(&x);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1714,7 +1777,8 @@ PHP_METHOD(Stub_NativeArray, testMultipleArrayAppend3)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -1774,7 +1838,8 @@ PHP_METHOD(Stub_NativeArray, testImplodeArray)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &param);
 
 
@@ -1797,7 +1862,8 @@ PHP_METHOD(Stub_NativeArray, issue110)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&byteUnits);
 	zephir_create_array(&byteUnits, 9, 0);
@@ -1829,7 +1895,8 @@ PHP_METHOD(Stub_NativeArray, issue264)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &tokens_param);
 	zephir_get_arrval(&tokens, tokens_param);
 
@@ -1851,7 +1918,8 @@ PHP_METHOD(Stub_NativeArray, issue743a)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &current743a_param);
 	zephir_get_arrval(&current743a, current743a_param);
 
@@ -1876,7 +1944,8 @@ PHP_METHOD(Stub_NativeArray, issue743b)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &current_param);
 	zephir_get_arrval(&current, current_param);
 
@@ -1902,7 +1971,8 @@ PHP_METHOD(Stub_NativeArray, issue743c)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &current_param);
 	zephir_get_arrval(&current, current_param);
 
@@ -1934,7 +2004,8 @@ PHP_METHOD(Stub_NativeArray, issue709)
 	ZVAL_UNDEF(&_5$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	works = 1;
 	_2 = 50;
@@ -1996,7 +2067,8 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &prefix_param, &baseDir_param);
 	zephir_get_strval(&prefix, prefix_param);
 	zephir_get_strval(&baseDir, baseDir_param);
@@ -2027,7 +2099,8 @@ PHP_METHOD(Stub_NativeArray, Issue1159)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&myvar);
 	ZVAL_LONG(&myvar, 1);
@@ -2046,7 +2119,8 @@ zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_typ
 	ZVAL_UNDEF(&_1$$3);
 	
 
-		ZEPHIR_MM_GROW();
+		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;

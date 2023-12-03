@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 #include "kernel/operators.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Interfaces_ImplementInt)
@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 	val = zephir_get_intval(val_param);
 
 
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, val);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("val"), &_0);
 }

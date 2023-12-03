@@ -52,7 +52,8 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 3, &dsn_param, &username_param, &password_param, &attrs);
 	zephir_get_strval(&dsn, dsn_param);
 	if (!username_param) {

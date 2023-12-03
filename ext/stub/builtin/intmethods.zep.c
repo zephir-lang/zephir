@@ -40,7 +40,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -62,7 +63,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs1)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, -5);
 	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 9, &_0);
@@ -84,7 +86,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getBinary)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -109,7 +112,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getHex)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -134,7 +138,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getOctal)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -161,7 +166,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getPow)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &num_param, &exp_param);
 	num = zephir_get_intval(num_param);
 	exp = zephir_get_intval(exp_param);
@@ -208,7 +214,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getExp)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -293,7 +300,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAsin)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -318,7 +326,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAcos)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -343,7 +352,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAtan)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	num = zephir_get_intval(num_param);
 
@@ -373,7 +383,8 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &num_param, &base_param);
 	num = zephir_get_intval(num_param);
 	if (!base_param) {

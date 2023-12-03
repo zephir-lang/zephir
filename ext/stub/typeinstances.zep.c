@@ -42,7 +42,8 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString1)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
@@ -64,7 +65,8 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString2)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, -24);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);
@@ -86,7 +88,8 @@ PHP_METHOD(Stub_TypeInstances, testInstanceOfString3)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "create_string", NULL, 0, &_0);

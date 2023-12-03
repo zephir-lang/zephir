@@ -32,7 +32,8 @@ PHP_METHOD(Stub_Issue914, __construct)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_CALL_PARENT(NULL, stub_issue914_ce, getThis(), "__construct", NULL, 0);
 	zephir_check_call_status();

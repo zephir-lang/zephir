@@ -40,7 +40,8 @@ PHP_METHOD(Stub_Optimizers_ArrayMerge, mergeTwoRequiredArrays)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &arr1_param, &arr2_param);
 	zephir_get_arrval(&arr1, arr1_param);
 	zephir_get_arrval(&arr2, arr2_param);

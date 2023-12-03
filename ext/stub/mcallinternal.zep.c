@@ -36,7 +36,8 @@ void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *ret
 		ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello");
@@ -92,7 +93,8 @@ PHP_METHOD(Stub_McallInternal, e)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello");
@@ -110,7 +112,8 @@ PHP_METHOD(Stub_McallInternal, d)
 	ZVAL_UNDEF(&_3$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 0;
 	_2 = 1000000;
@@ -147,7 +150,8 @@ PHP_METHOD(Stub_McallInternal, f)
 	ZVAL_UNDEF(&_3$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 0;
 	_2 = 1000000;
@@ -186,7 +190,8 @@ PHP_METHOD(Stub_McallInternal, g)
 	ZVAL_UNDEF(&_5$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 0;
 	_2 = 1000;
@@ -249,7 +254,8 @@ PHP_METHOD(Stub_McallInternal, callFibonacci)
 	ZVAL_UNDEF(&_5$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	p = (double) (0);
 	i = 0;
@@ -293,7 +299,8 @@ PHP_METHOD(Stub_McallInternal, issue1956)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_RETURN_CALL_INTERNAL_METHOD_P0(this_ptr, zep_Stub_McallInternal_test1956);
 	zephir_check_call_status();

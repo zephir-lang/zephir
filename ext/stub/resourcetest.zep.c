@@ -33,7 +33,8 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDIN)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
@@ -49,7 +50,8 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDOUT)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDOUT");
@@ -65,7 +67,8 @@ PHP_METHOD(Stub_ResourceTest, testLetStatementSTDERR)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDERR");
@@ -82,7 +85,8 @@ PHP_METHOD(Stub_ResourceTest, testTypeOffResource)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
@@ -100,7 +104,8 @@ PHP_METHOD(Stub_ResourceTest, testIsResource)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");
@@ -118,7 +123,8 @@ PHP_METHOD(Stub_ResourceTest, testFunctionsForSTDIN)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "STDIN");

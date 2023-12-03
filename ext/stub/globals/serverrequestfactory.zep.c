@@ -69,7 +69,8 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_get_global(&_GET, SL("_GET"));
@@ -171,7 +172,8 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &source, &super_param);
 	zephir_get_arrval(&super, super_param);
 

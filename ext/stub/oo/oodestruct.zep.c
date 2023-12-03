@@ -193,7 +193,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 2, &file_param, &width_param, &height_param);
 	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be of the type string"));
@@ -355,13 +356,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_check_call_status();
 		zephir_read_property(&_38$$13, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("realpath"), &_38$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, width);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("width"), &_39$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, height);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("height"), &_39$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, 3);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_39$$13);
 		ZEPHIR_INIT_VAR(&_40$$13);
@@ -383,7 +384,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, __destruct)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("image"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&image, &_0);
@@ -415,7 +417,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_UNDEF(&_9$$5);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_is_true(&_0)) {
@@ -489,7 +492,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_UNDEF(&_8$$5);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (UNEXPECTED(!((zephir_function_exists_ex(ZEND_STRL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_0$$3);

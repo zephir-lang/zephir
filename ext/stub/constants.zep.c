@@ -261,7 +261,8 @@ PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "PHP_VERSION");
@@ -282,7 +283,8 @@ PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted)
 	ZVAL_UNDEF(&delimiter);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&delimiter);
 	ZVAL_STRING(&delimiter, ".");
@@ -298,7 +300,8 @@ PHP_METHOD(Stub_Constants, testStringConstantWithVars)
 	ZVAL_UNDEF(&property);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&property);
 	ZVAL_STRING(&property, "$SOME/CSRF/KEY$");

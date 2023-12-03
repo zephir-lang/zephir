@@ -42,7 +42,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1055)
 	ZVAL_UNDEF(&_3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 1, 0);
@@ -73,7 +74,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1087)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&filtered);
 	ZVAL_STRING(&filtered, "test_test");
@@ -125,7 +127,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A)
 	ZVAL_UNDEF(&subject);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&search);
 	zephir_create_array(&search, 5, 0);
@@ -183,7 +186,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B)
 	ZVAL_UNDEF(&subject);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&patterns);
 	zephir_create_array(&patterns, 3, 0);

@@ -70,7 +70,8 @@ PHP_METHOD(Stub_Router_Route, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
 	if (!paths) {
 		paths = &paths_sub;
@@ -121,7 +122,8 @@ PHP_METHOD(Stub_Router_Route, compilePattern)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &pattern);
 	ZEPHIR_SEPARATE_PARAM(pattern);
 
@@ -258,7 +260,8 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &pattern_param);
 	zephir_get_strval(&pattern, pattern_param);
 
@@ -490,7 +493,8 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
 	if (!paths) {
 		paths = &paths_sub;
@@ -757,7 +761,8 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&reversed);
 	array_init(&reversed);

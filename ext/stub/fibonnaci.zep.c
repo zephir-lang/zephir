@@ -86,7 +86,8 @@ PHP_METHOD(Stub_Fibonnaci, fibArray)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&fib);
 	zephir_create_array(&fib, 2, 0);
@@ -130,7 +131,8 @@ PHP_METHOD(Stub_Fibonnaci, fibArray2)
 	ZVAL_UNDEF(&_3$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&fib);
 	zephir_create_array(&fib, 2, 0);
@@ -172,7 +174,8 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n_param);
 	n = zephir_get_intval(n_param);
 
@@ -211,7 +214,8 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n_param);
 	n = zephir_get_intval(n_param);
 

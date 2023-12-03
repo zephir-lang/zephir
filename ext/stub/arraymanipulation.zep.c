@@ -44,7 +44,8 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 	ZVAL_UNDEF(&_3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 1000000);
@@ -71,14 +72,15 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init(&obj);
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_update_property_zval(&obj, ZEND_STRL("prop0"), &_0);
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 1);
 	zephir_update_property_zval(&obj, ZEND_STRL("prop1"), &_0);
 	zephir_get_arrval(&_1, &obj);
@@ -94,7 +96,8 @@ zend_object *zephir_init_properties_Stub_ArrayManipulation(zend_class_entry *cla
 	ZVAL_UNDEF(&_1$$3);
 	
 
-		ZEPHIR_MM_GROW();
+		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;

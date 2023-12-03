@@ -35,7 +35,8 @@ PHP_METHOD(Stub_Reflection, getReflectionClass)
 	ZVAL_UNDEF(&r);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionclass")));
@@ -55,7 +56,8 @@ PHP_METHOD(Stub_Reflection, getReflectionFunction)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionfunction")));
