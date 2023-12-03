@@ -113,8 +113,67 @@ class ForStatement extends StatementAbstract
         CompilationContext $compilationContext,
         Variable $exprVariable
     ): void {
-        $keyVariable = $this->initializeKeyVariable($compilationContext);
-        $variable    = $this->initializeValueVariable($compilationContext);
+        /**
+         * Initialize 'key' variable
+         */
+        if (isset($this->statement['key'])) {
+            if ('_' != $this->statement['key']) {
+                $keyVariable = $compilationContext->symbolTable->getVariableForWrite(
+                    $this->statement['key'],
+                    $compilationContext,
+                    $this->statement['expr']
+                );
+                if ('variable' != $keyVariable->getType()) {
+                    throw new CompilerException(
+                        'Cannot use variable: '
+                        . $this->statement['key']
+                        . ' type: '
+                        . $keyVariable->getType()
+                        . ' as key in hash traversal',
+                        $this->statement['expr']
+                    );
+                }
+            } else {
+                $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+            }
+
+            $keyVariable->setMustInitNull(true);
+            $keyVariable->setIsInitialized(true, $compilationContext);
+            $keyVariable->setDynamicTypes('undefined');
+        }
+
+        /**
+         * Initialize 'value' variable
+         */
+        if (isset($this->statement['value'])) {
+            if ('_' != $this->statement['value']) {
+                $variable = $compilationContext->symbolTable->getVariableForWrite(
+                    $this->statement['value'],
+                    $compilationContext,
+                    $this->statement['expr']
+                );
+                if ('variable' != $variable->getType()) {
+                    throw new CompilerException(
+                        'Cannot use variable: '
+                        . $this->statement['value']
+                        . ' type: '
+                        . $variable->getType()
+                        . ' as value in hash traversal',
+                        $this->statement['expr']
+                    );
+                }
+            } else {
+                $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+            }
+
+            $variable->setMustInitNull(true);
+            $variable->setIsInitialized(true, $compilationContext);
+            $variable->increaseVariantIfNull();
+            $variable->setDynamicTypes('undefined');
+        }
 
         /**
          * Variables are initialized in a different way inside cycle
@@ -206,8 +265,74 @@ class ForStatement extends StatementAbstract
             $this->statement['expr']
         );
 
-        $keyVariable = $this->initializeKeyVariable($compilationContext);
-        $variable    = $this->initializeValueVariable($compilationContext);
+        /**
+         * Initialize 'key' variable
+         */
+        if (isset($this->statement['key'])) {
+            if ('_' != $this->statement['key']) {
+                $keyVariable = $compilationContext->symbolTable->getVariableForWrite(
+                    $this->statement['key'],
+                    $compilationContext,
+                    $this->statement['expr']
+                );
+                if ('variable' != $keyVariable->getType()) {
+                    throw new CompilerException(
+                        'Cannot use variable: '
+                        . $this->statement['key']
+                        . ' type: '
+                        . $keyVariable->getType()
+                        . ' as key in hash traversal',
+                        $this->statement['expr']
+                    );
+                }
+            } else {
+                /**
+                 * Anonymous key variable.
+                 */
+                $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+                $keyVariable->increaseUses();
+            }
+
+            $keyVariable->setMustInitNull(true);
+            $keyVariable->setIsInitialized(true, $compilationContext);
+            $keyVariable->setDynamicTypes('undefined');
+        }
+
+        /**
+         * Initialize 'value' variable
+         */
+        if (isset($this->statement['value'])) {
+            if ('_' != $this->statement['value']) {
+                $variable = $compilationContext->symbolTable->getVariableForWrite(
+                    $this->statement['value'],
+                    $compilationContext,
+                    $this->statement['expr']
+                );
+                if ('variable' != $variable->getType()) {
+                    throw new CompilerException(
+                        'Cannot use variable: '
+                        . $this->statement['value']
+                        . ' type: '
+                        . $variable->getType()
+                        . ' as value in hash traversal',
+                        $this->statement['expr']
+                    );
+                }
+            } else {
+                /**
+                 * Anonymous value variable.
+                 */
+                $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $variable->increaseUses();
+            }
+
+            $variable->setMustInitNull(true);
+            $variable->setIsInitialized(true, $compilationContext);
+            $variable->setDynamicTypes('undefined');
+        }
 
         /**
          * Variables are initialized in a different way inside cycle
@@ -810,89 +935,6 @@ class ForStatement extends StatementAbstract
         --$compilationContext->insideCycle;
 
         $codePrinter->output('}');
-    }
-
-    /**
-     * @param CompilationContext $compilationContext
-     *
-     * @return bool|Variable
-     */
-    private function initializeValueVariable(CompilationContext $compilationContext): bool | Variable
-    {
-        /**
-         * Initialize 'value' variable
-         */
-        if (isset($this->statement['value'])) {
-            if ('_' != $this->statement['value']) {
-                $variable = $compilationContext->symbolTable->getVariableForWrite(
-                    $this->statement['value'],
-                    $compilationContext,
-                    $this->statement['expr']
-                );
-                if ('variable' != $variable->getType()) {
-                    throw new CompilerException(
-                        'Cannot use variable: '
-                        . $this->statement['value']
-                        . ' type: '
-                        . $variable->getType()
-                        . ' as value in hash traversal',
-                        $this->statement['expr']
-                    );
-                }
-            } else {
-                /**
-                 * Anonymous value variable.
-                 */
-                $variable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $variable->increaseUses();
-            }
-
-            $variable->setMustInitNull(true);
-            $variable->setIsInitialized(true, $compilationContext);
-            $variable->setDynamicTypes('undefined');
-        }
-        return $variable;
-    }
-
-    /**
-     * @param CompilationContext $compilationContext
-     *
-     * @return bool|Variable
-     */
-    private function initializeKeyVariable(CompilationContext $compilationContext): bool | Variable
-    {
-        /**
-         * Initialize 'key' variable
-         */
-        if (isset($this->statement['key'])) {
-            if ('_' != $this->statement['key']) {
-                $keyVariable = $compilationContext->symbolTable->getVariableForWrite(
-                    $this->statement['key'],
-                    $compilationContext,
-                    $this->statement['expr']
-                );
-                if ('variable' != $keyVariable->getType()) {
-                    throw new CompilerException(
-                        'Cannot use variable: '
-                        . $this->statement['key']
-                        . ' type: '
-                        . $keyVariable->getType()
-                        . ' as key in hash traversal',
-                        $this->statement['expr']
-                    );
-                }
-            } else {
-                $keyVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                    'variable',
-                    $compilationContext
-                );
-            }
-
-            $keyVariable->setMustInitNull(true);
-            $keyVariable->setIsInitialized(true, $compilationContext);
-            $keyVariable->setDynamicTypes('undefined');
-        }
-        return $keyVariable;
     }
 
     /**

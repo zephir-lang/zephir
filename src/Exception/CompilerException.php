@@ -15,6 +15,7 @@ namespace Zephir\Exception;
 
 use Exception;
 use Throwable;
+
 use Zephir\Variable\Variable;
 
 use function is_array;
