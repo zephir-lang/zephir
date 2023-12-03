@@ -16,6 +16,8 @@ namespace Zephir\Exception;
 use Exception;
 use Throwable;
 
+use Zephir\Variable\Variable;
+
 use function is_array;
 
 /**
@@ -86,6 +88,54 @@ class CompilerException extends RuntimeException
     ): self {
         return new self(
             'Cannot use non-initialized variable as an object',
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
+     * Cannot use non-initialized variable as an object
+     *
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Exception|Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function cannotUseVariableTypeAs(
+        Variable $variable,
+        string $asType,
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            'Cannot use variable type: ' . $variable->getType() . ' ' . $asType,
+            $extra,
+            $code,
+            $previous
+        );
+    }
+
+    /**
+     * Cannot use non-initialized variable as an object
+     *
+     * @param array|null               $extra    extra info [optional]
+     * @param int                      $code     the Exception code [optional]
+     * @param Exception|Throwable|null $previous the previous throwable used for the exception chaining [optional]
+     *
+     * @return self
+     */
+    public static function cannotUseValueTypeAs(
+        Variable $variable,
+        string $asType,
+        array | null $extra = null,
+        int $code = 0,
+        Exception | Throwable $previous = null
+    ): self {
+        return new self(
+            'Cannot use value type: ' . $variable->getType() . ' as ' . $asType,
             $extra,
             $code,
             $previous

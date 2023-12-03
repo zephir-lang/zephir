@@ -138,8 +138,9 @@ class MethodCall extends Call
             }
 
             if ($variableMethod->isNotVariableAndString()) {
-                throw new CompilerException(
-                    'Cannot use variable type: ' . $variableMethod->getType() . ' as dynamic method name',
+                throw CompilerException::cannotUseVariableTypeAs(
+                    $variableMethod,
+                    'as a dynamic method name',
                     $expression
                 );
             }
@@ -794,8 +795,10 @@ class MethodCall extends Call
                     case 'variable':
                         break;
                     default:
-                        throw new Exception(
-                            sprintf('Cannot use variable type: %s as method caller', $variableMethod->getType())
+                        throw CompilerException::cannotUseVariableTypeAs(
+                            $variableMethod,
+                            'as a method caller',
+                            $expression
                         );
                 }
 

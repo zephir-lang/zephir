@@ -56,10 +56,9 @@ class NativeArray
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
                 if ('variable' != $symbolVariable->getType() && 'array' != $symbolVariable->getType()) {
-                    throw new CompilerException(
-                        'Cannot use variable type: '
-                        . $symbolVariable->getType()
-                        . ' as an array',
+                    throw CompilerException::cannotUseVariableTypeAs(
+                        $symbolVariable,
+                        'as an array',
                         $expression
                     );
                 }
@@ -445,9 +444,10 @@ class NativeArray
                             break;
 
                         default:
-                            throw new CompilerException(
-                                'Cannot use variable type: ' . $variableVariable->getType() . ' as array index',
-                                $item['key']
+                            throw CompilerException::cannotUseVariableTypeAs(
+                                $variableVariable,
+                                'as an array index',
+                                $expression
                             );
                     }
                     break;

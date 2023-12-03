@@ -336,16 +336,18 @@ class Call
                             break;
 
                         default:
-                            throw new CompilerException(
-                                'Cannot use variable type: ' . $parameterVariable->getType() . ' as parameter',
+                            throw CompilerException::cannotUseVariableTypeAs(
+                                $parameterVariable,
+                                'as parameter',
                                 $expression
                             );
                     }
                     break;
 
                 default:
-                    throw new CompilerException(
-                        'Cannot use value type: ' . $compiledExpression->getType() . ' as parameter',
+                    throw CompilerException::cannotUseValueTypeAs(
+                        $compiledExpression,
+                        'parameter',
                         $expression
                     );
             }
@@ -576,16 +578,18 @@ class Call
                             break;
 
                         default:
-                            throw new CompilerException(
-                                'Cannot use variable type: ' . $parameterVariable->getType() . ' as parameter',
+                            throw CompilerException::cannotUseVariableTypeAs(
+                                $parameterVariable,
+                                'as parameter',
                                 $expression
                             );
                     }
                     break;
 
                 default:
-                    throw new CompilerException(
-                        'Cannot use value type: ' . $compiledExpression->getType() . ' as parameter',
+                    throw CompilerException::cannotUseValueTypeAs(
+                        $compiledExpression,
+                        'parameter',
                         $expression
                     );
             }

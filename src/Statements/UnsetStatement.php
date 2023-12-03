@@ -93,8 +93,9 @@ class UnsetStatement extends StatementAbstract
         }
 
         if (!in_array($variable->getType(), ['variable', 'array'])) {
-            throw new CompilerException(
-                'Cannot use variable type: ' . $variable->gettype() . ' in "unset"',
+            throw CompilerException::cannotUseVariableTypeAs(
+                $variable,
+                'in "unset"',
                 $expression['left']
             );
         }

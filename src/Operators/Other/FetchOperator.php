@@ -44,8 +44,9 @@ class FetchOperator extends AbstractOperator
             $expression['left']
         );
         if ('variable' != $variable->getType()) {
-            throw new CompilerException(
-                'Cannot use variable type: ' . $variable->gettype() . ' in "fetch" operator',
+            throw CompilerException::cannotUseVariableTypeAs(
+                $variable,
+                'in "fetch" operator',
                 $expression
             );
         }

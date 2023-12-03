@@ -65,10 +65,9 @@ class Reference
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
                 if ('variable' !== $symbolVariable->getType()) {
-                    throw new CompilerException(
-                        'Cannot use variable type: '
-                        . $symbolVariable->getType()
-                        . ' to store a reference',
+                    throw CompilerException::cannotUseVariableTypeAs(
+                        $symbolVariable,
+                        'to store a reference',
                         $expression
                     );
                 }

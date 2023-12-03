@@ -78,8 +78,9 @@ class ObjectDynamicProperty
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException(
-                'Cannot use variable type: ' . $symbolVariable->getType() . ' as an object',
+            throw CompilerException::cannotUseVariableTypeAs(
+                $symbolVariable,
+                'as an object',
                 $statement
             );
         }
