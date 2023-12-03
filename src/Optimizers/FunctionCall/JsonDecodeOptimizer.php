@@ -17,6 +17,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
 
 use function count;
 
@@ -27,6 +28,8 @@ use function count;
  */
 class JsonDecodeOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_json_decode';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -40,17 +43,12 @@ class JsonDecodeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
-        $symbolVariable = $call->getSymbolVariable();
-        $this->checkNotVariable($symbolVariable, $expression);
-        if (!$symbolVariable) {
-            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
-            $symbolVariable->initVariant($context);
-        }
+        $symbolVariable = $this->processSymbolVariable($call, $expression, $context);
 
         $context->headersManager->add('kernel/string');
 
@@ -71,9 +69,32 @@ class JsonDecodeOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            'zephir_json_decode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $options . ');'
+            $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $options . ');'
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param Call               $call
+     * @param array              $expression
+     * @param CompilationContext $context
+     *
+     * @return Variable|null
+     */
+    private function processSymbolVariable(
+        Call $call,
+        array $expression,
+        CompilationContext $context
+    ): ?Variable {
+        $symbolVariable = $call->getSymbolVariable();
+        $this->checkNotVariable($symbolVariable, $expression);
+        if (!$symbolVariable) {
+            $symbolVariable = $context->symbolTable->addTemp('variable', $context);
+            $symbolVariable->initVariant($context);
+        }
+
+        return $symbolVariable;
     }
 }
