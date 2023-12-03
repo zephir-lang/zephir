@@ -18,4 +18,9 @@ class Openssl
 
         return arr;
 	}
+
+	public function opensslEncrypt(string data)
+	{
+	    return openssl_encrypt(data, "AES-256-CBC", "passphrase", OPENSSL_RAW_DATA, "1234567890123456");
+	}
 }

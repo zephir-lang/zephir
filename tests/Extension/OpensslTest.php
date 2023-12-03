@@ -40,6 +40,13 @@ final class OpensslTest extends TestCase
         $this->assertSame(10, count($this->test->randomPseudoBytesLoop()));
     }
 
+    public function testOpensslEncrypt(): void
+    {
+        for ($i = 0; $i < 20; $i++) {
+            $this->assertNotFalse($this->test->opensslEncrypt((string)$i));
+        }
+    }
+
     public function providerLength(): array
     {
         return [
