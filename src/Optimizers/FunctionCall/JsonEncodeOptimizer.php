@@ -15,32 +15,61 @@ namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\Variable\Variable;
+use Zephir\CompiledExpression;
+use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * JsonEncodeOptimizer.
  *
  * Optimizes calls to 'json_encode' using internal function
  */
-class JsonEncodeOptimizer extends JsonDecodeOptimizer
+class JsonEncodeOptimizer extends OptimizerAbstract
 {
-    protected string $zephirMethod = 'zephir_json_encode';
-
     /**
-     * @param Call               $call
      * @param array              $expression
+     * @param Call               $call
      * @param CompilationContext $context
      *
-     * @return Variable|null
+     * @return bool|CompiledExpression|mixed
      */
-    private function processSymbolVariable(
-        Call $call,
-        array $expression,
-        CompilationContext $context
-    ): ?Variable {
+    public function optimize(array $expression, Call $call, CompilationContext $context)
+    {
+        if (!isset($expression['parameters'])) {
+            return false;
+        }
+
+        /*
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
+
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariable($symbolVariable, $expression);
 
-        return $symbolVariable;
+        $context->headersManager->add('kernel/string');
+
+        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+
+        /*
+         * Process encode options
+         */
+        if (count($resolvedParams) >= 2) {
+            $context->headersManager->add('kernel/operators');
+            $options = 'zephir_get_intval(' . $resolvedParams[1] . ') ';
+        } else {
+            $options = '0 ';
+        }
+
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+        $context->codePrinter->output(
+            'zephir_json_encode(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $options . ');'
+        );
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }
