@@ -59,7 +59,8 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse)
 	ZVAL_UNDEF(&_7);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("tmp2"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("tmp1"), PH_NOISY_CC | PH_READONLY);
@@ -185,7 +186,8 @@ PHP_METHOD(Stub_Statements, test544Issue)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &step_param);
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));
@@ -254,7 +256,8 @@ PHP_METHOD(Stub_Statements, test544IssueWithVariable)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &step_param);
 	if (UNEXPECTED(Z_TYPE_P(step_param) != IS_LONG)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'step' must be of the type int"));

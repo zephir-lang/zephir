@@ -48,7 +48,8 @@ PHP_METHOD(Stub_Strings, camelize)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
 	zephir_get_strval(&str, str_param);
 	if (!delimiter) {
@@ -79,7 +80,8 @@ PHP_METHOD(Stub_Strings, uncamelize)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
 	zephir_get_strval(&str, str_param);
 	if (!delimiter) {
@@ -524,7 +526,8 @@ PHP_METHOD(Stub_Strings, testTrimMultilineString)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "\n            Hello world\n        ");
@@ -541,7 +544,8 @@ PHP_METHOD(Stub_Strings, testWellEscapedMultilineString)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "\n            \\\"\\}\\$hello\\$\\\"\'\n        ");
@@ -568,7 +572,8 @@ PHP_METHOD(Stub_Strings, testInternedString2)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
@@ -598,7 +603,8 @@ PHP_METHOD(Stub_Strings, strToHex)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value_param);
 	zephir_get_strval(&value, value_param);
 
@@ -645,7 +651,8 @@ PHP_METHOD(Stub_Strings, issue1267)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
 	ZEPHIR_SEPARATE_PARAM(value);
 
@@ -699,7 +706,8 @@ PHP_METHOD(Stub_Strings, issue2186)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -726,7 +734,8 @@ PHP_METHOD(Stub_Strings, issue2186SegFault)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -757,7 +766,8 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -787,7 +797,8 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -818,7 +829,8 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -855,7 +867,8 @@ PHP_METHOD(Stub_Strings, issue2234Strict)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -894,7 +907,8 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -934,7 +948,8 @@ PHP_METHOD(Stub_Strings, issue2234StrictChild)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -972,7 +987,8 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &val_param);
 	if (!val_param) {
 		ZEPHIR_INIT_VAR(&val);
@@ -1013,7 +1029,8 @@ PHP_METHOD(Stub_Strings, issue2299NullableStringCondition)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &roleName_param);
 	if (!roleName_param) {
 		ZEPHIR_INIT_VAR(&roleName);

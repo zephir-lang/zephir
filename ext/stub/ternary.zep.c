@@ -39,7 +39,8 @@ PHP_METHOD(Stub_Ternary, testTernary1)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	if (100) {
@@ -63,7 +64,8 @@ PHP_METHOD(Stub_Ternary, testTernary2)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &b_param);
 	b = zephir_get_boolval(b_param);
 
@@ -94,7 +96,8 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &y);
 
 
@@ -132,7 +135,8 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a, &y);
 
 
@@ -167,7 +171,8 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex3)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 
 
@@ -198,7 +203,8 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&var2);
 	zephir_create_array(&var2, 2, 0);
@@ -233,7 +239,8 @@ PHP_METHOD(Stub_Ternary, testTernaryAfterLetVariable)
 	ZVAL_UNDEF(&s);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&s);
 	ZVAL_LONG(&s, 23);
@@ -260,7 +267,8 @@ PHP_METHOD(Stub_Ternary, testShortTernary)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 
 
@@ -288,7 +296,8 @@ PHP_METHOD(Stub_Ternary, testShortTernaryComplex)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &left, &value);
 
 

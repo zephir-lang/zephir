@@ -34,7 +34,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "callprivatemethod", NULL, 0);
 	zephir_check_call_status();
@@ -62,7 +63,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &obj, &property_param, &value);
 	ZEPHIR_SEPARATE_PARAM(obj);
 	zephir_get_strval(&property, property_param);
@@ -96,7 +98,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &className_param, &property_param, &value);
 	zephir_get_strval(&className, className_param);
 	zephir_get_strval(&property, property_param);
@@ -125,7 +128,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &obj);
 
 
@@ -152,7 +156,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className_param);
 	zephir_get_strval(&className, className_param);
 

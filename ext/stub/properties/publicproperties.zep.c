@@ -113,7 +113,8 @@ PHP_METHOD(Stub_Properties_PublicProperties, test394Issue)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&_0);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("someTrue"), PH_NOISY_CC);
@@ -139,7 +140,8 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 	ZVAL_UNDEF(&_8$$6);
 	
 
-		ZEPHIR_MM_GROW();
+		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;

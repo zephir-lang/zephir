@@ -108,7 +108,8 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArray)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &arrayParameter);
 	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 
@@ -132,7 +133,8 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArrayByIndexVar)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &arrayParameter, &index);
 	ZEPHIR_SEPARATE_PARAM(arrayParameter);
 
@@ -163,18 +165,19 @@ PHP_METHOD(Stub_Unsettest, testStdClassUnset)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&simpleObject);
 	object_init(&simpleObject);
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 12345);
 	zephir_update_property_zval(&simpleObject, ZEND_STRL("property1"), &_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "test");
 	zephir_update_property_zval(&simpleObject, ZEND_STRL("property2"), &_1);
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 12345);
 	zephir_update_property_zval(&simpleObject, ZEND_STRL("property3"), &_0);
 	zephir_unset_property(&simpleObject, "property2");
@@ -197,7 +200,8 @@ PHP_METHOD(Stub_Unsettest, testUnsetTypedArray)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &arr_param, &key_param);
 	zephir_get_arrval(&arr, arr_param);
 	zephir_get_strval(&key, key_param);

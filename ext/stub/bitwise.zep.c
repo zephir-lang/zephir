@@ -291,7 +291,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
@@ -313,7 +314,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
@@ -367,7 +369,8 @@ PHP_METHOD(Stub_Bitwise, complex4And)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) & 1));
@@ -943,7 +946,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
@@ -965,7 +969,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 	ZVAL_UNDEF(&a);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
@@ -1019,7 +1024,8 @@ PHP_METHOD(Stub_Bitwise, complex4Or)
 	ZVAL_UNDEF(&c);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) | 1));
@@ -1469,7 +1475,8 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	ZVAL_UNDEF(&j);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 123);
 	ZEPHIR_CALL_METHOD(&i, this_ptr, "getint", NULL, 0, &_0);

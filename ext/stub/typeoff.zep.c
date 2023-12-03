@@ -36,7 +36,8 @@ PHP_METHOD(Stub_Typeoff, testNativeStringFalse)
 	ZVAL_UNDEF(&testVar);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "sdfsdf");
@@ -52,7 +53,8 @@ PHP_METHOD(Stub_Typeoff, testNativeStringTrue)
 	ZVAL_UNDEF(&testVar);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "sdfsdf");
@@ -116,7 +118,8 @@ PHP_METHOD(Stub_Typeoff, testNotBoolTrue)
 	ZVAL_UNDEF(&testVar);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "");
@@ -146,7 +149,8 @@ PHP_METHOD(Stub_Typeoff, testArrayFalse)
 	ZVAL_UNDEF(&testVar);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&testVar);
 	array_init(&testVar);
@@ -162,7 +166,8 @@ PHP_METHOD(Stub_Typeoff, testArrayTrue)
 	ZVAL_UNDEF(&testVar);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&testVar);
 	array_init(&testVar);
@@ -179,7 +184,8 @@ PHP_METHOD(Stub_Typeoff, testClassPropertyAccess)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -203,7 +209,8 @@ PHP_METHOD(Stub_Typeoff, testUnknownTypeOf)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &u);
 
 

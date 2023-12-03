@@ -279,7 +279,8 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	a = zephir_get_intval(a_param);
 
@@ -313,7 +314,8 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &result_type);
 	if (!result_type) {
 		result_type = &result_type_sub;

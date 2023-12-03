@@ -53,7 +53,8 @@ PHP_METHOD(Stub_UseTest, testUseClass1)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
@@ -76,7 +77,8 @@ PHP_METHOD(Stub_UseTest, testUseClass2)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Strings"), ZEND_FETCH_CLASS_AUTO);
@@ -99,7 +101,8 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);

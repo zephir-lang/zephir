@@ -37,7 +37,8 @@ PHP_METHOD(Stub_Invokes_InvokeProtected, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
 	zephir_get_strval(&text, text_param);
 

@@ -39,7 +39,8 @@ PHP_METHOD(Stub_ArrayIterator, __construct)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 3, 0);
@@ -53,7 +54,7 @@ PHP_METHOD(Stub_ArrayIterator, __construct)
 	ZVAL_STRING(&_1, "three");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
-	ZEPHIR_INIT_ZVAL_NREF(_2);
+	ZVAL_UNDEF(&_2);
 	ZVAL_LONG(&_2, 0);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("position"), &_2);
 	ZEPHIR_MM_RESTORE();
@@ -68,7 +69,7 @@ PHP_METHOD(Stub_ArrayIterator, rewind)
 
 
 
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("position"), &_0);
 }
@@ -84,7 +85,8 @@ PHP_METHOD(Stub_ArrayIterator, current)
 	ZVAL_UNDEF(&_2);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_memory_observe(&_2);

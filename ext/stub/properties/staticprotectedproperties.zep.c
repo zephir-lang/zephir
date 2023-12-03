@@ -201,7 +201,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_memory_observe(&_0);
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someNull"), PH_NOISY_CC);

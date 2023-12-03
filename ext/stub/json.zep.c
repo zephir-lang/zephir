@@ -35,7 +35,8 @@ PHP_METHOD(Stub_Json, testEncodeObject)
 	ZVAL_UNDEF(&obj);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	zephir_create_array(&obj, 3, 0);
@@ -56,7 +57,8 @@ PHP_METHOD(Stub_Json, testEncodeArray)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 3, 0);
@@ -84,7 +86,8 @@ PHP_METHOD(Stub_Json, testEncodeOptions)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&arr);
 	zephir_create_array(&arr, 4, 0);
@@ -114,7 +117,8 @@ PHP_METHOD(Stub_Json, testDecodeObject)
 	ZVAL_UNDEF(&obj);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	ZVAL_STRING(&obj, "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}");
@@ -132,7 +136,8 @@ PHP_METHOD(Stub_Json, testDecodeObject2)
 	ZVAL_UNDEF(&obj);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	ZVAL_STRING(&obj, "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}");
@@ -149,7 +154,8 @@ PHP_METHOD(Stub_Json, testDecodeArray)
 	ZVAL_UNDEF(&arr);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&arr);
 	ZVAL_STRING(&arr, "[1,2,3]");
