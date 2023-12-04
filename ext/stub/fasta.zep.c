@@ -69,7 +69,8 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &n, &seq_param);
 	zephir_get_strval(&seq, seq_param);
 
@@ -96,7 +97,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		if (ZEPHIR_LE_LONG(&j, -1)) {
 			break;
 		}
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_decrement(&j);
 		ZVAL_LONG(&_6$$3, (60 * zephir_get_numberval(&j)));
 		ZVAL_LONG(&_7$$3, 60);
@@ -119,7 +120,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 			break;
 		}
 		zend_print_zval(&block, 0);
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
 	ZEPHIR_INIT_NVAR(&j);
@@ -132,7 +133,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		}
 		zephir_array_fetch(&_11$$6, &lines, &j, PH_NOISY | PH_READONLY, "stub/fasta.zep", 38);
 		zend_print_zval(&_11$$6, 0);
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
 	if (zephir_safe_mod_zval_long(n, 60) > 0) {
@@ -173,7 +174,8 @@ PHP_METHOD(Stub_Fasta, main)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n);
 
 

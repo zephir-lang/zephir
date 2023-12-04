@@ -51,9 +51,10 @@ PHP_METHOD(Stub_SPropertyAccess, __construct)
 	ZVAL_UNDEF(&_4);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abc");
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("a"), &_0);
@@ -87,7 +88,8 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &delimiter);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -121,7 +123,8 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &delimiter);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -154,7 +157,8 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
 	ZVAL_UNDEF(&_4$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	_2 = 3;
 	_1 = 0;
@@ -213,7 +217,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateIntVarInsideCycle)
 			}
 			_1 = _1;
 			i = 42;
-			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
+			ZVAL_UNDEF(&_3$$3);
 			ZVAL_LONG(&_3$$3, i);
 			zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("intVar"), &_3$$3);
 		}
@@ -253,7 +257,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateDoubleVarInsideCycle)
 			}
 			_1 = _1;
 			i = 3.14;
-			ZEPHIR_INIT_ZVAL_NREF(_3$$3);
+			ZVAL_UNDEF(&_3$$3);
 			ZVAL_DOUBLE(&_3$$3, i);
 			zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("doubleVar"), &_3$$3);
 		}
@@ -277,7 +281,8 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 	ZVAL_UNDEF(&_4$$3);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	_2 = 3;
 	_1 = 0;
@@ -314,7 +319,8 @@ void zephir_init_static_properties_Stub_SPropertyAccess()
 		ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);

@@ -40,7 +40,8 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, stub_arrayiterator_ce);

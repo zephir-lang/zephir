@@ -38,7 +38,8 @@ void zephir_throw_exception_debug(zval *object, const char *file, uint32_t line)
 
 	ZVAL_UNDEF(&curline);
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		ZVAL_COPY_VALUE(&object_copy, object);

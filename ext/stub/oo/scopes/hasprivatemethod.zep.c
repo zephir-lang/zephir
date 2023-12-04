@@ -32,7 +32,8 @@ PHP_METHOD(Stub_Oo_Scopes_HasPrivateMethod, callPrivateMethod)
 
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "isprivate", NULL, 1);
 	zephir_check_call_status();

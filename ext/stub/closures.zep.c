@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_Closures, testUseCommand)
 
 	abc = 1;
 	zephir_create_closure_ex(return_value, NULL, stub_8__closure_ce, SL("__invoke"));
-	ZEPHIR_INIT_ZVAL_NREF(_0);
+	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, abc);
 	zephir_update_static_property_ce(stub_8__closure_ce, ZEND_STRL("abc"), &_0);
 	return;
@@ -130,7 +130,8 @@ PHP_METHOD(Stub_Closures, issue1860)
 	ZEND_PARSE_PARAMETERS_END();
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &abc_param);
 	ZEPHIR_OBS_COPY_OR_DUP(&abc, abc_param);
 
@@ -156,7 +157,8 @@ PHP_METHOD(Stub_Closures, issue642)
 	ZVAL_UNDEF(&_0);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init(&obj);
@@ -218,7 +220,8 @@ PHP_METHOD(Stub_Closures, issue1036Call)
 	ZVAL_UNDEF(&_1);
 
 
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_function"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("_argument"), PH_NOISY_CC | PH_READONLY);
