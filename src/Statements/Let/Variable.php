@@ -82,11 +82,23 @@ class Variable
             case 'ulong':
             case 'char':
             case 'uchar':
-                $this->doNumericAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                $this->doNumericAssignment(
+                    $codePrinter,
+                    $resolvedExpr,
+                    $variable,
+                    $statement,
+                    $compilationContext
+                );
                 break;
 
             case 'double':
-                $this->doDoubleAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                $this->doDoubleAssignment(
+                    $codePrinter,
+                    $resolvedExpr,
+                    $variable,
+                    $statement,
+                    $compilationContext
+                );
                 break;
 
             case 'array':
@@ -112,7 +124,13 @@ class Variable
                 break;
 
             case 'bool':
-                $this->doBoolAssignment($codePrinter, $resolvedExpr, $variable, $statement, $compilationContext);
+                $this->doBoolAssignment(
+                    $codePrinter,
+                    $resolvedExpr,
+                    $variable,
+                    $statement,
+                    $compilationContext
+                );
                 break;
 
             case 'variable':
@@ -378,71 +396,35 @@ class Variable
     ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = 0.0;');
-                        break;
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += 0.0;');
-                        break;
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= 0.0;');
-                        break;
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= 0.0;');
-                        break;
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $this->doNumberAssignmentNull(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    $resolvedExpr,
+                    '0.0'
+                );
                 break;
 
             case 'int':
             case 'uint':
             case 'long':
             case 'ulong':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = (double) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += (double) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= (double) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= (double) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $this->doNumericAssignmentLong(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    $resolvedExpr,
+                    '(double)'
+                );
                 break;
 
             case 'double':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $this->doNumericAssignmentLong(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    $resolvedExpr
+                );
                 break;
 
             case 'bool':
@@ -480,41 +462,22 @@ class Variable
                     case 'long':
                     case 'ulong':
                     case 'bool':
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = (double) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'add-assign':
-                                $codePrinter->output($variable . ' += (double) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'sub-assign':
-                                $codePrinter->output($variable . ' -= (double) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'mul-assign':
-                                $codePrinter->output($variable . ' *= (double) ' . $itemVariable->getName() . ';');
-                                break;
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $this->doNumericAssignmentVar(
+                            $statement,
+                            $codePrinter,
+                            $variable,
+                            $itemVariable,
+                            '(double)'
+                        );
                         break;
 
                     case 'double':
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'add-assign':
-                                $codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'sub-assign':
-                                $codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'mul-assign':
-                                $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
-                                break;
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $this->doNumericAssignmentVar(
+                            $statement,
+                            $codePrinter,
+                            $variable,
+                            $itemVariable
+                        );
                         break;
 
                     case 'variable':
@@ -554,26 +517,13 @@ class Variable
     ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = 0;');
-                        break;
-
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += 0;');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= 0;');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= 0;');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $this->doNumberAssignmentNull(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    $resolvedExpr,
+                    '0'
+                );
                 break;
 
             case 'int':
@@ -635,26 +585,13 @@ class Variable
                 break;
 
             case 'double':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = (long) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += (long) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= (long) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= (long) (' . $resolvedExpr->getCode() . ');');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $this->doNumericAssignmentLong(
+                    $statement,
+                    $codePrinter,
+                    $variable,
+                    $resolvedExpr,
+                    '(long)'
+                );
                 break;
 
             case 'bool':
@@ -721,22 +658,13 @@ class Variable
                         break;
 
                     case 'double':
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = (long) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'add-assign':
-                                $codePrinter->output($variable . ' += (long) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'sub-assign':
-                                $codePrinter->output($variable . ' -= (long) ' . $itemVariable->getName() . ';');
-                                break;
-                            case 'mul-assign':
-                                $codePrinter->output($variable . ' *= (long) ' . $itemVariable->getName() . ';');
-                                break;
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $this->doNumericAssignmentVar(
+                            $statement,
+                            $codePrinter,
+                            $variable,
+                            $itemVariable,
+                            '(long)'
+                        );
                         break;
 
                     case 'variable':
@@ -1025,13 +953,11 @@ class Variable
     ): void {
         switch ($resolvedExpr->getType()) {
             case 'null':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $symbolVariable->initVariant($compilationContext);
-                        $symbolVariable->setDynamicTypes('null');
+                if ($statement['operator'] == 'assign') {
+                    $symbolVariable->initVariant($compilationContext);
+                    $symbolVariable->setDynamicTypes('null');
 
-                        $compilationContext->backend->assignNull($symbolVariable, $compilationContext);
-                        break;
+                    $compilationContext->backend->assignNull($symbolVariable, $compilationContext);
                 }
                 break;
 
@@ -1474,6 +1400,132 @@ class Variable
 
             default:
                 throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $resolvedExpr->getOriginal());
+        }
+    }
+
+    /**
+     * @param array              $statement
+     * @param Printer            $codePrinter
+     * @param string             $variable
+     * @param CompiledExpression $resolvedExpr
+     * @param string             $value
+     *
+     * @return void
+     */
+    private function doNumberAssignmentNull(
+        array $statement,
+        Printer $codePrinter,
+        string $variable,
+        CompiledExpression $resolvedExpr,
+        string $value
+    ): void {
+        switch ($statement['operator']) {
+            case 'assign':
+                $codePrinter->output($variable . ' = ' . $value . ';');
+                break;
+            case 'add-assign':
+                $codePrinter->output($variable . ' += ' . $value . ';');
+                break;
+            case 'sub-assign':
+                $codePrinter->output($variable . ' -= ' . $value . ';');
+                break;
+            case 'mul-assign':
+                $codePrinter->output($variable . ' *= ' . $value . ';');
+                break;
+            default:
+                throw new IllegalOperationException($statement, $resolvedExpr);
+        }
+    }
+
+    /**
+     * @param array               $statement
+     * @param Printer             $codePrinter
+     * @param string              $variable
+     * @param ZephirVariable|bool $itemVariable
+     * @param string              $cast
+     *
+     * @return void
+     */
+    private function doNumericAssignmentVar(
+        array $statement,
+        Printer $codePrinter,
+        string $variable,
+        ZephirVariable | bool $itemVariable,
+        string $cast = ''
+    ): void {
+        switch ($statement['operator']) {
+            case 'assign':
+                $codePrinter->output(
+                    $variable . ' = ' . $cast . ' ' . $itemVariable->getName() . ';'
+                );
+                break;
+            case 'add-assign':
+                $codePrinter->output(
+                    $variable . ' += ' . $cast . ' ' . $itemVariable->getName() . ';'
+                );
+                break;
+            case 'sub-assign':
+                $codePrinter->output(
+                    $variable . ' -= ' . $cast . ' ' . $itemVariable->getName() . ';'
+                );
+                break;
+            case 'mul-assign':
+                $codePrinter->output(
+                    $variable . ' *= ' . $cast . ' ' . $itemVariable->getName() . ';'
+                );
+                break;
+            default:
+                throw new IllegalOperationException($statement, $itemVariable);
+        }
+    }
+
+    /**
+     * @param array              $statement
+     * @param Printer            $codePrinter
+     * @param string             $variable
+     * @param CompiledExpression $resolvedExpr
+     * @param string             $cast
+     *
+     * @return void
+     */
+    private function doNumericAssignmentLong(
+        array $statement,
+        Printer $codePrinter,
+        string $variable,
+        CompiledExpression $resolvedExpr,
+        string $cast = ''
+    ): void {
+        switch ($statement['operator']) {
+            case 'assign':
+                $codePrinter->output(
+                    $variable . ' = ' . $cast
+                    . ' (' . $resolvedExpr->getCode() . ');'
+                );
+                break;
+
+            case 'add-assign':
+                $codePrinter->output(
+                    $variable . ' += ' . $cast
+                    . ' (' . $resolvedExpr->getCode() . ');'
+                );
+                break;
+
+            case 'sub-assign':
+                $codePrinter->output(
+                    $variable . ' -= ' . $cast
+                    . ' (' . $resolvedExpr->getCode() . ');'
+                );
+                break;
+
+            case 'mul-assign':
+                $codePrinter->output(
+                    $variable . ' *= ' . $cast
+                    . ' (' . $resolvedExpr->getCode() . ');'
+                );
+                break;
+
+            default:
+                throw new IllegalOperationException($statement, $resolvedExpr);
         }
     }
 
