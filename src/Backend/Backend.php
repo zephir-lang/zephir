@@ -102,7 +102,7 @@ class Backend
 
     public function initVar(Variable $variable, CompilationContext $context, bool $useCodePrinter = true, bool $second = false): string
     {
-        $macro = !$second ? 'ZEPHIR_INIT_VAR' : 'ZEPHIR_INIT_NVAR';
+        $macro = !$second ? 'ZVAL_NULL' : 'ZEPHIR_INIT_NVAR';
         $code = $macro.'('.$this->getVariableCode($variable).');';
         if ($useCodePrinter) {
             $context->codePrinter->output($code);
@@ -218,11 +218,6 @@ class Backend
             case 'static_zephir_fcall_cache_entry':
                 $pointer = '*';
                 $code = 'zephir_fcall_cache_entry';
-                break;
-
-            case 'zephir_method_globals':
-                $pointer = '*';
-                $code = 'zephir_method_globals';
                 break;
 
             default:
@@ -544,7 +539,7 @@ class Backend
         if (!$variable->isDoublePointer()) {
             $context->symbolTable->mustGrownStack(true);
             $symbolVariable = $this->getVariableCode($variable);
-            $context->codePrinter->output('ZEPHIR_OBS_COPY_OR_DUP('.$symbolVariable.', '.$code.');');
+            $context->codePrinter->output('ZVAL_COPY('.$symbolVariable.', '.$code.');');
         } else {
             $context->codePrinter->output($variable->getName().' = '.$code.';');
         }

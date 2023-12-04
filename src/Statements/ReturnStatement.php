@@ -26,6 +26,8 @@ use Zephir\Types\Types;
  */
 final class ReturnStatement extends StatementAbstract
 {
+    private const RETURN_RETURN = 'return;';
+
     /**
      * @param CompilationContext $compilationContext
      *
@@ -222,7 +224,7 @@ final class ReturnStatement extends StatementAbstract
                     if ('return_value' != $resolvedExpr->getCode()) {
                         $codePrinter->output('RETURN_CTOR('.$resolvedExpr->getCode().');');
                     } else {
-                        $codePrinter->output('RETURN_MM();');
+                        $codePrinter->output(self::RETURN_RETURN);
                     }
                     break;
 
@@ -300,10 +302,10 @@ final class ReturnStatement extends StatementAbstract
                                                 $compilationContext->backend->getVariableCode($symbolVariable)
                                             )
                                         );
-                                        $codePrinter->output('RETURN_MM();');
+                                        $codePrinter->output(self::RETURN_RETURN);
                                     }
                                 } else {
-                                    $codePrinter->output('RETURN_MM();');
+                                    $codePrinter->output(self::RETURN_RETURN);
                                 }
                             }
                             if ($symbolVariable->isTemporal()) {

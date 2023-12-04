@@ -33,7 +33,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Downloads Cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.CACHE_DIR }}
         key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build-win-ext/actions.yml') }}

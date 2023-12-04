@@ -32,7 +32,6 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
-use Zephir\Variable\Variable;
 
 /**
  * Represents a class method
@@ -820,6 +819,8 @@ class Method
 
     /**
      * Replace macros.
+     *
+     * @deprecated
      */
     public function removeMemoryStackReferences(SymbolTable $symbolTable, string $containerCode): string
     {
@@ -846,7 +847,6 @@ class Method
         $containerCode = str_replace('RETURN_MM_EMPTY_STRING', 'RETURN_MM_EMPTY_STRING', $containerCode);
         $containerCode = str_replace('RETURN_MM_EMPTY_ARRAY', 'RETURN_EMPTY_ARRAY', $containerCode);
         $containerCode = str_replace('RETURN_MM_MEMBER', 'RETURN_MEMBER', $containerCode);
-        $containerCode = str_replace('RETURN_MM()', 'return', $containerCode);
 
         return preg_replace('/[ \t]+ZEPHIR_MM_RESTORE\(\);'.PHP_EOL.'/s', '', $containerCode);
     }
@@ -1230,13 +1230,15 @@ class Method
             case 'uint':
             case 'long':
             case 'ulong':
-                return "\t".$parameter['name'].' = zephir_get_intval('.$parameterCode.');'.PHP_EOL;
+                // Value already passed in `Z_PARAM_LONG()`
+                return '';
 
             case 'char':
                 return "\t".$parameter['name'].' = zephir_get_charval('.$parameterCode.');'.PHP_EOL;
 
             case 'bool':
-                return "\t".$parameter['name'].' = zephir_get_boolval('.$parameterCode.');'.PHP_EOL;
+                //return "\t".$parameter['name'].' = zephir_get_boolval('.$parameterCode.');'.PHP_EOL;
+                return '';
 
             case 'double':
                 return "\t".$parameter['name'].' = zephir_get_doubleval('.$parameterCode.');'.PHP_EOL;
@@ -1716,25 +1718,6 @@ class Method
         }
 
         /**
-         * Grow the stack if needed
-         */
-        if ($symbolTable->getMustGrownStack()) {
-            $compilationContext->headersManager->add('kernel/memory');
-            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_METHOD_GLOBALS_PTR')) {
-                $methodGlobals = new Variable('zephir_method_globals', 'ZEPHIR_METHOD_GLOBALS_PTR', $compilationContext->branchManager->getCurrentBranch());
-                $methodGlobals->setMustInitNull(true);
-                $methodGlobals->increaseUses();
-                $methodGlobals->setReusable(false);
-                $methodGlobals->setReadOnly(true);
-                $compilationContext->symbolTable->addRawVariable($methodGlobals);
-            }
-
-            // #define ZEPHIR_MM_GROW()
-            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);');
-            $codePrinter->preOutput("\t".'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
-        }
-
-        /**
          * Check if there are unused variables.
          */
         $usedVariables = [];
@@ -1859,21 +1842,19 @@ class Method
              */
             $lastType = $this->statements->getLastStatementType();
 
-            if ('return' !== $lastType && 'throw' !== $lastType && !$this->hasChildReturnStatementType($statement)) {
-                if ($symbolTable->getMustGrownStack()) {
-                    $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
-                }
-
-                /**
-                 * If a method has return-type hints we need to ensure the last statement is a 'return' statement
-                 */
-                if ($this->hasReturnTypes()) {
-                    throw new CompilerException(
-                        'Reached end of the method without returning a valid type specified in the return-type hints',
-                        $this->expression['return-type']
-                    );
-                }
+            /**
+             * If a method has return-type hints we need to ensure the last
+             * statement is a 'return' statement
+             */
+            if ('return' !== $lastType
+                && 'throw' !== $lastType
+                && !$this->hasChildReturnStatementType($statement)
+                && $this->hasReturnTypes()
+            ) {
+                throw new CompilerException(
+                    'Reached end of the method without returning a valid type specified in the return-type hints',
+                    $this->expression['return-type']
+                );
             }
         }
 
