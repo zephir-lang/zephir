@@ -13,12 +13,10 @@ RUN apt update -y && apt install -y \
     libicu-dev \
     libgmp-dev \
     libzip-dev && \
-    pecl install psr zephir_parser
-#    pecl install psr zephir_parser xdebug
+    pecl install psr zephir_parser xdebug
 
 RUN docker-php-ext-install zip gmp intl mysqli && \
-    docker-php-ext-enable psr zephir_parser
-#    docker-php-ext-enable psr zephir_parser xdebug
+    docker-php-ext-enable psr zephir_parser xdebug
 
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 # Bash script with helper aliases
