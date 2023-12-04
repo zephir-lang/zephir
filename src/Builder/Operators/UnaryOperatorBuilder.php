@@ -13,35 +13,37 @@ declare(strict_types=1);
 
 namespace Zephir\Builder\Operators;
 
+use function is_object;
+use function method_exists;
+
 /**
  * Allows to manually build a unary operator AST node
  */
 class UnaryOperatorBuilder extends AbstractOperatorBuilder
 {
     /**
-     * Operator name
-     */
-    protected string $operator;
-
-    /**
      * Left Expression
      *
      * @var mixed
      */
     protected $leftExpression;
+    /**
+     * Operator name
+     */
+    protected string $operator;
 
     public function __construct(string $operator, $leftExpression, string $file = null, int $line = 0, int $char = 0)
     {
-        $this->operator = $operator;
+        $this->operator       = $operator;
         $this->leftExpression = $leftExpression;
-        $this->file = $file;
-        $this->line = $line;
-        $this->char = $char;
+        $this->file           = $file;
+        $this->line           = $line;
+        $this->char           = $char;
     }
 
     public function get(): array
     {
-        if (\is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
+        if (is_object($this->leftExpression) && method_exists($this->leftExpression, 'get')) {
             $expr = $this->leftExpression->get();
         } else {
             $expr = $this->leftExpression;

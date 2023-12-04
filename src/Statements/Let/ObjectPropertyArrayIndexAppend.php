@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,14 +9,20 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable\Variable as ZephirVariable;
+
+use function count;
+use function current;
 
 /**
  * Updates object properties dynamically
@@ -31,17 +35,23 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
      * @param string             $variable
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext,
+     * @param CompilationContext $compilationContext ,
      * @param array              $statement
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
-    {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
-        }
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ): void {
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Attempt to use variable type: '.$symbolVariable->getType().' as object', $statement);
+            throw new CompilerException(
+                'Attempt to use variable type: ' . $symbolVariable->getType() . ' as object',
+                $statement
+            );
         }
 
         $this->_assignPropertyArrayMultipleIndex($symbolVariable, $resolvedExpr, $compilationContext, $statement);
@@ -55,11 +65,15 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
      * @param CompilationContext $compilationContext
      * @param array              $statement
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
-    protected function _assignPropertyArrayMultipleIndex(ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement): void
-    {
+    protected function _assignPropertyArrayMultipleIndex(
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ): void {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
 
@@ -68,7 +82,7 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          */
         $variableExpr = $this->_getResolvedArrayItem($resolvedExpr, $compilationContext);
 
-        if (\count($statement['index-expr']) > 16) {
+        if (count($statement['index-expr']) > 16) {
             throw new CompilerException('Too many array indexes', $statement);
         }
 
@@ -89,7 +103,12 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
                 case 'variable':
                     break;
                 default:
-                    throw new CompilerException('Expression: '.$resolvedIndex->getType().' cannot be used as index without cast', $statement);
+                    throw new CompilerException(
+                        'Expression: '
+                        . $resolvedIndex->getType()
+                        . ' cannot be used as index without cast',
+                        $statement
+                    );
             }
 
             $offsetExprs[] = $resolvedIndex;
@@ -100,9 +119,11 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
          */
         if ('this' == $symbolVariable->getRealName()) {
             $classDefinition = $compilationContext->classDefinition;
-            if (!$classDefinition->hasProperty($property)) {
-                throw new CompilerException("Class '".$classDefinition->getCompleteName()."' does not have a property called: '".$property."'", $statement);
-            }
+            $this->checkClassHasProperty(
+                $classDefinition,
+                $property,
+                $statement
+            );
         } else {
             /**
              * If we know the class related to a variable we could check if the property
@@ -110,22 +131,34 @@ class ObjectPropertyArrayIndexAppend extends ArrayIndex
              */
             if ($symbolVariable->hasAnyDynamicType('object')) {
                 $classType = current($symbolVariable->getClassTypes());
-                $compiler = $compilationContext->compiler;
+                $compiler  = $compilationContext->compiler;
 
                 if ($compiler->isClass($classType)) {
                     $classDefinition = $compiler->getClassDefinition($classType);
                     if (!$classDefinition) {
-                        throw new CompilerException('Cannot locate class definition for class: '.$classType, $statement);
+                        throw new CompilerException(
+                            'Cannot locate class definition for class: ' . $classType,
+                            $statement
+                        );
                     }
 
-                    if (!$classDefinition->hasProperty($property)) {
-                        throw new CompilerException("Class '".$classType."' does not have a property called: '".$property."'", $statement);
-                    }
+                    $this->checkClassHasProperty(
+                        $classDefinition,
+                        $property,
+                        $statement,
+                        $classType
+                    );
                 }
             }
         }
 
         $offsetExprs[] = 'a';
-        $compilationContext->backend->assignPropertyArrayMulti($symbolVariable, $variableExpr, $property, $offsetExprs, $compilationContext);
+        $compilationContext->backend->assignPropertyArrayMulti(
+            $symbolVariable,
+            $variableExpr,
+            $property,
+            $offsetExprs,
+            $compilationContext
+        );
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
+use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -37,17 +38,18 @@ class CharType extends AbstractType
      *
      * @return bool|mixed|CompiledExpression
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function toHex($caller, CompilationContext $compilationContext, Call $call, array $expression)
     {
-        $exprBuilder = BuilderFactory::getInstance();
+        $exprBuilder  = BuilderFactory::getInstance();
         $functionCall = $exprBuilder->statements()
-            ->functionCall('zephir_string_to_hex', [$caller])
-            ->setFile($expression['file'])
-            ->setLine($expression['line'])
-            ->setChar($expression['char']);
+                                    ->functionCall('zephir_string_to_hex', [$caller])
+                                    ->setFile($expression['file'])
+                                    ->setLine($expression['line'])
+                                    ->setChar($expression['char'])
+        ;
 
         $expression = new Expression($functionCall->build());
 

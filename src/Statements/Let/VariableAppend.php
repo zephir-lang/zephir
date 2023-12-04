@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,11 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
@@ -25,6 +26,8 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class VariableAppend
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo[] = {expr}.
      *
@@ -36,25 +39,25 @@ class VariableAppend
      *
      * @throws CompilerException
      */
-    public function assign($variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, $statement): void
-    {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
-        }
-
-        if ($symbolVariable->isReadOnly()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is read only", $statement);
-        }
-
-        if ($symbolVariable->isLocalOnly()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is local only", $statement);
-        }
+    public function assign(
+        $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        $statement
+    ): void {
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
+        $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
+        $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
         /*
          * Only dynamic variables and arrays can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
-            throw new CompilerException("Cannot use variable type: '".$symbolVariable->getType()."' as an array", $statement);
+            throw new CompilerException(
+                "Cannot use variable type: '" . $symbolVariable->getType() . "' as an array",
+                $statement
+            );
         }
 
         if ('variable' == $symbolVariable->getType()) {
@@ -75,69 +78,187 @@ class VariableAppend
             case 'mixed':
                 switch ($resolvedExpr->getType()) {
                     case 'null':
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, 'null', $compilationContext, $statement);
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            'null',
+                            $compilationContext,
+                            $statement
+                        );
                         break;
 
                     case 'int':
                     case 'uint':
                     case 'long':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                        $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->assignLong(
+                            $tempVariable,
+                            $resolvedExpr->getCode(),
+                            $compilationContext
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $tempVariable,
+                            $compilationContext,
+                            $statement
+                        );
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'double':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                        $compilationContext->backend->assignDouble($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->assignDouble(
+                            $tempVariable,
+                            $resolvedExpr->getCode(),
+                            $compilationContext
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $tempVariable,
+                            $compilationContext,
+                            $statement
+                        );
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'bool':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                        $compilationContext->backend->assignBool($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->assignBool(
+                            $tempVariable,
+                            $resolvedExpr->getBooleanCode(),
+                            $compilationContext
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $tempVariable,
+                            $compilationContext,
+                            $statement
+                        );
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'ulong':
                     case 'string':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                        $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getBooleanCode(), $compilationContext);
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->assignString(
+                            $tempVariable,
+                            $resolvedExpr->getBooleanCode(),
+                            $compilationContext
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $tempVariable,
+                            $compilationContext,
+                            $statement
+                        );
                         $tempVariable->setIdle(true);
                         break;
 
                     case 'array':
-                        $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-                        $compilationContext->backend->addArrayEntry($symbolVariable, null, $exprVariable, $compilationContext, $statement);
+                        $exprVariable = $compilationContext->symbolTable->getVariableForRead(
+                            $resolvedExpr->getCode(),
+                            $compilationContext,
+                            $statement
+                        );
+                        $compilationContext->backend->addArrayEntry(
+                            $symbolVariable,
+                            null,
+                            $exprVariable,
+                            $compilationContext,
+                            $statement
+                        );
                         break;
 
                     case 'variable':
                     case 'mixed':
-                        $exprVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+                        $exprVariable = $compilationContext->symbolTable->getVariableForRead(
+                            $resolvedExpr->getCode(),
+                            $compilationContext,
+                            $statement
+                        );
                         switch ($exprVariable->getType()) {
                             case 'int':
                             case 'uint':
                             case 'long':
-                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                                $compilationContext->backend->assignLong($tempVariable, $exprVariable, $compilationContext);
-                                $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                    'variable',
+                                    $compilationContext,
+                                    $statement
+                                );
+                                $compilationContext->backend->assignLong(
+                                    $tempVariable,
+                                    $exprVariable,
+                                    $compilationContext
+                                );
+                                $compilationContext->backend->addArrayEntry(
+                                    $symbolVariable,
+                                    null,
+                                    $tempVariable,
+                                    $compilationContext,
+                                    $statement
+                                );
                                 $tempVariable->setIdle(true);
                                 break;
 
                             case 'double':
-                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                                $compilationContext->backend->assignDouble($tempVariable, $exprVariable, $compilationContext);
-                                $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                    'variable',
+                                    $compilationContext,
+                                    $statement
+                                );
+                                $compilationContext->backend->assignDouble(
+                                    $tempVariable,
+                                    $exprVariable,
+                                    $compilationContext
+                                );
+                                $compilationContext->backend->addArrayEntry(
+                                    $symbolVariable,
+                                    null,
+                                    $tempVariable,
+                                    $compilationContext,
+                                    $statement
+                                );
                                 $tempVariable->setIdle(true);
                                 break;
 
                             case 'bool':
-                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $statement);
-                                $compilationContext->backend->assignBool($tempVariable, $exprVariable, $compilationContext);
-                                $compilationContext->backend->addArrayEntry($symbolVariable, null, $tempVariable, $compilationContext, $statement);
+                                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                    'variable',
+                                    $compilationContext,
+                                    $statement
+                                );
+                                $compilationContext->backend->assignBool(
+                                    $tempVariable,
+                                    $exprVariable,
+                                    $compilationContext
+                                );
+                                $compilationContext->backend->addArrayEntry(
+                                    $symbolVariable,
+                                    null,
+                                    $tempVariable,
+                                    $compilationContext,
+                                    $statement
+                                );
                                 $tempVariable->setIdle(true);
                                 break;
 
@@ -145,21 +266,27 @@ class VariableAppend
                             case 'mixed':
                             case 'string':
                             case 'array':
-                                $compilationContext->backend->addArrayEntry($symbolVariable, null, $exprVariable, $compilationContext, $statement);
+                                $compilationContext->backend->addArrayEntry(
+                                    $symbolVariable,
+                                    null,
+                                    $exprVariable,
+                                    $compilationContext,
+                                    $statement
+                                );
                                 break;
 
                             default:
-                                throw new CompilerException('Unknown type: '.$exprVariable->getType(), $statement);
+                                throw new CompilerException('Unknown type: ' . $exprVariable->getType(), $statement);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type: '.$resolvedExpr->getType(), $statement);
+                        throw new CompilerException('Unknown type: ' . $resolvedExpr->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type: '.$type, $statement);
+                throw new CompilerException('Unknown type: ' . $type, $statement);
         }
     }
 }

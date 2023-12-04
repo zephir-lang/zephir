@@ -38,9 +38,17 @@ class FetchOperator extends AbstractOperator
     {
         $compilationContext->headersManager->add('kernel/array');
 
-        $variable = $compilationContext->symbolTable->getVariableForWrite($expression['left']['value'], $compilationContext, $expression['left']);
+        $variable = $compilationContext->symbolTable->getVariableForWrite(
+            $expression['left']['value'],
+            $compilationContext,
+            $expression['left']
+        );
         if ('variable' != $variable->getType()) {
-            throw new CompilerException('Cannot use variable type: '.$variable->gettype().' in "fetch" operator', $expression);
+            throw CompilerException::cannotUseVariableTypeAs(
+                $variable,
+                'in "fetch" operator',
+                $expression
+            );
         }
 
         /**
@@ -51,7 +59,10 @@ class FetchOperator extends AbstractOperator
              * TODO: use a read detector here
              */
             $readOnly = false;
-            $line = max($compilationContext->symbolTable->getLastCallLine(), $compilationContext->symbolTable->getLastUnsetLine());
+            $line     = max(
+                $compilationContext->symbolTable->getLastCallLine(),
+                $compilationContext->symbolTable->getLastUnsetLine()
+            );
             if (false === $line || ($line > 0 && $line < $expression['line'])) {
                 $numberMutations = $compilationContext->symbolTable->getExpectedMutations($variable->getName());
                 if (1 == $numberMutations) {
@@ -84,12 +95,22 @@ class FetchOperator extends AbstractOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as array', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as array',
+                        $expression['right']['left']
+                    );
                 }
 
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariable->getCode(),
+                    $compilationContext,
+                    $expression['right']['left']
+                );
                 if ('variable' != $evalVariable->getType() && 'array' != $evalVariable->getType()) {
-                    throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as array', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Variable type: ' . $variable->getType() . ' cannot be used as array',
+                        $expression['right']['left']
+                    );
                 }
 
                 if ('variable' == $evalVariable->getType()) {
@@ -106,8 +127,14 @@ class FetchOperator extends AbstractOperator
                 $expr->setNoisy(false);
                 $resolvedExpr = $expr->compile($compilationContext);
 
-                return $compilationContext->backend->arrayIssetFetch($variable, $evalVariable, $resolvedExpr, $flags, $expression, $compilationContext);
-                break;
+                return $compilationContext->backend->arrayIssetFetch(
+                    $variable,
+                    $evalVariable,
+                    $resolvedExpr,
+                    $flags,
+                    $expression,
+                    $compilationContext
+                );
 
             case 'property-access':
                 $exprVariable = new Expression($expression['right']['left']);
@@ -116,12 +143,22 @@ class FetchOperator extends AbstractOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as object', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
+                        $expression['right']['left']
+                    );
                 }
 
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariable->getCode(),
+                    $compilationContext,
+                    $expression['right']['left']
+                );
                 if ('variable' != $evalVariable->getType()) {
-                    throw new CompilerException('Variable type: '.$variable->getType().' cannot be used as object', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Variable type: ' . $variable->getType() . ' cannot be used as object',
+                        $expression['right']['left']
+                    );
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -134,10 +171,14 @@ class FetchOperator extends AbstractOperator
                 $property = $expression['right']['right']['value'];
 
                 $compilationContext->headersManager->add('kernel/object');
-                $symbol = $compilationContext->backend->getVariableCode($variable);
+                $symbol     = $compilationContext->backend->getVariableCode($variable);
                 $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
 
-                return new CompiledExpression('bool', 'zephir_fetch_property('.$symbol.', '.$evalSymbol.', SL("'.$property.'"), PH_SILENT_CC)', $expression);
+                return new CompiledExpression(
+                    'bool',
+                    'zephir_fetch_property(' . $symbol . ', ' . $evalSymbol . ', SL("' . $property . '"), PH_SILENT_CC)',
+                    $expression
+                );
 
             case 'property-dynamic-access':
                 $exprVariable = new Expression($expression['right']['left']);
@@ -146,12 +187,22 @@ class FetchOperator extends AbstractOperator
 
                 $exprCompiledVariable = $exprVariable->compile($compilationContext);
                 if ('variable' != $exprCompiledVariable->getType()) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariable->getType().' cannot be used as object', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariable->getType() . ' cannot be used as object',
+                        $expression['right']['left']
+                    );
                 }
 
-                $evalVariable = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariable->getCode(), $compilationContext, $expression['right']['left']);
+                $evalVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariable->getCode(),
+                    $compilationContext,
+                    $expression['right']['left']
+                );
                 if ('variable' != $evalVariable->getType()) {
-                    throw new CompilerException('Variable type: '.$evalVariable->getType().' cannot be used as object', $expression['right']['left']);
+                    throw new CompilerException(
+                        'Variable type: ' . $evalVariable->getType() . ' cannot be used as object',
+                        $expression['right']['left']
+                    );
                 }
 
                 if ($evalVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -166,24 +217,43 @@ class FetchOperator extends AbstractOperator
 
                 $exprCompiledVariableProperty = $exprVariableProperty->compile($compilationContext);
                 if ('variable' != $exprCompiledVariableProperty->getType()) {
-                    throw new CompilerException('Expression type: '.$exprCompiledVariableProperty->getType().' cannot be used in property-dynamic-access', $expression['right']['right']);
+                    throw new CompilerException(
+                        'Expression type: ' . $exprCompiledVariableProperty->getType(
+                        ) . ' cannot be used in property-dynamic-access',
+                        $expression['right']['right']
+                    );
                 }
 
-                $evalVariableProperty = $compilationContext->symbolTable->getVariableForRead($exprCompiledVariableProperty->getCode(), $compilationContext, $expression['right']['right']);
+                $evalVariableProperty = $compilationContext->symbolTable->getVariableForRead(
+                    $exprCompiledVariableProperty->getCode(),
+                    $compilationContext,
+                    $expression['right']['right']
+                );
                 if ('variable' != $evalVariableProperty->getType() && 'string' != $evalVariableProperty->getType()) {
-                    throw new CompilerException('Variable type: '.$evalVariableProperty->getType().' cannot be used in property-dynamic-access', $expression['right']['right']);
+                    throw new CompilerException(
+                        'Variable type: ' . $evalVariableProperty->getType(
+                        ) . ' cannot be used in property-dynamic-access',
+                        $expression['right']['right']
+                    );
                 }
 
                 $compilationContext->headersManager->add('kernel/object');
 
-                $symbol = $compilationContext->backend->getVariableCode($variable);
-                $evalSymbol = $compilationContext->backend->getVariableCode($evalVariable);
+                $symbol             = $compilationContext->backend->getVariableCode($variable);
+                $evalSymbol         = $compilationContext->backend->getVariableCode($evalVariable);
                 $evalPropertySymbol = $compilationContext->backend->getVariableCode($evalVariableProperty);
 
-                return new CompiledExpression('bool', 'zephir_fetch_property_zval('.$symbol.', '.$evalSymbol.', '.$evalPropertySymbol.', PH_SILENT_CC)', $expression);
+                return new CompiledExpression(
+                    'bool',
+                    'zephir_fetch_property_zval(' . $symbol . ', ' . $evalSymbol . ', ' . $evalPropertySymbol . ', PH_SILENT_CC)',
+                    $expression
+                );
 
             default:
-                throw new CompilerException('Cannot use this expression for "fetch" operators: '.$expression['right']['type'], $expression);
+                throw new CompilerException(
+                    'Cannot use this expression for "fetch" operators: ' . $expression['right']['type'],
+                    $expression
+                );
         }
     }
 }

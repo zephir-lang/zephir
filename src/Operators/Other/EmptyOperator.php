@@ -49,11 +49,22 @@ class EmptyOperator extends AbstractOperator
             throw new CompilerException("'empty' operand only can be a variable", $expression['left']);
         }
 
-        $variableLeft = $compilationContext->symbolTable->getVariableForRead($left->getCode(), $compilationContext, $expression['left']);
+        $variableLeft = $compilationContext->symbolTable->getVariableForRead(
+            $left->getCode(),
+            $compilationContext,
+            $expression['left']
+        );
         if (!$variableLeft->isVariable() && !$variableLeft->isString() && !$variableLeft->isArray()) {
-            throw new CompilerException("Only dynamic/string variables can be used in 'empty' operators", $expression['left']);
+            throw new CompilerException(
+                "Only dynamic/string variables can be used in 'empty' operators",
+                $expression['left']
+            );
         }
 
-        return new CompiledExpression('bool', 'ZEPHIR_IS_EMPTY('.$compilationContext->backend->getVariableCode($variableLeft).')', $expression);
+        return new CompiledExpression(
+            'bool',
+            'ZEPHIR_IS_EMPTY(' . $compilationContext->backend->getVariableCode($variableLeft) . ')',
+            $expression
+        );
     }
 }

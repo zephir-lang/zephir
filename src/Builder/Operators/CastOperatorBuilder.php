@@ -31,22 +31,22 @@ class CastOperatorBuilder extends AbstractOperatorBuilder
         int $line = 0,
         int $char = 0
     ) {
-        $this->leftOperand = $left;
+        $this->leftOperand  = $left;
         $this->rightOperand = $right;
-        $this->file = $file;
-        $this->line = $line;
-        $this->char = $char;
+        $this->file         = $file;
+        $this->line         = $line;
+        $this->char         = $char;
     }
 
     public function get(): array
     {
         return [
-            'type' => 'cast',
-            'left' => $this->leftOperand,
+            'type'  => 'cast',
+            'left'  => $this->leftOperand,
             'right' => $this->rightOperand->get(),
-            'file' => $this->file,
-            'line' => $this->line,
-            'char' => $this->char,
+            'file'  => $this->file,
+            'line'  => $this->line,
+            'char'  => $this->char,
         ];
     }
 }

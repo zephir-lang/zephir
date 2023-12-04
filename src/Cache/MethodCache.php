@@ -13,10 +13,17 @@ declare(strict_types=1);
 
 namespace Zephir\Cache;
 
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilationContext;
 use Zephir\Passes\CallGathererPass;
 use Zephir\Variable\Variable;
+
+use function count;
+use function in_array;
+use function is_object;
 
 /**
  * Calls in Zephir implement monomorphic and polymorphic caches to
@@ -46,7 +53,7 @@ class MethodCache
     /**
      * Retrieves/Creates a function cache for a method call.
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function get(CompilationContext $compilationContext, string $methodName, Variable $caller): string
     {
@@ -63,7 +70,12 @@ class MethodCache
         } else {
             $classTypes = $caller->getClassTypes();
             foreach ($classTypes as $classType) {
-                if ($compiler->isClass($classType) || $compiler->isInterface($classType) || $compiler->isBundledClass($classType) || $compiler->isBundledInterface($classType)) {
+                if (
+                    $compiler->isClass($classType) ||
+                    $compiler->isInterface($classType) ||
+                    $compiler->isBundledClass($classType) ||
+                    $compiler->isBundledInterface($classType)
+                ) {
                     if ($compiler->isInterface($classType)) {
                         continue;
                     }
@@ -89,15 +101,18 @@ class MethodCache
         if (!$numberPoly) {
             // Try to generate a cache based on the fact the variable is not modified within the loop block
             if ($compilationContext->insideCycle && !$caller->isTemporal()) {
-                if (\count($compilationContext->cycleBlocks) && 'variable' == $caller->getType()) {
-                    $currentBlock = $compilationContext->cycleBlocks[\count($compilationContext->cycleBlocks) - 1];
+                if (count($compilationContext->cycleBlocks) && 'variable' == $caller->getType()) {
+                    $currentBlock = $compilationContext->cycleBlocks[count($compilationContext->cycleBlocks) - 1];
 
                     if (0 == $currentBlock->getMutateGatherer(true)->getNumberOfMutations($caller->getName())) {
-                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+                        $functionCache = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'zephir_fcall_cache_entry',
+                            $compilationContext
+                        );
                         $functionCache->setMustInitNull(true);
                         $functionCache->setReusable(false);
 
-                        return '&'.$functionCache->getName().', 0';
+                        return '&' . $functionCache->getName() . ', 0';
                     }
                 }
             }
@@ -105,24 +120,35 @@ class MethodCache
             return 'NULL, 0';
         }
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             if ($method->getClassDefinition()->isExternal()) {
                 return 'NULL, 0';
             }
 
             $completeName = $method->getClassDefinition()->getCompleteName();
             if (isset($this->cache[$completeName][$method->getName()])) {
-                return $this->cache[$completeName][$method->getName()].', '.SlotsCache::getExistingMethodSlot($method);
+                return $this->cache[$completeName][$method->getName()]
+                    . ', '
+                    . SlotsCache::getExistingMethodSlot($method);
             }
 
             $gatherer = $this->gatherer;
-            if (\is_object($gatherer)) {
-                $number = $gatherer->getNumberOfMethodCalls($method->getClassDefinition()->getCompleteName(), $method->getName());
+            if (is_object($gatherer)) {
+                $number = $gatherer->getNumberOfMethodCalls(
+                    $method->getClassDefinition()->getCompleteName(),
+                    $method->getName()
+                );
             } else {
                 $number = 0;
             }
 
-            $staticCacheable = !$method->getClassDefinition()->isInterface() && ($compilationContext->currentMethod == $method || $method->getClassDefinition()->isFinal() || $method->isFinal() || $method->isPrivate());
+            $staticCacheable = !$method->getClassDefinition()->isInterface() &&
+                (
+                    $compilationContext->currentMethod == $method ||
+                    $method->getClassDefinition()->isFinal() ||
+                    $method->isFinal() ||
+                    $method->isPrivate()
+                );
             if ($number > 1 || $compilationContext->insideCycle) {
                 $cacheable = true;
             } else {
@@ -130,7 +156,7 @@ class MethodCache
             }
         } else {
             $staticCacheable = false;
-            $cacheable = false;
+            $cacheable       = false;
         }
 
         if ('this_ptr' !== $caller->getName()) {
@@ -147,25 +173,28 @@ class MethodCache
         }
 
         if ($cacheable) {
-            $functionCacheVar = $compilationContext->symbolTable->getTempVariableForWrite('zephir_fcall_cache_entry', $compilationContext);
+            $functionCacheVar = $compilationContext->symbolTable->getTempVariableForWrite(
+                'zephir_fcall_cache_entry',
+                $compilationContext
+            );
             $functionCacheVar->setMustInitNull(true);
             $functionCacheVar->setReusable(false);
-            $functionCache = '&'.$functionCacheVar->getName();
+            $functionCache = '&' . $functionCacheVar->getName();
         } else {
             $functionCache = 'NULL';
         }
 
-        if (!($method instanceof \ReflectionMethod)) {
+        if (!($method instanceof ReflectionMethod)) {
             $this->cache[$completeName][$method->getName()] = $functionCache;
         }
 
-        return $functionCache.', '.$cacheSlot;
+        return $functionCache . ', ' . $cacheSlot;
     }
 
     /**
      * Checks if the class is suitable for caching.
      *
-     * @param Definition|\ReflectionClass|null $classDefinition
+     * @param Definition|ReflectionClass|null $classDefinition
      *
      * @return bool
      */
@@ -175,12 +204,12 @@ class MethodCache
             return true;
         }
 
-        if (!($classDefinition instanceof \ReflectionClass)) {
+        if (!($classDefinition instanceof ReflectionClass)) {
             return false;
         }
 
         return $classDefinition->isInternal()
-               && $classDefinition->isInstantiable()
-               && in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
+            && $classDefinition->isInstantiable()
+            && in_array($classDefinition->getExtension()->getName(), ['Reflection', 'Core', 'SPL']);
     }
 }

@@ -15,9 +15,27 @@ namespace Zephir;
 
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use ReflectionException;
 use Zephir\Class\Definition\Definition;
 use Zephir\Code\Printer;
 use Zephir\Compiler\FileInterface;
+use Zephir\Traits\CompilerTrait;
+
+use function count;
+use function dirname;
+use function file_exists;
+use function file_put_contents;
+use function hash_file;
+use function implode;
+use function is_dir;
+use function md5;
+use function mkdir;
+use function str_replace;
+use function strpos;
+use function strtolower;
+
+use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
 
 /**
  * This class represents an anonymous file created to dump
@@ -25,15 +43,16 @@ use Zephir\Compiler\FileInterface;
  */
 final class CompilerFileAnonymous implements FileInterface
 {
+    use CompilerTrait;
     use LoggerAwareTrait;
 
-    protected ?string $namespace = null;
-    protected ?string $compiledFile = null;
-    protected bool $external = false;
-    protected array $headerCBlocks = [];
-    protected ?CompilationContext $context = null;
-    protected Definition $classDefinition;
-    protected Config $config;
+    protected Definition          $classDefinition;
+    protected ?string             $compiledFile  = null;
+    protected Config              $config;
+    protected ?CompilationContext $context       = null;
+    protected bool                $external      = false;
+    protected array               $headerCBlocks = [];
+    protected ?string             $namespace     = null;
 
     /**
      * CompilerFileAnonymous constructor.
@@ -45,88 +64,9 @@ final class CompilerFileAnonymous implements FileInterface
     public function __construct(Definition $classDefinition, Config $config, CompilationContext $context = null)
     {
         $this->classDefinition = $classDefinition;
-        $this->config = $config;
-        $this->context = $context;
-        $this->logger = new NullLogger();
-    }
-
-    /**
-     * @return Definition
-     */
-    public function getClassDefinition(): Definition
-    {
-        return $this->classDefinition;
-    }
-
-    /**
-     * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
-     */
-    public function setIsExternal($external): void
-    {
-        $this->external = (bool) $external;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExternal(): bool
-    {
-        return $this->external;
-    }
-
-    /**
-     * Compiles the class/interface contained in the file.
-     *
-     * @param CompilationContext $compilationContext
-     *
-     * @throws Exception
-     * @throws \ReflectionException
-     */
-    private function compileClass(CompilationContext $compilationContext): void
-    {
-        $classDefinition = $this->classDefinition;
-
-        /**
-         * Do the compilation
-         */
-        $classDefinition->compile($compilationContext);
-
-        $separators = str_repeat('../', \count(explode('\\', $classDefinition->getCompleteName())) - 1);
-
-        $code = PHP_EOL;
-        $code .= '#ifdef HAVE_CONFIG_H'.PHP_EOL;
-        $code .= '#include "'.$separators.'ext_config.h"'.PHP_EOL;
-        $code .= '#endif'.PHP_EOL;
-        $code .= PHP_EOL;
-
-        $code .= '#include <php.h>'.PHP_EOL;
-        $code .= '#include "'.$separators.'php_ext.h"'.PHP_EOL;
-        $code .= '#include "'.$separators.'ext.h"'.PHP_EOL;
-        $code .= PHP_EOL;
-
-        $code .= '#include <Zend/zend_operators.h>'.PHP_EOL;
-        $code .= '#include <Zend/zend_exceptions.h>'.PHP_EOL;
-        $code .= '#include <Zend/zend_interfaces.h>'.PHP_EOL;
-        $code .= PHP_EOL;
-
-        $code .= '#include "kernel/main.h"'.PHP_EOL;
-
-        if ('class' == $classDefinition->getType()) {
-            foreach ($compilationContext->headersManager->get() as $header => $one) {
-                $code .= '#include "'.$header.'.h"'.PHP_EOL;
-            }
-        }
-
-        if (\count($this->headerCBlocks) > 0) {
-            $code .= implode(PHP_EOL, $this->headerCBlocks).PHP_EOL;
-        }
-
-        /**
-         * Prepend the required files to the header
-         */
-        $compilationContext->codePrinter->preOutput($code);
+        $this->config          = $config;
+        $this->context         = $context;
+        $this->logger          = new NullLogger();
     }
 
     /**
@@ -150,22 +90,22 @@ final class CompilerFileAnonymous implements FileInterface
             $compilationContext->aliasManager = new AliasManager();
         }
 
-        $compilationContext->compiler = $compiler;
-        $compilationContext->config = $this->config;
-        $compilationContext->logger = $this->logger;
+        $compilationContext->compiler       = $compiler;
+        $compilationContext->config         = $this->config;
+        $compilationContext->logger         = $this->logger;
         $compilationContext->stringsManager = $stringsManager;
-        $compilationContext->backend = $compiler->backend;
+        $compilationContext->backend        = $compiler->backend;
 
         /**
          * Headers manager.
          */
-        $headersManager = new HeadersManager();
+        $headersManager                     = new HeadersManager();
         $compilationContext->headersManager = $headersManager;
 
         /**
          * Main code-printer for the file.
          */
-        $codePrinter = new Printer();
+        $codePrinter                     = new Printer();
         $compilationContext->codePrinter = $codePrinter;
 
         $codePrinter->outputBlankLine();
@@ -174,17 +114,7 @@ final class CompilerFileAnonymous implements FileInterface
 
         $completeName = $this->classDefinition->getCompleteName();
 
-        $path = str_replace('\\', \DIRECTORY_SEPARATOR, strtolower($completeName));
-
-        $filePath = 'ext/'.$path.'.zep.c';
-        $filePathHeader = 'ext/'.$path.'.zep.h';
-
-        if (strpos($path, \DIRECTORY_SEPARATOR)) {
-            $dirname = \dirname($filePath);
-            if (!is_dir($dirname)) {
-                mkdir($dirname, 0755, true);
-            }
-        }
+        [$path, $filePath, $filePathHeader] = $this->calculatePaths($completeName);
 
         /**
          * If the file does not exist we create it for the first time
@@ -200,14 +130,14 @@ final class CompilerFileAnonymous implements FileInterface
              * thus avoiding unnecessary recompilations.
              */
             $output = $codePrinter->getOutput();
-            $hash = hash_file('md5', $filePath);
+            $hash   = hash_file('md5', $filePath);
             if (md5($output) !== $hash) {
                 file_put_contents($filePath, $output);
             }
 
             if ($compilationContext->headerPrinter) {
                 $output = $compilationContext->headerPrinter->getOutput();
-                $hash = hash_file('md5', $filePathHeader);
+                $hash   = hash_file('md5', $filePathHeader);
                 if (md5($output) !== $hash) {
                     file_put_contents($filePathHeader, $output);
                 }
@@ -217,7 +147,15 @@ final class CompilerFileAnonymous implements FileInterface
         /**
          * Add to file compiled
          */
-        $this->compiledFile = $path.'.c';
+        $this->compiledFile = $path . '.c';
+    }
+
+    /**
+     * @return Definition
+     */
+    public function getClassDefinition(): Definition
+    {
+        return $this->classDefinition;
     }
 
     /**
@@ -231,6 +169,14 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isExternal(): bool
+    {
+        return $this->external;
+    }
+
+    /**
      * {@inheritdoc}
      *
      * Only implemented to satisfy the Zephir\Compiler\FileInterface interface.
@@ -240,5 +186,41 @@ final class CompilerFileAnonymous implements FileInterface
     public function preCompile(Compiler $compiler): void
     {
         // nothing to do
+    }
+
+    /**
+     * Sets if the class belongs to an external dependency or not.
+     *
+     * @param bool $external
+     */
+    public function setIsExternal($external): void
+    {
+        $this->external = (bool)$external;
+    }
+
+    /**
+     * Compiles the class/interface contained in the file.
+     *
+     * @param CompilationContext $compilationContext
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function compileClass(CompilationContext $compilationContext): void
+    {
+        $classDefinition = $this->classDefinition;
+
+        /**
+         * Do the compilation
+         */
+        $classDefinition->compile($compilationContext);
+
+        $code = $this->generateCodeHeadersPre($classDefinition);
+
+        $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
+        $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
+        $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
+
+        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
     }
 }

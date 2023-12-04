@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,9 +9,14 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
+
+use function strpos;
+use function substr;
 
 /**
  * A link annotation that looks like  `(@)link uri text`.
@@ -21,19 +24,9 @@ use Zephir\Documentation\Annotation;
 class Link extends Annotation
 {
     /** @var string|null */
-    protected $uri;
-
-    /** @var string|null */
     protected $linkText;
-
-    public function getUri()
-    {
-        if (!$this->contentParsed) {
-            $this->parseContent();
-        }
-
-        return $this->uri;
-    }
+    /** @var string|null */
+    protected $uri;
 
     public function getLinkText()
     {
@@ -44,6 +37,15 @@ class Link extends Annotation
         return $this->linkText;
     }
 
+    public function getUri()
+    {
+        if (!$this->contentParsed) {
+            $this->parseContent();
+        }
+
+        return $this->uri;
+    }
+
     protected function parseContent(): void
     {
         $spaceIndex = strpos($this->string, ' ');
@@ -51,7 +53,7 @@ class Link extends Annotation
         $this->uri = $this->string;
 
         if (false !== $spaceIndex) {
-            $this->uri = substr($this->string, 0, $spaceIndex);
+            $this->uri      = substr($this->string, 0, $spaceIndex);
             $this->linkText = substr($this->string, $spaceIndex + 1);
         }
 

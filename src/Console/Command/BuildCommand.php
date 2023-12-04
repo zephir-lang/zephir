@@ -13,12 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Console\Command;
 
+use Exception;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+
+use const PHP_EOL;
 
 /**
  * Generates/Compiles/Installs a Zephir extension.
@@ -36,14 +39,20 @@ final class BuildCommand extends AbstractCommand
             ->setDefinition($this->createDefinition())
             ->addOption('dev', null, InputOption::VALUE_NONE, 'Build the extension in development mode')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Build the extension in production mode')
-            ->setHelp($this->getDevelopmentModeHelp().PHP_EOL.$this->getZflagsHelp());
+            ->setHelp($this->getDevelopmentModeHelp() . PHP_EOL . $this->getZflagsHelp())
+        ;
+    }
+
+    protected function createDefinition(): InputDefinition
+    {
+        return new InputDefinition([]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // call generate
         $command = $this->getApplication()->find('generate');
-        $io = new SymfonyStyle($input, $output);
+        $io      = new SymfonyStyle($input, $output);
 
         $arguments = [
             'command' => 'generate',
@@ -51,7 +60,7 @@ final class BuildCommand extends AbstractCommand
 
         try {
             $command->run(new ArrayInput($arguments), $output);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
@@ -59,16 +68,16 @@ final class BuildCommand extends AbstractCommand
 
         // call compile
         $command = $this->getApplication()->find('compile');
-        $io = new SymfonyStyle($input, $output);
+        $io      = new SymfonyStyle($input, $output);
 
         $arguments = [
             'command' => 'compile',
-            '--dev' => $this->isDevelopmentModeEnabled($input),
+            '--dev'   => $this->isDevelopmentModeEnabled($input),
         ];
 
         try {
             $command->run(new ArrayInput($arguments), $output);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
@@ -76,25 +85,20 @@ final class BuildCommand extends AbstractCommand
 
         // call install
         $command = $this->getApplication()->find('install');
-        $io = new SymfonyStyle($input, $output);
+        $io      = new SymfonyStyle($input, $output);
 
         $arguments = [
             'command' => 'install',
-            '--dev' => $this->isDevelopmentModeEnabled($input),
+            '--dev'   => $this->isDevelopmentModeEnabled($input),
         ];
 
         try {
             return $command->run(new ArrayInput($arguments), $output);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $io->getErrorStyle()->error($e->getMessage());
 
             return 1;
         }
-    }
-
-    protected function createDefinition(): InputDefinition
-    {
-        return new InputDefinition([]);
     }
 
     /**

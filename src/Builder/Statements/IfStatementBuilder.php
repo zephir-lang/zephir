@@ -31,8 +31,8 @@ class IfStatementBuilder extends AbstractStatementBuilder
     public function get(): array
     {
         $expression = [
-            'type' => 'if',
-            'expr' => $this->evalExpr->get(),
+            'type'       => 'if',
+            'expr'       => $this->evalExpr->get(),
             'statements' => $this->ifBlock->get(),
         ];
 

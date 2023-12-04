@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * GetCalledClassOptimizer.
@@ -38,7 +40,7 @@ class GetCalledClassOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (isset($expression['parameters'])) {
-            $numberParameters = \count($expression['parameters']);
+            $numberParameters = count($expression['parameters']);
             if (0 != $numberParameters) {
                 return false;
             }
@@ -50,20 +52,17 @@ class GetCalledClassOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $context->headersManager->add('kernel/object');
 
         $symbolVariable->setDynamicTypes('string');
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_get_called_class('.$symbol.');');
+        $context->codePrinter->output('zephir_get_called_class(' . $symbol . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

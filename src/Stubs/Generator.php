@@ -22,6 +22,25 @@ use Zephir\Class\Property;
 use Zephir\CompilerFile;
 use Zephir\Exception;
 
+use function addslashes;
+use function array_diff;
+use function array_key_exists;
+use function file_put_contents;
+use function implode;
+use function in_array;
+use function is_dir;
+use function key;
+use function mkdir;
+use function realpath;
+use function sprintf;
+use function str_ireplace;
+use function str_replace;
+use function trim;
+use function ucfirst;
+
+use const DIRECTORY_SEPARATOR;
+use const PHP_EOL;
+
 class Generator
 {
     /**
@@ -64,24 +83,29 @@ class Generator
         $indent = 'tabs' === $indent ? "\t" : '    ';
 
         foreach ($this->files as $file) {
-            $class = $file->getClassDefinition();
+            $class  = $file->getClassDefinition();
             $source = $this->buildClass($class, $indent, $banner);
 
-            $filename = ucfirst($class->getName()).'.php';
-            $filePath = $path.str_ireplace(
-                $namespace,
-                '',
-                str_replace($namespace.'\\\\', \DIRECTORY_SEPARATOR, $class->getNamespace())
-            );
-            $filePath = str_replace('\\', \DIRECTORY_SEPARATOR, $filePath);
-            $filePath = str_replace(\DIRECTORY_SEPARATOR.\DIRECTORY_SEPARATOR, \DIRECTORY_SEPARATOR, $filePath);
+            $filename = ucfirst($class->getName()) . '.php';
+            $filePath = $path
+                . str_ireplace(
+                    $namespace,
+                    '',
+                    str_replace(
+                        $namespace . '\\\\',
+                        DIRECTORY_SEPARATOR,
+                        $class->getNamespace()
+                    )
+                );
+            $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $filePath);
+            $filePath = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $filePath);
 
             if (!is_dir($filePath)) {
                 mkdir($filePath, 0777, true);
             }
 
-            $filePath = realpath($filePath).'/';
-            file_put_contents($filePath.$filename, $source);
+            $filePath = realpath($filePath) . '/';
+            file_put_contents($filePath . $filename, $source);
         }
     }
 
@@ -98,21 +122,21 @@ class Generator
      */
     protected function buildClass(Definition $class, string $indent, string $banner): string
     {
-        $source = '<?php'.PHP_EOL.PHP_EOL;
-        $source .= '' === $banner ? '' : $banner.PHP_EOL;
-        $source .= "namespace {$class->getNamespace()};".PHP_EOL;
+        $source = '<?php' . PHP_EOL . PHP_EOL;
+        $source .= '' === $banner ? '' : $banner . PHP_EOL;
+        $source .= "namespace {$class->getNamespace()};" . PHP_EOL;
 
         /** @var AliasManager $aliasManager */
         $aliasManager = $class->getAliasManager();
-        $aliases = $aliasManager->getAliases();
+        $aliases      = $aliasManager->getAliases();
 
         if (!empty($aliases)) {
             $source .= PHP_EOL;
 
             foreach ($aliases as $alias => $fqn) {
                 $isAliased = $aliasManager->isUseStatementAliased($alias);
-                $asAlias = $isAliased ? ' as '.$alias : '';
-                $source .= 'use '.$fqn.$asAlias.';'.PHP_EOL;
+                $asAlias   = $isAliased ? ' as ' . $alias : '';
+                $source    .= 'use ' . $fqn . $asAlias . ';' . PHP_EOL;
             }
         }
 
@@ -120,8 +144,8 @@ class Generator
 
         $docBlock = (new DocBlock($class->getDocBlock(), ''));
 
-        if ('' !== (string) $docBlock) {
-            $source .= $docBlock.PHP_EOL;
+        if ('' !== (string)$docBlock) {
+            $source .= $docBlock . PHP_EOL;
         }
 
         if ($class->isFinal()) {
@@ -130,7 +154,7 @@ class Generator
             $source .= 'abstract ';
         }
 
-        $source .= $class->getType().' '.$class->getName();
+        $source .= $class->getType() . ' ' . $class->getName();
 
         if ($class->getExtendsClass()) {
             $extendsClassDefinition = $class->getExtendsClassDefinition();
@@ -145,13 +169,14 @@ class Generator
 
             $hasAliasForExtends = $aliasManager->isAlias($extendsClassDefinition->getShortName());
 
-            $source .= ' extends '.($hasAliasForExtends || $extendsClassDefinition->isBundled() ? '' : '\\');
-            $source .= $hasAliasForExtends ? $extendsClassDefinition->getShortName() : $extendsClassDefinition->getCompleteName();
+            $source .= ' extends ' . ($hasAliasForExtends || $extendsClassDefinition->isBundled() ? '' : '\\');
+            $source .= $hasAliasForExtends ? $extendsClassDefinition->getShortName(
+            ) : $extendsClassDefinition->getCompleteName();
         }
 
         if ($interfaces = $class->getImplementedInterfaces()) {
             foreach ($interfaces as $key => $interface) {
-                $interfaces[$key] = '\\'.trim($interface, '\\');
+                $interfaces[$key] = '\\' . trim($interface, '\\');
 
                 if ($aliasManager->isAliasPresentFor($interface)) {
                     $interfaces[$key] = $aliasManager->getAliasForClassName($interface);
@@ -159,20 +184,20 @@ class Generator
             }
 
             $keyword = 'interface' == $class->getType() ? ' extends ' : ' implements ';
-            $source .= $keyword.implode(', ', $interfaces);
+            $source  .= $keyword . implode(', ', $interfaces);
         }
 
-        $source .= PHP_EOL.'{'.PHP_EOL;
+        $source .= PHP_EOL . '{' . PHP_EOL;
 
         /**
          * Build Class constants
          */
         $constants = [];
         foreach ($class->getConstants() as $constant) {
-            $constants[] = $this->buildConstant($constant, $indent).PHP_EOL;
+            $constants[] = $this->buildConstant($constant, $indent) . PHP_EOL;
         }
 
-        $source .= implode(PHP_EOL, $constants).PHP_EOL;
+        $source .= implode(PHP_EOL, $constants) . PHP_EOL;
         unset($constants);
 
         /**
@@ -180,10 +205,10 @@ class Generator
          */
         $properties = [];
         foreach ($class->getProperties() as $property) {
-            $properties[] = $this->buildProperty($property, $indent).PHP_EOL;
+            $properties[] = $this->buildProperty($property, $indent) . PHP_EOL;
         }
 
-        $source .= implode(PHP_EOL, $properties).PHP_EOL;
+        $source .= implode(PHP_EOL, $properties) . PHP_EOL;
         unset($properties);
 
         /**
@@ -195,45 +220,13 @@ class Generator
                 continue;
             }
 
-            $methods[] = $this->buildMethod($method, 'interface' === $class->getType(), $indent).PHP_EOL;
+            $methods[] = $this->buildMethod($method, 'interface' === $class->getType(), $indent) . PHP_EOL;
         }
 
         $source .= implode(PHP_EOL, $methods);
         unset($methods);
 
-        return $source.'}'.PHP_EOL;
-    }
-
-    /**
-     * Build property.
-     *
-     * @param Property $property
-     * @param string   $indent
-     *
-     * @return string
-     */
-    protected function buildProperty(Property $property, string $indent): string
-    {
-        $visibility = 'public';
-
-        if (false === $property->isPublic()) {
-            $visibility = $property->isProtected() ? 'protected' : 'private';
-        }
-
-        if ($property->isStatic()) {
-            $visibility = 'static '.$visibility;
-        }
-
-        $source = $indent.$visibility.' $'.$property->getName();
-        $original = $property->getOriginal();
-
-        if (isset($original['default'])) {
-            $source .= ' = '.$this->wrapPHPValue([
-                'default' => $original['default'],
-            ]);
-        }
-
-        return $this->fetchDocBlock($property->getDocBlock(), $indent).$source.';';
+        return $source . '}' . PHP_EOL;
     }
 
     /**
@@ -244,13 +237,13 @@ class Generator
      */
     protected function buildConstant(Constant $constant, string $indent): string
     {
-        $source = 'const '.$constant->getName();
+        $source = 'const ' . $constant->getName();
 
         $value = $this->wrapPHPValue([
             'default' => $constant->getValue(),
         ]);
 
-        return $this->fetchDocBlock($constant->getDocBlock(), $indent).$indent.$source.' = '.$value.';';
+        return $this->fetchDocBlock($constant->getDocBlock(), $indent) . $indent . $source . ' = ' . $value . ';';
     }
 
     /**
@@ -265,8 +258,8 @@ class Generator
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
 
         $methodParameters = $method->getParameters();
-        $aliasManager = $method->getClassDefinition()->getAliasManager();
-        $docBlock = new MethodDocBlock($method, $aliasManager, $indent);
+        $aliasManager     = $method->getClassDefinition()->getAliasManager();
+        $docBlock         = new MethodDocBlock($method, $aliasManager, $indent);
 
         $parameters = [];
 
@@ -275,30 +268,30 @@ class Generator
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
                     if ($aliasManager->isAlias($parameter['cast']['value'])) {
-                        $cast = '\\'.$aliasManager->getAlias($parameter['cast']['value']);
+                        $cast = '\\' . $aliasManager->getAlias($parameter['cast']['value']);
                     } else {
                         $cast = $parameter['cast']['value'];
                     }
 
-                    $paramStr .= $cast.' ';
+                    $paramStr .= $cast . ' ';
                 } elseif (isset($parameter['data-type']) && 'array' === $parameter['data-type']) {
                     $paramStr .= 'array ';
                 } elseif (isset($parameter['data-type'])) {
-                    if (\in_array($parameter['data-type'], ['bool', 'boolean'])) {
+                    if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
                         $paramStr .= 'bool ';
                     } elseif ('double' == $parameter['data-type']) {
                         $paramStr .= 'float ';
-                    } elseif (\in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
+                    } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
                         $paramStr .= 'int ';
-                    } elseif (\in_array($parameter['data-type'], ['char', 'string'])) {
+                    } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
                         $paramStr .= 'string ';
                     }
                 }
 
-                $paramStr .= '$'.$parameter['name'];
+                $paramStr .= '$' . $parameter['name'];
 
                 if (isset($parameter['default'])) {
-                    $paramStr .= ' = '.$this->wrapPHPValue($parameter);
+                    $paramStr .= ' = ' . $this->wrapPHPValue($parameter);
                 }
 
                 $parameters[] = $paramStr;
@@ -309,7 +302,7 @@ class Generator
         if ($method->hasReturnTypes()) {
             $supported = 0;
 
-            if (\array_key_exists('object', $method->getReturnTypes())) {
+            if (array_key_exists('object', $method->getReturnTypes())) {
                 $return = key($method->getReturnClassTypes());
                 ++$supported;
             }
@@ -334,17 +327,17 @@ class Generator
                 ++$supported;
             }
 
-            if (\array_key_exists('array', $method->getReturnTypes())) {
+            if (array_key_exists('array', $method->getReturnTypes())) {
                 $return = 'array';
                 ++$supported;
             }
 
             if (!empty($return) && $method->areReturnTypesNullCompatible()) {
-                $return = '?'.$return;
+                $return = '?' . $return;
             }
 
             // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1 || \array_key_exists('variable', $method->getReturnTypes())) {
+            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
                 $return = '';
             }
         } elseif ($method->isVoid()) {
@@ -352,22 +345,54 @@ class Generator
         }
 
         if (!empty($return)) {
-            $return = ': '.$return;
+            $return = ': ' . $return;
         }
 
-        $function = trim($modifier.' function', ' ').' ';
-        $methodBody = $indent.$function.$method->getName().'('.implode(', ', $parameters).')'.$return;
+        $function   = trim($modifier . ' function', ' ') . ' ';
+        $methodBody = $indent . $function . $method->getName() . '(' . implode(', ', $parameters) . ')' . $return;
 
         if ($isInterface || $method->isAbstract()) {
             $methodBody .= ';';
         } else {
-            $methodBody .= PHP_EOL.$indent.'{'.PHP_EOL.$indent.'}';
+            $methodBody .= PHP_EOL . $indent . '{' . PHP_EOL . $indent . '}';
         }
 
         $docs = $docBlock->processMethodDocBlock();
-        $docs = $docs ? $docs.PHP_EOL : '';
+        $docs = $docs ? $docs . PHP_EOL : '';
 
-        return $docs.$methodBody;
+        return $docs . $methodBody;
+    }
+
+    /**
+     * Build property.
+     *
+     * @param Property $property
+     * @param string   $indent
+     *
+     * @return string
+     */
+    protected function buildProperty(Property $property, string $indent): string
+    {
+        $visibility = 'public';
+
+        if (false === $property->isPublic()) {
+            $visibility = $property->isProtected() ? 'protected' : 'private';
+        }
+
+        if ($property->isStatic()) {
+            $visibility = 'static ' . $visibility;
+        }
+
+        $source   = $indent . $visibility . ' $' . $property->getName();
+        $original = $property->getOriginal();
+
+        if (isset($original['default'])) {
+            $source .= ' = ' . $this->wrapPHPValue([
+                    'default' => $original['default'],
+                ]);
+        }
+
+        return $this->fetchDocBlock($property->getDocBlock(), $indent) . $source . ';';
     }
 
     /**
@@ -388,7 +413,7 @@ class Generator
 
             case 'string':
             case 'char':
-                $returnValue = '\''.addslashes($parameter['default']['value']).'\'';
+                $returnValue = '\'' . addslashes($parameter['default']['value']) . '\'';
                 break;
 
             case 'empty-array':
@@ -403,22 +428,22 @@ class Generator
 
                     if (isset($value['key'])) {
                         $source .= $this->wrapPHPValue([
-                            'default' => $value['key'],
-                            'type' => $value['key']['type'],
-                        ]).' => ';
+                                'default' => $value['key'],
+                                'type'    => $value['key']['type'],
+                            ]) . ' => ';
                     }
 
-                    $parameters[] = $source.$this->wrapPHPValue([
-                        'default' => $value['value'],
-                        'type' => $value['value']['type'],
-                    ]);
+                    $parameters[] = $source . $this->wrapPHPValue([
+                            'default' => $value['value'],
+                            'type'    => $value['value']['type'],
+                        ]);
                 }
 
-                $returnValue = '['.implode(', ', $parameters).']';
+                $returnValue = '[' . implode(', ', $parameters) . ']';
                 break;
 
             case 'static-constant-access':
-                $returnValue = $parameter['default']['left']['value'].'::'.$parameter['default']['right']['value'];
+                $returnValue = $parameter['default']['left']['value'] . '::' . $parameter['default']['right']['value'];
                 break;
 
             case 'int':
@@ -436,13 +461,13 @@ class Generator
                 );
         }
 
-        return (string) $returnValue;
+        return (string)$returnValue;
     }
 
     private function fetchDocBlock(?string $docBlock, string $indent): string
     {
         $docBlock = (new DocBlock($docBlock, $indent))->__toString();
 
-        return $docBlock ? $docBlock.PHP_EOL : '';
+        return $docBlock ? $docBlock . PHP_EOL : '';
     }
 }

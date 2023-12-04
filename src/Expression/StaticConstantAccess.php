@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
+use ReflectionException;
 use Zephir\Class\Constant;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -20,39 +21,18 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
 
+use function gettype;
+use function in_array;
+use function sprintf;
+
 /**
  * Resolves class constants
  */
 class StaticConstantAccess
 {
-    protected bool $expecting = true;
-
-    protected bool $readOnly = false;
-
+    protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
-
-    /**
-     * Sets if the variable must be resolved into a direct variable symbol
-     * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
-     */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
-    {
-        $this->expecting = $expecting;
-        $this->expectingVariable = $expectingVariable;
-    }
-
-    /**
-     * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
-     */
-    public function setReadOnly(bool $readOnly): void
-    {
-        $this->readOnly = $readOnly;
-    }
+    protected bool      $readOnly          = false;
 
     /**
      * Access a static constant class.
@@ -63,19 +43,19 @@ class StaticConstantAccess
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
-        $compiler = &$compilationContext->compiler;
+        $compiler  = &$compilationContext->compiler;
         $className = $expression['left']['value'];
-        $constant = $expression['right']['value'];
+        $constant  = $expression['right']['value'];
 
         /**
          * Fetch the class definition according to the class where the constant
          * is supposed to be declared
          */
-        if (!\in_array($className, ['this', 'self', 'static', 'parent'])) {
+        if (!in_array($className, ['this', 'self', 'static', 'parent'])) {
             $className = $compilationContext->getFullName($className);
             if ($compiler->isClass($className) || $compiler->isInterface($className)) {
                 $classDefinition = $compiler->getClassDefinition($className);
@@ -83,15 +63,15 @@ class StaticConstantAccess
                 if ($compiler->isBundledClass($className) || $compiler->isBundledInterface($className)) {
                     $classDefinition = $compiler->getInternalClassDefinition($className);
                 } else {
-                    throw new CompilerException("Cannot locate class '".$className."'", $expression['left']);
+                    throw new CompilerException("Cannot locate class '" . $className . "'", $expression['left']);
                 }
             }
         } else {
-            if (\in_array($className, ['self', 'static', 'this'])) {
+            if (in_array($className, ['self', 'static', 'this'])) {
                 $classDefinition = $compilationContext->classDefinition;
             } elseif ('parent' === $className) {
                 $classDefinition = $compilationContext->classDefinition;
-                $extendsClass = $classDefinition->getExtendsClass();
+                $extendsClass    = $classDefinition->getExtendsClass();
                 if (!$extendsClass) {
                     throw new CompilerException(
                         sprintf(
@@ -153,7 +133,7 @@ class StaticConstantAccess
              */
             if (!$symbolVariable->isVariable()) {
                 throw new CompilerException(
-                    'Cannot use variable: '.$symbolVariable->getType().' to assign class constants',
+                    'Cannot use variable: ' . $symbolVariable->getType() . ' to assign class constants',
                     $expression
                 );
             }
@@ -177,10 +157,10 @@ class StaticConstantAccess
         if ($constantDefinition instanceof Constant) {
             $constantDefinition->processValue($compilationContext);
             $value = $constantDefinition->getValueValue();
-            $type = $constantDefinition->getValueType();
+            $type  = $constantDefinition->getValueType();
         } else {
             $value = $constantDefinition;
-            $type = \gettype($value);
+            $type  = gettype($value);
             if ('integer' === $type) {
                 $type = 'int';
             }
@@ -196,7 +176,7 @@ class StaticConstantAccess
                 break;
             default:
                 $compilationContext->logger->warning(
-                    "Constant '".$constantDefinition->getName()."' does not exist at compile time",
+                    "Constant '" . $constantDefinition->getName() . "' does not exist at compile time",
                     ['nonexistent-constant', $expression]
                 );
 
@@ -204,5 +184,28 @@ class StaticConstantAccess
         }
 
         return new CompiledExpression($type, $value, $expression);
+    }
+
+    /**
+     * Sets if the variable must be resolved into a direct variable symbol
+     * create a temporary value or ignore the return value.
+     *
+     * @param bool          $expecting
+     * @param Variable|null $expectingVariable
+     */
+    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    {
+        $this->expecting         = $expecting;
+        $this->expectingVariable = $expectingVariable;
+    }
+
+    /**
+     * Sets if the result of the evaluated expression is read only.
+     *
+     * @param bool $readOnly
+     */
+    public function setReadOnly(bool $readOnly): void
+    {
+        $this->readOnly = $readOnly;
     }
 }

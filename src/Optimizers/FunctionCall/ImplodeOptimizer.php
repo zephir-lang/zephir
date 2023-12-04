@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Optimizes calls to 'implode' using internal function
@@ -40,7 +42,7 @@ class ImplodeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             return false;
         }
 
@@ -50,9 +52,7 @@ class ImplodeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         if ('string' == $expression['parameters'][0]['parameter']['type']) {
             $str = Name::addSlashes($expression['parameters'][0]['parameter']['value']);
@@ -64,18 +64,21 @@ class ImplodeOptimizer extends OptimizerAbstract
         $context->headersManager->add('kernel/string');
         $symbolVariable->setDynamicTypes('string');
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($str)) {
-            $context->codePrinter->output('zephir_fast_join_str('.$symbol.', SL("'.$str.'"), '.$resolvedParams[0].');');
+            $context->codePrinter->output(
+                'zephir_fast_join_str(' . $symbol . ', SL("' . $str . '"), ' . $resolvedParams[0] . ');'
+            );
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         }
 
-        $context->codePrinter->output('zephir_fast_join('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
+        $context->codePrinter->output(
+            'zephir_fast_join(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -49,7 +49,7 @@ $config
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHPUnit48Migration:risky' => true,
-        '@PSR2' => true,
+        '@PSR12' => true,
         'php_unit_no_expectation_annotation' => false,
         'array_syntax' => ['syntax' => 'short'],
         'fopen_flags' => false,

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * CreateInstanceOptimizer.
  *
@@ -26,6 +28,9 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class CreateInstanceOptimizer extends OptimizerAbstract
 {
+    protected string $exceptionMessage = 'This function only accepts one parameter';
+    protected int    $parameterCount   = 1;
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -41,8 +46,11 @@ class CreateInstanceOptimizer extends OptimizerAbstract
             throw new CompilerException('This function requires parameters', $expression);
         }
 
-        if (1 != \count($expression['parameters'])) {
-            throw new CompilerException('This function only requires one parameter', $expression);
+        if ($this->parameterCount !== count($expression['parameters'])) {
+            throw new CompilerException(
+                $this->exceptionMessage,
+                $expression
+            );
         }
 
         /*
@@ -51,9 +59,7 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariable($symbolVariable, $expression);
 
         /*
          * Add the last call status to the current symbol table
@@ -66,9 +72,8 @@ class CreateInstanceOptimizer extends OptimizerAbstract
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         /*
          * Add the last call status to the current symbol table
@@ -76,11 +81,34 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         $call->addCallStatusFlag($context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_create_instance('.$symbol.', '.$resolvedParams[0].');');
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
 
-        $call->checkTempParameters($context);
+        $this->getTempParameters($call, $context);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, array $resolvedParams): string
+    {
+        return 'ZEPHIR_LAST_CALL_STATUS = '
+            . 'zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        ;
+    }
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function getTempParameters(Call $call, CompilationContext $context): void
+    {
+        $call->checkTempParameters($context);
     }
 }

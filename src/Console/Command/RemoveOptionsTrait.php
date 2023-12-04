@@ -16,14 +16,19 @@ namespace Zephir\Console\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
 
+use function array_filter;
+use function in_array;
+
 trait RemoveOptionsTrait
 {
     protected function removeOptions(array $names): void
     {
-        /** @var InputDefinition $definition */
         $definition = $this->getDefinition();
 
-        $filtered = \array_filter($definition->getOptions(), fn (InputOption $option) => !\in_array($option->getName(), $names, true));
+        $filtered = array_filter(
+            $definition->getOptions(),
+            fn(InputOption $option) => !in_array($option->getName(), $names, true)
+        );
 
         $definition->setOptions($filtered);
     }

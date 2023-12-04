@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,18 +9,22 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder\Statements;
+
+use function is_array;
 
 /**
  * Allows to manually build a static function call AST node
  */
 class CallStaticStatement extends AbstractStatement
 {
-    private $class;
-    private $method;
     private $arguments;
-    private $dynamicClass = false;
+    private $class;
+    private $dynamicClass  = false;
     private $dynamicMethod = false;
+    private $method;
 
     /**
      * @param null       $class
@@ -47,21 +49,17 @@ class CallStaticStatement extends AbstractStatement
     /**
      * @return mixed
      */
-    public function getClass()
+    public function getArguments()
     {
-        return $this->class;
+        return $this->arguments;
     }
 
     /**
-     * @param mixed $class
-     *
-     * @return CallStaticStatement
+     * @return mixed
      */
-    public function setClass($class)
+    public function getClass()
     {
-        $this->class = $class;
-
-        return $this;
+        return $this->class;
     }
 
     /**
@@ -73,23 +71,19 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @param mixed $method
-     *
-     * @return CallStaticStatement
+     * @return bool
      */
-    public function setMethod($method)
+    public function isDynamicClass()
     {
-        $this->method = $method;
-
-        return $this;
+        return $this->dynamicClass;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getArguments()
+    public function isDynamicMethod()
     {
-        return $this->arguments;
+        return $this->dynamicMethod;
     }
 
     /**
@@ -105,11 +99,15 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @return bool
+     * @param mixed $class
+     *
+     * @return CallStaticStatement
      */
-    public function isDynamicClass()
+    public function setClass($class)
     {
-        return $this->dynamicClass;
+        $this->class = $class;
+
+        return $this;
     }
 
     /**
@@ -125,14 +123,6 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
-     * @return bool
-     */
-    public function isDynamicMethod()
-    {
-        return $this->dynamicMethod;
-    }
-
-    /**
      * @param bool $dynamicMethod
      *
      * @return CallStaticStatement
@@ -145,25 +135,37 @@ class CallStaticStatement extends AbstractStatement
     }
 
     /**
+     * @param mixed $method
+     *
+     * @return CallStaticStatement
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+
+        return $this;
+    }
+
+    /**
      * @return array
      */
     protected function preBuild()
     {
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
-                if (!\is_array($argument) || !isset($argument['parameter'])) {
+                if (!is_array($argument) || !isset($argument['parameter'])) {
                     $argument = ['parameter' => $argument];
                 }
             }
         }
 
         return [
-            'type' => 'scall',
-            'class' => $this->getClass(),
-            'name' => $this->getMethod(),
-            'parameters' => $arguments,
+            'type'          => 'scall',
+            'class'         => $this->getClass(),
+            'name'          => $this->getMethod(),
+            'parameters'    => $arguments,
             'dynamic-class' => $this->isDynamicClass(),
-            'dynamic' => $this->isDynamicMethod(),
+            'dynamic'       => $this->isDynamicMethod(),
         ];
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\MathOptimizer;
 
+use function count;
+
 /**
  * LdexpOptimizer.
  *
@@ -26,15 +28,7 @@ use Zephir\Optimizers\MathOptimizer;
  */
 class LdexpOptimizer extends MathOptimizer
 {
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getFunctionName()
-    {
-        return 'ldexp';
-    }
+    protected string $zephirMethod = 'ldexp';
 
     /**
      * @param array              $expression
@@ -47,17 +41,27 @@ class LdexpOptimizer extends MathOptimizer
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
-        if (!isset($expression['parameters']) || 2 != \count($expression['parameters'])) {
-            throw new CompilerException(sprintf("'%s' requires two parameters", $this->getFunctionName()), $expression);
+        if (!isset($expression['parameters']) || 2 != count($expression['parameters'])) {
+            throw new CompilerException(
+                sprintf(
+                    "'%s' requires two parameters",
+                    $this->zephirMethod
+                ),
+                $expression
+            );
         }
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         $context->headersManager->add('kernel/math');
 
         return new CompiledExpression(
             'double',
-            'zephir_'.$this->getFunctionName().'('.$resolvedParams[0].', '.$resolvedParams[1].')',
+            'zephir_' . $this->zephirMethod . '(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')',
             $expression
         );
     }

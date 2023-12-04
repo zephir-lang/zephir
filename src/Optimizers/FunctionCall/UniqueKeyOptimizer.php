@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,9 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
+
+use function count;
 
 /**
  * UniqueKeyOptimizer.
@@ -26,6 +29,8 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class UniqueKeyOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_unique_key';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -41,31 +46,52 @@ class UniqueKeyOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             throw new CompilerException("'unique_key' only accepts two parameter", $expression);
         }
+        return $this->processOptimizer($call, $context, $expression);
+    }
 
-        /*
+    /**
+     * @param CompilationContext             $context
+     * @param Variable|null $symbolVariable
+     *
+     * @return void
+     */
+    protected function setHeaders(CompilationContext $context, ?Variable $symbolVariable): void
+    {
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('string');
+    }
+
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     * @param array              $expression
+     *
+     * @return CompiledExpression
+     * @throws \Zephir\Exception
+     */
+    protected function processOptimizer(Call $call, CompilationContext $context, array $expression): CompiledExpression
+    {
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
-        $context->headersManager->add('kernel/string');
-
-        $symbolVariable->setDynamicTypes('string');
+        $this->setHeaders($context, $symbolVariable);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_unique_key('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
+        $context->codePrinter->output(
+            $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -15,9 +15,14 @@ namespace Zephir\Optimizers;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
+use Zephir\Exception;
+use Zephir\Traits\VariablesTrait;
+use Zephir\Variable\Variable;
 
 abstract class OptimizerAbstract
 {
+    use VariablesTrait;
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -26,4 +31,55 @@ abstract class OptimizerAbstract
      * @return mixed
      */
     abstract public function optimize(array $expression, Call $call, CompilationContext $context);
+
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     * @param array              $expression
+     *
+     * @return array
+     * @throws Exception
+     */
+    protected function processStringOptimizer(Call $call, CompilationContext $context, array $expression): array
+    {
+        /**
+         * Process the expected symbol to be returned
+         */
+        $call->processExpectedReturn($context);
+
+        $symbolVariable = $call->getSymbolVariable(true, $context);
+        $this->checkNotVariableString($symbolVariable, $expression);
+
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('string');
+
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
+
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
+        $symbol = $context->backend->getVariableCode($symbolVariable);
+
+        return [$symbolVariable, $resolvedParams, $symbol];
+    }
+
+    /**
+     * @param Call               $call
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function checkInitSymbolVariable(
+        Call $call,
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): void {
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
+    }
 }

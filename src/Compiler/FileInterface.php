@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Compiler;
 
@@ -22,18 +22,18 @@ use Zephir\Compiler;
 interface FileInterface
 {
     /**
-     * Checks if the class file belongs to an external dependency or not.
-     *
-     * @return bool
-     */
-    public function isExternal();
-
-    /**
      * Returns the class definition related to the compiled file.
      *
      * @return Definition
      */
     public function getClassDefinition();
+
+    /**
+     * Checks if the class file belongs to an external dependency or not.
+     *
+     * @return bool
+     */
+    public function isExternal();
 
     /**
      * Pre-compiles a Zephir file.

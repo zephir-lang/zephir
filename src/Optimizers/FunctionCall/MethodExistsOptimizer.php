@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Name;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * Optimizes calls to 'method_exists' using internal function
@@ -37,7 +39,7 @@ class MethodExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             return false;
         }
 
@@ -52,14 +54,16 @@ class MethodExistsOptimizer extends OptimizerAbstract
         if (isset($str)) {
             return new CompiledExpression(
                 'bool',
-                '(zephir_method_exists_ex('.$resolvedParams[0].', ZEND_STRL("'.strtolower($str).'")) == SUCCESS)',
+                '(zephir_method_exists_ex(' . $resolvedParams[0] . ', ZEND_STRL("' . strtolower(
+                    $str
+                ) . '")) == SUCCESS)',
                 $expression
             );
         }
 
         return new CompiledExpression(
             'bool',
-            '(zephir_method_exists('.$resolvedParams[0].', '.$resolvedParams[1].')  == SUCCESS)',
+            '(zephir_method_exists(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ')  == SUCCESS)',
             $expression
         );
     }

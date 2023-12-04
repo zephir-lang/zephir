@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Statements;
 
@@ -29,7 +29,7 @@ class WhileStatement extends StatementAbstract
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $exprRaw = $this->statement['expr'];
+        $exprRaw     = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
         /*
@@ -44,12 +44,12 @@ class WhileStatement extends StatementAbstract
          */
         ++$compilationContext->insideCycle;
 
-        $expr = new EvalExpression();
-        $condition = $expr->optimize($exprRaw, $compilationContext);
+        $expr                 = new EvalExpression();
+        $condition            = $expr->optimize($exprRaw, $compilationContext);
         $this->evalExpression = $expr;
 
-        $codePrinter->output('if (!('.$condition.')) {');
-        $codePrinter->output("\t".'break;');
+        $codePrinter->output('if (!(' . $condition . ')) {');
+        $codePrinter->output("\t" . 'break;');
         $codePrinter->output('}');
 
         $codePrinter->decreaseLevel();

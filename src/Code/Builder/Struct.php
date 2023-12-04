@@ -15,6 +15,12 @@ namespace Zephir\Code\Builder;
 
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\RuntimeException;
+use Zephir\Types\Types;
+
+use function sprintf;
+use function substr;
+
+use const PHP_EOL;
 
 /**
  * Represents an internal extension global structure
@@ -41,13 +47,13 @@ class Struct
 
     public function __toString(): string
     {
-        $code = 'typedef struct '.$this->name.' { '.PHP_EOL;
+        $code = 'typedef struct ' . $this->name . ' { ' . PHP_EOL;
 
         foreach ($this->properties as $name => $type) {
             $code .= sprintf("\t%s %s;%s", $type, $name, PHP_EOL);
         }
 
-        return $code.'} '.substr($this->name, 1).';'.PHP_EOL;
+        return $code . '} ' . substr($this->name, 1) . ';' . PHP_EOL;
     }
 
     /**
@@ -80,27 +86,26 @@ class Struct
     public function getCDefault(string $name, array $global, string $namespace): string
     {
         if (!isset($global['default'])) {
-            throw new RuntimeException('Field "'.$name.'" does not have a default value');
+            throw new RuntimeException('Field "' . $name . '" does not have a default value');
         }
 
-        switch ($global['type']) {
-            case 'boolean':
-            case 'bool':
-                return '';
-
-            case 'string':
-                return "\t".$namespace.'_globals->'.$this->simpleName.'.'.$name.' = ZSTR_VAL(zend_string_init(ZEND_STRL("'.$global['default'].'"), 0));';
-
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'double':
-            case 'hash':
-                return "\t".$namespace.'_globals->'.$this->simpleName.'.'.$name.' = '.$global['default'].';';
-
-            default:
-                throw new InvalidArgumentException('Unknown global type: '.$global['type']);
-        }
+        return match ($global['type']) {
+            Types::T_BOOL,
+            Types::T_BOOLEAN => '',
+            Types::T_STRING  => "\t" . $namespace
+                . '_globals->' . $this->simpleName . '.' . $name
+                . ' = ZSTR_VAL(zend_string_init(ZEND_STRL("' . $global['default'] . '"), 0));',
+            Types::T_INT,
+            Types::T_UINT,
+            Types::T_LONG,
+            Types::T_DOUBLE,
+            Types::T_HASH    => "\t" . $namespace
+                . '_globals->' . $this->simpleName . '.' . $name
+                . ' = ' . $global['default'] . ';',
+            default          => throw new InvalidArgumentException(
+                'Unknown global type: ' . $global['type']
+            ),
+        };
     }
 
     /**
@@ -116,41 +121,28 @@ class Struct
      */
     public function getInitEntry(string $name, array $global, string $namespace): string
     {
-        $structName = $this->simpleName.'.'.$name;
-        $iniEntry = $global['ini-entry'] ?? [];
-        $iniName = $iniEntry['name'] ?? $namespace.'.'.$structName;
-        $scope = $iniEntry['scope'] ?? 'PHP_INI_ALL';
+        $structName = $this->simpleName . '.' . $name;
+        $iniEntry   = $global['ini-entry'] ?? [];
+        $iniName    = $iniEntry['name'] ?? $namespace . '.' . $structName;
+        $scope      = $iniEntry['scope'] ?? 'PHP_INI_ALL';
 
-        switch ($global['type']) {
-            case 'boolean':
-            case 'bool':
-                return
-                    'STD_PHP_INI_BOOLEAN("'.
-                    $iniName.
-                    '", "'.
-                    (int) (true === $global['default']).
-                    '", '.
-                    $scope.
-                    ', OnUpdateBool, '.
-                    $structName.
-                    ', zend_'.
-                    $namespace.
-                    '_globals, '.
-                    $namespace.'_globals)';
-
-            case 'string':
-                return sprintf(
-                    'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
-                    '"'.$iniName.'"',
-                    '"'.$global['default'].'"',
-                    $scope,
-                    $structName,
-                    'zend_'.$namespace.'_globals',
-                    $namespace.'_globals',
-                );
-        }
-
-        return '';
+        return match ($global['type']) {
+            Types::T_BOOLEAN,
+            Types::T_BOOL   => 'STD_PHP_INI_BOOLEAN("' . $iniName . '", "'
+                . (int)(true === $global['default']) . '", ' . $scope
+                . ', OnUpdateBool, ' . $structName . ', zend_' . $namespace
+                . '_globals, ' . $namespace . '_globals)',
+            Types::T_STRING => sprintf(
+                'STD_PHP_INI_ENTRY(%s, %s, %s, NULL, %s, %s, %s)',
+                '"' . $iniName . '"',
+                '"' . $global['default'] . '"',
+                $scope,
+                $structName,
+                'zend_' . $namespace . '_globals',
+                $namespace . '_globals',
+            ),
+            default         => '',
+        };
     }
 
     /**
@@ -161,11 +153,13 @@ class Struct
     protected function convertToCType(string $type): string
     {
         return match ($type) {
-            'boolean', 'bool' => 'zend_bool',
-            'hash' => 'HashTable* ',
-            'string' => 'zend_string* ',
+            'boolean', 'bool'                                => 'zend_bool',
+            'hash'                                           => 'HashTable* ',
+            'string'                                         => 'zend_string* ',
             'int', 'uint', 'long', 'char', 'uchar', 'double' => $type,
-            default => throw new InvalidArgumentException('Unknown global type: '.$type),
+            default                                          => throw new InvalidArgumentException(
+                'Unknown global type: ' . $type
+            ),
         };
     }
 }

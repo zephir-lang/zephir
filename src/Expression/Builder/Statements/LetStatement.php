@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Statements;
 
@@ -28,6 +28,18 @@ class LetStatement extends AbstractStatement
         if (null !== $assignments) {
             $this->setAssignments($assignments);
         }
+    }
+
+    /**
+     * @param mixed $assignment
+     *
+     * @return $this
+     */
+    public function addAssignment($assignment)
+    {
+        $this->assignments[] = $assignment;
+
+        return $this;
     }
 
     /**
@@ -51,24 +63,12 @@ class LetStatement extends AbstractStatement
     }
 
     /**
-     * @param mixed $assignment
-     *
-     * @return $this
-     */
-    public function addAssignment($assignment)
-    {
-        $this->assignments[] = $assignment;
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function preBuild()
     {
         return [
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => $this->getAssignments(),
         ];
     }

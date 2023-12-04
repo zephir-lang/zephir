@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,14 +9,20 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\Branch;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Expression;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
+
+use function count;
+use function implode;
 
 /**
  * Switch statement, the same as in PHP/C
@@ -28,7 +32,7 @@ class SwitchStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
@@ -53,59 +57,64 @@ class SwitchStatement extends StatementAbstract
                 /**
                  * Create a temporary variable.
                  */
-                $tempVariable = $compilationContext->symbolTable->getTempVariable($resolvedExpr->getType(), $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempVariable(
+                    $resolvedExpr->getType(),
+                    $compilationContext
+                );
 
                 /**
                  * Simulate an assignment to the temporary variable.
                  */
                 $statement = new LetStatement([
-                    'type' => 'let',
+                    'type'        => 'let',
                     'assignments' => [
                         [
                             'assign-type' => 'variable',
-                            'operator' => 'assign',
-                            'variable' => $tempVariable->getName(),
-                            'expr' => [
-                                'type' => $resolvedExpr->getType(),
+                            'operator'    => 'assign',
+                            'variable'    => $tempVariable->getName(),
+                            'expr'        => [
+                                'type'  => $resolvedExpr->getType(),
                                 'value' => $resolvedExpr->getCode(),
-                                'file' => $exprRaw['file'],
-                                'line' => $exprRaw['line'],
-                                'char' => $exprRaw['char'],
+                                'file'  => $exprRaw['file'],
+                                'line'  => $exprRaw['line'],
+                                'char'  => $exprRaw['char'],
                             ],
-                            'file' => $exprRaw['file'],
-                            'line' => $exprRaw['line'],
-                            'char' => $exprRaw['char'],
+                            'file'        => $exprRaw['file'],
+                            'line'        => $exprRaw['line'],
+                            'char'        => $exprRaw['char'],
                         ],
                     ],
                 ]);
                 $statement->compile($compilationContext);
             } else {
-                $tempVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $exprRaw);
+                $tempVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $compilationContext,
+                    $exprRaw
+                );
             }
 
-            $clauses = $this->normalizeClauses($this->statement['clauses']);
+            $clauses  = $this->normalizeClauses($this->statement['clauses']);
             $tempLeft = ['type' => 'variable', 'value' => $tempVariable->getRealName()];
 
             /**
              * In the first round we group case clauses that have block statements
              * with the ones that does not have one.
              */
-            $blocks = [];
-            $exprStack = [];
+            $blocks       = [];
+            $exprStack    = [];
             $defaultBlock = null;
             foreach ($clauses as $clause) {
                 if ('case' == $clause['type']) {
                     $expr = [
-                        'type' => 'equals',
-                        'left' => $tempLeft,
+                        'type'  => 'equals',
+                        'left'  => $tempLeft,
                         'right' => $clause['expr'],
                     ];
-                    if (!isset($clause['statements'])) {
-                        $exprStack[] = $expr;
-                    } else {
-                        $exprStack[] = $expr;
-                        $blocks[] = [
-                            'expr' => $exprStack,
+                    $exprStack[] = $expr;
+                    if (isset($clause['statements'])) {
+                        $blocks[]  = [
+                            'expr'  => $exprStack,
                             'block' => $clause['statements'],
                         ];
                         $exprStack = [];
@@ -124,19 +133,19 @@ class SwitchStatement extends StatementAbstract
             foreach ($blocks as $block) {
                 $expressions = $block['expr'];
 
-                if (1 == \count($expressions)) {
+                if (1 == count($expressions)) {
                     $condition = $evalExpr->optimize($expressions[0], $compilationContext);
-                    $codePrinter->output('if ('.$condition.') {');
+                    $codePrinter->output('if (' . $condition . ') {');
                 } else {
                     $orConditions = [];
                     foreach ($expressions as $expression) {
                         $orConditions[] = $evalExpr->optimize($expression, $compilationContext);
                     }
-                    $codePrinter->output('if ('.implode(' || ', $orConditions).') {');
+                    $codePrinter->output('if (' . implode(' || ', $orConditions) . ') {');
                 }
 
                 if (isset($block['block'])) {
-                    $st = new StatementsBlock($block['block']);
+                    $st     = new StatementsBlock($block['block']);
                     $branch = $st->compile($compilationContext, false, Branch::TYPE_SWITCH);
                     $branch->setRelatedStatement($this);
                 }
@@ -169,7 +178,7 @@ class SwitchStatement extends StatementAbstract
             }
         }
 
-        if ($defaultIndex === \count($clauses) - 1) {
+        if ($defaultIndex === count($clauses) - 1) {
             return $clauses;
         }
 

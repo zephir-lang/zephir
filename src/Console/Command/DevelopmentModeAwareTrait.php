@@ -15,6 +15,8 @@ namespace Zephir\Console\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 
+use const PHP_DEBUG;
+
 trait DevelopmentModeAwareTrait
 {
     /**
@@ -27,7 +29,7 @@ trait DevelopmentModeAwareTrait
     protected function isDevelopmentModeEnabled(InputInterface $input): bool
     {
         if (false === $input->getOption('no-dev')) {
-            return $input->getOption('dev') || \PHP_DEBUG;
+            return $input->getOption('dev') || PHP_DEBUG;
         }
 
         return false;

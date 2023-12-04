@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * StrtoupperOptimizer.
  *
@@ -26,6 +28,9 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class StrtoupperOptimizer extends OptimizerAbstract
 {
+    protected string $type         = 'string';
+    protected string $zephirMethod = 'zephir_fast_strtoupper';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -41,7 +46,7 @@ class StrtoupperOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != \count($expression['parameters'])) {
+        if (1 != count($expression['parameters'])) {
             return false;
         }
 
@@ -51,20 +56,23 @@ class StrtoupperOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/string');
-        $symbolVariable->setDynamicTypes('string');
+        $symbolVariable->setDynamicTypes($this->type);
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_strtoupper('.$symbol.', '.$resolvedParams[0].');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

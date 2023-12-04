@@ -15,6 +15,12 @@ namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
 
+use function constant;
+use function defined;
+use function gettype;
+
+use const PHP_EOL;
+
 /**
  * This pass tries to check whether variables only do exist in the local context of the method block
  * or if they're used externally which will un allow variables to be placed in the stack
@@ -28,25 +34,11 @@ use Zephir\StatementsBlock;
  */
 class LocalContextPass
 {
-    protected array $variables = [];
-
-    protected array $mutations = [];
-
-    protected array $uses = [];
-
-    protected int $lastCallLine = 0;
-
-    protected int $lastUnsetLine = 0;
-
-    /**
-     * Do the compilation pass.
-     *
-     * @param StatementsBlock $block
-     */
-    public function pass(StatementsBlock $block): void
-    {
-        $this->passStatementBlock($block->getStatements());
-    }
+    protected int   $lastCallLine  = 0;
+    protected int   $lastUnsetLine = 0;
+    protected array $mutations     = [];
+    protected array $uses          = [];
+    protected array $variables     = [];
 
     public function declareVariables(array $statement): void
     {
@@ -56,9 +48,10 @@ class LocalContextPass
 
         foreach ($statement['variables'] as $variable) {
             if (isset($variable['expr'])) {
-                if ('string' === $variable['expr']['type']
-                    || 'empty-array' === $variable['expr']['type']
-                    || 'array' === $variable['expr']['type']
+                if (
+                    'string' === $variable['expr']['type'] ||
+                    'empty-array' === $variable['expr']['type'] ||
+                    'array' === $variable['expr']['type']
                 ) {
                     $this->variables[$variable['variable']] = false;
                     continue;
@@ -69,69 +62,6 @@ class LocalContextPass
                 $this->variables[$variable['variable']] = true;
             }
         }
-    }
-
-    /**
-     * Marks a variable to mandatory be stored in the heap.
-     *
-     * @param string $variable
-     */
-    public function markVariableNoLocal(string $variable): void
-    {
-        if (isset($this->variables[$variable])) {
-            $this->variables[$variable] = false;
-        }
-    }
-
-    /**
-     * Marks the latest use/read of a variable.
-     *
-     * @param string $variable
-     * @param array  $node
-     */
-    public function markLastUse(string $variable, array $node): void
-    {
-        if (isset($node['line'])) {
-            $this->uses[$variable] = $node['line'];
-        }
-    }
-
-    /**
-     * Asks the local context information whether a variable can be stored in the stack instead of the heap.
-     *
-     * @param string $variable
-     *
-     * @return bool
-     */
-    public function shouldBeLocal(string $variable): bool
-    {
-        return !empty($this->variables[$variable]);
-    }
-
-    /**
-     * Increase the number of mutations a variable has inside a statement block.
-     *
-     * @param string $variable
-     */
-    public function increaseMutations(string $variable): void
-    {
-        if (isset($this->mutations[$variable])) {
-            ++$this->mutations[$variable];
-        } else {
-            $this->mutations[$variable] = 1;
-        }
-    }
-
-    /**
-     * Returns the number of assignment instructions that mutated a variable.
-     *
-     * @param string $variable
-     *
-     * @return int
-     */
-    public function getNumberOfMutations(string $variable): int
-    {
-        return $this->mutations[$variable] ?? 0;
     }
 
     /**
@@ -154,110 +84,65 @@ class LocalContextPass
         return $this->lastUnsetLine;
     }
 
-    public function passLetStatement(array $statement): void
+    /**
+     * Returns the number of assignment instructions that mutated a variable.
+     *
+     * @param string $variable
+     *
+     * @return int
+     */
+    public function getNumberOfMutations(string $variable): int
     {
-        foreach ($statement['assignments'] as $assignment) {
-            if (isset($assignment['expr'])) {
-                $this->passExpression($assignment['expr']);
-            }
-            $this->increaseMutations($assignment['variable']);
+        return $this->mutations[$variable] ?? 0;
+    }
 
-            switch ($assignment['assign-type']) {
-                case 'variable':
-                    switch ($assignment['operator']) {
-                        case 'mul-assign':
-                        case 'sub-assign':
-                        case 'add-assign':
-                            $this->markVariableNoLocal($assignment['variable']);
-                            break;
-                    }
-
-                    switch ($assignment['expr']['type']) {
-                        case 'property-access':
-                        case 'property-dynamic-access':
-                        case 'property-string-access':
-                        case 'array-access':
-                        case 'static-property-access':
-                        case 'static-constant-access':
-                        case 'string':
-                        case 'array':
-                        case 'empty-array':
-                        case 'fcall':
-                        case 'mcall':
-                        case 'scall':
-                        case 'concat':
-                        case 'clone':
-                        case 'require':
-                        case 'require_once':
-                        case 'type-hint':
-                        case 'minus':
-                        case 'new':
-                        case 'new-type':
-                        case 'closure':
-                        case 'closure-arrow':
-                        case 'reference':
-                        case 'irange':
-                        case 'erange':
-                            $this->markVariableNoLocal($assignment['variable']);
-                            break;
-
-                        case 'constant':
-                            if (\defined($assignment['expr']['value'])) {
-                                if ('string' === \gettype(\constant($assignment['expr']['value']))) {
-                                    $this->markVariableNoLocal($assignment['variable']);
-                                }
-                            }
-                            break;
-
-                        case 'variable':
-                            $this->markVariableNoLocal($assignment['expr']['value']);
-                            $this->markVariableNoLocal($assignment['variable']);
-                            break;
-
-                        case 'cast':
-                            switch ($assignment['expr']['left']) {
-                                case 'array':
-                                case 'string':
-                                    $this->markVariableNoLocal($assignment['variable']);
-                                    break;
-                            }
-                            break;
-                    }
-                    break;
-
-                case 'object-property':
-                case 'array-index':
-                case 'object-property-array-index':
-                case 'object-property-append':
-                    if ($assignment['expr']['type'] == 'variable') {
-                        $this->markVariableNoLocal($assignment['expr']['value']);
-                    }
-                    $this->markVariableNoLocal($assignment['variable']);
-                    break;
-
-                case 'variable-append':
-                    $this->markVariableNoLocal($assignment['variable']);
-                    switch ($assignment['expr']['type']) {
-                        case 'variable':
-                            $this->markVariableNoLocal($assignment['expr']['value']);
-                            break;
-                    }
-                    break;
-            }
+    /**
+     * Increase the number of mutations a variable has inside a statement block.
+     *
+     * @param string $variable
+     */
+    public function increaseMutations(string $variable): void
+    {
+        if (isset($this->mutations[$variable])) {
+            ++$this->mutations[$variable];
+        } else {
+            $this->mutations[$variable] = 1;
         }
     }
 
-    public function passCall(array $expression): void
+    /**
+     * Marks the latest use/read of a variable.
+     *
+     * @param string $variable
+     * @param array  $node
+     */
+    public function markLastUse(string $variable, array $node): void
     {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                if ('variable' == $parameter['parameter']['type']) {
-                    $this->markVariableNoLocal($parameter['parameter']['value']);
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
-            }
+        if (isset($node['line'])) {
+            $this->uses[$variable] = $node['line'];
         }
+    }
+
+    /**
+     * Marks a variable to mandatory be stored in the heap.
+     *
+     * @param string $variable
+     */
+    public function markVariableNoLocal(string $variable): void
+    {
+        if (isset($this->variables[$variable])) {
+            $this->variables[$variable] = false;
+        }
+    }
+
+    /**
+     * Do the compilation pass.
+     *
+     * @param StatementsBlock $block
+     */
+    public function pass(StatementsBlock $block): void
+    {
+        $this->passStatementBlock($block->getStatements());
     }
 
     public function passArray(array $expression): void
@@ -271,7 +156,7 @@ class LocalContextPass
         }
     }
 
-    public function passNew(array $expression): void
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -402,6 +287,112 @@ class LocalContextPass
             default:
                 echo 'LocalContextPassType=', $expression['type'], PHP_EOL;
                 break;
+        }
+    }
+
+    public function passLetStatement(array $statement): void
+    {
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
+            }
+            $this->increaseMutations($assignment['variable']);
+
+            switch ($assignment['assign-type']) {
+                case 'variable':
+                    switch ($assignment['operator']) {
+                        case 'mul-assign':
+                        case 'sub-assign':
+                        case 'add-assign':
+                            $this->markVariableNoLocal($assignment['variable']);
+                            break;
+                    }
+
+                    switch ($assignment['expr']['type']) {
+                        case 'property-access':
+                        case 'property-dynamic-access':
+                        case 'property-string-access':
+                        case 'array-access':
+                        case 'static-property-access':
+                        case 'static-constant-access':
+                        case 'string':
+                        case 'array':
+                        case 'empty-array':
+                        case 'fcall':
+                        case 'mcall':
+                        case 'scall':
+                        case 'concat':
+                        case 'clone':
+                        case 'require':
+                        case 'require_once':
+                        case 'type-hint':
+                        case 'minus':
+                        case 'new':
+                        case 'new-type':
+                        case 'closure':
+                        case 'closure-arrow':
+                        case 'reference':
+                        case 'irange':
+                        case 'erange':
+                            $this->markVariableNoLocal($assignment['variable']);
+                            break;
+
+                        case 'constant':
+                            if (defined($assignment['expr']['value'])) {
+                                if ('string' === gettype(constant($assignment['expr']['value']))) {
+                                    $this->markVariableNoLocal($assignment['variable']);
+                                }
+                            }
+                            break;
+
+                        case 'variable':
+                            $this->markVariableNoLocal($assignment['expr']['value']);
+                            $this->markVariableNoLocal($assignment['variable']);
+                            break;
+
+                        case 'cast':
+                            switch ($assignment['expr']['left']) {
+                                case 'array':
+                                case 'string':
+                                    $this->markVariableNoLocal($assignment['variable']);
+                                    break;
+                            }
+                            break;
+                    }
+                    break;
+
+                case 'object-property':
+                case 'array-index':
+                case 'object-property-array-index':
+                case 'object-property-append':
+                    if ($assignment['expr']['type'] == 'variable') {
+                        $this->markVariableNoLocal($assignment['expr']['value']);
+                    }
+                    $this->markVariableNoLocal($assignment['variable']);
+                    break;
+
+                case 'variable-append':
+                    $this->markVariableNoLocal($assignment['variable']);
+                    switch ($assignment['expr']['type']) {
+                        case 'variable':
+                            $this->markVariableNoLocal($assignment['expr']['value']);
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+
+    public function passNew(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                if ('variable' == $parameter['parameter']['type']) {
+                    $this->markVariableNoLocal($parameter['parameter']['value']);
+                } else {
+                    $this->passExpression($parameter['parameter']);
+                }
+            }
         }
     }
 
@@ -568,5 +559,17 @@ class LocalContextPass
                     echo 'Statement=', $statement['type'], PHP_EOL;
             }
         }
+    }
+
+    /**
+     * Asks the local context information whether a variable can be stored in the stack instead of the heap.
+     *
+     * @param string $variable
+     *
+     * @return bool
+     */
+    public function shouldBeLocal(string $variable): bool
+    {
+        return !empty($this->variables[$variable]);
     }
 }

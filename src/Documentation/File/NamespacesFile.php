@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Documentation\FileInterface;
@@ -20,22 +22,22 @@ class NamespacesFile implements FileInterface
     {
     }
 
-    public function getTemplateName(): string
-    {
-        return 'namespaces.phtml';
-    }
-
     public function getData(): array
     {
         return [
             'namespaceAccessor' => $this->namespaceAccessor,
-            'namespacesTree' => $this->namespaceAccessor->getNamespaceTree(),
-            'namespaces' => $this->namespaceAccessor->getByNamespace(),
+            'namespacesTree'    => $this->namespaceAccessor->getNamespaceTree(),
+            'namespaces'        => $this->namespaceAccessor->getByNamespace(),
         ];
     }
 
     public function getOutputFile(): string
     {
         return 'namespaces.html';
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'namespaces.phtml';
     }
 }

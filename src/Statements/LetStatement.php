@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Statements;
 
@@ -43,6 +43,8 @@ use Zephir\Statements\Let\StaticPropertySub as LetStaticPropertySub;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 
+use function is_object;
+
 /**
  * LetStatement.
  *
@@ -66,28 +68,28 @@ class LetStatement extends StatementAbstract
             /*
              * Get the symbol from the symbol table if necessary
              */
-            switch ($assignment['assign-type']) {
-                case 'static-property':
-                case 'static-property-append':
-                case 'static-property-array-index':
-                case 'static-property-array-index-append':
-                case 'dynamic-variable-string':
-                    $symbolVariable = null;
-                    break;
-
-                case 'array-index':
-                case 'variable-append':
-                case 'object-property':
-                case 'array-index-append':
-                case 'string-dynamic-object-property':
-                case 'variable-dynamic-object-property':
-                    $symbolVariable = $compilationContext->symbolTable->getVariableForUpdate($variable, $compilationContext, $assignment);
-                    break;
-
-                default:
-                    $symbolVariable = $compilationContext->symbolTable->getVariableForWrite($variable, $compilationContext, $assignment);
-                    break;
-            }
+            $symbolVariable = match ($assignment['assign-type']) {
+                'static-property',
+                'static-property-append',
+                'static-property-array-index',
+                'static-property-array-index-append',
+                'dynamic-variable-string'     => null,
+                'array-index',
+                'variable-append',
+                'object-property',
+                'array-index-append',
+                'string-dynamic-object-property',
+                'variable-dynamic-object-property' => $compilationContext->symbolTable->getVariableForUpdate(
+                    $variable,
+                    $compilationContext,
+                    $assignment
+                ),
+                default                                                                                                                                         => $compilationContext->symbolTable->getVariableForWrite(
+                    $variable,
+                    $compilationContext,
+                    $assignment
+                ),
+            };
 
             /*
              * Incr/Decr assignments don't require an expression
@@ -134,9 +136,9 @@ class LetStatement extends StatementAbstract
                 $resolvedExpr = $expr->compile($compilationContext);
 
                 /*
-                 * Bad implemented operators could return values different than objects
+                 * Bad implemented operators could return values different from objects
                  */
-                if (!\is_object($resolvedExpr)) {
+                if (!is_object($resolvedExpr)) {
                     throw new CompilerException('Resolved expression is not valid', $assignment['expr']);
                 }
             }
@@ -151,7 +153,14 @@ class LetStatement extends StatementAbstract
             switch ($assignment['assign-type']) {
                 case 'variable':
                     $let = new LetVariable();
-                    $let->assign($variable, $symbolVariable, $resolvedExpr, $readDetector, $compilationContext, $assignment);
+                    $let->assign(
+                        $variable,
+                        $symbolVariable,
+                        $resolvedExpr,
+                        $readDetector,
+                        $compilationContext,
+                        $assignment
+                    );
                     break;
 
                 case 'variable-append':
@@ -177,34 +186,53 @@ class LetStatement extends StatementAbstract
                 case 'static-property':
                     $let = new LetStaticProperty();
                     if (isset($assignment['operator'])) {
-                        switch ($assignment['operator']) {
-                            case 'add-assign':
-                                $let = new LetStaticPropertyAdd();
-                                break;
-                            case 'sub-assign':
-                                $let = new LetStaticPropertySub();
-                                break;
-                            default:
-                                $let = new LetStaticProperty();
-                        }
+                        $let = match ($assignment['operator']) {
+                            'add-assign' => new LetStaticPropertyAdd(),
+                            'sub-assign' => new LetStaticPropertySub(),
+                            default      => new LetStaticProperty(),
+                        };
                     }
 
-                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic(
+                        $variable,
+                        $assignment['property'],
+                        $resolvedExpr,
+                        $compilationContext,
+                        $assignment
+                    );
                     break;
 
                 case 'static-property-append':
                     $let = new LetStaticPropertyAppend();
-                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic(
+                        $variable,
+                        $assignment['property'],
+                        $resolvedExpr,
+                        $compilationContext,
+                        $assignment
+                    );
                     break;
 
                 case 'static-property-array-index':
                     $let = new LetStaticPropertyArrayIndex();
-                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic(
+                        $variable,
+                        $assignment['property'],
+                        $resolvedExpr,
+                        $compilationContext,
+                        $assignment
+                    );
                     break;
 
                 case 'static-property-array-index-append':
                     $let = new LetStaticPropertyArrayIndexAppend();
-                    $let->assignStatic($variable, $assignment['property'], $resolvedExpr, $compilationContext, $assignment);
+                    $let->assignStatic(
+                        $variable,
+                        $assignment['property'],
+                        $resolvedExpr,
+                        $compilationContext,
+                        $assignment
+                    );
                     break;
 
                 case 'array-index':
@@ -263,7 +291,7 @@ class LetStatement extends StatementAbstract
                     break;
 
                 default:
-                    throw new CompilerException('Unknown assignment: '.$assignment['assign-type'], $assignment);
+                    throw new CompilerException('Unknown assignment: ' . $assignment['assign-type'], $assignment);
             }
         }
     }
@@ -303,7 +331,9 @@ class LetStatement extends StatementAbstract
         }
 
         if ($assignment['assign-type'] !== 'variable') {
-            throw new CompilerException("Operator '".$assignment['operator']."' is not supported assign-type: ".$assignment['assign-type']);
+            throw new CompilerException(
+                "Operator '" . $assignment['operator'] . "' is not supported assign-type: " . $assignment['assign-type']
+            );
         }
 
         $builderExpr = BuilderFactory::getInstance();
@@ -311,8 +341,9 @@ class LetStatement extends StatementAbstract
         $leftExpression = $builderExpr->variable($assignment['variable']);
 
         $assignment['expr'] = $builderExpr->operators()
-            ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
-            ->build();
+                                          ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
+                                          ->build()
+        ;
 
         $assignment['operator'] = AssignVariableOperator::OPERATOR_ASSIGN;
 

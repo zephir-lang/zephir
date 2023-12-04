@@ -20,34 +20,31 @@ use Zephir\Statements\StatementAbstract;
  */
 class Branch
 {
-    public const TYPE_ROOT = 0;
-    public const TYPE_CONDITIONAL_TRUE = 1;
     public const TYPE_CONDITIONAL_FALSE = 2;
-    public const TYPE_LOOP_INFINITE = 3;
-    public const TYPE_LOOP_CONDITIONAL = 4;
-    public const TYPE_SWITCH = 5;
-    public const TYPE_EXTERNAL = 6;
-    public const TYPE_UNKNOWN = 7;
+    public const TYPE_CONDITIONAL_TRUE  = 1;
+    public const TYPE_EXTERNAL          = 6;
+    public const TYPE_LOOP_CONDITIONAL  = 4;
+    public const TYPE_LOOP_INFINITE     = 3;
+    public const TYPE_ROOT              = 0;
+    public const TYPE_SWITCH            = 5;
+    public const TYPE_UNKNOWN           = 7;
 
-    protected int $level = -1;
-    protected int $type = self::TYPE_ROOT;
-    protected ?bool $unreachable = null;
-    protected ?Branch $parentBranch = null;
+    protected int                $level            = -1;
+    protected ?Branch            $parentBranch     = null;
     protected ?StatementAbstract $relatedStatement = null;
-
+    protected int                $type             = self::TYPE_ROOT;
+    protected ?bool              $unreachable      = null;
     /**
      * @var mixed
      */
     private $uniqueId;
 
     /**
-     * Set the branch's parent.
-     *
-     * @param Branch $parentBranch
+     * @return int
      */
-    public function setParentBranch(self $parentBranch): void
+    public function getLevel(): int
     {
-        $this->parentBranch = $parentBranch;
+        return $this->level;
     }
 
     /**
@@ -61,13 +58,11 @@ class Branch
     }
 
     /**
-     * Set the type of branch. One of the TYPE_* constants.
-     *
-     * @param int $type
+     * @return StatementAbstract|null
      */
-    public function setType(int $type): void
+    public function getRelatedStatement(): ?StatementAbstract
     {
-        $this->type = $type;
+        return $this->relatedStatement;
     }
 
     /**
@@ -81,13 +76,11 @@ class Branch
     }
 
     /**
-     * Sets if the branch is unreachable.
-     *
-     * @param bool|null $unreachable
+     * @return mixed
      */
-    public function setUnreachable(?bool $unreachable): void
+    public function getUniqueId()
     {
-        $this->unreachable = $unreachable;
+        return $this->uniqueId;
     }
 
     /**
@@ -107,27 +100,13 @@ class Branch
     }
 
     /**
-     * @return int
+     * Set the branch's parent.
+     *
+     * @param Branch $parentBranch
      */
-    public function getLevel(): int
+    public function setParentBranch(self $parentBranch): void
     {
-        return $this->level;
-    }
-
-    /**
-     * @param $uniqueId
-     */
-    public function setUniqueId($uniqueId): void
-    {
-        $this->uniqueId = $uniqueId;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUniqueId()
-    {
-        return $this->uniqueId;
+        $this->parentBranch = $parentBranch;
     }
 
     /**
@@ -139,10 +118,30 @@ class Branch
     }
 
     /**
-     * @return StatementAbstract|null
+     * Set the type of branch. One of the TYPE_* constants.
+     *
+     * @param int $type
      */
-    public function getRelatedStatement(): ?StatementAbstract
+    public function setType(int $type): void
     {
-        return $this->relatedStatement;
+        $this->type = $type;
+    }
+
+    /**
+     * @param $uniqueId
+     */
+    public function setUniqueId($uniqueId): void
+    {
+        $this->uniqueId = $uniqueId;
+    }
+
+    /**
+     * Sets if the branch is unreachable.
+     *
+     * @param bool|null $unreachable
+     */
+    public function setUnreachable(?bool $unreachable): void
+    {
+        $this->unreachable = $unreachable;
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * CreateArrayOptimizer.
@@ -38,7 +40,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (isset($expression['parameters'])) {
-            if (\count($expression['parameters']) > 1) {
+            if (count($expression['parameters']) > 1) {
                 throw new CompilerException('This function only requires one parameter', $expression);
             }
         }
@@ -49,9 +51,7 @@ class CreateArrayOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariable($symbolVariable, $expression);
 
         /*
          * Add the last call status to the current symbol table
@@ -68,15 +68,16 @@ class CreateArrayOptimizer extends OptimizerAbstract
             $resolvedParams = null;
         }
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if ($resolvedParams) {
-            $context->codePrinter->output('zephir_create_array('.$symbol.', zephir_get_intval('.$resolvedParams[0].'), 1);');
+            $context->codePrinter->output(
+                'zephir_create_array(' . $symbol . ', zephir_get_intval(' . $resolvedParams[0] . '), 1);'
+            );
         } else {
-            $context->codePrinter->output('zephir_create_array('.$symbol.', 0, 1);');
+            $context->codePrinter->output('zephir_create_array(' . $symbol . ', 0, 1);');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

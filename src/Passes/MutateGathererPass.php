@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,9 +9,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
+
+use const PHP_EOL;
 
 /**
  * Counts variables mutated inside a specific statement block
@@ -21,19 +23,8 @@ use Zephir\StatementsBlock;
  */
 class MutateGathererPass
 {
-    protected array $variables = [];
-
     protected array $mutations = [];
-
-    /**
-     * Do the compilation pass.
-     *
-     * @param StatementsBlock $block
-     */
-    public function pass(StatementsBlock $block): void
-    {
-        $this->passStatementBlock($block->getStatements());
-    }
+    protected array $variables = [];
 
     public function declareVariables(array $statement): void
     {
@@ -42,6 +33,18 @@ class MutateGathererPass
                 $this->variables[$variable['variable']] = true;
             }
         }
+    }
+
+    /**
+     * Returns the number of assignment instructions that mutated a variable.
+     *
+     * @param string $variable
+     *
+     * @return int
+     */
+    public function getNumberOfMutations(string $variable): int
+    {
+        return $this->mutations[$variable] ?? 0;
     }
 
     /**
@@ -63,36 +66,13 @@ class MutateGathererPass
     }
 
     /**
-     * Pass let statements.
+     * Do the compilation pass.
      *
-     * @param array $statement
+     * @param StatementsBlock $block
      */
-    public function passLetStatement(array $statement): void
+    public function pass(StatementsBlock $block): void
     {
-        foreach ($statement['assignments'] as $assignment) {
-            if (isset($assignment['expr'])) {
-                $this->passExpression($assignment['expr']);
-            }
-            $this->increaseMutations($assignment['variable']);
-        }
-    }
-
-    /**
-     * Pass call expressions.
-     *
-     * @param array $expression
-     */
-    public function passCall(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                if ('variable' == $parameter['parameter']['type']) {
-                    $this->increaseMutations($parameter['parameter']['value']);
-                } else {
-                    $this->passExpression($parameter['parameter']);
-                }
-            }
-        }
+        $this->passStatementBlock($block->getStatements());
     }
 
     /**
@@ -110,15 +90,17 @@ class MutateGathererPass
     }
 
     /**
-     * Pass "new" expressions.
+     * Pass call expressions.
      *
      * @param array $expression
      */
-    public function passNew(array $expression): void
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
-                if ('variable' != $parameter['parameter']['type']) {
+                if ('variable' == $parameter['parameter']['type']) {
+                    $this->increaseMutations($parameter['parameter']['value']);
+                } else {
                     $this->passExpression($parameter['parameter']);
                 }
             }
@@ -180,15 +162,15 @@ class MutateGathererPass
                 $this->passExpression($expression['right']);
                 break;
 
-            case 'typeof':
             case 'minus':
-            case 'list':
-            case 'array-access':
+            case 'not':
             case 'static-property-access':
+            case 'array-access':
             case 'property-string-access':
             case 'property-dynamic-access':
             case 'property-access':
-            case 'not':
+            case 'list':
+            case 'typeof':
                 $this->passExpression($expression['left']);
                 break;
 
@@ -236,15 +218,34 @@ class MutateGathererPass
     }
 
     /**
-     * Returns the number of assignment instructions that mutated a variable.
+     * Pass let statements.
      *
-     * @param string $variable
-     *
-     * @return int
+     * @param array $statement
      */
-    public function getNumberOfMutations(string $variable): int
+    public function passLetStatement(array $statement): void
     {
-        return $this->mutations[$variable] ?? 0;
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
+            }
+            $this->increaseMutations($assignment['variable']);
+        }
+    }
+
+    /**
+     * Pass "new" expressions.
+     *
+     * @param array $expression
+     */
+    public function passNew(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                if ('variable' != $parameter['parameter']['type']) {
+                    $this->passExpression($parameter['parameter']);
+                }
+            }
+        }
     }
 
     /**

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir;
 
@@ -21,6 +21,24 @@ use Zephir\Documentation\NamespaceAccessor;
 use Zephir\Documentation\Theme;
 use Zephir\Exception\InvalidArgumentException;
 
+use function array_merge;
+use function file_exists;
+use function file_get_contents;
+use function getcwd;
+use function is_array;
+use function is_dir;
+use function is_writable;
+use function json_decode;
+use function ksort;
+use function mkdir;
+use function realpath;
+use function rtrim;
+use function sprintf;
+use function str_replace;
+use function trim;
+
+use const DIRECTORY_SEPARATOR;
+
 /**
  * Documentation Generator.
  */
@@ -28,22 +46,16 @@ class Documentation
 {
     use LoggerAwareTrait;
 
-    protected $outputDirectory;
-
-    /** @var Config */
-    protected $config;
-
+    protected $baseUrl;
     /** @var CompilerFile[] */
     protected $classes;
-
-    /** @var Theme */
-    protected $theme;
-
+    /** @var Config */
+    protected $config;
     /** @var array */
     protected $options;
-
-    protected $baseUrl;
-
+    protected $outputDirectory;
+    /** @var Theme */
+    protected $theme;
     protected $themesDirectories;
 
     /** @var string|null */
@@ -64,87 +76,13 @@ class Documentation
     {
         ksort($classes);
 
-        $this->config = $config;
-        $this->classes = $classes;
-        $this->logger = new NullLogger();
+        $this->config        = $config;
+        $this->classes       = $classes;
+        $this->logger        = new NullLogger();
         $this->templatesPath = $templatesPath;
-        $this->options = $options;
+        $this->options       = $options;
 
         $this->initialize();
-    }
-
-    /**
-     * TODO: options => to ApiOptions object
-     * TODO: Validate options.
-     *
-     * @throws ConfigException
-     * @throws Exception
-     */
-    protected function initialize(): void
-    {
-        $themeConfig = $this->config->get('theme', 'api');
-
-        if (!$themeConfig) {
-            throw new ConfigException('Theme configuration is not present');
-        }
-
-        $themeDir = $this->findThemeDirectory($themeConfig, $this->options['path']);
-
-        if (!file_exists($themeDir)) {
-            throw new ConfigException('There is no theme named '.$themeConfig['name']);
-        }
-
-        $outputDir = $this->findOutputDirectory($this->options['output']);
-
-        if (!$outputDir) {
-            throw new ConfigException('Api path (output directory) is not configured');
-        }
-
-        $this->outputDirectory = $outputDir;
-
-        if (!file_exists($outputDir)) {
-            if (!mkdir($outputDir, 0777, true)) {
-                throw new Exception("Can't write output directory $outputDir");
-            }
-        }
-
-        if (!is_writable($outputDir)) {
-            throw new Exception("Can't write output directory $outputDir");
-        }
-
-        $themeConfig['options'] = $this->prepareThemeOptions($themeConfig, $this->options['options']);
-
-        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $this->config, $this);
-
-        $this->baseUrl = $this->options['url'];
-    }
-
-    /**
-     * Search a theme by its name.
-     *
-     * Return the path to it if it exists. Otherwise NULL.
-     *
-     * @param string $name
-     *
-     * @return string|null
-     */
-    public function findThemePathByName($name)
-    {
-        // check the theme from the config
-        $path = null;
-
-        foreach ($this->themesDirectories as $themeDir) {
-            $path = rtrim($themeDir, '\\/').\DIRECTORY_SEPARATOR.$name;
-            if (!str_starts_with($path, 'phar://')) {
-                $path = realpath($path);
-            }
-
-            if (is_dir($path)) {
-                break;
-            }
-        }
-
-        return $path;
     }
 
     /**
@@ -207,17 +145,35 @@ class Documentation
             $cname = $c->getCompleteName();
         }
 
-        return '/class/'.trim(str_replace('\\', '/', $cname), '/').'.html';
+        return '/class/' . trim(str_replace('\\', '/', $cname), '/') . '.html';
     }
 
-    public static function namespaceUrl($ns)
+    /**
+     * Search a theme by its name.
+     *
+     * Return the path to it if it exists, otherwise NULL.
+     *
+     * @param string $name
+     *
+     * @return string|null
+     */
+    public function findThemePathByName($name)
     {
-        return '/namespace/'.str_replace('\\', '/', $ns).'.html';
-    }
+        // check the theme from the config
+        $path = null;
 
-    public static function sourceUrl(Definition $c)
-    {
-        return '/source/'.str_replace('\\', '/', $c->getCompleteName()).'.html';
+        foreach ($this->themesDirectories as $themeDir) {
+            $path = rtrim($themeDir, '\\/') . DIRECTORY_SEPARATOR . $name;
+            if (!str_starts_with($path, 'phar://')) {
+                $path = realpath($path);
+            }
+
+            if (is_dir($path)) {
+                break;
+            }
+        }
+
+        return $path;
     }
 
     /**
@@ -230,49 +186,60 @@ class Documentation
         return $this->outputDirectory;
     }
 
+    public static function namespaceUrl($ns)
+    {
+        return '/namespace/' . str_replace('\\', '/', $ns) . '.html';
+    }
+
+    public static function sourceUrl(Definition $c)
+    {
+        return '/source/' . str_replace('\\', '/', $c->getCompleteName()) . '.html';
+    }
+
     /**
-     * Prepare the options by merging the one in the project config with the one in the command line arg "theme-options".
+     * TODO: options => to ApiOptions object
+     * TODO: Validate options.
      *
-     * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
-     *
-     * @param array       $themeConfig
-     * @param string|null $options
-     *
-     * @return array
-     *
+     * @throws ConfigException
      * @throws Exception
      */
-    private function prepareThemeOptions($themeConfig, $options = null)
+    protected function initialize(): void
     {
-        $parsedOptions = null;
-        if (!empty($options)) {
-            if ('{' == $options[0]) {
-                $parsedOptions = json_decode(trim($options), true);
-                if (!$parsedOptions || !\is_array($parsedOptions)) {
-                    throw new Exception("Unable to parse json from 'theme-options' argument");
-                }
-            } else {
-                if (file_exists($options)) {
-                    $unparsed = file_get_contents($options);
-                    $parsedOptions = json_decode($unparsed, true);
-                    if (!$parsedOptions || !\is_array($parsedOptions)) {
-                        throw new Exception(
-                            sprintf("Unable to parse json from the file '%s'", $options)
-                        );
-                    }
-                } else {
-                    throw new Exception(sprintf("Unable to find file '%s'", $options));
-                }
+        $themeConfig = $this->config->get('theme', 'api');
+
+        if (!$themeConfig) {
+            throw new ConfigException('Theme configuration is not present');
+        }
+
+        $themeDir = $this->findThemeDirectory($themeConfig, $this->options['path']);
+
+        if (!file_exists($themeDir)) {
+            throw new ConfigException('There is no theme named ' . $themeConfig['name']);
+        }
+
+        $outputDir = $this->findOutputDirectory($this->options['output']);
+
+        if (!$outputDir) {
+            throw new ConfigException('Api path (output directory) is not configured');
+        }
+
+        $this->outputDirectory = $outputDir;
+
+        if (!file_exists($outputDir)) {
+            if (!mkdir($outputDir, 0777, true)) {
+                throw new Exception("Can't write output directory $outputDir");
             }
         }
 
-        if (\is_array($parsedOptions)) {
-            $options = array_merge($themeConfig['options'], $parsedOptions);
-        } else {
-            $options = $themeConfig['options'];
+        if (!is_writable($outputDir)) {
+            throw new Exception("Can't write output directory $outputDir");
         }
 
-        return $options;
+        $themeConfig['options'] = $this->prepareThemeOptions($themeConfig, $this->options['options']);
+
+        $this->theme = new Theme($themeDir, $outputDir, $themeConfig, $this->config, $this);
+
+        $this->baseUrl = $this->options['url'];
     }
 
     /**
@@ -280,7 +247,7 @@ class Documentation
      *
      * output directory is checked in this order :
      *  => check if the command line argument --output-directory was given
-     *  => if not ; check if config config[api][path] was given
+     *  => if not ; check if config[api][path] was given
      *
      * @param string $outputDir
      *
@@ -291,7 +258,7 @@ class Documentation
         $outputDir = str_replace('%version%', $this->config->get('version'), $outputDir);
 
         if ('/' !== $outputDir[0]) {
-            $outputDir = getcwd().'/'.$outputDir;
+            $outputDir = getcwd() . '/' . $outputDir;
         }
 
         return $outputDir;
@@ -319,7 +286,7 @@ class Documentation
         // check if there are additional theme paths in the config
         $themeDirectoriesConfig = $this->config->get('theme-directories', 'api');
         if ($themeDirectoriesConfig) {
-            if (\is_array($themeDirectoriesConfig)) {
+            if (is_array($themeDirectoriesConfig)) {
                 $themesDirectories = $themeDirectoriesConfig;
             } else {
                 throw new InvalidArgumentException("Invalid value for theme config 'theme-directories'");
@@ -328,7 +295,7 @@ class Documentation
             $themesDirectories = [];
         }
 
-        $themesDirectories[] = $this->templatesPath.'/Api/themes';
+        $themesDirectories[]     = $this->templatesPath . '/Api/themes';
         $this->themesDirectories = $themesDirectories;
 
         // check if the path was set from the command
@@ -352,5 +319,51 @@ class Documentation
         }
 
         return $this->findThemePathByName($themeConfig['name']);
+    }
+
+    /**
+     * Prepare the options by merging the one in the project config with the one in the command line arg
+     * "theme-options".
+     *
+     * command line arg "theme-options" can be either a path to a json file containing the options or a raw json string
+     *
+     * @param array       $themeConfig
+     * @param string|null $options
+     *
+     * @return array
+     *
+     * @throws Exception
+     */
+    private function prepareThemeOptions($themeConfig, $options = null)
+    {
+        $parsedOptions = null;
+        if (!empty($options)) {
+            if ('{' == $options[0]) {
+                $parsedOptions = json_decode(trim($options), true);
+                if (!$parsedOptions || !is_array($parsedOptions)) {
+                    throw new Exception("Unable to parse json from 'theme-options' argument");
+                }
+            } else {
+                if (file_exists($options)) {
+                    $unparsed      = file_get_contents($options);
+                    $parsedOptions = json_decode($unparsed, true);
+                    if (!$parsedOptions || !is_array($parsedOptions)) {
+                        throw new Exception(
+                            sprintf("Unable to parse json from the file '%s'", $options)
+                        );
+                    }
+                } else {
+                    throw new Exception(sprintf("Unable to find file '%s'", $options));
+                }
+            }
+        }
+
+        if (is_array($parsedOptions)) {
+            $options = array_merge($themeConfig['options'], $parsedOptions);
+        } else {
+            $options = $themeConfig['options'];
+        }
+
+        return $options;
     }
 }

@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Documentation;
@@ -24,24 +26,14 @@ class NamespaceFile implements FileInterface
     /**
      * {@inheritdoc}
      *
-     * @return string
-     */
-    public function getTemplateName(): string
-    {
-        return 'namespace.phtml';
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @return array
      */
     public function getData(): array
     {
         return [
             'namespaceHelper' => $this->namespaceHelper,
-            'subNamespaces' => $this->namespaceHelper->getNamespaces(),
-            'subClasses' => $this->namespaceHelper->getClasses(),
+            'subNamespaces'   => $this->namespaceHelper->getNamespaces(),
+            'subClasses'      => $this->namespaceHelper->getClasses(),
         ];
     }
 
@@ -53,5 +45,15 @@ class NamespaceFile implements FileInterface
     public function getOutputFile(): string
     {
         return Documentation::namespaceUrl($this->namespaceHelper->getFullNamespace());
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
+    {
+        return 'namespace.phtml';
     }
 }

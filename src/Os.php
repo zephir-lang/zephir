@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function stripos;
+
+use const PHP_OS;
+
 class Os
 {
     /**
@@ -20,6 +24,6 @@ class Os
      */
     public static function isWindows(): bool
     {
-        return 0 === stripos(\PHP_OS, 'WIN');
+        return 0 === stripos(PHP_OS, 'WIN');
     }
 }

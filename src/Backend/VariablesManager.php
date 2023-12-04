@@ -18,6 +18,10 @@ use Zephir\Exception\CompilerException as Exception;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
+use function in_array;
+use function sprintf;
+use function strlen;
+use function substr;
 use function Zephir\Backend\ZendEngine3\add_slashes;
 
 class VariablesManager
@@ -58,6 +62,33 @@ class VariablesManager
     }
 
     /**
+     * Initialize 'array' variables with default values.
+     * Meant for VariablesManager::initializeDefaults.
+     *
+     * @param Variable $variable
+     * @param array    $value
+     * @param Context  $context
+     *
+     * @return void
+     */
+    private function initArrayVar(Variable $variable, array $value, Context $context): void
+    {
+        $context->symbolTable->mustGrownStack(true);
+        $context->backend->initVar($variable, $context);
+
+        switch ($value['type']) {
+            case Types::T_NULL:
+                $context->backend->assignNull($variable, $context);
+                break;
+
+            case Types::T_ARRAY:
+            case 'empty-array':
+                $context->backend->initArray($variable, $context);
+                break;
+        }
+    }
+
+    /**
      * Initialize 'dynamic' variables with default values.
      * Meant for VariablesManager::initializeDefaults.
      *
@@ -71,7 +102,7 @@ class VariablesManager
     {
         /* These are system variables, do not add default values.
            Also see: https://github.com/zephir-lang/zephir/issues/1660 */
-        if (\in_array($variable->getName(), self::RESERVED_NAMES, true)) {
+        if (in_array($variable->getName(), self::RESERVED_NAMES, true)) {
             return;
         }
 
@@ -93,7 +124,7 @@ class VariablesManager
             case Types::T_CHAR:
             case Types::T_UCHAR:
                 $this->validateCharValue($value);
-                $context->backend->assignLong($variable, "'".$value['value']."'", $context);
+                $context->backend->assignLong($variable, "'" . $value['value'] . "'", $context);
                 break;
 
             case Types::T_NULL:
@@ -144,33 +175,6 @@ class VariablesManager
     }
 
     /**
-     * Initialize 'array' variables with default values.
-     * Meant for VariablesManager::initializeDefaults.
-     *
-     * @param Variable $variable
-     * @param array    $value
-     * @param Context  $context
-     *
-     * @return void
-     */
-    private function initArrayVar(Variable $variable, array $value, Context $context): void
-    {
-        $context->symbolTable->mustGrownStack(true);
-        $context->backend->initVar($variable, $context);
-
-        switch ($value['type']) {
-            case Types::T_NULL:
-                $context->backend->assignNull($variable, $context);
-                break;
-
-            case Types::T_ARRAY:
-            case 'empty-array':
-                $context->backend->initArray($variable, $context);
-                break;
-        }
-    }
-
-    /**
      * Validate 'char' value type.
      *
      * @param array $value
@@ -181,12 +185,12 @@ class VariablesManager
      */
     private function validateCharValue(array $value): void
     {
-        if (\strlen($value['value']) > 2) {
+        if (strlen($value['value']) > 2) {
             throw new Exception(
                 sprintf(
                     "Invalid char literal: '%s%s'",
                     substr($value['value'], 0, 10),
-                    \strlen($value['value']) > 10 ? '...' : ''
+                    strlen($value['value']) > 10 ? '...' : ''
                 ),
                 $value
             );

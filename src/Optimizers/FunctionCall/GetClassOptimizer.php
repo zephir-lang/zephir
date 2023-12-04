@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * GetClassOptimizer.
@@ -41,10 +43,7 @@ class GetClassOptimizer extends OptimizerAbstract
             return false;
         }
 
-        $numberParameters = \count($expression['parameters']);
-        if (1 != $numberParameters && 2 != $numberParameters) {
-            throw new CompilerException("'get_class' only accepts one or two parameters", $expression);
-        }
+        $this->checkParameters($expression);
 
         /*
          * Process the expected symbol to be returned
@@ -52,22 +51,53 @@ class GetClassOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
+
         $context->headersManager->add('kernel/object');
 
         $symbolVariable->setDynamicTypes('string');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->codePrinter->output('zephir_get_class('.$symbol.', '.$resolvedParams[0].', 0);');
+        $this->getOutput($context, $symbol, $resolvedParams);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param array $expression
+     *
+     * @return void
+     */
+    protected function checkParameters(array $expression): void
+    {
+        $numberParameters = count($expression['parameters']);
+        if (1 != $numberParameters && 2 != $numberParameters) {
+            throw new CompilerException(
+                "'get_class' only accepts one or two parameters",
+                $expression
+            );
+        }
+    }
+
+    /**
+     * @param CompilationContext $context
+     * @param string             $symbol
+     * @param array              $resolvedParams
+     *
+     * @return void
+     */
+    protected function getOutput(
+        CompilationContext $context,
+        string $symbol,
+        array $resolvedParams
+    ): void {
+        $context->codePrinter->output(
+            'zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', 0);'
+        );
     }
 }

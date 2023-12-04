@@ -9,14 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation;
 
 interface FileInterface
 {
     /**
-     * @return string
+     * @return array
      */
-    public function getTemplateName(): string;
+    public function getData(): array;
 
     /**
      * @return string
@@ -24,7 +26,7 @@ interface FileInterface
     public function getOutputFile(): string;
 
     /**
-     * @return array
+     * @return string
      */
-    public function getData(): array;
+    public function getTemplateName(): string;
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,12 +9,16 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * EndsWithOptimizer.
@@ -25,6 +27,9 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class EndsWithOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod    = 'zephir_end_with';
+    protected string $zephirMethodStr = 'zephir_end_with_str';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -38,7 +43,7 @@ class EndsWithOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters']) && 3 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters']) && 3 != count($expression['parameters'])) {
             return false;
         }
 
@@ -47,18 +52,36 @@ class EndsWithOptimizer extends OptimizerAbstract
             unset($expression['parameters'][1]);
         }
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         $context->headersManager->add('kernel/string');
 
         if (isset($str)) {
-            return new CompiledExpression('bool', 'zephir_end_with_str('.$resolvedParams[0].', SL("'.$str.'"))', $expression);
+            return new CompiledExpression(
+                'bool',
+                $this->zephirMethodStr . '(' . $resolvedParams[0] . ', SL("' . $str . '"))',
+                $expression
+            );
         }
 
-        if (2 == \count($expression['parameters'])) {
-            return new CompiledExpression('bool', 'zephir_end_with('.$resolvedParams[0].', '.$resolvedParams[1].', NULL)', $expression);
+        if (2 == count($expression['parameters'])) {
+            return new CompiledExpression(
+                'bool',
+                $this->zephirMethod
+                . '(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', NULL)',
+                $expression
+            );
         } else {
-            return new CompiledExpression('bool', 'zephir_end_with('.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].')', $expression);
+            return new CompiledExpression(
+                'bool',
+                $this->zephirMethod
+                . '(' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ')',
+                $expression
+            );
         }
     }
 }

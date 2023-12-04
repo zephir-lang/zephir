@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use Exception;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
@@ -23,6 +25,8 @@ use Zephir\Variable\Variable as ZephirVariable;
  */
 class ObjectDynamicProperty
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo->{x} = {expr}.
      *
@@ -33,35 +37,56 @@ class ObjectDynamicProperty
      * @param array              $statement
      *
      * @throws CompilerException
-     * @throws \Exception
+     * @throws Exception
      */
-    public function assign(string $variable, ZephirVariable $symbolVariable, CompiledExpression $resolvedExpr, CompilationContext $compilationContext, array $statement): void
-    {
-        if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate variable '".$variable."' because it is not initialized", $statement);
-        }
+    public function assign(
+        string $variable,
+        ZephirVariable $symbolVariable,
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ): void {
+        $this->checkVariableInitialized($variable, $symbolVariable, $statement);
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException("Variable type '".$symbolVariable->getType()."' cannot be used as object", $statement);
+            throw new CompilerException(
+                "Variable type '" . $symbolVariable->getType() . "' cannot be used as object",
+                $statement
+            );
         }
 
         $propertyName = $statement['property'];
 
-        $propertyVariable = $compilationContext->symbolTable->getVariableForRead($propertyName, $compilationContext, $statement);
+        $propertyVariable = $compilationContext->symbolTable->getVariableForRead(
+            $propertyName,
+            $compilationContext,
+            $statement
+        );
         if ($propertyVariable->isNotVariableAndMixedAndString()) {
-            throw new CompilerException("Cannot use variable type '".$propertyVariable->getType()."' to update object property", $statement);
+            throw new CompilerException(
+                "Cannot use variable type '" . $propertyVariable->getType() . "' to update object property",
+                $statement
+            );
         }
 
         if (!$symbolVariable->isInitialized()) {
-            throw new CompilerException("Cannot mutate static property '".$compilationContext->classDefinition->getCompleteName().'::'.$propertyName."' because it is not initialized", $statement);
+            throw new CompilerException(
+                "Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName(
+                ) . '::' . $propertyName . "' because it is not initialized",
+                $statement
+            );
         }
 
         if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Cannot use variable type: '.$symbolVariable->getType().' as an object', $statement);
+            throw CompilerException::cannotUseVariableTypeAs(
+                $symbolVariable,
+                'as an object',
+                $statement
+            );
         }
 
         if ($symbolVariable->hasAnyDynamicType('unknown')) {
-            throw new CompilerException('Cannot use non-initialized variable as an object', $statement);
+            throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
         /**
@@ -81,20 +106,45 @@ class ObjectDynamicProperty
 
         switch ($resolvedExpr->getType()) {
             case 'null':
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, 'null', $compilationContext);
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    'null',
+                    $compilationContext
+                );
                 break;
 
             case 'int':
             case 'long':
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
                 $compilationContext->backend->assignLong($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $tempVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'string':
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $compilationContext->backend->assignString($tempVariable, $resolvedExpr->getCode(), $compilationContext);
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+                $compilationContext->backend->assignString(
+                    $tempVariable,
+                    $resolvedExpr->getCode(),
+                    $compilationContext
+                );
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $tempVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'bool':
@@ -103,25 +153,51 @@ class ObjectDynamicProperty
                 } elseif ('0' == $resolvedExpr->getBooleanCode()) {
                     $value = 'false';
                 } else {
-                    throw new \Exception('?');
+                    throw new Exception('?');
                 }
 
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $value, $compilationContext);
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $value,
+                    $compilationContext
+                );
                 break;
 
             case 'empty-array':
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
-                $codePrinter->output('array_init('.$tempVariable->getName().');');
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
+                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                    'variable',
+                    $compilationContext
+                );
+                $codePrinter->output('array_init(' . $tempVariable->getName() . ');');
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $tempVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'array':
-                $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
-                $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $variableVariable, $compilationContext);
+                $variableVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $compilationContext,
+                    $statement
+                );
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
+                    $propertyVariableName,
+                    $variableVariable,
+                    $compilationContext
+                );
                 break;
 
             case 'variable':
-                $variableVariable = $compilationContext->symbolTable->getVariableForRead($resolvedExpr->getCode(), $compilationContext, $statement);
+                $variableVariable = $compilationContext->symbolTable->getVariableForRead(
+                    $resolvedExpr->getCode(),
+                    $compilationContext,
+                    $statement
+                );
                 switch ($variableVariable->getType()) {
                     case 'int':
                     case 'uint':
@@ -129,34 +205,55 @@ class ObjectDynamicProperty
                     case 'ulong':
                     case 'char':
                     case 'uchar':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext
+                        );
                         $compilationContext->backend->assignLong($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
+                        $compilationContext->backend->updateProperty(
+                            $symbolVariable,
+                            $propertyVariableName,
+                            $tempVariable,
+                            $compilationContext
+                        );
                         break;
 
                     case 'bool':
-                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
+                        $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                            'variable',
+                            $compilationContext
+                        );
                         $compilationContext->backend->assignBool($tempVariable, $variableVariable, $compilationContext);
-                        $compilationContext->backend->updateProperty($symbolVariable, $propertyVariableName, $tempVariable, $compilationContext);
+                        $compilationContext->backend->updateProperty(
+                            $symbolVariable,
+                            $propertyVariableName,
+                            $tempVariable,
+                            $compilationContext
+                        );
                         break;
 
                     case 'string':
                     case 'variable':
                     case 'array':
                     case 'mixed':
-                        $compilationContext->backend->updateProperty($symbolVariable, $propertyVariable, $resolvedExpr, $compilationContext);
+                        $compilationContext->backend->updateProperty(
+                            $symbolVariable,
+                            $propertyVariable,
+                            $resolvedExpr,
+                            $compilationContext
+                        );
                         if ($symbolVariable->isTemporal()) {
                             $symbolVariable->setIdle(true);
                         }
                         break;
 
                     default:
-                        throw new CompilerException('Unknown type '.$variableVariable->getType(), $statement);
+                        throw new CompilerException('Unknown type ' . $variableVariable->getType(), $statement);
                 }
                 break;
 
             default:
-                throw new CompilerException('Unknown type '.$resolvedExpr->getType(), $statement);
+                throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Builder\Statements;
 
+use function array_merge;
+
 /**
  * Allows to manually build a 'let' statement AST node
  */
@@ -25,7 +27,7 @@ class LetStatementBuilder extends AbstractStatementBuilder
     public function get(): array
     {
         return [
-            'type' => 'let',
+            'type'        => 'let',
             'assignments' => [array_merge(['expr' => $this->expr], $this->assignments)],
         ];
     }

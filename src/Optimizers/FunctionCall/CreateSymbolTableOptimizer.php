@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * CreateSymbolTableOptimizer.
  *
@@ -38,7 +40,7 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         if (isset($expression['parameters'])) {
-            if (0 != \count($expression['parameters'])) {
+            if (0 != count($expression['parameters'])) {
                 throw new CompilerException("This function doesn't require parameters", $expression);
             }
         }
@@ -49,15 +51,10 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-            }
-        }
+        $this->checkNotVariable($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         // TODO: Still needed?
         $context->symbolTable->mustGrownStack(true);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,7 +9,15 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Exception;
+
+use function file;
+use function file_exists;
+use function sprintf;
+use function str_repeat;
+use function str_replace;
 
 trait ExceptionExtraAwareTrait
 {
@@ -21,26 +27,18 @@ trait ExceptionExtraAwareTrait
     protected ?array $extra = [];
 
     /**
-     * @return array
-     */
-    public function getExtra(): array
-    {
-        return $this->extra;
-    }
-
-    /**
      * @return string
      */
     public function getErrorRegion(): string
     {
         $region = '';
-        $extra = $this->getExtra();
+        $extra  = $this->getExtra();
 
         if (isset($extra['file']) && file_exists($extra['file'])) {
             $lines = file($extra['file']);
 
             if (isset($lines[$extra['line'] - 1])) {
-                $line = $lines[$extra['line'] - 1];
+                $line   = $lines[$extra['line'] - 1];
                 $region .= sprintf("\t%s", str_replace("\t", ' ', $line));
 
                 if (($extra['char'] - 1) > 0) {
@@ -50,5 +48,13 @@ trait ExceptionExtraAwareTrait
         }
 
         return $region;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExtra(): array
+    {
+        return $this->extra;
     }
 }

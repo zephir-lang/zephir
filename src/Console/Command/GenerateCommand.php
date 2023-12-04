@@ -22,6 +22,12 @@ use Zephir\Exception;
 use Zephir\Exception\ExceptionInterface;
 use Zephir\Exception\InvalidArgumentException;
 
+use function extension_loaded;
+use function ini_get;
+use function sprintf;
+
+use const PHP_EOL;
+
 /**
  * Generate Command
  *
@@ -46,7 +52,8 @@ final class GenerateCommand extends AbstractCommand
             ->setName('generate')
             ->setDescription('Generates C code from the Zephir code without compiling it')
             ->addOption('trace', 't', InputOption::VALUE_NONE, 'Show trace message output (in case of exception error)')
-            ->setHelp(sprintf('%s.', $this->getDescription()).PHP_EOL.PHP_EOL.$this->getZflagsHelp());
+            ->setHelp(sprintf('%s.', $this->getDescription()) . PHP_EOL . PHP_EOL . $this->getZflagsHelp())
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -55,7 +62,7 @@ final class GenerateCommand extends AbstractCommand
 
         $trace = $input->getOption('trace');
 
-        if (\extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
+        if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
             $io->getErrorStyle()->warning(
                 <<<MSG
 The timecop extension was detected. It is recommended to disable
@@ -86,7 +93,9 @@ MSG
             return 1;
         } catch (ExceptionInterface | Exception $e) {
             if ($trace === true) {
-                $io->getErrorStyle()->error($e->getMessage().sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine()));
+                $io->getErrorStyle()->error(
+                    $e->getMessage() . sprintf(' (Zephir file: %s#%d)', $e->getFile(), $e->getLine())
+                );
                 $io->getErrorStyle()->error($e->getTraceAsString());
             } else {
                 $io->getErrorStyle()->error($e->getMessage());

@@ -15,6 +15,9 @@ namespace Zephir\Documentation\Annotation;
 
 use Zephir\Documentation\Annotation;
 
+use function strpos;
+use function substr;
+
 /**
  * A link annotation that looks like  `(@)link uri text`.
  */
@@ -49,7 +52,7 @@ class See extends Annotation
 
         if (false !== $spaceIndex) {
             $this->resource = substr($this->string, 0, $spaceIndex);
-            $this->text = substr($this->string, $spaceIndex + 1);
+            $this->text     = substr($this->string, $spaceIndex + 1);
         }
 
         $this->contentParsed = true;

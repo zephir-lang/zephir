@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -33,11 +34,11 @@ class InstanceOfOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $context): CompiledExpression
     {
-        $left = new Expression($expression['left']);
+        $left     = new Expression($expression['left']);
         $resolved = $left->compile($context);
 
         if ('variable' != $resolved->getType()) {
@@ -49,8 +50,8 @@ class InstanceOfOperator extends AbstractOperator
             throw new CompilerException("InstanceOf requires a 'dynamic variable' in the left operand", $expression);
         }
 
-        $right = new Expression($expression['right']);
-        $resolved = $right->compile($context);
+        $right            = new Expression($expression['right']);
+        $resolved         = $right->compile($context);
         $resolvedVariable = $resolved->getCode();
 
         switch ($resolved->getType()) {
@@ -71,25 +72,29 @@ class InstanceOfOperator extends AbstractOperator
                             if ('Traversable' === $className) {
                                 $symbol = $context->backend->getVariableCode($symbolVariable);
 
-                                return new CompiledExpression('bool', 'zephir_zval_is_traversable('.$symbol.')', $expression);
+                                return new CompiledExpression(
+                                    'bool',
+                                    'zephir_zval_is_traversable(' . $symbol . ')',
+                                    $expression
+                                );
                             }
 
                             if ($context->compiler->isClass($className)) {
                                 $classDefinition = $context->compiler->getClassDefinition($className);
-                                $classEntry = $classDefinition->getClassEntry($context);
+                                $classEntry      = $classDefinition->getClassEntry($context);
                             } else {
                                 if ($context->compiler->isInterface($className)) {
                                     $classDefinition = $context->compiler->getClassDefinition($className);
-                                    $classEntry = $classDefinition->getClassEntry($context);
+                                    $classEntry      = $classDefinition->getClassEntry($context);
                                 } else {
                                     if (!class_exists($className, false)) {
-                                        $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
+                                        $code = 'SL("' . trim(Entry::escape($className), '\\') . '")';
                                     } else {
-                                        $entry = (new Entry($resolvedVariable, $context));
+                                        $entry      = (new Entry($resolvedVariable, $context));
                                         $classEntry = $entry->get();
 
                                         if (!$entry->isInternal()) {
-                                            $code = 'SL("'.trim(Entry::escape($className), '\\').'")';
+                                            $code = 'SL("' . trim(Entry::escape($className), '\\') . '")';
                                         }
                                     }
                                 }
@@ -105,12 +110,17 @@ class InstanceOfOperator extends AbstractOperator
                         $tempVariable = $context->symbolTable->getTempVariableForWrite('string', $context);
                         $tempVariable->setMustInitNull(true);
                         $tempVariableName = $tempVariable->getName();
-                        $context->codePrinter->output('zephir_get_strval('.$tempVariableName.', '.$resolvedVariable.');');
+                        $context->codePrinter->output(
+                            'zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');'
+                        );
                         $code = $this->prepareBackendSpecificCode($tempVariableName, $context);
                         break;
 
                     default:
-                        throw new CompilerException("InstanceOf requires a 'variable' or a 'string' in the right operand", $expression);
+                        throw new CompilerException(
+                            "InstanceOf requires a 'variable' or a 'string' in the right operand",
+                            $expression
+                        );
                 }
         }
 
@@ -118,17 +128,21 @@ class InstanceOfOperator extends AbstractOperator
         $context->headersManager->add('kernel/object');
         $symbol = $context->backend->getVariableCode($symbolVariable);
         if (isset($code)) {
-            return new CompiledExpression('bool', 'zephir_is_instance_of('.$symbol.', '.$code.')', $expression);
+            return new CompiledExpression('bool', 'zephir_is_instance_of(' . $symbol . ', ' . $code . ')', $expression);
         }
 
-        return new CompiledExpression('bool', 'zephir_instance_of_ev('.$symbol.', '.$classEntry.')', $expression);
+        return new CompiledExpression(
+            'bool',
+            'zephir_instance_of_ev(' . $symbol . ', ' . $classEntry . ')',
+            $expression
+        );
     }
 
     private function prepareBackendSpecificCode($variable, CompilationContext $context): string
     {
         return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
             ':name' => $variable,
-            ':p' => '&',
+            ':p'    => '&',
         ]);
     }
 }

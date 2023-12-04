@@ -9,12 +9,16 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Class\Definition\Definition;
 use Zephir\CompilerFile;
 use Zephir\Documentation;
 use Zephir\Documentation\FileInterface;
+
+use function explode;
 
 class ClassFile implements FileInterface
 {
@@ -25,33 +29,28 @@ class ClassFile implements FileInterface
         $this->class = $compilerFile->getClassDefinition();
     }
 
-    public function getTemplateName(): string
-    {
-        return 'class.phtml';
-    }
-
     public function getData(): array
     {
         $nsPieces = explode('\\', $this->class->getNamespace());
 
         $nsPatches = [];
-        $nsStr = '';
+        $nsStr     = '';
 
         foreach ($nsPieces as $n) {
             if ($nsStr !== '') {
                 $nsStr .= '\\';
             }
-            $nsStr .= $n;
+            $nsStr         .= $n;
             $nsPatches[$n] = $nsStr;
         }
 
         return [
             'classDefinition' => $this->class,
-            'compilerFile' => $this->compilerFile,
-            'className' => $this->class->getName(),
-            'classNamespace' => $this->class->getNamespace(),
-            'fullName' => $this->class->getCompleteName(),
-            'methods' => $this->class->getMethods(),
+            'compilerFile'    => $this->compilerFile,
+            'className'       => $this->class->getName(),
+            'classNamespace'  => $this->class->getNamespace(),
+            'fullName'        => $this->class->getCompleteName(),
+            'methods'         => $this->class->getMethods(),
             'namespacePieces' => $nsPatches,
         ];
     }
@@ -59,5 +58,10 @@ class ClassFile implements FileInterface
     public function getOutputFile(): string
     {
         return Documentation::classUrl($this->class);
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'class.phtml';
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,13 +9,16 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * CallUserFuncOptimizer.
@@ -26,6 +27,9 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class CallUserFuncOptimizer extends OptimizerAbstract
 {
+    protected int    $parameterCount = 1;
+    protected string $zephirMethod   = 'ZEPHIR_CALL_USER_FUNC';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -39,7 +43,7 @@ class CallUserFuncOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != \count($expression['parameters'])) {
+        if ($this->parameterCount !== count($expression['parameters'])) {
             return false;
         }
 
@@ -49,11 +53,8 @@ class CallUserFuncOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable) {
-            if (!$symbolVariable->isVariable()) {
-                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-            }
-        } else {
+        $this->checkNotVariable($symbolVariable, $expression);
+        if (!$symbolVariable) {
             $symbolVariable = $context->symbolTable->addTemp('variable', $context);
             $symbolVariable->initVariant($context);
         }
@@ -63,7 +64,11 @@ class CallUserFuncOptimizer extends OptimizerAbstract
          */
         $call->addCallStatusFlag($context);
 
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+        $resolvedParams = $call->getReadOnlyResolvedParams(
+            $expression['parameters'],
+            $context,
+            $expression
+        );
 
         $context->headersManager->add('kernel/fcall');
 
@@ -72,14 +77,25 @@ class CallUserFuncOptimizer extends OptimizerAbstract
          */
         $call->addCallStatusFlag($context);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('ZEPHIR_CALL_USER_FUNC('.$symbol.', '.$resolvedParams[0].');');
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, array $resolvedParams): string
+    {
+        return $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ');';
     }
 }

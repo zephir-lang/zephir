@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,9 +9,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Expression\Builder\Statements;
 
 use Zephir\FunctionCall;
+
+use function is_array;
 
 /**
  * Allows to manually build a function call AST node
@@ -34,9 +36,8 @@ class CallFunctionStatement extends AbstractStatement
      * {"f"}(x, y, ... , N).
      */
     public const TYPE_CALL_DYNAMIC_STRING = FunctionCall::CALL_DYNAMIC_STRING;
-
-    private $name;
     private $arguments;
+    private $name;
     private $typeCall;
 
     /**
@@ -60,11 +61,51 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
+     * @param $argument
+     *
+     * @return $this
+     */
+    public function addArgument($argument)
+    {
+        $this->arguments[] = $argument;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    /**
      * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTypeCall()
+    {
+        return $this->typeCall;
+    }
+
+    /**
+     * @param array|null $arguments
+     *
+     * @return $this
+     */
+    public function setArguments(array $arguments = null)
+    {
+        $this->arguments = $arguments;
+
+        return $this;
     }
 
     /**
@@ -80,34 +121,6 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @return array
-     */
-    public function getArguments()
-    {
-        return $this->arguments;
-    }
-
-    /**
-     * @param array $arguments
-     *
-     * @return $this
-     */
-    public function setArguments(array $arguments = null)
-    {
-        $this->arguments = $arguments;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTypeCall()
-    {
-        return $this->typeCall;
-    }
-
-    /**
      * @param int $typeCall
      *
      * @return $this
@@ -120,34 +133,22 @@ class CallFunctionStatement extends AbstractStatement
     }
 
     /**
-     * @param $argument
-     *
-     * @return $this
-     */
-    public function addArgument($argument)
-    {
-        $this->arguments[] = $argument;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     protected function preBuild()
     {
         if ($arguments = $this->getArguments()) {
             foreach ($arguments as &$argument) {
-                if (!\is_array($argument) || !isset($argument['parameter'])) {
+                if (!is_array($argument) || !isset($argument['parameter'])) {
                     $argument = ['parameter' => $argument];
                 }
             }
         }
 
         return [
-            'type' => 'fcall',
-            'name' => $this->getName(),
-            'call-type' => $this->getTypeCall(),
+            'type'       => 'fcall',
+            'name'       => $this->getName(),
+            'call-type'  => $this->getTypeCall(),
             'parameters' => $arguments,
         ];
     }

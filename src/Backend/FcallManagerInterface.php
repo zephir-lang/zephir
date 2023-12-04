@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,20 +9,22 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Backend;
 
 interface FcallManagerInterface
 {
+    public function genFcallCode(): void;
+
     /**
      * Resolve internal fcall attributes to a suitable macro and ensure that it's generated during compilation.
      *
      * @param bool $static
-     * @param int  $doReturn   tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
+     * @param int  $doReturn tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
      * @param int  $paramCount
      *
      * @return string
      */
     public function getMacro(bool $static, int $doReturn, int $paramCount): string;
-
-    public function genFcallCode(): void;
 }

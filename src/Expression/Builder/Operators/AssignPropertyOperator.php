@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Operators;
 
@@ -38,16 +38,16 @@ class AssignPropertyOperator extends AssignVariableOperator
         return $this->property;
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     public function setProperty(string $property): static
     {
         $this->property = $property;
 
         return $this;
-    }
-
-    public function getType(): string
-    {
-        return $this->type;
     }
 
     public function setType(string $type): static
@@ -59,9 +59,9 @@ class AssignPropertyOperator extends AssignVariableOperator
 
     protected function preBuild(): array
     {
-        $expression = parent::preBuild();
+        $expression                = parent::preBuild();
         $expression['assign-type'] = $this->getType();
-        $expression['property'] = $this->getProperty();
+        $expression['property']    = $this->getProperty();
 
         return $expression;
     }

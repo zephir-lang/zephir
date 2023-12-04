@@ -17,8 +17,8 @@
     <!-- Show sniff codes in all reports -->
     <arg value="s"/>
 
-    <!-- Use PSR-2 as a base -->
-    <rule ref="PSR2"/>
+    <!-- Use PSR-12 as a base -->
+    <rule ref="PSR12"/>
 
     <!-- Uncomment to use colors in progress or report -->
     <arg name="colors" />
@@ -26,9 +26,10 @@
     <!-- Show progress of the run -->
     <arg value="p"/>
 
-    <rule ref="PSR2">
+    <rule ref="PSR12">
         <exclude name="Generic.Files.LineLength.TooLong"/>
         <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="PSR2.Classes.PropertyDeclaration.SpacingAfterType"/>
     </rule>
 
     <!--

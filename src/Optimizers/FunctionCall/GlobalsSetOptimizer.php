@@ -19,6 +19,10 @@ use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Types\Types;
+
+use function count;
+use function is_string;
 
 /**
  * `globals_set()` internal function.
@@ -42,7 +46,7 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             throw new CompilerException("'globals_set' requires two parameters", $expression);
         }
 
-        if (2 !== \count($expression['parameters'])) {
+        if (2 !== count($expression['parameters'])) {
             throw new CompilerException("'globals_set' only accepts two parameters", $expression);
         }
 
@@ -63,9 +67,9 @@ class GlobalsSetOptimizer extends OptimizerAbstract
 
         try {
             $globalDefinition = $context->compiler->getExtensionGlobal($globalName);
-            $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
+            $resolvedParams   = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !\is_string($resolvedParams[0])) {
+            if (!isset($resolvedParams[0]) || empty($resolvedParams[0]) || !is_string($resolvedParams[0])) {
                 throw new CompilerException(
                     "Unable to reslove value for '{$globalName}' global variable.",
                     $expression
@@ -80,7 +84,12 @@ class GlobalsSetOptimizer extends OptimizerAbstract
             }
 
             $internalAccessor = $this->resolveInternalAccessor($globalName);
-            $internalValue = $this->resolveInternalValue($globalDefinition, $expression, $globalName, $resolvedParams[0]);
+            $internalValue    = $this->resolveInternalValue(
+                $globalDefinition,
+                $expression,
+                $globalName,
+                $resolvedParams[0]
+            );
 
             $context->codePrinter->output("{$internalAccessor} = {$internalValue};");
 
@@ -115,32 +124,26 @@ class GlobalsSetOptimizer extends OptimizerAbstract
     {
         $type = $definition['type'];
 
-        switch ($type) {
-            case 'boolean':
-            case 'bool':
-                return strtr('zend_is_true(:v)', [':v' => $value]);
-            case 'int':
-            case 'uint':
-            case 'integer':
-            case 'long':
-            case 'ulong':
-                return strtr('zval_get_long(:v)', [':v' => $value]);
-            case 'string':
-                return strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]);
-            case 'char':
-            case 'uchar':
-                return strtr(
-                    '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : zval_get_long(:v))',
-                    [':v' => $value]
-                );
-            case 'double':
-            case 'float':
-                return strtr('zval_get_double(:v)', [':v' => $value]);
-            default:
-                throw new CompilerException(
-                    "Unknown type '{$type}' to setting global variable '{$name}'.",
-                    $expression
-                );
-        }
+        return match ($type) {
+            Types::T_BOOLEAN,
+            Types::T_BOOL   => strtr('zend_is_true(:v)', [':v' => $value]),
+            Types::T_INT,
+            Types::T_UINT,
+            Types::T_INTEGER,
+            Types::T_LONG,
+            Types::T_ULONG  => strtr('zval_get_long(:v)', [':v' => $value]),
+            Types::T_STRING => strtr('ZSTR_VAL(zval_get_string(:v))', [':v' => $value]),
+            Types::T_CHAR,
+            Types::T_UCHAR  => strtr(
+                '(Z_TYPE_P(:v) == IS_STRING ? (Z_STRLEN_P(:v) ? Z_STRVAL_P(:v)[0] : NULL) : zval_get_long(:v))',
+                [':v' => $value]
+            ),
+            Types::T_DOUBLE,
+            Types::T_FLOAT  => strtr('zval_get_double(:v)', [':v' => $value]),
+            default         => throw new CompilerException(
+                "Unknown type '$type' to setting global variable '$name'.",
+                $expression
+            ),
+        };
     }
 }

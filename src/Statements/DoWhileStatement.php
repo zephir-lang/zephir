@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Optimizers\EvalExpression;
@@ -26,12 +27,12 @@ class DoWhileStatement extends StatementAbstract
     /**
      * @param CompilationContext $compilationContext
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $exprRaw = $this->statement['expr'];
+        $exprRaw     = $this->statement['expr'];
         $codePrinter = $compilationContext->codePrinter;
 
         $codePrinter->output('do {');
@@ -61,6 +62,6 @@ class DoWhileStatement extends StatementAbstract
         /**
          * Compound conditions can be evaluated in a single line of the C-code
          */
-        $codePrinter->output('} while ('.$condition.');');
+        $codePrinter->output('} while (' . $condition . ');');
     }
 }

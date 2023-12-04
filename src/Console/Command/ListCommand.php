@@ -26,16 +26,6 @@ final class ListCommand extends Command
 
     /**
      * {@inheritdoc}
-     */
-    protected function configure(): void
-    {
-        parent::configure();
-
-        $this->setHidden(true);
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @param bool $mergeArgs
      */
@@ -44,5 +34,15 @@ final class ListCommand extends Command
         parent::mergeApplicationDefinition($mergeArgs);
 
         $this->removeOptions(['dumpversion', 'version']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure(): void
+    {
+        parent::configure();
+
+        $this->setHidden(true);
     }
 }

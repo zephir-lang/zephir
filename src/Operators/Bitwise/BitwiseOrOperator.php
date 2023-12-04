@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,13 +9,13 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Bitwise;
 
 class BitwiseOrOperator extends BitwiseBaseOperator
 {
-    protected string $operator = '|';
-
-    protected string $bitOperator = '|';
-
+    protected string $bitOperator  = '|';
+    protected string $operator     = '|';
     protected string $zvalOperator = 'zephir_bitwise_or_function';
 }

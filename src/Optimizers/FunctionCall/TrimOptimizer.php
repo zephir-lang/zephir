@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,73 +9,28 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-namespace Zephir\Optimizers\FunctionCall;
+declare(strict_types=1);
 
-use Zephir\Call;
-use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
-use Zephir\Optimizers\OptimizerAbstract;
+namespace Zephir\Optimizers\FunctionCall;
 
 /**
  * TrimOptimizer.
  *
  * Optimizes calls to 'trim' using internal function
  */
-class TrimOptimizer extends OptimizerAbstract
+class TrimOptimizer extends UncamelizeOptimizer
 {
-    protected static $TRIM_WHERE = 'ZEPHIR_TRIM_BOTH';
+    protected string $trimWhere    = ', ZEPHIR_TRIM_BOTH';
+    protected string $warningName  = '';
+    protected string $zephirMethod = 'zephir_fast_trim';
 
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
+     * @param $parameters
      *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @return void
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    protected function checkParameters($parameters): void
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        $charlist = 'NULL ';
-        if (2 == \count($expression['parameters'])) {
-            if ('null' == $expression['parameters'][1]['parameter']['type']) {
-                unset($expression['parameters'][1]);
-            }
-        }
-
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
-
-        $context->headersManager->add('kernel/string');
-
-        $symbolVariable->setDynamicTypes('string');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        if (isset($resolvedParams[1])) {
-            $charlist = $resolvedParams[1];
-        }
-
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_fast_trim('.$symbol.', '.$resolvedParams[0].', '.$charlist.', '.static::$TRIM_WHERE.');');
-
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        // empty
     }
 }

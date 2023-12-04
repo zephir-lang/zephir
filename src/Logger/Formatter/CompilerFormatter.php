@@ -16,6 +16,19 @@ namespace Zephir\Logger\Formatter;
 use Monolog\Formatter\LineFormatter;
 use Zephir\Config;
 
+use function array_key_exists;
+use function count;
+use function file;
+use function file_exists;
+use function is_array;
+use function preg_replace;
+use function str_repeat;
+use function str_replace;
+use function strtolower;
+use function ucfirst;
+
+use const PHP_EOL;
+
 /**
  * Formatter for warnings/notices/errors generated in compilation.
  */
@@ -49,9 +62,10 @@ final class CompilerFormatter extends LineFormatter
         $output = str_replace('%context%', '', $output);
 
         // ignore empty context or invalid format
-        if (!empty($vars['context'])
-            && \is_array($vars['context'])
-            && 2 == \count($vars['context'])
+        if (
+            !empty($vars['context']) &&
+            is_array($vars['context']) &&
+            2 == count($vars['context'])
         ) {
             $type = $vars['context'][0];
             $node = $vars['context'][1];
@@ -68,14 +82,14 @@ final class CompilerFormatter extends LineFormatter
             } else {
                 $vars['file'] = $node['file'];
                 $vars['line'] = $node['line'];
-                $output .= PHP_EOL;
+                $output       .= PHP_EOL;
 
                 $lines = $this->getFileContents($node['file']);
                 if (isset($lines[$node['line'] - 1])) {
-                    $line = $lines[$node['line'] - 1];
-                    $output .= "\t".str_replace("\t", ' ', $line);
+                    $line   = $lines[$node['line'] - 1];
+                    $output .= "\t" . str_replace("\t", ' ', $line);
                     if (($node['char'] - 1) > 0) {
-                        $output .= PHP_EOL."\t".str_repeat('-', $node['char'] - 1).'^'.PHP_EOL;
+                        $output .= PHP_EOL . "\t" . str_repeat('-', $node['char'] - 1) . '^' . PHP_EOL;
                     }
                 }
             }
@@ -88,37 +102,6 @@ final class CompilerFormatter extends LineFormatter
         $output = $this->replacePlaceholders($vars, $output);
 
         return $this->cleanExtraPlaceholders($output);
-    }
-
-    private function replacePlaceholders(array $vars, $output)
-    {
-        // WARNING -> Warning
-        if (\array_key_exists('level_name', $vars)) {
-            $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
-        }
-
-        foreach ($vars as $var => $val) {
-            $placeholder = '%'.$var.'%';
-            $realValue = $this->stringify($val);
-
-            if (!str_contains($output, $placeholder)) {
-                continue;
-            }
-
-            // Strip level name from entries like "Info: Installing..."
-            if ('%level_name%' === $placeholder) {
-                switch ($realValue) {
-                    case 'Debug':
-                    case 'Info':
-                        $output = str_replace('%level_name%: ', '', $output);
-                        continue 2;
-                }
-            }
-
-            $output = str_replace('%'.$var.'%', $realValue, $output);
-        }
-
-        return $output;
     }
 
     /**
@@ -146,5 +129,36 @@ final class CompilerFormatter extends LineFormatter
         }
 
         return $this->filesContent[$file];
+    }
+
+    private function replacePlaceholders(array $vars, $output)
+    {
+        // WARNING -> Warning
+        if (array_key_exists('level_name', $vars)) {
+            $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
+        }
+
+        foreach ($vars as $var => $val) {
+            $placeholder = '%' . $var . '%';
+            $realValue   = $this->stringify($val);
+
+            if (!str_contains($output, $placeholder)) {
+                continue;
+            }
+
+            // Strip level name from entries like "Info: Installing..."
+            if ('%level_name%' === $placeholder) {
+                switch ($realValue) {
+                    case 'Debug':
+                    case 'Info':
+                        $output = str_replace('%level_name%: ', '', $output);
+                        continue 2;
+                }
+            }
+
+            $output = str_replace('%' . $var . '%', $realValue, $output);
+        }
+
+        return $output;
     }
 }

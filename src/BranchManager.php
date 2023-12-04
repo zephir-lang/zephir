@@ -20,11 +20,9 @@ class BranchManager
 {
     protected ?Branch $currentBranch = null;
 
-    protected int $level = 0;
-
-    protected int $uniqueId = 1;
-
+    protected int     $level    = 0;
     protected ?Branch $rootBranch;
+    protected int     $uniqueId = 1;
 
     /**
      * Sets the current active branch in the manager.
@@ -51,18 +49,6 @@ class BranchManager
     }
 
     /**
-     * Removes a branch from the branch manager.
-     *
-     * @param Branch $branch
-     */
-    public function removeBranch(Branch $branch): void
-    {
-        $parentBranch = $branch->getParentBranch();
-        $this->currentBranch = $parentBranch;
-        --$this->level;
-    }
-
-    /**
      * Returns the active branch in the manager.
      *
      * @return Branch|null
@@ -75,6 +61,18 @@ class BranchManager
     public function getCurrentBranchId()
     {
         return $this->currentBranch->getUniqueId();
+    }
+
+    /**
+     * Removes a branch from the branch manager.
+     *
+     * @param Branch $branch
+     */
+    public function removeBranch(Branch $branch): void
+    {
+        $parentBranch        = $branch->getParentBranch();
+        $this->currentBranch = $parentBranch;
+        --$this->level;
     }
 
     public function setRootBranch(Branch $branch): void

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,9 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
+
+use function count;
 
 /**
  * CamelizeOptimizer.
@@ -26,6 +29,10 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class CamelizeOptimizer extends OptimizerAbstract
 {
+    protected string $trimWhere    = '';
+    protected string $warningName  = 'camelize';
+    protected string $zephirMethod = 'zephir_camelize';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -41,12 +48,10 @@ class CamelizeOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) < 1 || \count($expression['parameters']) > 2) {
-            throw new CompilerException("'camelize' only accepts one or two parameters");
-        }
+        $this->checkParameters($expression['parameters']);
 
-        $delimiter = 'NULL ';
-        if (2 == \count($expression['parameters'])) {
+        $charlist = 'NULL ';
+        if (2 == count($expression['parameters'])) {
             if ('null' == $expression['parameters'][1]['parameter']['type']) {
                 unset($expression['parameters'][1]);
             }
@@ -58,13 +63,9 @@ class CamelizeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->symbolVariablePre($call, $symbolVariable, $context);
 
         $context->headersManager->add('kernel/string');
 
@@ -73,12 +74,62 @@ class CamelizeOptimizer extends OptimizerAbstract
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
         if (isset($resolvedParams[1])) {
-            $delimiter = $resolvedParams[1];
+            $charlist = $resolvedParams[1];
         }
 
+        $this->symbolVariablePost($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_camelize('.$symbol.', '.$resolvedParams[0].', '.$delimiter.' );');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', '
+            . $resolvedParams[0] . ', '
+            . $charlist . $this->trimWhere . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param $parameters
+     *
+     * @return void
+     */
+    protected function checkParameters($parameters): void
+    {
+        if (count($parameters) < 1 || count($parameters) > 2) {
+            throw new CompilerException(
+                "'" . $this->warningName . "' only accepts one or two parameters"
+            );
+        }
+    }
+
+    /**
+     * @param Call               $call
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function symbolVariablePost(
+        Call $call,
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): void {
+        // empty
+    }
+
+    /**
+     * @param Call               $call
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function symbolVariablePre(
+        Call $call,
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): void {
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
     }
 }

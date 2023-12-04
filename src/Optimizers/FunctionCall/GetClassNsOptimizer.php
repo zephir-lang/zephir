@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,67 +9,58 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
-use Zephir\Call;
 use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * GetClassNsOptimizer.
  *
  * Optimizes calls to 'get_class_ns' using internal function
  */
-class GetClassNsOptimizer extends OptimizerAbstract
+class GetClassNsOptimizer extends GetClassOptimizer
 {
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
+     * @param array $expression
      *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @return void
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    protected function checkParameters(array $expression): void
     {
-        if (!isset($expression['parameters'])) {
-            return false;
-        }
-
-        $numberParameters = \count($expression['parameters']);
+        $numberParameters = count($expression['parameters']);
         if (1 != $numberParameters && 2 != $numberParameters) {
-            throw new CompilerException("'get_class_ns' only accepts one or two parameters", $expression);
+            throw new CompilerException(
+                "'get_class_ns' only accepts one or two parameters",
+                $expression
+            );
         }
+    }
 
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
+    /**
+     * @param CompilationContext $context
+     * @param string             $symbol
+     * @param array              $resolvedParams
+     *
+     * @return void
+     */
+    protected function getOutput(
+        CompilationContext $context,
+        string $symbol,
+        array $resolvedParams
+    ): void {
+        $output = 'zephir_get_class_ns(' . $symbol . ', ' . $resolvedParams[0];
 
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
-
-        $context->headersManager->add('kernel/object');
-
-        $symbolVariable->setDynamicTypes('string');
-
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
-
-        $symbol = $context->backend->getVariableCode($symbolVariable);
         if (!isset($resolvedParams[1])) {
-            $context->codePrinter->output('zephir_get_class_ns('.$symbol.', '.$resolvedParams[0].', 0);');
+            $output .=  ', 0);';
         } else {
-            $context->codePrinter->output('zephir_get_class_ns('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
+            $output .=  ', ' . $resolvedParams[1] . ');';
         }
 
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        $context->codePrinter->output($output);
     }
 }

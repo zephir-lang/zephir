@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Statements\LetStatement;
+use Zephir\Types\Types;
 
 /**
  * VarDumpOptimizer.
@@ -48,35 +49,31 @@ class VarDumpOptimizer extends OptimizerAbstract
                 /*
                  * Complex expressions require a temporary variable
                  */
-                switch ($resolvedParam->getType()) {
-                    case 'array':
-                        $type = 'array';
-                        break;
-                    default:
-                        $type = 'variable';
-                        break;
-                }
+                $type = match ($resolvedParam->getType()) {
+                    Types::T_ARRAY => 'array',
+                    default        => 'variable',
+                };
 
                 $variable = $context->symbolTable->addTemp($type, $context);
                 $variable->initVariant($context);
 
                 $statement = new LetStatement([
-                    'type' => 'let',
+                    'type'        => 'let',
                     'assignments' => [
                         [
                             'assign-type' => $type,
-                            'variable' => $variable->getName(),
-                            'operator' => 'assign',
-                            'expr' => [
-                                'type' => $resolvedParam->getType(),
+                            'variable'    => $variable->getName(),
+                            'operator'    => 'assign',
+                            'expr'        => [
+                                'type'  => $resolvedParam->getType(),
                                 'value' => $resolvedParam->getCode(),
-                                'file' => $expression['file'],
-                                'line' => $expression['line'],
-                                'char' => $expression['char'],
+                                'file'  => $expression['file'],
+                                'line'  => $expression['line'],
+                                'char'  => $expression['char'],
                             ],
-                            'file' => $expression['file'],
-                            'line' => $expression['line'],
-                            'char' => $expression['char'],
+                            'file'        => $expression['file'],
+                            'line'        => $expression['line'],
+                            'char'        => $expression['char'],
                         ],
                     ],
                 ]);
@@ -89,7 +86,7 @@ class VarDumpOptimizer extends OptimizerAbstract
             }
 
             $symbol = $context->backend->getVariableCode($variable);
-            $context->codePrinter->output('zephir_var_dump('.$symbol.');');
+            $context->codePrinter->output('zephir_var_dump(' . $symbol . ');');
         }
 
         return new CompiledExpression('null', 'null', $expression);

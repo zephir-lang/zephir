@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Expression\Builder\Statements;
 
@@ -33,26 +33,6 @@ class StatementsBlock extends AbstractBuilder
     }
 
     /**
-     * @return array
-     */
-    public function getStatements()
-    {
-        return $this->statements;
-    }
-
-    /**
-     * @param array $statements
-     *
-     * @return $this
-     */
-    public function setStatements($statements)
-    {
-        $this->statements = $statements;
-
-        return $this;
-    }
-
-    /**
      * @param $statement
      *
      * @return $this
@@ -70,6 +50,26 @@ class StatementsBlock extends AbstractBuilder
     public function build()
     {
         return $this->resolve($this->preBuild());
+    }
+
+    /**
+     * @return array
+     */
+    public function getStatements()
+    {
+        return $this->statements;
+    }
+
+    /**
+     * @param array $statements
+     *
+     * @return $this
+     */
+    public function setStatements($statements)
+    {
+        $this->statements = $statements;
+
+        return $this;
     }
 
     /**

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Types;
 
+use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -21,12 +22,28 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
 
+use function array_unshift;
+use function method_exists;
+use function sprintf;
+
 abstract class AbstractType
 {
     /**
      * The array of methods in zephir mapped to PHP internal methods.
      */
     protected array $methodMap = [];
+
+    public function getMethodMap(): array
+    {
+        return $this->methodMap;
+    }
+
+    /**
+     * Get the name of the type.
+     *
+     * @return string
+     */
+    abstract public function getTypeName(): string;
 
     /**
      * Intercepts calls to built-in methods.
@@ -40,7 +57,7 @@ abstract class AbstractType
      * @return bool|CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function invokeMethod(
         $methodName,
@@ -84,10 +101,11 @@ abstract class AbstractType
             }
 
             $functionCall = BuilderFactory::getInstance()->statements()
-                ->functionCall($this->methodMap[$methodName], $parameters)
-                ->setFile($expression['file'])
-                ->setLine($expression['line'])
-                ->setChar($expression['char']);
+                                          ->functionCall($this->methodMap[$methodName], $parameters)
+                                          ->setFile($expression['file'])
+                                          ->setLine($expression['line'])
+                                          ->setChar($expression['char'])
+            ;
 
             $expression = new Expression($functionCall->build());
 
@@ -98,18 +116,6 @@ abstract class AbstractType
             sprintf('Method "%s" is not a built-in method of type "%s"', $methodName, $this->getTypeName()),
             $expression
         );
-    }
-
-    /**
-     * Get the name of the type.
-     *
-     * @return string
-     */
-    abstract public function getTypeName(): string;
-
-    public function getMethodMap(): array
-    {
-        return $this->methodMap;
     }
 
     /**

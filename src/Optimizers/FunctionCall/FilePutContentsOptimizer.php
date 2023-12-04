@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * FilePutContentsOptimizer.
@@ -41,7 +43,7 @@ class FilePutContentsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (2 != \count($expression['parameters'])) {
+        if (2 != count($expression['parameters'])) {
             return false;
         }
 
@@ -53,11 +55,7 @@ class FilePutContentsOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable();
-        if ($symbolVariable) {
-            if ($symbolVariable->isNotVariableAndString()) {
-                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-            }
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         if ($symbolVariable) {
@@ -65,11 +63,15 @@ class FilePutContentsOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_file_put_contents('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].');');
+            $context->codePrinter->output(
+                'zephir_file_put_contents(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+            );
 
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
         } else {
-            $context->codePrinter->output('zephir_file_put_contents(NULL, '.$resolvedParams[0].', '.$resolvedParams[1].');');
+            $context->codePrinter->output(
+                'zephir_file_put_contents(NULL, ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+            );
         }
 
         return new CompiledExpression('null', 'null', $expression);

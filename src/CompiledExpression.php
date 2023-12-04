@@ -13,6 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use Closure;
+
+use function in_array;
+
 /**
  * This represents a compiled expression, the object can be used to check
  * if the expression type is able to used in certain types of the application.
@@ -21,30 +25,6 @@ class CompiledExpression implements TypeAwareInterface
 {
     public function __construct(protected string $type, protected mixed $code, protected ?array $originalExpr = null)
     {
-    }
-
-    /**
-     * Returns the type of the compiled expression.
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * Returns the code produced by the compiled expression.
-     */
-    public function getCode(): mixed
-    {
-        return $this->code;
-    }
-
-    /**
-     * Original AST code that produced the code.
-     */
-    public function getOriginal(): ?array
-    {
-        return $this->originalExpr;
     }
 
     /**
@@ -64,6 +44,30 @@ class CompiledExpression implements TypeAwareInterface
     }
 
     /**
+     * Returns the code produced by the compiled expression.
+     */
+    public function getCode(): mixed
+    {
+        return $this->code;
+    }
+
+    /**
+     * Original AST code that produced the code.
+     */
+    public function getOriginal(): ?array
+    {
+        return $this->originalExpr;
+    }
+
+    /**
+     * Returns the type of the compiled expression.
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    /**
      * Checks if the compiled expression is an integer or compatible type.
      */
     public function isIntCompatibleType(): bool
@@ -80,7 +84,7 @@ class CompiledExpression implements TypeAwareInterface
      */
     public function resolve(?string $result, CompilationContext $compilationContext): string
     {
-        if (!($this->code instanceof \Closure)) {
+        if (!($this->code instanceof Closure)) {
             return $this->code;
         }
 

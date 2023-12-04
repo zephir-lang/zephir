@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * MicrotimeOptimizer.
@@ -38,7 +40,7 @@ class MicrotimeOptimizer extends OptimizerAbstract
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
         /* microtime has one optional parameter (get_as_float) */
-        if (isset($expression['parameters']) && \count($expression['parameters']) > 2) {
+        if (isset($expression['parameters']) && count($expression['parameters']) > 2) {
             return false;
         }
 
@@ -48,9 +50,7 @@ class MicrotimeOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/time');
 
@@ -60,14 +60,14 @@ class MicrotimeOptimizer extends OptimizerAbstract
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime('.$symbol.', NULL);');
+            $context->codePrinter->output('zephir_microtime(' . $symbol . ', NULL);');
         } else {
             $symbolVariable->setDynamicTypes('double');
             $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
             if ($call->mustInitSymbolVariable()) {
                 $symbolVariable->initVariant($context);
             }
-            $context->codePrinter->output('zephir_microtime('.$symbol.', '.$resolvedParams[0].');');
+            $context->codePrinter->output('zephir_microtime(' . $symbol . ', ' . $resolvedParams[0] . ');');
         }
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

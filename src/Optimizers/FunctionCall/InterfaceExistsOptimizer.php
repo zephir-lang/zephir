@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * InterfaceExistsOptimizer.
@@ -41,7 +43,7 @@ class InterfaceExistsOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (\count($expression['parameters']) < 1) {
+        if (count($expression['parameters']) < 1) {
             throw new CompilerException("'class_exists' require one or two parameters");
         }
 
@@ -49,20 +51,30 @@ class InterfaceExistsOptimizer extends OptimizerAbstract
          * Process autoload.
          */
         $autoload = '1 ';
-        if (2 == \count($expression['parameters']) && ('int' == $expression['parameters'][1]['parameter']['type'] || 'bool' == $expression['parameters'][1]['parameter']['type'])) {
-            $autoload = $expression['parameters'][1]['parameter']['value'].' ';
+        if (
+            2 == count($expression['parameters']) &&
+            (
+                'int' == $expression['parameters'][1]['parameter']['type'] ||
+                'bool' == $expression['parameters'][1]['parameter']['type']
+            )
+        ) {
+            $autoload = $expression['parameters'][1]['parameter']['value'] . ' ';
             unset($expression['parameters'][1]);
         }
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if (2 == \count($resolvedParams)) {
+        if (2 == count($resolvedParams)) {
             $context->headersManager->add('kernel/operators');
-            $autoload = 'zephir_is_true('.$resolvedParams[1].') ';
+            $autoload = 'zephir_is_true(' . $resolvedParams[1] . ') ';
         }
 
         $context->headersManager->add('kernel/object');
 
-        return new CompiledExpression('bool', 'zephir_interface_exists('.$resolvedParams[0].', '.$autoload.')', $expression);
+        return new CompiledExpression(
+            'bool',
+            'zephir_interface_exists(' . $resolvedParams[0] . ', ' . $autoload . ')',
+            $expression
+        );
     }
 }

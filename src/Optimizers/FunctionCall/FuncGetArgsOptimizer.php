@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
@@ -43,19 +43,13 @@ class FuncGetArgsOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException(
-                'Returned values by functions can only be assigned to variant variables',
-                $expression
-            );
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->headersManager->add('kernel/main');
-        $context->codePrinter->output('zephir_get_args('.$symbol.');');
+        $context->codePrinter->output('zephir_get_args(' . $symbol . ');');
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

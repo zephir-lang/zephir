@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,13 +9,17 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * BasenameOptimizer.
@@ -26,6 +28,8 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class BasenameOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_basename';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -33,7 +37,8 @@ class BasenameOptimizer extends OptimizerAbstract
      *
      * @return bool|CompiledExpression|mixed
      *
-     * @throws CompilerException
+     * @return false|CompiledExpression
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -41,7 +46,7 @@ class BasenameOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != \count($expression['parameters'])) {
+        if (1 != count($expression['parameters'])) {
             return false;
         }
 
@@ -53,20 +58,17 @@ class BasenameOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable) {
-            if ($symbolVariable->isNotVariableAndString()) {
-                throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-            }
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
 
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
+
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_basename('.$symbol.', '.$resolvedParams[0].');');
+        $context->codePrinter->output(
+            $this->zephirMethod . '(' . $symbol . ', ' . $resolvedParams[0] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Operators\Arithmetical;
 
 /**
@@ -18,9 +18,7 @@ namespace Zephir\Operators\Arithmetical;
  */
 class SubOperator extends ArithmeticalBaseOperator
 {
-    protected string $operator = '-';
-
-    protected string $bitOperator = '&';
-
+    protected string $bitOperator  = '&';
+    protected string $operator     = '-';
     protected string $zvalOperator = 'zephir_sub_function';
 }

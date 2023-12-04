@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Exception;
 
+use function sprintf;
+
 final class InvalidTypeException extends CompilerException
 {
     /**

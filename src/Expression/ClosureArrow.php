@@ -42,7 +42,7 @@ class ClosureArrow extends Closure
     {
         $classDefinition = new Definition(
             $compilationContext->config->get('namespace'),
-            self::$id.'__closure'
+            self::$id . '__closure'
         );
 
         $classDefinition->setIsFinal(true);
@@ -57,22 +57,22 @@ class ClosureArrow extends Closure
          */
         $parameters = new Parameters([
             [
-                'type' => 'parameter',
-                'name' => $expression['left']['value'],
-                'const' => 0,
+                'type'      => 'parameter',
+                'name'      => $expression['left']['value'],
+                'const'     => 0,
                 'data-type' => 'variable',
                 'mandatory' => 0,
                 'reference' => 0,
-                'file' => $expression['left']['file'],
-                'line' => $expression['left']['line'],
-                'char' => $expression['left']['char'],
+                'file'      => $expression['left']['file'],
+                'line'      => $expression['left']['line'],
+                'char'      => $expression['left']['char'],
             ],
         ]);
 
-        $exprBuilder = BuilderFactory::getInstance();
+        $exprBuilder           = BuilderFactory::getInstance();
         $statementBlockBuilder = $exprBuilder->statements()->block([
             $exprBuilder->statements()
-                ->returnX($exprBuilder->raw($expression['right'])),
+                        ->returnX($exprBuilder->raw($expression['right'])),
         ]);
 
         $block = $statementBlockBuilder->build();
@@ -87,22 +87,14 @@ class ClosureArrow extends Closure
             null,
             $expression
         );
-        $classDefinition->addMethod($classMethod, $block);
 
-        $compilationContext->headersManager->add('kernel/object');
-
-        if ($this->expecting) {
-            if ($this->expectingVariable) {
-                $symbolVariable = $this->expectingVariable;
-            } else {
-                $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-            }
-        } else {
-            $symbolVariable = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext, $expression);
-        }
-
-        $symbolVariable->initVariant($compilationContext);
-        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
+        $symbolVariable = $this->generateClosure(
+            $classDefinition,
+            $classMethod,
+            $block,
+            $compilationContext,
+            $expression
+        );
 
         ++self::$id;
 

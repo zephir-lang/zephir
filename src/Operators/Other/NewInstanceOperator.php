@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionClass;
+use ReflectionException;
 use Zephir\Class\Entry;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
@@ -21,6 +23,8 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
 use Zephir\Operators\AbstractOperator;
+
+use function count;
 
 /**
  * Creates a new instance of a class
@@ -37,7 +41,7 @@ class NewInstanceOperator extends AbstractOperator
      *
      * @return CompiledExpression
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws Exception
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
@@ -48,7 +52,7 @@ class NewInstanceOperator extends AbstractOperator
          * Resolves the symbol that expects the value
          */
         $this->literalOnly = false;
-        $symbolVariable = $this->getExpectedNonLiteral($compilationContext, $expression);
+        $symbolVariable    = $this->getExpectedNonLiteral($compilationContext, $expression);
         if (!$symbolVariable->isVariable()) {
             throw new CompilerException('Objects can only be instantiated into dynamic variables', $expression);
         }
@@ -76,7 +80,7 @@ class NewInstanceOperator extends AbstractOperator
             $className = $compilationContext->classDefinition->getCompleteName();
         } else {
             $className = $expression['class'];
-            $dynamic = $expression['dynamic'];
+            $dynamic   = $expression['dynamic'];
             if (!$dynamic) {
                 $className = $compilationContext->getFullName($expression['class']);
             }
@@ -90,10 +94,10 @@ class NewInstanceOperator extends AbstractOperator
          * stdclass doesn't have constructors.
          */
         $lowerClassName = strtolower($className);
-        $isStdClass = 'stdclass' === $lowerClassName || '\stdclass' === $lowerClassName;
+        $isStdClass     = 'stdclass' === $lowerClassName || '\stdclass' === $lowerClassName;
 
         if ($isStdClass) {
-            if (isset($expression['parameters']) && \count($expression['parameters']) > 0) {
+            if (isset($expression['parameters']) && count($expression['parameters']) > 0) {
                 throw new CompilerException('stdclass does not receive parameters in its constructor', $expression);
             }
 
@@ -109,7 +113,11 @@ class NewInstanceOperator extends AbstractOperator
              * Classes inside the same extension
              */
             if ($classDefinition) {
-                $compilationContext->backend->initObject($symbolVariable, $classDefinition->getClassEntry($compilationContext), $compilationContext);
+                $compilationContext->backend->initObject(
+                    $symbolVariable,
+                    $classDefinition->getClassEntry($compilationContext),
+                    $compilationContext
+                );
                 $symbolVariable->setClassTypes($className);
                 $symbolVariable->setAssociatedClass($classDefinition);
             } else {
@@ -117,28 +125,45 @@ class NewInstanceOperator extends AbstractOperator
                  * Classes outside the extension
                  */
                 if ($dynamic) {
-                    $classNameVariable = $compilationContext->symbolTable->getVariableForRead($className, $compilationContext, $expression);
+                    $classNameVariable = $compilationContext->symbolTable->getVariableForRead(
+                        $className,
+                        $compilationContext,
+                        $expression
+                    );
                     if ($classNameVariable->isNotVariableAndString()) {
-                        throw new CompilerException('Only dynamic/string variables can be used in new operator. '.$classNameVariable->getName(), $expression);
+                        throw new CompilerException(
+                            'Only dynamic/string variables can be used in new operator. ' . $classNameVariable->getName(
+                            ),
+                            $expression
+                        );
                     }
 
                     /**
                      * Use a safe string version of the variable to avoid segfaults
                      */
                     $compilationContext->headersManager->add('kernel/object');
-                    $safeSymbolVariable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext);
+                    $safeSymbolVariable = $compilationContext->symbolTable->getTempVariable(
+                        'variable',
+                        $compilationContext
+                    );
                     $safeSymbolVariable->setMustInitNull(true);
                     $safeSymbolVariable->setIsInitialized(true, $compilationContext);
                     $safeSymbolVariable->increaseUses();
-                    $safeSymbol = $compilationContext->backend->getVariableCode($safeSymbolVariable);
+                    $safeSymbol      = $compilationContext->backend->getVariableCode($safeSymbolVariable);
                     $classNameSymbol = $compilationContext->backend->getVariableCode($classNameVariable);
 
-                    $compilationContext->codePrinter->output('zephir_fetch_safe_class('.$safeSymbol.', '.$classNameSymbol.');');
-                    $classNameToFetch = 'Z_STRVAL_P('.$safeSymbol.'), Z_STRLEN_P('.$safeSymbol.')';
-                    $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, true, $compilationContext);
-                    $classEntry = $zendClassEntry->getName();
+                    $compilationContext->codePrinter->output(
+                        'zephir_fetch_safe_class(' . $safeSymbol . ', ' . $classNameSymbol . ');'
+                    );
+                    $classNameToFetch = 'Z_STRVAL_P(' . $safeSymbol . '), Z_STRLEN_P(' . $safeSymbol . ')';
+                    $zendClassEntry   = $compilationContext->cacheManager->getClassEntryCache()->get(
+                        $classNameToFetch,
+                        true,
+                        $compilationContext
+                    );
+                    $classEntry       = $zendClassEntry->getName();
 
-                    $compilationContext->codePrinter->output('if(!'.$classEntry.') {');
+                    $compilationContext->codePrinter->output('if(!' . $classEntry . ') {');
                     $compilationContext->codePrinter->increaseLevel();
                     $compilationContext->codePrinter->output('RETURN_MM_NULL();');
                     $compilationContext->codePrinter->decreaseLevel();
@@ -146,15 +171,19 @@ class NewInstanceOperator extends AbstractOperator
                 } else {
                     if (!class_exists($className, false)) {
                         $compilationContext->logger->warning(
-                            'Class "'.$className.'" does not exist at compile time',
+                            'Class "' . $className . '" does not exist at compile time',
                             ['nonexistent-class', $expression]
                         );
-                        $classNameToFetch = 'SL("'.Entry::escape($className).'")';
+                        $classNameToFetch = 'SL("' . Entry::escape($className) . '")';
 
-                        $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get($classNameToFetch, false, $compilationContext);
-                        $classEntry = $zendClassEntry->getName();
+                        $zendClassEntry = $compilationContext->cacheManager->getClassEntryCache()->get(
+                            $classNameToFetch,
+                            false,
+                            $compilationContext
+                        );
+                        $classEntry     = $zendClassEntry->getName();
                     } else {
-                        $reflectionClass = new \ReflectionClass($className);
+                        $reflectionClass = new ReflectionClass($className);
                         if ($reflectionClass->isInterface()) {
                             throw new CompilerException('Interfaces cannot be instantiated', $expression);
                         }
@@ -210,24 +239,24 @@ class NewInstanceOperator extends AbstractOperator
         /* TODO: use the MethodBuilder here */
         if (isset($expression['parameters'])) {
             $callExpr = new Expression([
-                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
-                'name' => '__construct',
+                'variable'   => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name'       => '__construct',
                 'parameters' => $expression['parameters'],
-                'call-type' => MethodCall::CALL_NORMAL,
-                'file' => $expression['file'],
-                'line' => $expression['line'],
-                'char' => $expression['char'],
-                'check' => $callConstructor,
+                'call-type'  => MethodCall::CALL_NORMAL,
+                'file'       => $expression['file'],
+                'line'       => $expression['line'],
+                'char'       => $expression['char'],
+                'check'      => $callConstructor,
             ]);
         } else {
             $callExpr = new Expression([
-                'variable' => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
-                'name' => '__construct',
+                'variable'  => ['type' => 'variable', 'value' => $symbolVariable->getRealName()],
+                'name'      => '__construct',
                 'call-type' => MethodCall::CALL_NORMAL,
-                'file' => $expression['file'],
-                'line' => $expression['line'],
-                'char' => $expression['char'],
-                'check' => $callConstructor,
+                'file'      => $expression['file'],
+                'line'      => $expression['line'],
+                'char'      => $expression['char'],
+                'check'     => $callConstructor,
             ]);
         }
 

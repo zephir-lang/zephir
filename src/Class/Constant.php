@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Class;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Exception;
 use Zephir\Expression\Constants;
@@ -31,11 +32,45 @@ class Constant
     }
 
     /**
+     * Produce the code to register a class constant.
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    public function compile(CompilationContext $compilationContext): void
+    {
+        $this->processValue($compilationContext);
+        $constantValue = $this->value['value'] ?? null;
+        $compilationContext->backend->declareConstant(
+            $this->value['type'],
+            $this->getName(),
+            $constantValue,
+            $compilationContext
+        );
+    }
+
+    /**
+     * Returns the docblock related to the constant.
+     */
+    public function getDocBlock(): ?string
+    {
+        return $this->docblock;
+    }
+
+    /**
      * Returns the constant's name.
      */
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * Get type of class constant.
+     */
+    public function getType(): string
+    {
+        return $this->value['type'];
     }
 
     /**
@@ -63,26 +98,10 @@ class Constant
     }
 
     /**
-     * Returns the docblock related to the constant.
-     */
-    public function getDocBlock(): ?string
-    {
-        return $this->docblock;
-    }
-
-    /**
-     * Get type of class constant.
-     */
-    public function getType(): string
-    {
-        return $this->value['type'];
-    }
-
-    /**
      * Process the value of the class constant if needed.
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function processValue(CompilationContext $compilationContext): void
     {
@@ -90,7 +109,7 @@ class Constant
             $compiledExpression = (new Constants())->compile($this->value, $compilationContext);
 
             $this->value = [
-                'type' => $compiledExpression->getType(),
+                'type'  => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
 
@@ -101,27 +120,9 @@ class Constant
             $compiledExpression = (new StaticConstantAccess())->compile($this->value, $compilationContext);
 
             $this->value = [
-                'type' => $compiledExpression->getType(),
+                'type'  => $compiledExpression->getType(),
                 'value' => $compiledExpression->getCode(),
             ];
         }
-    }
-
-    /**
-     * Produce the code to register a class constant.
-     *
-     * @throws Exception
-     * @throws \ReflectionException
-     */
-    public function compile(CompilationContext $compilationContext): void
-    {
-        $this->processValue($compilationContext);
-        $constantValue = $this->value['value'] ?? null;
-        $compilationContext->backend->declareConstant(
-            $this->value['type'],
-            $this->getName(),
-            $constantValue,
-            $compilationContext
-        );
     }
 }

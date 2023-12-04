@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Unary;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -31,13 +32,11 @@ class MinusOperator extends AbstractOperator
      * @return CompiledExpression
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
-        if (!isset($expression['left'])) {
-            throw new CompilerException('Missing left part of the expression');
-        }
+        $this->checkLeft($expression);
 
         $leftExpr = new Expression($expression['left']);
         $leftExpr->setReadOnly($this->readOnly);
@@ -49,7 +48,7 @@ class MinusOperator extends AbstractOperator
             case 'long':
             case 'ulong':
             case 'double':
-                return new CompiledExpression($left->getType(), '-'.$left->getCode(), $expression);
+                return new CompiledExpression($left->getType(), '-' . $left->getCode(), $expression);
 
             case 'variable':
                 $variable = $compilationContext->symbolTable->getVariable($left->getCode());
@@ -59,21 +58,24 @@ class MinusOperator extends AbstractOperator
                     case 'long':
                     case 'ulong':
                     case 'double':
-                        return new CompiledExpression($variable->getType(), '-'.$variable->getName(), $expression);
+                        return new CompiledExpression($variable->getType(), '-' . $variable->getName(), $expression);
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
-                        $compilationContext->codePrinter->output('zephir_negate('.$compilationContext->backend->getVariableCode($variable).');');
+                        $compilationContext->codePrinter->output(
+                            'zephir_negate(' . $compilationContext->backend->getVariableCode($variable) . ');'
+                        );
 
                         return new CompiledExpression('variable', $variable->getName(), $expression);
 
                     default:
-                        throw new CompilerException("Cannot operate minus with variable of '".$left->getType()."' type");
+                        throw new CompilerException(
+                            "Cannot operate minus with variable of '" . $left->getType() . "' type"
+                        );
                 }
-                break;
 
             default:
-                throw new CompilerException("Cannot operate minus with '".$left->getType()."' type");
+                throw new CompilerException("Cannot operate minus with '" . $left->getType() . "' type");
         }
     }
 }

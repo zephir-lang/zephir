@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Exception;
 
 /**
@@ -19,16 +19,16 @@ namespace Zephir\Exception;
 interface ExceptionInterface
 {
     /**
-     * Gets extra info.
-     *
-     * @return array
-     */
-    public function getExtra();
-
-    /**
      * Returns the code block in which the error occurred.
      *
      * @return string
      */
-    public function getErrorRegion();
+    public function getErrorRegion(): string;
+
+    /**
+     * Gets extra info.
+     *
+     * @return array|null
+     */
+    public function getExtra(): array | null;
 }

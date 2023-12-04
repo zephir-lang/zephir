@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,9 +9,15 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Passes;
 
 use Zephir\StatementsBlock;
+
+use function is_string;
+
+use const PHP_EOL;
 
 /**
  * This pass try to infer typing on dynamic variables so the compiler
@@ -21,19 +25,8 @@ use Zephir\StatementsBlock;
  */
 class StaticTypeInference
 {
+    protected array $infered   = [];
     protected array $variables = [];
-
-    protected array $infered = [];
-
-    /**
-     * Do the compilation pass.
-     *
-     * @param StatementsBlock $block
-     */
-    public function pass(StatementsBlock $block): void
-    {
-        $this->passStatementBlock($block->getStatements());
-    }
 
     public function declareVariables(array $statement): void
     {
@@ -51,15 +44,23 @@ class StaticTypeInference
     }
 
     /**
-     * Marks a variable to mandatory be stored in the heap if a type has not been defined for it.
+     * Asks the local context information whether a variable can be stored in the stack instead of the heap.
      *
      * @param string $variable
-     * @param string $type
+     *
+     * @return bool
      */
-    public function markVariableIfUnknown($variable, $type): void
+    public function getInferedType($variable)
     {
-        $this->variables[$variable] = $type;
-        $this->infered[$variable] = $type;
+        if (isset($this->variables[$variable])) {
+            $type = $this->variables[$variable];
+            if ('variable' != $type && 'undefined' != $type && 'string' != $type && 'istring' != $type && 'array' != $type && 'null' != $type && 'numeric' != $type) {
+                // echo $variable, ' ', $type, PHP_EOL;
+                return $type;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -169,81 +170,25 @@ class StaticTypeInference
     }
 
     /**
-     * Process the found infered types and schedule a new pass.
+     * Marks a variable to mandatory be stored in the heap if a type has not been defined for it.
      *
-     * @return bool
+     * @param string $variable
+     * @param string $type
      */
-    public function reduce(): bool
+    public function markVariableIfUnknown($variable, $type): void
     {
-        $pass = false;
-        foreach ($this->variables as $variable => $type) {
-            if ('variable' == $type || 'string' == $type || 'istring' == $type || 'array' == $type || 'null' == $type || 'numeric' == $type) {
-                unset($this->variables[$variable]);
-            } else {
-                $pass = true;
-                $this->infered[$variable] = $type;
-            }
-        }
-
-        return $pass;
+        $this->variables[$variable] = $type;
+        $this->infered[$variable]   = $type;
     }
 
     /**
-     * Asks the local context information whether a variable can be stored in the stack instead of the heap.
+     * Do the compilation pass.
      *
-     * @param string $variable
-     *
-     * @return bool
+     * @param StatementsBlock $block
      */
-    public function getInferedType($variable)
+    public function pass(StatementsBlock $block): void
     {
-        if (isset($this->variables[$variable])) {
-            $type = $this->variables[$variable];
-            if ('variable' != $type && 'undefined' != $type && 'string' != $type && 'istring' != $type && 'array' != $type && 'null' != $type && 'numeric' != $type) {
-                // echo $variable, ' ', $type, PHP_EOL;
-                return $type;
-            }
-        }
-
-        return false;
-    }
-
-    public function passLetStatement(array $statement): void
-    {
-        foreach ($statement['assignments'] as $assignment) {
-            switch ($assignment['assign-type']) {
-                case 'variable':
-                    $type = $this->passExpression($assignment['expr']);
-                    if (\is_string($type)) {
-                        $this->markVariable($assignment['variable'], $type);
-                    }
-                    break;
-
-                case 'object-property':
-                case 'array-index':
-                case 'object-property-array-index':
-                case 'object-property-append':
-                case 'static-property-access':
-                    $this->markVariable($assignment['variable'], 'variable');
-                    break;
-
-                case 'variable-append':
-                    $this->markVariable($assignment['variable'], 'variable');
-                    break;
-
-                default:
-                    // echo $assignment['assign-type'];
-            }
-        }
-    }
-
-    public function passCall(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $this->passExpression($parameter['parameter']);
-            }
-        }
+        $this->passStatementBlock($block->getStatements());
     }
 
     public function passArray(array $expression): void
@@ -253,7 +198,7 @@ class StaticTypeInference
         }
     }
 
-    public function passNew(array $expression): void
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -281,6 +226,12 @@ class StaticTypeInference
             case 'closure':
             case 'closure-arrow':
             case 'static-constant-access':
+            case 'irange':
+            case 'erange':
+            case 'empty-array':
+            case 'clone':
+            case 'require':
+            case 'require_once':
                 return 'variable';
 
             case 'reference':
@@ -301,7 +252,7 @@ class StaticTypeInference
             case 'bitwise_xor':
             case 'bitwise_shiftleft':
             case 'bitwise_shiftright':
-                $left = $this->passExpression($expression['left']);
+                $left  = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
                 if ('int' == $left && 'int' == $right) {
                     return 'int';
@@ -340,7 +291,7 @@ class StaticTypeInference
                 return 'numeric';
 
             case 'mod':
-                $left = $this->passExpression($expression['left']);
+                $left  = $this->passExpression($expression['left']);
                 $right = $this->passExpression($expression['right']);
                 if ('long' == $left && 'long' == $right) {
                     return 'long';
@@ -351,13 +302,12 @@ class StaticTypeInference
 
                 return 'int';
 
-            case 'and':
-            case 'or':
-                return 'bool';
 
             case 'concat':
                 return 'string';
 
+            case 'and':
+            case 'or':
             case 'equals':
             case 'identical':
             case 'not-identical':
@@ -367,10 +317,6 @@ class StaticTypeInference
             case 'greater-equal':
             case 'less-equal':
                 return 'bool';
-
-            case 'irange':
-            case 'erange':
-                return 'variable';
 
             case 'typeof':
                 $this->passExpression($expression['left']);
@@ -384,6 +330,11 @@ class StaticTypeInference
 
             case 'not':
             case 'bitwise_not':
+            case 'isset':
+            case 'empty':
+            case 'instanceof':
+            case 'likely':
+            case 'unlikely':
                 $this->passExpression($expression['left']);
 
                 return 'bool';
@@ -398,9 +349,6 @@ class StaticTypeInference
             case 'array':
                 $this->passArray($expression);
 
-                return 'variable';
-
-            case 'empty-array':
                 return 'variable';
 
             case 'new':
@@ -424,15 +372,6 @@ class StaticTypeInference
 
                 return 'bool';
 
-            case 'isset':
-            case 'empty':
-            case 'instanceof':
-            case 'likely':
-            case 'unlikely':
-                $this->passExpression($expression['left']);
-
-                return 'bool';
-
             case 'list':
                 return $this->passExpression($expression['left']);
 
@@ -452,11 +391,6 @@ class StaticTypeInference
             case 'constant':
                 return null;
 
-            case 'clone':
-            case 'require':
-            case 'require_once':
-                return 'variable';
-
             case 'ternary':
             case 'short-ternary':
                 // $right = $this->passExpression($expression['right']);
@@ -471,6 +405,41 @@ class StaticTypeInference
             default:
                 echo 'STI=', $expression['type'], PHP_EOL;
                 break;
+        }
+    }
+
+    public function passLetStatement(array $statement): void
+    {
+        foreach ($statement['assignments'] as $assignment) {
+            switch ($assignment['assign-type']) {
+                case 'variable':
+                    $type = $this->passExpression($assignment['expr']);
+                    if (is_string($type)) {
+                        $this->markVariable($assignment['variable'], $type);
+                    }
+                    break;
+
+                case 'object-property':
+                case 'array-index':
+                case 'object-property-array-index':
+                case 'object-property-append':
+                case 'static-property-access':
+                case 'variable-append':
+                    $this->markVariable($assignment['variable'], 'variable');
+                    break;
+
+                default:
+                    // echo $assignment['assign-type'];
+            }
+        }
+    }
+
+    public function passNew(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
         }
     }
 
@@ -586,5 +555,25 @@ class StaticTypeInference
                     echo 'SSTI=', $statement['type'];
             }
         }
+    }
+
+    /**
+     * Process the found infered types and schedule a new pass.
+     *
+     * @return bool
+     */
+    public function reduce(): bool
+    {
+        $pass = false;
+        foreach ($this->variables as $variable => $type) {
+            if ('variable' == $type || 'string' == $type || 'istring' == $type || 'array' == $type || 'null' == $type || 'numeric' == $type) {
+                unset($this->variables[$variable]);
+            } else {
+                $pass                     = true;
+                $this->infered[$variable] = $type;
+            }
+        }
+
+        return $pass;
     }
 }

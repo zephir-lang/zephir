@@ -42,7 +42,22 @@ class FunctionDefinition extends Method
      */
     public function getInternalName(): string
     {
-        return ($this->isGlobal() ? 'g_' : 'f_').str_replace('\\', '_', $this->namespace).'_'.$this->getName();
+        return ($this->isGlobal() ? 'g_' : 'f_') . str_replace('\\', '_', $this->namespace) . '_' . $this->getName();
+    }
+
+    public function getNamespace(): string
+    {
+        return $this->namespace;
+    }
+
+    public function getVisibility(): array
+    {
+        return [];
+    }
+
+    public function hasModifier(string $modifier): bool
+    {
+        return false;
     }
 
     public function isGlobal(): bool
@@ -55,23 +70,8 @@ class FunctionDefinition extends Method
         $this->isGlobal = $global;
     }
 
-    public function getNamespace(): string
-    {
-        return $this->namespace;
-    }
-
     public function setNamespace(string $namespace): void
     {
         $this->namespace = $namespace;
-    }
-
-    public function hasModifier(string $modifier): bool
-    {
-        return false;
-    }
-
-    public function getVisibility(): array
-    {
-        return [];
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Statements;
 
@@ -24,6 +24,8 @@ use Zephir\Expression;
  */
 class RequireStatement extends StatementAbstract
 {
+    protected string $methodName = 'require';
+
     /**
      * @param CompilationContext $compilationContext
      *
@@ -32,7 +34,7 @@ class RequireStatement extends StatementAbstract
     public function compile(CompilationContext $compilationContext): void
     {
         $expression = [
-            'type' => 'require',
+            'type' => $this->methodName,
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
@@ -40,7 +42,7 @@ class RequireStatement extends StatementAbstract
         ];
 
         $expr = new Expression($expression);
-        $expr->setExpectReturn(false, null);
+        $expr->setExpectReturn(false);
         $expr->compile($compilationContext);
     }
 }

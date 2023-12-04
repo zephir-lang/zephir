@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -19,6 +19,8 @@ use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
+use function count;
+
 /**
  * ArrayKeysOptimizer.
  *
@@ -26,6 +28,8 @@ use Zephir\Optimizers\OptimizerAbstract;
  */
 class ArrayKeysOptimizer extends OptimizerAbstract
 {
+    protected int $parameterCount = 1;
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -33,7 +37,8 @@ class ArrayKeysOptimizer extends OptimizerAbstract
      *
      * @return bool|CompiledExpression|mixed
      *
-     * @throws CompilerException
+     * @return false|CompiledExpression
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -41,7 +46,7 @@ class ArrayKeysOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (1 != \count($expression['parameters'])) {
+        if ($this->parameterCount !== count($expression['parameters'])) {
             return false;
         }
 
@@ -51,23 +56,34 @@ class ArrayKeysOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-
-        if (!$symbolVariable->isVariable()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariable($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/array');
 
         $symbolVariable->setDynamicTypes('array');
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
+        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output('zephir_array_keys('.$symbol.', '.$resolvedParams[0].');');
+
+        $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param string $symbol
+     * @param array  $resolvedParams
+     *
+     * @return string
+     */
+    protected function getOutput(string $symbol, $resolvedParams): string
+    {
+        return sprintf(
+            'zephir_array_keys(%s, %s);',
+            $symbol,
+            $resolvedParams[0]
+        );
     }
 }

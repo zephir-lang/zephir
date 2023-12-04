@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,8 +9,11 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Passes\MutateGathererPass;
 use Zephir\Statements\BreakStatement;
 use Zephir\Statements\ContinueStatement;
@@ -32,24 +33,29 @@ use Zephir\Statements\TryCatchStatement;
 use Zephir\Statements\UnsetStatement;
 use Zephir\Statements\WhileStatement;
 
+use function array_pop;
+use function count;
+use function filter_var;
+use function getenv;
+use function sprintf;
+
+use const FILTER_VALIDATE_BOOLEAN;
+
 /**
  * This represents a single basic block in Zephir.
  * A statements block is simply a container of instructions that execute sequentially.
  */
 class StatementsBlock
 {
-    protected ?bool $unreachable = null;
-
     protected $debug = false;
-
-    protected $loop = false;
-
-    protected $mutateGatherer;
-
     /**
      * @var array|null
      */
     protected $lastStatement;
+    protected $loop = false;
+
+    protected $mutateGatherer;
+    protected ?bool $unreachable = null;
 
     public function __construct(protected $statements)
     {
@@ -66,20 +72,6 @@ class StatementsBlock
     }
 
     /**
-     * Sets whether the statements block belongs to a loop.
-     *
-     * @param bool $loop
-     *
-     * @return StatementsBlock
-     */
-    public function isLoop(bool $loop): static
-    {
-        $this->loop = $loop;
-
-        return $this;
-    }
-
-    /**
      * @param CompilationContext $compilationContext
      * @param bool               $unreachable
      * @param int                $branchType
@@ -87,10 +79,13 @@ class StatementsBlock
      * @return Branch
      *
      * @throws Exception
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function compile(CompilationContext $compilationContext, bool $unreachable = null, int $branchType = Branch::TYPE_UNKNOWN): Branch
-    {
+    public function compile(
+        CompilationContext $compilationContext,
+        bool $unreachable = null,
+        int $branchType = Branch::TYPE_UNKNOWN
+    ): Branch {
         $compilationContext->codePrinter->increaseLevel();
         ++$compilationContext->currentBranch;
 
@@ -137,7 +132,7 @@ class StatementsBlock
                 if (isset($statement['file'])) {
                     if ('declare' != $statement['type'] && 'comment' != $statement['type']) {
                         $compilationContext->codePrinter->outputNoIndent(
-                            '#line '.$statement['line'].' "'.$statement['file'].'"'
+                            '#line ' . $statement['line'] . ' "' . $statement['file'] . '"'
                         );
                     }
                 }
@@ -289,19 +284,19 @@ class StatementsBlock
                     $expr = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
                     $compiledExpression = $expr->compile($compilationContext);
-                    $compilationContext->codePrinter->output($compiledExpression->getCode().';');
+                    $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
                     break;
 
                 case 'mcall':
                     $methodCall = new MethodCall();
-                    $expr = new Expression($statement['expr']);
+                    $expr       = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
                     $methodCall->compile($expr, $compilationContext);
                     break;
 
                 case 'fcall':
                     $functionCall = new FunctionCall();
-                    $expr = new Expression($statement['expr']);
+                    $expr         = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
                     $compiledExpression = $functionCall->compile($expr, $compilationContext);
                     switch ($compiledExpression->getType()) {
@@ -313,14 +308,14 @@ class StatementsBlock
                         case 'char':
                         case 'uchar':
                         case 'bool':
-                            $compilationContext->codePrinter->output($compiledExpression->getCode().';');
+                            $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
                             break;
                     }
                     break;
 
                 case 'scall':
                     $methodCall = new StaticCall();
-                    $expr = new Expression($statement['expr']);
+                    $expr       = new Expression($statement['expr']);
                     $expr->setExpectReturn(false);
                     $methodCall->compile($expr, $compilationContext);
                     break;
@@ -334,7 +329,7 @@ class StatementsBlock
                     break;
 
                 default:
-                    throw new Exception('Unsupported statement: '.$statement['type']);
+                    throw new Exception('Unsupported statement: ' . $statement['type']);
             }
 
             if ('comment' != $statement['type']) {
@@ -364,36 +359,6 @@ class StatementsBlock
     }
 
     /**
-     * Returns the statements in the block.
-     *
-     * @return array
-     */
-    public function getStatements(): array
-    {
-        return $this->statements;
-    }
-
-    /**
-     * Setter for statements.
-     *
-     * @param array $statements
-     */
-    public function setStatements(array $statements): void
-    {
-        $this->statements = $statements;
-    }
-
-    /**
-     * Returns the type of the last statement executed.
-     *
-     * @return string
-     */
-    public function getLastStatementType()
-    {
-        return $this->lastStatement['type'];
-    }
-
-    /**
      * Returns the last statement executed.
      *
      * @return array|null
@@ -404,13 +369,13 @@ class StatementsBlock
     }
 
     /**
-     * Checks whether the block is empty or not.
+     * Returns the type of the last statement executed.
      *
-     * @return bool
+     * @return string
      */
-    public function isEmpty(): bool
+    public function getLastStatementType()
     {
-        return 0 === \count($this->statements);
+        return $this->lastStatement['type'];
     }
 
     /**
@@ -431,5 +396,49 @@ class StatementsBlock
         }
 
         return $this->mutateGatherer;
+    }
+
+    /**
+     * Returns the statements in the block.
+     *
+     * @return array
+     */
+    public function getStatements(): array
+    {
+        return $this->statements;
+    }
+
+    /**
+     * Checks whether the block is empty or not.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return 0 === count($this->statements);
+    }
+
+    /**
+     * Sets whether the statements block belongs to a loop.
+     *
+     * @param bool $loop
+     *
+     * @return StatementsBlock
+     */
+    public function isLoop(bool $loop): static
+    {
+        $this->loop = $loop;
+
+        return $this;
+    }
+
+    /**
+     * Setter for statements.
+     *
+     * @param array $statements
+     */
+    public function setStatements(array $statements): void
+    {
+        $this->statements = $statements;
     }
 }

@@ -9,7 +9,11 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation;
+
+use function trim;
 
 /**
  * A parsed Annotation
@@ -23,6 +27,11 @@ class Annotation
         $this->string = trim($string);
     }
 
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
     public function getString(): string
     {
         return $this->string;
@@ -31,10 +40,5 @@ class Annotation
     public function setString(string $string): void
     {
         $this->string = $string;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
     }
 }

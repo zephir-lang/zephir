@@ -18,11 +18,11 @@ namespace Zephir\Builder\Operators;
  */
 abstract class AbstractOperatorBuilder
 {
+    protected int $char = 0;
+
     protected ?string $file = null;
 
     protected int $line = 0;
-
-    protected int $char = 0;
 
     /**
      * Returns a builder definition.

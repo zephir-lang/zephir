@@ -21,45 +21,56 @@ use Zephir\Expression;
 use Zephir\LiteralCompiledExpression;
 use Zephir\Variable\Variable;
 
+use function end;
+use function is_numeric;
+use function is_object;
+
 /**
- * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while' statements
+ * Resolves evaluation of expressions returning a C-int expression that can be used by 'if'/'while'/'do-while'
+ * statements
  */
 class EvalExpression
 {
-    protected ?bool $unreachable = null;
+    protected ?bool $unreachable     = null;
     protected ?bool $unreachableElse = null;
-    protected array $usedVariables = [];
+    protected array $usedVariables   = [];
 
     /**
-     * Skips the not operator by recursively optimizing the expression at its right.
+     * Returns the variable evaluated by the EvalExpression.
      *
-     * @param array              $expr
-     * @param CompilationContext $compilationContext
-     *
-     * @return string|null
-     *
-     * @throws Exception
+     * @return Variable
      */
-    public function optimizeNot(array $expr, CompilationContext $compilationContext): ?string
+    public function getEvalVariable()
     {
-        /**
-         * Compile the expression negating the evaluated expression
-         */
-        if ('not' == $expr['type']) {
-            $conditions = $this->optimize($expr['left'], $compilationContext);
-            if (false !== $conditions) {
-                if (null !== $this->unreachable) {
-                    $this->unreachable = !$this->unreachable;
-                }
-                if (null !== $this->unreachableElse) {
-                    $this->unreachableElse = !$this->unreachableElse;
-                }
+        return end($this->usedVariables);
+    }
 
-                return '!('.$conditions.')';
-            }
-        }
+    /**
+     * @return array
+     */
+    public function getUsedVariables(): array
+    {
+        return $this->usedVariables;
+    }
 
-        return null;
+    /**
+     * Checks if the evaluation produce unreachable code.
+     *
+     * @return bool|null
+     */
+    public function isUnreachable(): ?bool
+    {
+        return $this->unreachable;
+    }
+
+    /**
+     * Checks if the evaluation not produce unreachable code.
+     *
+     * @return bool|null
+     */
+    public function isUnreachableElse(): ?bool
+    {
+        return $this->unreachableElse;
     }
 
     /**
@@ -96,8 +107,8 @@ class EvalExpression
         /**
          * Possible corrupted expression?
          */
-        if (!\is_object($compiledExpression)) {
-            throw new CompilerException('Corrupted expression: '.$exprRaw['type'], $exprRaw);
+        if (!is_object($compiledExpression)) {
+            throw new CompilerException('Corrupted expression: ' . $exprRaw['type'], $exprRaw);
         }
 
         /**
@@ -142,9 +153,13 @@ class EvalExpression
                 return $code;
 
             case 'variable':
-                $variableRight = $compilationContext->symbolTable->getVariableForRead($compiledExpression->getCode(), $compilationContext, $exprRaw);
+                $variableRight = $compilationContext->symbolTable->getVariableForRead(
+                    $compiledExpression->getCode(),
+                    $compilationContext,
+                    $exprRaw
+                );
                 $possibleValue = $variableRight->getPossibleValue();
-                if (\is_object($possibleValue)) {
+                if (is_object($possibleValue)) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
                         /**
@@ -166,7 +181,7 @@ class EvalExpression
                                         break;
 
                                     case 'int':
-                                        if (!(int) $possibleValue->getCode()) {
+                                        if (!(int)$possibleValue->getCode()) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -174,7 +189,7 @@ class EvalExpression
                                         break;
 
                                     case 'double':
-                                        if (!(float) $possibleValue->getCode()) {
+                                        if (!(float)$possibleValue->getCode()) {
                                             $this->unreachable = true;
                                         } else {
                                             $this->unreachableElse = true;
@@ -206,59 +221,66 @@ class EvalExpression
                         return $variableRight->getName();
 
                     case 'string':
-                        return '!('.$compilationContext->backend->ifVariableValueUndefined($variableRight, $compilationContext, true, false).')';
+                        return '!('
+                            . $compilationContext->backend->ifVariableValueUndefined(
+                                $variableRight,
+                                $compilationContext,
+                                true,
+                                false
+                            )
+                            . ')';
 
                     case 'variable':
                         $compilationContext->headersManager->add('kernel/operators');
                         $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
 
-                        return 'zephir_is_true('.$variableRightCode.')';
+                        return 'zephir_is_true(' . $variableRightCode . ')';
 
                     default:
-                        throw new CompilerException("Variable can't be evaluated ".$variableRight->getType(), $exprRaw);
+                        throw new CompilerException(
+                            "Variable can't be evaluated " . $variableRight->getType(),
+                            $exprRaw
+                        );
                 }
                 break;
 
             default:
-                throw new CompilerException('Expression '.$compiledExpression->getType()." can't be evaluated", $exprRaw);
+                throw new CompilerException(
+                    'Expression ' . $compiledExpression->getType() . " can't be evaluated",
+                    $exprRaw
+                );
         }
     }
 
     /**
-     * Checks if the evaluation produce unreachable code.
+     * Skips the not operator by recursively optimizing the expression at its right.
      *
-     * @return bool|null
-     */
-    public function isUnreachable(): ?bool
-    {
-        return $this->unreachable;
-    }
-
-    /**
-     * Checks if the evaluation not produce unreachable code.
+     * @param array              $expr
+     * @param CompilationContext $compilationContext
      *
-     * @return bool|null
-     */
-    public function isUnreachableElse(): ?bool
-    {
-        return $this->unreachableElse;
-    }
-
-    /**
-     * Returns the variable evaluated by the EvalExpression.
+     * @return string|null
      *
-     * @return Variable
+     * @throws Exception
      */
-    public function getEvalVariable()
+    public function optimizeNot(array $expr, CompilationContext $compilationContext): ?string
     {
-        return end($this->usedVariables);
-    }
+        /**
+         * Compile the expression negating the evaluated expression
+         */
+        if ('not' == $expr['type']) {
+            $conditions = $this->optimize($expr['left'], $compilationContext);
+            if (false !== $conditions) {
+                if (null !== $this->unreachable) {
+                    $this->unreachable = !$this->unreachable;
+                }
+                if (null !== $this->unreachableElse) {
+                    $this->unreachableElse = !$this->unreachableElse;
+                }
 
-    /**
-     * @return array
-     */
-    public function getUsedVariables(): array
-    {
-        return $this->usedVariables;
+                return '!(' . $conditions . ')';
+            }
+        }
+
+        return null;
     }
 }

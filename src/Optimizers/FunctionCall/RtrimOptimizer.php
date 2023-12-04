@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Optimizers\FunctionCall;
 
@@ -20,5 +20,5 @@ namespace Zephir\Optimizers\FunctionCall;
  */
 class RtrimOptimizer extends TrimOptimizer
 {
-    protected static $TRIM_WHERE = 'ZEPHIR_TRIM_RIGHT';
+    protected string $trimWhere = ', ZEPHIR_TRIM_RIGHT';
 }

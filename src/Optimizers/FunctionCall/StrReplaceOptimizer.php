@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Optimizers\FunctionCall;
 
 use Zephir\Call;
@@ -18,6 +18,8 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+
+use function count;
 
 /**
  * StrReplaceOptimizer.
@@ -41,8 +43,8 @@ class StrReplaceOptimizer extends OptimizerAbstract
             return false;
         }
 
-        if (3 != \count($expression['parameters'])) {
-            if (4 == \count($expression['parameters'])) {
+        if (3 != count($expression['parameters'])) {
+            if (4 == count($expression['parameters'])) {
                 return false;
             }
             throw new CompilerException("'str_replace' only accepts three parameter", $expression);
@@ -54,9 +56,7 @@ class StrReplaceOptimizer extends OptimizerAbstract
         $call->processExpectedReturn($context);
 
         $symbolVariable = $call->getSymbolVariable(true, $context);
-        if ($symbolVariable->isNotVariableAndString()) {
-            throw new CompilerException('Returned values by functions can only be assigned to variant variables', $expression);
-        }
+        $this->checkNotVariableString($symbolVariable, $expression);
 
         $context->headersManager->add('kernel/string');
 
@@ -74,7 +74,9 @@ class StrReplaceOptimizer extends OptimizerAbstract
 
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
-        $context->codePrinter->output('zephir_fast_str_replace('.$symbol.', '.$resolvedParams[0].', '.$resolvedParams[1].', '.$resolvedParams[2].');');
+        $context->codePrinter->output(
+            'zephir_fast_str_replace(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ', ' . $resolvedParams[2] . ');'
+        );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }

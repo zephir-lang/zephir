@@ -13,24 +13,28 @@ declare(strict_types=1);
 
 namespace Zephir\Class\Method;
 
+use ArrayAccess;
+use Countable;
+use Iterator;
 use Zephir\Exception\CompilerException;
+use Zephir\Types\Types;
+
+use function count;
 
 /**
  * Represents the parameters defined in a method.
  */
-class Parameters implements \Countable, \Iterator, \ArrayAccess
+class Parameters implements Countable, Iterator, ArrayAccess
 {
-    private int $position = 0;
-
-    /**
-     * List of Required parameters
-     */
-    private array $requiredParameters = [];
-
     /**
      * List of Optional parameters (with default value)
      */
     private array $optionalParameters = [];
+    private int   $position           = 0;
+    /**
+     * List of Required parameters
+     */
+    private array $requiredParameters = [];
 
     /**
      * @throws CompilerException
@@ -40,12 +44,67 @@ class Parameters implements \Countable, \Iterator, \ArrayAccess
         foreach ($parameters as $parameter) {
             if (isset($parameter['reference']) && $parameter['reference']) {
                 throw new CompilerException(
-                    'Zephir not support reference parameters for now. '.
+                    'Zephir not support reference parameters for now. ' .
                     'Stay tuned for https://github.com/zephir-lang/zephir/issues/203',
                     $parameter
                 );
             }
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function count(): int
+    {
+        return count($this->parameters);
+    }
+
+    public function countOptionalParameters(): int
+    {
+        return count($this->optionalParameters);
+    }
+
+    public function countRequiredParameters(): int
+    {
+        return count($this->requiredParameters);
+    }
+
+    public function current(): mixed
+    {
+        return $this->parameters[$this->position];
+    }
+
+    public function fetchParameters(bool $isMethodInternal): array
+    {
+        $parameters = [];
+
+        foreach ($this->parameters as $parameter) {
+            $name     = $parameter['name'];
+            $dataType = $parameter['data-type'] ?? 'variable';
+
+            $parameters[] = match ($dataType) {
+                Types::T_OBJECT,
+                Types::T_CALLABLE,
+                Types::T_RESOURCE,
+                Types::T_VARIABLE,
+                Types::T_MIXED => $isMethodInternal ? $name : '&' . $name,
+                default        => ($isMethodInternal ? $name : '&' . $name) . '_param',
+            };
+
+            if (isset($parameter['default'])) {
+                $this->optionalParameters[] = $parameter;
+            } else {
+                $this->requiredParameters[] = $parameter;
+            }
+        }
+
+        return $parameters;
+    }
+
+    public function getOptionalParameters(): array
+    {
+        return $this->optionalParameters;
     }
 
     /**
@@ -61,21 +120,6 @@ class Parameters implements \Countable, \Iterator, \ArrayAccess
         return $this->requiredParameters;
     }
 
-    public function countRequiredParameters(): int
-    {
-        return \count($this->requiredParameters);
-    }
-
-    public function getOptionalParameters(): array
-    {
-        return $this->optionalParameters;
-    }
-
-    public function countOptionalParameters(): int
-    {
-        return \count($this->optionalParameters);
-    }
-
     public function hasNullableParameters(): bool
     {
         foreach ($this->optionalParameters as $parameter) {
@@ -87,64 +131,9 @@ class Parameters implements \Countable, \Iterator, \ArrayAccess
         return false;
     }
 
-    public function fetchParameters(bool $isMethodInternal): array
-    {
-        $parameters = [];
-
-        foreach ($this->parameters as $parameter) {
-            $name = $parameter['name'];
-            $dataType = $parameter['data-type'] ?? 'variable';
-
-            switch ($dataType) {
-                case 'object':
-                case 'callable':
-                case 'resource':
-                case 'variable':
-                case 'mixed':
-                    $parameters[] = $isMethodInternal ? $name : '&'.$name;
-                    break;
-
-                default:
-                    $parameters[] = ($isMethodInternal ? $name : '&'.$name).'_param';
-                    break;
-            }
-
-            if (isset($parameter['default'])) {
-                $this->optionalParameters[] = $parameter;
-            } else {
-                $this->requiredParameters[] = $parameter;
-            }
-        }
-
-        return $parameters;
-    }
-
-    /**
-     * @return int
-     */
-    public function count(): int
-    {
-        return \count($this->parameters);
-    }
-
-    public function rewind(): void
-    {
-        $this->position = 0;
-    }
-
     public function key(): int
     {
         return $this->position;
-    }
-
-    public function valid(): bool
-    {
-        return isset($this->parameters[$this->position]);
-    }
-
-    public function current(): mixed
-    {
-        return $this->parameters[$this->position];
     }
 
     public function next(): void
@@ -170,5 +159,15 @@ class Parameters implements \Countable, \Iterator, \ArrayAccess
     public function offsetUnset(mixed $offset): void
     {
         unset($this->parameters[$offset]);
+    }
+
+    public function rewind(): void
+    {
+        $this->position = 0;
+    }
+
+    public function valid(): bool
+    {
+        return isset($this->parameters[$this->position]);
     }
 }

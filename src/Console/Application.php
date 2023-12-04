@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Console;
 
+use Exception;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\HelpCommand;
@@ -27,8 +28,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Throwable;
 use Zephir\Console\Command\ListCommand;
 use Zephir\Zephir;
+
+use function explode;
+use function fprintf;
+use function implode;
+use function sprintf;
+use function strtolower;
+use function trim;
+
+use const PHP_EOL;
+use const STDERR;
 
 final class Application extends BaseApplication
 {
@@ -45,71 +57,12 @@ final class Application extends BaseApplication
     /**
      * {@inheritdoc}
      *
-     * @return string
-     */
-    public function getHelp(): string
-    {
-        return Zephir::LOGO.parent::getHelp();
-    }
-
-    /**
-     * Get Version Number
-     *
-     * @return string The application version
-     */
-    public function getVerNum(): string
-    {
-        $version = explode('-', parent::getVersion());
-        $version = explode('.', $version[0]);
-
-        return $version[0].sprintf('%02s', $version[1]).sprintf('%02s', $version[2]);
-    }
-
-    /**
-     * Gets the application version as integer.
-     *
-     * @return string The application version
-     */
-    public function getVersion(): string
-    {
-        $version = explode('-', parent::getVersion());
-
-        if (isset($version[1]) && str_starts_with($version[1], '$')) {
-            return "{$version[0]}-source";
-        }
-
-        return implode('-', $version);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return string The long application version
-     */
-    public function getLongVersion(): string
-    {
-        $version = explode('-', $this->getVersion());
-        $commit = "({$version[1]})";
-
-        return trim(
-            sprintf(
-                '%s <info>%s</info> by <comment>Andres Gutierrez</comment> and <comment>Serghei Iakovlev</comment> %s',
-                $this->getName(),
-                $version[0],
-                $commit
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int
      *
-     * @throws \Exception|\Throwable
+     * @throws Exception|Throwable
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
@@ -133,7 +86,7 @@ final class Application extends BaseApplication
         }
 
         $wantsHelp = false;
-        $name = $this->getCommandName($input);
+        $name      = $this->getCommandName($input);
 
         if ($name && 'help' == strtolower($name) && 2 == $_SERVER['argc']) {
             $wantsHelp = true;
@@ -150,10 +103,70 @@ final class Application extends BaseApplication
         try {
             return parent::doRun($input, $output);
         } catch (CommandNotFoundException | RuntimeException $e) {
-            fprintf(STDERR, $e->getMessage().PHP_EOL);
+            fprintf(STDERR, $e->getMessage() . PHP_EOL);
 
             return 1;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getHelp(): string
+    {
+        return Zephir::LOGO . parent::getHelp();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string The long application version
+     */
+    public function getLongVersion(): string
+    {
+        $version = explode('-', $this->getVersion());
+        $commit  = "({$version[1]})";
+
+        return trim(
+            sprintf(
+                '%s <info>%s</info> by the <comment>Phalcon Team</comment>' . PHP_EOL .
+                'Thanks to the work by: <comment>Andres Gutierrez</comment> and <comment>Serghei Iakovlev</comment> %s',
+                $this->getName(),
+                $version[0],
+                $commit
+            )
+        );
+    }
+
+    /**
+     * Get Version Number
+     *
+     * @return string The application version
+     */
+    public function getVerNum(): string
+    {
+        $version = explode('-', parent::getVersion());
+        $version = explode('.', $version[0]);
+
+        return $version[0] . sprintf('%02s', $version[1]) . sprintf('%02s', $version[2]);
+    }
+
+    /**
+     * Gets the application version as integer.
+     *
+     * @return string The application version
+     */
+    public function getVersion(): string
+    {
+        $version = explode('-', parent::getVersion());
+
+        if (isset($version[1]) && str_starts_with($version[1], '$')) {
+            return "{$version[0]}-source";
+        }
+
+        return implode('-', $version);
     }
 
     /**
@@ -188,7 +201,7 @@ final class Application extends BaseApplication
                 '--verbose',
                 '-v',
                 InputOption::VALUE_NONE,
-                'Displays more detail in error messages from exceptions generated by commands '.
+                'Displays more detail in error messages from exceptions generated by commands ' .
                 '(can also disable with -V)'
             ),
             new InputOption(

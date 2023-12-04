@@ -17,18 +17,14 @@ use Zephir\Exception\IllegalStateException;
 use Zephir\Exception\InvalidArgumentException;
 use Zephir\Exception\ParseException;
 
+use function file_get_contents;
+use function function_exists;
+use function is_file;
+use function is_readable;
+use function phpversion;
+
 class Parser
 {
-    /**
-     * Check if Zephir Parser available.
-     *
-     * @return bool
-     */
-    public function isAvailable(): bool
-    {
-        return \function_exists('zephir_parse_file');
-    }
-
     /**
      * Gets Zephir Parser version.
      *
@@ -37,6 +33,16 @@ class Parser
     public function getVersion(): ?string
     {
         return phpversion('zephir_parser') ?: null;
+    }
+
+    /**
+     * Check if Zephir Parser available.
+     *
+     * @return bool
+     */
+    public function isAvailable(): bool
+    {
+        return function_exists('zephir_parse_file');
     }
 
     /**

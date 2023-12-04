@@ -9,33 +9,29 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation\File;
 
 use Zephir\Documentation\FileInterface;
 
+use function rtrim;
+
+use const DIRECTORY_SEPARATOR;
+
 class Sitemap implements FileInterface
 {
+    protected $baseUrl;
     protected $classes;
     protected $namespaces;
-    protected $baseUrl;
     private $baseDir;
 
     public function __construct($baseDir, $baseUrl, $classList, $namespaceList)
     {
-        $this->classes = $classList;
+        $this->classes    = $classList;
         $this->namespaces = $namespaceList;
-        $this->baseUrl = rtrim($baseUrl, '\\/').\DIRECTORY_SEPARATOR;
-        $this->baseDir = $baseDir;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
-    public function getTemplateName(): string
-    {
-        return $this->baseDir.'/Api/sitemap.php';
+        $this->baseUrl    = rtrim($baseUrl, '\\/') . DIRECTORY_SEPARATOR;
+        $this->baseDir    = $baseDir;
     }
 
     /**
@@ -46,9 +42,9 @@ class Sitemap implements FileInterface
     public function getData(): array
     {
         return [
-            'classes' => $this->classes,
+            'classes'    => $this->classes,
             'namespaces' => $this->namespaces,
-            'baseUrl' => $this->baseUrl,
+            'baseUrl'    => $this->baseUrl,
         ];
     }
 
@@ -60,5 +56,15 @@ class Sitemap implements FileInterface
     public function getOutputFile(): string
     {
         return 'sitemap.xml';
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getTemplateName(): string
+    {
+        return $this->baseDir . '/Api/sitemap.php';
     }
 }

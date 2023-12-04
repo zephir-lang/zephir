@@ -9,56 +9,47 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Zephir\Documentation;
+
+use Zephir\CompilerFile;
+
+use function explode;
 
 class NamespaceAccessor
 {
+    protected $byNamespace;
     /**
-     * @var \Zephir\CompilerFile[]
+     * @var CompilerFile[]
      */
     protected $classes;
-
     protected $namespaceTree;
 
-    protected $byNamespace;
-
     /**
-     * @param \Zephir\CompilerFile[] $files
+     * @param CompilerFile[] $files
      */
     public function __construct($files)
     {
         $this->classes = $files;
     }
 
-    /**
-     * @return NamespaceHelper[]
-     */
-    public function getByNamespace()
-    {
-        return $this->byNamespace;
-    }
-
-    public function getNamespaceTree()
-    {
-        return $this->namespaceTree;
-    }
-
     public function build(): void
     {
         $byNamespace = [];
-        $tree = [];
+        $tree        = [];
 
         foreach ($this->classes as $class) {
-            $ns = explode('\\', $class->getClassDefinition()->getNamespace());
+            $ns        = explode('\\', $class->getClassDefinition()->getNamespace());
             $actualStr = '';
             foreach ($ns as $n) {
                 if ($actualStr !== '') {
-                    $previous = $byNamespace[$actualStr];
+                    $previous  = $byNamespace[$actualStr];
                     $actualStr .= '\\';
-                    $isRoot = false;
+                    $isRoot    = false;
                 } else {
                     $previous = null;
-                    $isRoot = true;
+                    $isRoot   = true;
                 }
                 $actualStr .= $n;
 
@@ -82,7 +73,20 @@ class NamespaceAccessor
             $nh->addClass($class);
         }
 
-        $this->byNamespace = $byNamespace;
+        $this->byNamespace   = $byNamespace;
         $this->namespaceTree = $tree;
+    }
+
+    /**
+     * @return NamespaceHelper[]
+     */
+    public function getByNamespace()
+    {
+        return $this->byNamespace;
+    }
+
+    public function getNamespaceTree()
+    {
+        return $this->namespaceTree;
     }
 }

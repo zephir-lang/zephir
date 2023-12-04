@@ -17,6 +17,8 @@ use Zephir\CompilationContext;
 use Zephir\FunctionCall;
 use Zephir\StatementsBlock;
 
+use const PHP_EOL;
+
 /**
  * This pass counts how many times the same function is called inside a
  * statements block. It also counts how many times a method is calling
@@ -80,24 +82,6 @@ class CallGathererPass
         $this->passStatementBlock($block->getStatements());
     }
 
-    public function passLetStatement(array $statement): void
-    {
-        foreach ($statement['assignments'] as $assignment) {
-            if (isset($assignment['expr'])) {
-                $this->passExpression($assignment['expr']);
-            }
-        }
-    }
-
-    public function passCall(array $expression): void
-    {
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $this->passExpression($parameter['parameter']);
-            }
-        }
-    }
-
     public function passArray(array $expression): void
     {
         foreach ($expression['left'] as $item) {
@@ -105,25 +89,7 @@ class CallGathererPass
         }
     }
 
-    public function passNew(array $expression): void
-    {
-        if (!$expression['dynamic']) {
-            $className = $this->compilationContext->getFullName($expression['class']);
-            if (!isset($this->methodCalls[$className]['__construct'])) {
-                $this->methodCalls[$className]['__construct'] = 1;
-            } else {
-                ++$this->methodCalls[$className]['__construct'];
-            }
-        }
-
-        if (isset($expression['parameters'])) {
-            foreach ($expression['parameters'] as $parameter) {
-                $this->passExpression($parameter['parameter']);
-            }
-        }
-    }
-
-    public function passNewType(array $expression): void
+    public function passCall(array $expression): void
     {
         if (isset($expression['parameters'])) {
             foreach ($expression['parameters'] as $parameter) {
@@ -141,34 +107,29 @@ class CallGathererPass
             case 'uint':
             case 'long':
             case 'ulong':
+            case 'string':
+            case 'istring':
             case 'null':
             case 'char':
             case 'uchar':
-            case 'string':
-            case 'istring':
-            case 'static-constant-access':
+            case 'empty-array':
             case 'variable':
             case 'constant':
-            case 'empty-array':
+            case 'static-constant-access':
             case 'closure':
             case 'closure-arrow':
             case 'reference':
             case 'short-ternary':
                 break;
 
-            case 'div':
-            case 'mod':
             case 'sub':
             case 'add':
+            case 'div':
             case 'mul':
-            case 'bitwise_and':
-            case 'bitwise_or':
-            case 'bitwise_xor':
-            case 'bitwise_shiftleft':
-            case 'bitwise_shiftright':
-            case 'concat':
+            case 'mod':
             case 'and':
             case 'or':
+            case 'concat':
             case 'equals':
             case 'identical':
             case 'not-identical':
@@ -177,6 +138,11 @@ class CallGathererPass
             case 'greater':
             case 'greater-equal':
             case 'less-equal':
+            case 'bitwise_and':
+            case 'bitwise_or':
+            case 'bitwise_xor':
+            case 'bitwise_shiftleft':
+            case 'bitwise_shiftright':
             case 'irange':
             case 'erange':
                 $this->passExpression($expression['left']);
@@ -208,7 +174,7 @@ class CallGathererPass
                 if (isset($expression['variable']['value'])) {
                     if ('this' == $expression['variable']['value']) {
                         $methodName = $expression['name'];
-                        $className = $this->compilationContext->classDefinition->getCompleteName();
+                        $className  = $this->compilationContext->classDefinition->getCompleteName();
                         if (!isset($this->methodCalls[$className][$methodName])) {
                             $this->methodCalls[$className][$methodName] = 1;
                         } else {
@@ -258,6 +224,52 @@ class CallGathererPass
             default:
                 echo 'CGP=', $expression['type'], PHP_EOL;
                 break;
+        }
+    }
+
+    /**
+     * Pass let statements.
+     *
+     * @param array $statement
+     */
+    public function passLetStatement(array $statement): void
+    {
+        foreach ($statement['assignments'] as $assignment) {
+            if (isset($assignment['expr'])) {
+                $this->passExpression($assignment['expr']);
+            }
+        }
+    }
+
+    /**
+     * Pass "new" expressions.
+     *
+     * @param array $expression
+     */
+    public function passNew(array $expression): void
+    {
+        if (!$expression['dynamic']) {
+            $className = $this->compilationContext->getFullName($expression['class']);
+            if (!isset($this->methodCalls[$className]['__construct'])) {
+                $this->methodCalls[$className]['__construct'] = 1;
+            } else {
+                ++$this->methodCalls[$className]['__construct'];
+            }
+        }
+
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
+        }
+    }
+
+    public function passNewType(array $expression): void
+    {
+        if (isset($expression['parameters'])) {
+            foreach ($expression['parameters'] as $parameter) {
+                $this->passExpression($parameter['parameter']);
+            }
         }
     }
 
