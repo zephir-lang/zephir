@@ -27,7 +27,7 @@ use function sprintf;
 /**
  * Updates static properties
  */
-class StaticProperty
+class StaticProperty extends StaticPropertySub
 {
     use VariablesTrait;
 
