@@ -162,15 +162,15 @@ class MutateGathererPass
                 $this->passExpression($expression['right']);
                 break;
 
-            case 'typeof':
             case 'minus':
-            case 'list':
-            case 'array-access':
+            case 'not':
             case 'static-property-access':
+            case 'array-access':
             case 'property-string-access':
             case 'property-dynamic-access':
             case 'property-access':
-            case 'not':
+            case 'list':
+            case 'typeof':
                 $this->passExpression($expression['left']);
                 break;
 

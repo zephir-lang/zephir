@@ -18,6 +18,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
 
 use function count;
 
@@ -28,6 +29,8 @@ use function count;
  */
 class UniqueKeyOptimizer extends OptimizerAbstract
 {
+    protected string $zephirMethod = 'zephir_unique_key';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -46,8 +49,32 @@ class UniqueKeyOptimizer extends OptimizerAbstract
         if (2 != count($expression['parameters'])) {
             throw new CompilerException("'unique_key' only accepts two parameter", $expression);
         }
+        return $this->processOptimizer($call, $context, $expression);
+    }
 
-        /*
+    /**
+     * @param CompilationContext             $context
+     * @param Variable|null $symbolVariable
+     *
+     * @return void
+     */
+    protected function setHeaders(CompilationContext $context, ?Variable $symbolVariable): void
+    {
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('string');
+    }
+
+    /**
+     * @param Call               $call
+     * @param CompilationContext $context
+     * @param array              $expression
+     *
+     * @return CompiledExpression
+     * @throws \Zephir\Exception
+     */
+    protected function processOptimizer(Call $call, CompilationContext $context, array $expression): CompiledExpression
+    {
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -55,17 +82,15 @@ class UniqueKeyOptimizer extends OptimizerAbstract
         $symbolVariable = $call->getSymbolVariable(true, $context);
         $this->checkNotVariableString($symbolVariable, $expression);
 
-        $context->headersManager->add('kernel/string');
-
-        $symbolVariable->setDynamicTypes('string');
+        $this->setHeaders($context, $symbolVariable);
 
         $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
         $this->checkInitSymbolVariable($call, $symbolVariable, $context);
 
-
         $symbol = $context->backend->getVariableCode($symbolVariable);
         $context->codePrinter->output(
-            'zephir_unique_key(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
+            $this->zephirMethod
+            . '(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

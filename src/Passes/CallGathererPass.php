@@ -107,34 +107,29 @@ class CallGathererPass
             case 'uint':
             case 'long':
             case 'ulong':
+            case 'string':
+            case 'istring':
             case 'null':
             case 'char':
             case 'uchar':
-            case 'string':
-            case 'istring':
-            case 'static-constant-access':
+            case 'empty-array':
             case 'variable':
             case 'constant':
-            case 'empty-array':
+            case 'static-constant-access':
             case 'closure':
             case 'closure-arrow':
             case 'reference':
             case 'short-ternary':
                 break;
 
-            case 'div':
-            case 'mod':
             case 'sub':
             case 'add':
+            case 'div':
             case 'mul':
-            case 'bitwise_and':
-            case 'bitwise_or':
-            case 'bitwise_xor':
-            case 'bitwise_shiftleft':
-            case 'bitwise_shiftright':
-            case 'concat':
+            case 'mod':
             case 'and':
             case 'or':
+            case 'concat':
             case 'equals':
             case 'identical':
             case 'not-identical':
@@ -143,6 +138,11 @@ class CallGathererPass
             case 'greater':
             case 'greater-equal':
             case 'less-equal':
+            case 'bitwise_and':
+            case 'bitwise_or':
+            case 'bitwise_xor':
+            case 'bitwise_shiftleft':
+            case 'bitwise_shiftright':
             case 'irange':
             case 'erange':
                 $this->passExpression($expression['left']);
@@ -227,6 +227,11 @@ class CallGathererPass
         }
     }
 
+    /**
+     * Pass let statements.
+     *
+     * @param array $statement
+     */
     public function passLetStatement(array $statement): void
     {
         foreach ($statement['assignments'] as $assignment) {
@@ -236,6 +241,11 @@ class CallGathererPass
         }
     }
 
+    /**
+     * Pass "new" expressions.
+     *
+     * @param array $expression
+     */
     public function passNew(array $expression): void
     {
         if (!$expression['dynamic']) {

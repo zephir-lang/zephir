@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Statements\LetStatement;
@@ -28,22 +29,25 @@ class ExportSymbol
     /**
      * Compiles {var} = {expr}.
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext ,
-     * @param array              $statement
+     * @param string                  $variable
+     * @param ZephirVariable|null     $symbolVariable
+     * @param CompiledExpression|null $resolvedExpr
+     * @param CompilationContext|null $compilationContext ,
+     * @param array|null              $statement
      */
     public function assign(
         $variable,
-        ZephirVariable $symbolVariable,
-        CompiledExpression $resolvedExpr,
-        CompilationContext $compilationContext,
-        $statement
+        ZephirVariable $symbolVariable = null,
+        CompiledExpression $resolvedExpr = null,
+        CompilationContext $compilationContext = null,
+        $statement = null
     ): void {
         $codePrinter = $compilationContext->codePrinter;
 
-        $variable = $compilationContext->symbolTable->getTempVariable('variable', $compilationContext, $statement);
+        $variable = $compilationContext->symbolTable->getTempVariable(
+            'variable',
+            $compilationContext
+        );
         $variable->setMustInitNull(true);
 
         $letStatement = new LetStatement([
@@ -68,6 +72,31 @@ class ExportSymbol
         ]);
         $letStatement->compile($compilationContext);
 
+        $this->getOutput(
+            $compilationContext,
+            $symbolVariable,
+            $variable,
+            $codePrinter,
+            $statement
+        );
+    }
+
+    /**
+     * @param CompilationContext|null   $compilationContext
+     * @param ZephirVariable|null       $symbolVariable
+     * @param ZephirVariable            $variable
+     * @param Printer|null              $codePrinter
+     * @param array|null                $statement
+     *
+     * @return void
+     */
+    protected function getOutput(
+        ?CompilationContext $compilationContext,
+        ?ZephirVariable $symbolVariable,
+        ZephirVariable $variable,
+        ?Printer $codePrinter,
+        ?array $statement
+    ): void {
         $symbol   = $compilationContext->backend->getVariableCode($symbolVariable);
         $variable = $compilationContext->backend->getVariableCode($variable);
 

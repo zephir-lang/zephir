@@ -17,7 +17,7 @@ use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Optimizers\OptimizerAbstract;
+use Zephir\Variable\Variable;
 
 use function count;
 
@@ -26,8 +26,10 @@ use function count;
  *
  * Optimizes calls to 'pow' using internal function
  */
-class PowOptimizer extends OptimizerAbstract
+class PowOptimizer extends UniqueKeyOptimizer
 {
+    protected string $zephirMethod = 'zephir_pow_function';
+
     /**
      * @param array              $expression
      * @param Call               $call
@@ -46,26 +48,17 @@ class PowOptimizer extends OptimizerAbstract
         if (2 != count($expression['parameters'])) {
             return false;
         }
+    }
 
-        /*
-         * Process the expected symbol to be returned
-         */
-        $call->processExpectedReturn($context);
-
-        $symbolVariable = $call->getSymbolVariable(true, $context);
-        $this->checkNotVariableString($symbolVariable, $expression);
-
+    /**
+     * @param CompilationContext             $context
+     * @param Variable|null $symbolVariable
+     *
+     * @return void
+     */
+    protected function setHeaders(CompilationContext $context, ?Variable $symbolVariable): void
+    {
         $context->headersManager->add('kernel/operators');
         $symbolVariable->setDynamicTypes('variable');
-        $resolvedParams = $call->getReadOnlyResolvedParams($expression['parameters'], $context, $expression);
-
-        $this->checkInitSymbolVariable($call, $symbolVariable, $context);
-
-        $symbol = $context->backend->getVariableCode($symbolVariable);
-        $context->codePrinter->output(
-            'zephir_pow_function(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $resolvedParams[1] . ');'
-        );
-
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 }

@@ -530,58 +530,30 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getCode() . ';');
-                        break;
+                $operator = match ($statement['operator']) {
+                    'assign'     => ' = ',
+                    'add-assign' => ' += ',
+                    'sub-assign' => ' -= ',
+                    'mul-assign' => ' *= ',
+                    'div-assign' => ' /= ',
+                    'mod-assign' => ' %= ',
+                    default => throw new IllegalOperationException($statement, $resolvedExpr)
+                };
 
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'div-assign':
-                        $codePrinter->output($variable . ' /= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    case 'mod-assign':
-                        $codePrinter->output($variable . ' %= ' . $resolvedExpr->getCode() . ';');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $codePrinter->output($variable . $operator . $resolvedExpr->getCode() . ';');
                 break;
 
             case 'char':
             case 'uchar':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = \'' . $resolvedExpr->getCode() . '\';');
-                        break;
+                $operator = match ($statement['operator']) {
+                    'assign'     => ' = ',
+                    'add-assign' => ' += ',
+                    'sub-assign' => ' -= ',
+                    'mul-assign' => ' *= ',
+                    default => throw new IllegalOperationException($statement, $resolvedExpr)
+                };
 
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += \'' . $resolvedExpr->getCode() . '\';');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= \'' . $resolvedExpr->getCode() . '\';');
-                        break;
-
-                    case 'mul-assign':
-                        $codePrinter->output($variable . ' *= \'' . $resolvedExpr->getCode() . '\';');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $codePrinter->output($variable . $operator . '\'' . $resolvedExpr->getCode() . '\';');
                 break;
 
             case 'double':
@@ -595,22 +567,14 @@ class Variable
                 break;
 
             case 'bool':
-                switch ($statement['operator']) {
-                    case 'assign':
-                        $codePrinter->output($variable . ' = ' . $resolvedExpr->getBooleanCode() . ';');
-                        break;
+                $operator = match ($statement['operator']) {
+                    'assign'     => ' = ',
+                    'add-assign' => ' += ',
+                    'sub-assign' => ' -= ',
+                    default      => throw new IllegalOperationException($statement, $resolvedExpr)
+                };
 
-                    case 'add-assign':
-                        $codePrinter->output($variable . ' += ' . $resolvedExpr->getBooleanCode() . ';');
-                        break;
-
-                    case 'sub-assign':
-                        $codePrinter->output($variable . ' -= ' . $resolvedExpr->getBooleanCode() . ';');
-                        break;
-
-                    default:
-                        throw new IllegalOperationException($statement, $resolvedExpr);
-                }
+                $codePrinter->output($variable . $operator . $resolvedExpr->getBooleanCode() . ';');
                 break;
 
             case 'variable':
@@ -627,34 +591,17 @@ class Variable
                     case 'bool':
                     case 'char':
                     case 'uchar':
-                        switch ($statement['operator']) {
-                            case 'assign':
-                                $codePrinter->output($variable . ' = ' . $itemVariable->getName() . ';');
-                                break;
+                        $operator = match ($statement['operator']) {
+                            'assign' => ' = ',
+                            'add-assign' => ' += ',
+                            'sub-assign' => ' -= ',
+                            'mul-assign' => ' *= ',
+                            'div-assign' => ' /= ',
+                            'mod-assign' => ' %= ',
+                            default => throw new IllegalOperationException($statement, $itemVariable)
+                        };
 
-                            case 'add-assign':
-                                $codePrinter->output($variable . ' += ' . $itemVariable->getName() . ';');
-                                break;
-
-                            case 'sub-assign':
-                                $codePrinter->output($variable . ' -= ' . $itemVariable->getName() . ';');
-                                break;
-
-                            case 'mul-assign':
-                                $codePrinter->output($variable . ' *= ' . $itemVariable->getName() . ';');
-                                break;
-
-                            case 'div-assign':
-                                $codePrinter->output($variable . ' /= ' . $itemVariable->getName() . ';');
-                                break;
-
-                            case 'mod-assign':
-                                $codePrinter->output($variable . ' %= ' . $itemVariable->getName() . ';');
-                                break;
-
-                            default:
-                                throw new IllegalOperationException($statement, $itemVariable);
-                        }
+                        $codePrinter->output($variable . $operator . $itemVariable->getName() . ';');
                         break;
 
                     case 'double':
