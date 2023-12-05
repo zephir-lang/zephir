@@ -19,6 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Traits\VariablesTrait;
+
 use Zephir\Variable\Variable;
 
 use function sprintf;
