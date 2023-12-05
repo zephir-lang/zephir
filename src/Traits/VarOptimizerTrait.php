@@ -21,15 +21,15 @@ use Zephir\Variable\Variable;
 trait VarOptimizerTrait
 {
     /**
-     * @param Variable|null $symbolVariable
-     * @param mixed                          $resolvedParam
-     * @param CompilationContext             $context
-     * @param array                          $expression
+     * @param Variable|bool      $symbolVariable
+     * @param mixed              $resolvedParam
+     * @param CompilationContext $context
+     * @param array              $expression
      *
      * @return bool|Variable
      */
     private function processVariable(
-        ?Variable $symbolVariable,
+        Variable|bool $symbolVariable,
         mixed $resolvedParam,
         CompilationContext $context,
         array $expression
