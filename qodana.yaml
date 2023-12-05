@@ -18,7 +18,7 @@ profile:
 #      - <path/where/not/run/inspection>
 
 php:
-  version: 8.0 #(Applied in CI/CD pipeline)
+  version: '8.0' #(Applied in CI/CD pipeline)
 
 #Execute shell command before Qodana execution (Applied in CI/CD pipeline)
 #bootstrap: sh ./prepare-qodana.sh
