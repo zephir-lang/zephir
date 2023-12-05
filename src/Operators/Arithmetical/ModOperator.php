@@ -500,10 +500,10 @@ class ModOperator extends ArithmeticalBaseOperator
                                             return new CompiledExpression(
                                                 'double',
                                                 'zephir_safe_mod_double_zval('
-						. $variableLeft->getName()
-						. ', '
-						. $variableRight->getName()
-						. ')',
+                                                . $variableLeft->getName()
+                                                . ', '
+                                                . $variableRight->getName()
+                                                . ')',
                                                 $expression
                                             );
                                         }

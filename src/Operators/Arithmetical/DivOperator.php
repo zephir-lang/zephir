@@ -485,10 +485,10 @@ class DivOperator extends ArithmeticalBaseOperator
                                         return new CompiledExpression(
                                             'double',
                                             'zephir_safe_div_double_zval('
-					    . $variableLeft->getName()
-					    . ', '
-					    . $symbolRight
-					    . ')',
+                                            . $variableLeft->getName()
+                                            . ', '
+                                            . $symbolRight
+                                            . ')',
                                             $expression
                                         );
 
