@@ -19,6 +19,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Variable\Variable;
 
 use function sprintf;
 
@@ -167,10 +168,10 @@ class StaticPropertySub
                 break;
 
             case 'string':
-                $tempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
-                    'variable',
+                $tempVariable = $this->processStringType(
+                    $resolvedExpr,
                     $compilationContext,
-                    true
+                    $statement
                 );
                 $tempVariable->initVariant($compilationContext);
 
@@ -277,6 +278,11 @@ class StaticPropertySub
                     case 'ulong':
                     case 'char':
                     case 'uchar':
+                        $this->processVariableIntType(
+                            $statement,
+                            $variableVariable
+                        );
+
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
                             'variable',
                             $compilationContext,
@@ -297,6 +303,11 @@ class StaticPropertySub
                         break;
 
                     case 'double':
+                        $this->processVariableDoubleType(
+                            $statement,
+                            $variableVariable
+                        );
+
                         $tempVariable = $compilationContext->symbolTable->getTempNonTrackedVariable(
                             'variable',
                             $compilationContext,
@@ -338,15 +349,13 @@ class StaticPropertySub
                         }
                         break;
                     default:
-                        $compilationContext->backend->$method(
+                        $this->processDefaultType(
+                            $compilationContext,
+                            $statement,
                             $classEntry,
                             $property,
-                            $variableVariable,
-                            $compilationContext
+                            $variableVariable
                         );
-                        if ($variableVariable->isTemporal()) {
-                            $variableVariable->setIdle(true);
-                        }
                         break;
                 }
 
@@ -355,5 +364,79 @@ class StaticPropertySub
             default:
                 throw new CompilerException('Unknown type ' . $resolvedExpr->getType(), $statement);
         }
+    }
+
+    /**
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     * @param string             $classEntry
+     * @param string             $property
+     * @param Variable           $variableVariable
+     *
+     * @return void
+     */
+    protected function processDefaultType(
+        CompilationContext $compilationContext,
+        array $statement,
+        string $classEntry,
+        string $property,
+        Variable $variableVariable
+    ): void {
+        $method = $this->methodName;
+        $compilationContext->backend->$method(
+            $classEntry,
+            $property,
+            $variableVariable,
+            $compilationContext
+        );
+        if ($variableVariable->isTemporal()) {
+            $variableVariable->setIdle(true);
+        }
+    }
+
+
+    /**
+     * @param array    $statement
+     * @param Variable $variableVariable
+     *
+     * @return void
+     */
+    protected function processVariableDoubleType(
+        array $statement,
+        Variable $variableVariable
+    ): void {
+        // Nothing
+    }
+
+    /**
+     * @param CompiledExpression $resolvedExpr
+     * @param CompilationContext $compilationContext
+     * @param array              $statement
+     *
+     * @return Variable
+     */
+    protected function processStringType(
+        CompiledExpression $resolvedExpr,
+        CompilationContext $compilationContext,
+        array $statement
+    ): Variable {
+        return $compilationContext->symbolTable->getTempVariableForWrite(
+            'variable',
+            $compilationContext
+        );
+    }
+
+
+    /**
+     * @param array    $statement
+     * @param Variable $variableVariable
+     *
+     * @return void
+     */
+    protected function processVariableIntType(
+        array $statement,
+        Variable $variableVariable
+    ): void {
+        // Nothing
     }
 }
