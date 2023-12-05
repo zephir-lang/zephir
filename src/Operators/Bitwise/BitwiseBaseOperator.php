@@ -614,7 +614,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
 

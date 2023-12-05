@@ -16,8 +16,6 @@ namespace Zephir\Operators\Arithmetical;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception\CompilerException;
-use Zephir\Expression;
-use Zephir\Types\Types;
 
 /**
  * Generates an arithmetical operation according to the operands
@@ -398,7 +396,7 @@ class DivOperator extends ArithmeticalBaseOperator
                                                 'zephir_safe_div_long_zval('
                                                 . $variableLeft->getName()
                                                 . ', '
-                                                . variableRightCode
+                                                . $variableRightCode
                                                 . ')',
                                                 $expression
                                             );

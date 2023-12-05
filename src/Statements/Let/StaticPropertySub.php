@@ -394,20 +394,6 @@ class StaticPropertySub
         }
     }
 
-
-    /**
-     * @param array    $statement
-     * @param Variable $variableVariable
-     *
-     * @return void
-     */
-    protected function processVariableDoubleType(
-        array $statement,
-        Variable $variableVariable
-    ): void {
-        // Nothing
-    }
-
     /**
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
@@ -426,6 +412,18 @@ class StaticPropertySub
         );
     }
 
+    /**
+     * @param array    $statement
+     * @param Variable $variableVariable
+     *
+     * @return void
+     */
+    protected function processVariableDoubleType(
+        array $statement,
+        Variable $variableVariable
+    ): void {
+        // Nothing
+    }
 
     /**
      * @param array    $statement

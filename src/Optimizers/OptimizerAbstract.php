@@ -34,6 +34,23 @@ abstract class OptimizerAbstract
 
     /**
      * @param Call               $call
+     * @param Variable|null      $symbolVariable
+     * @param CompilationContext $context
+     *
+     * @return void
+     */
+    protected function checkInitSymbolVariable(
+        Call $call,
+        ?Variable $symbolVariable,
+        CompilationContext $context
+    ): void {
+        if ($call->mustInitSymbolVariable()) {
+            $symbolVariable->initVariant($context);
+        }
+    }
+
+    /**
+     * @param Call               $call
      * @param CompilationContext $context
      * @param array              $expression
      *
@@ -64,22 +81,5 @@ abstract class OptimizerAbstract
         $symbol = $context->backend->getVariableCode($symbolVariable);
 
         return [$symbolVariable, $resolvedParams, $symbol];
-    }
-
-    /**
-     * @param Call               $call
-     * @param Variable|null      $symbolVariable
-     * @param CompilationContext $context
-     *
-     * @return void
-     */
-    protected function checkInitSymbolVariable(
-        Call $call,
-        ?Variable $symbolVariable,
-        CompilationContext $context
-    ): void {
-        if ($call->mustInitSymbolVariable()) {
-            $symbolVariable->initVariant($context);
-        }
     }
 }

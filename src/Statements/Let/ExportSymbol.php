@@ -80,11 +80,11 @@ class ExportSymbol
     }
 
     /**
-     * @param CompilationContext|null   $compilationContext
-     * @param ZephirVariable|null       $symbolVariable
-     * @param ZephirVariable            $variable
-     * @param Printer|null              $codePrinter
-     * @param array|null                $statement
+     * @param CompilationContext|null $compilationContext
+     * @param ZephirVariable|null     $symbolVariable
+     * @param ZephirVariable          $variable
+     * @param Printer|null            $codePrinter
+     * @param array|null              $statement
      *
      * @return void
      */

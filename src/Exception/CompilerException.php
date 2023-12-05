@@ -213,7 +213,6 @@ class CompilerException extends RuntimeException
     /**
      * Unknown variable type
      *
-     * @param CompiledExpression       $expression
      * @param array|null               $extra
      * @param int                      $code
      * @param Exception|Throwable|null $previous

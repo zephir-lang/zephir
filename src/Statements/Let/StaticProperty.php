@@ -22,8 +22,6 @@ use Zephir\Expression;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
-use function sprintf;
-
 /**
  * Updates static properties
  */

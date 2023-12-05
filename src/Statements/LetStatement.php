@@ -73,7 +73,7 @@ class LetStatement extends StatementAbstract
                 'static-property-append',
                 'static-property-array-index',
                 'static-property-array-index-append',
-                'dynamic-variable-string' => null,
+                'dynamic-variable-string'          => null,
                 'array-index',
                 'variable-append',
                 'object-property',
@@ -84,7 +84,7 @@ class LetStatement extends StatementAbstract
                     $compilationContext,
                     $assignment
                 ),
-                default => $compilationContext->symbolTable->getVariableForWrite(
+                default                                                                                                                                         => $compilationContext->symbolTable->getVariableForWrite(
                     $variable,
                     $compilationContext,
                     $assignment

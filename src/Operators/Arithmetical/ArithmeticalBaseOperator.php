@@ -615,7 +615,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         );
                                 }
                         }
-                        // no break
+                    // no break
 
                     case 'variable':
                         switch ($right->getType()) {
@@ -815,35 +815,30 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * Returns proper dynamic types.
+     * @param array              $expression
+     * @param CompilationContext $compilationContext
      *
-     * @param Variable $left
-     * @param Variable $right
-     *
-     * @return string
+     * @return array
+     * @throws ReflectionException
+     * @throws ZephirException
      */
-    private function getDynamicTypes(Variable $left, Variable $right): string
-    {
-        if ('/' === $this->operator) {
-            return 'double';
-        }
+    protected function preCompileChecks(
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        $this->checkLeft($expression);
+        $this->checkRight($expression);
 
-        switch ($left->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return 'int';
-                }
-                break;
-        }
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly(true);
+        $left = $leftExpr->compile($compilationContext);
 
-        return 'double';
+        $rightExpr = new Expression($expression['right']);
+        $rightExpr->setReadOnly(true);
+        $right = $rightExpr->compile($compilationContext);
+
+        $compilationContext->headersManager->add('kernel/operators');
+        return [$left, $right];
     }
 
     /**
@@ -881,29 +876,34 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
+     * Returns proper dynamic types.
      *
-     * @return array
-     * @throws ReflectionException
-     * @throws ZephirException
+     * @param Variable $left
+     * @param Variable $right
+     *
+     * @return string
      */
-    protected function preCompileChecks(
-        array $expression,
-        CompilationContext $compilationContext
-    ): array {
-        $this->checkLeft($expression);
-        $this->checkRight($expression);
+    private function getDynamicTypes(Variable $left, Variable $right): string
+    {
+        if ('/' === $this->operator) {
+            return 'double';
+        }
 
-        $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly(true);
-        $left = $leftExpr->compile($compilationContext);
+        switch ($left->getType()) {
+            case 'int':
+            case 'uint':
+            case 'long':
+            case 'ulong':
+                switch ($right->getType()) {
+                    case 'int':
+                    case 'uint':
+                    case 'long':
+                    case 'ulong':
+                        return 'int';
+                }
+                break;
+        }
 
-        $rightExpr = new Expression($expression['right']);
-        $rightExpr->setReadOnly(true);
-        $right = $rightExpr->compile($compilationContext);
-
-        $compilationContext->headersManager->add('kernel/operators');
-        return [$left, $right];
+        return 'double';
     }
 }

@@ -2343,6 +2343,7 @@ class Method
      * @param CompilationContext $compilationContext
      * @param array              $parameter
      * @param Printer            $oldCodePrinter
+     * @param string             $type
      *
      * @return string
      * @throws Exception

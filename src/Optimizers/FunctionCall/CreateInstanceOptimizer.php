@@ -98,9 +98,9 @@ class CreateInstanceOptimizer extends OptimizerAbstract
     protected function getOutput(string $symbol, array $resolvedParams): string
     {
         return 'ZEPHIR_LAST_CALL_STATUS = '
-            . 'zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ');'
-        ;
+            . 'zephir_create_instance(' . $symbol . ', ' . $resolvedParams[0] . ');';
     }
+
     /**
      * @param Call               $call
      * @param CompilationContext $context

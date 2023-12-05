@@ -106,7 +106,7 @@ class SwitchStatement extends StatementAbstract
             $defaultBlock = null;
             foreach ($clauses as $clause) {
                 if ('case' == $clause['type']) {
-                    $expr = [
+                    $expr        = [
                         'type'  => 'equals',
                         'left'  => $tempLeft,
                         'right' => $clause['expr'],

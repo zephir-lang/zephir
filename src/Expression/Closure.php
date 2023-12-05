@@ -199,11 +199,11 @@ class Closure
     }
 
     /**
-     * @param Definition $classDefinition
-     * @param Method $classMethod
-     * @param mixed $block
+     * @param Definition         $classDefinition
+     * @param Method             $classMethod
+     * @param mixed              $block
      * @param CompilationContext $compilationContext
-     * @param array $expression
+     * @param array              $expression
      *
      * @return Variable|null
      */

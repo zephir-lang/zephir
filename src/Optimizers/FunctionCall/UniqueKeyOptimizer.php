@@ -16,6 +16,7 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 use Zephir\Variable\Variable;
@@ -53,24 +54,12 @@ class UniqueKeyOptimizer extends OptimizerAbstract
     }
 
     /**
-     * @param CompilationContext             $context
-     * @param Variable|null $symbolVariable
-     *
-     * @return void
-     */
-    protected function setHeaders(CompilationContext $context, ?Variable $symbolVariable): void
-    {
-        $context->headersManager->add('kernel/string');
-        $symbolVariable->setDynamicTypes('string');
-    }
-
-    /**
      * @param Call               $call
      * @param CompilationContext $context
      * @param array              $expression
      *
      * @return CompiledExpression
-     * @throws \Zephir\Exception
+     * @throws Exception
      */
     protected function processOptimizer(Call $call, CompilationContext $context, array $expression): CompiledExpression
     {
@@ -94,5 +83,17 @@ class UniqueKeyOptimizer extends OptimizerAbstract
         );
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    /**
+     * @param CompilationContext $context
+     * @param Variable|null      $symbolVariable
+     *
+     * @return void
+     */
+    protected function setHeaders(CompilationContext $context, ?Variable $symbolVariable): void
+    {
+        $context->headersManager->add('kernel/string');
+        $symbolVariable->setDynamicTypes('string');
     }
 }
