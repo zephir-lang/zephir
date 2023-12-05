@@ -499,8 +499,11 @@ class ModOperator extends ArithmeticalBaseOperator
                                         } else {
                                             return new CompiledExpression(
                                                 'double',
-                                                'zephir_safe_mod_double_zval(' . $variableLeft->getName(
-                                                ) . ', ' . $variableRight->getName() . ')',
+                                                'zephir_safe_mod_double_zval('
+						. $variableLeft->getName()
+						. ', '
+						. $variableRight->getName()
+						. ')',
                                                 $expression
                                             );
                                         }
@@ -746,18 +749,12 @@ class ModOperator extends ArithmeticalBaseOperator
 
 
                     default:
-                        throw new CompilerException(
-                            "Unknown '" . $variableLeft->getType() . "'",
-                            $expression
-                        );
+                        throw CompilerException::unknownType($variableLeft, $expression);
                 }
 
 
             default:
-                throw new CompilerException(
-                    'Unsupported type: ' . $left->getType(),
-                    $expression
-                );
+                throw CompilerException::unsupportedType($left, $expression);
         }
     }
 }

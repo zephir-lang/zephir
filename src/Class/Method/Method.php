@@ -334,35 +334,12 @@ class Method
             case 'double':
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
+                        return $this->processStaticConstantAccess(
                             $compilationContext,
-                            $parameter['default']
+                            $parameter,
+                            $oldCodePrinter,
+                            'double'
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
-
-                        if ('double' != $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(double)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
 
                     case 'null':
                         $codePrinter->output($parameter['name'] . ' = 0;');
@@ -449,35 +426,12 @@ class Method
 
                 switch ($parameter['default']['type']) {
                     case 'static-constant-access':
-                        /**
-                         * Now I can write code for easy use on Expression because code in this method don't write with codePrinter ;(.
-                         *
-                         * TODO: Rewrite all to codePrinter
-                         */
-                        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $parameter['name'],
+                        return $this->processStaticConstantAccess(
                             $compilationContext,
-                            $parameter['default']
+                            $parameter,
+                            $oldCodePrinter,
+                            'string'
                         );
-                        $expression     = new Expression($parameter['default']);
-                        $expression->setExpectReturn(true, $symbolVariable);
-                        $compiledExpression = $expression->compile($compilationContext);
-
-                        if ('string' != $compiledExpression->getType()) {
-                            throw new CompilerException(
-                                'Default parameter value type: '
-                                . $compiledExpression->getType()
-                                . ' cannot be assigned to variable(string)',
-                                $parameter
-                            );
-                        }
-
-                        $parameter['default']['type']  = $compiledExpression->getType();
-                        $parameter['default']['value'] = $compiledExpression->getCode();
-
-                        $compilationContext->codePrinter = $oldCodePrinter;
-
-                        return $this->assignDefaultValue($parameter, $compilationContext);
 
                     case 'null':
                         $compilationContext->backend->initVar($paramVariable, $compilationContext);
@@ -2382,5 +2336,52 @@ class Method
     private function getParamDataType(array $parameter): string
     {
         return $parameter['data-type'] ?? 'variable';
+    }
+
+    /**
+     * @param CompilationContext $compilationContext
+     * @param array              $parameter
+     * @param Printer            $oldCodePrinter
+     *
+     * @return string
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    private function processStaticConstantAccess(
+        CompilationContext $compilationContext,
+        array $parameter,
+        Printer $oldCodePrinter,
+        string $type
+    ): string {
+        /**
+         * Now I can write code for easy use on Expression because
+         * code in this method don't write with codePrinter ;(.
+         *
+         * TODO: Rewrite all to codePrinter
+         */
+        $symbolVariable = $compilationContext->symbolTable->getVariableForWrite(
+            $parameter['name'],
+            $compilationContext,
+            $parameter['default']
+        );
+        $expression     = new Expression($parameter['default']);
+        $expression->setExpectReturn(true, $symbolVariable);
+        $compiledExpression = $expression->compile($compilationContext);
+
+        if ($type !== $compiledExpression->getType()) {
+            throw new CompilerException(
+                'Default parameter value type: '
+                . $compiledExpression->getType()
+                . ' cannot be assigned to variable(' . $type . ')',
+                $parameter
+            );
+        }
+
+        $parameter['default']['type']  = $compiledExpression->getType();
+        $parameter['default']['value'] = $compiledExpression->getCode();
+
+        $compilationContext->codePrinter = $oldCodePrinter;
+
+        return $this->assignDefaultValue($parameter, $compilationContext);
     }
 }

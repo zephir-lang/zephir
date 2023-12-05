@@ -560,12 +560,12 @@ class LogicalBaseOperator extends AbstractOperator
 
 
                     default:
-                        throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
+                        throw CompilerException::unknownType($variableLeft, $expression);
                 }
 
 
             default:
-                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
+                throw CompilerException::unsupportedType($left, $expression);
         }
     }
 }

@@ -732,12 +732,12 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
 
                     default:
-                        throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
+                        throw CompilerException::unknownType($variableLeft, $expression);
                 }
             // no break
 
             default:
-                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
+                throw CompilerException::unsupportedType($left, $expression);
         }
     }
 
