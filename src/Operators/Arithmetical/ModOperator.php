@@ -69,7 +69,7 @@ class ModOperator extends ArithmeticalBaseOperator
             case Types::T_STRING:
             case Types::T_ARRAY:
                 $this->processLeftStringArray($right, $expression);
-                // no break
+            // no break
 
             case Types::T_VARIABLE:
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -584,7 +584,7 @@ class ModOperator extends ArithmeticalBaseOperator
      */
     protected function processDoubleVarVar(
         CompilationContext $compilationContext,
-        Variable | bool $variableRight,
+        mixed $variableRight,
         mixed $left,
         array $expression
     ): CompiledExpression {
@@ -609,7 +609,7 @@ class ModOperator extends ArithmeticalBaseOperator
      */
     protected function processIntVarVar(
         CompilationContext $compilationContext,
-        Variable | bool $variableRight,
+        mixed $variableRight,
         mixed $left,
         array $expression
     ): CompiledExpression {
