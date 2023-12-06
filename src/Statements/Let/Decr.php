@@ -20,8 +20,6 @@ use Zephir\Types\Types;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * Decr.
- *
  * Decrements a variable
  */
 class Decr
@@ -36,15 +34,10 @@ class Decr
     /**
      * Compiles x++/x--.
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
      * @throws CompilerException
      */
     public function assign(
-        $variable,
+        string $variable,
         ZephirVariable $symbolVariable,
         CompilationContext $compilationContext,
         array $statement
@@ -58,12 +51,10 @@ class Decr
             );
         }
 
-        /*
+        /**
          * TODO: implement increment of objects members
          */
         $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
-
-        $codePrinter = $compilationContext->codePrinter;
 
         switch ($symbolVariable->getType()) {
             case Types::T_INT:
@@ -73,11 +64,11 @@ class Decr
             case Types::T_DOUBLE:
             case Types::T_CHAR:
             case Types::T_UCHAR:
-                $codePrinter->output($variable . $this->operator . ';');
+                $compilationContext->codePrinter->output($variable . $this->operator . ';');
                 break;
 
             case Types::T_VARIABLE:
-                /*
+                /**
                  * Variable is probably not initialized here
                  */
                 if ($symbolVariable->hasAnyDynamicType('unknown')) {
@@ -89,10 +80,9 @@ class Decr
                     );
                 }
 
-                /*
+                /**
                  * Decrement non-numeric variables could be expensive
                  */
-//                if (!$symbolVariable->hasAnyDynamicType(['undefined', 'long', 'double'])) {
                 if (!$symbolVariable->hasAnyDynamicType(['undefined', 'int', 'long', 'double', 'uint'])) {
                     $compilationContext->logger->warning(
                         'Possible attempt to '
@@ -108,7 +98,7 @@ class Decr
                 }
 
                 $symbol = $compilationContext->backend->getVariableCode($symbolVariable);
-                $codePrinter->output($this->zephirMethod . '(' . $symbol . ');');
+                $compilationContext->codePrinter->output($this->zephirMethod . '(' . $symbol . ');');
                 break;
 
             default:

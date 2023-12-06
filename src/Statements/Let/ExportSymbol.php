@@ -20,8 +20,6 @@ use Zephir\Statements\LetStatement;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * ExportSymbol.
- *
  * Exports a symbol to the current PHP symbol table using a variable as parameter
  */
 class ExportSymbol

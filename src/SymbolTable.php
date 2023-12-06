@@ -30,34 +30,16 @@ use function substr;
  */
 class SymbolTable
 {
-    /**
-     * @var array
-     */
     protected array $branchTempVariables = [];
 
-    /**
-     * @var array
-     */
     protected array $branchVariables = [];
 
-    /**
-     * @var Globals
-     */
     protected Globals $globalsManager;
 
-    /**
-     * @var LocalContextPass|null
-     */
     protected ?LocalContextPass $localContext = null;
 
-    /**
-     * @var bool
-     */
     protected bool $mustGrownStack = false;
 
-    /**
-     * @var int
-     */
     protected int $tempVarCount = 0;
 
     public function __construct(protected CompilationContext $compilationContext)
@@ -65,7 +47,6 @@ class SymbolTable
         $this->globalsManager = new Globals();
 
         /* The variables are registered in branch 1, which is the external branch */
-        $this->compilationContext = $compilationContext;
         $this->branchVariables[1] = [];
         /* this_ptr */
         $thisVar = new Variable('variable', 'this', $compilationContext->branchManager->getCurrentBranch());
@@ -110,13 +91,8 @@ class SymbolTable
 
     /**
      * Creates a temporary variable.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function addTemp($type, CompilationContext $context)
+    public function addTemp(string $type, CompilationContext $context): Variable
     {
         $tempVar  = $this->getNextTempVar();
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
@@ -130,12 +106,6 @@ class SymbolTable
 
     /**
      * Adds a variable to the symbol table.
-     *
-     * @param string             $type
-     * @param string             $name
-     * @param CompilationContext $compilationContext
-     *
-     * @return Variable
      */
     public function addVariable(
         string $type,
