@@ -89,7 +89,7 @@ class ArrayIndex
          * Choose one-offset or multiple-offset functions
          */
         if (1 == count($statement['index-expr'])) {
-            $this->_assignArrayIndexSingle($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+            $this->_assignArrayIndexSingle($symbolVariable, $resolvedExpr, $compilationContext, $statement);
         } else {
             $this->_assignArrayIndexMultiple(
                 $variable,
@@ -175,8 +175,7 @@ class ArrayIndex
 
     /**
      * Compiles foo[y] = {expr} (one offset).
-     *
-     * @param string             $variable
+
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
@@ -185,7 +184,6 @@ class ArrayIndex
      * @throws CompilerException
      */
     protected function _assignArrayIndexSingle(
-        $variable,
         ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
