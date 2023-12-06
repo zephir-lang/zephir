@@ -24,8 +24,8 @@ use Zephir\Variable\Variable;
  */
 class DivOperator extends ModOperator
 {
-    protected string $bitOperator        = '-';
-    protected string $operator           = '/';
+    protected string $bitOperator  = '-';
+    protected string $operator     = '/';
     protected string $zephirDoubleDouble = 'zephir_safe_div_double_double';
     protected string $zephirDoubleLong   = 'zephir_safe_div_double_long';
     protected string $zephirLongDouble   = 'zephir_safe_div_long_double';
@@ -69,7 +69,7 @@ class DivOperator extends ModOperator
             case Types::T_STRING:
             case Types::T_ARRAY:
                 $this->processLeftStringArray($right, $expression);
-            // no break
+                // no break
 
             case Types::T_VARIABLE:
                 $variableLeft = $compilationContext->symbolTable->getVariableForRead(
@@ -612,23 +612,23 @@ class DivOperator extends ModOperator
 
     /**
      * @param CompilationContext $compilationContext
-     * @param Variable|bool      $variableRight
-     * @param mixed              $left
-     * @param array              $expression
+     * @param Variable|bool $variableRight
+     * @param mixed $left
+     * @param array $expression
      *
      * @return CompiledExpression
      */
-    protected function processDoubleVarVar(
+    protected function processIntVarVar(
         CompilationContext $compilationContext,
-        mixed $variableRight,
+        Variable | bool $variableRight,
         mixed $left,
         array $expression
     ): CompiledExpression {
-        $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
+        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
 
         return new CompiledExpression(
             'double',
-            'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ')',
+            'zephir_safe_div_long_zval(' . $left->getCode() . ', ' . $variableRightCode . ')',
             $expression
         );
     }
@@ -641,17 +641,17 @@ class DivOperator extends ModOperator
      *
      * @return CompiledExpression
      */
-    protected function processIntVarVar(
+    protected function processDoubleVarVar(
         CompilationContext $compilationContext,
-        mixed $variableRight,
+        Variable | bool $variableRight,
         mixed $left,
         array $expression
     ): CompiledExpression {
-        $variableRightCode = $compilationContext->backend->getVariableCode($variableRight);
+        $symbolRight = $compilationContext->backend->getVariableCode($variableRight);
 
         return new CompiledExpression(
             'double',
-            'zephir_safe_div_long_zval(' . $left->getCode() . ', ' . $variableRightCode . ')',
+            'zephir_safe_div_double_zval(' . $left->getCode() . ', ' . $symbolRight . ')',
             $expression
         );
     }
