@@ -73,7 +73,7 @@ class LetStatement extends StatementAbstract
                 'static-property-append',
                 'static-property-array-index',
                 'static-property-array-index-append',
-                'dynamic-variable-string'     => null,
+                'dynamic-variable-string' => null,
                 'array-index',
                 'variable-append',
                 'object-property',
@@ -84,14 +84,14 @@ class LetStatement extends StatementAbstract
                     $compilationContext,
                     $assignment
                 ),
-                default                                                                                                                                         => $compilationContext->symbolTable->getVariableForWrite(
+                default => $compilationContext->symbolTable->getVariableForWrite(
                     $variable,
                     $compilationContext,
                     $assignment
                 ),
             };
 
-            /*
+            /**
              * Incr/Decr assignments don't require an expression
              */
             if (isset($assignment['expr'])) {
@@ -135,7 +135,7 @@ class LetStatement extends StatementAbstract
 
                 $resolvedExpr = $expr->compile($compilationContext);
 
-                /*
+                /**
                  * Bad implemented operators could return values different from objects
                  */
                 if (!is_object($resolvedExpr)) {
@@ -337,9 +337,7 @@ class LetStatement extends StatementAbstract
         }
 
         $builderExpr = BuilderFactory::getInstance();
-
         $leftExpression = $builderExpr->variable($assignment['variable']);
-
         $assignment['expr'] = $builderExpr->operators()
                                           ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
                                           ->build()
