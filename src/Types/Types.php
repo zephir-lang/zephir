@@ -44,7 +44,6 @@ final class Types
     public const T_UCHAR     = 'uchar';
     public const T_UINT      = 'uint';
     public const T_ULONG     = 'ulong';
-    public const T_UNDEFINED = 'undefined';
     public const T_VARIABLE  = 'variable';
     public const T_VOID      = 'void';
 
