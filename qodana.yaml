@@ -33,11 +33,14 @@ exclude:
   - name: All
     paths:
       - config
+      - ext
       - kernel
       - prototypes
       - stub
       - templates
+      - tests
       - vendor
+
 include:
   - name: CheckDependencyLicenses
   - name: PhpVulnerablePathsInspection
