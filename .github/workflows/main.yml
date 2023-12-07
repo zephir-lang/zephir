@@ -220,6 +220,15 @@ jobs:
         with:
           args: --baseline,qodana.sarif.json
 
+      - name: 'Qodana Scan'
+        run: |
+          docker run \
+            -v $(pwd):/data/project/ \
+            -v $(pwd):/data/base/ \
+            -e QODANA_TOKEN="${{ secrets.CODECOV_TOKEN }}" \
+            jetbrains/qodana-php \
+            --baseline /data/base/qodana.sarif.json
+
       - name: "Create download folder"
         run: |
           mkdir -p reports

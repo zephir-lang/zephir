@@ -40,3 +40,5 @@ exclude:
       - vendor
 include:
   - name: CheckDependencyLicenses
+  - name: PhpVulnerablePathsInspection
+  - name: VulnerableLibrariesGlobal
