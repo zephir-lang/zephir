@@ -213,13 +213,13 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: 'Qodana Scan'
-        uses: JetBrains/qodana-action@v2023.2
-        env:
-          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-        with:
-          args: --baseline,qodana.sarif.json
-
+#      - name: 'Qodana Scan'
+#        uses: JetBrains/qodana-action@v2023.2
+#        env:
+#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+#        with:
+#          args: --baseline,qodana.sarif.json
+#
       - name: 'Qodana Scan'
         run: |
           docker run \
