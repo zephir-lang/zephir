@@ -447,7 +447,8 @@ class NativeArray
                 default:
                     throw new CompilerException(
                         'Invalid key type: '
-                        . $resolvedExprKey->getType(), $item['key']
+                        . $resolvedExprKey->getType(),
+                        $item['key']
                     );
             }
         }
