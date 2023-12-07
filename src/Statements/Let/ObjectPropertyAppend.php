@@ -154,9 +154,7 @@ class ObjectPropertyAppend
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'int':
@@ -175,9 +173,7 @@ class ObjectPropertyAppend
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'double':
@@ -198,9 +194,7 @@ class ObjectPropertyAppend
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'string':
@@ -222,9 +216,7 @@ class ObjectPropertyAppend
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'array':
@@ -266,9 +258,7 @@ class ObjectPropertyAppend
                             $tempVariable,
                             $compilationContext
                         );
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
 
                     case 'double':
@@ -285,9 +275,7 @@ class ObjectPropertyAppend
                             $tempVariable,
                             $compilationContext
                         );
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
 
                     case 'bool':
@@ -304,9 +292,7 @@ class ObjectPropertyAppend
                             $tempVariable,
                             $compilationContext
                         );
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
 
                     case 'variable':
@@ -322,9 +308,7 @@ class ObjectPropertyAppend
                             $variableExpr,
                             $compilationContext
                         );
-                        if ($variableExpr->isTemporal()) {
-                            $variableExpr->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($variableExpr);
                         break;
 
                     default:

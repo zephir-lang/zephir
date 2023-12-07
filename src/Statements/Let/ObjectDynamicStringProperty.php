@@ -235,9 +235,7 @@ class ObjectDynamicStringProperty
                             $resolvedExpr,
                             $compilationContext
                         );
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($symbolVariable);
                         break;
 
                     default:

@@ -1592,9 +1592,7 @@ class Variable
                 $itemVariable,
                 $compilationContext
             );
-            if ($itemVariable->isTemporal()) {
-                $itemVariable->setIdle(true);
-            }
+            $this->checkVariableTemporal($itemVariable);
         }
     }
 }

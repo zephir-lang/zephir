@@ -313,9 +313,8 @@ final class ReturnStatement extends StatementAbstract
                                     $codePrinter->output(self::RETURN_RETURN);
                                 }
                             }
-                            if ($symbolVariable->isTemporal()) {
-                                $symbolVariable->setIdle(true);
-                            }
+
+                            $this->checkVariableTemporal($symbolVariable);
                             break;
 
                         default:

@@ -637,12 +637,8 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $this->zvalOperator . '(' . $expectedSymbol . ', ' . $op1 . ', ' . $op2 . ');'
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
 

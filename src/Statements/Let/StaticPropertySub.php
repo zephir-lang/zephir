@@ -117,9 +117,7 @@ class StaticPropertySub
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'char':
@@ -140,9 +138,7 @@ class StaticPropertySub
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'double':
@@ -162,9 +158,7 @@ class StaticPropertySub
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'string':
@@ -185,9 +179,7 @@ class StaticPropertySub
                     $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
                 }
 
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
 
                 $compilationContext->backend->$method(
                     $classEntry,
@@ -250,9 +242,7 @@ class StaticPropertySub
                     $tempVariable,
                     $compilationContext
                 );
-                if ($tempVariable->isTemporal()) {
-                    $tempVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($tempVariable);
                 break;
 
             case 'array':
@@ -297,9 +287,7 @@ class StaticPropertySub
                             $compilationContext
                         );
 
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
 
                     case 'double':
@@ -326,9 +314,7 @@ class StaticPropertySub
                             $compilationContext
                         );
 
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
 
                     case 'bool':
@@ -344,9 +330,7 @@ class StaticPropertySub
                             $tempVariable,
                             $compilationContext
                         );
-                        if ($tempVariable->isTemporal()) {
-                            $tempVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($tempVariable);
                         break;
                     default:
                         $this->processDefaultType(
@@ -389,9 +373,7 @@ class StaticPropertySub
             $variableVariable,
             $compilationContext
         );
-        if ($variableVariable->isTemporal()) {
-            $variableVariable->setIdle(true);
-        }
+        $this->checkVariableTemporal($variableVariable);
     }
 
     /**

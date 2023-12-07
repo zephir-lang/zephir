@@ -168,14 +168,12 @@ class ArrayIndex
             $compilationContext
         );
 
-        if ($symbolVariable->isTemporal()) {
-            $symbolVariable->setIdle(true);
-        }
+        $this->checkVariableTemporal($symbolVariable);
     }
 
     /**
      * Compiles foo[y] = {expr} (one offset).
-
+     *
      * @param ZephirVariable     $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext

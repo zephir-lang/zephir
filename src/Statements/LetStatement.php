@@ -84,7 +84,7 @@ class LetStatement extends StatementAbstract
                     $compilationContext,
                     $assignment
                 ),
-                default                                                                                                                                         => $compilationContext->symbolTable->getVariableForWrite(
+                default                            => $compilationContext->symbolTable->getVariableForWrite(
                     $variable,
                     $compilationContext,
                     $assignment
@@ -336,8 +336,8 @@ class LetStatement extends StatementAbstract
             );
         }
 
-        $builderExpr = BuilderFactory::getInstance();
-        $leftExpression = $builderExpr->variable($assignment['variable']);
+        $builderExpr        = BuilderFactory::getInstance();
+        $leftExpression     = $builderExpr->variable($assignment['variable']);
         $assignment['expr'] = $builderExpr->operators()
                                           ->binary($operator, $leftExpression, $builderExpr->raw($assignment['expr']))
                                           ->build()

@@ -15,9 +15,12 @@ namespace Zephir\Statements;
 
 use Zephir\CompilationContext;
 use Zephir\Optimizers\EvalExpression;
+use Zephir\Traits\VariablesTrait;
 
 abstract class StatementAbstract
 {
+    use VariablesTrait;
+
     protected ?EvalExpression $evalExpression;
 
     public function __construct(protected array $statement)

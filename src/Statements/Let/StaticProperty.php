@@ -92,9 +92,7 @@ class StaticProperty extends StaticPropertySub
                             $variableVariable,
                             $compilationContext
                         );
-                        if ($variableVariable->isTemporal()) {
-                            $variableVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($variableVariable);
                         break;
                     default:
                         throw CompilerException::illegalOperationTypeOnStaticVariable(
@@ -112,9 +110,7 @@ class StaticProperty extends StaticPropertySub
                     $variableVariable,
                     $compilationContext
                 );
-                if ($variableVariable->isTemporal()) {
-                    $variableVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($variableVariable);
                 break;
 
             default:

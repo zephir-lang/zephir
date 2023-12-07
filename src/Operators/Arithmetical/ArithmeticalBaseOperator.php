@@ -595,12 +595,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $compilationContext
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         $expected->setDynamicTypes(
                                             $this->getDynamicTypes($variableLeft, $variableRight)
@@ -701,12 +697,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $compilationContext
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         $expected->setDynamicTypes(
                                             $this->getDynamicTypes($variableLeft, $variableRight)
@@ -815,6 +807,16 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
+     * @param Variable $variable
+     *
+     * @return string
+     */
+    protected function getIsLocal(Variable $variable): string
+    {
+        return $variable->isLocalOnly() ? '&' : '';
+    }
+
+    /**
      * @param array              $expression
      * @param CompilationContext $compilationContext
      *
@@ -886,24 +888,24 @@ class ArithmeticalBaseOperator extends AbstractOperator
     private function getDynamicTypes(Variable $left, Variable $right): string
     {
         if ('/' === $this->operator) {
-            return 'double';
+            return Types::T_DOUBLE;
         }
 
         switch ($left->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+            case Types::T_ULONG:
                 switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return 'int';
+                    case Types::T_INT:
+                    case Types::T_UINT:
+                    case Types::T_LONG:
+                    case Types::T_ULONG:
+                        return Types::T_INT;
                 }
                 break;
         }
 
-        return 'double';
+        return Types::T_DOUBLE;
     }
 }

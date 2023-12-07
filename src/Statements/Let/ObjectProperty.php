@@ -17,6 +17,7 @@ use Zephir\CompilationContext as Context;
 use Zephir\CompiledExpression as Expression;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\CompilerException as Exception;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function sprintf;
@@ -26,6 +27,8 @@ use function sprintf;
  */
 class ObjectProperty
 {
+    use VariablesTrait;
+
     /**
      * Compiles foo->x = {expr}.
      *
@@ -342,9 +345,7 @@ class ObjectProperty
                     case 'variable':
                     case 'mixed':
                         $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($symbolVariable);
                         break;
 
                     default:

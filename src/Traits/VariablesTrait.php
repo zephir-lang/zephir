@@ -197,4 +197,16 @@ trait VariablesTrait
             );
         }
     }
+
+    /**
+     * @param string $variable
+     *
+     * @return void
+     */
+    protected function checkVariableTemporal(Variable $variable): void
+    {
+        if ($variable->isTemporal()) {
+            $variable->setIdle(true);
+        }
+    }
 }

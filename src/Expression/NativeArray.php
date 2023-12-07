@@ -20,6 +20,7 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
+use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable;
 
 use function count;
@@ -32,6 +33,8 @@ use function gmp_strval;
  */
 class NativeArray
 {
+    use VariablesTrait;
+
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
@@ -134,9 +137,7 @@ class NativeArray
                 $symbol       = $compilationContext->backend->getVariableCode($symbolVariable);
                 $item         = $compilationContext->backend->resolveValue($itemVariable, $compilationContext);
                 $codePrinter->output('zephir_array_fast_append(' . $symbol . ', ' . $item . ');');
-                if ($itemVariable->isTemporal()) {
-                    $itemVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($itemVariable);
 
                 continue;
             }
@@ -204,9 +205,7 @@ class NativeArray
                                 $compilationContext,
                                 'PH_COPY | PH_SEPARATE'
                             );
-                            if ($valueVariable->isTemporal()) {
-                                $valueVariable->setIdle(true);
-                            }
+                            $this->checkVariableTemporal($valueVariable);
                             break;
 
                         default:
@@ -278,9 +277,7 @@ class NativeArray
                                 $compilationContext,
                                 'PH_COPY'
                             );
-                            if ($valueVariable->isTemporal()) {
-                                $valueVariable->setIdle(true);
-                            }
+                            $this->checkVariableTemporal($valueVariable);
                             break;
 
                         default:
@@ -330,9 +327,7 @@ class NativeArray
                                         $compilationContext,
                                         'PH_COPY'
                                     );
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:
@@ -402,9 +397,7 @@ class NativeArray
                                         $resolvedExpr,
                                         $compilationContext
                                     );
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:
@@ -430,9 +423,7 @@ class NativeArray
                                         $compilationContext
                                     );
 
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:

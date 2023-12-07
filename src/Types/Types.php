@@ -21,31 +21,31 @@ use function in_array;
 
 final class Types
 {
-    public const T_ARRAY     = 'array';
-    public const T_BOOL      = 'bool';
-    public const T_BOOLEAN   = 'boolean';
-    public const T_CALLABLE  = 'callable';
-    public const T_CHAR      = 'char';
-    public const T_DOUBLE    = 'double';
-    public const T_FALSE     = 'false';
-    public const T_FLOAT     = 'float';
-    public const T_HASH      = 'hash';
-    public const T_INT       = 'int';
-    public const T_INTEGER   = 'integer';
-    public const T_ISTRING   = 'istring';
-    public const T_ITERABLE  = 'iterable';
-    public const T_LONG      = 'long';
-    public const T_MIXED     = 'mixed';
-    public const T_NULL      = 'null';
-    public const T_NUMBER    = 'number';
-    public const T_OBJECT    = 'object';
-    public const T_RESOURCE  = 'resource';
-    public const T_STRING    = 'string';
-    public const T_UCHAR     = 'uchar';
-    public const T_UINT      = 'uint';
-    public const T_ULONG     = 'ulong';
-    public const T_VARIABLE  = 'variable';
-    public const T_VOID      = 'void';
+    public const T_ARRAY    = 'array';
+    public const T_BOOL     = 'bool';
+    public const T_BOOLEAN  = 'boolean';
+    public const T_CALLABLE = 'callable';
+    public const T_CHAR     = 'char';
+    public const T_DOUBLE   = 'double';
+    public const T_FALSE    = 'false';
+    public const T_FLOAT    = 'float';
+    public const T_HASH     = 'hash';
+    public const T_INT      = 'int';
+    public const T_INTEGER  = 'integer';
+    public const T_ISTRING  = 'istring';
+    public const T_ITERABLE = 'iterable';
+    public const T_LONG     = 'long';
+    public const T_MIXED    = 'mixed';
+    public const T_NULL     = 'null';
+    public const T_NUMBER   = 'number';
+    public const T_OBJECT   = 'object';
+    public const T_RESOURCE = 'resource';
+    public const T_STRING   = 'string';
+    public const T_UCHAR    = 'uchar';
+    public const T_UINT     = 'uint';
+    public const T_ULONG    = 'ulong';
+    public const T_VARIABLE = 'variable';
+    public const T_VOID     = 'void';
 
     /**
      * Gets PHP compatible return type from class method.

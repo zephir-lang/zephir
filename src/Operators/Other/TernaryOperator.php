@@ -48,9 +48,7 @@ class TernaryOperator extends AbstractOperator
                 'variable',
                 $compilationContext
             );
-            if ($returnVariable->isTemporal()) {
-                $returnVariable->skipInitVariant(2);
-            }
+            $this->checkVariableTemporal($returnVariable);
         }
 
         $expr      = new EvalExpression();
