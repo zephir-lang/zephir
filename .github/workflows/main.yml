@@ -213,21 +213,21 @@ jobs:
         with:
           fetch-depth: 2
 
-#      - name: 'Qodana Scan'
-#        uses: JetBrains/qodana-action@v2023.2
-#        env:
-#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
-#        with:
-#          args: --baseline,qodana.sarif.json
-#
       - name: 'Qodana Scan'
-        run: |
-          docker run \
-            -v $(pwd):/data/project/ \
-            -v $(pwd):/data/base/ \
-            -e QODANA_TOKEN="${{ secrets.CODECOV_TOKEN }}" \
-            jetbrains/qodana-php \
-            --baseline /data/base/qodana.sarif.json
+        uses: JetBrains/qodana-action@v2023.2
+        env:
+          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+        with:
+          args: --baseline,./qodana.sarif.json
+
+#      - name: 'Qodana Scan'
+#        run: |
+#          docker run \
+#            -v $(pwd):/data/project/ \
+#            -v $(pwd):/data/base/ \
+#            -e QODANA_TOKEN="${{ secrets.CODECOV_TOKEN }}" \
+#            jetbrains/qodana-php \
+#            --baseline /data/base/qodana.sarif.json
 
       - name: "Create download folder"
         run: |
@@ -261,7 +261,7 @@ jobs:
 
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |
