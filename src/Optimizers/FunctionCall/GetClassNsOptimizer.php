@@ -56,9 +56,9 @@ class GetClassNsOptimizer extends GetClassOptimizer
         $output = 'zephir_get_class_ns(' . $symbol . ', ' . $resolvedParams[0];
 
         if (!isset($resolvedParams[1])) {
-            $output .=  ', 0);';
+            $output .= ', 0);';
         } else {
-            $output .=  ', ' . $resolvedParams[1] . ');';
+            $output .= ', ' . $resolvedParams[1] . ');';
         }
 
         $context->codePrinter->output($output);

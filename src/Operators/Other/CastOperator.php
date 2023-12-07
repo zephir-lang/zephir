@@ -373,9 +373,8 @@ class CastOperator extends AbstractOperator
                         );
                         $symbol         = $compilationContext->backend->getVariableCode($symbolVariable);
 
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($symbolVariable);
+
                         return match ($symbolVariable->getType()) {
                             Types::T_INT,
                             Types::T_CHAR,
@@ -514,9 +513,7 @@ class CastOperator extends AbstractOperator
                                     sprintf('zephir_cast_to_string(%s, %s);', $symbol, $resolvedCode)
                                 );
 
-                                if ($symbolVariable->isTemporal()) {
-                                    $symbolVariable->setIdle(true);
-                                }
+                                $this->checkVariableTemporal($symbolVariable);
 
                                 return new CompiledExpression(
                                     'variable',
@@ -560,9 +557,7 @@ class CastOperator extends AbstractOperator
                             sprintf('zephir_get_arrval(%s, %s);', $symbol, $resolvedCode)
                         );
 
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($symbolVariable);
 
                         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);
 
@@ -619,9 +614,7 @@ class CastOperator extends AbstractOperator
                             $expression
                         );
                         $symbol         = $compilationContext->backend->getVariableCode($symbolVariable);
-                        if ($symbolVariable->isTemporal()) {
-                            $symbolVariable->setIdle(true);
-                        }
+                        $this->checkVariableTemporal($symbolVariable);
 
                         $compilationContext->codePrinter->output('zephir_convert_to_object(' . $symbol . ');');
 

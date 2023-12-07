@@ -155,9 +155,7 @@ class StaticPropertyAppend extends ArrayIndex
             $compilationContext
         );
 
-        if ($variableExpr->isTemporal()) {
-            $variableExpr->setIdle(true);
-        }
+        $this->checkVariableTemporal($variableExpr);
     }
 
     /**

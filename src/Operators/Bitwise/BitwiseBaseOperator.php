@@ -614,7 +614,7 @@ class BitwiseBaseOperator extends AbstractOperator
                                     case 'uint':
                                     case 'long':
                                     case 'ulong':
-                                    /* a(var) + a(bool) */
+                                        /* a(var) + a(bool) */
                                     case 'bool':
                                         $compilationContext->headersManager->add('kernel/operators');
 
@@ -637,12 +637,8 @@ class BitwiseBaseOperator extends AbstractOperator
                                             $this->zvalOperator . '(' . $expectedSymbol . ', ' . $op1 . ', ' . $op2 . ');'
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         return new CompiledExpression('variable', $expected->getName(), $expression);
 
@@ -664,12 +660,12 @@ class BitwiseBaseOperator extends AbstractOperator
 
 
                     default:
-                        throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
+                        throw CompilerException::unknownType($variableLeft, $expression);
                 }
 
 
             default:
-                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
+                throw CompilerException::unsupportedType($left, $expression);
         }
     }
 

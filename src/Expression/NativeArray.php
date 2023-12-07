@@ -20,6 +20,8 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\GlobalConstant;
+use Zephir\Traits\VariablesTrait;
+use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
 use function count;
@@ -32,6 +34,8 @@ use function gmp_strval;
  */
 class NativeArray
 {
+    use VariablesTrait;
+
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
     protected bool      $readOnly          = false;
@@ -134,9 +138,7 @@ class NativeArray
                 $symbol       = $compilationContext->backend->getVariableCode($symbolVariable);
                 $item         = $compilationContext->backend->resolveValue($itemVariable, $compilationContext);
                 $codePrinter->output('zephir_array_fast_append(' . $symbol . ', ' . $item . ');');
-                if ($itemVariable->isTemporal()) {
-                    $itemVariable->setIdle(true);
-                }
+                $this->checkVariableTemporal($itemVariable);
 
                 continue;
             }
@@ -145,16 +147,16 @@ class NativeArray
             $resolvedExprKey = $exprKey->compile($compilationContext);
 
             switch ($resolvedExprKey->getType()) {
-                case 'string':
+                case Types::T_STRING:
                     $expr         = new Expression($item['value']);
                     $resolvedExpr = $expr->compile($compilationContext);
                     switch ($resolvedExpr->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                        case 'string':
-                        case 'double':
+                        case Types::T_INT:
+                        case Types::T_UINT:
+                        case Types::T_LONG:
+                        case Types::T_ULONG:
+                        case Types::T_DOUBLE:
+                        case Types::T_STRING:
                             $compilationContext->backend->addArrayEntry(
                                 $symbolVariable,
                                 $resolvedExprKey,
@@ -163,7 +165,7 @@ class NativeArray
                             );
                             break;
 
-                        case 'bool':
+                        case Types::T_BOOL:
                             $compilationContext->headersManager->add('kernel/array');
                             if ('true' == $resolvedExpr->getCode()) {
                                 $compilationContext->backend->updateArray(
@@ -184,7 +186,7 @@ class NativeArray
                             }
                             break;
 
-                        case 'null':
+                        case Types::T_NULL:
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
                                 $resolvedExprKey,
@@ -194,8 +196,8 @@ class NativeArray
                             );
                             break;
 
-                        case 'array':
-                        case 'variable':
+                        case Types::T_ARRAY:
+                        case Types::T_VARIABLE:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -204,9 +206,7 @@ class NativeArray
                                 $compilationContext,
                                 'PH_COPY | PH_SEPARATE'
                             );
-                            if ($valueVariable->isTemporal()) {
-                                $valueVariable->setIdle(true);
-                            }
+                            $this->checkVariableTemporal($valueVariable);
                             break;
 
                         default:
@@ -217,19 +217,19 @@ class NativeArray
                     }
                     break;
 
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
+                case Types::T_INT:
+                case Types::T_UINT:
+                case Types::T_LONG:
+                case Types::T_ULONG:
                     $expr         = new Expression($item['value']);
                     $resolvedExpr = $expr->compile($compilationContext);
                     switch ($resolvedExpr->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                        case 'double':
-                        case 'string':
+                        case Types::T_INT:
+                        case Types::T_UINT:
+                        case Types::T_LONG:
+                        case Types::T_ULONG:
+                        case Types::T_DOUBLE:
+                        case Types::T_STRING:
                             $compilationContext->backend->addArrayEntry(
                                 $symbolVariable,
                                 $resolvedExprKey,
@@ -238,7 +238,7 @@ class NativeArray
                             );
                             break;
 
-                        case 'bool':
+                        case Types::T_BOOL:
                             if ('true' == $resolvedExpr->getCode()) {
                                 $compilationContext->backend->updateArray(
                                     $symbolVariable,
@@ -258,7 +258,7 @@ class NativeArray
                             }
                             break;
 
-                        case 'null':
+                        case Types::T_NULL:
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
                                 $resolvedExprKey,
@@ -268,8 +268,8 @@ class NativeArray
                             );
                             break;
 
-                        case 'array':
-                        case 'variable':
+                        case Types::T_ARRAY:
+                        case Types::T_VARIABLE:
                             $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                             $compilationContext->backend->updateArray(
                                 $symbolVariable,
@@ -278,9 +278,7 @@ class NativeArray
                                 $compilationContext,
                                 'PH_COPY'
                             );
-                            if ($valueVariable->isTemporal()) {
-                                $valueVariable->setIdle(true);
-                            }
+                            $this->checkVariableTemporal($valueVariable);
                             break;
 
                         default:
@@ -291,28 +289,28 @@ class NativeArray
                     }
                     break;
 
-                case 'variable':
+                case Types::T_VARIABLE:
                     $variableVariable = $compilationContext->symbolTable->getVariableForRead(
                         $resolvedExprKey->getCode(),
                         $compilationContext,
                         $item['key']
                     );
                     switch ($variableVariable->getType()) {
-                        case 'int':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
+                        case Types::T_INT:
+                        case Types::T_UINT:
+                        case Types::T_LONG:
+                        case Types::T_ULONG:
                             $expr         = new Expression($item['value']);
                             $resolvedExpr = $expr->compile($compilationContext);
                             switch ($resolvedExpr->getType()) {
-                                case 'int':
-                                case 'uint':
-                                case 'long':
-                                case 'ulong':
-                                case 'bool':
-                                case 'double':
-                                case 'null':
-                                case 'string':
+                                case Types::T_INT:
+                                case Types::T_UINT:
+                                case Types::T_LONG:
+                                case Types::T_ULONG:
+                                case Types::T_BOOL:
+                                case Types::T_DOUBLE:
+                                case Types::T_NULL:
+                                case Types::T_STRING:
                                     $compilationContext->backend->addArrayEntry(
                                         $symbolVariable,
                                         $resolvedExprKey,
@@ -321,7 +319,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'variable':
+                                case Types::T_VARIABLE:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
@@ -330,9 +328,7 @@ class NativeArray
                                         $compilationContext,
                                         'PH_COPY'
                                     );
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:
@@ -343,14 +339,14 @@ class NativeArray
                             }
                             break;
 
-                        case 'string':
+                        case Types::T_STRING:
                             $expr         = new Expression($item['value']);
                             $resolvedExpr = $expr->compile($compilationContext);
                             switch ($resolvedExpr->getType()) {
-                                case 'int':
-                                case 'uint':
-                                case 'long':
-                                case 'ulong':
+                                case Types::T_INT:
+                                case Types::T_UINT:
+                                case Types::T_LONG:
+                                case Types::T_ULONG:
                                     $codePrinter->output(
                                         'add_assoc_long_ex(' . $symbolVariable->getName(
                                         ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
@@ -359,7 +355,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'double':
+                                case Types::T_DOUBLE:
                                     $codePrinter->output(
                                         'add_assoc_double_ex(' . $symbolVariable->getName(
                                         ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
@@ -368,7 +364,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'bool':
+                                case Types::T_BOOL:
                                     $codePrinter->output(
                                         'add_assoc_bool_ex(' . $symbolVariable->getName(
                                         ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
@@ -377,7 +373,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'string':
+                                case Types::T_STRING:
                                     $compilationContext->backend->addArrayEntry(
                                         $symbolVariable,
                                         $resolvedExprKey,
@@ -386,7 +382,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'null':
+                                case Types::T_NULL:
                                     $codePrinter->output(
                                         'add_assoc_null_ex(' . $symbolVariable->getName(
                                         ) . ', Z_STRVAL_P(' . $resolvedExprKey->getCode(
@@ -394,7 +390,7 @@ class NativeArray
                                     );
                                     break;
 
-                                case 'variable':
+                                case Types::T_VARIABLE:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
@@ -402,9 +398,7 @@ class NativeArray
                                         $resolvedExpr,
                                         $compilationContext
                                     );
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:
@@ -415,13 +409,13 @@ class NativeArray
                             }
                             break;
 
-                        case 'variable':
+                        case Types::T_VARIABLE:
                             $expr         = new Expression($item['value']);
                             $resolvedExpr = $expr->compile($compilationContext);
                             switch ($resolvedExpr->getType()) {
-                                case 'null':
-                                case 'variable':
-                                case 'bool':
+                                case Types::T_NULL:
+                                case Types::T_VARIABLE:
+                                case Types::T_BOOL:
                                     $valueVariable = $this->getArrayValue($resolvedExpr, $compilationContext);
                                     $compilationContext->backend->updateArray(
                                         $symbolVariable,
@@ -430,9 +424,7 @@ class NativeArray
                                         $compilationContext
                                     );
 
-                                    if ($valueVariable->isTemporal()) {
-                                        $valueVariable->setIdle(true);
-                                    }
+                                    $this->checkVariableTemporal($valueVariable);
                                     break;
 
                                 default:
@@ -453,7 +445,11 @@ class NativeArray
                     break;
 
                 default:
-                    throw new CompilerException('Invalid key type: ' . $resolvedExprKey->getType(), $item['key']);
+                    throw new CompilerException(
+                        'Invalid key type: '
+                        . $resolvedExprKey->getType(),
+                        $item['key']
+                    );
             }
         }
 
@@ -466,21 +462,23 @@ class NativeArray
      * @param CompiledExpression $exprCompiled
      * @param CompilationContext $compilationContext
      *
-     * @return Variable
+     * @return GlobalConstant|Variable
      */
-    public function getArrayValue(CompiledExpression $exprCompiled, CompilationContext $compilationContext)
-    {
+    public function getArrayValue(
+        CompiledExpression $exprCompiled,
+        CompilationContext $compilationContext
+    ) {
         switch ($exprCompiled->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $compilationContext->backend->assignLong($tempVar, $exprCompiled->getCode(), $compilationContext);
 
                 return $tempVar;
 
-            case 'char':
-            case 'uchar':
+            case Types::T_CHAR:
+            case Types::T_UCHAR:
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $compilationContext->backend->assignLong(
                     $tempVar,
@@ -490,13 +488,13 @@ class NativeArray
 
                 return $tempVar;
 
-            case 'double':
+            case Types::T_DOUBLE:
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $compilationContext->backend->assignDouble($tempVar, $exprCompiled->getCode(), $compilationContext);
 
                 return $tempVar;
 
-            case 'bool':
+            case Types::T_BOOL:
                 if ('true' === $exprCompiled->getCode()) {
                     return new GlobalConstant('ZEPHIR_GLOBAL(global_true)');
                 }
@@ -510,34 +508,34 @@ class NativeArray
 
                 return $tempVar;
 
-            case 'null':
+            case Types::T_NULL:
                 return new GlobalConstant('ZEPHIR_GLOBAL(global_null)');
 
-            case 'string':
-            case 'ulong':
+            case Types::T_STRING:
+            case Types::T_ULONG:
                 $tempVar = $compilationContext->symbolTable->getTempVariableForWrite('variable', $compilationContext);
                 $compilationContext->backend->assignString($tempVar, $exprCompiled->getCode(), $compilationContext);
 
                 return $tempVar;
 
-            case 'array':
+            case Types::T_ARRAY:
                 return $compilationContext->symbolTable->getVariableForRead(
                     $exprCompiled->getCode(),
                     $compilationContext,
                     $exprCompiled->getOriginal()
                 );
 
-            case 'variable':
+            case Types::T_VARIABLE:
                 $itemVariable = $compilationContext->symbolTable->getVariableForRead(
                     $exprCompiled->getCode(),
                     $compilationContext,
                     $exprCompiled->getOriginal()
                 );
                 switch ($itemVariable->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
+                    case Types::T_INT:
+                    case Types::T_UINT:
+                    case Types::T_LONG:
+                    case Types::T_ULONG:
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext
@@ -546,7 +544,7 @@ class NativeArray
 
                         return $tempVar;
 
-                    case 'double':
+                    case Types::T_DOUBLE:
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext
@@ -555,7 +553,7 @@ class NativeArray
 
                         return $tempVar;
 
-                    case 'bool':
+                    case Types::T_BOOL:
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext
@@ -564,10 +562,10 @@ class NativeArray
 
                         return $tempVar;
 
-                    case 'string':
-                    case 'variable':
-                    case 'array':
-                    case 'mixed':
+                    case Types::T_STRING:
+                    case Types::T_VARIABLE:
+                    case Types::T_ARRAY:
+                    case Types::T_MIXED:
                         return $itemVariable;
 
                     default:

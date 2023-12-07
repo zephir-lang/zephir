@@ -15,8 +15,6 @@ namespace Zephir\Statements\Let;
 
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
-use Zephir\CompiledExpression;
-use Zephir\Statements\LetStatement;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
@@ -31,11 +29,11 @@ class ExportSymbolString extends ExportSymbol
      */
 
     /**
-     * @param CompilationContext|null   $compilationContext
-     * @param ZephirVariable|null       $symbolVariable
-     * @param ZephirVariable            $variable
-     * @param Printer|null              $codePrinter
-     * @param array|null                $statement
+     * @param CompilationContext|null $compilationContext
+     * @param ZephirVariable|null     $symbolVariable
+     * @param ZephirVariable          $variable
+     * @param Printer|null            $codePrinter
+     * @param array|null              $statement
      *
      * @return void
      */

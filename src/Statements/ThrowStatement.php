@@ -135,9 +135,7 @@ class ThrowStatement extends StatementAbstract
             $codePrinter->outputBlankLine();
         }
 
-        if ($variableVariable->isTemporal()) {
-            $variableVariable->setIdle(true);
-        }
+        $this->checkVariableTemporal($variableVariable);
     }
 
     /**

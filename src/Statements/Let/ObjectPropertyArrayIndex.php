@@ -149,9 +149,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             $compilationContext
         );
 
-        if ($variableExpr->isTemporal()) {
-            $variableExpr->setIdle(true);
-        }
+        $this->checkVariableTemporal($variableExpr);
     }
 
     /**
@@ -519,9 +517,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                                     $variableExpr,
                                     $compilationContext
                                 );
-                                if ($variableExpr->isTemporal()) {
-                                    $variableExpr->setIdle(true);
-                                }
+                                $this->checkVariableTemporal($variableExpr);
                                 break;
 
                             default:

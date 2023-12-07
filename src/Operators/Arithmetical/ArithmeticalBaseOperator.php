@@ -595,12 +595,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $compilationContext
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         $expected->setDynamicTypes(
                                             $this->getDynamicTypes($variableLeft, $variableRight)
@@ -615,7 +611,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         );
                                 }
                         }
-                        // no break
+                    // no break
 
                     case 'variable':
                         switch ($right->getType()) {
@@ -701,12 +697,8 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                             $compilationContext
                                         );
 
-                                        if ($variableLeft->isTemporal()) {
-                                            $variableLeft->setIdle(true);
-                                        }
-                                        if ($variableRight->isTemporal()) {
-                                            $variableRight->setIdle(true);
-                                        }
+                                        $this->checkVariableTemporal($variableLeft);
+                                        $this->checkVariableTemporal($variableRight);
 
                                         $expected->setDynamicTypes(
                                             $this->getDynamicTypes($variableLeft, $variableRight)
@@ -732,12 +724,12 @@ class ArithmeticalBaseOperator extends AbstractOperator
 
 
                     default:
-                        throw new CompilerException("Unknown '" . $variableLeft->getType() . "'", $expression);
+                        throw CompilerException::unknownType($variableLeft, $expression);
                 }
             // no break
 
             default:
-                throw new CompilerException('Unsupported type: ' . $left->getType(), $expression);
+                throw CompilerException::unsupportedType($left, $expression);
         }
     }
 
@@ -815,35 +807,40 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * Returns proper dynamic types.
-     *
-     * @param Variable $left
-     * @param Variable $right
+     * @param Variable $variable
      *
      * @return string
      */
-    private function getDynamicTypes(Variable $left, Variable $right): string
+    protected function getIsLocal(Variable $variable): string
     {
-        if ('/' === $this->operator) {
-            return 'double';
-        }
+        return $variable->isLocalOnly() ? '&' : '';
+    }
 
-        switch ($left->getType()) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-                switch ($right->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                        return 'int';
-                }
-                break;
-        }
+    /**
+     * @param array              $expression
+     * @param CompilationContext $compilationContext
+     *
+     * @return array
+     * @throws ReflectionException
+     * @throws ZephirException
+     */
+    protected function preCompileChecks(
+        array $expression,
+        CompilationContext $compilationContext
+    ): array {
+        $this->checkLeft($expression);
+        $this->checkRight($expression);
 
-        return 'double';
+        $leftExpr = new Expression($expression['left']);
+        $leftExpr->setReadOnly(true);
+        $left = $leftExpr->compile($compilationContext);
+
+        $rightExpr = new Expression($expression['right']);
+        $rightExpr->setReadOnly(true);
+        $right = $rightExpr->compile($compilationContext);
+
+        $compilationContext->headersManager->add('kernel/operators');
+        return [$left, $right];
     }
 
     /**
@@ -881,29 +878,34 @@ class ArithmeticalBaseOperator extends AbstractOperator
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
+     * Returns proper dynamic types.
      *
-     * @return array
-     * @throws ReflectionException
-     * @throws ZephirException
+     * @param Variable $left
+     * @param Variable $right
+     *
+     * @return string
      */
-    protected function preCompileChecks(
-        array $expression,
-        CompilationContext $compilationContext
-    ): array {
-        $this->checkLeft($expression);
-        $this->checkRight($expression);
+    private function getDynamicTypes(Variable $left, Variable $right): string
+    {
+        if ('/' === $this->operator) {
+            return Types::T_DOUBLE;
+        }
 
-        $leftExpr = new Expression($expression['left']);
-        $leftExpr->setReadOnly(true);
-        $left = $leftExpr->compile($compilationContext);
+        switch ($left->getType()) {
+            case Types::T_INT:
+            case Types::T_UINT:
+            case Types::T_LONG:
+            case Types::T_ULONG:
+                switch ($right->getType()) {
+                    case Types::T_INT:
+                    case Types::T_UINT:
+                    case Types::T_LONG:
+                    case Types::T_ULONG:
+                        return Types::T_INT;
+                }
+                break;
+        }
 
-        $rightExpr = new Expression($expression['right']);
-        $rightExpr->setReadOnly(true);
-        $right = $rightExpr->compile($compilationContext);
-
-        $compilationContext->headersManager->add('kernel/operators');
-        return [$left, $right];
+        return Types::T_DOUBLE;
     }
 }

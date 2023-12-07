@@ -21,20 +21,11 @@ use Zephir\Code\Printer;
 use Zephir\Compiler\FileInterface;
 use Zephir\Traits\CompilerTrait;
 
-use function count;
-use function dirname;
 use function file_exists;
 use function file_put_contents;
 use function hash_file;
-use function implode;
-use function is_dir;
 use function md5;
-use function mkdir;
-use function str_replace;
-use function strpos;
-use function strtolower;
 
-use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
 
 /**

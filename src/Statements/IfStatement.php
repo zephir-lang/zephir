@@ -100,9 +100,7 @@ class IfStatement extends StatementAbstract
          */
         $evalVariable = $expr->getEvalVariable();
         if (is_object($evalVariable)) {
-            if ($evalVariable->isTemporal()) {
-                $evalVariable->setIdle(true);
-            }
+            $this->checkVariableTemporal($evalVariable);
         }
 
         /**

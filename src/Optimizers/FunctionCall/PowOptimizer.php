@@ -51,8 +51,8 @@ class PowOptimizer extends UniqueKeyOptimizer
     }
 
     /**
-     * @param CompilationContext             $context
-     * @param Variable|null $symbolVariable
+     * @param CompilationContext $context
+     * @param Variable|null      $symbolVariable
      *
      * @return void
      */

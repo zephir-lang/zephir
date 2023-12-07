@@ -18,7 +18,7 @@ Functionality is exposed to the PHP language.
 ## Community
 
 * Follow us on [GitHub][zephir] and [Facebook][facebook]
-* Get Zephir support on [Discord][discord] and [Github discussions][discussions]
+* Get Zephir support on [Discord][discord] and [GitHub discussions][discussions]
 * Read our [Code of Conduct](./CODE_OF_CONDUCT.md)
 
 ## Contributing
@@ -28,7 +28,7 @@ for details about contributions to this repository.
 
 ## Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site.
+Become a sponsor and get your logo on our README on GitHub with a link to your site.
 [[Become a sponsor](https://opencollective.com/phalcon#sponsor)]
 
 <a href="https://opencollective.com/phalcon/#contributors">
