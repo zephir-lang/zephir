@@ -18,6 +18,7 @@ use Zephir\Class\Definition\AbstractDefinition;
 use Zephir\Class\Definition\Definition;
 use Zephir\Class\Property;
 use Zephir\Exception\CompilerException;
+use Zephir\GlobalConstant;
 use Zephir\Variable\Variable;
 use Zephir\Variable\Variable as ZephirVariable;
 
@@ -199,11 +200,11 @@ trait VariablesTrait
     }
 
     /**
-     * @param string $variable
+     * @param GlobalConstant|ZephirVariable $variable
      *
      * @return void
      */
-    protected function checkVariableTemporal(Variable $variable): void
+    protected function checkVariableTemporal(GlobalConstant|Variable $variable): void
     {
         if ($variable->isTemporal()) {
             $variable->setIdle(true);
