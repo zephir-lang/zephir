@@ -271,15 +271,25 @@ class DivOperator extends ArithmeticalBaseOperator
 
                                     case 'variable':
                                         $compilationContext->headersManager->add('kernel/operators');
-                                        return new CompiledExpression(
-                                            'double',
-                                            'zephir_safe_div_long_zval('
-                                            . $variableLeft->getName()
-                                            . ', '
-                                            . $this->getIsLocal($variableRight)
-                                            . $variableRight->getName() . ')',
-                                            $expression
-                                        );
+                                        if ($variableRight->isLocalOnly()) {
+                                            return new CompiledExpression(
+                                                'double',
+                                                'zephir_safe_div_long_zval(' . $variableLeft->getName(
+                                                ) . ', &' . $variableRight->getName() . ')',
+                                                $expression
+                                            );
+                                        } else {
+                                            $variableRightCode = $compilationContext->backend->getVariableCode(
+                                                $variableRight
+                                            );
+
+                                            return new CompiledExpression(
+                                                'double',
+                                                'zephir_safe_div_long_zval(' . $variableLeft->getName(
+                                                ) . ', ' . $variableRightCode . ')',
+                                                $expression
+                                            );
+                                        }
 
                                     default:
                                         throw new CompilerException(
