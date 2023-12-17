@@ -48,7 +48,7 @@ final class VariableTest extends TestCase
         $this->assertFalse($this->zephirVar->isTemporal());
         $this->assertTrue($this->zephirVar->isReusable());
         $this->assertFalse($this->zephirVar->isIdle());
-        $this->assertTrue($this->zephirVar->isUsed());
+        $this->assertFalse($this->zephirVar->isUsed());
         $this->assertFalse($this->zephirVar->isDoublePointer());
         $this->assertTrue($this->zephirVar->isMemoryTracked());
         $this->assertSame('UnitTest', $this->zephirVar->getRealName());
