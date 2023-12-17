@@ -98,6 +98,7 @@ class SymbolTable
         $variable = $this->addVariable($type, '_' . $tempVar, $context);
         $variable->setIsInitialized(true, $context);
         $variable->setTemporal(true);
+        $variable->setUsed(true);
         $variable->increaseUses();
         $variable->increaseMutates();
 
@@ -124,6 +125,7 @@ class SymbolTable
         }
 
         $variable = new Variable($type, $varName, $currentBranch);
+        $variable->setUsed(true);
 
         /**
          * Checks whether a variable can be optimized to be static or not
@@ -503,7 +505,10 @@ class SymbolTable
             return false;
         }
 
-        return $this->branchVariables[$branchId][$name];
+        $variable = $this->branchVariables[$branchId][$name];
+        $variable->setUsed(true);
+
+        return $variable;
     }
 
     /**

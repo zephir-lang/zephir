@@ -104,7 +104,7 @@ class Variable implements TypeAwareInterface
     /**
      * Whether the variable was used or not.
      */
-    protected bool $used = true;
+    protected bool $used = false;
 
     /**
      * Last AST node where the variable was used.
