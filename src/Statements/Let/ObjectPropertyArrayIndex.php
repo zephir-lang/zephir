@@ -65,9 +65,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
             );
         }
 
-        /*
+        /**
          * Update the property according to the number of array-offsets
          */
+        $symbolVariable->setUsed(true);
         if (1 == count($statement['index-expr'])) {
             $this->_assignPropertyArraySingleIndex(
                 $variable,

@@ -577,7 +577,8 @@ class Backend
         CompilationContext $compilationContext
     ): void {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
-        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext);
+        $variable->setUsed(true);
 
         $compilationContext->codePrinter->output(
             sprintf(
@@ -600,7 +601,7 @@ class Backend
         CompilationContext $compilationContext
     ): void {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
-        $valueVariable = $this->resolveValue($valueVariable, $compilationContext, true);
+        $valueVariable = $this->resolveValue($valueVariable, $compilationContext);
 
         $offsetStr = $offsetItems ? ', ' . implode(', ', $offsetItems) : '';
         $compilationContext->codePrinter->output(
@@ -1580,6 +1581,8 @@ class Backend
 
     public function getVariableCode(Variable $variable): string
     {
+        $variable->setUsed(true);
+
         if (
             $variable->isDoublePointer() ||
             in_array($variable->getName(), ['this_ptr', 'return_value']) ||

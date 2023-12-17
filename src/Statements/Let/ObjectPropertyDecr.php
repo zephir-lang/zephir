@@ -21,8 +21,6 @@ use Zephir\Variable\Variable as ZephirVariable;
 use function current;
 
 /**
- * ObjectPropertyDecr.
- *
  * Decrements an object property
  */
 class ObjectPropertyDecr
@@ -33,28 +31,22 @@ class ObjectPropertyDecr
 
     /**
      * Compiles obj->x++/obj->x--.
-     *
-     * @param string             $variable
-     * @param string             $property
-     * @param ZephirVariable     $symbolVariable
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
      */
     public function assign(
-        $variable,
-        $property,
+        string $variable,
+        string $property,
         ZephirVariable $symbolVariable,
         CompilationContext $compilationContext,
-        $statement
+        array $statement,
     ): void {
         $this->checkVariableInitialized($variable, $symbolVariable, $statement);
 
-        /*
+        /**
          * Arrays must be stored in the HEAP
          */
         $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
-        /*
+        /**
          * Only dynamic variables can be used as arrays
          */
         if (!$symbolVariable->isVariable()) {
@@ -68,7 +60,7 @@ class ObjectPropertyDecr
             throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
-        /*
+        /**
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object', 'null'])) {
@@ -78,18 +70,13 @@ class ObjectPropertyDecr
             );
         }
 
-        /*
+        /**
          * Check if the variable to update is defined
          */
-        if ('this' == $symbolVariable->getRealName()) {
-            $classDefinition = $compilationContext->classDefinition;
-            $this->checkClassHasProperty(
-                $classDefinition,
-                $property,
-                $statement
-            );
+        if ('this' === $symbolVariable->getRealName()) {
+            $this->checkClassHasProperty($compilationContext->classDefinition, $property, $statement);
         } else {
-            /*
+            /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */
@@ -116,6 +103,7 @@ class ObjectPropertyDecr
             }
         }
 
+        $symbolVariable->setUsed(true);
         $compilationContext->headersManager->add('kernel/object');
         $compilationContext->codePrinter->output(
             'RETURN_ON_FAILURE(' . $this->zephirMethod . '(' . $symbolVariable->getName(

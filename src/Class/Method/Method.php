@@ -1237,6 +1237,7 @@ class Method
          */
         $usedVariables = [];
         $completeName  = $this->getClassDefinition()?->getCompleteName() ?: '[unknown]';
+        $thisUnused = false;
 
         foreach ($symbolTable->getVariables() as $variable) {
             if ($variable->getNumberUses() <= 0) {
@@ -1275,6 +1276,10 @@ class Method
                 }
 
                 $usedVariables[$type][] = $variable;
+            }
+
+            if ('this_ptr' === $variable->getName() && !$variable->isUsed()) {
+                $thisUnused = true;
             }
         }
 
@@ -1411,6 +1416,15 @@ class Method
          * Remove macros that grow/restore the memory frame stack if it wasn't used.
          */
         $code = $this->removeMemoryStackReferences($symbolTable, $codePrinter->getOutput());
+
+        /**
+         * Remove unused this_ptr variable.
+         */
+        if ($thisUnused) {
+            $code = str_replace("\t" . 'zval *this_ptr = getThis();' . PHP_EOL, '', $code);
+        }
+
+        $code = preg_replace("/(\R){3,}/", "$1", $code);
 
         /**
          * Restore the compilation context
