@@ -480,13 +480,8 @@ class SymbolTable
 
     /**
      * Returns a variable in the symbol table.
-     *
-     * @param                         $name
-     * @param CompilationContext|null $compilationContext
-     *
-     * @return bool|Variable
      */
-    public function getVariable($name, CompilationContext $compilationContext = null)
+    public function getVariable(string $name, ?CompilationContext $compilationContext = null)
     {
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
@@ -499,8 +494,10 @@ class SymbolTable
             if (!$branch) {
                 return false;
             }
+
             $branchId = $branch->getUniqueId();
         }
+
         if (!isset($this->branchVariables[$branchId]) || !isset($this->branchVariables[$branchId][$name])) {
             return false;
         }
@@ -706,12 +703,6 @@ class SymbolTable
     /**
      * Return a variable in the symbol table, it will be used for a mutating operation
      * This method implies mutation of one of the members of the variable but no the variables itself.
-     *
-     * @param string             $name
-     * @param CompilationContext $compilationContext
-     * @param array|null         $statement
-     *
-     * @return Variable
      */
     public function getVariableForUpdate(string $name, CompilationContext $compilationContext, array $statement = null)
     {
@@ -768,7 +759,7 @@ class SymbolTable
      */
     public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
     {
-        /*
+        /**
          * Create superglobals just in time
          */
         if ($this->globalsManager->isSuperGlobal($name)) {
@@ -816,7 +807,7 @@ class SymbolTable
      *
      * @return Variable[]
      */
-    public function getVariables()
+    public function getVariables(): array
     {
         $ret = [];
         foreach ($this->branchVariables as $vars) {
@@ -854,14 +845,10 @@ class SymbolTable
     /**
      * Traverses temporal variables created in a specific branch
      * marking them as idle.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function markTemporalVariablesIdle(CompilationContext $compilationContext): void
     {
-        $compilationContext = $compilationContext ?: $this->compilationContext;
-        $branchId           = $compilationContext->branchManager->getCurrentBranchId();
-
+        $branchId = $compilationContext->branchManager->getCurrentBranchId();
         if (!isset($this->branchTempVariables[$branchId])) {
             return;
         }
@@ -919,17 +906,12 @@ class SymbolTable
 
     /**
      * Register a variable as temporal.
-     *
-     * @param string                  $type
-     * @param string                  $location
-     * @param Variable                $variable
-     * @param CompilationContext|null $compilationContext
      */
     protected function registerTempVariable(
-        $type,
-        $location,
+        string $type,
+        string $location,
         Variable $variable,
-        CompilationContext $compilationContext = null
+        ?CompilationContext $compilationContext = null
     ): void {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId           = $compilationContext->branchManager->getCurrentBranchId();
@@ -942,29 +924,21 @@ class SymbolTable
 
     /**
      * Reuse variables marked as idle after leave a branch.
-     *
-     * @param string                  $type
-     * @param string                  $location
-     * @param CompilationContext|null $compilationContext
-     *
-     * @return Variable|null
      */
     protected function reuseTempVariable(
         string $type,
         string $location,
-        CompilationContext $compilationContext = null
+        ?CompilationContext $compilationContext = null,
     ): ?Variable {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId           = $compilationContext->branchManager->getCurrentBranchId();
 
         if (isset($this->branchTempVariables[$branchId][$location][$type])) {
             foreach ($this->branchTempVariables[$branchId][$location][$type] as $variable) {
-                if (!$variable->isDoublePointer()) {
-                    if ($variable->isIdle()) {
-                        $variable->setIdle(false);
+                if (!$variable->isDoublePointer() && $variable->isIdle()) {
+                    $variable->setIdle(false);
 
-                        return $variable;
-                    }
+                    return $variable;
                 }
             }
         }
