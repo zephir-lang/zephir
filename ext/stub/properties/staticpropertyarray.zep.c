@@ -40,17 +40,11 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray()
 {
 	zval _1;
 	zval _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	zephir_create_array(&_0, 4, 0);
-	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_NULL(&_1);
 	ZVAL_LONG(&_1, 1);
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -66,6 +60,5 @@ void zephir_init_static_properties_Stub_Properties_StaticPropertyArray()
 	ZEPHIR_INIT_NVAR(&_1);
 	array_init(&_1);
 	zephir_update_static_property_ce(stub_properties_staticpropertyarray_ce, ZEND_STRL("someEmptyArray"), &_1);
-	ZEPHIR_MM_RESTORE();
 }
 

@@ -35,9 +35,7 @@ PHP_METHOD(Stub_FortyTwo, proof)
 	zend_bool _4$$3, _8$$6;
 	zval _0;
 	zval box, side, _1, *_2, _3, _7$$4, _11$$7;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, j = 0, _5$$3, _6$$3, _9$$6, _10$$6;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&box);
 	ZVAL_UNDEF(&side);
@@ -46,16 +44,11 @@ PHP_METHOD(Stub_FortyTwo, proof)
 	ZVAL_UNDEF(&_7$$4);
 	ZVAL_UNDEF(&_11$$7);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&box);
+	ZVAL_NULL(&box);
 	zephir_create_array(&box, 15, 0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	zephir_create_array(&_0, 3, 0);
-	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_NULL(&_1);
 	ZVAL_LONG(&_1, 10);
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -302,6 +295,5 @@ PHP_METHOD(Stub_FortyTwo, proof)
 		}
 	}
 	ZEPHIR_INIT_NVAR(&side);
-	ZEPHIR_MM_RESTORE();
 }
 

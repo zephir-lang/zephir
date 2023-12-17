@@ -31,7 +31,6 @@ ZEPHIR_INIT_CLASS(Stub_Globals_ServerRequestFactory)
  */
 PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *server_param = NULL, *get_param = NULL, *post_param = NULL, *cookies_param = NULL, *files_param = NULL, _COOKIE, _FILES, _GET, _POST, _SERVER, _0, _2, _3, _4, _5;
@@ -67,10 +66,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 		Z_PARAM_ARRAY_OR_NULL(cookies)
 		Z_PARAM_ARRAY_OR_NULL(files)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_get_global(&_GET, SL("_GET"));
@@ -78,41 +73,39 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	zephir_get_global(&_COOKIE, SL("_COOKIE"));
 	zephir_fetch_params(1, 0, 5, &server_param, &get_param, &post_param, &cookies_param, &files_param);
 	if (!server_param) {
-		ZEPHIR_INIT_VAR(&server);
+		ZVAL_NULL(&server);
 	} else {
 		zephir_get_arrval(&server, server_param);
 	}
 	if (!get_param) {
-		ZEPHIR_INIT_VAR(&get);
+		ZVAL_NULL(&get);
 	} else {
 		zephir_get_arrval(&get, get_param);
 	}
 	if (!post_param) {
-		ZEPHIR_INIT_VAR(&post);
+		ZVAL_NULL(&post);
 	} else {
 		zephir_get_arrval(&post, post_param);
 	}
 	if (!cookies_param) {
-		ZEPHIR_INIT_VAR(&cookies);
+		ZVAL_NULL(&cookies);
 	} else {
 		zephir_get_arrval(&cookies, cookies_param);
 	}
 	if (!files_param) {
-		ZEPHIR_INIT_VAR(&files);
+		ZVAL_NULL(&files);
 	} else {
 		zephir_get_arrval(&files, files_param);
 	}
-
-
-	ZEPHIR_INIT_VAR(&globalCookies);
+	ZVAL_NULL(&globalCookies);
 	array_init(&globalCookies);
-	ZEPHIR_INIT_VAR(&globalFiles);
+	ZVAL_NULL(&globalFiles);
 	array_init(&globalFiles);
-	ZEPHIR_INIT_VAR(&globalGet);
+	ZVAL_NULL(&globalGet);
 	array_init(&globalGet);
-	ZEPHIR_INIT_VAR(&globalPost);
+	ZVAL_NULL(&globalPost);
 	array_init(&globalPost);
-	ZEPHIR_INIT_VAR(&globalServer);
+	ZVAL_NULL(&globalServer);
 	array_init(&globalServer);
 	if (!(ZEPHIR_IS_EMPTY(&_COOKIE))) {
 		ZEPHIR_CPY_WRT(&globalCookies, &_COOKIE);
@@ -129,19 +122,19 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	if (!(ZEPHIR_IS_EMPTY(&_SERVER))) {
 		ZEPHIR_CPY_WRT(&globalServer, &_SERVER);
 	}
-	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 46, &server, &globalServer);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "checknullarray", &_1, 47, &server, &globalServer);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&server, &_0);
-	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 46, &files, &globalFiles);
+	ZEPHIR_CALL_METHOD(&_2, this_ptr, "checknullarray", &_1, 47, &files, &globalFiles);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&files, &_2);
-	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 46, &cookies, &globalCookies);
+	ZEPHIR_CALL_METHOD(&_3, this_ptr, "checknullarray", &_1, 47, &cookies, &globalCookies);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&cookies, &_3);
-	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 46, &get, &globalGet);
+	ZEPHIR_CALL_METHOD(&_4, this_ptr, "checknullarray", &_1, 47, &get, &globalGet);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&get, &_4);
-	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 46, &post, &globalPost);
+	ZEPHIR_CALL_METHOD(&_5, this_ptr, "checknullarray", &_1, 47, &post, &globalPost);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(&post, &_5);
 	zephir_create_array(return_value, 5, 0);
@@ -150,7 +143,7 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	zephir_array_update_string(return_value, SL("cookies"), &cookies, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("get"), &get, PH_COPY | PH_SEPARATE);
 	zephir_array_update_string(return_value, SL("post"), &post, PH_COPY | PH_SEPARATE);
-	RETURN_MM();
+	return;
 }
 
 /**
@@ -159,10 +152,8 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
  */
 PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval super;
 	zval *source, source_sub, *super_param = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&source_sub);
 	ZVAL_UNDEF(&super);
@@ -170,18 +161,12 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 		Z_PARAM_ZVAL(source)
 		Z_PARAM_ARRAY(super)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &source, &super_param);
 	zephir_get_arrval(&super, super_param);
-
-
 	if (UNEXPECTED(Z_TYPE_P(source) == IS_NULL)) {
 		RETURN_CTOR(&super);
 	}
 	RETVAL_ZVAL(source, 1, 0);
-	RETURN_MM();
+	return;
 }
 

@@ -27,17 +27,12 @@ ZEPHIR_INIT_CLASS(stub_7__closure)
 PHP_METHOD(stub_7__closure, __invoke)
 {
 	zval *x, x_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&x_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(x)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &x);
-
-
 	RETURN_LONG((((zephir_get_numberval(x) + 100)) + ((zephir_get_numberval(x) * 150))));
 }
 

@@ -28,11 +28,6 @@ ZEPHIR_INIT_CLASS(Stub_Optimizers_CreateArray)
 PHP_METHOD(Stub_Optimizers_CreateArray, createNoSize)
 {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-
 	zephir_create_array(return_value, 0, 1);
 	return;
 }
@@ -41,18 +36,12 @@ PHP_METHOD(Stub_Optimizers_CreateArray, createSize)
 {
 	zval *n_param = NULL, _0;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
-	n = zephir_get_intval(n_param);
-
-
 	ZVAL_LONG(&_0, n);
 	zephir_create_array(return_value, zephir_get_intval(&_0), 1);
 	return;

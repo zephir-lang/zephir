@@ -33,31 +33,24 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1055)
 {
 	zval _1, _3;
 	zval _0, _2;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	zephir_create_array(&_0, 1, 0);
-	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_NULL(&_1);
 	ZVAL_STRING(&_1, "aa");
 	zephir_array_fast_append(&_0, &_1);
-	ZEPHIR_INIT_VAR(&_2);
+	ZVAL_NULL(&_2);
 	zephir_create_array(&_2, 1, 0);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "aaa");
 	zephir_array_fast_append(&_2, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
 	ZVAL_STRING(&_1, "bla bla aa aaa askks");
-	ZEPHIR_INIT_VAR(&_3);
+	ZVAL_NULL(&_3);
 	zephir_fast_str_replace(&_3, &_0, &_2, &_1);
 	RETURN_CCTOR(&_3);
 }
@@ -65,23 +58,16 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1055)
 PHP_METHOD(Stub_Optimizers_StrReplace, issue1087)
 {
 	zval filtered, sanitize, _0, _1;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&filtered);
 	ZVAL_UNDEF(&sanitize);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&filtered);
+	ZVAL_NULL(&filtered);
 	ZVAL_STRING(&filtered, "test_test");
-	ZEPHIR_INIT_VAR(&sanitize);
+	ZVAL_NULL(&sanitize);
 	zephir_create_array(&sanitize, 8, 0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	ZVAL_STRING(&_0, "/");
 	zephir_array_fast_append(&sanitize, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -106,7 +92,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1087)
 	ZVAL_STRING(&_0, "&");
 	zephir_array_fast_append(&sanitize, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_NULL(&_1);
 	ZVAL_STRING(&_1, "");
 	zephir_fast_str_replace(&_0, &sanitize, &_1, &filtered);
 	ZEPHIR_CPY_WRT(&filtered, &_0);
@@ -118,21 +104,14 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A)
 	zval subject;
 	zval _0;
 	zval search, replace;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&search);
 	ZVAL_UNDEF(&replace);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&subject);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&search);
+	ZVAL_NULL(&search);
 	zephir_create_array(&search, 5, 0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	ZVAL_STRING(&_0, "A");
 	zephir_array_fast_append(&search, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -147,7 +126,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "E");
 	zephir_array_fast_append(&search, &_0);
-	ZEPHIR_INIT_VAR(&replace);
+	ZVAL_NULL(&replace);
 	zephir_create_array(&replace, 5, 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "B");
@@ -164,7 +143,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732A)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "F");
 	zephir_array_fast_append(&replace, &_0);
-	ZEPHIR_INIT_VAR(&subject);
+	ZVAL_NULL(&subject);
 	ZVAL_STRING(&subject, "A");
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_fast_str_replace(&_0, &search, &replace, &subject);
@@ -176,22 +155,15 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B)
 	zval subject;
 	zval _0;
 	zval patterns, replacements;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&patterns);
 	ZVAL_UNDEF(&replacements);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&subject);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&patterns);
+	ZVAL_NULL(&patterns);
 	zephir_create_array(&patterns, 3, 0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	ZVAL_STRING(&_0, "/quick/");
 	zephir_array_fast_append(&patterns, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -200,7 +172,7 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "/fox/");
 	zephir_array_fast_append(&patterns, &_0);
-	ZEPHIR_INIT_VAR(&replacements);
+	ZVAL_NULL(&replacements);
 	zephir_create_array(&replacements, 3, 0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "bear");
@@ -211,10 +183,10 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue732B)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "slow");
 	zephir_array_fast_append(&replacements, &_0);
-	ZEPHIR_INIT_VAR(&subject);
+	ZVAL_NULL(&subject);
 	ZVAL_STRING(&subject, "The quick brown fox jumped over the lazy dog.");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 75, &patterns, &replacements, &subject);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace", NULL, 78, &patterns, &replacements, &subject);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 

@@ -186,6 +186,7 @@ zend_class_entry *stub_oo_propertyaccess_ce;
 zend_class_entry *stub_oo_scopes_abstractclass_ce;
 zend_class_entry *stub_oo_scopes_abstractclassmagic_ce;
 zend_class_entry *stub_oo_scopes_privatescopetester_ce;
+zend_class_entry *stub_openssl_ce;
 zend_class_entry *stub_operator_ce;
 zend_class_entry *stub_optimizers_acos_ce;
 zend_class_entry *stub_optimizers_arraymerge_ce;
@@ -417,6 +418,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClass);
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClassMagic);
 	ZEPHIR_INIT(Stub_Oo_Scopes_PrivateScopeTester);
+	ZEPHIR_INIT(Stub_Openssl);
 	ZEPHIR_INIT(Stub_Operator);
 	ZEPHIR_INIT(Stub_Optimizers_ACos);
 	ZEPHIR_INIT(Stub_Optimizers_ASin);

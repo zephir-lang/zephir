@@ -29,7 +29,6 @@ ZEPHIR_INIT_CLASS(Stub_Sort)
 PHP_METHOD(Stub_Sort, quick)
 {
 	zend_bool _1;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_8 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, length = 0, pivot = 0, item = 0, _2, _3;
 	zval *arr_param = NULL, left, right, _0, _7, _10, _11, _4$$4, _5$$5, _6$$6;
@@ -50,24 +49,17 @@ PHP_METHOD(Stub_Sort, quick)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(arr)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &arr_param);
 	zephir_get_arrval(&arr, arr_param);
-
-
 	length = zephir_fast_count_int(&arr);
 	if (length <= 1) {
 		RETURN_CTOR(&arr);
 	}
-	zephir_memory_observe(&_0);
 	zephir_array_fetch_long(&_0, &arr, 0, PH_NOISY, "stub/sort.zep", 18);
 	pivot = zephir_get_intval(&_0);
-	ZEPHIR_INIT_VAR(&left);
+	ZVAL_NULL(&left);
 	array_init(&left);
-	ZEPHIR_INIT_VAR(&right);
+	ZVAL_NULL(&right);
 	array_init(&right);
 	_3 = (length - 1);
 	_2 = 1;
@@ -97,17 +89,17 @@ PHP_METHOD(Stub_Sort, quick)
 			}
 		}
 	}
-	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 92, &left);
+	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 95, &left);
 	zephir_check_call_status();
-	ZEPHIR_INIT_VAR(&_9);
+	ZVAL_NULL(&_9);
 	zephir_create_array(&_9, 1, 0);
-	ZEPHIR_INIT_VAR(&_10);
+	ZVAL_NULL(&_10);
 	ZVAL_LONG(&_10, pivot);
 	zephir_array_fast_append(&_9, &_10);
-	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 92, &right);
+	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 95, &right);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 93, &_7, &_9, &_11);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 96, &_7, &_9, &_11);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 

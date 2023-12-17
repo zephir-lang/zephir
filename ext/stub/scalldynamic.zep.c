@@ -29,27 +29,18 @@ ZEPHIR_INIT_CLASS(Stub_ScallDynamic)
 
 PHP_METHOD(Stub_ScallDynamic, testMethod1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello public");
 }
 
 PHP_METHOD(Stub_ScallDynamic, testMethod2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello protected");
 }
 
 PHP_METHOD(Stub_ScallDynamic, testMethod3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello private");
 }
@@ -58,17 +49,12 @@ PHP_METHOD(Stub_ScallDynamic, selfDynamicCall1)
 {
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *methodName, methodName_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&methodName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(methodName)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &methodName);
-
-
 	return;
 }
 

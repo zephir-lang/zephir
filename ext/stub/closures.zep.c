@@ -31,9 +31,6 @@ ZEPHIR_INIT_CLASS(Stub_Closures)
 
 PHP_METHOD(Stub_Closures, simple1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_1__closure_ce, SL("__invoke"));
 	return;
@@ -41,9 +38,6 @@ PHP_METHOD(Stub_Closures, simple1)
 
 PHP_METHOD(Stub_Closures, simple2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_2__closure_ce, SL("__invoke"));
 	return;
@@ -51,9 +45,6 @@ PHP_METHOD(Stub_Closures, simple2)
 
 PHP_METHOD(Stub_Closures, simple3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_3__closure_ce, SL("__invoke"));
 	return;
@@ -61,9 +52,6 @@ PHP_METHOD(Stub_Closures, simple3)
 
 PHP_METHOD(Stub_Closures, simple4)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_4__closure_ce, SL("__invoke"));
 	return;
@@ -71,9 +59,6 @@ PHP_METHOD(Stub_Closures, simple4)
 
 PHP_METHOD(Stub_Closures, simple5)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_5__closure_ce, SL("__invoke"));
 	return;
@@ -81,9 +66,6 @@ PHP_METHOD(Stub_Closures, simple5)
 
 PHP_METHOD(Stub_Closures, arrow1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_6__closure_ce, SL("__invoke"));
 	return;
@@ -91,9 +73,6 @@ PHP_METHOD(Stub_Closures, arrow1)
 
 PHP_METHOD(Stub_Closures, arrow2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	zephir_create_closure_ex(return_value, NULL, stub_7__closure_ce, SL("__invoke"));
 	return;
@@ -103,12 +82,8 @@ PHP_METHOD(Stub_Closures, testUseCommand)
 {
 	zval _0;
 	zend_long abc;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	abc = 1;
 	zephir_create_closure_ex(return_value, NULL, stub_8__closure_ce, SL("__invoke"));
 	ZVAL_UNDEF(&_0);
@@ -119,26 +94,18 @@ PHP_METHOD(Stub_Closures, testUseCommand)
 
 PHP_METHOD(Stub_Closures, issue1860)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *abc_param = NULL;
 	zval abc;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(abc)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &abc_param);
-	ZEPHIR_OBS_COPY_OR_DUP(&abc, abc_param);
-
-
+	ZVAL_COPY(&abc, abc_param);
 	zephir_create_closure_ex(return_value, NULL, stub_9__closure_ce, SL("__invoke"));
 	zephir_update_static_property_ce(stub_9__closure_ce, ZEND_STRL("abc"), &abc);
-	RETURN_MM();
+	return;
 }
 
 /**
@@ -148,28 +115,21 @@ PHP_METHOD(Stub_Closures, issue642)
 {
 	zval _0;
 	zval obj, closure;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&closure);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&obj);
+	ZVAL_NULL(&obj);
 	object_init(&obj);
-	ZEPHIR_INIT_VAR(&closure);
+	ZVAL_NULL(&closure);
 	zephir_create_closure_ex(&closure, NULL, stub_10__closure_ce, SL("__invoke"));
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	zephir_create_array(&_0, 1, 0);
 	zephir_array_fast_append(&_0, &obj);
 	ZEPHIR_CALL_USER_FUNC_ARRAY(return_value, &closure, &_0);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Closures, issue1036SetArgument)
@@ -181,11 +141,7 @@ PHP_METHOD(Stub_Closures, issue1036SetArgument)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(argument)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &argument);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_argument"), argument);
 }
 
@@ -198,11 +154,7 @@ PHP_METHOD(Stub_Closures, issue1036SetFunction)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(func)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &func);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_function"), func);
 }
 
@@ -212,21 +164,15 @@ PHP_METHOD(Stub_Closures, issue1036SetFunction)
 PHP_METHOD(Stub_Closures, issue1036Call)
 {
 	zval _0, _1;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_function"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("_argument"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 29, &_0, &_1);
+	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 30, &_0, &_1);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 

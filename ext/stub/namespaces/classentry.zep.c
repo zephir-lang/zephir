@@ -26,17 +26,12 @@ ZEPHIR_INIT_CLASS(Stub_Namespaces_ClassEntry)
 PHP_METHOD(Stub_Namespaces_ClassEntry, setParam)
 {
 	zval *param, param_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, stub_namespaces_a_b_sub_ce)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
-
-
 	RETVAL_ZVAL(param, 1, 0);
 	return;
 }
@@ -44,17 +39,12 @@ PHP_METHOD(Stub_Namespaces_ClassEntry, setParam)
 PHP_METHOD(Stub_Namespaces_ClassEntry, setParamImported)
 {
 	zval *param, param_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, stub_namespaces_a_b_sub_ce)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
-
-
 	RETVAL_ZVAL(param, 1, 0);
 	return;
 }

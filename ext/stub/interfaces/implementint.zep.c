@@ -36,12 +36,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(val)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
-	val = zephir_get_intval(val_param);
-
-
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, val);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("val"), &_0);
@@ -49,9 +44,6 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 
 PHP_METHOD(Stub_Interfaces_ImplementInt, get)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "val");
 }

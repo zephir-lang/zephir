@@ -153,6 +153,7 @@
 #include "stub/oo/scopes/abstractclassmagic.zep.h"
 #include "stub/oo/scopes/privatescopetester.zep.h"
 #include "stub/ooimpl/abeginning.zep.h"
+#include "stub/openssl.zep.h"
 #include "stub/operator.zep.h"
 #include "stub/optimizers/isscalar.zep.h"
 #include "stub/optimizers/acos.zep.h"

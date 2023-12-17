@@ -29,23 +29,15 @@ ZEPHIR_INIT_CLASS(Stub_Issue663)
 PHP_METHOD(Stub_Issue663, is_array_assoc)
 {
 	zend_bool _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_1 = NULL;
 	zval *arr, arr_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &arr);
-
-
 	_0 = !(Z_TYPE_P(arr) == IS_ARRAY);
 	if (!(_0)) {
 		_0 = ZEPHIR_IS_EMPTY(arr);
@@ -53,32 +45,24 @@ PHP_METHOD(Stub_Issue663, is_array_assoc)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 54, arr);
+	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 55, arr);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 {
 	zend_bool _0;
 	zend_long count = 0, i = 0, _1, _2;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arr_param = NULL;
 	zval arr;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(arr)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &arr_param);
 	zephir_get_arrval(&arr, arr_param);
-
-
 	count = zephir_fast_count_int(&arr);
 	_2 = (count - 1);
 	_1 = 0;
@@ -105,24 +89,16 @@ PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 PHP_METHOD(Stub_Issue663, is_array_indexed)
 {
 	zend_bool _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *arr, arr_sub, _1;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr_sub);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &arr);
-
-
 	_0 = !(Z_TYPE_P(arr) == IS_ARRAY);
 	if (!(_0)) {
 		_0 = ZEPHIR_IS_EMPTY(arr);
@@ -130,7 +106,7 @@ PHP_METHOD(Stub_Issue663, is_array_indexed)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 54, arr);
+	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 55, arr);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(!zephir_is_true(&_1));
 }

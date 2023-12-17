@@ -30,20 +30,13 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	zend_string *_3;
 	zend_ulong _2;
 	zval arr, k, v, *_0, _1;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&arr);
+	ZVAL_NULL(&arr);
 	object_init_ex(&arr, stub_arrayiterator_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 4);
 	zephir_check_call_status();
@@ -60,7 +53,7 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _0);
 			ZEPHIR_CONCAT_VV(return_value, &k, &v);
-			RETURN_MM();
+			return;
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &arr, "rewind", NULL, 0);
@@ -76,7 +69,7 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 			ZEPHIR_CALL_METHOD(&v, &arr, "current", NULL, 0);
 			zephir_check_call_status();
 				ZEPHIR_CONCAT_VV(return_value, &k, &v);
-				RETURN_MM();
+				return;
 			ZEPHIR_CALL_METHOD(NULL, &arr, "next", NULL, 0);
 			zephir_check_call_status();
 		}

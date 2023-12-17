@@ -32,21 +32,14 @@ PHP_METHOD(Stub_Oo_OoDynamicA, getNew)
 {
 	zend_class_entry *_1;
 	zval className, fullClassName, _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&className);
 	ZVAL_UNDEF(&fullClassName);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&className);
+	ZVAL_NULL(&className);
 	zephir_get_called_class(&className);
-	ZEPHIR_INIT_VAR(&fullClassName);
+	ZVAL_NULL(&fullClassName);
 	ZEPHIR_CONCAT_SV(&fullClassName, "\\", &className);
 	zephir_fetch_safe_class(&_0, &fullClassName);
 	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
@@ -59,55 +52,33 @@ PHP_METHOD(Stub_Oo_OoDynamicA, getNew)
 		zephir_check_call_status();
 	}
 
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Oo_OoDynamicA, call2)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	ZEPHIR_RETURN_CALL_SELF("getnew", NULL, 0);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Oo_OoDynamicA, call1)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	ZEPHIR_RETURN_CALL_SELF("call2", NULL, 0);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Oo_OoDynamicA, execute)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("A");
 }
 
 PHP_METHOD(Stub_Oo_OoDynamicA, execute2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("AA");
 }

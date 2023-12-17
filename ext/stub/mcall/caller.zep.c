@@ -26,32 +26,21 @@ ZEPHIR_INIT_CLASS(Stub_Mcall_Caller)
 
 PHP_METHOD(Stub_Mcall_Caller, start)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *f, f_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&f_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(f)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &f);
-
-
 	ZEPHIR_RETURN_CALL_ZVAL_FUNCTION(f, NULL, 0);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Mcall_Caller, perform)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("Caller:perform");
 }

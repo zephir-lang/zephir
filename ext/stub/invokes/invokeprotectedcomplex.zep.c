@@ -26,7 +26,6 @@ ZEPHIR_INIT_CLASS(Stub_Invokes_InvokeProtectedComplex)
 
 PHP_METHOD(Stub_Invokes_InvokeProtectedComplex, __construct)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *text_param = NULL;
 	zval text;
 	zval *this_ptr = getThis();
@@ -35,15 +34,8 @@ PHP_METHOD(Stub_Invokes_InvokeProtectedComplex, __construct)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
 	zephir_get_strval(&text, text_param);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("text"), &text);
-	ZEPHIR_MM_RESTORE();
 }
 

@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_UseTest)
@@ -27,9 +26,6 @@ ZEPHIR_INIT_CLASS(Stub_UseTest)
 
 PHP_METHOD(Stub_UseTest, createInstance)
 {
-	zval *this_ptr = getThis();
-
-
 
 	object_init(return_value);
 	return;
@@ -37,9 +33,6 @@ PHP_METHOD(Stub_UseTest, createInstance)
 
 PHP_METHOD(Stub_UseTest, count)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(0);
 }
@@ -47,15 +40,7 @@ PHP_METHOD(Stub_UseTest, count)
 PHP_METHOD(Stub_UseTest, testUseClass1)
 {
 	zend_class_entry *_0 = NULL;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
 	}
@@ -65,21 +50,13 @@ PHP_METHOD(Stub_UseTest, testUseClass1)
 		zephir_check_call_status();
 	}
 
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_UseTest, testUseClass2)
 {
 	zend_class_entry *_0 = NULL;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Strings"), ZEND_FETCH_CLASS_AUTO);
 	}
@@ -89,21 +66,13 @@ PHP_METHOD(Stub_UseTest, testUseClass2)
 		zephir_check_call_status();
 	}
 
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_UseTest, testUseNamespaceAlias)
 {
 	zend_class_entry *_0 = NULL;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	if (!_0) {
 	_0 = zephir_fetch_class_str_ex(SL("Oo\\OoConstruct"), ZEND_FETCH_CLASS_AUTO);
 	}
@@ -113,6 +82,6 @@ PHP_METHOD(Stub_UseTest, testUseNamespaceAlias)
 		zephir_check_call_status();
 	}
 
-	RETURN_MM();
+	return;
 }
 

@@ -30,12 +30,8 @@ PHP_METHOD(Stub_Optimizers_Tan, testInt)
 {
 	zval _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	a = 0;
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(tan(a));
@@ -45,12 +41,8 @@ PHP_METHOD(Stub_Optimizers_Tan, testVar)
 {
 	zval _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	a = 0;
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(tan(a));
@@ -60,12 +52,8 @@ PHP_METHOD(Stub_Optimizers_Tan, testVar2)
 {
 	zval _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	a = 1;
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(tan(a));
@@ -74,12 +62,8 @@ PHP_METHOD(Stub_Optimizers_Tan, testVar2)
 PHP_METHOD(Stub_Optimizers_Tan, testIntValue1)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	ZVAL_LONG(&_0, 1);
 	RETURN_DOUBLE(tan(1));
 }
@@ -87,12 +71,8 @@ PHP_METHOD(Stub_Optimizers_Tan, testIntValue1)
 PHP_METHOD(Stub_Optimizers_Tan, testIntValue2)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	ZVAL_LONG(&_0, 2);
 	RETURN_DOUBLE(tan(2));
 }
@@ -101,18 +81,12 @@ PHP_METHOD(Stub_Optimizers_Tan, testIntParameter)
 {
 	zval *a_param = NULL, _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	a = zephir_get_intval(a_param);
-
-
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(tan(a));
 }
@@ -120,17 +94,12 @@ PHP_METHOD(Stub_Optimizers_Tan, testIntParameter)
 PHP_METHOD(Stub_Optimizers_Tan, testVarParameter)
 {
 	zval *a, a_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
-
 	RETURN_DOUBLE(zephir_tan(a));
 }
 

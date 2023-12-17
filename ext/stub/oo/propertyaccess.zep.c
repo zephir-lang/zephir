@@ -31,7 +31,6 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 {
 	zval _0, _6;
 	zval test, test1, _1, _2, _3, _4, _5, _7, _8, _9, _10;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&test);
@@ -47,16 +46,11 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	ZVAL_UNDEF(&_10);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_6);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&test);
+	ZVAL_NULL(&test);
 	object_init(&test);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	zephir_create_array(&_0, 5, 0);
-	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_NULL(&_1);
 	ZVAL_STRING(&_1, "1");
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -78,10 +72,9 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_read_property(&_4, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch_long(&_5, &_4, 1, PH_NOISY | PH_READONLY, "stub/oo/propertyaccess.zep", 18);
 	zephir_update_property_zval(&test, ZEND_STRL("test3"), &_5);
-	ZEPHIR_INIT_VAR(&_6);
+	ZVAL_NULL(&_6);
 	zephir_create_array(&_6, 4, 0);
 	zephir_read_property(&_7, &test, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	zephir_memory_observe(&_8);
 	zephir_array_fetch_long(&_8, &_7, 1, PH_NOISY, "stub/oo/propertyaccess.zep", 19);
 	zephir_array_fast_append(&_6, &_8);
 	ZEPHIR_INIT_NVAR(&_1);
@@ -98,9 +91,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_read_property(&_9, this_ptr, ZEND_STRL("a"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_10, &_9, ZEND_STRL("test2"), PH_NOISY_CC | PH_READONLY);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("b"), &_10);
-	zephir_memory_observe(&test1);
 	zephir_read_property(&test1, this_ptr, ZEND_STRL("a"), PH_NOISY_CC);
-	ZEPHIR_MM_RESTORE();
 }
 
 /**
@@ -115,11 +106,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &value);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("privateVariable"), value);
 	RETURN_THISW();
 }
@@ -129,9 +116,6 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
  */
 PHP_METHOD(Stub_Oo_PropertyAccess, getPrivatevariable)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "privateVariable");
 }

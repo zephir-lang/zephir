@@ -27,19 +27,12 @@ ZEPHIR_INIT_CLASS(Stub_Properties_PropertyUpdate)
 PHP_METHOD(Stub_Properties_PropertyUpdate, update1)
 {
 	zval _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	ZVAL_UNDEF(&_0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	ZVAL_STRING(&_0, "aaa");
 	zephir_update_property_array_append(this_ptr, SL("p1"), &_0);
-	ZEPHIR_MM_RESTORE();
 }
 

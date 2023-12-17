@@ -28,7 +28,6 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClass)
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, *value, value_sub;
 	zval name;
 	zval *this_ptr = getThis();
@@ -39,32 +38,20 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &name_param, &value);
 	zephir_get_strval(&name, name_param);
-
-
 	zephir_update_property_zval_zval(this_ptr, &name, value);
 	RETURN_THIS();
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "privateProperty2");
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, getProtectedProperty2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "protectedProperty2");
 }

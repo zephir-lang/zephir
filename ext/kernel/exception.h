@@ -19,25 +19,21 @@
 #define ZEPHIR_THROW_EXCEPTION_STR(class_entry, message) \
 	do { \
 		zephir_throw_exception_string(class_entry, message, strlen(message)); \
-		ZEPHIR_MM_RESTORE(); \
 	} while (0)
 
 #define ZEPHIR_THROW_EXCEPTION_DEBUG_STR(class_entry, message, file, line) \
   do { \
     zephir_throw_exception_string_debug(class_entry, message, strlen(message), file, line); \
-    ZEPHIR_MM_RESTORE(); \
   } while (0)
 
 #define ZEPHIR_THROW_EXCEPTION_ZVAL(class_entry, message) \
 	do { \
 		zephir_throw_exception_zval(class_entry, message); \
-		ZEPHIR_MM_RESTORE(); \
 	} while (0)
 
 #define ZEPHIR_THROW_EXCEPTION_DEBUG_ZVAL(class_entry, message, file, line) \
   do { \
     zephir_throw_exception_zval(class_entry, message, file, line); \
-    ZEPHIR_MM_RESTORE(); \
   } while (0)
 
 

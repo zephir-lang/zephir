@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Globals_Session_Child)
@@ -26,17 +25,10 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Session_Child)
 
 PHP_METHOD(Stub_Globals_Session_Child, destroy)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "removesessiondata", NULL, 0);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 

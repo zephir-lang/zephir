@@ -32,7 +32,6 @@ ZEPHIR_INIT_CLASS(Stub_Instance)
 PHP_METHOD(Stub_Instance, __construct)
 {
 	zval *a1, a1_sub, *a2, a2_sub, *a3, a3_sub, *a4, a4_sub, *a5, a5_sub, *a6, a6_sub, *a7, a7_sub, *a8, a8_sub, *a9, a9_sub, *a10, a10_sub, *a11, a11_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a1_sub);
 	ZVAL_UNDEF(&a2_sub);
@@ -58,30 +57,19 @@ PHP_METHOD(Stub_Instance, __construct)
 		Z_PARAM_OBJECT_OF_CLASS(a10, stub_compare_ce)
 		Z_PARAM_OBJECT_OF_CLASS(a11, stub_concat_ce)
 	ZEND_PARSE_PARAMETERS_END();
-
-
 	zephir_fetch_params_without_memory_grow(11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
-
-
 }
 
 PHP_METHOD(Stub_Instance, testIssue1339)
 {
 	zval parameters, _0;
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&parameters);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
-	ZEPHIR_INIT_VAR(&parameters);
+	ZVAL_NULL(&parameters);
 	zephir_create_array(&parameters, 11, 0);
-	ZEPHIR_INIT_VAR(&_0);
+	ZVAL_NULL(&_0);
 	object_init_ex(&_0, stub_arithmetic_ce);
 	if (zephir_has_constructor(&_0)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
@@ -91,7 +79,7 @@ PHP_METHOD(Stub_Instance, testIssue1339)
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	object_init_ex(&_0, stub_arrayobject_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 47);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 48);
 	zephir_check_call_status();
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -170,31 +158,23 @@ PHP_METHOD(Stub_Instance, testIssue1339)
 	ZVAL_STRING(&_0, "Stub\\Instance");
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(return_value, &_0, &parameters);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 
 PHP_METHOD(Stub_Instance, testInstanceCreate)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *className_param = NULL;
 	zval className;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&className);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(className)
 	ZEND_PARSE_PARAMETERS_END();
-
-
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className_param);
 	zephir_get_strval(&className, className_param);
-
-
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(return_value, &className);
 	zephir_check_call_status();
-	RETURN_MM();
+	return;
 }
 

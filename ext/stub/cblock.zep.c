@@ -46,11 +46,6 @@ ZEPHIR_INIT_CLASS(Stub_Cblock)
 PHP_METHOD(Stub_Cblock, testCblock1)
 {
 	zend_long a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	
 			a = MAX_FACTOR;
@@ -61,11 +56,6 @@ PHP_METHOD(Stub_Cblock, testCblock1)
 PHP_METHOD(Stub_Cblock, testCblock2)
 {
 	long a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	
 			a = fibonacci(MAX_FACTOR);

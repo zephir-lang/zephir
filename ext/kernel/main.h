@@ -112,7 +112,6 @@ extern zend_string* i_self;
 #define RETURN_CTOR(var)        \
 	do {                        \
 		RETVAL_ZVAL(var, 1, 0); \
-		ZEPHIR_MM_RESTORE();    \
 		return;                 \
 	} while (0)
 
@@ -127,7 +126,6 @@ extern zend_string* i_self;
 #define RETURN_CCTOR(v)            \
 	do {                           \
 		ZVAL_DUP(return_value, v); \
-		ZEPHIR_MM_RESTORE();       \
 		return;                    \
 	} while (0)
 
@@ -146,7 +144,6 @@ extern zend_string* i_self;
 #define RETURN_THIS() { \
 		RETVAL_ZVAL(getThis(), 1, 0); \
 	} \
-	ZEPHIR_MM_RESTORE(); \
 	return;
 
 #define RETURN_LCTORW(var) RETURN_CCTORW(var);
@@ -160,28 +157,25 @@ extern zend_string* i_self;
 	zephir_return_property(return_value, object, SL(member_name)); \
 	return;
 
-/** Return without change return_value */
-#define RETURN_MM()                 { ZEPHIR_MM_RESTORE(); return; }
-
 /** Return null restoring memory frame */
-#define RETURN_MM_BOOL(value)       { RETVAL_BOOL(value); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_BOOL(value)       { RETVAL_BOOL(value); return; }
 
 /** Return string restoring memory frame */
-#define RETURN_MM_STRING(str)       { RETVAL_STRING(str); ZEPHIR_MM_RESTORE(); return; }
-#define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_STRING(str)       { RETVAL_STRING(str); return; }
+#define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); return; }
 
 /* Return long */
-#define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_LONG(value)       { RETVAL_LONG(value); return; }
 
 /* Return double */
-#define RETURN_MM_DOUBLE(value)     { RETVAL_DOUBLE(value); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_DOUBLE(value)     { RETVAL_DOUBLE(value); return; }
 
 /**
  * Returns a zval in an object member
  */
 #define RETURN_MM_MEMBER(object, member_name) \
   zephir_return_property(return_value, object, SL(member_name)); \
-  RETURN_MM();
+  return;
 
 #define RETURN_ON_FAILURE(what) \
 	do { \
@@ -193,13 +187,12 @@ extern zend_string* i_self;
 #define RETURN_MM_ON_FAILURE(what) \
 	do { \
 		if (what == FAILURE) { \
-			ZEPHIR_MM_RESTORE(); \
 			return; \
 		} \
 	} while (0)
 
 /** Return null restoring memory frame */
-#define RETURN_MM_NULL()            { RETVAL_NULL(); ZEPHIR_MM_RESTORE(); return; }
+#define RETURN_MM_NULL()            { RETVAL_NULL(); return; }
 
 /* Globals functions */
 int zephir_get_global(zval *arr, const char *global, unsigned int global_length);
@@ -245,7 +238,6 @@ int zephir_is_iterable_ex(zval *arr, int duplicate);
 #define zephir_is_iterable(var, duplicate, file, line) \
 	if (!zephir_is_iterable_ex(var, duplicate)) { \
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(), "The argument is not initialized or iterable()", file, line); \
-		ZEPHIR_MM_RESTORE(); \
 		return; \
 	}
 
