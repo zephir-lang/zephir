@@ -427,6 +427,8 @@ class Variable implements TypeAwareInterface
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&' . $this->getName() . ');');
+                } else {
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
                 }
             }
 
@@ -458,7 +460,7 @@ class Variable implements TypeAwareInterface
         }
 
         /**
-         * Variables are allocated for the first time using ZVAL_NULL
+         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */
@@ -490,6 +492,8 @@ class Variable implements TypeAwareInterface
                 if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                     $this->mustInitNull = true;
                     $compilationContext->codePrinter->output('ZEPHIR_INIT_NVAR(&' . $this->getName() . ');');
+                } else {
+                    $compilationContext->codePrinter->output('ZEPHIR_INIT_VAR(&'.$this->getName().');');
                 }
             }
 
@@ -794,6 +798,8 @@ class Variable implements TypeAwareInterface
             if ($this->variantInits > 0 || $compilationContext->insideCycle) {
                 $this->mustInitNull = true;
                 $compilationContext->codePrinter->output('ZEPHIR_OBS_NVAR(' . $symbol . ');');
+            } else {
+                $compilationContext->codePrinter->output('zephir_memory_observe('.$symbol.');');
             }
 
             ++$this->variantInits;
@@ -1073,7 +1079,7 @@ class Variable implements TypeAwareInterface
         }
 
         /**
-         * Variables are allocated for the first time using ZVAL_NULL
+         * Variables are allocated for the first time using ZEPHIR_INIT_VAR
          * the second, third, etc. times are allocated using ZEPHIR_INIT_NVAR
          * Variables initialized for the first time in a cycle are always initialized using ZEPHIR_INIT_NVAR
          */

@@ -653,7 +653,7 @@ class Backend
         if (!$variable->isDoublePointer()) {
             $context->symbolTable->mustGrownStack(true);
             $symbolVariable = $this->getVariableCode($variable);
-            $context->codePrinter->output('ZVAL_COPY(' . $symbolVariable . ', ' . $code . ');');
+            $context->codePrinter->output('ZEPHIR_OBS_COPY_OR_DUP(' . $symbolVariable . ', ' . $code . ');');
         } else {
             $context->codePrinter->output($variable->getName() . ' = ' . $code . ';');
         }
@@ -1540,6 +1540,11 @@ class Backend
                 $code    = 'zephir_fcall_cache_entry';
                 break;
 
+            case 'zephir_method_globals':
+                $pointer = '*';
+                $code = 'zephir_method_globals';
+                break;
+
             default:
                 throw new CompilerException('Unsupported type in declare: ' . $type);
         }
@@ -1673,7 +1678,7 @@ class Backend
         bool $useCodePrinter = true,
         bool $second = false
     ): string {
-        $macro = !$second ? 'ZVAL_NULL' : 'ZEPHIR_INIT_NVAR';
+        $macro = !$second ? 'ZEPHIR_INIT_VAR' : 'ZEPHIR_INIT_NVAR';
         $code  = $macro . '(' . $this->getVariableCode($variable) . ');';
         if ($useCodePrinter) {
             $context->codePrinter->output($code);

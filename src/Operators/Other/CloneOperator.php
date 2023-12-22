@@ -83,7 +83,7 @@ class CloneOperator extends AbstractOperator
         $compilationContext->codePrinter->output(
             'if (zephir_clone(' . $symbol . ', ' . $clonedSymbol . ') == FAILURE) {'
         );
-        $compilationContext->codePrinter->output("\t" . 'return;');
+        $compilationContext->codePrinter->output("\t" . 'RETURN_MM();');
         $compilationContext->codePrinter->output('}');
 
         return new CompiledExpression('variable', $symbolVariable->getName(), $expression);

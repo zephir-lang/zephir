@@ -394,6 +394,7 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 #define zephir_check_call_status() \
 	do { \
 		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
+			ZEPHIR_MM_RESTORE(); \
 			return; \
 		} \
 	} while(0)
@@ -403,6 +404,9 @@ ZEPHIR_ATTR_WARN_UNUSED_RESULT ZEPHIR_ATTR_NONNULL static inline int zephir_has_
 		if (ZEPHIR_LAST_CALL_STATUS == FAILURE) { \
 			if (EG(exception)) { \
 				goto label; \
+			} else { \
+				ZEPHIR_MM_RESTORE(); \
+				return; \
 			} \
 		} \
 	} while (0)

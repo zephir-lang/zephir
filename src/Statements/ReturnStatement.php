@@ -32,7 +32,7 @@ final class ReturnStatement extends StatementAbstract
 {
     use VariablesTrait;
 
-    private const RETURN_RETURN = 'return;';
+    private const RETURN_RETURN = 'RETURN_MM();';
 
     /**
      * @param CompilationContext $compilationContext

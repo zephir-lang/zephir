@@ -58,6 +58,8 @@ class CreateSymbolTableOptimizer extends OptimizerAbstract
 
         // TODO: Still needed?
         $context->symbolTable->mustGrownStack(true);
+        $context->codePrinter->output('ZEPHIR_CREATE_SYMBOL_TABLE();');
+        $context->codePrinter->output('');
 
         return new CompiledExpression('null', null, $expression);
     }
