@@ -10,7 +10,6 @@ use Stubs\Events\EventManager;
 class Issue_2026
 {
 
-
     /**
      * Expects:
      *  return array|\StdClass[]
