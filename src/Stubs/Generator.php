@@ -306,7 +306,7 @@ class Generator
                 $returnTypes[] = 'mixed';
             } else {
                 if (array_key_exists('object', $methodReturnTypes)) {
-                    $returnTypes[] = key($method->getReturnClassTypes());
+                    $returnTypes[] = key($method->getReturnClassTypes()) ?: 'object';
                 }
 
                 if ($method->areReturnTypesIntCompatible()) {
