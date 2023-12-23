@@ -27,7 +27,7 @@ class Issue_2026
      *
      * @return array|bool|\StdClass[]
      */
-    public function getClassCollectionOrBool()
+    public function getClassCollectionOrBool(): array|bool
     {
     }
 
@@ -37,7 +37,7 @@ class Issue_2026
      *
      * @return array|bool|\Stubs\Events\EventManager[]
      */
-    public function getInterfaceCollectionOrBool()
+    public function getInterfaceCollectionOrBool(): array|bool
     {
     }
 
