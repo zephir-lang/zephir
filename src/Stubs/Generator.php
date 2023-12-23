@@ -299,47 +299,43 @@ class Generator
         }
 
         $return = '';
+        $returnTypes = [];
         if ($method->hasReturnTypes()) {
-            $supported = 0;
+            if (array_key_exists('variable', $method->getReturnTypes())) {
+                $returnTypes[] = 'mixed';
+            } else {
+                if (array_key_exists('object', $method->getReturnTypes())) {
+                    $returnTypes[] = key($method->getReturnClassTypes());
+                }
 
-            if (array_key_exists('object', $method->getReturnTypes())) {
-                $return = key($method->getReturnClassTypes());
-                ++$supported;
+                if ($method->areReturnTypesIntCompatible()) {
+                    $returnTypes[] = 'int';
+                }
+
+                if ($method->areReturnTypesDoubleCompatible()) {
+                    $returnTypes[] = 'float';
+                }
+
+                if ($method->areReturnTypesFalseCompatible()) {
+                    $returnTypes[] = 'false';
+                } elseif ($method->areReturnTypesBoolCompatible()) {
+                    $returnTypes[] = 'bool';
+                }
+
+                if ($method->areReturnTypesStringCompatible()) {
+                    $returnTypes[] = 'string';
+                }
+
+                if (array_key_exists('array', $method->getReturnTypes())) {
+                    $returnTypes[] = 'array';
+                }
+
+                if ($method->areReturnTypesNullCompatible()) {
+                    $returnTypes[] = 'null';
+                }
             }
 
-            if ($method->areReturnTypesIntCompatible()) {
-                $return = 'int';
-                ++$supported;
-            }
-
-            if ($method->areReturnTypesDoubleCompatible()) {
-                $return = 'float';
-                ++$supported;
-            }
-
-            if ($method->areReturnTypesBoolCompatible()) {
-                $return = 'bool';
-                ++$supported;
-            }
-
-            if ($method->areReturnTypesStringCompatible()) {
-                $return = 'string';
-                ++$supported;
-            }
-
-            if (array_key_exists('array', $method->getReturnTypes())) {
-                $return = 'array';
-                ++$supported;
-            }
-
-            if (!empty($return) && $method->areReturnTypesNullCompatible()) {
-                $return = '?' . $return;
-            }
-
-            // PHP doesn't support multiple return types (yet?)
-            if ($supported > 1 || array_key_exists('variable', $method->getReturnTypes())) {
-                $return = '';
-            }
+            $return = join('|', $returnTypes);
         } elseif ($method->isVoid()) {
             $return = 'void';
         }
