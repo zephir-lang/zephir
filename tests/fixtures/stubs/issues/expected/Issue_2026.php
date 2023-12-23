@@ -10,6 +10,7 @@ use Stubs\Events\EventManager;
 class Issue_2026
 {
 
+
     /**
      * Expects:
      *  return array|\stdClass[]
@@ -26,7 +27,7 @@ class Issue_2026
      *
      * @return array|bool|\stdClass[]
      */
-    public function getClassCollectionOrBool(): array|bool
+    public function getClassCollectionOrBool(): bool|array
     {
     }
 
@@ -36,7 +37,7 @@ class Issue_2026
      *
      * @return array|bool|\Stubs\Events\EventManager[]
      */
-    public function getInterfaceCollectionOrBool(): array|bool
+    public function getInterfaceCollectionOrBool(): bool|array
     {
     }
 
