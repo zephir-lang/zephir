@@ -16,26 +16,21 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\OptimizerAbstract;
 
 use function count;
 
 /**
- * GetClassOptimizer.
- *
  * Optimizes calls to 'get_class' using internal function
  */
 class GetClassOptimizer extends OptimizerAbstract
 {
+    protected bool $lower = false;
+
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
-     *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @throws Exception
      */
     public function optimize(array $expression, Call $call, CompilationContext $context)
     {
@@ -45,7 +40,7 @@ class GetClassOptimizer extends OptimizerAbstract
 
         $this->checkParameters($expression);
 
-        /*
+        /**
          * Process the expected symbol to be returned
          */
         $call->processExpectedReturn($context);
@@ -96,8 +91,10 @@ class GetClassOptimizer extends OptimizerAbstract
         string $symbol,
         array $resolvedParams
     ): void {
+        $lower = $this->lower ? 1 : 0;
+
         $context->codePrinter->output(
-            'zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', 0);'
+            'zephir_get_class(' . $symbol . ', ' . $resolvedParams[0] . ', ' . $lower . ');'
         );
     }
 }
