@@ -205,6 +205,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0, _1, _2;
 	long a;
@@ -215,6 +216,8 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
@@ -227,10 +230,12 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 		RETURN_MM_LONG(0);
 	} while(0);
 
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *result_type = NULL, result_type_sub, ret, _0;
 
 	ZVAL_UNDEF(&result_type_sub);
@@ -240,17 +245,19 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(result_type)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &result_type);
 	if (!result_type) {
 		result_type = &result_type_sub;
-		ZVAL_NULL(result_type);
+		ZEPHIR_INIT_VAR(result_type);
 		ZVAL_LONG(result_type, 1);
 	}
 	do {
-		ZVAL_NULL(&_0);
+		ZEPHIR_INIT_VAR(&_0);
 		ZEPHIR_GET_CONSTANT(&_0, "MYSQL_ASSOC");
 		if (ZEPHIR_IS_LONG(result_type, 1) || ZEPHIR_IS_EQUAL(result_type, &_0) || ZEPHIR_IS_LONG(result_type, 1)) {
-			ZVAL_NULL(&ret);
+			ZEPHIR_INIT_VAR(&ret);
 			ZVAL_STRING(&ret, "aaa");
 			break;
 		}

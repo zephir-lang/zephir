@@ -100,9 +100,14 @@ PHP_METHOD(Stub_Properties_PublicProperties, getSomeGetterSetterArray)
 PHP_METHOD(Stub_Properties_PublicProperties, test394Issue)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	zephir_memory_observe(&_0);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("someTrue"), PH_NOISY_CC);
 	RETURN_CCTOR(&_0);
 }
@@ -111,6 +116,7 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 {
 		zval _3$$4, _4$$4, _6$$5, _8$$6;
 	zval _0, _2, _5, _7, _10, _1$$3, _9$$6, _11$$7;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);
@@ -125,21 +131,23 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 	ZVAL_UNDEF(&_8$$6);
 	
 
+		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("someGetterSetterArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZVAL_NULL(&_1$$3);
+			ZEPHIR_INIT_VAR(&_1$$3);
 			array_init(&_1$$3);
 			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("someGetterSetterArray"), &_1$$3);
 		}
 		zephir_read_property_ex(&_2, this_ptr, ZEND_STRL("someArrayWithSubArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_2) == IS_NULL) {
-			ZVAL_NULL(&_3$$4);
+			ZEPHIR_INIT_VAR(&_3$$4);
 			zephir_create_array(&_3$$4, 4, 0);
-			ZVAL_NULL(&_4$$4);
+			ZEPHIR_INIT_VAR(&_4$$4);
 			zephir_create_array(&_4$$4, 1, 0);
 			add_assoc_stringl_ex(&_4$$4, SL("class"), SL("alert alert-success"));
 			zephir_array_update_string(&_3$$4, SL("success"), &_4$$4, PH_COPY | PH_SEPARATE);
@@ -159,7 +167,7 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 		}
 		zephir_read_property_ex(&_5, this_ptr, ZEND_STRL("someArrayWithSpecifyKeys"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_5) == IS_NULL) {
-			ZVAL_NULL(&_6$$5);
+			ZEPHIR_INIT_VAR(&_6$$5);
 			zephir_create_array(&_6$$5, 3, 0);
 			add_assoc_stringl_ex(&_6$$5, SL("a"), SL("A"));
 			add_assoc_stringl_ex(&_6$$5, SL("b"), SL("B"));
@@ -168,9 +176,9 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 		}
 		zephir_read_property_ex(&_7, this_ptr, ZEND_STRL("someArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_7) == IS_NULL) {
-			ZVAL_NULL(&_8$$6);
+			ZEPHIR_INIT_VAR(&_8$$6);
 			zephir_create_array(&_8$$6, 4, 0);
-			ZVAL_NULL(&_9$$6);
+			ZEPHIR_INIT_VAR(&_9$$6);
 			ZVAL_LONG(&_9$$6, 1);
 			zephir_array_fast_append(&_8$$6, &_9$$6);
 			ZEPHIR_INIT_NVAR(&_9$$6);
@@ -186,10 +194,11 @@ zend_object *zephir_init_properties_Stub_Properties_PublicProperties(zend_class_
 		}
 		zephir_read_property_ex(&_10, this_ptr, ZEND_STRL("someEmptyArray"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_10) == IS_NULL) {
-			ZVAL_NULL(&_11$$7);
+			ZEPHIR_INIT_VAR(&_11$$7);
 			array_init(&_11$$7);
 			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("someEmptyArray"), &_11$$7);
 		}
+		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);
 	}
 }

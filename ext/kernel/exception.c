@@ -31,11 +31,15 @@
 void zephir_throw_exception_debug(zval *object, const char *file, uint32_t line)
 {
 	zend_class_entry *default_exception_ce;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	int ZEPHIR_LAST_CALL_STATUS = 0;
 	zval curline;
 	zval object_copy;
 
 	ZVAL_UNDEF(&curline);
+
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (Z_TYPE_P(object) != IS_OBJECT) {
 		ZVAL_COPY_VALUE(&object_copy, object);
@@ -59,6 +63,7 @@ void zephir_throw_exception_debug(zval *object, const char *file, uint32_t line)
 	if (ZEPHIR_LAST_CALL_STATUS != FAILURE) {
 		zend_throw_exception_object(object);
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 /**

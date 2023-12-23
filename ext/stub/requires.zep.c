@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Requires)
 
 PHP_METHOD(Stub_Requires, requireExternal1)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *path, path_sub, _0;
 
 	ZVAL_UNDEF(&path_sub);
@@ -38,6 +39,8 @@ PHP_METHOD(Stub_Requires, requireExternal1)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &path);
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
 	if (zephir_require_zval_ret(&_0, path) == FAILURE) {
@@ -63,6 +66,7 @@ PHP_METHOD(Stub_Requires, requireExternal2)
 
 PHP_METHOD(Stub_Requires, requireExternal3)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *path, path_sub, external3, _0;
 	zval *this_ptr = getThis();
@@ -73,9 +77,13 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &path);
-	ZVAL_NULL(&_0);
-	ZVAL_NULL(&external3);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_CREATE_SYMBOL_TABLE();
+	
+	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, stub_requires_external3_ce);
 	if (zephir_has_constructor(&external3)) {
 		ZEPHIR_CALL_METHOD(NULL, &external3, "__construct", NULL, 0);
@@ -104,6 +112,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 {
 	zend_string *_4$$3;
 	zend_ulong _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *templatePath_param = NULL, *params, params_sub, _0, key, value, _7, *_1$$3, _2$$3, _5$$4, _6$$5;
 	zval templatePath;
@@ -121,6 +130,8 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 		Z_PARAM_STR(templatePath)
 		Z_PARAM_ZVAL(params)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &templatePath_param, &params);
 	if (UNEXPECTED(Z_TYPE_P(templatePath_param) != IS_STRING && Z_TYPE_P(templatePath_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'templatePath' must be of the type string"));
@@ -129,9 +140,11 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	if (EXPECTED(Z_TYPE_P(templatePath_param) == IS_STRING)) {
 		zephir_get_strval(&templatePath, templatePath_param);
 	} else {
-		ZVAL_NULL(&templatePath);
+		ZEPHIR_INIT_VAR(&templatePath);
 	}
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_CREATE_SYMBOL_TABLE();
+	
 	if (Z_TYPE_P(params) == IS_ARRAY) {
 		zephir_is_iterable(params, 0, "stub/requires.zep", 47);
 		if (Z_TYPE_P(params) == IS_ARRAY) {
@@ -183,6 +196,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 
 PHP_METHOD(Stub_Requires, requireOnce)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *path_param = NULL, _0;
 	zval path;
 
@@ -191,6 +205,8 @@ PHP_METHOD(Stub_Requires, requireOnce)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(path)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &path_param);
 	zephir_get_strval(&path, path_param);
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);

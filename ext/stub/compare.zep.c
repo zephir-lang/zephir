@@ -100,6 +100,7 @@ PHP_METHOD(Stub_Compare, isMoreThenPi)
  */
 PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *str_param = NULL;
 	zval str;
 
@@ -107,6 +108,8 @@ PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &str_param);
 	if (UNEXPECTED(Z_TYPE_P(str_param) != IS_STRING && Z_TYPE_P(str_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'str' must be of the type string"));
@@ -115,7 +118,7 @@ PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 	if (EXPECTED(Z_TYPE_P(str_param) == IS_STRING)) {
 		zephir_get_strval(&str, str_param);
 	} else {
-		ZVAL_NULL(&str);
+		ZEPHIR_INIT_VAR(&str);
 	}
 	if (ZEPHIR_IS_STRING_IDENTICAL(&str, "wrong testing")) {
 		ZEPHIR_INIT_NVAR(&str);

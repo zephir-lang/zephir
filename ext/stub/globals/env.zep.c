@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Env)
 
 PHP_METHOD(Stub_Globals_Env, read)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *name_param = NULL, _ENV, _0;
 	zval name;
 
@@ -36,10 +37,12 @@ PHP_METHOD(Stub_Globals_Env, read)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_ENV, SL("_ENV"));
 	zephir_fetch_params(1, 1, 0, &name_param);
 	zephir_get_strval(&name, name_param);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	if (zephir_array_isset(&_ENV, &name)) {
 		ZEPHIR_OBS_NVAR(&_0);
 		zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY, "stub/globals/env.zep", 8);

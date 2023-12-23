@@ -15,6 +15,7 @@
 #include "kernel/array.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Globals_Server)
@@ -29,6 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Server)
  */
 PHP_METHOD(Stub_Globals_Server, f1)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval _SERVER, _0, _1;
 	zval *this_ptr = getThis();
@@ -36,6 +38,8 @@ PHP_METHOD(Stub_Globals_Server, f1)
 	ZVAL_UNDEF(&_SERVER);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 
 	zephir_array_fetch_string(&_0, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 10);
@@ -44,6 +48,7 @@ PHP_METHOD(Stub_Globals_Server, f1)
 	zephir_check_call_status();
 	zephir_array_fetch_string(&_1, &_SERVER, SL("PHP_SELF"), PH_NOISY | PH_READONLY, "stub/globals/server.zep", 12);
 	zend_print_zval(&_1, 0);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Globals_Server, f2)

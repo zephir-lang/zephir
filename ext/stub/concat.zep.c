@@ -37,6 +37,7 @@ PHP_METHOD(Stub_Concat, getTestProperty)
 
 PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *title_param = NULL, _0;
 	zval title;
 
@@ -45,6 +46,8 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(title)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &title_param);
 	zephir_get_strval(&title, title_param);
 	ZEPHIR_OBS_NVAR(&_0);
@@ -52,17 +55,22 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	SEPARATE_ZVAL(&title);
 	zephir_concat_function(&title, &_0, &title);
 	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &title);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Concat, testConcat1)
 {
 	zval url, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&url);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&url);
 	ZVAL_STRING(&url, "test");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SV(&_0, "append", &url);
 	ZEPHIR_CPY_WRT(&url, &_0);
 	RETURN_CCTOR(&url);
@@ -72,16 +80,20 @@ PHP_METHOD(Stub_Concat, testConcat2)
 {
 	zval _1;
 	zval url, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&url);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_NULL(&url);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&url);
 	ZVAL_STRING(&url, "test");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SVS(&_0, "append", &url, "other");
 	ZEPHIR_CPY_WRT(&url, &_0);
-	ZVAL_NULL(&_1);
+	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SS(&_1, "append", "other");
 	ZEPHIR_CPY_WRT(&url, &_1);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -96,12 +108,16 @@ PHP_METHOD(Stub_Concat, testConcat2)
 PHP_METHOD(Stub_Concat, testConcat3)
 {
 	zval a, b;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
-	ZVAL_NULL(&b);
+	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
 	zephir_concat_self(&b, &a);
 	RETURN_CCTOR(&b);
@@ -114,6 +130,7 @@ PHP_METHOD(Stub_Concat, testConcat4)
 {
 	zval query, _1, _3;
 	double min = 0, max = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *value, value_sub, _0, _2;
 
 	ZVAL_UNDEF(&value_sub);
@@ -125,16 +142,20 @@ PHP_METHOD(Stub_Concat, testConcat4)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
-	ZVAL_NULL(&query);
+	ZEPHIR_INIT_VAR(&query);
 	min =  ((zephir_safe_div_zval_long(value, 100) * (double) (25)));
 	max =  ((zephir_safe_div_zval_long(value, 100) * (double) (50)));
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, max);
-	ZVAL_NULL(&_1);
+	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CONCAT_SV(&_1, "SELECT * FROM TEST WHERE value <= ", &_0);
 	zephir_concat_self(&query, &_1);
+	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_DOUBLE(&_2, min);
-	ZVAL_NULL(&_3);
+	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CONCAT_SV(&_3, " AND value >= ", &_2);
 	zephir_concat_self(&query, &_3);
 	RETURN_CTOR(&query);
@@ -146,6 +167,7 @@ PHP_METHOD(Stub_Concat, testConcat4)
 PHP_METHOD(Stub_Concat, testConcat5)
 {
 	zval retval, left;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *number_param = NULL, _0;
 	double number;
 
@@ -155,12 +177,15 @@ PHP_METHOD(Stub_Concat, testConcat5)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(number)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &number_param);
 	number = zephir_get_doubleval(number_param);
-	ZVAL_NULL(&left);
+	ZEPHIR_INIT_VAR(&left);
 	ZVAL_STRING(&left, "Concatenated string with number ");
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, number);
-	ZVAL_NULL(&retval);
+	ZEPHIR_INIT_VAR(&retval);
 	ZEPHIR_CONCAT_VV(&retval, &left, &_0);
 	RETURN_CTOR(&retval);
 }

@@ -30,9 +30,13 @@ ZEPHIR_INIT_CLASS(Stub_Typeoff)
 PHP_METHOD(Stub_Typeoff, testNativeStringFalse)
 {
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&testVar);
-	ZVAL_NULL(&testVar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "sdfsdf");
 	RETURN_MM_BOOL(1 == 0);
 }
@@ -40,9 +44,13 @@ PHP_METHOD(Stub_Typeoff, testNativeStringFalse)
 PHP_METHOD(Stub_Typeoff, testNativeStringTrue)
 {
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&testVar);
-	ZVAL_NULL(&testVar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "sdfsdf");
 	RETURN_MM_BOOL(1 == 1);
 }
@@ -78,9 +86,13 @@ PHP_METHOD(Stub_Typeoff, testNativeBoolTrue)
 PHP_METHOD(Stub_Typeoff, testNotBoolTrue)
 {
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&testVar);
-	ZVAL_NULL(&testVar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&testVar);
 	ZVAL_STRING(&testVar, "");
 	ZEPHIR_INIT_NVAR(&testVar);
 	ZVAL_BOOL(&testVar, 1);
@@ -97,9 +109,13 @@ PHP_METHOD(Stub_Typeoff, testNativeBoolFalse)
 PHP_METHOD(Stub_Typeoff, testArrayFalse)
 {
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&testVar);
-	ZVAL_NULL(&testVar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&testVar);
 	array_init(&testVar);
 	RETURN_MM_BOOL(Z_TYPE_P(&testVar) == IS_STRING);
 }
@@ -107,9 +123,13 @@ PHP_METHOD(Stub_Typeoff, testArrayFalse)
 PHP_METHOD(Stub_Typeoff, testArrayTrue)
 {
 	zval testVar;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&testVar);
-	ZVAL_NULL(&testVar);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&testVar);
 	array_init(&testVar);
 	RETURN_MM_BOOL(Z_TYPE_P(&testVar) == IS_ARRAY);
 }
@@ -117,20 +137,26 @@ PHP_METHOD(Stub_Typeoff, testArrayTrue)
 PHP_METHOD(Stub_Typeoff, testClassPropertyAccess)
 {
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_NULL(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "test string");
 	zephir_update_property_zval(this_ptr, ZEND_STRL("property"), &_0);
+	zephir_memory_observe(&_1);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("property"), PH_NOISY_CC);
 	RETURN_MM_BOOL(Z_TYPE_P(&_1) == IS_STRING);
 }
 
 PHP_METHOD(Stub_Typeoff, testUnknownTypeOf)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *u, u_sub, _0;
 
 	ZVAL_UNDEF(&u_sub);
@@ -138,8 +164,10 @@ PHP_METHOD(Stub_Typeoff, testUnknownTypeOf)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(u)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &u);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_gettype(&_0, u);
 	RETURN_CCTOR(&_0);
 }

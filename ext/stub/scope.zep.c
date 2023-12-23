@@ -35,6 +35,7 @@ PHP_METHOD(Stub_Scope, getStr)
 
 PHP_METHOD(Stub_Scope, getDyStr)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *g_param = NULL, _0;
 	zend_long g;
 
@@ -42,33 +43,40 @@ PHP_METHOD(Stub_Scope, getDyStr)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(g)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &g_param);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, g);
 	ZEPHIR_CONCAT_SV(return_value, "internal_", &_0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Scope, test1)
 {
 	zval ret, k, k$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, r;
 	zephir_fcall_cache_entry *_0 = NULL;
 
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&k$$3);
-	ZVAL_NULL(&ret);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&ret);
 	ZVAL_STRING(&ret, "");
 	ZEPHIR_CALL_SELF(&k, "getstr", &_0, 93);
 	zephir_check_call_status();
 	r = 1;
 	if (r == 1) {
-		ZVAL_NULL(&k$$3);
+		ZEPHIR_INIT_VAR(&k$$3);
 		ZVAL_STRING(&k$$3, "test");
 		zephir_concat_self(&ret, &k$$3);
 	}
 	ZEPHIR_CONCAT_VV(return_value, &ret, &k);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Scope, test2)
@@ -76,14 +84,18 @@ PHP_METHOD(Stub_Scope, test2)
 	zend_bool _0;
 	zval k, c, _5, _3$$3, _4$$3;
 	zend_long p, _1, _2, p$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	p = 15;
-	ZVAL_NULL(&k);
+	ZEPHIR_INIT_VAR(&k);
 	ZVAL_STRING(&k, "");
 	_2 = 3;
 	_1 = 0;
@@ -109,24 +121,28 @@ PHP_METHOD(Stub_Scope, test2)
 		}
 	}
 	zephir_create_array(return_value, 2, 0);
-	ZVAL_NULL(&_5);
+	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_LONG(&_5, p);
 	zephir_array_fast_append(return_value, &_5);
 	zephir_array_fast_append(return_value, &k);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Scope, test3)
 {
 	zend_bool _0;
 	zval k, c, str$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_3 = NULL;
 
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&c);
 	ZVAL_UNDEF(&str$$3);
-	ZVAL_NULL(&k);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&k);
 	ZVAL_STRING(&k, "");
 	_2 = 3;
 	_1 = 0;

@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/fcall.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Invokes_AbstractInvokerComplex)
@@ -26,14 +27,18 @@ ZEPHIR_INIT_CLASS(Stub_Invokes_AbstractInvokerComplex)
 PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __toString)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("text"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "renderarrayelementscomplex", NULL, 0, &_0);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Invokes_AbstractInvokerComplex, __invoke)

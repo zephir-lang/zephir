@@ -41,31 +41,38 @@ ZEPHIR_INIT_CLASS(Stub_SPropertyAccess)
 PHP_METHOD(Stub_SPropertyAccess, __construct)
 {
 	zval _0, _1, _2, _3, _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abc");
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("a"), &_0);
 	zephir_read_static_property_ce(&_0, stub_spropertyaccess_ce, SL("a"), PH_NOISY_CC | PH_READONLY);
 	ZVAL_LONG(&_1, 0);
 	ZVAL_LONG(&_2, 1);
-	ZVAL_NULL(&_3);
+	ZEPHIR_INIT_VAR(&_3);
 	zephir_substr(&_3, &_0, 0 , 1 , 0);
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("b"), &_3);
+	zephir_memory_observe(&_4);
 	zephir_read_static_property_ce(&_4, stub_spropertyaccess_ce, SL("b"), PH_NOISY_CC);
 	zephir_update_static_property_ce(stub_scallexternal_ce, ZEND_STRL("sproperty"), &_4);
 	ZEPHIR_OBS_NVAR(&_4);
 	zephir_read_static_property_ce(&_4, stub_scallexternal_ce, SL("sproperty"), PH_NOISY_CC);
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("b"), &_4);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null;
 
 	ZVAL_UNDEF(&delimiter_sub);
@@ -75,6 +82,8 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &delimiter);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -87,11 +96,12 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 		zephir_read_static_property_ce(delimiter, stub_spropertyaccess_ce, SL("_delimiterWithUnderscore"), PH_NOISY_CC);
 	}
 	RETVAL_ZVAL(delimiter, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_SPropertyAccess, testArgument)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null, _0$$3;
 
 	ZVAL_UNDEF(&delimiter_sub);
@@ -102,6 +112,8 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &delimiter);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -110,11 +122,12 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 		ZEPHIR_SEPARATE_PARAM(delimiter);
 	}
 	if (ZEPHIR_IS_EMPTY(delimiter)) {
+		zephir_memory_observe(&_0$$3);
 		zephir_read_static_property_ce(&_0$$3, stub_spropertyaccess_ce, SL("delimiter"), PH_NOISY_CC);
 		ZEPHIR_CPY_WRT(delimiter, &_0$$3);
 	}
 	RETVAL_ZVAL(delimiter, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
@@ -122,11 +135,15 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
 	zend_long _1, _2;
 	zend_bool _0;
 	zval i, _5, _3$$3, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	_2 = 3;
 	_1 = 0;
 	_0 = 0;
@@ -230,12 +247,16 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 	zend_long _1, _2;
 	zend_bool _0;
 	zval i, j, _5, _3$$3, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&j);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	_2 = 3;
 	_1 = 0;
 	_0 = 0;
@@ -267,9 +288,14 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 void zephir_init_static_properties_Stub_SPropertyAccess()
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
 	zephir_update_static_property_ce(stub_spropertyaccess_ce, ZEND_STRL("arrayVar"), &_0);
+	ZEPHIR_MM_RESTORE();
 }
 

@@ -195,9 +195,13 @@ PHP_METHOD(Stub_Constants, testDirConstant)
 PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue)
 {
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZEPHIR_GET_CONSTANT(&a, "PHP_VERSION");
 	RETURN_CCTOR(&a);
 }
@@ -210,9 +214,13 @@ PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue)
 PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted)
 {
 	zval delimiter;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&delimiter);
-	ZVAL_NULL(&delimiter);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&delimiter);
 	ZVAL_STRING(&delimiter, ".");
 	RETURN_CCTOR(&delimiter);
 }
@@ -220,9 +228,13 @@ PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted)
 PHP_METHOD(Stub_Constants, testStringConstantWithVars)
 {
 	zval property;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&property);
-	ZVAL_NULL(&property);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&property);
 	ZVAL_STRING(&property, "$SOME/CSRF/KEY$");
 	RETURN_CCTOR(&property);
 }

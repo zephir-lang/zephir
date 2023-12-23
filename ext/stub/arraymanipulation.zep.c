@@ -34,6 +34,7 @@ ZEPHIR_INIT_CLASS(Stub_ArrayManipulation)
 PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 {
 	zval _0, _1, _2, _3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
@@ -41,9 +42,12 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	ZVAL_LONG(&_0, 0);
 	ZVAL_LONG(&_1, 1000000);
-	ZVAL_NULL(&_2);
+	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "message");
 	ZEPHIR_CALL_FUNCTION(&_3, "array_fill", NULL, 5, &_0, &_1, &_2);
 	zephir_check_call_status();
@@ -58,11 +62,15 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 {
 	zval _1;
 	zval obj, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_NULL(&obj);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&obj);
 	object_init(&obj);
 	ZVAL_UNDEF(&_0);
 	ZVAL_LONG(&_0, 0);
@@ -78,20 +86,24 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 zend_object *zephir_init_properties_Stub_ArrayManipulation(zend_class_entry *class_type)
 {
 		zval _0, _1$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	
 
+		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
 		zephir_read_property_ex(&_0, this_ptr, ZEND_STRL("arrayFillQueue"), PH_NOISY_CC | PH_READONLY);
 		if (Z_TYPE_P(&_0) == IS_NULL) {
-			ZVAL_NULL(&_1$$3);
+			ZEPHIR_INIT_VAR(&_1$$3);
 			array_init(&_1$$3);
 			zephir_update_property_zval_ex(this_ptr, ZEND_STRL("arrayFillQueue"), &_1$$3);
 		}
+		ZEPHIR_MM_RESTORE();
 		return Z_OBJ_P(this_ptr);
 	}
 }

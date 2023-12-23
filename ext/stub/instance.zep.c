@@ -63,13 +63,17 @@ PHP_METHOD(Stub_Instance, __construct)
 PHP_METHOD(Stub_Instance, testIssue1339)
 {
 	zval parameters, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&parameters);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&parameters);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&parameters);
 	zephir_create_array(&parameters, 11, 0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	object_init_ex(&_0, stub_arithmetic_ce);
 	if (zephir_has_constructor(&_0)) {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 0);
@@ -158,11 +162,12 @@ PHP_METHOD(Stub_Instance, testIssue1339)
 	ZVAL_STRING(&_0, "Stub\\Instance");
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance_params(return_value, &_0, &parameters);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Instance, testInstanceCreate)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *className_param = NULL;
 	zval className;
@@ -171,10 +176,12 @@ PHP_METHOD(Stub_Instance, testInstanceCreate)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(className)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className_param);
 	zephir_get_strval(&className, className_param);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(return_value, &className);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 

@@ -28,11 +28,15 @@ ZEPHIR_INIT_CLASS(Stub_Reflection)
 PHP_METHOD(Stub_Reflection, getReflectionClass)
 {
 	zval r;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&r);
-	ZVAL_NULL(&r);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionclass")));
 	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 84, this_ptr);
 	zephir_check_call_status();
@@ -42,13 +46,17 @@ PHP_METHOD(Stub_Reflection, getReflectionClass)
 PHP_METHOD(Stub_Reflection, getReflectionFunction)
 {
 	zval r, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&r);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&r);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionfunction")));
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abs");
 	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 85, &_0);
 	zephir_check_call_status();

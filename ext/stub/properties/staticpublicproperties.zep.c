@@ -81,9 +81,13 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub)
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &_0);
@@ -91,6 +95,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub2)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "2string");
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &_0);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub3)
@@ -124,11 +129,16 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub4)
 PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5)
 {
 	zval v;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&v);
-	ZVAL_NULL(&v);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&v);
 	ZVAL_STRING(&v, "1");
 	zephir_add_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someAdd"), &v);
 	zephir_sub_static_property_ce(stub_properties_staticpublicproperties_ce, ZEND_STRL("someSub"), &v);
+	ZEPHIR_MM_RESTORE();
 }
 

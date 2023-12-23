@@ -35,6 +35,7 @@ ZEPHIR_INIT_CLASS(Stub_Fannkuch)
 PHP_METHOD(Stub_Fannkuch, process)
 {
 	zend_bool _0, _5$$4, _11$$8;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n_param = NULL, perm, perm0, perm1, count, temp, _3$$3, _4$$6, _9$$4, _8$$7, _10$$8, _14$$9, _15$$14, _16$$15, _17$$13, _18$$13, _19$$13;
 	zend_long n, maxFlipsCount, permCount, checksum, i = 0, j = 0, flipsCount = 0, k = 0, r = 0, k2 = 0, _1, _2, _6$$4, _7$$4, _12$$8, _13$$8;
 
@@ -57,15 +58,17 @@ PHP_METHOD(Stub_Fannkuch, process)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n_param);
 	maxFlipsCount = 0;
 	permCount = 0;
 	checksum = 0;
-	ZVAL_NULL(&perm);
+	ZEPHIR_INIT_VAR(&perm);
 	array_init(&perm);
-	ZVAL_NULL(&perm1);
+	ZEPHIR_INIT_VAR(&perm1);
 	array_init(&perm1);
-	ZVAL_NULL(&count);
+	ZEPHIR_INIT_VAR(&count);
 	array_init(&count);
 	_2 = n;
 	_1 = 0;
@@ -171,7 +174,7 @@ PHP_METHOD(Stub_Fannkuch, process)
 				ZEPHIR_INIT_NVAR(&_15$$14);
 				ZVAL_LONG(&_15$$14, maxFlipsCount);
 				zephir_array_fast_append(return_value, &_15$$14);
-				return;
+				RETURN_MM();
 			}
 			zephir_array_fetch_long(&perm0, &perm1, 0, PH_NOISY | PH_READONLY, "stub/fannkuch.zep", 75);
 			i = 0;
@@ -197,5 +200,6 @@ PHP_METHOD(Stub_Fannkuch, process)
 		}
 		permCount++;
 	}
+	ZEPHIR_MM_RESTORE();
 }
 

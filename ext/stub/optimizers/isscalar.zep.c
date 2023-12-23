@@ -59,9 +59,13 @@ PHP_METHOD(Stub_Optimizers_IsScalar, testBoolVar)
 PHP_METHOD(Stub_Optimizers_IsScalar, testStringVar)
 {
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "test string");
 	RETURN_MM_BOOL(zephir_is_scalar(&a));
 }
@@ -69,9 +73,13 @@ PHP_METHOD(Stub_Optimizers_IsScalar, testStringVar)
 PHP_METHOD(Stub_Optimizers_IsScalar, testEmptyArrayVar)
 {
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
 	RETURN_MM_BOOL(zephir_is_scalar(&a));
 }

@@ -14,6 +14,7 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/memory.h"
 
 
 /**
@@ -40,10 +41,14 @@ PHP_METHOD(Stub_ScallParent, testMethod2)
 
 PHP_METHOD(Stub_ScallParent, testCallStatic)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL, 0);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_ScallParent, testMethodStatic)

@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Functional)
 
 PHP_METHOD(Stub_Functional, map1)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, _0, _1;
 	zval a;
@@ -37,9 +38,11 @@ PHP_METHOD(Stub_Functional, map1)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ARRAY(a)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	zephir_get_arrval(&a, a_param);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	zephir_create_closure_ex(&_0, NULL, stub_11__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_FUNCTION(&_1, "array_map", NULL, 8, &_0, &a);
@@ -49,6 +52,7 @@ PHP_METHOD(Stub_Functional, map1)
 
 PHP_METHOD(Stub_Functional, map2)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a_param = NULL, *b, b_sub, _0;
 	zval a;
@@ -60,6 +64,8 @@ PHP_METHOD(Stub_Functional, map2)
 		Z_PARAM_ARRAY(a)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &a_param, &b);
 	zephir_get_arrval(&a, a_param);
 	ZEPHIR_CALL_FUNCTION(&_0, "array_map", NULL, 8, b, &a);

@@ -43,6 +43,7 @@ PHP_METHOD(Stub_Operator, testIdentical)
 PHP_METHOD(Stub_Operator, testIdenticalIfComplex)
 {
 	zend_bool b = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *input, input_sub, a, _0;
 
 	ZVAL_UNDEF(&input_sub);
@@ -51,8 +52,10 @@ PHP_METHOD(Stub_Operator, testIdenticalIfComplex)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &input);
-	ZVAL_NULL(&a);
+	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 1, 0);
 	zephir_array_update_string(&a, SL("1"), input, PH_COPY | PH_SEPARATE);
 	b = 0;
@@ -90,6 +93,7 @@ PHP_METHOD(Stub_Operator, testIdenticalFalseVar)
 PHP_METHOD(Stub_Operator, testBoolComparison)
 {
 	zend_bool var1, var2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *varTrue, varTrue_sub, *varFalse, varFalse_sub, _0;
 
 	ZVAL_UNDEF(&varTrue_sub);
@@ -99,11 +103,13 @@ PHP_METHOD(Stub_Operator, testBoolComparison)
 		Z_PARAM_ZVAL(varTrue)
 		Z_PARAM_ZVAL(varFalse)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &varTrue, &varFalse);
 	var1 = 1;
 	var2 = 0;
 	zephir_create_array(return_value, 8, 0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, ZEPHIR_IS_BOOL_VALUE(varTrue, var1));
 	zephir_array_fast_append(return_value, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -127,12 +133,13 @@ PHP_METHOD(Stub_Operator, testBoolComparison)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_BOOL(&_0, !ZEPHIR_IS_BOOL_IDENTICAL(varFalse, var1));
 	zephir_array_fast_append(return_value, &_0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Operator, testNewInstanceOperator)
 {
 	zend_class_entry *_1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *className, className_sub, _0;
 
@@ -141,6 +148,8 @@ PHP_METHOD(Stub_Operator, testNewInstanceOperator)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(className)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className);
 	zephir_fetch_safe_class(&_0, className);
 	_1 = zephir_fetch_class_str_ex(Z_STRVAL_P(&_0), Z_STRLEN_P(&_0), ZEND_FETCH_CLASS_AUTO);
@@ -153,6 +162,6 @@ PHP_METHOD(Stub_Operator, testNewInstanceOperator)
 		zephir_check_call_status();
 	}
 
-	return;
+	RETURN_MM();
 }
 

@@ -91,10 +91,14 @@ PHP_METHOD(Stub_Arithmetic, boolSumExpression)
 {
 	zval _0, _1;
 	zend_bool a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	a = 1;
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
@@ -137,10 +141,14 @@ PHP_METHOD(Stub_Arithmetic, doubleSum2Simple)
 PHP_METHOD(Stub_Arithmetic, doubleSumExpression)
 {
 	zval _0, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
 	zephir_check_call_status();
@@ -151,10 +159,14 @@ PHP_METHOD(Stub_Arithmetic, doubleSumVarExpression)
 {
 	zval _0, _1;
 	double a = 0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	a =  (1.0);
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
@@ -234,15 +246,19 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCastSum)
 {
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
-	ZVAL_NULL(&b);
+	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_add_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -252,9 +268,13 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sum)
 {
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b + zephir_get_numberval(&a));
@@ -285,9 +305,13 @@ PHP_METHOD(Stub_Arithmetic, complex3Sum)
 PHP_METHOD(Stub_Arithmetic, complex4Sum)
 {
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&c);
-	ZVAL_NULL(&c);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&c);
 	ZVAL_DOUBLE(&c, (1.0 + 1));
 	RETURN_CCTOR(&c);
 }
@@ -696,9 +720,13 @@ PHP_METHOD(Stub_Arithmetic, addSum22)
 {
 	zend_long b = 0, _0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_DOUBLE(&a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_NVAR(&a);
@@ -717,6 +745,7 @@ PHP_METHOD(Stub_Arithmetic, addSum23)
 
 PHP_METHOD(Stub_Arithmetic, addSum24)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 
 	ZVAL_UNDEF(&a_sub);
@@ -724,13 +753,15 @@ PHP_METHOD(Stub_Arithmetic, addSum24)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 	ZEPHIR_SEPARATE_PARAM(a);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1024);
 	ZEPHIR_ADD_ASSIGN(a, &_0);
 	RETVAL_ZVAL(a, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Arithmetic, intSub)
@@ -910,15 +941,19 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCastSub)
 {
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
-	ZVAL_NULL(&b);
+	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_sub_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -928,9 +963,13 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sub)
 {
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b - zephir_get_numberval(&a));
@@ -961,9 +1000,13 @@ PHP_METHOD(Stub_Arithmetic, complex3Sub)
 PHP_METHOD(Stub_Arithmetic, complex4Sub)
 {
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&c);
-	ZVAL_NULL(&c);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&c);
 	ZVAL_DOUBLE(&c, (1.0 - 1));
 	RETURN_CCTOR(&c);
 }
@@ -1372,9 +1415,13 @@ PHP_METHOD(Stub_Arithmetic, sub22)
 {
 	zend_long b = 0, _0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_DOUBLE(&a, 0.0);
 	b = 1;
 	ZEPHIR_INIT_NVAR(&a);
@@ -1393,6 +1440,7 @@ PHP_METHOD(Stub_Arithmetic, sub23)
 
 PHP_METHOD(Stub_Arithmetic, sub24)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 
 	ZVAL_UNDEF(&a_sub);
@@ -1400,13 +1448,15 @@ PHP_METHOD(Stub_Arithmetic, sub24)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 	ZEPHIR_SEPARATE_PARAM(a);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 1024);
 	ZEPHIR_SUB_ASSIGN(a, &_0);
 	RETVAL_ZVAL(a, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Arithmetic, mul1)
@@ -1419,6 +1469,7 @@ PHP_METHOD(Stub_Arithmetic, mul1)
 
 PHP_METHOD(Stub_Arithmetic, mul2)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 
 	ZVAL_UNDEF(&a_sub);
@@ -1426,13 +1477,15 @@ PHP_METHOD(Stub_Arithmetic, mul2)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
 	ZEPHIR_SEPARATE_PARAM(a);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 5);
 	ZEPHIR_MUL_ASSIGN(a, &_0);
 	RETVAL_ZVAL(a, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Arithmetic, mul3)
@@ -1557,6 +1610,7 @@ PHP_METHOD(Stub_Arithmetic, letStatementBoolMinus)
 
 PHP_METHOD(Stub_Arithmetic, letStatementVarMinus)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b, b_sub, a;
 
 	ZVAL_UNDEF(&b_sub);
@@ -1564,6 +1618,8 @@ PHP_METHOD(Stub_Arithmetic, letStatementVarMinus)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &b);
 	zephir_negate(b);
 	ZEPHIR_CPY_WRT(&a, b);

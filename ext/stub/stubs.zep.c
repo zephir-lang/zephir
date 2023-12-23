@@ -126,17 +126,22 @@ PHP_METHOD(Stub_Stubs, testVariableLength)
 {
 	zval _0, _1;
 	zval data;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&data);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-	ZVAL_NULL(&data);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&data);
 	array_init(&data);
-	ZVAL_NULL(&_0);
-	ZVAL_NULL(&_1);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_VAR(&_1);
 	zephir_get_args(&_1);
 	zephir_fast_array_merge(&_0, &data, &_1);
 	ZEPHIR_CPY_WRT(&data, &_0);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature1)

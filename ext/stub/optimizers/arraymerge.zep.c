@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Optimizers_ArrayMerge)
 
 PHP_METHOD(Stub_Optimizers_ArrayMerge, mergeTwoRequiredArrays)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arr1_param = NULL, *arr2_param = NULL;
 	zval arr1, arr2;
 
@@ -36,10 +37,12 @@ PHP_METHOD(Stub_Optimizers_ArrayMerge, mergeTwoRequiredArrays)
 		Z_PARAM_ARRAY(arr1)
 		Z_PARAM_ARRAY(arr2)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &arr1_param, &arr2_param);
 	zephir_get_arrval(&arr1, arr1_param);
 	zephir_get_arrval(&arr2, arr2_param);
 	zephir_fast_array_merge(return_value, &arr1, &arr2);
-	return;
+	RETURN_MM();
 }
 

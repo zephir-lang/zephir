@@ -188,15 +188,19 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd)
 {
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
-	ZVAL_NULL(&b);
+	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_bitwise_and_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -206,9 +210,13 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And)
 {
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b & (int) (zephir_get_numberval(&a)));
@@ -239,9 +247,13 @@ PHP_METHOD(Stub_Bitwise, complex3And)
 PHP_METHOD(Stub_Bitwise, complex4And)
 {
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&c);
-	ZVAL_NULL(&c);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) & 1));
 	RETURN_CCTOR(&c);
 }
@@ -612,15 +624,19 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr)
 {
 	zend_long c = 0;
 	zval a, b, _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&b);
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
-	ZVAL_NULL(&b);
+	ZEPHIR_INIT_VAR(&b);
 	ZVAL_STRING(&b, "2");
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_bitwise_or_function(&_0, &b, &a);
 	c = zephir_get_numberval(&_0);
 	RETURN_MM_LONG(c);
@@ -630,9 +646,13 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 {
 	zend_long b = 0, c = 0;
 	zval a;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_NULL(&a);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
 	c = (b | (int) (zephir_get_numberval(&a)));
@@ -663,9 +683,13 @@ PHP_METHOD(Stub_Bitwise, complex3Or)
 PHP_METHOD(Stub_Bitwise, complex4Or)
 {
 	zval c;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
 	ZVAL_UNDEF(&c);
-	ZVAL_NULL(&c);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&c);
 	ZVAL_LONG(&c, ((int) (1.0) | 1));
 	RETURN_CCTOR(&c);
 }
@@ -960,12 +984,16 @@ PHP_METHOD(Stub_Bitwise, getInt)
 PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 {
 	zval i, _0, j;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&j);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
 	ZVAL_LONG(&_0, 123);
 	ZEPHIR_CALL_METHOD(&i, this_ptr, "getint", NULL, 0, &_0);
 	zephir_check_call_status();
@@ -973,6 +1001,6 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	ZEPHIR_CALL_METHOD(&j, this_ptr, "getint", NULL, 0, &_0);
 	zephir_check_call_status();
 	zephir_bitwise_xor_function(return_value, &i, &j);
-	return;
+	RETURN_MM();
 }
 

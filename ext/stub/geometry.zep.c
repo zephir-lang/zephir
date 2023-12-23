@@ -29,6 +29,7 @@ ZEPHIR_INIT_CLASS(Stub_Geometry)
 
 PHP_METHOD(Stub_Geometry, run)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3;
@@ -47,6 +48,8 @@ PHP_METHOD(Stub_Geometry, run)
 		Z_PARAM_ARRAY(list)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
 	zephir_get_arrval(&list, list_param);
 	i = 0;
@@ -66,10 +69,12 @@ PHP_METHOD(Stub_Geometry, run)
 		zephir_check_call_status();
 		i = (i + 1);
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Geometry, runOptimize)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_0 = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS, i;
 	zval *list_param = NULL, *count_param = NULL, item, _1$$3, _2$$3, _3$$3, _4$$3;
@@ -85,6 +90,8 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 		Z_PARAM_ARRAY(list)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &list_param, &count_param);
 	zephir_get_arrval(&list, list_param);
 	i = 0;
@@ -102,6 +109,7 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 		zephir_check_call_status();
 		i++;
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Geometry, distanceStatic)

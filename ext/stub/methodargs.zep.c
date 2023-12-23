@@ -117,6 +117,7 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict)
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *method = NULL, method_sub;
 
 	ZVAL_UNDEF(&method_sub);
@@ -124,14 +125,16 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(method)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &method);
 	if (!method) {
 		method = &method_sub;
-		ZVAL_NULL(method);
+		ZEPHIR_INIT_VAR(method);
 		ZVAL_STRING(method, "get");
 	}
 	RETVAL_ZVAL(method, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 /**
@@ -140,6 +143,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
  */
 PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAccess)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *parameter_param = NULL;
 	zval parameter;
 
@@ -148,9 +152,11 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &parameter_param);
 	if (!parameter_param) {
-		ZVAL_NULL(&parameter);
+		ZEPHIR_INIT_VAR(&parameter);
 		ZVAL_STRING(&parameter, "get");
 	} else {
 		zephir_get_strval(&parameter, parameter_param);

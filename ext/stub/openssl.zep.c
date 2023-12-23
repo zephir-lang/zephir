@@ -28,6 +28,7 @@ ZEPHIR_INIT_CLASS(Stub_Openssl)
 
 PHP_METHOD(Stub_Openssl, randomPseudoBytes)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *length_param = NULL, _0;
 	zend_long length, ZEPHIR_LAST_CALL_STATUS;
 
@@ -35,17 +36,20 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytes)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(length)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &length_param);
 	ZVAL_LONG(&_0, length);
 	ZEPHIR_RETURN_CALL_FUNCTION("openssl_random_pseudo_bytes", NULL, 76, &_0);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 {
 	zend_bool _0;
 	zval arr, i, _3$$3, _4$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_5 = NULL;
 
@@ -53,9 +57,12 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
-	ZVAL_NULL(&i);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&i);
 	ZVAL_LONG(&i, 0);
-	ZVAL_NULL(&arr);
+	ZEPHIR_INIT_VAR(&arr);
 	array_init(&arr);
 	_2 = 10;
 	_1 = 1;
@@ -83,6 +90,7 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 
 PHP_METHOD(Stub_Openssl, opensslEncrypt)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *data_param = NULL, _0, _1, _2, _3;
 	zval data;
@@ -95,17 +103,19 @@ PHP_METHOD(Stub_Openssl, opensslEncrypt)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(data)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &data_param);
 	zephir_get_strval(&data, data_param);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "AES-256-CBC");
-	ZVAL_NULL(&_1);
+	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "passphrase");
 	ZVAL_LONG(&_2, 1);
-	ZVAL_NULL(&_3);
+	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "1234567890123456");
 	ZEPHIR_RETURN_CALL_FUNCTION("openssl_encrypt", NULL, 77, &data, &_0, &_1, &_2, &_3);
 	zephir_check_call_status();
-	return;
+	RETURN_MM();
 }
 

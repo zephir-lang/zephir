@@ -34,6 +34,7 @@ ZEPHIR_INIT_CLASS(Stub_SpectralNorm)
 
 PHP_METHOD(Stub_SpectralNorm, Ax)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *i, i_sub, *j, j_sub, _0, _1;
 
 	ZVAL_UNDEF(&i_sub);
@@ -44,16 +45,20 @@ PHP_METHOD(Stub_SpectralNorm, Ax)
 		Z_PARAM_ZVAL(i)
 		Z_PARAM_ZVAL(j)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &i, &j);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_add_function(&_0, i, j);
+	ZEPHIR_INIT_VAR(&_1);
 	zephir_add_function(&_1, i, j);
-	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * ((zephir_get_numberval(&_1) + 1))), 2) + zephir_get_numberval(i)) + (double) (1))));
+	RETURN_MM_DOUBLE(zephir_safe_div_long_double((double) 1, ((zephir_safe_div_long_long((zephir_get_numberval(&_0) * (zephir_get_numberval(&_1) + 1)), 2) + zephir_get_numberval(i)) + (double) (1))));
 }
 
 PHP_METHOD(Stub_SpectralNorm, Au)
 {
 	zend_bool _0, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
@@ -73,6 +78,8 @@ PHP_METHOD(Stub_SpectralNorm, Au)
 		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
 		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 	_2 = (n - 1);
 	_1 = 0;
@@ -121,11 +128,13 @@ PHP_METHOD(Stub_SpectralNorm, Au)
 			zephir_check_call_status();
 		}
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_SpectralNorm, Atu)
 {
 	zend_bool _0, _3$$3;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_9 = NULL, *_11 = NULL, *_15 = NULL;
 	zval *n_param = NULL, *u, u_sub, *v, v_sub, _13$$3, _14$$3, _6$$4, _7$$4, _8$$4, _10$$4, _12$$4;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
@@ -145,6 +154,8 @@ PHP_METHOD(Stub_SpectralNorm, Atu)
 		Z_PARAM_OBJECT_OF_CLASS(u, spl_ce_SplFixedArray)
 		Z_PARAM_OBJECT_OF_CLASS(v, spl_ce_SplFixedArray)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &n_param, &u, &v);
 	_2 = (n - 1);
 	_1 = 0;
@@ -193,10 +204,12 @@ PHP_METHOD(Stub_SpectralNorm, Atu)
 			zephir_check_call_status();
 		}
 	}
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_SpectralNorm, AtAu)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *n, n_sub, *u, u_sub, *v, v_sub, *w, w_sub;
 	zval *this_ptr = getThis();
@@ -211,16 +224,20 @@ PHP_METHOD(Stub_SpectralNorm, AtAu)
 		Z_PARAM_ZVAL(v)
 		Z_PARAM_ZVAL(w)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 4, 0, &n, &u, &v, &w);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "au", NULL, 98, n, u, w);
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "atu", NULL, 99, n, w, v);
 	zephir_check_call_status();
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_SpectralNorm, process)
 {
 	zend_bool _1, _7, _12;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zephir_fcall_cache_entry *_6 = NULL, *_11 = NULL, *_17 = NULL;
 	zval *n_param = NULL, u, v, w, _0, _4$$3, _5$$3, _10$$4, _15$$5, _16$$5, _18$$5, _19$$5, _20$$5;
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;
@@ -241,20 +258,22 @@ PHP_METHOD(Stub_SpectralNorm, process)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(n)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n_param);
 	vv = 0;
 	vBv = 0;
-	ZVAL_NULL(&u);
+	ZEPHIR_INIT_VAR(&u);
 	object_init_ex(&u, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &u, "__construct", NULL, 100, &_0);
 	zephir_check_call_status();
-	ZVAL_NULL(&v);
+	ZEPHIR_INIT_VAR(&v);
 	object_init_ex(&v, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &v, "__construct", NULL, 100, &_0);
 	zephir_check_call_status();
-	ZVAL_NULL(&w);
+	ZEPHIR_INIT_VAR(&w);
 	object_init_ex(&w, spl_ce_SplFixedArray);
 	ZVAL_LONG(&_0, n);
 	ZEPHIR_CALL_METHOD(NULL, &w, "__construct", NULL, 100, &_0);

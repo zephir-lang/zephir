@@ -30,6 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue1134)
 
 PHP_METHOD(Stub_Issue1134, __construct)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *config_param = NULL;
 	zval config;
 	zval *this_ptr = getThis();
@@ -39,18 +40,22 @@ PHP_METHOD(Stub_Issue1134, __construct)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(config)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &config_param);
 	if (!config_param) {
-		ZVAL_NULL(&config);
+		ZEPHIR_INIT_VAR(&config);
 		array_init(&config);
 	} else {
 		zephir_get_arrval(&config, config_param);
 	}
 	zephir_update_property_zval(this_ptr, ZEND_STRL("data"), &config);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Issue1134, arrayWithFilledDefaultValue)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *someDefaultData_param = NULL;
 	zval someDefaultData;
 
@@ -59,9 +64,11 @@ PHP_METHOD(Stub_Issue1134, arrayWithFilledDefaultValue)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ARRAY(someDefaultData)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &someDefaultData_param);
 	if (!someDefaultData_param) {
-		ZVAL_NULL(&someDefaultData);
+		ZEPHIR_INIT_VAR(&someDefaultData);
 		array_init(&someDefaultData);
 	} else {
 		zephir_get_arrval(&someDefaultData, someDefaultData_param);

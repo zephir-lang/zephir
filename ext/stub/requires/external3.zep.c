@@ -31,6 +31,7 @@ ZEPHIR_INIT_CLASS(Stub_Requires_External3)
 
 PHP_METHOD(Stub_Requires_External3, req)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *path, path_sub, *requires, requires_sub, _0;
 
@@ -41,6 +42,8 @@ PHP_METHOD(Stub_Requires_External3, req)
 		Z_PARAM_ZVAL(path)
 		Z_PARAM_ZVAL(requires)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &path, &requires);
 	ZEPHIR_CALL_FUNCTION(NULL, "ob_clean", NULL, 87);
 	zephir_check_call_status();
@@ -51,5 +54,6 @@ PHP_METHOD(Stub_Requires_External3, req)
 	zephir_check_call_status();
 	ZEPHIR_CALL_METHOD(NULL, requires, "setcontent", NULL, 0, &_0);
 	zephir_check_call_status();
+	ZEPHIR_MM_RESTORE();
 }
 

@@ -136,6 +136,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedTwo)
 
 PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *mixedVal;
 	zval stringVal;
 	zval *intVal_param = NULL, *stringVal_param = NULL, mixedVal_sub, _0;
@@ -149,15 +150,17 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 		Z_PARAM_STR(stringVal)
 		Z_PARAM_ZVAL(mixedVal)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &intVal_param, &stringVal_param, &mixedVal);
 	zephir_get_strval(&stringVal, stringVal_param);
 	zephir_create_array(return_value, 3, 0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, intVal);
 	zephir_array_fast_append(return_value, &_0);
 	zephir_array_fast_append(return_value, &stringVal);
 	zephir_array_fast_append(return_value, mixedVal);
-	return;
+	RETURN_MM();
 }
 
 /**
@@ -180,6 +183,7 @@ PHP_METHOD(Stub_Types_MixedType, paramAndReturnMixed)
 PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval val_sub;
 	zval *val;
 
@@ -188,6 +192,8 @@ PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	zephir_cast_to_string(&_0, val);
 	RETURN_CTOR(&_0);
@@ -196,6 +202,7 @@ PHP_METHOD(Stub_Types_MixedType, castToStringMixedAndReturnMixed)
 PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval val_sub;
 	zval *val = NULL;
 
@@ -204,11 +211,13 @@ PHP_METHOD(Stub_Types_MixedType, castToStringInternallyMixedAndReturnMixed)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	zephir_cast_to_string(&_0, val);
 	ZEPHIR_CPY_WRT(val, &_0);
 	RETVAL_ZVAL(val, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Types_MixedType, castToIntMixedAndReturnMixed)
@@ -227,6 +236,7 @@ PHP_METHOD(Stub_Types_MixedType, castToIntMixedAndReturnMixed)
 PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
 {
 	zend_long _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval val_sub;
 	zval *val = NULL;
 
@@ -234,12 +244,14 @@ PHP_METHOD(Stub_Types_MixedType, castToIntInternallyMixedAndReturnMixed)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	_0 = zephir_get_intval(val);
 	ZEPHIR_INIT_NVAR(val);
 	ZVAL_LONG(val, _0);
 	RETVAL_ZVAL(val, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Types_MixedType, castToBoolMixedAndReturnMixed)
@@ -258,6 +270,7 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolMixedAndReturnMixed)
 PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
 {
 	double _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval val_sub;
 	zval *val = NULL;
 
@@ -265,12 +278,14 @@ PHP_METHOD(Stub_Types_MixedType, castToBoolInternallyMixedAndReturnMixed)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	_0 = zephir_get_boolval(val);
 	ZEPHIR_INIT_NVAR(val);
 	ZVAL_BOOL(val, _0);
 	RETVAL_ZVAL(val, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Types_MixedType, castToFloatMixedAndReturnMixed)
@@ -289,6 +304,7 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatMixedAndReturnMixed)
 PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
 {
 	double _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval val_sub;
 	zval *val = NULL;
 
@@ -296,12 +312,14 @@ PHP_METHOD(Stub_Types_MixedType, castToFloatInternallyMixedAndReturnMixed)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &val);
 	_0 = zephir_get_doubleval(val);
 	ZEPHIR_INIT_NVAR(val);
 	ZVAL_DOUBLE(val, _0);
 	RETVAL_ZVAL(val, 1, 0);
-	return;
+	RETURN_MM();
 }
 
 /**

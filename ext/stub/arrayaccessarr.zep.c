@@ -29,15 +29,20 @@ ZEPHIR_INIT_CLASS(Stub_ArrayAccessArr)
 PHP_METHOD(Stub_ArrayAccessArr, __construct)
 {
 	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-	ZVAL_NULL(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 3, 0);
 	add_assoc_long_ex(&_0, SL("one"), 1);
 	add_assoc_long_ex(&_0, SL("two"), 2);
 	add_assoc_long_ex(&_0, SL("three"), 3);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
+	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetSet)
@@ -95,6 +100,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetUnset)
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetGet)
 {
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval offset_sub, _0, _1, _2;
 	zval *offset;
 	zval *this_ptr = getThis();
@@ -106,8 +112,10 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetGet)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &offset);
-	ZVAL_NULL(&_0);
+	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_array_isset(&_1, offset)) {
 		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
