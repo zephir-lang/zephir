@@ -300,11 +300,12 @@ class Generator
 
         $return = '';
         $returnTypes = [];
+        $methodReturnTypes = $method->getReturnTypes();
         if ($method->hasReturnTypes()) {
-            if (array_key_exists('variable', $method->getReturnTypes())) {
+            if (array_key_exists('variable', $methodReturnTypes) || array_key_exists('mixed', $methodReturnTypes)) {
                 $returnTypes[] = 'mixed';
             } else {
-                if (array_key_exists('object', $method->getReturnTypes())) {
+                if (array_key_exists('object', $methodReturnTypes)) {
                     $returnTypes[] = key($method->getReturnClassTypes());
                 }
 
@@ -326,7 +327,7 @@ class Generator
                     $returnTypes[] = 'string';
                 }
 
-                if (array_key_exists('array', $method->getReturnTypes())) {
+                if (array_key_exists('array', $methodReturnTypes)) {
                     $returnTypes[] = 'array';
                 }
 
@@ -335,6 +336,7 @@ class Generator
                 }
             }
 
+            $returnTypes = array_filter($returnTypes);
             $return = join('|', $returnTypes);
         } elseif ($method->isVoid()) {
             $return = 'void';
