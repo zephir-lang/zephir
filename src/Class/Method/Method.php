@@ -33,8 +33,8 @@ use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
 use Zephir\SymbolTable;
-
 use Zephir\Variable\Variable;
+
 use function array_diff;
 use function array_key_exists;
 use function array_keys;
@@ -1249,8 +1249,8 @@ class Method
             }
 
             // #define ZEPHIR_MM_GROW()
-            $codePrinter->preOutput("\t".'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);');
-            $codePrinter->preOutput("\t".'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
+            $codePrinter->preOutput("\t" . 'zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);');
+            $codePrinter->preOutput("\t" . 'ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);');
         }
 
         /**
@@ -1414,13 +1414,14 @@ class Method
              */
             $lastType = $this->statements->getLastStatementType();
 
-            if ('return' !== $lastType &&
+            if (
+                'return' !== $lastType &&
                 'throw' !== $lastType &&
                 !$this->hasChildReturnStatementType($statement)
             ) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
-                    $codePrinter->output("\t".'ZEPHIR_MM_RESTORE();');
+                    $codePrinter->output("\t" . 'ZEPHIR_MM_RESTORE();');
                 }
 
                 /**
