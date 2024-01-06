@@ -47,17 +47,13 @@ use const FILTER_VALIDATE_BOOLEAN;
  */
 class StatementsBlock
 {
-    protected $debug = false;
-    /**
-     * @var array|null
-     */
-    protected $lastStatement;
-    protected $loop = false;
-
-    protected $mutateGatherer;
+    protected bool $loop = false;
+    protected bool $debug = false;
+    protected ?array $lastStatement = null;
+    protected ?MutateGathererPass $mutateGatherer = null;
     protected ?bool $unreachable = null;
 
-    public function __construct(protected $statements)
+    public function __construct(protected array $statements)
     {
         $debug = false;
         if (getenv('ZEPHIR_DEBUG')) {
@@ -125,7 +121,7 @@ class StatementsBlock
         }
 
         foreach ($statements as $statement) {
-            /*
+            /**
              * TODO: Generate GDB hints
              */
             if ($this->debug) {
