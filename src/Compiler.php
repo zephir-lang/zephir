@@ -98,7 +98,7 @@ use const DIRECTORY_SEPARATOR;
 use const INFO_GENERAL;
 use const PHP_EOL;
 use const PHP_INT_SIZE;
-use const PHP_ZTS;
+use const ZEND_THREAD_SAFE;
 use const SORT_STRING;
 use const STDERR;
 
@@ -2043,7 +2043,7 @@ final class Compiler
 
     private function isZts(): bool
     {
-        if (defined('PHP_ZTS') && PHP_ZTS === 1) {
+        if (defined('ZEND_THREAD_SAFE') && ZEND_THREAD_SAFE === true) {
             return true;
         }
 
