@@ -600,7 +600,6 @@ int zephir_call_user_func_array_noex(zval *return_value, zval *handler, zval *pa
 #else
 	if (!zend_is_callable_at_frame(handler, NULL, frame, 0, &fci_cache, &is_callable_error)) {
 #endif
-	}
 		if (is_callable_error) {
 			zend_error(E_WARNING, "%s", is_callable_error);
 			efree(is_callable_error);
