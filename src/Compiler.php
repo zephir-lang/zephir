@@ -1488,7 +1488,7 @@ final class Compiler
     public function isInterface(string $className): bool
     {
         foreach ($this->definitions as $key => $value) {
-            if (!strcasecmp($key, $className) && 'interface' === $value->getType()) {
+            if (!strcasecmp($key, $className) && Definition::TYPE_INTERFACE === $value->getType()) {
                 return true;
             }
         }

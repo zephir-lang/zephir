@@ -332,7 +332,7 @@ final class CompilerFile implements FileInterface
         foreach ($this->ir as $topStatement) {
             switch ($topStatement['type']) {
                 case 'class':
-                case 'interface':
+                case Definition::TYPE_INTERFACE:
                     if ($interface || $class) {
                         throw new CompilerException('More than one class defined in the same file', $topStatement);
                     }
@@ -652,7 +652,7 @@ final class CompilerFile implements FileInterface
                     $lastComment        = null;
                     break;
 
-                case 'interface':
+                case Definition::TYPE_INTERFACE:
                     if ($class || $interface) {
                         throw new CompilerException(
                             'More than one class/interface defined in the same file',
@@ -855,7 +855,7 @@ final class CompilerFile implements FileInterface
             $classDefinition->setImplementsInterfaces($topStatement['extends']);
         }
 
-        $classDefinition->setType('interface');
+        $classDefinition->setType(Definition::TYPE_INTERFACE);
 
         if (is_array($docblock)) {
             $classDefinition->setDocBlock($docblock['value']);

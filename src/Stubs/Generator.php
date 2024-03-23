@@ -183,7 +183,7 @@ class Generator
                 }
             }
 
-            $keyword = 'interface' == $class->getType() ? ' extends ' : ' implements ';
+            $keyword = Definition::TYPE_INTERFACE === $class->getType() ? ' extends ' : ' implements ';
             $source  .= $keyword . implode(', ', $interfaces);
         }
 
@@ -220,7 +220,7 @@ class Generator
                 continue;
             }
 
-            $methods[] = $this->buildMethod($method, 'interface' === $class->getType(), $indent) . PHP_EOL;
+            $methods[] = $this->buildMethod($method, Definition::TYPE_INTERFACE === $class->getType(), $indent) . PHP_EOL;
         }
 
         $source .= implode(PHP_EOL, $methods);

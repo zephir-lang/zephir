@@ -1237,7 +1237,7 @@ final class Definition extends AbstractDefinition
      */
     public function isInterface(): bool
     {
-        return 'interface' === $this->type;
+        return Definition::TYPE_INTERFACE === $this->type;
     }
 
     /**
