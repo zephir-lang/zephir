@@ -21,24 +21,16 @@ use function method_exists;
  */
 class UnaryOperatorBuilder extends AbstractOperatorBuilder
 {
-    /**
-     * Left Expression
-     *
-     * @var mixed
-     */
-    protected $leftExpression;
-    /**
-     * Operator name
-     */
-    protected string $operator;
-
-    public function __construct(string $operator, $leftExpression, string $file = null, int $line = 0, int $char = 0)
-    {
-        $this->operator       = $operator;
-        $this->leftExpression = $leftExpression;
-        $this->file           = $file;
-        $this->line           = $line;
-        $this->char           = $char;
+    public function __construct(
+        protected string $operator,
+        protected $leftExpression,
+        string $file = null,
+        int $line = 0, int
+        $char = 0,
+    ) {
+        $this->file = $file;
+        $this->line = $line;
+        $this->char = $char;
     }
 
     public function get(): array
