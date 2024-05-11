@@ -108,7 +108,7 @@ class Entry
                 );
             }
 
-            $classNamespace = explode(self::NAMESPACE_SEPARATOR, $reflection->getNamespaceName());
+            $classNamespace = explode(self::NAMESPACE_SEPARATOR, $reflection->getName());
         } else {
             $className      = $this->classname;
             $classNamespace = explode(self::NAMESPACE_SEPARATOR, $className);
