@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Arithmetical;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 
 /**
@@ -29,10 +31,10 @@ class DivOperator extends ArithmeticalBaseOperator
     /**
      * Compiles the arithmetical division operation.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression|bool
     {
         [$left, $right] = $this->preCompileChecks($expression, $compilationContext);
 
