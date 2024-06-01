@@ -159,46 +159,41 @@ class EvalExpression
                     $exprRaw
                 );
                 $possibleValue = $variableRight->getPossibleValue();
-                if (is_object($possibleValue)) {
+                if ($possibleValue instanceof LiteralCompiledExpression) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
                         /**
                          * Check if the possible value was assigned in the root branch
                          */
                         if (Branch::TYPE_ROOT == $possibleValueBranch->getType()) {
-                            if ($possibleValue instanceof LiteralCompiledExpression) {
-                                switch ($possibleValue->getType()) {
-                                    case 'null':
+                            switch ($possibleValue->getType()) {
+                                case 'null':
+                                    $this->unreachable = true;
+                                    break;
+
+                                case 'bool':
+                                    if ('0' == $possibleValue->getBooleanCode()) {
                                         $this->unreachable = true;
-                                        break;
+                                    } else {
+                                        $this->unreachableElse = true;
+                                    }
+                                    break;
 
-                                    case 'bool':
-                                        if ('0' == $possibleValue->getBooleanCode()) {
-                                            $this->unreachable = true;
-                                        } else {
-                                            $this->unreachableElse = true;
-                                        }
-                                        break;
+                                case 'int':
+                                    if (!(int)$possibleValue->getCode()) {
+                                        $this->unreachable = true;
+                                    } else {
+                                        $this->unreachableElse = true;
+                                    }
+                                    break;
 
-                                    case 'int':
-                                        if (!(int)$possibleValue->getCode()) {
-                                            $this->unreachable = true;
-                                        } else {
-                                            $this->unreachableElse = true;
-                                        }
-                                        break;
-
-                                    case 'double':
-                                        if (!(float)$possibleValue->getCode()) {
-                                            $this->unreachable = true;
-                                        } else {
-                                            $this->unreachableElse = true;
-                                        }
-                                        break;
-
-                                    default:
-                                        // echo $possibleValue->getType();
-                                }
+                                case 'double':
+                                    if (!(float)$possibleValue->getCode()) {
+                                        $this->unreachable = true;
+                                    } else {
+                                        $this->unreachableElse = true;
+                                    }
+                                    break;
                             }
                         }
                     }
