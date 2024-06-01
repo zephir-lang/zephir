@@ -29,8 +29,6 @@ final class AliasManager
 
     /**
      * Adds a renaming in a "use" to the alias manager.
-     *
-     * @param array $useStatement
      */
     public function add(array $useStatement): void
     {
@@ -43,10 +41,6 @@ final class AliasManager
 
     /**
      * Returns the class name according to an existing alias.
-     *
-     * @param string $alias
-     *
-     * @return string
      */
     public function getAlias(string $alias): string
     {
@@ -57,8 +51,6 @@ final class AliasManager
      * Returns alias by fully qualified class name.
      *
      * @param string $className - fully qualified class name
-     *
-     * @return string
      */
     public function getAliasForClassName(string $className): string
     {
@@ -73,8 +65,6 @@ final class AliasManager
 
     /**
      * Returns key-value pair of aliases.
-     *
-     * @return array
      */
     public function getAliases(): array
     {
@@ -83,10 +73,6 @@ final class AliasManager
 
     /**
      * Checks if a class name is an existing alias.
-     *
-     * @param string $alias
-     *
-     * @return bool
      */
     public function isAlias(string $alias): bool
     {
@@ -97,8 +83,6 @@ final class AliasManager
      * Check if class name has explicit alias in `use` declaration.
      *
      * @param string $className - fully qualified class name
-     *
-     * @return bool
      */
     public function isAliasPresentFor(string $className): bool
     {
@@ -114,10 +98,6 @@ final class AliasManager
      * Check if class name use an aliasing in use statement.
      *
      * ex: use Events\ManagerInterface as EventsManagerInterface;
-     *
-     * @param string $alias
-     *
-     * @return bool
      */
     public function isUseStatementAliased(string $alias): bool
     {
@@ -132,8 +112,6 @@ final class AliasManager
      * Extract implicit alias from use statement.
      *
      * @param string $className - FQCN or simple class name from use statement
-     *
-     * @return string
      */
     private function implicitAlias(string $className): string
     {
