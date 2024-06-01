@@ -24,7 +24,6 @@
         "php": ">=8.0",
         "ext-ctype": "*",
         "ext-hash": "*",
-        "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pcre": "*",
         "ext-xml": "*",
