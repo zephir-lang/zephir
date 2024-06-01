@@ -1,7 +1,5 @@
 # For local development only.
 
-version: '3'
-
 services:
   zephir-8.0:
     container_name: zephir-8.0
