@@ -373,20 +373,12 @@ class Call
      * Resolve parameters getting aware that the target function/method could retain or change
      * the parameters.
      *
-     * @param array              $parameters
-     * @param CompilationContext $compilationContext
-     * @param array              $expression
-     * @param null               $calleeDefinition
-     *
-     * @return array
-     *
      * @throws Exception
      */
     public function getResolvedParams(
         array $parameters,
         CompilationContext $compilationContext,
         array $expression,
-        $calleeDefinition = null
     ): array {
         $codePrinter = $compilationContext->codePrinter;
         $exprParams  = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression);
