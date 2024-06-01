@@ -25,8 +25,8 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
         protected string $operator,
         protected $leftExpression,
         string $file = null,
-        int $line = 0, int
-        $char = 0,
+        int $line = 0,
+        int $char = 0,
     ) {
         $this->file = $file;
         $this->line = $line;
