@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 5
 
       - name: Setup PHP
-        uses: shivammathur/setup-php@develop
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           extensions: intl, zip, zlib
