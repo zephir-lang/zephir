@@ -27,34 +27,21 @@ class Docblock
      * @var Annotation[]
      */
     protected array $annotations = [];
-    /**
-     * @var string
-     */
+
     protected string $description;
-    /**
-     * @var string
-     */
+
     protected string $summary;
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return $this->generate();
     }
 
-    /**
-     * @param Annotation $annotation
-     */
     public function addAnnotation(Annotation $annotation): void
     {
         $this->annotations[] = $annotation;
     }
 
-    /**
-     * @return string
-     */
     public function generate(): string
     {
         $docBlock         = '**';
@@ -112,17 +99,11 @@ class Docblock
         return $annotation;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @return string
-     */
     public function getSummary(): string
     {
         return $this->summary;
@@ -131,22 +112,16 @@ class Docblock
     /**
      * @param Annotation[] $annotations
      */
-    public function setAnnotations(array $annotations)
+    public function setAnnotations(array $annotations): void
     {
         $this->annotations = $annotations;
     }
 
-    /**
-     * @param string $description
-     */
-    public function setDescription(string $description)
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
 
-    /**
-     * @param string $summary
-     */
     public function setSummary(string $summary): void
     {
         $this->summary = $summary;

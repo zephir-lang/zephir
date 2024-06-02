@@ -15,18 +15,9 @@ namespace Zephir\Documentation;
 
 interface FileInterface
 {
-    /**
-     * @return array
-     */
     public function getData(): array;
 
-    /**
-     * @return string
-     */
     public function getOutputFile(): string;
 
-    /**
-     * @return string
-     */
     public function getTemplateName(): string;
 }
