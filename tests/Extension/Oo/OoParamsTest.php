@@ -43,6 +43,10 @@ final class OoParamsTest extends TestCase
 
         $this->assertSame($this->test->setList([1, 2, 3, 4, 5]), [1, 2, 3, 4, 5]);
         $this->assertSame($this->test->setList([]), []);
+
+        $this->assertSame(0, $this->test->getDefaultParamValue());
+        $this->assertSame(1, $this->test->getDefaultParamValue1());
+        $this->assertSame('default', $this->test->getDefaultParamValueStr());
     }
 
     public function setObjectClassCast(): void
