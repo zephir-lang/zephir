@@ -376,10 +376,6 @@ class StatementsBlock
 
     /**
      * Create/Returns a mutate gatherer pass for this block.
-     *
-     * @param bool $pass
-     *
-     * @return MutateGathererPass
      */
     public function getMutateGatherer(bool $pass = false): MutateGathererPass
     {
@@ -396,8 +392,6 @@ class StatementsBlock
 
     /**
      * Returns the statements in the block.
-     *
-     * @return array
      */
     public function getStatements(): array
     {
@@ -406,8 +400,6 @@ class StatementsBlock
 
     /**
      * Checks whether the block is empty or not.
-     *
-     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -416,10 +408,6 @@ class StatementsBlock
 
     /**
      * Sets whether the statements block belongs to a loop.
-     *
-     * @param bool $loop
-     *
-     * @return StatementsBlock
      */
     public function isLoop(bool $loop): static
     {
@@ -430,8 +418,6 @@ class StatementsBlock
 
     /**
      * Setter for statements.
-     *
-     * @param array $statements
      */
     public function setStatements(array $statements): void
     {
