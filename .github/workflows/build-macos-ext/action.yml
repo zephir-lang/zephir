@@ -56,4 +56,8 @@ runs:
       shell: bash
       run: |
         cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
-        echo "extension=stub.so" > /usr/local/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        if [ "${{ matrix.ts }}" = "ts" ]; then
+            echo "extension=stub.so" > /usr/local/etc/php/${{ matrix.php }}-zts/conf.d/99-stub.ini
+        else
+          echo "extension=stub.so" > /usr/local/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        fi
