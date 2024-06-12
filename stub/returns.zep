@@ -3,6 +3,8 @@ namespace Stub;
 
 class Returns
 {
+    protected stringDefaultNull = null;
+
 	public function testReturnCast1() -> int
 	{
 		return (int) 5.0;
@@ -35,5 +37,13 @@ class Returns
 	public static function returnWithoutParameter()
 	{
 		return "Return back";
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1991
+     */
+	public function returnNullOnString() -> string
+	{
+	    return this->stringDefaultNull;
 	}
 }
