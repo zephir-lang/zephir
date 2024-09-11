@@ -5,6 +5,7 @@ class Closures
 {
     protected _argument;
     protected _function;
+    protected property1873 = "call from closure";
 
 	public function simple1()
 	{
@@ -96,5 +97,12 @@ class Closures
 	public function issue1036Call()
 	{
 	    return call_user_func(this->_function, this->_argument);
+	}
+
+	public function issue1873() -> string
+	{
+	    return function () {
+            return this->property1873;
+        };
 	}
 }
