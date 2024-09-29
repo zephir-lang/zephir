@@ -400,7 +400,7 @@ class MethodCall extends Call
                                     );
                                 }
 
-                                /*
+                                /**
                                  * Try to produce an exception if a method is called with a wrong number of parameters
                                  * We only check extension parameters if methods are extension methods
                                  * Internal methods may have invalid Reflection information
@@ -448,7 +448,7 @@ class MethodCall extends Call
                                     }
                                 }
 
-                                /*
+                                /**
                                  * The method is checked in the first class that implements the method
                                  * We could probably have collisions here
                                  */
@@ -497,45 +497,43 @@ class MethodCall extends Call
             $this->reflection = $method;
         }
 
-        /*
+        /**
          * Transfer the return type-hint to the returned variable
          */
-        if ($isExpecting) {
-            if (isset($method)) {
-                if ($method instanceof Method) {
-                    if ($method->isVoid()) {
-                        throw new CompilerException(
-                            sprintf(
-                                "Method '%s::%s' is marked as '%s' and it does not return anything",
-                                $classDefinition->getCompleteName(),
-                                $expression['name'],
-                                Types::T_VOID
-                            ),
-                            $expression
-                        );
+        if ($isExpecting && isset($method)) {
+            if ($method instanceof Method) {
+                if ($method->isVoid()) {
+                    throw new CompilerException(
+                        sprintf(
+                            "Method '%s::%s' is marked as '%s' and it does not return anything",
+                            $classDefinition->getCompleteName(),
+                            $expression['name'],
+                            Types::T_VOID
+                        ),
+                        $expression
+                    );
+                }
+
+                $returnClassTypes = $method->getReturnClassTypes();
+
+                if (null !== $returnClassTypes) {
+                    $symbolVariable->setDynamicTypes('object');
+                    foreach ($returnClassTypes as &$returnClassType) {
+                        $returnClassType = $compilationContext->getFullName($returnClassType);
                     }
+                    $symbolVariable->setClassTypes($returnClassTypes);
+                }
 
-                    $returnClassTypes = $method->getReturnClassTypes();
-
-                    if (null !== $returnClassTypes) {
-                        $symbolVariable->setDynamicTypes('object');
-                        foreach ($returnClassTypes as &$returnClassType) {
-                            $returnClassType = $compilationContext->getFullName($returnClassType);
-                        }
-                        $symbolVariable->setClassTypes($returnClassTypes);
-                    }
-
-                    $returnTypes = $method->getReturnTypes();
-                    if (null !== $returnTypes) {
-                        foreach ($returnTypes as $dataType => $returnType) {
-                            $symbolVariable->setDynamicTypes($dataType);
-                        }
+                $returnTypes = $method->getReturnTypes();
+                if (null !== $returnTypes) {
+                    foreach ($returnTypes as $dataType => $returnType) {
+                        $symbolVariable->setDynamicTypes($dataType);
                     }
                 }
             }
         }
 
-        /*
+        /**
          * Some parameters in internal methods receive parameters as references
          */
         if (isset($expression['parameters'])) {
@@ -555,17 +553,17 @@ class MethodCall extends Call
             }
         }
 
-        /*
+        /**
          * Include fcall header
          */
         $compilationContext->headersManager->add('kernel/fcall');
 
-        /*
+        /**
          * Call methods must grown the stack
          */
         $compilationContext->symbolTable->mustGrownStack(true);
 
-        /*
+        /**
          * Mark references
          */
         $params = [];
@@ -597,7 +595,7 @@ class MethodCall extends Call
                                 continue;
                             }
 
-                            /*
+                            /**
                              * If the passed parameter is different to the expected type we show a warning
                              */
                             if ($resolvedTypes[$n] != $parameter['data-type']) {
