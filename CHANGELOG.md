@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+## [0.18.0] - 2024-09-29
 ### Added
 - Added support of PHP `8.3` [#2407](https://github.com/zephir-lang/zephir/issues/2407)
 - Added support of multiple return types in stubs
