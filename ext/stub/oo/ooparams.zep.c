@@ -413,3 +413,60 @@ PHP_METHOD(Stub_Oo_OoParams, setObjectClassCast)
 	return;
 }
 
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue)
+{
+	zval *i_param = NULL;
+	zend_long i;
+
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(i)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(0, 1, &i_param);
+	if (!i_param) {
+		i = 0;
+	} else {
+		}
+	RETURN_LONG(i);
+}
+
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue1)
+{
+	zval *i_param = NULL;
+	zend_long i;
+
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_LONG(i)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(0, 1, &i_param);
+	if (!i_param) {
+		i = 1;
+	} else {
+		}
+	RETURN_LONG(i);
+}
+
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *str_param = NULL;
+	zval str;
+
+	ZVAL_UNDEF(&str);
+	ZEND_PARSE_PARAMETERS_START(0, 1)
+		Z_PARAM_OPTIONAL
+		Z_PARAM_STR(str)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 0, 1, &str_param);
+	if (!str_param) {
+		ZEPHIR_INIT_VAR(&str);
+		ZVAL_STRING(&str, "default");
+	} else {
+		zephir_get_strval(&str, str_param);
+	}
+	RETURN_CTOR(&str);
+}
+

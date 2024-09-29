@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Reflection, getReflectionClass)
 
 	ZEPHIR_INIT_VAR(&r);
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionclass")));
-	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 84, this_ptr);
+	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 82, this_ptr);
 	zephir_check_call_status();
 	RETURN_CCTOR(&r);
 }
@@ -58,7 +58,7 @@ PHP_METHOD(Stub_Reflection, getReflectionFunction)
 	object_init_ex(&r, zephir_get_internal_ce(SL("reflectionfunction")));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "abs");
-	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 85, &_0);
+	ZEPHIR_CALL_METHOD(NULL, &r, "__construct", NULL, 83, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&r);
 }
