@@ -20,31 +20,30 @@ use Zephir\Documentation\Annotation\ReturnAnnotation;
 use Zephir\Documentation\Annotation\See;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class DocblockParserTest extends TestCase
 {
     public function testShouldParseDocblockFromString(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
         $test = <<<DOC
-/**
- * This file is part of the Zephir.
- *
- * Helper to parse raw docblocks to structured object.
- *
- * @link https://github.com/zephir-lang/zephir - Zephir
- * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
- *
- * @param array \$annotation - custom annotation
- *
- * @return Docblock the parsed docblock
- */
-DOC;
+            /**
+             * This file is part of the Zephir.
+             *
+             * Helper to parse raw docblocks to structured object.
+             *
+             * @link https://github.com/zephir-lang/zephir - Zephir
+             * @see  https://github.com/zephir-lang/zephir/README.md - Zephir readme
+             *
+             * @param array \$annotation - custom annotation
+             *
+             * @return Docblock the parsed docblock
+             */
+            DOC;
 
         $link = new Link('link', 'https://github.com/zephir-lang/zephir - Zephir');
         $link->getLinkText();

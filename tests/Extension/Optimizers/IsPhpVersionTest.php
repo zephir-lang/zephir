@@ -9,12 +9,12 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension\Optimizers;
 
-use Exception;
 use PHPUnit\Framework\TestCase;
 use Stub\Issue1404;
-use Throwable;
 
 /**
  * Extension\Optimizers\IsPhpVersionTest.
@@ -23,8 +23,8 @@ use Throwable;
  */
 final class IsPhpVersionTest extends TestCase
 {
-    const PHP_RELEASES_LIMIT = 17;
-    const PHP_MINOR_LIMIT = 3;
+    public const PHP_RELEASES_LIMIT = 17;
+    public const PHP_MINOR_LIMIT = 3;
 
     protected $test;
 
@@ -61,18 +61,18 @@ final class IsPhpVersionTest extends TestCase
      * @param mixed $version
      * @param mixed $expected
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function testOptimizer($version, $expected): void
     {
-        $isPhpVersion = (bool) $this->isPhpVersion($version);
+        $isPhpVersion = $this->isPhpVersion($version);
 
         $this->assertEquals($expected, $isPhpVersion);
     }
 
     public function testOptimizerExceptionLLU(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Could not parse PHP version');
 
         $this->isPhpVersion(92233720368547758079);
@@ -80,7 +80,7 @@ final class IsPhpVersionTest extends TestCase
 
     public function testOptimizerExceptionNegativeNumber(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Could not parse PHP version');
 
         $this->isPhpVersion(-7);
@@ -88,7 +88,7 @@ final class IsPhpVersionTest extends TestCase
 
     public function testOptimizerExceptionEmpty(): void
     {
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Could not parse PHP version');
 
         /**
@@ -151,7 +151,7 @@ final class IsPhpVersionTest extends TestCase
      * @param mixed $testName
      * @param mixed $version
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function testIsPhpVersionVersionUsing701XX($testName, $version): void
     {
@@ -178,7 +178,7 @@ final class IsPhpVersionTest extends TestCase
      * @param mixed $testName
      * @param mixed $version
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function testIsPhpVersionVersionUsing70X00($testName, $version): void
     {
@@ -213,11 +213,11 @@ final class IsPhpVersionTest extends TestCase
     }
 
     /**
-     * @param Throwable $error
+     * @param \Throwable $error
      *
-     * @throws Throwable
+     * @throws \Throwable
      */
-    protected function onNotSuccessfulTest(Throwable $error): void
+    protected function onNotSuccessfulTest(\Throwable $error): void
     {
         $phpVer = sprintf(
             'PHP_VERSION_ID:%d(%d.%d.%d)',
@@ -241,13 +241,13 @@ final class IsPhpVersionTest extends TestCase
      *
      * @return bool
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    private function isPhpVersion($version): bool
+    private function isPhpVersion(float | int | string $version): bool
     {
-        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', $version, $matches);
+        preg_match('/^(?<major>\d+)(?:\.(?<minor>!?\d+))?(?:\.(?<patch>!?\d+))?(?:[^Ee0-9.]+.*)?$/', (string) $version, $matches);
         if (!\count($matches)) {
-            throw new Exception('Could not parse PHP version');
+            throw new \Exception('Could not parse PHP version');
         }
 
         $minorVersion = 0;

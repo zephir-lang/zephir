@@ -27,6 +27,9 @@ PHP_METHOD(Stub_Oo_OoParams, setObject);
 PHP_METHOD(Stub_Oo_OoParams, setCallable);
 PHP_METHOD(Stub_Oo_OoParams, setResource);
 PHP_METHOD(Stub_Oo_OoParams, setObjectClassCast);
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue);
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue1);
+PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_createthisclasswithoutwritecurrentnamespace, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -94,11 +97,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setenableddefault, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlistdefault, 0, 0, 0)
-#if PHP_VERSION_ID >= 80000
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, someList, IS_ARRAY, 0, "[]")
-#else
-	ZEND_ARG_ARRAY_INFO(0, someList, 0)
-#endif
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, someList, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setconstage, 0, 0, 1)
@@ -125,17 +124,21 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setobjectclasscast, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, parameter, Stub\\Oo\\Param, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvalue, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, i, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvalue1, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, i, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvaluestr, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createthisclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createotherclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_OoParams, createThisClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createthisclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Oo_OoParams, createOtherClassWithoutWriteCurrentNamespace, arginfo_stub_oo_ooparams_createotherclasswithoutwritecurrentnamespace, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setAge, arginfo_stub_oo_ooparams_setage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setAverage, arginfo_stub_oo_ooparams_setaverage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setName, arginfo_stub_oo_ooparams_setname, ZEND_ACC_PUBLIC)
@@ -143,11 +146,7 @@ ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {
 	PHP_ME(Stub_Oo_OoParams, setList, arginfo_stub_oo_ooparams_setlist, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictAge, arginfo_stub_oo_ooparams_setstrictage, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictAverage, arginfo_stub_oo_ooparams_setstrictaverage, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_OoParams, setStrictNameFromZephirLand, arginfo_stub_oo_ooparams_setstrictnamefromzephirland, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_OoParams, setStrictNameFromZephirLand, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_OoParams, setStrictNameFromZephirLand, arginfo_stub_oo_ooparams_setstrictnamefromzephirland, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictName, arginfo_stub_oo_ooparams_setstrictname, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictEnabled, arginfo_stub_oo_ooparams_setstrictenabled, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setStrictList, arginfo_stub_oo_ooparams_setstrictlist, ZEND_ACC_PUBLIC)
@@ -162,5 +161,8 @@ ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {
 	PHP_ME(Stub_Oo_OoParams, setCallable, arginfo_stub_oo_ooparams_setcallable, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setResource, arginfo_stub_oo_ooparams_setresource, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Oo_OoParams, setObjectClassCast, arginfo_stub_oo_ooparams_setobjectclasscast, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Oo_OoParams, getDefaultParamValue, arginfo_stub_oo_ooparams_getdefaultparamvalue, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Oo_OoParams, getDefaultParamValue1, arginfo_stub_oo_ooparams_getdefaultparamvalue1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Oo_OoParams, getDefaultParamValueStr, arginfo_stub_oo_ooparams_getdefaultparamvaluestr, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

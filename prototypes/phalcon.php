@@ -1,12 +1,12 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
 
 namespace Phalcon {
@@ -35,12 +35,12 @@ namespace Phalcon\Mvc {
 namespace Phalcon\Mvc\Model {
     class Query
     {
-        const TYPE_SELECT = 309;
+        public const TYPE_SELECT = 309;
 
-        const TYPE_INSERT = 306;
+        public const TYPE_INSERT = 306;
 
-        const TYPE_UPDATE = 300;
+        public const TYPE_UPDATE = 300;
 
-        const TYPE_DELETE = 303;
+        public const TYPE_DELETE = 303;
     }
 }

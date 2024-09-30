@@ -29,18 +29,12 @@ ZEPHIR_INIT_CLASS(Stub_ScallParent)
 
 PHP_METHOD(Stub_ScallParent, testMethod1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello parent public");
 }
 
 PHP_METHOD(Stub_ScallParent, testMethod2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello parent protected");
 }
@@ -49,11 +43,8 @@ PHP_METHOD(Stub_ScallParent, testCallStatic)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_RETURN_CALL_STATIC("testmethodstatic", NULL, 0);
 	zephir_check_call_status();
@@ -62,9 +53,6 @@ PHP_METHOD(Stub_ScallParent, testCallStatic)
 
 PHP_METHOD(Stub_ScallParent, testMethodStatic)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello ScallParent");
 }

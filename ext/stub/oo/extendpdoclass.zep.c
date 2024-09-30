@@ -34,7 +34,6 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *dsn_param = NULL, *username_param = NULL, *password_param = NULL, *attrs = NULL, attrs_sub, _1;
 	zval dsn, username, password;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&dsn);
 	ZVAL_UNDEF(&username);
@@ -42,7 +41,6 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_UNDEF(&attrs_sub);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_STR(dsn)
@@ -51,10 +49,8 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 		Z_PARAM_STR_OR_NULL(password)
 		Z_PARAM_ZVAL(attrs)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 3, &dsn_param, &username_param, &password_param, &attrs);
 	zephir_get_strval(&dsn, dsn_param);
 	if (!username_param) {
@@ -74,8 +70,6 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	} else {
 		ZEPHIR_SEPARATE_PARAM(attrs);
 	}
-
-
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 1, 0);
 	ZEPHIR_INIT_VAR(&_1);

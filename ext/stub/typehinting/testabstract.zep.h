@@ -15,11 +15,7 @@ PHP_METHOD(Stub_TypeHinting_TestAbstract, returnBoolean);
 PHP_METHOD(Stub_TypeHinting_TestAbstract, returnChar);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_typehinting_testabstract_testfunc, 0, 0, 0)
-#if PHP_VERSION_ID >= 80000
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text, IS_ARRAY, 0, "[]")
-#else
-	ZEND_ARG_ARRAY_INFO(0, text, 0)
-#endif
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text, IS_ARRAY, 0, "[]")
 	ZEND_ARG_TYPE_INFO(0, text2, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, flag, _IS_BOOL, 0)
 	ZEND_ARG_TYPE_INFO(0, optional, IS_LONG, 1)
@@ -54,11 +50,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_typehinting_testabstract_method_entry) {
 	PHP_ME(Stub_TypeHinting_TestAbstract, testFunc, arginfo_stub_typehinting_testabstract_testfunc, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_TypeHinting_TestAbstract, returnOneOfScalar, arginfo_stub_typehinting_testabstract_returnoneofscalar, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_TypeHinting_TestAbstract, returnOneOfScalar, NULL, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_TypeHinting_TestAbstract, returnOneOfScalar, arginfo_stub_typehinting_testabstract_returnoneofscalar, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnInt, arginfo_stub_typehinting_testabstract_returnint, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnUint, arginfo_stub_typehinting_testabstract_returnuint, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_TypeHinting_TestAbstract, returnLong, arginfo_stub_typehinting_testabstract_returnlong, ZEND_ACC_ABSTRACT|ZEND_ACC_PUBLIC)

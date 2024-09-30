@@ -17,7 +17,7 @@ on:
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.5.3
+  ZEPHIR_PARSER_VERSION: 1.6.1
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -26,17 +26,16 @@ jobs:
     name: Static Code Analysis
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         env:
-          PHP_CS_FIXER_VERSION: 3.2.0
+          PHP_CS_FIXER_VERSION: 3.37.0
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
           tools: php-cs-fixer:${{ env.PHP_CS_FIXER_VERSION }}, phpcs
 
@@ -45,10 +44,11 @@ jobs:
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
-      - name: Run PHP CS Fixer
-        if: always()
-        run: |
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no
+# Disabling for now until I figure out the rules
+#      - name: Run PHP CS Fixer
+#        if: always()
+#        run: |
+#          php-cs-fixer fix --diff --dry-run -v --using-cache=no
 
       - name: Run Shell Check
         if: always()
@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' , '8.1', '8.2' ]
+        php: [ '8.0', '8.1', '8.2', '8.3' ]
         ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
@@ -77,23 +77,21 @@ jobs:
           # macOS
           - { name: macos-clang, os: macos-12, compiler: clang }
           # Windows
-          - { php: '7.4', ts: 'ts',  arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
-          - { php: '7.4', ts: 'nts', arch: 'x64', name: 'windows2019-vc15', os: 'windows-2019', compiler: 'vc15' }
           - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          # Disabled due PSR extension wasn't complied for 8.2
+          # Disabled due PSR extension wasn't complied for >=8.2
           #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 5
 
       - name: Install PHP ${{ matrix.php }}
-        uses: shivammathur/setup-php@develop
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
@@ -115,22 +113,8 @@ jobs:
           phpts: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#      - name: Get composer cache directory
-#        id: composer-cache
-#        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-#      - name: Set Up Composer Cache
-#        uses: actions/cache@v2
-#        with:
-#          path: ${{ steps.composer-cache.outputs.dir }}
-#          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-#          restore-keys: ${{ runner.os }}-composer-
-
       - name: Install Project Dependencies
-        run: |
-          echo "::group::Install composer dependencies"
-          composer install --prefer-dist --no-interaction --no-ansi --no-progress
-          echo "::endgroup::"
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Fast Commands Test
         run: php zephir --help
@@ -177,12 +161,20 @@ jobs:
         shell: pwsh
         run: |
           php vendor/bin/phpunit -c phpunit.ext.xml
+        env:
+          XDEBUG_MODE: coverage
 
       - name: Unit Tests (Zephir)
         if: always()
-        run: php vendor/bin/phpunit --testsuite Zephir
+        run: php vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/clover.xml
         env:
           XDEBUG_MODE: coverage
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v3"
+        with:
+          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          path: "tests/output/clover.xml"
 
       - name: Black-box Testing
         if: always() && runner.os != 'Windows'
@@ -191,17 +183,69 @@ jobs:
         run: |
           make -j$(getconf _NPROCESSORS_ONLN)
 
-      - name: Upload Code Coverage Report
-        uses: codecov/codecov-action@v2
+  upload-coverage:
+    permissions:
+      contents: read
+
+    name: "Upload coverage"
+    runs-on: "ubuntu-22.04"
+    needs:
+      - "build-and-test"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+#      - name: 'Qodana Scan'
+#        uses: JetBrains/qodana-action@v2023.2
+#        env:
+#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+#        with:
+#          args: --baseline,./qodana.sarif.json
+
+#      - name: 'Qodana Scan'
+#        run: |
+#          docker run \
+#            -v $(pwd):/data/project/ \
+#            -v $(pwd):/data/base/ \
+#            -e QODANA_TOKEN="${{ secrets.CODECOV_TOKEN }}" \
+#            jetbrains/qodana-php \
+#            --baseline /data/base/qodana.sarif.json
+
+      - name: "Create download folder"
+        run: |
+          mkdir -p reports
+
+      - name: "Download coverage files"
+        uses: "actions/download-artifact@v4.1.7"
+        with:
+          path: "reports"
+
+      - name: "Display structure of downloaded files"
+        run: ls -R
+        working-directory: reports
+
+      - name: "Upload to Codecov"
+        uses: "codecov/codecov-action@v3"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/output/clover.xml
-          flags: unittests,${{ runner.os }},php-${{ matrix.php }}
+          directory: reports
+          fail_ci_if_error: true
+          verbose: true
           name: codecov-umbrella
+
+      - name: "Upload to Qodana"
+        run: |
+          docker run \
+            -v $(pwd):/data/project/ \
+            -v ./reports/:/data/coverage \
+            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
+            jetbrains/qodana-php
 
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |

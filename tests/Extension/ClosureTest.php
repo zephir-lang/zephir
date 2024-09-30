@@ -34,9 +34,7 @@ final class ClosureTest extends TestCase
         $test = new Closures();
 
         $test->issue1036SetArgument(true);
-        $test->issue1036SetFunction(function ($argument) {
-            return $argument;
-        });
+        $test->issue1036SetFunction(fn ($argument) => $argument);
 
         $this->assertTrue($test->issue1036Call());
     }

@@ -18,7 +18,7 @@ class Issue_2092
      *
      * @return ManagerInterface|null
      */
-    public function getInternalEventsManager(): ?ManagerInterface
+    public function getInternalEventsManager(): ManagerInterface|null
     {
     }
 }

@@ -386,10 +386,6 @@ ZEPHIR_INIT_FUNCS(stub_nativearray_method_entry) {
 	PHP_ME(Stub_NativeArray, issue743c, arginfo_stub_nativearray_issue743c, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_NativeArray, issue709, arginfo_stub_nativearray_issue709, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_NativeArray, Issue1140, arginfo_stub_nativearray_issue1140, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_NativeArray, Issue1159, arginfo_stub_nativearray_issue1159, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_NativeArray, Issue1159, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_NativeArray, Issue1159, arginfo_stub_nativearray_issue1159, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -49,7 +49,7 @@ final class UnsetTest extends TestCase
 
     public function xtestStdClassUnset(): void
     {
-        $equalsStdClass = new \StdClass();
+        $equalsStdClass = new \stdClass();
         $equalsStdClass->property1 = 12345;
         $equalsStdClass->property3 = 12345;
 

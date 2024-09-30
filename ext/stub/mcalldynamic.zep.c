@@ -31,9 +31,6 @@ ZEPHIR_INIT_CLASS(Stub_McallDynamic)
 
 PHP_METHOD(Stub_McallDynamic, testMethod1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(1);
 }
@@ -47,9 +44,8 @@ PHP_METHOD(Stub_McallDynamic, testMagicCall1)
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_CALL_METHOD(&_0, this_ptr, "method1", NULL, 0);
 	zephir_check_call_status();
@@ -69,19 +65,13 @@ PHP_METHOD(Stub_McallDynamic, __call)
 	ZVAL_UNDEF(&method_sub);
 	ZVAL_UNDEF(&arguments_sub);
 	ZVAL_UNDEF(&realMethod);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(method)
 		Z_PARAM_ZVAL(arguments)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &method, &arguments);
-
-
 	ZEPHIR_INIT_VAR(&realMethod);
 	ZEPHIR_CONCAT_SV(&realMethod, "test", method);
 	ZEPHIR_RETURN_CALL_METHOD_ZVAL(this_ptr, &realMethod, NULL, 0);
@@ -94,22 +84,19 @@ PHP_METHOD(Stub_McallDynamic, __call)
  */
 PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 {
-	zval result, _1;
+	zval result, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zephir_fcall_cache_entry *_0 = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&result);
-	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_INIT_NVAR(&_1);
-	zephir_create_closure_ex(&_1, NULL, stub_13__closure_ce, SL("__invoke"));
-	ZEPHIR_CALL_CE_STATIC(&result, stub_mcall_caller_ce, "start", &_0, 0, &_1);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_create_closure_ex(&_0, NULL, stub_13__closure_ce, SL("__invoke"));
+	ZEPHIR_CALL_CE_STATIC(&result, stub_mcall_caller_ce, "start", NULL, 0, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&result);
 }

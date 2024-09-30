@@ -52,63 +52,42 @@ ZEPHIR_INIT_CLASS(Stub_Properties_PrivateProperties)
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeNull)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someNull");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeNullInitial)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someNullInitial");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeFalse)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someFalse");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeTrue)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someTrue");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeInteger)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someInteger");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeDouble)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someDouble");
 }
 
 PHP_METHOD(Stub_Properties_PrivateProperties, getSomeString)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someString");
 }

@@ -148,57 +148,21 @@ ZEPHIR_INIT_FUNCS(stub_scall_method_entry) {
 	PHP_ME(Stub_Scall, testMethod5, arginfo_stub_scall_testmethod5, ZEND_ACC_STATIC|ZEND_ACC_PROTECTED)
 	PHP_ME(Stub_Scall, testMethod6, arginfo_stub_scall_testmethod6, ZEND_ACC_STATIC|ZEND_ACC_PRIVATE)
 	PHP_ME(Stub_Scall, testMethod7, arginfo_stub_scall_testmethod7, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall1, arginfo_stub_scall_testcall1, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall1, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall2, arginfo_stub_scall_testcall2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall2, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall3, arginfo_stub_scall_testcall3, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall3, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Scall, testCall1, arginfo_stub_scall_testcall1, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall2, arginfo_stub_scall_testcall2, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall3, arginfo_stub_scall_testcall3, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall4, arginfo_stub_scall_testcall4, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall5, arginfo_stub_scall_testcall5, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall6, arginfo_stub_scall_testcall6, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall7, arginfo_stub_scall_testcall7, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall7, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall8, arginfo_stub_scall_testcall8, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall8, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall9, arginfo_stub_scall_testcall9, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall9, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Scall, testCall7, arginfo_stub_scall_testcall7, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall8, arginfo_stub_scall_testcall8, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall9, arginfo_stub_scall_testcall9, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall10, arginfo_stub_scall_testcall10, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall11, arginfo_stub_scall_testcall11, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testCall12, arginfo_stub_scall_testcall12, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall13, arginfo_stub_scall_testcall13, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall13, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall14, arginfo_stub_scall_testcall14, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall14, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Scall, testCall15, arginfo_stub_scall_testcall15, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Scall, testCall15, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Scall, testCall13, arginfo_stub_scall_testcall13, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall14, arginfo_stub_scall_testcall14, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Scall, testCall15, arginfo_stub_scall_testcall15, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Scall, testMethod16, arginfo_stub_scall_testmethod16, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_Scall, testCall17, arginfo_stub_scall_testcall17, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_Scall, testCall18, arginfo_stub_scall_testcall18, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)

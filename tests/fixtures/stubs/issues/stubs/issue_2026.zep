@@ -9,9 +9,9 @@ class Issue_2026
 {
     /**
      * Expects:
-     *  return array|\StdClass[]
+     *  return array|\stdClass[]
      */
-    public function getClassCollection() -> <\StdClass[]>
+    public function getClassCollection() -> <\stdClass[]>
     {
         return [
             new \StdClass()
@@ -20,9 +20,9 @@ class Issue_2026
 
     /**
      * Expects:
-     *  return array|bool|\StdClass[]
+     *  return array|bool|\stdClass[]
      */
-    public function getClassCollectionOrBool() -> <\StdClass[]> | bool
+    public function getClassCollectionOrBool() -> <\stdClass[]> | bool
     {
         return [
             new \StdClass()
@@ -53,9 +53,9 @@ class Issue_2026
 
     /**
      * Expects:
-     *  return array|\Stubs\Events\EventManager[]|\StdClass[]
+     *  return array|\Stubs\Events\EventManager[]|\stdClass[]
      */
-    public function getMixedCollectionOrArray() -> <EventManager[]> | <\StdClass[]> | array
+    public function getMixedCollectionOrArray() -> <EventManager[]> | <\stdClass[]> | array
     {
         return [
             new EventManager()

@@ -19,10 +19,6 @@ ZEND_END_ARG_INFO()
 ZEPHIR_INIT_FUNCS(stub_globals_server_method_entry) {
 	PHP_ME(Stub_Globals_Server, f1, arginfo_stub_globals_server_f1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Server, f2, arginfo_stub_globals_server_f2, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals_Server, check, arginfo_stub_globals_server_check, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Globals_Server, check, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Globals_Server, check, arginfo_stub_globals_server_check, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

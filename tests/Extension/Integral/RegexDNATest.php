@@ -15,27 +15,25 @@ namespace Extension\Integral;
 
 use PHPUnit\Framework\TestCase;
 use Stub\RegexDNA;
-
-use function dirname;
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class RegexDNATest extends TestCase
 {
     public function testProcess(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Different strlen() in Windows.');
         }
 
         $test = new RegexDNA();
 
         ob_start();
-        $test->process(dirname(__DIR__).'/../fixtures/regexdna/input.txt');
+        $test->process(\dirname(__DIR__).'/../fixtures/regexdna/input.txt');
         $content = ob_get_clean();
 
         $this->assertSame(
             $content,
-            file_get_contents(dirname(__DIR__).'/../fixtures/regexdna/output.txt')
+            file_get_contents(\dirname(__DIR__).'/../fixtures/regexdna/output.txt')
         );
     }
 }

@@ -58,11 +58,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_testcountoptimizervardumpandexport, 0, 
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_testarraytypevardumpandexport, 0, 0, 0)
-#if PHP_VERSION_ID >= 80000
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, testVar, IS_ARRAY, 0, "[]")
-#else
-	ZEND_ARG_ARRAY_INFO(0, testVar, 0)
-#endif
+ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, testVar, IS_ARRAY, 0, "[]")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_testintvardump, 0, 0, 0)
@@ -79,42 +75,18 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_vars_method_entry) {
 	PHP_ME(Stub_Vars, testParam, arginfo_stub_vars_testparam, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testVarDump, arginfo_stub_vars_testvardump, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testVarDump, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Vars, testVarDump, arginfo_stub_vars_testvardump, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, testVarDump2, arginfo_stub_vars_testvardump2, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testVarExport, arginfo_stub_vars_testvarexport, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testVarExport, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Vars, testVarExport, arginfo_stub_vars_testvarexport, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, test88Issue, arginfo_stub_vars_test88issue, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, test88IssueParam2InitString, arginfo_stub_vars_test88issueparam2initstring, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, testVarDump2param, arginfo_stub_vars_testvardump2param, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, testVarDump3param, arginfo_stub_vars_testvardump3param, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, testCountOptimizerVarDumpAndExport, arginfo_stub_vars_testcountoptimizervardumpandexport, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Vars, testArrayTypeVarDumpAndExport, arginfo_stub_vars_testarraytypevardumpandexport, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testIntVarDump, arginfo_stub_vars_testintvardump, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testIntVarDump, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testDoubleVarDump, arginfo_stub_vars_testdoublevardump, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testDoubleVarDump, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testBoolVarDump, arginfo_stub_vars_testboolvardump, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testBoolVarDump, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Vars, testGetDefinedVars, arginfo_stub_vars_testgetdefinedvars, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Vars, testGetDefinedVars, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Vars, testIntVarDump, arginfo_stub_vars_testintvardump, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Vars, testDoubleVarDump, arginfo_stub_vars_testdoublevardump, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Vars, testBoolVarDump, arginfo_stub_vars_testboolvardump, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Vars, testGetDefinedVars, arginfo_stub_vars_testgetdefinedvars, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

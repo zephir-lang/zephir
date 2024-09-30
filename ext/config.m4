@@ -158,6 +158,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/abstractclassmagic.zep.c
 	stub/oo/scopes/privatescopetester.zep.c
 	stub/ooimpl/abeginning.zep.c
+	stub/openssl.zep.c
 	stub/operator.zep.c
 	stub/optimizers/isscalar.zep.c
 	stub/optimizers/acos.zep.c

@@ -33,9 +33,6 @@ ZEPHIR_INIT_CLASS(Stub_Cast)
  */
 PHP_METHOD(Stub_Cast, testCharCastFromChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG('a');
 }
@@ -46,11 +43,6 @@ PHP_METHOD(Stub_Cast, testCharCastFromChar)
 PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
 {
 	char a, _0;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 'A';
 	_0 = a;
 	RETURN_LONG(_0);
@@ -61,9 +53,6 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
  */
 PHP_METHOD(Stub_Cast, testStringCastChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("z");
 }
@@ -76,12 +65,10 @@ PHP_METHOD(Stub_Cast, testStringCastVariableChar)
 	zval _0;
 	char a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	a = 'X';
 	ZEPHIR_INIT_VAR(&_0);
@@ -97,13 +84,11 @@ PHP_METHOD(Stub_Cast, testStringCastFromNull)
 	zval _0;
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_NULL(&a);
@@ -113,9 +98,6 @@ PHP_METHOD(Stub_Cast, testStringCastFromNull)
 
 PHP_METHOD(Stub_Cast, testIntCastFromFloat)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG((int) 5.0);
 }
@@ -123,12 +105,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromFloat)
 PHP_METHOD(Stub_Cast, testIntCastFromVariableFloat)
 {
 	double a;
-	zval *this_ptr = getThis();
-
-
-
-
-	a = 5.0;
+	a =  (5.0);
 	RETURN_LONG((int) (a));
 }
 
@@ -137,9 +114,6 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableFloat)
  */
 PHP_METHOD(Stub_Cast, testIntCastFromChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG('A');
 }
@@ -150,29 +124,18 @@ PHP_METHOD(Stub_Cast, testIntCastFromChar)
 PHP_METHOD(Stub_Cast, testIntCastFromVariableChar)
 {
 	char a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 'a';
 	RETURN_LONG(a);
 }
 
 PHP_METHOD(Stub_Cast, testIntCastFromBooleanTrue)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(1);
 }
 
 PHP_METHOD(Stub_Cast, testIntCastFromBooleanFalse)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(0);
 }
@@ -180,11 +143,6 @@ PHP_METHOD(Stub_Cast, testIntCastFromBooleanFalse)
 PHP_METHOD(Stub_Cast, testIntCastFromVariableBooleanTrue)
 {
 	zend_bool a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 1;
 	RETURN_LONG((int) (a));
 }
@@ -192,11 +150,6 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableBooleanTrue)
 PHP_METHOD(Stub_Cast, testIntCastFromVariableBooleanFalse)
 {
 	zend_bool a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	RETURN_LONG((int) (a));
 }
@@ -205,12 +158,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableNull)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_NULL(&a);
@@ -221,12 +172,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromStringValue)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -238,12 +187,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableString)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "test");
@@ -255,30 +202,20 @@ PHP_METHOD(Stub_Cast, testIntCastFromParameterString)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a_param = NULL;
 	zval a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	zephir_get_strval(&a, a_param);
-
-
 	RETURN_MM_LONG(zephir_get_intval(&a));
 }
 
 PHP_METHOD(Stub_Cast, testIntCastFromNull)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(0);
 }
@@ -287,12 +224,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableEmptyArray)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -303,12 +238,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromEmptyArray)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
@@ -319,13 +252,11 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableArray)
 {
 	zval a, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 4, 0);
@@ -349,13 +280,11 @@ PHP_METHOD(Stub_Cast, testIntCastFromArray)
 	zval _1;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
@@ -382,12 +311,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromStdClass)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	object_init(&_0);
@@ -402,12 +329,10 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init(&a);
@@ -419,9 +344,6 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableStdClass)
  */
 PHP_METHOD(Stub_Cast, testLongCastFromChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG((long) 'a');
 }
@@ -432,20 +354,12 @@ PHP_METHOD(Stub_Cast, testLongCastFromChar)
 PHP_METHOD(Stub_Cast, testLongCastFromVariableChar)
 {
 	char a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 'A';
 	RETURN_LONG(a);
 }
 
 PHP_METHOD(Stub_Cast, testFloatCastFromFloat)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(5.0);
 }
@@ -453,29 +367,18 @@ PHP_METHOD(Stub_Cast, testFloatCastFromFloat)
 PHP_METHOD(Stub_Cast, testFloatCastFromVariableFloat)
 {
 	double a;
-	zval *this_ptr = getThis();
-
-
-
-
-	a = 5.0;
+	a =  (5.0);
 	RETURN_DOUBLE((double) (a));
 }
 
 PHP_METHOD(Stub_Cast, testFloatCastFromBooleanTrue)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(1);
 }
 
 PHP_METHOD(Stub_Cast, testFloatCastFromBooleanFalse)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(0);
 }
@@ -483,11 +386,6 @@ PHP_METHOD(Stub_Cast, testFloatCastFromBooleanFalse)
 PHP_METHOD(Stub_Cast, testFloatCastFromVariableBooleanTrue)
 {
 	zend_bool a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 1;
 	RETURN_DOUBLE((double) (a));
 }
@@ -495,11 +393,6 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableBooleanTrue)
 PHP_METHOD(Stub_Cast, testFloatCastFromVariableBooleanFalse)
 {
 	zend_bool a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	RETURN_DOUBLE((double) (a));
 }
@@ -508,12 +401,10 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableNull)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_NULL(&a);
@@ -522,9 +413,6 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableNull)
 
 PHP_METHOD(Stub_Cast, testFloatCastFromNull)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(0);
 }
@@ -533,12 +421,10 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableEmptyArray)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -549,12 +435,10 @@ PHP_METHOD(Stub_Cast, testFloatCastFromEmptyArray)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
@@ -565,13 +449,11 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableArray)
 {
 	zval a, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 4, 0);
@@ -595,13 +477,11 @@ PHP_METHOD(Stub_Cast, testFloatCastFromArray)
 	zval _1;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
@@ -628,12 +508,10 @@ PHP_METHOD(Stub_Cast, testFloatCastFromStdClass)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	object_init(&_0);
@@ -648,12 +526,10 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	object_init(&a);
@@ -665,9 +541,6 @@ PHP_METHOD(Stub_Cast, testFloatCastFromVariableStdClass)
  */
 PHP_METHOD(Stub_Cast, testDoubleCastFromVChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE((double) 'a');
 }
@@ -678,38 +551,24 @@ PHP_METHOD(Stub_Cast, testDoubleCastFromVChar)
 PHP_METHOD(Stub_Cast, testDoubleCastFromVariableChar)
 {
 	char a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 'A';
 	RETURN_DOUBLE((double) a);
 }
 
 PHP_METHOD(Stub_Cast, testBooleanCastFromIntTrue1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL((zend_bool) 1);
 }
 
 PHP_METHOD(Stub_Cast, testBooleanCastFromIntTrue2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL((zend_bool) 1000);
 }
 
 PHP_METHOD(Stub_Cast, testBooleanCastFromIntFalse)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL((zend_bool) 0);
 }
@@ -718,12 +577,10 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromObject)
 {
 	zval simpleObject;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&simpleObject);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&simpleObject);
 	object_init(&simpleObject);
@@ -734,12 +591,10 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromEmptyArray)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	array_init(&a);
@@ -750,13 +605,11 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromArray)
 {
 	zval a, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	zephir_create_array(&a, 4, 0);
@@ -779,12 +632,10 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromNull)
 {
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_NULL(&a);
@@ -796,9 +647,6 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromNull)
  */
 PHP_METHOD(Stub_Cast, testBooleanCastFromChar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL((zend_bool) 'a');
 }
@@ -809,11 +657,6 @@ PHP_METHOD(Stub_Cast, testBooleanCastFromChar)
 PHP_METHOD(Stub_Cast, testBooleanCastFromVariableChar)
 {
 	char a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 'A';
 	RETURN_BOOL((zend_bool) a);
 }
@@ -822,12 +665,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromInt)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 5);
@@ -839,12 +680,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromFloat)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, 5.0);
@@ -856,12 +695,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromFalse)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, 0);
@@ -873,12 +710,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromTrue)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, 1);
@@ -890,12 +725,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromNull)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_NULL(&_0);
@@ -907,13 +740,11 @@ PHP_METHOD(Stub_Cast, testObjectCastFromEmptyArray)
 {
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
@@ -927,14 +758,12 @@ PHP_METHOD(Stub_Cast, testObjectCastFromArray)
 	zval _1, _2;
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
@@ -959,12 +788,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromEmptyString)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "");
@@ -976,12 +803,10 @@ PHP_METHOD(Stub_Cast, testObjectCastFromString)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "test string");
@@ -993,12 +818,10 @@ PHP_METHOD(Stub_Cast, testCastStdinToInteger)
 {
 	zval handle;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&handle);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&handle);
 	ZEPHIR_GET_CONSTANT(&handle, "STDIN");
@@ -1009,12 +832,10 @@ PHP_METHOD(Stub_Cast, testCastStdoutToInteger)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_GET_CONSTANT(&_0, "STDOUT");
@@ -1025,20 +846,12 @@ PHP_METHOD(Stub_Cast, testCastFileResourceToInteger)
 {
 	zend_long id = 0;
 	zval *fileName, fileName_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&fileName_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(fileName)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &fileName);
-
-
 	id = zephir_get_intval(fileName);
 	RETURN_LONG(id);
 }
@@ -1048,14 +861,12 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableArray)
 	zval _1;
 	zval uids, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	zephir_create_array(&uids, 3, 0);
@@ -1078,13 +889,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableTrue)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_BOOL(&uids, 1);
@@ -1098,13 +907,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableFalse)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_BOOL(&uids, 0);
@@ -1118,13 +925,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableNull)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_NULL(&uids);
@@ -1138,13 +943,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableInteger)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_LONG(&uids, 1);
@@ -1158,13 +961,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableFloat)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_DOUBLE(&uids, 1.1);
@@ -1178,13 +979,11 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableString)
 	zval _0;
 	zval uids;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	ZVAL_STRING(&uids, "aaa");
@@ -1198,14 +997,12 @@ PHP_METHOD(Stub_Cast, testArrayCastFromVariableStdClass)
 	zval _1;
 	zval uids, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&uids);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&uids);
 	object_init(&uids);
@@ -1228,15 +1025,13 @@ PHP_METHOD(Stub_Cast, testIssue828)
 	zval version, nonNumericString, _0;
 	zval ret;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&ret);
 	ZVAL_UNDEF(&version);
 	ZVAL_UNDEF(&nonNumericString);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
@@ -1246,9 +1041,9 @@ PHP_METHOD(Stub_Cast, testIssue828)
 	ZVAL_STRING(&nonNumericString, "OK");
 	zephir_array_append(&ret, &version, PH_SEPARATE, "stub/cast.zep", 501);
 	zephir_array_append(&ret, &nonNumericString, PH_SEPARATE, "stub/cast.zep", 502);
-	floatVersion = zephir_get_doubleval(&version);
+	floatVersion =  (zephir_get_doubleval(&version));
 	intVersion = zephir_get_intval(&version);
-	floatNonNumeric = zephir_get_doubleval(&nonNumericString);
+	floatNonNumeric =  (zephir_get_doubleval(&nonNumericString));
 	intNonNumeric = zephir_get_intval(&nonNumericString);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_DOUBLE(&_0, floatVersion);

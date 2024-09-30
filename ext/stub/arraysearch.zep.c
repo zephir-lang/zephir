@@ -34,32 +34,24 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 	zend_bool strict;
 	zval haystack;
 	zval *needle, needle_sub, *haystack_param = NULL, *strict_param = NULL, _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&needle_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&haystack);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 3)
 		Z_PARAM_ZVAL(needle)
 		Z_PARAM_ARRAY(haystack)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(strict)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 1, &needle, &haystack_param, &strict_param);
 	zephir_get_arrval(&haystack, haystack_param);
 	if (!strict_param) {
 		strict = 0;
 	} else {
-		strict = zephir_get_boolval(strict_param);
-	}
-
-
+		}
 	ZVAL_BOOL(&_0, (strict ? 1 : 0));
 	ZEPHIR_RETURN_CALL_FUNCTION("array_search", NULL, 6, needle, &haystack, &_0);
 	zephir_check_call_status();
@@ -73,14 +65,12 @@ PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir)
 	zval itoA64;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&itoA64);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&pos);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&itoA64);
 	zephir_create_array(&itoA64, 9, 0);

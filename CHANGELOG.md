@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.18.0] - 2024-09-29
+### Added
+- Added support of PHP `8.3` [#2407](https://github.com/zephir-lang/zephir/issues/2407)
+- Added support of multiple return types in stubs
+- Changed `PHP_DEBUG` const usage to `ZEND_DEBUG_BUILD`
+
+### Changed
+- Changed minimal PHP version to `8.0` [#2407](https://github.com/zephir-lang/zephir/issues/2407)
+
 ## [0.17.0] - 2023-02-11
 ### Added
 - Added support of PHP `8.2` [#2255](https://github.com/zephir-lang/zephir/issues/2370)

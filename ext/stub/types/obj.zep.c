@@ -24,18 +24,12 @@ ZEPHIR_INIT_CLASS(Stub_Types_Obj)
 
 PHP_METHOD(Stub_Types_Obj, nullableObjectReturnNull)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_NULL();
 }
 
 PHP_METHOD(Stub_Types_Obj, nullableObjectReturnObj)
 {
-	zval *this_ptr = getThis();
-
-
 
 	object_init(return_value);
 	return;
@@ -43,9 +37,6 @@ PHP_METHOD(Stub_Types_Obj, nullableObjectReturnObj)
 
 PHP_METHOD(Stub_Types_Obj, objectReturn)
 {
-	zval *this_ptr = getThis();
-
-
 
 	object_init(return_value);
 	return;

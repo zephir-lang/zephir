@@ -186,6 +186,7 @@ zend_class_entry *stub_oo_propertyaccess_ce;
 zend_class_entry *stub_oo_scopes_abstractclass_ce;
 zend_class_entry *stub_oo_scopes_abstractclassmagic_ce;
 zend_class_entry *stub_oo_scopes_privatescopetester_ce;
+zend_class_entry *stub_openssl_ce;
 zend_class_entry *stub_operator_ce;
 zend_class_entry *stub_optimizers_acos_ce;
 zend_class_entry *stub_optimizers_arraymerge_ce;
@@ -417,6 +418,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClass);
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClassMagic);
 	ZEPHIR_INIT(Stub_Oo_Scopes_PrivateScopeTester);
+	ZEPHIR_INIT(Stub_Openssl);
 	ZEPHIR_INIT(Stub_Operator);
 	ZEPHIR_INIT(Stub_Optimizers_ACos);
 	ZEPHIR_INIT(Stub_Optimizers_ASin);
@@ -586,7 +588,7 @@ static PHP_MINFO_FUNCTION(stub)
 		php_info_print_table_start();
 	php_info_print_table_header(2, "Test Extension support", "Value");
 	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions&#039; compiler provides static analysis of the compiled code.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Test variable", "Value");

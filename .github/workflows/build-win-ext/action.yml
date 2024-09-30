@@ -33,7 +33,7 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Downloads Cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ${{ env.CACHE_DIR }}
         key: ${{ runner.os }}-downloads-${{ hashFiles('**/.github/workflows/build-win-ext/actions.yml') }}
@@ -46,7 +46,6 @@ runs:
       shell: powershell
       run: |
         Write-Output "::group::Install dependencies"
-        mkdir ${{ env.CACHE_DIR }}\Choco
         choco install --no-progress -y --cache-location=${{ env.CACHE_DIR }}\Choco re2c
         Write-Output "::endgroup::"
 

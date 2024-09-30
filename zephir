@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Zephir\Backends\BackendFactory;
+use Zephir\Backend\Backend;
 use Zephir\Compiler;
 use Zephir\Config;
 use Zephir\Console\Application;
@@ -107,12 +107,11 @@ $logger = new Logger('zephir', [
     $consoleStdOutHandler,
 ]);
 $compilerFactory = new Compiler\CompilerFileFactory($config, $disk, $logger);
-$backend = (new BackendFactory($config, $rootPath.'/kernels', $rootPath.'/templates'))
-    ->createBackend();
+$backend = new Backend($config, $rootPath.'/kernel', $rootPath.'/templates');
 
 $compiler = new Compiler($config, $backend, new Manager($parser), $disk, $compilerFactory);
 $compiler->setPrototypesPath($rootPath.'/prototypes');
-$compiler->setOptimizersPath($rootPath.'/Library/Optimizers');
+$compiler->setOptimizersPath($rootPath.'/src/Optimizers');
 $compiler->setTemplatesPath($rootPath.'/templates');
 $compiler->setLogger($logger);
 
