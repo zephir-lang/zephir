@@ -709,7 +709,7 @@ class Method
      *
      * @throws CompilerException
      */
-    public function checkVisibility(array $visibility, string $name, array $original = []): void
+    public function checkVisibility(array $visibility, string $name, ?array $original = null): void
     {
         if (count($visibility) > 1) {
             if (in_array('public', $visibility) && in_array('protected', $visibility)) {
