@@ -126,7 +126,7 @@ class CompilationContext
     /**
      * Lookup a class from a given class name.
      */
-    public function classLookup(string $className, array $statement = null): AbstractDefinition
+    public function classLookup(string $className, array $statement = []): AbstractDefinition
     {
         if (!in_array($className, ['self', 'static', 'parent'])) {
             $className = $this->getFullName($className);

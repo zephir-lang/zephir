@@ -1643,7 +1643,7 @@ class Backend
      *
      * @return void
      */
-    public function initArray(Variable $variable, CompilationContext $context, int $size = null): void
+    public function initArray(Variable $variable, CompilationContext $context, ?int $size = null): void
     {
         $code = $this->getVariableCode($variable);
 

@@ -1049,7 +1049,7 @@ class Variable implements TypeAwareInterface
      * @param bool       $used
      * @param array|null $node
      */
-    public function setUsed(bool $used, array $node = null): void
+    public function setUsed(bool $used, ?array $node = null): void
     {
         $this->used     = $used;
         $this->usedNode = $node;

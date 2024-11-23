@@ -119,7 +119,7 @@ final class InitCommand extends AbstractCommand
      *
      * @return void
      */
-    private function recursiveProcess(string $src, string $dst, string $pattern = null, string $callback = 'copy'): void
+    private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): void
     {
         $success  = true;
         $iterator = new DirectoryIterator($src);

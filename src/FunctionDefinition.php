@@ -31,7 +31,7 @@ class FunctionDefinition extends Method
         protected string $name,
         protected ?Parameters $parameters = null,
         protected ?StatementsBlock $statements = null,
-        array $returnType = null,
+        ?array $returnType = null,
         protected ?array $expression = [],
     ) {
         $this->setReturnTypes($returnType);

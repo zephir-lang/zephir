@@ -519,7 +519,7 @@ class SymbolTable
      *
      * @throws CompilerException
      */
-    public function getVariableForRead($name, CompilationContext $compilationContext = null, array $statement = null)
+    public function getVariableForRead(string $name, ?CompilationContext $compilationContext = null, ?array $statement = null)
     {
         /**
          * Validate that 'this' cannot be used in a static function
@@ -704,7 +704,7 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a mutating operation
      * This method implies mutation of one of the members of the variable but no the variables itself.
      */
-    public function getVariableForUpdate(string $name, CompilationContext $compilationContext, array $statement = null)
+    public function getVariableForUpdate(string $name, CompilationContext $compilationContext, ?array $statement = null)
     {
         /**
          * Create superglobals just in time
@@ -757,7 +757,7 @@ class SymbolTable
      *
      * @throws CompilerException
      */
-    public function getVariableForWrite($name, CompilationContext $compilationContext, array $statement = null)
+    public function getVariableForWrite(string $name, CompilationContext $compilationContext, ?array $statement = null)
     {
         /**
          * Create superglobals just in time
@@ -827,7 +827,7 @@ class SymbolTable
      *
      * @return bool
      */
-    public function hasVariable(string $name, CompilationContext $compilationContext = null): bool
+    public function hasVariable(string $name, ?CompilationContext $compilationContext = null): bool
     {
         return false !== $this->getVariable($name, $compilationContext ?: $this->compilationContext);
     }
@@ -835,7 +835,7 @@ class SymbolTable
     public function hasVariableInBranch(
         $name,
         Branch $compareBranch,
-        CompilationContext $compilationContext = null
+        ?CompilationContext $compilationContext = null
     ): bool {
         $branch = $this->resolveVariableToBranch($name, $compilationContext ?: $this->compilationContext);
 

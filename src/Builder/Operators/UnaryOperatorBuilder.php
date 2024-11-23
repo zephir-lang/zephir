@@ -24,7 +24,7 @@ class UnaryOperatorBuilder extends AbstractOperatorBuilder
     public function __construct(
         protected string $operator,
         protected $leftExpression,
-        string $file = null,
+        ?string $file = null,
         int $line = 0,
         int $char = 0,
     ) {

@@ -57,7 +57,7 @@ class Property
     /**
      * Checks for visibility congruence.
      */
-    public function checkVisibility(array $visibility, string $name, array $original = null): void
+    public function checkVisibility(array $visibility, string $name, ?array $original = null): void
     {
         if (in_array('public', $visibility) && in_array('protected', $visibility)) {
             throw new CompilerException(

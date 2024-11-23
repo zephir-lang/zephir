@@ -46,8 +46,6 @@ use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 use function is_object;
 
 /**
- * LetStatement.
- *
  * Let statement is used to assign variables
  */
 class LetStatement extends StatementAbstract
@@ -65,7 +63,7 @@ class LetStatement extends StatementAbstract
         foreach ($statement['assignments'] as $assignment) {
             $variable = $assignment['variable'];
 
-            /*
+            /**
              * Get the symbol from the symbol table if necessary
              */
             $symbolVariable = match ($assignment['assign-type']) {

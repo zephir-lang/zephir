@@ -37,10 +37,7 @@ final class CompilerFileAnonymous implements FileInterface
     use CompilerTrait;
     use LoggerAwareTrait;
 
-    protected Definition          $classDefinition;
     protected ?string             $compiledFile  = null;
-    protected Config              $config;
-    protected ?CompilationContext $context       = null;
     protected bool                $external      = false;
     protected array               $headerCBlocks = [];
     protected ?string             $namespace     = null;
@@ -52,21 +49,18 @@ final class CompilerFileAnonymous implements FileInterface
      * @param Config                  $config
      * @param CompilationContext|null $context
      */
-    public function __construct(Definition $classDefinition, Config $config, CompilationContext $context = null)
-    {
-        $this->classDefinition = $classDefinition;
-        $this->config          = $config;
-        $this->context         = $context;
-        $this->logger          = new NullLogger();
+    public function __construct(
+        protected Definition $classDefinition,
+        protected Config $config,
+        protected ?CompilationContext $context = null
+    ) {
+        $this->logger = new NullLogger();
     }
 
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
-     * @param StringsManager $stringsManager
-     *
-     * @throws Exception
+     * @throws Exception|ReflectionException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
@@ -74,7 +68,6 @@ final class CompilerFileAnonymous implements FileInterface
          * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
-
         if ($this->context) {
             $compilationContext->aliasManager = $this->context->aliasManager;
         } else {
@@ -151,17 +144,12 @@ final class CompilerFileAnonymous implements FileInterface
 
     /**
      * Returns the path to the compiled file.
-     *
-     * @return string
      */
-    public function getCompiledFile()
+    public function getCompiledFile(): string
     {
         return $this->compiledFile;
     }
 
-    /**
-     * @return bool
-     */
     public function isExternal(): bool
     {
         return $this->external;
@@ -181,8 +169,6 @@ final class CompilerFileAnonymous implements FileInterface
 
     /**
      * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
      */
     public function setIsExternal($external): void
     {

@@ -18,54 +18,26 @@ namespace Zephir\Expression\Builder\Statements;
  */
 class LetStatement extends AbstractStatement
 {
-    private $assignments;
-
-    /**
-     * @param array|null $assignments
-     */
-    public function __construct(array $assignments = null)
+    public function __construct(private ?array $assignments = null)
     {
         if (null !== $assignments) {
             $this->setAssignments($assignments);
         }
     }
 
-    /**
-     * @param mixed $assignment
-     *
-     * @return $this
-     */
-    public function addAssignment($assignment)
-    {
-        $this->assignments[] = $assignment;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAssignments()
+    public function getAssignments(): array
     {
         return $this->assignments;
     }
 
-    /**
-     * @param array $assignments
-     *
-     * @return $this
-     */
-    public function setAssignments($assignments)
+    public function setAssignments(array $assignments): self
     {
         $this->assignments = $assignments;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         return [
             'type'        => 'let',

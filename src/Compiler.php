@@ -268,7 +268,7 @@ final class Compiler
      *
      * @throws Exception
      */
-    public function compile(bool $development = false, int $jobs = null): void
+    public function compile(bool $development = false, ?int $jobs = null): void
     {
         $jobs = $jobs ?: 2;
 

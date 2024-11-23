@@ -135,7 +135,7 @@ final class Definition extends AbstractDefinition
      */
     protected string $type = self::TYPE_CLASS;
 
-    public function __construct(protected string $namespace, string $name, string $shortName = null)
+    public function __construct(protected string $namespace, string $name, ?string $shortName = null)
     {
         $this->name      = $name;
         $this->shortName = $shortName ?: $name;
@@ -182,7 +182,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function addMethod(Method $method, array $statement = null): void
+    public function addMethod(Method $method, array $statement = []): void
     {
         $methodName = strtolower($method->getName());
         if (isset($this->methods[$methodName])) {
@@ -782,7 +782,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws Exception
      */
-    public function getClassEntry(CompilationContext $compilationContext = null): string
+    public function getClassEntry(?CompilationContext $compilationContext = null): string
     {
         if ($this->external) {
             if ($compilationContext === null) {
@@ -1368,7 +1368,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function updateMethod(Method $method, array $statement = null): void
+    public function updateMethod(Method $method, array $statement = []): void
     {
         $methodName = strtolower($method->getName());
         if (!isset($this->methods[$methodName])) {

@@ -35,9 +35,9 @@ class ExportSymbol
      */
     public function assign(
         $variable,
-        ZephirVariable $symbolVariable = null,
-        CompiledExpression $resolvedExpr = null,
-        CompilationContext $compilationContext = null,
+        ?ZephirVariable $symbolVariable = null,
+        ?CompiledExpression $resolvedExpr = null,
+        ?CompilationContext $compilationContext = null,
         $statement = null
     ): void {
         $codePrinter = $compilationContext->codePrinter;

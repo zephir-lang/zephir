@@ -753,7 +753,7 @@ class ForStatement extends StatementAbstract
     public function compileStringTraverse(
         CompiledExpression $expression,
         CompilationContext $compilationContext,
-        Variable $exprVariable = null,
+        ?Variable $exprVariable = null,
     ): void {
         $codePrinter = $compilationContext->codePrinter;
 
