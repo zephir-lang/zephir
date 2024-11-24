@@ -27,8 +27,6 @@ use function in_array;
 class UnsetStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -111,11 +109,6 @@ class UnsetStatement extends StatementAbstract
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */

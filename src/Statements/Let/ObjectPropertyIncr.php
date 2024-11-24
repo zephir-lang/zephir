@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Statements\Let;
 
 /**
- * ObjectPropertyIncr.
- *
  * Increments an object property
  */
 class ObjectPropertyIncr extends ObjectPropertyDecr

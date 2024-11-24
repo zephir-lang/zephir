@@ -34,8 +34,6 @@ use function count;
 class ForStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -105,9 +103,6 @@ class ForStatement extends StatementAbstract
      * - Evaluated expression must be a zval
      * - A key must be a zval
      * - A value must be a zval
-     *
-     * @param CompilationContext $compilationContext
-     * @param Variable           $exprVariable
      */
     public function compileHashTraverse(
         CompilationContext $compilationContext,
@@ -230,11 +225,6 @@ class ForStatement extends StatementAbstract
 
     /**
      * Compiles a 'for' statement that use an 'iterator' as expression.
-     *
-     * @param array              $exprRaw
-     * @param CompilationContext $compilationContext
-     *
-     * @return void
      *
      * @throws Exception
      * @throws ReflectionException
@@ -398,11 +388,6 @@ class ForStatement extends StatementAbstract
 
     /**
      * Compiles a for statement that use a 'range' as expression.
-     *
-     * @param array              $exprRaw
-     * @param CompilationContext $compilationContext
-     *
-     * @return bool
      *
      * @throws ReflectionException
      * @throws Exception
@@ -908,10 +893,6 @@ class ForStatement extends StatementAbstract
     }
 
     /**
-     * @param CompilationContext $compilationContext
-     * @param Printer|null       $codePrinter
-     *
-     * @return void
      * @throws Exception
      * @throws ReflectionException
      */
@@ -938,11 +919,8 @@ class ForStatement extends StatementAbstract
     }
 
     /**
-     * @param mixed              $keyVariableName
-     * @param Variable           $keyVariable
-     * @param CompilationContext $compilationContext
-     *
-     * @return void
+     * @throws Exception
+     * @throws ReflectionException
      */
     private function getLetStatement(
         mixed $keyVariableName,

@@ -33,12 +33,6 @@ class ObjectDynamicStringProperty
     /**
      * Compiles foo->{"x"} = {expr}.
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
      * @throws CompilerException
      * @throws Exception
      */
@@ -71,14 +65,6 @@ class ObjectDynamicStringProperty
             throw new CompilerException(
                 "Cannot mutate static property '" . $compilationContext->classDefinition->getCompleteName(
                 ) . '::' . $propertyName . "' because it is not initialized",
-                $statement
-            );
-        }
-
-        if ('variable' != $symbolVariable->getType()) {
-            throw CompilerException::cannotUseVariableTypeAs(
-                $symbolVariable,
-                'as an object',
                 $statement
             );
         }

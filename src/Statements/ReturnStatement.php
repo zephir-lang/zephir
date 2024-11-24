@@ -35,8 +35,6 @@ final class ReturnStatement extends StatementAbstract
     private const RETURN_RETURN = 'RETURN_MM();';
 
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */

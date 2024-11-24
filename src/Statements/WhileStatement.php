@@ -13,48 +13,44 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\StatementsBlock;
 
 /**
- * WhileStatement.
- *
  * While statement, the same as in PHP/C
  */
 class WhileStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $exprRaw     = $this->statement['expr'];
-        $codePrinter = $compilationContext->codePrinter;
-
-        /*
+        /**
          * Compound conditions can be evaluated in a single line of the C-code
          */
-        $codePrinter->output('while (1) {');
+        $compilationContext->codePrinter->output('while (1) {');
+        $compilationContext->codePrinter->increaseLevel();
 
-        $codePrinter->increaseLevel();
-
-        /*
+        /**
          * Variables are initialized in a different way inside loops
          */
         ++$compilationContext->insideCycle;
 
         $expr                 = new EvalExpression();
-        $condition            = $expr->optimize($exprRaw, $compilationContext);
+        $condition            = $expr->optimize($this->statement['expr'], $compilationContext);
         $this->evalExpression = $expr;
 
-        $codePrinter->output('if (!(' . $condition . ')) {');
-        $codePrinter->output("\t" . 'break;');
-        $codePrinter->output('}');
+        $compilationContext->codePrinter->output('if (!(' . $condition . ')) {');
+        $compilationContext->codePrinter->output("\t" . 'break;');
+        $compilationContext->codePrinter->output('}');
+        $compilationContext->codePrinter->decreaseLevel();
 
-        $codePrinter->decreaseLevel();
-
-        /*
+        /**
          * Compile statements in the 'while' block
          */
         if (isset($this->statement['statements'])) {
@@ -63,11 +59,11 @@ class WhileStatement extends StatementAbstract
             $st->compile($compilationContext);
         }
 
-        /*
+        /**
          * Restore the cycle counter
          */
         --$compilationContext->insideCycle;
 
-        $codePrinter->output('}');
+        $compilationContext->codePrinter->output('}');
     }
 }

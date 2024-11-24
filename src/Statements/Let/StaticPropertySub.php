@@ -24,8 +24,6 @@ use Zephir\Variable\Variable;
 use function sprintf;
 
 /**
- * StaticPropertySub.
- *
  * Updates static properties
  */
 class StaticPropertySub
@@ -36,12 +34,6 @@ class StaticPropertySub
 
     /**
      * Compiles ClassName::foo = {expr}.
-     *
-     * @param string             $className
-     * @param string             $property
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
      *
      * @throws CompilerException
      * @throws IllegalOperationException
@@ -350,15 +342,6 @@ class StaticPropertySub
         }
     }
 
-    /**
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     * @param string             $classEntry
-     * @param string             $property
-     * @param Variable           $variableVariable
-     *
-     * @return void
-     */
     protected function processDefaultType(
         CompilationContext $compilationContext,
         array $statement,
@@ -376,17 +359,10 @@ class StaticPropertySub
         $this->checkVariableTemporal($variableVariable);
     }
 
-    /**
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @return Variable
-     */
     protected function processStringType(
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
-        array $statement
+        array $statement,
     ): Variable {
         return $compilationContext->symbolTable->getTempVariableForWrite(
             'variable',
@@ -394,29 +370,13 @@ class StaticPropertySub
         );
     }
 
-    /**
-     * @param array    $statement
-     * @param Variable $variableVariable
-     *
-     * @return void
-     */
-    protected function processVariableDoubleType(
-        array $statement,
-        Variable $variableVariable
-    ): void {
+    protected function processVariableDoubleType(array $statement, Variable $variableVariable): void
+    {
         // Nothing
     }
 
-    /**
-     * @param array    $statement
-     * @param Variable $variableVariable
-     *
-     * @return void
-     */
-    protected function processVariableIntType(
-        array $statement,
-        Variable $variableVariable
-    ): void {
+    protected function processVariableIntType(array $statement, Variable $variableVariable): void
+    {
         // Nothing
     }
 }

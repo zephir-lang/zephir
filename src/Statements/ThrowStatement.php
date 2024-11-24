@@ -33,8 +33,6 @@ use function sprintf;
 class ThrowStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -141,11 +139,6 @@ class ThrowStatement extends StatementAbstract
 
     /**
      * Throws an exception escaping the data.
-     *
-     * @param Printer $printer
-     * @param string  $class
-     * @param string  $message
-     * @param array   $expression
      */
     private function throwStringException(Printer $printer, string $class, string $message, array $expression): void
     {

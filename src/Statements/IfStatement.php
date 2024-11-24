@@ -30,8 +30,6 @@ use function is_object;
 class IfStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws ReflectionException
      * @throws Exception
      */

@@ -18,24 +18,12 @@ use Zephir\CompilationContext;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * ExportSymbolString.
- *
  * Exports a symbol to the current PHP symbol table using a variable as parameter
  */
 class ExportSymbolString extends ExportSymbol
 {
     /**
      * Compiles {"var"} = {expr}.
-     */
-
-    /**
-     * @param CompilationContext|null $compilationContext
-     * @param ZephirVariable|null     $symbolVariable
-     * @param ZephirVariable          $variable
-     * @param Printer|null            $codePrinter
-     * @param array|null              $statement
-     *
-     * @return void
      */
     protected function getOutput(
         ?CompilationContext $compilationContext,
