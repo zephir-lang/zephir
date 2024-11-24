@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
@@ -51,9 +53,8 @@ use function is_object;
 class LetStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
@@ -145,7 +146,7 @@ class LetStatement extends StatementAbstract
                 $variable = $symbolVariable->getName();
             }
 
-            /*
+            /**
              * There are four types of assignments
              */
             switch ($assignment['assign-type']) {
@@ -280,12 +281,12 @@ class LetStatement extends StatementAbstract
 
                 case 'dynamic-variable':
                     $let = new LetExportSymbol();
-                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assign($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'dynamic-variable-string':
                     $let = new LetExportSymbolString();
-                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assign($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 default:
@@ -295,10 +296,6 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * @param array $assignment
-     *
-     * @return array
-     *
      * @throws CompilerException
      */
     protected function replaceAssignBitwiseOnDirect(array $assignment): array
