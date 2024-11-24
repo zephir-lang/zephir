@@ -94,10 +94,6 @@ class Expression
     /**
      * Resolves an expression.
      *
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws CompilerException|Exception
      * @throws Exception
      * @throws ReflectionException
