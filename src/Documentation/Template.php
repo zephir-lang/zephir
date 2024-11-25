@@ -13,17 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Documentation;
 
-use Zephir\Class\Definition\Definition;
-use Zephir\CompilerFile;
 use Zephir\Config;
-use Zephir\Documentation;
 use Zephir\Exception;
 
 use function array_merge;
 use function file_exists;
 use function file_put_contents;
-use function is_string;
-use function ltrim;
 use function ob_get_clean;
 use function ob_start;
 
@@ -37,13 +32,6 @@ class Template
     protected $themeOptions;
 
     /**
-     * Template constructor.
-     *
-     * @param Theme  $theme
-     * @param array  $data
-     * @param string $template
-     * @param int    $nestedLevel
-     *
      * @throws Exception
      */
     public function __construct(
@@ -58,9 +46,6 @@ class Template
         }
     }
 
-    /**
-     * @return string
-     */
     public function getPathToRoot(): string
     {
         return $this->pathToRoot;
@@ -93,8 +78,6 @@ class Template
 
     /**
      * the path to root for the hyperlink in the templates.
-     *
-     * @param string $pathToRoot
      */
     public function setPathToRoot(string $pathToRoot): void
     {
@@ -113,36 +96,10 @@ class Template
 
     /**
      * add theme options to make them available during the render phase.
-     *
-     * @param array $themeOptions
      */
-    public function setThemeOptions($themeOptions): void
+    public function setThemeOptions(array $themeOptions): void
     {
         $this->themeOptions = $themeOptions;
-    }
-
-    /**
-     * Generate an url relative to the current directory.
-     *
-     * @param string $url the url we want to reach
-     *
-     * @return string the relative path to the url
-     */
-    public function url(string $url): string
-    {
-        if (is_string($url)) {
-            if ('/' == $url[0]) {
-                return $this->getPathToRoot() . ltrim($url, '/');
-            } elseif (is_string($url)) {
-                return $url;
-            }
-        } elseif ($url instanceof Definition) {
-            return $this->url(Documentation::classUrl($url));
-        } elseif ($url instanceof CompilerFile) {
-            return $this->url(Documentation::classUrl($url->getClassDefinition()));
-        }
-
-        return '';
     }
 
     public function write($outputFile): void
