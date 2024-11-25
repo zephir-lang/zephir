@@ -26,12 +26,6 @@ trait VariablesTrait
 {
     /**
      * Check whether a class has a property
-     *
-     * @param Definition $classDefinition
-     * @param string     $property
-     * @param array      $statement
-     *
-     * @return void
      */
     protected function checkAccessNonStaticProperty(
         Property $propertyDefinition,
@@ -53,12 +47,6 @@ trait VariablesTrait
 
     /**
      * Check whether a class has a property
-     *
-     * @param Definition $classDefinition
-     * @param string     $property
-     * @param array      $statement
-     *
-     * @return void
      */
     protected function checkClassHasProperty(
         Definition $classDefinition,
@@ -75,13 +63,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param array      $expression
-     * @param string     $exception
-     * @param array|null $extra
-     *
-     * @return void
-     */
     protected function checkLeft(
         array $expression,
         string $exception = Exception::class,
@@ -92,12 +73,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param Variable|null $variable
-     * @param array         $expression
-     *
-     * @return void
-     */
     protected function checkNotVariable(
         ?Variable $variable,
         array $expression
@@ -107,12 +82,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param Variable|null $variable
-     * @param array         $expression
-     *
-     * @return void
-     */
     protected function checkNotVariableString(
         ?Variable $variable,
         array $expression
@@ -122,13 +91,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param array      $expression
-     * @param string     $exception
-     * @param array|null $extra
-     *
-     * @return void
-     */
     protected function checkRight(
         array $expression,
         string $exception = Exception::class,
@@ -139,13 +101,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param string         $variable
-     * @param ZephirVariable $symbolVariable
-     * @param array          $statement
-     *
-     * @return void
-     */
     protected function checkVariableInitialized(
         string $variable,
         ZephirVariable $symbolVariable,
@@ -159,13 +114,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param string         $variable
-     * @param ZephirVariable $symbolVariable
-     * @param array          $statement
-     *
-     * @return void
-     */
     protected function checkVariableLocalOnly(
         string $variable,
         ZephirVariable $symbolVariable,
@@ -179,13 +127,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param string         $variable
-     * @param ZephirVariable $symbolVariable
-     * @param array          $statement
-     *
-     * @return void
-     */
     protected function checkVariableReadOnly(
         string $variable,
         ZephirVariable $symbolVariable,
@@ -199,11 +140,6 @@ trait VariablesTrait
         }
     }
 
-    /**
-     * @param GlobalConstant|ZephirVariable $variable
-     *
-     * @return void
-     */
     protected function checkVariableTemporal(GlobalConstant|Variable $variable): void
     {
         if ($variable->isTemporal()) {
