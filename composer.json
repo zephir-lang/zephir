@@ -30,7 +30,7 @@
         "ext-zlib": "*",
         "monolog/monolog": "^2.3",
         "symfony/console": "^5.2",
-        "symfony/event-dispatcher": "^5.3"
+        "symfony/event-dispatcher": "^6.0"
     },
     "require-dev": {
         "ext-gmp": "*",
