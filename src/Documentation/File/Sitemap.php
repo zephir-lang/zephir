@@ -34,11 +34,6 @@ class Sitemap implements FileInterface
         $this->baseDir    = $baseDir;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         return [
@@ -48,21 +43,11 @@ class Sitemap implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return 'sitemap.xml';
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return $this->baseDir . '/Api/sitemap.php';

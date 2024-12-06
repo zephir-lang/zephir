@@ -184,7 +184,7 @@ class DocblockParser
      *
      * @return Annotation
      */
-    private function __createAnnotation($name, $string)
+    private function __createAnnotation(string $name, string $string)
     {
         switch ($name) {
             case 'link':

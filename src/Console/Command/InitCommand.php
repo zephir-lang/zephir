@@ -111,13 +111,6 @@ final class InitCommand extends AbstractCommand
 
     /**
      * Copies the base kernel to the extension destination.
-     *
-     * @param string      $src
-     * @param string      $dst
-     * @param string|null $pattern
-     * @param string      $callback
-     *
-     * @return void
      */
     private function recursiveProcess(string $src, string $dst, ?string $pattern = null, string $callback = 'copy'): void
     {

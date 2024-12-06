@@ -24,12 +24,7 @@ final class ListCommand extends Command
 {
     use RemoveOptionsTrait;
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param bool $mergeArgs
-     */
-    public function mergeApplicationDefinition($mergeArgs = true): void
+    public function mergeApplicationDefinition(bool $mergeArgs = true): void
     {
         parent::mergeApplicationDefinition($mergeArgs);
 

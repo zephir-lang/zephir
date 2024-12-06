@@ -197,7 +197,7 @@ class ArgInfoDefinition
         $flag = $this->richFormat ? '1' : '0';
 
         foreach ($this->parameters->getParameters() as $parameter) {
-            switch ("{$flag}:" . $parameter['data-type']) {
+            switch ("$flag:" . $parameter['data-type']) {
                 case '0:array':
                 case '1:array':
                     if (!isset($parameter['default'])) {

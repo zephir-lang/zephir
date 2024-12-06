@@ -239,17 +239,12 @@ class Property
     /**
      * Declare class property with default value.
      *
-     * @param CompilationContext $compilationContext
-     * @param string             $type
-     * @param                    $value
-     *
      * @throws Exception
      * @throws CompilerException
      */
-    protected function declareProperty(CompilationContext $compilationContext, $type, $value): void
+    protected function declareProperty(CompilationContext $compilationContext, string $type, $value): void
     {
         $codePrinter = $compilationContext->codePrinter;
-
         if (is_object($value)) {
             return;
         }

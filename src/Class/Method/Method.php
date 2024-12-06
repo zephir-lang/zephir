@@ -58,11 +58,12 @@ use const PHP_EOL;
 class Method
 {
     public bool $optimizable = true;
+
     /**
      * Call Gatherer Pass.
      */
     protected ?CallGathererPass $callGathererPass = null;
-    protected ?Definition       $classDefinition  = null;
+
     /**
      * Whether the method is abstract or not.
      */
@@ -130,9 +131,9 @@ class Method
     protected bool $void = false;
 
     public function __construct(
-        Definition $classDefinition,
-        protected array $visibility,
-        protected string $name,
+        protected ?Definition $classDefinition = null,
+        protected array $visibility = [],
+        protected string $name = '',
         protected ?Parameters $parameters = null,
         protected ?StatementsBlock $statements = null,
         protected ?string $docblock = null,
@@ -140,7 +141,6 @@ class Method
         protected ?array $expression = [],
         array $staticVariables = [],
     ) {
-        $this->classDefinition = $classDefinition;
         $this->staticVariables = $staticVariables;
 
         $this->checkVisibility($visibility, $name, $expression);

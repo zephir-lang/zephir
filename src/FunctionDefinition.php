@@ -34,6 +34,8 @@ class FunctionDefinition extends Method
         ?array $returnType = null,
         protected ?array $expression = [],
     ) {
+        parent::__construct(null, [], $name, $parameters, $statements);
+
         $this->setReturnTypes($returnType);
     }
 

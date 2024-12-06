@@ -19,9 +19,6 @@ abstract class AbstractCommand extends Command
 {
     use RemoveOptionsTrait;
 
-    /**
-     * @param bool $mergeArgs
-     */
     public function mergeApplicationDefinition(bool $mergeArgs = true): void
     {
         parent::mergeApplicationDefinition($mergeArgs);

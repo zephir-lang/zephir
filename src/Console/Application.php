@@ -50,18 +50,10 @@ final class Application extends BaseApplication
 
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(ConsoleEvents::ERROR, [new ErrorListener(), 'onCommandError']);
-
         $this->setDispatcher($dispatcher);
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
-     *
      * @throws Exception|Throwable
      */
     public function doRun(InputInterface $input, OutputInterface $output): int
@@ -109,21 +101,11 @@ final class Application extends BaseApplication
         }
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getHelp(): string
     {
         return Zephir::LOGO . parent::getHelp();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string The long application version
-     */
     public function getLongVersion(): string
     {
         $version = explode('-', $this->getVersion());
@@ -142,8 +124,6 @@ final class Application extends BaseApplication
 
     /**
      * Get Version Number
-     *
-     * @return string The application version
      */
     public function getVerNum(): string
     {
@@ -155,8 +135,6 @@ final class Application extends BaseApplication
 
     /**
      * Gets the application version as integer.
-     *
-     * @return string The application version
      */
     public function getVersion(): string
     {
@@ -170,8 +148,6 @@ final class Application extends BaseApplication
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return Command[] An array of default Command instances
      */
     protected function getDefaultCommands(): array
@@ -180,8 +156,6 @@ final class Application extends BaseApplication
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return InputDefinition An InputDefinition instance
      */
     protected function getDefaultInputDefinition(): InputDefinition

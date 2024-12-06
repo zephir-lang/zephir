@@ -21,10 +21,6 @@ trait DevelopmentModeAwareTrait
 {
     /**
      * Checks if the development mode is enabled.
-     *
-     * @param InputInterface $input
-     *
-     * @return bool
      */
     protected function isDevelopmentModeEnabled(InputInterface $input): bool
     {

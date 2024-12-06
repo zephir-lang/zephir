@@ -58,70 +58,62 @@ final class Definition extends AbstractDefinition
      * Contains "abstract" in the definition
      */
     protected bool $abstract = false;
-    /**
-     * @var AliasManager|null
-     */
+
     protected ?AliasManager $aliasManager = null;
-    /**
-     * @var Compiler
-     */
+
     protected Compiler $compiler;
     /**
      * @var Constant[]
      */
     protected array $constants = [];
-    /**
-     * @var int
-     */
+
     protected int $dependencyRank = 0;
-    /**
-     * @var string
-     */
+
     protected string $docBlock = '';
+
     /**
      * Name of inherited class
      */
     protected ?string $extendsClass = null;
+
     /**
      * Definition object of inherited class
      */
     protected ?AbstractDefinition $extendsClassDefinition = null;
+
     /**
      * When class is from external dependency
      */
     protected bool $external = false;
+
     /**
      * Contains "final" in the definition
      */
     protected bool $final = false;
-    /**
-     * @var array
-     */
+
     protected array $implementedInterfaceDefinitions = [];
+
     /**
      * List of implemented interfaces of current class
      */
     protected array $interfaces = [];
-    /**
-     * @var bool
-     */
+
     protected bool $isBundled = false;
+
     /**
      * @var Method[]
      */
     protected array $methods = [];
-    /**
-     * @var array
-     */
+
     protected array $originalNode = [];
-    /**
-     * @var Docblock|null
-     */
+
     protected ?Docblock $parsedDocblock = null;
+
     /**
      * @var Property[]
      */
     protected array $properties = [];
+
     /**
      * Class short name
      *
@@ -130,14 +122,17 @@ final class Definition extends AbstractDefinition
      * @see Definition::name
      */
     protected string $shortName;
+
     /**
      * Definition type
      */
     protected string $type = self::TYPE_CLASS;
 
-    public function __construct(protected string $namespace, string $name, ?string $shortName = null)
-    {
-        $this->name      = $name;
+    public function __construct(
+        protected string $namespace,
+        protected string $name,
+        ?string $shortName = null,
+    ) {
         $this->shortName = $shortName ?: $name;
     }
 
@@ -888,7 +883,7 @@ final class Definition extends AbstractDefinition
      */
     public function getExtendsClassDefinition(): ?AbstractDefinition
     {
-        if (!$this->extendsClassDefinition && $this->extendsClass && $this->compiler) {
+        if (!$this->extendsClassDefinition && $this->extendsClass) {
             $this->setExtendsClassDefinition($this->compiler->getClassDefinition($this->extendsClass));
         }
 
@@ -1060,10 +1055,6 @@ final class Definition extends AbstractDefinition
 
     /**
      * Returns a method definition by its name.
-     *
-     * @param string $propertyName
-     *
-     * @return Property|null
      */
     public function getProperty(string $propertyName): ?Property
     {
@@ -1139,10 +1130,6 @@ final class Definition extends AbstractDefinition
 
     /**
      * Checks if the class implements a specific name.
-     *
-     * @param string $methodName
-     *
-     * @return bool
      */
     public function hasMethod(string $methodName): bool
     {
