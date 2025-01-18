@@ -235,14 +235,6 @@ jobs:
           verbose: true
           name: codecov-umbrella
 
-      - name: "Upload to Qodana"
-        run: |
-          docker run \
-            -v $(pwd):/data/project/ \
-            -v ./reports/:/data/coverage \
-            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
-            jetbrains/qodana-php
-
       - name: Upload build artifacts after Failure
         if: failure()
         uses: actions/upload-artifact@v4
