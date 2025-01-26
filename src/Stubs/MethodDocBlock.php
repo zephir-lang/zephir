@@ -52,7 +52,7 @@ class MethodDocBlock extends DocBlock
         Method $method,
         AliasManager $aliasManager,
         string $indent = '    ',
-        Types $types = null
+        ?Types $types = null
     ) {
         parent::__construct($method->getDocBlock(), $indent);
 
