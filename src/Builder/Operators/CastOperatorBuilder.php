@@ -20,22 +20,13 @@ use Zephir\Builder\FunctionCallBuilder;
  */
 class CastOperatorBuilder extends AbstractOperatorBuilder
 {
-    protected string $leftOperand;
-
-    protected FunctionCallBuilder $rightOperand;
-
     public function __construct(
-        string $left,
-        FunctionCallBuilder $right,
-        ?string $file = null,
-        int $line = 0,
-        int $char = 0,
+        protected string $leftOperand,
+        protected FunctionCallBuilder $rightOperand,
+        protected ?string $file = null,
+        protected int $line = 0,
+        protected int $char = 0,
     ) {
-        $this->leftOperand  = $left;
-        $this->rightOperand = $right;
-        $this->file         = $file;
-        $this->line         = $line;
-        $this->char         = $char;
     }
 
     public function get(): array
