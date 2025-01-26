@@ -185,11 +185,11 @@ EOT);
         }
 
         if (!generate($trace)) {
-            return;
+            exit(1);
         }
 
         if (!compile($devMode, $jobs)) {
-            return;
+            exit(1);
         }
 
         install($devMode);
@@ -294,7 +294,10 @@ HELP);
             exit(0);
         }
 
-        generate($trace);
+        if (!generate($trace)) {
+            exit(1);
+        }
+
         break;
 
     case 'init':
@@ -340,6 +343,7 @@ EOT);
     case 'stubs':
         if ($showHelp) {
             fwrite(STDOUT, 'Generates stubs that can be used in a PHP IDE' . PHP_EOL);
+            exit(0);
         }
 
         $compiler->stubs();
