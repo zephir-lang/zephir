@@ -379,7 +379,7 @@ HELP;
 
 function generate(bool $trace = false): bool
 {
-    global $compiler, $config, $backend, $parser, $disk, $compilerFactory;
+    global $compiler;
 
     if (extension_loaded('timecop') && 1 == ini_get('timecop.func_override')) {
         echo <<<MSG
@@ -394,8 +394,6 @@ For more see:
 MSG;
         return false;
     }
-
-    $compiler = new Compiler($config, $backend, new Manager($parser), $disk, $compilerFactory);
 
     try {
         $compiler->generate(true);
