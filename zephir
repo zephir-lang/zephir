@@ -342,6 +342,8 @@ EOT);
             fwrite(STDOUT, 'Generates stubs that can be used in a PHP IDE' . PHP_EOL);
         }
 
+        $compiler->stubs();
+
         break;
 
     case 'help':
