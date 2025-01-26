@@ -303,12 +303,13 @@ HELP);
             exit(0);
         }
 
-        if (empty($params['namespace'])) {
+        $namespace = $params[1] ?? $params['namespace'] ?? null;
+        if ($namespace === null) {
             fwrite(STDERR, 'Not enough arguments (missing: "namespace").' . PHP_EOL);
             exit(1);
         }
 
-        init($params['namespace']);
+        init($namespace);
 
         break;
 
