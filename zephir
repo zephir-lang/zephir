@@ -304,7 +304,7 @@ HELP;
         }
 
         if (empty($params['namespace'])) {
-            echo '--namespace is required' . PHP_EOL;
+            echo 'Not enough arguments (missing: "namespace").' . PHP_EOL;
             exit(1);
         }
 
