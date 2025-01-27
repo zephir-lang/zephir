@@ -1229,7 +1229,7 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 /**
  * Copied from php-src source tree for PHP 8.4
  */
-#ifndef object_init_with_constructor
+#if PHP_VERSION_ID < 80400
 static zend_result object_init_with_constructor(zval *arg, zend_class_entry *class_type, uint32_t param_count, zval *params, HashTable *named_params)
 {
 	zend_result status = object_and_properties_init(arg, class_type, NULL);
