@@ -31,11 +31,6 @@ use const PHP_EOL;
 
 trait CompilerTrait
 {
-    /**
-     * @param string $completeName
-     *
-     * @return array
-     */
     protected function calculatePaths(string $completeName): array
     {
         $path = str_replace('\\', DIRECTORY_SEPARATOR, strtolower($completeName));
@@ -53,23 +48,15 @@ trait CompilerTrait
         return [$path, $filePath, $filePathHeader];
     }
 
-    /**
-     * @param string             $code
-     * @param Definition|null    $classDefinition
-     * @param CompilationContext $compilationContext
-     *
-     * @return void
-     */
     protected function generateClassHeadersPost(
         string $code,
         ?Definition $classDefinition,
         CompilationContext $compilationContext
     ): void {
         $code .= PHP_EOL;
-
         $code .= '#include "kernel/main.h"' . PHP_EOL;
 
-        if ('class' == $classDefinition->getType()) {
+        if ('class' === $classDefinition->getType()) {
             foreach ($compilationContext->headersManager->get() as $header => $one) {
                 $code .= '#include "' . $header . '.h"' . PHP_EOL;
             }
@@ -85,11 +72,6 @@ trait CompilerTrait
         $compilationContext->codePrinter->preOutput($code);
     }
 
-    /**
-     * @param Definition|null $classDefinition
-     *
-     * @return string
-     */
     protected function generateCodeHeadersPre(?Definition $classDefinition): string
     {
         $separators = str_repeat('../', count(explode('\\', $classDefinition->getCompleteName())) - 1);

@@ -94,10 +94,6 @@ class Expression
     /**
      * Resolves an expression.
      *
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws CompilerException|Exception
      * @throws Exception
      * @throws ReflectionException
@@ -582,7 +578,7 @@ class Expression
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;

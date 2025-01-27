@@ -20,7 +20,6 @@ use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * VariableAppend.
  *
  * Append a value to a variable
  */
@@ -30,12 +29,6 @@ class VariableAppend
 
     /**
      * Compiles foo[] = {expr}.
-     *
-     * @param                    $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param                    $statement
      *
      * @throws CompilerException
      */
@@ -50,7 +43,7 @@ class VariableAppend
         $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
         $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
-        /*
+        /**
          * Only dynamic variables and arrays can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {

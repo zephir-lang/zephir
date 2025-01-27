@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Statements\Let;
 
 /**
- * StaticPropertyAdd.
- *
  * Updates static properties
  */
 class StaticPropertyAdd extends StaticPropertySub

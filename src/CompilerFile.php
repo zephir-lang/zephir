@@ -263,10 +263,8 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
-     * @param StringsManager $stringsManager
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
@@ -310,8 +308,7 @@ final class CompilerFile implements FileInterface
         /**
          * Headers manager.
          */
-        $headersManager                     = new HeadersManager();
-        $compilationContext->headersManager = $headersManager;
+        $compilationContext->headersManager = new HeadersManager();
 
         /**
          * Main code-printer for the file.
@@ -432,14 +429,12 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles a function.
      *
-     * @param CompilationContext $compilationContext
-     * @param FunctionDefinition $functionDefinition
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compileFunction(
         CompilationContext $compilationContext,
-        FunctionDefinition $functionDefinition
+        FunctionDefinition $functionDefinition,
     ): void {
         /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
         $bakClassDefinition                  = $compilationContext->classDefinition;
@@ -491,12 +486,7 @@ final class CompilerFile implements FileInterface
         return $ir;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return Definition
-     */
-    public function getClassDefinition()
+    public function getClassDefinition(): ?Definition
     {
         $this->classDefinition->setAliasManager($this->aliasManager);
 
@@ -505,8 +495,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Returns the path to the compiled file.
-     *
-     * @return string
      */
     public function getCompiledFile(): string
     {
@@ -515,17 +503,12 @@ final class CompilerFile implements FileInterface
 
     /**
      * Returns the path to the source file.
-     *
-     * @return string
      */
     public function getFilePath(): string
     {
         return $this->filePath;
     }
 
-    /**
-     * @return bool
-     */
     public function isExternal(): bool
     {
         return $this->external;
@@ -724,14 +707,13 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates a definition for a class.
-     *
-     * @param CompilationContext $compilationContext
-     * @param string             $namespace
-     * @param array              $topStatement
-     * @param array              $docblock
      */
-    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock): void
-    {
+    public function preCompileClass(
+        CompilationContext $compilationContext,
+        string $namespace,
+        array $topStatement,
+        ?array $docblock = null,
+    ): void {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
 
@@ -838,12 +820,8 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates a definition for an interface.
-     *
-     * @param string $namespace
-     * @param array  $topStatement
-     * @param array  $docblock
      */
-    public function preCompileInterface($namespace, $topStatement, $docblock): void
+    public function preCompileInterface(string $namespace, array $topStatement, ?array $docblock = null): void
     {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -857,7 +835,7 @@ final class CompilerFile implements FileInterface
 
         $classDefinition->setType(Definition::TYPE_INTERFACE);
 
-        if (is_array($docblock)) {
+        if ($docblock !== null) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
@@ -901,17 +879,11 @@ final class CompilerFile implements FileInterface
         $this->classDefinition = $classDefinition;
     }
 
-    /**
-     * @param string $className
-     */
     public function setClassName(string $className): void
     {
         $this->className = $className;
     }
 
-    /**
-     * @param string $filePath
-     */
     public function setFilePath(string $filePath): void
     {
         $this->filePath = $filePath;
@@ -919,8 +891,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
      */
     public function setIsExternal($external): void
     {
@@ -963,9 +933,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates the property shortcuts.
-     *
-     * @param array      $property
-     * @param Definition $classDefinition
      *
      * @throws CompilerException
      */

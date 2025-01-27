@@ -36,16 +36,10 @@ class CallFunctionStatement extends AbstractStatement
      * {"f"}(x, y, ... , N).
      */
     public const TYPE_CALL_DYNAMIC_STRING = FunctionCall::CALL_DYNAMIC_STRING;
-    private $arguments;
-    private $name;
-    private $typeCall;
 
-    /**
-     * @param string|null $name
-     * @param array|null  $parameters
-     * @param int         $typeCall
-     */
-    public function __construct(string $name = null, array $parameters = null, int $typeCall = self::TYPE_CALL_DIRECT)
+    private ?array $arguments = null;
+
+    public function __construct(private ?string $name = null, private ?array $parameters = null, private int $typeCall = self::TYPE_CALL_DIRECT)
     {
         if (null !== $name) {
             $this->setName($name);
@@ -96,12 +90,7 @@ class CallFunctionStatement extends AbstractStatement
         return $this->typeCall;
     }
 
-    /**
-     * @param array|null $arguments
-     *
-     * @return $this
-     */
-    public function setArguments(array $arguments = null)
+    public function setArguments(?array $arguments = null): self
     {
         $this->arguments = $arguments;
 

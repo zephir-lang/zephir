@@ -57,9 +57,6 @@ class Struct
     }
 
     /**
-     * @param string $field
-     * @param string $type
-     *
      * @throws InvalidArgumentException
      */
     public function addProperty(string $field, string $type): void
@@ -73,12 +70,6 @@ class Struct
 
     /**
      * Returns the C code that initializes the extension global.
-     *
-     * @param string $name
-     * @param array  $global
-     * @param string $namespace
-     *
-     * @return string
      *
      * @throws RuntimeException
      * @throws InvalidArgumentException

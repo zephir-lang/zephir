@@ -115,19 +115,11 @@ class BinaryOperator extends AbstractOperator
 
     // x [{expr}]
     public const OPERATOR_TYPE_HINT = 'type-hint';
-    private $leftExpression;
-    private $operator;
-    private $rightExpression;
 
-    /**
-     * @param null                 $operator
-     * @param AbstractBuilder|null $leftExpression
-     * @param AbstractBuilder|null $rightExpression
-     */
     public function __construct(
-        $operator = null,
-        AbstractBuilder $leftExpression = null,
-        AbstractBuilder $rightExpression = null
+        private $operator = null,
+        private ?AbstractBuilder $leftExpression = null,
+        private ?AbstractBuilder $rightExpression = null
     ) {
         if (null !== $operator) {
             $this->setOperator($operator);
@@ -142,70 +134,43 @@ class BinaryOperator extends AbstractOperator
         }
     }
 
-    /**
-     * @return AbstractBuilder
-     */
-    public function getLeftExpression()
+    public function getLeftExpression(): AbstractBuilder
     {
         return $this->leftExpression;
     }
 
-    /**
-     * @return string
-     */
-    public function getOperator()
+    public function getOperator(): string
     {
         return $this->operator;
     }
 
-    /**
-     * @return AbstractBuilder
-     */
-    public function getRightExpression()
+    public function getRightExpression(): AbstractBuilder
     {
         return $this->rightExpression;
     }
 
-    /**
-     * @param AbstractBuilder $leftExpression
-     *
-     * @return BinaryOperator
-     */
-    public function setLeftExpression(AbstractBuilder $leftExpression)
+    public function setLeftExpression(AbstractBuilder $leftExpression): BinaryOperator
     {
         $this->leftExpression = $leftExpression;
 
         return $this;
     }
 
-    /**
-     * @param string $operator
-     *
-     * @return BinaryOperator
-     */
-    public function setOperator($operator)
+    public function setOperator(string $operator): BinaryOperator
     {
         $this->operator = $operator;
 
         return $this;
     }
 
-    /**
-     * @param AbstractBuilder $rightExpression
-     *
-     * @return BinaryOperator
-     */
-    public function setRightExpression(AbstractBuilder $rightExpression)
+    public function setRightExpression(AbstractBuilder $rightExpression): BinaryOperator
     {
         $this->rightExpression = $rightExpression;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         return [
             'type'  => $this->getOperator(),

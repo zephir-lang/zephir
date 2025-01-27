@@ -31,14 +31,6 @@ class ObjectProperty
 
     /**
      * Compiles foo->x = {expr}.
-     *
-     * @param string $variable
-     * @param ZephirVariable $symbolVariable
-     * @param Expression $expression
-     * @param Context $context
-     * @param array $statement
-     *
-     * @return void
      */
     public function assign(
         string $variable,
@@ -86,7 +78,7 @@ class ObjectProperty
             throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
-        /*
+        /**
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'object'])) {
@@ -96,7 +88,7 @@ class ObjectProperty
             );
         }
 
-        /*
+        /**
          * Try to check if property is implemented on related object
          */
         if ('this' == $variable) {

@@ -24,7 +24,7 @@ class AssignPropertyOperator extends AssignVariableOperator
     public const TYPE_ASSIGN_STATIC_PROPERTY = 'static-property';
     private string $type = self::TYPE_ASSIGN_OBJECT_PROPERTY;
 
-    public function __construct($variable = null, private $property = null, AbstractBuilder $expression = null)
+    public function __construct($variable = null, private $property = null, ?AbstractBuilder $expression = null)
     {
         parent::__construct($variable, $expression);
 

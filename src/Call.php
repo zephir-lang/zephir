@@ -718,7 +718,7 @@ class Call
      *
      * @return Variable|null
      */
-    public function getSymbolVariable(bool $useTemp = false, CompilationContext $compilationContext = null): ?Variable
+    public function getSymbolVariable(bool $useTemp = false, ?CompilationContext $compilationContext = null): ?Variable
     {
         $symbolVariable = $this->symbolVariable;
 

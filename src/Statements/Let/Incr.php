@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Statements\Let;
 
 /**
- * Incr.
- *
  * Increments a variable
  */
 class Incr extends Decr

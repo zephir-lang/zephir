@@ -31,23 +31,12 @@ use function trim;
  */
 class DocBlock
 {
-    /**
-     * @var string
-     */
     protected string $description = '';
-    /**
-     * @var string
-     */
+
     protected string $indent;
-    /**
-     * @var array
-     */
+
     protected array $lines = [];
 
-    /**
-     * @param string|null $source Raw doc-block
-     * @param string      $indent Indent, 4 spaces by default
-     */
     public function __construct(?string $source, string $indent = '    ')
     {
         $this->indent = $indent;
@@ -106,9 +95,6 @@ class DocBlock
         }
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         $doc    = '';

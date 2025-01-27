@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
@@ -26,8 +27,6 @@ use function count;
 use function sprintf;
 
 /**
- * ArrayIndex.
- *
  * Adds/Updates an array index
  */
 class ArrayIndex
@@ -37,13 +36,8 @@ class ArrayIndex
     /**
      * Compiles foo[y] = {expr}.
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function assign(
         $variable,
@@ -52,14 +46,14 @@ class ArrayIndex
         CompilationContext $compilationContext,
         $statement
     ): void {
-        /*
+        /**
          * Arrays must be stored in the HEAP
          */
         $this->checkVariableInitialized($variable, $symbolVariable, $statement);
         $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
         $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
-        /*
+        /**
          * Only dynamic variables can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
@@ -74,7 +68,7 @@ class ArrayIndex
                 throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
             }
 
-            /*
+            /**
              * Trying to use a non-object dynamic variable as object
              */
             if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
@@ -85,15 +79,14 @@ class ArrayIndex
             }
         }
 
-        /*
+        /**
          * Choose one-offset or multiple-offset functions
          */
-        if (1 == count($statement['index-expr'])) {
+        if (1 === count($statement['index-expr'])) {
             $this->_assignArrayIndexSingle($symbolVariable, $resolvedExpr, $compilationContext, $statement);
         } else {
-            $this->_assignArrayIndexMultiple(
+            $this->assignArrayIndexMultiple(
                 $variable,
-                $symbolVariable,
                 $resolvedExpr,
                 $compilationContext,
                 $statement
@@ -104,21 +97,14 @@ class ArrayIndex
     /**
      * Compiles foo[y][x] = {expr} (multiple offset).
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
      * @throws Exception
+     * @throws ReflectionException
      */
-    protected function _assignArrayIndexMultiple(
+    protected function assignArrayIndexMultiple(
         $variable,
-        ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
-        $statement
+        $statement,
     ): void {
         $offsetExprs = [];
 
@@ -174,12 +160,8 @@ class ArrayIndex
     /**
      * Compiles foo[y] = {expr} (one offset).
      *
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     protected function _assignArrayIndexSingle(
         ZephirVariable $symbolVariable,

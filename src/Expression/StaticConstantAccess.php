@@ -37,11 +37,6 @@ class StaticConstantAccess
     /**
      * Access a static constant class.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -189,11 +184,8 @@ class StaticConstantAccess
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -201,8 +193,6 @@ class StaticConstantAccess
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {

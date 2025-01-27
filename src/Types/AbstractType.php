@@ -40,32 +40,22 @@ abstract class AbstractType
 
     /**
      * Get the name of the type.
-     *
-     * @return string
      */
     abstract public function getTypeName(): string;
 
     /**
      * Intercepts calls to built-in methods.
      *
-     * @param string             $methodName
-     * @param object             $caller
-     * @param CompilationContext $compilationContext
-     * @param Call               $call
-     * @param array              $expression
-     *
-     * @return bool|CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
     public function invokeMethod(
-        $methodName,
+        string $methodName,
         $caller,
         CompilationContext $compilationContext,
         Call $call,
         array $expression
-    ) {
+    ): CompiledExpression|bool {
         /**
          * Checks first whether the method exist in the array type definition
          */

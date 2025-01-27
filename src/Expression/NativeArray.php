@@ -585,7 +585,7 @@ class NativeArray
      * @param bool          $expecting
      * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;

@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 use Zephir\Expression;
 
 /**
- * RequireStatement.
- *
  * Require statement is used to execute PHP scripts in a given path
  */
 class RequireStatement extends StatementAbstract
@@ -27,21 +26,18 @@ class RequireStatement extends StatementAbstract
     protected string $methodName = 'require';
 
     /**
-     * @param CompilationContext $compilationContext
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $expression = [
+        $expr = new Expression([
             'type' => $this->methodName,
             'left' => $this->statement['expr'],
             'file' => $this->statement['file'],
             'line' => $this->statement['line'],
             'char' => $this->statement['char'],
-        ];
-
-        $expr = new Expression($expression);
+        ]);
         $expr->setExpectReturn(false);
         $expr->compile($compilationContext);
     }

@@ -137,11 +137,7 @@ HEAD;
     }
 
     /**
-     * @param bool $static
-     * @param int  $doReturn tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
-     * @param int  $paramCount
-     *
-     * @return string
+     * tri-state: 0 -> no return value, 1 -> do return, 2 -> do return to given variable
      */
     public function getMacro(bool $static, int $doReturn, int $paramCount): string
     {

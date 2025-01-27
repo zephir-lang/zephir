@@ -31,43 +31,28 @@ use function trim;
  */
 class MethodDocBlock extends DocBlock
 {
-    /**
-     * @var AliasManager
-     */
     private AliasManager $aliasManager;
-    /**
-     * @var Method
-     */
+
     private Method $classMethod;
-    /**
-     * @var bool
-     */
+
     private bool  $deprecated;
     private array $parameters = [];
     /**
      * Parameters which are described by User into docblock
-     *
-     * @var array
      */
     private array $predefinedParams = [];
-    /**
-     * @var array
-     */
+
     private array $return = [];
-    /**
-     * @var string|mixed
-     */
+
     private string $shortcutName;
-    /**
-     * @var Types
-     */
+
     private Types $types;
 
     public function __construct(
         Method $method,
         AliasManager $aliasManager,
         string $indent = '    ',
-        Types $types = null
+        ?Types $types = null
     ) {
         parent::__construct($method->getDocBlock(), $indent);
 
@@ -80,8 +65,6 @@ class MethodDocBlock extends DocBlock
 
     /**
      * Process DocBlock and Method arguments.
-     *
-     * @return string
      */
     public function processMethodDocBlock(): string
     {

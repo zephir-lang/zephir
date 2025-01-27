@@ -40,3 +40,13 @@ services:
       - "USER=Zephir"
     volumes:
       - .:/srv
+
+  zephir-8.4:
+    container_name: zephir-8.4
+    hostname: zephir-84
+    build: .docker/8.4
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv

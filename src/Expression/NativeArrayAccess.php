@@ -34,11 +34,6 @@ class NativeArrayAccess
     /**
      * Compiles foo[x] = {expr}.
      *
-     * @param                    $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -98,11 +93,8 @@ class NativeArrayAccess
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -110,8 +102,6 @@ class NativeArrayAccess
 
     /**
      * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
      */
     public function setNoisy(bool $noisy): void
     {
@@ -120,8 +110,6 @@ class NativeArrayAccess
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {
@@ -199,7 +187,6 @@ class NativeArrayAccess
                         $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
                             'variable',
                             $compilationContext,
-                            $expression
                         );
                     }
                 }
@@ -207,7 +194,6 @@ class NativeArrayAccess
                 $symbolVariable = $compilationContext->symbolTable->getTempNonTrackedUninitializedVariable(
                     'variable',
                     $compilationContext,
-                    $expression
                 );
             }
         } else {

@@ -107,8 +107,8 @@ final class Name
      */
     public static function fetchFQN(
         string $class,
-        string $namespace = null,
-        AliasManager $aliasManager = null
+        ?string $namespace = null,
+        ?AliasManager $aliasManager = null
     ): string {
         /**
          * Absolute class/interface name

@@ -139,11 +139,8 @@ class PropertyDynamicAccess
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn($expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -151,20 +148,16 @@ class PropertyDynamicAccess
 
     /**
      * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
      */
-    public function setNoisy($noisy): void
+    public function setNoisy(bool $noisy): void
     {
         $this->noisy = $noisy;
     }
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
-    public function setReadOnly($readOnly): void
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }

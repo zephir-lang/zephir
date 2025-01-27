@@ -79,7 +79,7 @@ class StatementsBlock
      */
     public function compile(
         CompilationContext $compilationContext,
-        bool $unreachable = null,
+        ?bool $unreachable = null,
         int $branchType = Branch::TYPE_UNKNOWN
     ): Branch {
         $compilationContext->codePrinter->increaseLevel();

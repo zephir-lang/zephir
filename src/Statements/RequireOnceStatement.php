@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Statements;
 
 /**
- * RequireOnceStatement.
- *
  * Require once statement is used to execute PHP scripts in a given path
  */
 class RequireOnceStatement extends RequireStatement

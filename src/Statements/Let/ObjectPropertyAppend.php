@@ -22,8 +22,6 @@ use Zephir\Variable\Variable as ZephirVariable;
 use function current;
 
 /**
- * ObjectPropertyAppend.
- *
  * Appends a value to a property
  */
 class ObjectPropertyAppend
@@ -32,12 +30,6 @@ class ObjectPropertyAppend
 
     /**
      * Compiles x->y[] = foo.
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -63,7 +55,7 @@ class ObjectPropertyAppend
 
         $compilationContext->headersManager->add('kernel/object');
 
-        /*
+        /**
          * Check if the variable to update is defined
          */
         if ('this' == $symbolVariable->getRealName()) {
@@ -74,7 +66,7 @@ class ObjectPropertyAppend
                 $statement
             );
         } else {
-            /*
+            /**
              * If we know the class related to a variable we could check if the property
              * is defined on that class
              */

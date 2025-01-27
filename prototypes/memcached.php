@@ -142,7 +142,7 @@ class Memcached
      *
      * @return mixed
      */
-    public function get($key, callable $cache_cb = null, &$cas_token = null)
+    public function get($key, ?callable $cache_cb = null, &$cas_token = null)
     {
     }
 
@@ -156,7 +156,7 @@ class Memcached
      *
      * @return mixed
      */
-    public function getByKey($server_key, $key, callable $cache_cb = null, &$cas_token = null)
+    public function getByKey($server_key, $key, ?callable $cache_cb = null, &$cas_token = null)
     {
     }
 
@@ -169,7 +169,7 @@ class Memcached
      *
      * @return mixed
      */
-    public function getMulti(array $keys, array &$cas_tokens = null, $flags = null)
+    public function getMulti(array $keys, ?array &$cas_tokens = null, $flags = null)
     {
     }
 
@@ -196,7 +196,7 @@ class Memcached
      *
      * @return bool
      */
-    public function getDelayed(array $keys, $with_cas = null, callable $value_cb = null)
+    public function getDelayed(array $keys, $with_cas = null, ?callable $value_cb = null)
     {
     }
 
@@ -210,7 +210,7 @@ class Memcached
      *
      * @return bool
      */
-    public function getDelayedByKey($server_key, array $keys, $with_cas = null, callable $value_cb = null)
+    public function getDelayedByKey($server_key, array $keys, $with_cas = null, ?callable $value_cb = null)
     {
     }
 

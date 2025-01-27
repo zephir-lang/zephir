@@ -26,8 +26,6 @@ use Zephir\Name;
 class EchoStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws ReflectionException
      * @throws Exception
      */

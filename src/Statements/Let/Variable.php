@@ -26,8 +26,6 @@ use Zephir\Variable\Variable as ZephirVariable;
 use function array_keys;
 
 /**
- * Zephir\Statements\Let\Variable.
- *
  * Assign a value to a variable.
  */
 class Variable
@@ -37,13 +35,6 @@ class Variable
     /**
      * Compiles foo = {expr}
      * Changes the value of a mutable variable.
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param ReadDetector       $readDetector
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -59,7 +50,7 @@ class Variable
 
         $codePrinter = $compilationContext->codePrinter;
 
-        /*
+        /**
          * Only initialize variables if it's direct assignment
          */
         if ('assign' == $statement['operator']) {
@@ -68,7 +59,7 @@ class Variable
             $this->checkVariableInitialized($variable, $symbolVariable, $statement);
         }
 
-        /*
+        /**
          * Set the assigned value to the variable as a CompiledExpression
          * We could use this expression for further analysis
          */
@@ -154,13 +145,6 @@ class Variable
     /**
      * Performs array assignment.
      *
-     * @param Printer            $codePrinter
-     * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
      * @throws CompilerException
      * @throws IllegalOperationException
      */
@@ -193,16 +177,6 @@ class Variable
         }
     }
 
-    /**
-     * @param array              $statement
-     * @param CompiledExpression $resolvedExpr
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompilationContext $compilationContext
-     * @param Printer            $codePrinter
-     *
-     * @return void
-     */
     private function doArrayAssignmentProcess(
         array $statement,
         CompiledExpression $resolvedExpr,
@@ -727,15 +701,6 @@ class Variable
         }
     }
 
-    /**
-     * @param array               $statement
-     * @param Printer             $codePrinter
-     * @param string              $variable
-     * @param ZephirVariable|bool $itemVariable
-     * @param string              $cast
-     *
-     * @return void
-     */
     private function doNumericAssignmentVar(
         array $statement,
         Printer $codePrinter,
@@ -1003,14 +968,6 @@ class Variable
 
     /**
      * Performs variable assignment.
-     *
-     * @param Printer            $codePrinter
-     * @param CompiledExpression $resolvedExpr
-     * @param ZephirVariable     $symbolVariable
-     * @param string             $variable
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     * @param ReadDetector       $readDetector
      *
      * @throws CompilerException
      * @throws IllegalOperationException
@@ -1476,16 +1433,6 @@ class Variable
         }
     }
 
-    /**
-     * @param CompilationContext  $compilationContext
-     * @param ZephirVariable|bool $exprVariable
-     * @param array               $statement
-     * @param Printer             $codePrinter
-     * @param string              $variable
-     * @param ZephirVariable|bool $itemVariable
-     *
-     * @return void
-     */
     private function processDoNumericAssignmentMixed(
         CompilationContext $compilationContext,
         ZephirVariable | bool $exprVariable,
@@ -1523,16 +1470,6 @@ class Variable
         }
     }
 
-    /**
-     * @param ZephirVariable     $symbolVariable
-     * @param ReadDetector       $readDetector
-     * @param string             $variable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param Printer            $codePrinter
-     *
-     * @return void
-     */
     private function processDoVariableAssignmentAssign(
         ZephirVariable $symbolVariable,
         ReadDetector $readDetector,
@@ -1564,14 +1501,6 @@ class Variable
         }
     }
 
-    /**
-     * @param ZephirVariable|bool $itemVariable
-     * @param string              $variable
-     * @param ZephirVariable      $symbolVariable
-     * @param CompilationContext  $compilationContext
-     *
-     * @return void
-     */
     private function processDoVariableAssignmentVariableString(
         ZephirVariable | bool $itemVariable,
         string $variable,

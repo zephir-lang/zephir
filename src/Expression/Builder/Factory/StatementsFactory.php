@@ -28,69 +28,38 @@ class StatementsFactory
     {
     }
 
-    /**
-     * @param array|null $statements
-     *
-     * @return StatementsBlock
-     */
-    public function block(array $statements = null)
+    public function block(?array $statements = null): StatementsBlock
     {
         return new StatementsBlock($statements);
     }
 
-    /**
-     * @param string     $name
-     * @param array|null $parameters
-     * @param int        $type
-     *
-     * @return CallFunctionStatement
-     */
-    public function functionCall($name, $parameters = null, $type = CallFunctionStatement::TYPE_CALL_DIRECT)
-    {
+    public function functionCall(
+        string $name,
+        ?array $parameters = null,
+        int $type = CallFunctionStatement::TYPE_CALL_DIRECT
+    ): CallFunctionStatement {
         return new CallFunctionStatement($name, $parameters, $type);
     }
 
-    /**
-     * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null  $statements
-     * @param StatementsBlock|null  $elseStatements
-     *
-     * @return IfStatement
-     */
     public function ifX(
-        AbstractOperator $condition = null,
-        StatementsBlock $statements = null,
-        StatementsBlock $elseStatements = null
-    ) {
+        ?AbstractOperator $condition = null,
+        ?StatementsBlock $statements = null,
+        ?StatementsBlock $elseStatements = null
+    ): IfStatement {
         return new IfStatement($condition, $statements, $elseStatements);
     }
 
-    /**
-     * @param array|null $assignments
-     *
-     * @return LetStatement
-     */
-    public function let(array $assignments = null)
+    public function let(?array $assignments = null): LetStatement
     {
         return new LetStatement($assignments);
     }
 
-    /**
-     * @param array $expression
-     *
-     * @return RawStatement
-     */
-    public function raw(array $expression)
+    public function raw(array $expression): RawStatement
     {
         return new RawStatement($expression);
     }
 
-    /**
-     * @param string $value
-     *
-     * @return RawStatement
-     */
-    public function rawC($value)
+    public function rawC(string $value): RawStatement
     {
         return $this->raw([
             'type'  => 'cblock',
@@ -98,12 +67,7 @@ class StatementsFactory
         ]);
     }
 
-    /**
-     * @param AbstractBuilder $expression
-     *
-     * @return RawStatement
-     */
-    public function returnX(AbstractBuilder $expression)
+    public function returnX(AbstractBuilder $expression): RawStatement
     {
         return $this->raw([
             'type' => 'return',

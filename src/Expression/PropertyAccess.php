@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Expression;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Traits\VariablesTrait;
@@ -37,12 +39,10 @@ class PropertyAccess
     /**
      * Resolves the access to a property in an object.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext)
+    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
     {
         $propertyAccess = $expression;
 
@@ -267,11 +267,8 @@ class PropertyAccess
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -279,8 +276,6 @@ class PropertyAccess
 
     /**
      * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
      */
     public function setNoisy(bool $noisy): void
     {
@@ -289,10 +284,8 @@ class PropertyAccess
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
-    public function setReadOnly($readOnly): void
+    public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
     }

@@ -18,17 +18,11 @@ use Zephir\CompilationContext;
 use Zephir\Exception;
 
 /**
- * StaticPropertyArrayIndexAppend.
- *
  * Updates object properties dynamically
  */
 class StaticPropertyArrayIndexAppend extends StaticPropertyArrayIndex
 {
     /**
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
-     * @return array
      * @throws Exception
      * @throws ReflectionException
      */
@@ -39,10 +33,7 @@ class StaticPropertyArrayIndexAppend extends StaticPropertyArrayIndex
         /**
          * Only string/variable/int.
          */
-        $offsetExpressions   = parent::getOffsetExpressions(
-            $statement,
-            $compilationContext
-        );
+        $offsetExpressions = parent::getOffsetExpressions($statement, $compilationContext);
         $offsetExpressions[] = 'a';
 
         return $offsetExpressions;

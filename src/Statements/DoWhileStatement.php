@@ -25,8 +25,6 @@ use Zephir\StatementsBlock;
 class DoWhileStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws ReflectionException
      * @throws Exception
      */

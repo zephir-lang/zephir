@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression\Builder\BuilderFactory;
 
@@ -25,28 +27,25 @@ use function is_string;
 class DeclareStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
-        $statement = $this->statement;
-
-        if (!isset($statement['data-type'])) {
+        if (!isset($this->statement['data-type'])) {
             throw new CompilerException('Data type is required', $this->statement);
         }
 
         $typeInference = $compilationContext->typeInference;
         $symbolTable   = $compilationContext->symbolTable;
 
-        foreach ($statement['variables'] as $variable) {
+        foreach ($this->statement['variables'] as $variable) {
             $varName = $variable['variable'];
             if ($symbolTable->hasVariableInBranch($varName, $compilationContext->branchManager->getCurrentBranch())) {
                 throw new CompilerException("Variable '" . $varName . "' is already defined", $variable);
             }
 
-            $currentType = $statement['data-type'];
+            $currentType = $this->statement['data-type'];
 
             /**
              * Replace original data type by the pre-processed infered type

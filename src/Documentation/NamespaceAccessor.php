@@ -13,25 +13,16 @@ declare(strict_types=1);
 
 namespace Zephir\Documentation;
 
-use Zephir\CompilerFile;
-
 use function explode;
 
 class NamespaceAccessor
 {
-    protected $byNamespace;
-    /**
-     * @var CompilerFile[]
-     */
-    protected $classes;
-    protected $namespaceTree;
+    protected array $byNamespace = [];
 
-    /**
-     * @param CompilerFile[] $files
-     */
-    public function __construct($files)
+    protected array $namespaceTree = [];
+
+    public function __construct(protected array $classes)
     {
-        $this->classes = $files;
     }
 
     public function build(): void
@@ -80,12 +71,12 @@ class NamespaceAccessor
     /**
      * @return NamespaceHelper[]
      */
-    public function getByNamespace()
+    public function getByNamespace(): array
     {
         return $this->byNamespace;
     }
 
-    public function getNamespaceTree()
+    public function getNamespaceTree(): array
     {
         return $this->namespaceTree;
     }
