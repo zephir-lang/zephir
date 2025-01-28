@@ -496,68 +496,62 @@ final class Definition extends AbstractDefinition
         /**
          * Implemented interfaces.
          */
-        $interfaces = $this->interfaces;
-        $compiler   = $compilationContext->compiler;
+        $codePrinter->outputBlankLine(true);
+        foreach ($this->interfaces as $interface) {
+            /**
+             * Try to find the interface.
+             */
+            $classEntry = null;
 
-        if (is_array($interfaces)) {
-            $codePrinter->outputBlankLine(true);
-
-            foreach ($interfaces as $interface) {
-                /**
-                 * Try to find the interface.
-                 */
-                $classEntry = null;
-
-                if ($compiler->isInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    $classEntry               = $classInterfaceDefinition->getClassEntry($compilationContext);
-                } elseif ($compiler->isBundledInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                    $classEntry               = (new Entry(
-                        '\\' . $classInterfaceDefinition->getName(),
-                        $compilationContext
-                    ))->get();
-                }
-
-                if (!$classEntry) {
-                    if ($compiler->isClass($interface)) {
-                        throw new CompilerException(
-                            sprintf(
-                                'Cannot locate interface %s when implementing interfaces on %s. ' .
-                                '%s is currently a class',
-                                $interface,
-                                $this->getCompleteName(),
-                                $interface
-                            ),
-                            $this->originalNode
-                        );
-                    } else {
-                        throw new CompilerException(
-                            sprintf(
-                                'Cannot locate interface %s when implementing interfaces on %s',
-                                $interface,
-                                $this->getCompleteName()
-                            ),
-                            $this->originalNode
-                        );
-                    }
-                }
-
-                /**
-                 * We don't check if abstract classes implement the methods in their interfaces
-                 */
-                if (!$this->isAbstract() && !$this->isInterface()) {
-                    $this->checkInterfaceImplements($this, $classInterfaceDefinition);
-                }
-
-                $codePrinter->output(
-                    sprintf(
-                        'zend_class_implements(%s, 1, %s);',
-                        $this->getClassEntry(),
-                        $classEntry
-                    )
-                );
+            if ($compilationContext->compiler->isInterface($interface)) {
+                $classInterfaceDefinition = $compilationContext->compiler->getClassDefinition($interface);
+                $classEntry               = $classInterfaceDefinition->getClassEntry($compilationContext);
+            } elseif ($compilationContext->compiler->isBundledInterface($interface)) {
+                $classInterfaceDefinition = $compilationContext->compiler->getInternalClassDefinition($interface);
+                $classEntry               = (new Entry(
+                    '\\' . $classInterfaceDefinition->getName(),
+                    $compilationContext
+                ))->get();
             }
+
+            if (!$classEntry) {
+                if ($compilationContext->compiler->isClass($interface)) {
+                    throw new CompilerException(
+                        sprintf(
+                            'Cannot locate interface %s when implementing interfaces on %s. ' .
+                            '%s is currently a class',
+                            $interface,
+                            $this->getCompleteName(),
+                            $interface
+                        ),
+                        $this->originalNode
+                    );
+                } else {
+                    throw new CompilerException(
+                        sprintf(
+                            'Cannot locate interface %s when implementing interfaces on %s',
+                            $interface,
+                            $this->getCompleteName()
+                        ),
+                        $this->originalNode
+                    );
+                }
+            }
+
+            /**
+             * We don't check if abstract classes implement the methods in their interfaces
+             */
+            if (!$this->isAbstract() && !$this->isInterface()) {
+                $this->checkInterfaceImplements($this, $classInterfaceDefinition);
+            }
+
+            $codePrinter->output(
+                sprintf(
+                    'zend_class_implements(%s, 1, %s);',
+                    $this->getClassEntry(),
+                    $classEntry
+                )
+            );
         }
 
         if (!$this->isAbstract() && !$this->isInterface()) {
@@ -568,10 +562,13 @@ final class Definition extends AbstractDefinition
                 $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                 foreach ($interfaces as $interface) {
                     $classInterfaceDefinition = null;
-                    if ($compiler->isInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    } elseif ($compiler->isBundledInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                    if ($compilationContext->compiler->isInterface($interface)) {
+                        $classInterfaceDefinition = $compilationContext->compiler->getClassDefinition($interface);
+                    } elseif ($compilationContext->compiler->isBundledInterface($interface)) {
+                        $classInterfaceDefinition = $compilationContext
+                            ->compiler
+                            ->getInternalClassDefinition($interface)
+                        ;
                     }
 
                     if ($classInterfaceDefinition !== null) {
