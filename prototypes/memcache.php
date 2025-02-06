@@ -1,21 +1,20 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
-
 define('MEMCACHE_HAVE_SESSION', 1);
 define('MEMCACHE_COMPRESSED', 2);
 
 /**
  * Class Memcache.
  *
- * @see http://se2.php.net/manual/en/class.memcache.php
+ * @see https://se2.php.net/manual/en/class.memcache.php
  */
 class memcache
 {
@@ -27,7 +26,7 @@ class memcache
     {
     }
 
-    public function addserver($host, $port = 11211, $persistent = null, $weight = null, $timeout = null, $retry_interval = null, $status = null, callable $failure_callback = null, $timeoutms = null)
+    public function addserver($host, $port = 11211, $persistent = null, $weight = null, $timeout = null, $retry_interval = null, $status = null, ?callable $failure_callback = null, $timeoutms = null)
     {
     }
 

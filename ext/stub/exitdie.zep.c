@@ -28,26 +28,19 @@ ZEPHIR_INIT_CLASS(Stub_ExitDie)
 PHP_METHOD(Stub_ExitDie, testExit)
 {
 	zval *param = NULL, param_sub, __$null;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(param)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(0, 1, &param);
 	if (!param) {
 		param = &param_sub;
 		param = &__$null;
 	}
-
-
 	if (ZEPHIR_IS_EMPTY(param)) {
 		zephir_exit_empty();
 	}
@@ -57,26 +50,19 @@ PHP_METHOD(Stub_ExitDie, testExit)
 PHP_METHOD(Stub_ExitDie, testDie)
 {
 	zval *param = NULL, param_sub, __$null;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(param)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(0, 1, &param);
 	if (!param) {
 		param = &param_sub;
 		param = &__$null;
 	}
-
-
 	if (ZEPHIR_IS_EMPTY(param)) {
 		zephir_exit_empty();
 	}

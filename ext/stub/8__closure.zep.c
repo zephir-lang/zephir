@@ -27,11 +27,8 @@ ZEPHIR_INIT_CLASS(stub_8__closure)
 PHP_METHOD(stub_8__closure, __invoke)
 {
 	zval abc;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&abc);
-
-
 	zephir_read_static_property_ce(&abc, stub_8__closure_ce, SL("abc"), PH_NOISY_CC);
 
 	RETURN_LONG((zephir_get_numberval(&abc) + 1));

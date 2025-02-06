@@ -1,4 +1,4 @@
-name: Upload Release Asset
+name: Upload Release Assets
 
 on:
   push:
@@ -8,21 +8,20 @@ on:
 jobs:
   release:
     name: Create Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
-      BOX_VERSION: 3.12.2
+      BOX_VERSION: 4.2.0
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.2'
           extensions: intl, zip, zlib
           coverage: none
           ini-values: memory_limit=1G, phar.readonly=0
@@ -32,7 +31,7 @@ jobs:
         run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -56,7 +55,7 @@ jobs:
         run: .ci/build-phar.sh
 
       - name: Upload Zephir Phar
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: zephir.phar
           path: zephir.phar

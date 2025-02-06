@@ -8,32 +8,34 @@ on:
       - '**.md'
       - '**.txt'
       - '**/nightly.yml'
+      - '**/release.yml'
+      - '**/FUNDING.yml'
   pull_request:
     branches:
       - master
-      - develoment
+      - development
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.4.1
+  ZEPHIR_PARSER_VERSION: 1.6.1
+  PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
 jobs:
   analyze:
     name: Static Code Analysis
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 1
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         env:
-          PHP_CS_FIXER_VERSION: 3.2.0
+          PHP_CS_FIXER_VERSION: 3.37.0
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           coverage: none
           tools: php-cs-fixer:${{ env.PHP_CS_FIXER_VERSION }}, phpcs
 
@@ -42,68 +44,49 @@ jobs:
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
-      - name: Run PHP CS Fixer
-        if: always()
-        run: |
-          php-cs-fixer fix --diff --dry-run -v --using-cache=no
+# Disabling for now until I figure out the rules
+#      - name: Run PHP CS Fixer
+#        if: always()
+#        run: |
+#          php-cs-fixer fix --diff --dry-run -v --using-cache=no
 
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
 
   build-and-test:
-    # To prevent build a particular commit use
-    #     git commit -m "......... [ci skip]"
-    if: "!contains(github.event.head_commit.message, '[ci skip]')"
+    name: "PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}"
 
-    name: "PHP-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.arch }}"
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
-
       matrix:
-        php: ['7.4', '8.0']
-        build_type: ['ts', 'nts']
-        arch: ['x64']
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
+        ts: [ 'ts', 'nts' ]
+        arch: [ 'x64' ]
 
         name:
           - ubuntu-gcc
           - macos-clang
-          - win2016-vc15
-          - win2019-vs16
 
         # matrix names should be in next format:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - name: ubuntu-gcc
-            os: ubuntu-18.04
-            compiler: gcc
-
+          - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
           # macOS
-          - name: macos-clang
-            os: macos-10.15
-            compiler: clang
-
+          - { name: macos-clang, os: macos-13, compiler: clang }
           # Windows
-          - name: win2016-vc15
-            os: windows-2016
-            compiler: vc15
-
-          - name: win2019-vs16
-            os: windows-2019
-            compiler: vs16
-
-        exclude:
-          - name: win2019-vs16
-            php: '7.4'
-
-          - name: win2016-vc15
-            php: '8.0'
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          # Disabled due PSR extension wasn't complied for >=8.2
+          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 5
 
@@ -111,7 +94,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '${{ matrix.php }}'
-          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
           tools: phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
@@ -127,25 +110,11 @@ jobs:
             date.timezone=UTC,
             xdebug.max_nesting_level=256
         env:
-          PHPTS: ${{ matrix.build_type }}
+          phpts: ${{ matrix.ts }}
           COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      - name: Set Up Composer Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
       - name: Install Project Dependencies
-        run: |
-          echo "::group::Install composer dependencies"
-          composer install --prefer-dist --no-interaction --no-ansi --no-progress
-          echo "::endgroup::"
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Fast Commands Test
         run: php zephir --help
@@ -170,9 +139,11 @@ jobs:
         uses: ./.github/workflows/build-win-ext
         with:
           php_version: ${{ matrix.php }}
-          ts: ${{ matrix.build_type }}
+          ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
+          cflags: '/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL'
+          ldflags: '/LTCG'
         env:
           CACHE_DIR: 'C:\Downloads'
           PHP_ROOT: 'C:\tools\php'
@@ -180,11 +151,8 @@ jobs:
       - name: Stub Extension Info
         shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php  --ri stub
-          } else {
-            php -d extension=./ext/modules/stub.so --ri stub
-          }
+          php --ini
+          php --ri stub
 
       - name: Setup problem matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -192,17 +160,21 @@ jobs:
       - name: Unit Tests (Stub Extension)
         shell: pwsh
         run: |
-          if ("${{ runner.os }}" -eq "Windows") {
-            php vendor/bin/phpunit -c phpunit.ext.xml
-          } else {
-            php -d extension=./ext/modules/stub.so vendor/bin/phpunit -c phpunit.ext.xml
-          }
+          php vendor/bin/phpunit -c phpunit.ext.xml
+        env:
+          XDEBUG_MODE: coverage
 
       - name: Unit Tests (Zephir)
         if: always()
-        run: vendor/bin/phpunit --testsuite Zephir
+        run: php vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/clover.xml
         env:
           XDEBUG_MODE: coverage
+
+      - name: "Upload coverage file artifact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
+          path: "tests/output/clover.xml"
 
       - name: Black-box Testing
         if: always() && runner.os != 'Windows'
@@ -211,19 +183,63 @@ jobs:
         run: |
           make -j$(getconf _NPROCESSORS_ONLN)
 
-      - name: Upload Code Coverage Report
-        uses: codecov/codecov-action@v2
+  upload-coverage:
+    permissions:
+      contents: read
+
+    name: "Upload coverage"
+    runs-on: "ubuntu-22.04"
+    needs:
+      - "build-and-test"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+#      - name: 'Qodana Scan'
+#        uses: JetBrains/qodana-action@v2023.2
+#        env:
+#          QODANA_TOKEN: ${{ secrets.QODANA_TOKEN }}
+#        with:
+#          args: --baseline,./qodana.sarif.json
+
+#      - name: 'Qodana Scan'
+#        run: |
+#          docker run \
+#            -v $(pwd):/data/project/ \
+#            -v $(pwd):/data/base/ \
+#            -e QODANA_TOKEN="${{ secrets.CODECOV_TOKEN }}" \
+#            jetbrains/qodana-php \
+#            --baseline /data/base/qodana.sarif.json
+
+      - name: "Create download folder"
+        run: |
+          mkdir -p reports
+
+      - name: "Download coverage files"
+        uses: "actions/download-artifact@v4"
+        with:
+          path: "reports"
+
+      - name: "Display structure of downloaded files"
+        run: ls -R
+        working-directory: reports
+
+      - name: "Upload to Codecov"
+        uses: "codecov/codecov-action@v3"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./tests/output/clover.xml
-          flags: unittests,${{ matrix.name }},php-${{ matrix.php }}
+          directory: reports
+          fail_ci_if_error: true
+          verbose: true
           name: codecov-umbrella
 
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: debug-${{ matrix.name }}-${{ matrix.php }}-${{ matrix.build_type }}-${{ matrix.name }}-${{ matrix.compiler }}-${{ matrix.arch }}
+          name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |
             ${{ github.workspace }}/*.log
             ${{ github.workspace }}/ext/
@@ -231,4 +247,5 @@ jobs:
             !${{ github.workspace }}/ext/stub/
             !${{ github.workspace }}/ext/Release/
             !${{ github.workspace }}/ext/x64/Release/
-          retention-days: 1
+            ${{ github.workspace }}/tests/output/
+          retention-days: 7

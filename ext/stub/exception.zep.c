@@ -40,15 +40,11 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&message);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &message_param);
 	if (UNEXPECTED(Z_TYPE_P(message_param) != IS_STRING && Z_TYPE_P(message_param) != IS_NULL)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'message' must be of the type string"));
@@ -59,8 +55,6 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 	} else {
 		ZEPHIR_INIT_VAR(&message);
 	}
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message);
 	ZEPHIR_MM_RESTORE();
 }

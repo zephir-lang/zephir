@@ -35,24 +35,17 @@ PHP_METHOD(Stub_Spl, issue1212)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *file_param = NULL;
 	zval file;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&file);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(file)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &file_param);
 	zephir_get_strval(&file, file_param);
-
-
 	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 98, &file);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 102, &file);
 	zephir_check_call_status();
 	RETURN_MM();
 }

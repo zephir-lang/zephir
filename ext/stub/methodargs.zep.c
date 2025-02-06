@@ -41,17 +41,10 @@ PHP_METHOD(Stub_MethodArgs, setCallable)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 }
 
@@ -61,17 +54,10 @@ PHP_METHOD(Stub_MethodArgs, setObject)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 }
 
@@ -81,21 +67,14 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 	if (UNEXPECTED(zephir_is_callable(a) != 1)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type callable"));
 		RETURN_NULL();
 	}
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 }
 
@@ -105,21 +84,14 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_OBJECT)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type object"));
 		RETURN_NULL();
 	}
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 }
 
@@ -129,21 +101,14 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_RESOURCE(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
 	if (UNEXPECTED(Z_TYPE_P(a) != IS_RESOURCE)) {
 		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'a' must be of the type resource"));
 		RETURN_NULL();
 	}
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("a"), a);
 }
 
@@ -154,27 +119,20 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *method = NULL, method_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&method_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(method)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &method);
 	if (!method) {
 		method = &method_sub;
 		ZEPHIR_INIT_VAR(method);
 		ZVAL_STRING(method, "get");
 	}
-
-
 	RETVAL_ZVAL(method, 1, 0);
 	RETURN_MM();
 }
@@ -188,19 +146,14 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *parameter_param = NULL;
 	zval parameter;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&parameter);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &parameter_param);
 	if (!parameter_param) {
 		ZEPHIR_INIT_VAR(&parameter);
@@ -208,8 +161,6 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalStringValueWithDefaultStaticConstantAc
 	} else {
 		zephir_get_strval(&parameter, parameter_param);
 	}
-
-
 	RETURN_CTOR(&parameter);
 }
 
@@ -221,25 +172,17 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalDoubleValueWithDefaultStaticConstantAc
 {
 	zval *parameter_param = NULL;
 	double parameter;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
 	if (!parameter_param) {
 		parameter = 1.32;
 	} else {
 		parameter = zephir_get_doubleval(parameter_param);
 	}
-
-
 	RETURN_DOUBLE(parameter);
 }
 
@@ -251,25 +194,16 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalBoolValueWithDefaultStaticConstantAcce
 {
 	zval *parameter_param = NULL;
 	zend_bool parameter;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_BOOL(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
 	if (!parameter_param) {
 		parameter = 1;
 	} else {
-		parameter = zephir_get_boolval(parameter_param);
-	}
-
-
+		}
 	RETURN_BOOL(parameter);
 }
 
@@ -281,25 +215,16 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalIntValueWithDefaultStaticConstantAcces
 {
 	zval *parameter_param = NULL;
 	zend_long parameter;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(0, 1, &parameter_param);
 	if (!parameter_param) {
 		parameter = 12345;
 	} else {
-		parameter = zephir_get_intval(parameter_param);
-	}
-
-
+		}
 	RETURN_LONG(parameter);
 }
 

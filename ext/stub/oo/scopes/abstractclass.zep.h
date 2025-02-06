@@ -20,15 +20,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_scopes_abstractclass_method_entry) {
 	PHP_ME(Stub_Oo_Scopes_AbstractClass, setProperty, arginfo_stub_oo_scopes_abstractclass_setproperty, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2, arginfo_stub_oo_scopes_abstractclass_getprivateproperty2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_Scopes_AbstractClass, getProtectedProperty2, arginfo_stub_oo_scopes_abstractclass_getprotectedproperty2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_Scopes_AbstractClass, getProtectedProperty2, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2, arginfo_stub_oo_scopes_abstractclass_getprivateproperty2, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Oo_Scopes_AbstractClass, getProtectedProperty2, arginfo_stub_oo_scopes_abstractclass_getprotectedproperty2, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

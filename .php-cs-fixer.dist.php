@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -11,7 +9,9 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
-if (!file_exists(__DIR__.'/Library')) {
+declare(strict_types=1);
+
+if (!file_exists(__DIR__.'/src')) {
     exit(0);
 }
 
@@ -31,7 +31,7 @@ $finder = PhpCsFixer\Finder::create()
         'ext',
         'ide',
         'config/class-entries',
-        'templates/ZendEngine3',
+        'templates/engine',
         'templates/Api',
         'tests/ext-bootstrap',
         'tests/fixtures',
@@ -49,7 +49,7 @@ $config
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@PHPUnit48Migration:risky' => true,
-        '@PSR2' => true,
+        '@PSR12' => true,
         'php_unit_no_expectation_annotation' => false,
         'array_syntax' => ['syntax' => 'short'],
         'fopen_flags' => false,

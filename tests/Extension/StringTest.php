@@ -15,8 +15,7 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Strings;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class StringTest extends TestCase
 {
@@ -259,7 +258,7 @@ final class StringTest extends TestCase
 
     public function testMultilineStrings(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('String will contain different line endings.');
         }
 
@@ -328,6 +327,16 @@ final class StringTest extends TestCase
         $this->assertNull($this->test->nullableStringReturnType());
         $this->assertNull($this->test->nullableStringReturnType(null));
         $this->assertSame('string', $this->test->nullableStringReturnType('string'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2299
+     */
+    public function testIssue2299NullableStringCondition(): void
+    {
+        $this->assertSame(null, $this->test->issue2299NullableStringCondition());
+        $this->assertSame('not-null', $this->test->issue2299NullableStringCondition('not-null'));
+        $this->assertSame('test', $this->test->issue2299NullableStringCondition('test'));
     }
 
     public function providerHashEquals(): array
@@ -404,9 +413,7 @@ final class StringTest extends TestCase
             [0],
             [[]],
             [
-                function () {
-                    return '-';
-                },
+                fn () => '-',
             ],
             [new \stdClass()],
         ];

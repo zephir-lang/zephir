@@ -64,7 +64,7 @@ class FetchTest
 		return c;
 	}
 
-	public function hasValue(string name) -> boolean
+	public function hasValue(name) -> boolean
 	{
 		// Check if there is a post value for the item
 		if isset _POST[name] {
@@ -79,7 +79,7 @@ class FetchTest
 		return false;
 	}
 
-	public function getValue(string name)
+	public function getValue(name)
 	{
 		var value;
 

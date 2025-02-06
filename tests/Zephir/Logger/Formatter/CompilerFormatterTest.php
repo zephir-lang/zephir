@@ -16,8 +16,7 @@ namespace Zephir\Test\Logger\Formatter;
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
 use Zephir\Logger\Formatter\CompilerFormatter;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class CompilerFormatterTest extends TestCase
 {
@@ -73,7 +72,7 @@ final class CompilerFormatterTest extends TestCase
 
     public function testShouldFormatWarningForCategory(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 

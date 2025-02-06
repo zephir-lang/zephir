@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="Library/autoload.php"
+         bootstrap="vendor/autoload.php"
          colors="true"
          verbose="true"
 >
     <coverage pathCoverage="true">
         <include>
-            <directory suffix=".php">Library</directory>
+            <directory suffix=".php">src</directory>
         </include>
         <report>
             <clover outputFile="tests/output/clover.xml"/>
@@ -22,7 +22,6 @@
         </testsuite>
         <testsuite name="Zephir">
             <directory suffix=".php">tests/Zephir</directory>
-            <exclude>tests/Zephir/KernelTestCase.php</exclude>
         </testsuite>
     </testsuites>
 
@@ -34,11 +33,8 @@
         <ini name="error_reporting" value="-1"/>
         <ini name="memory_limit" value="4G"/>
 
-        <const name="TESTS_PATH" value="./tests"/>
-        <const name="DATA_PATH" value="./tests/Data"/>
         <const name="FIXTURES_PATH" value="./tests/fixtures"/>
         <const name="ZEPHIRPATH" value="./"/>
-        <server name="KERNEL_CLASS" value="Zephir\DependencyInjection\ZephirKernel"/>
     </php>
 
     <logging>

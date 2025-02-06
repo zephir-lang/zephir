@@ -31,22 +31,15 @@ PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *func_param = NULL;
 	zval func;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&func);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(func)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &func_param);
 	zephir_get_strval(&func, func_param);
-
-
 	RETURN_MM_BOOL((zephir_function_exists(&func) == SUCCESS));
 }
 
@@ -56,7 +49,6 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 	zval func, _0, *_1, _2, _3$$3, _4$$4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&func);
 	ZVAL_UNDEF(&_0);
@@ -65,9 +57,8 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&functions);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
@@ -131,9 +122,6 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 
 PHP_METHOD(Stub_FunctionExists, testWithString)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL((zephir_function_exists_ex(ZEND_STRL("substr")) == SUCCESS));
 }

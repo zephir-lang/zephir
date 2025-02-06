@@ -21,9 +21,9 @@ final class ArrayAccessTest extends TestCase
         'key_a' => 'marcin',
         'key_b' => 'paula',
         3 => 'long value',
-        //3.14 => 'double value', // Not supported yet
-        //false => 'bool value', // Not supported yet
-        //null => 'null value', // Not supported yet
+        // 3.14 => 'double value', // Not supported yet
+        // false => 'bool value', // Not supported yet
+        // null => 'null value', // Not supported yet
     ];
 
     public function testTest(): void
@@ -92,6 +92,10 @@ final class ArrayAccessTest extends TestCase
      */
     public function testIssue1086StaticallyCalledFunctionWithArrayAsArgMustReturnArray(): void
     {
+        if (version_compare(PHP_VERSION, '8.2.0', '>=')) {
+            $this->markTestSkipped('Deprecated Callable Patterns');
+        }
+
         $class = new \Stub\ArrayAccessTest();
 
         $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithStrictParams();

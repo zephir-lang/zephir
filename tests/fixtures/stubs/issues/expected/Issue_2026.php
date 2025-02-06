@@ -13,9 +13,9 @@ class Issue_2026
 
     /**
      * Expects:
-     *  return array|\StdClass[]
+     *  return array|\stdClass[]
      *
-     * @return array|\StdClass[]
+     * @return array|\stdClass[]
      */
     public function getClassCollection(): array
     {
@@ -23,11 +23,11 @@ class Issue_2026
 
     /**
      * Expects:
-     *  return array|bool|\StdClass[]
+     *  return array|bool|\stdClass[]
      *
-     * @return array|bool|\StdClass[]
+     * @return array|bool|\stdClass[]
      */
-    public function getClassCollectionOrBool()
+    public function getClassCollectionOrBool(): bool|array
     {
     }
 
@@ -37,7 +37,7 @@ class Issue_2026
      *
      * @return array|bool|\Stubs\Events\EventManager[]
      */
-    public function getInterfaceCollectionOrBool()
+    public function getInterfaceCollectionOrBool(): bool|array
     {
     }
 
@@ -53,9 +53,9 @@ class Issue_2026
 
     /**
      * Expects:
-     *  return array|\Stubs\Events\EventManager[]|\StdClass[]
+     *  return array|\Stubs\Events\EventManager[]|\stdClass[]
      *
-     * @return array|\Stubs\Events\EventManager[]|\StdClass[]
+     * @return array|\Stubs\Events\EventManager[]|\stdClass[]
      */
     public function getMixedCollectionOrArray(): array
     {

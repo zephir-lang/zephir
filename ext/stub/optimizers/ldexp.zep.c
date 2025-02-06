@@ -29,13 +29,9 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testInt)
 {
 	zval _0, _1;
 	zend_long x, exponent;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-
 	x = 2;
 	exponent = 3;
 	ZVAL_LONG(&_0, x);
@@ -48,14 +44,10 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testDoubleInt)
 	zval _0, _1;
 	zend_long exponent;
 	double x;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-
-	x = 2.0;
+	x =  (2.0);
 	exponent = 3;
 	ZVAL_DOUBLE(&_0, x);
 	ZVAL_LONG(&_1, exponent);
@@ -66,15 +58,11 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testDouble)
 {
 	zval _0, _1;
 	double x, exponent;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-
-	x = 2.0;
-	exponent = 3.0;
+	x =  (2.0);
+	exponent =  (3.0);
 	ZVAL_DOUBLE(&_0, x);
 	ZVAL_DOUBLE(&_1, exponent);
 	RETURN_DOUBLE(zephir_ldexp(&_0, &_1));
@@ -84,13 +72,9 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testVar)
 {
 	zval _0, _1;
 	zend_long x, exponent;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-
 	x = 2;
 	exponent = 3;
 	ZVAL_LONG(&_0, x);
@@ -101,13 +85,9 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testVar)
 PHP_METHOD(Stub_Optimizers_Ldexp, testIntValue1)
 {
 	zval _0, _1;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-
 	ZVAL_LONG(&_0, 2);
 	ZVAL_LONG(&_1, 3);
 	RETURN_DOUBLE(zephir_ldexp(&_0, &_1));
@@ -117,24 +97,14 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testIntParameter)
 {
 	zval *x_param = NULL, *exponent_param = NULL, _0, _1;
 	zend_long x, exponent;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(x)
 		Z_PARAM_LONG(exponent)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &x_param, &exponent_param);
-	x = zephir_get_intval(x_param);
-	exponent = zephir_get_intval(exponent_param);
-
-
 	ZVAL_LONG(&_0, x);
 	ZVAL_LONG(&_1, exponent);
 	RETURN_DOUBLE(zephir_ldexp(&_0, &_1));
@@ -143,22 +113,14 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testIntParameter)
 PHP_METHOD(Stub_Optimizers_Ldexp, testVarParameter)
 {
 	zval *x, x_sub, *exponent, exponent_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&x_sub);
 	ZVAL_UNDEF(&exponent_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(x)
 		Z_PARAM_ZVAL(exponent)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &x, &exponent);
-
-
 	RETURN_DOUBLE(zephir_ldexp(x, exponent));
 }
 

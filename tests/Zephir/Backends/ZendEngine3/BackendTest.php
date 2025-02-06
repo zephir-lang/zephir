@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Zephir\Test\Backends\ZendEngine3;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\Backends\ZendEngine3\Backend;
+use Zephir\Backend\Backend;
 use Zephir\CompilationContext;
 use Zephir\Config;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 final class BackendTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class BackendTest extends TestCase
      */
     public function testShouldEscapeStringWithRegexp(string $testString, string $expectedString): void
     {
-        $backend = new Backend(new Config(), null, null);
+        $backend = new Backend(new Config(), '', '');
         $variable = new Variable('variable', 'name');
         $context = new CompilationContext();
 

@@ -27,45 +27,30 @@ ZEPHIR_INIT_CLASS(Stub_Echoes)
 
 PHP_METHOD(Stub_Echoes, testEcho1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	php_printf("%d", 1);
 }
 
 PHP_METHOD(Stub_Echoes, testEcho2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	php_printf("%f", 1.0);
 }
 
 PHP_METHOD(Stub_Echoes, testEcho3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	php_printf("%s", 1 ? "1": "");
 }
 
 PHP_METHOD(Stub_Echoes, testEcho4)
 {
-	zval *this_ptr = getThis();
-
-
 
 	php_printf("%s", 0 ? "1": "");
 }
 
 PHP_METHOD(Stub_Echoes, testEcho5)
 {
-	zval *this_ptr = getThis();
-
-
 
 	php_printf("%s", "hello");
 }

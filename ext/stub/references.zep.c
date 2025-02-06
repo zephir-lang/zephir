@@ -24,9 +24,6 @@ ZEPHIR_INIT_CLASS(Stub_References)
 
 PHP_METHOD(Stub_References, assignByRef)
 {
-	zval *this_ptr = getThis();
-
-
 
 }
 

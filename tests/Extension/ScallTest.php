@@ -46,8 +46,10 @@ final class ScallTest extends TestCase
         $this->assertSame('hello parent public', $test->testCall13());
         $this->assertSame('hello parent protected', $test->testCall14());
 
-        $this->assertSame('hello ScallParent', Scallparent::testCallStatic());
-        $this->assertSame('hello Scall', $test::testCallStatic());
+        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+            $this->assertSame('hello ScallParent', Scallparent::testCallStatic());
+            $this->assertSame('hello Scall', $test::testCallStatic());
+        }
     }
 
     /**

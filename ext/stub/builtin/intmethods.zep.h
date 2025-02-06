@@ -82,11 +82,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_builtin_intmethods_method_entry) {
 	PHP_ME(Stub_BuiltIn_IntMethods, getAbs, arginfo_stub_builtin_intmethods_getabs, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_BuiltIn_IntMethods, getAbs1, arginfo_stub_builtin_intmethods_getabs1, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_BuiltIn_IntMethods, getAbs1, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_BuiltIn_IntMethods, getAbs1, arginfo_stub_builtin_intmethods_getabs1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_IntMethods, getBinary, arginfo_stub_builtin_intmethods_getbinary, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_IntMethods, getHex, arginfo_stub_builtin_intmethods_gethex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_BuiltIn_IntMethods, getOctal, arginfo_stub_builtin_intmethods_getoctal, ZEND_ACC_PUBLIC)

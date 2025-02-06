@@ -33,10 +33,8 @@ PHP_METHOD(Stub_ScallLateConstruct, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "testpublicinit", NULL, 0);
 	zephir_check_call_status();
@@ -45,9 +43,6 @@ PHP_METHOD(Stub_ScallLateConstruct, __construct)
 
 PHP_METHOD(Stub_ScallLateConstruct, testStaticInit)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("hello public");
 }
@@ -60,9 +55,8 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_CALL_SELF(&_0, "teststaticinit", NULL, 0);
 	zephir_check_call_status();
@@ -72,9 +66,6 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 
 PHP_METHOD(Stub_ScallLateConstruct, varValue)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "protectedVar");
 }

@@ -26,9 +26,6 @@ ZEPHIR_INIT_CLASS(Stub_Oo_DeprecatedMethods)
 
 PHP_METHOD(Stub_Oo_DeprecatedMethods, publicDeprecated)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(1);
 }
@@ -38,21 +35,16 @@ PHP_METHOD(Stub_Oo_DeprecatedMethods, normalMethod)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 65);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "privatedeprecated", NULL, 67);
 	zephir_check_call_status();
 	RETURN_MM();
 }
 
 PHP_METHOD(Stub_Oo_DeprecatedMethods, privateDeprecated)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(1);
 }

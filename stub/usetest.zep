@@ -16,9 +16,9 @@ class UseTest implements Countable
 		return new StandardClass();
 	}
 
-	public function count()
+	public function count() -> int
 	{
-
+	    return 0;
 	}
 
 	public function testUseClass1()

@@ -1,14 +1,13 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * For the full copyright and license information, please view
+ * the LICENSE file that was distributed with this source code.
  */
-
 if (!class_exists('APCIterator', false)) {
     // See: https://github.com/php/pecl-caching-apc/blob/master/apc_bin.h
     defined('APC_BIN_VERIFY_CRC32') || define('APC_BIN_VERIFY_CRC32', 1 << 1);
@@ -38,7 +37,7 @@ if (!class_exists('APCIterator', false)) {
     /**
      * Class APCIterator.
      *
-     * @see http://www.php.net/manual/en/class.apciterator.php
+     * @see https://www.php.net/manual/en/class.apciterator.php
      */
     class APCIterator implements Iterator
     {
@@ -46,23 +45,27 @@ if (!class_exists('APCIterator', false)) {
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function rewind()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function valid()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function current()
         {
         }
 
+        #[\ReturnTypeWillChange]
         public function key()
         {
         }
 
-        #[ReturnTypeWillChange]
+        #[\ReturnTypeWillChange]
         public function next()
         {
         }
@@ -86,7 +89,7 @@ if (function_exists('apc_cache_info')) {
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-cache-info.php
+ * @see https://www.php.net/manual/en/function.apc-cache-info.php
  *
  * @param string $type
  * @param bool   $limited
@@ -96,7 +99,7 @@ function apc_cache_info($type = '', $limited = false)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-clear-cache.php
+ * @see https://www.php.net/manual/en/function.apc-clear-cache.php
  *
  * @param string $cache_type
  */
@@ -105,7 +108,7 @@ function apc_clear_cache($cache_type = '')
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-sma-info.php
+ * @see https://www.php.net/manual/en/function.apc-sma-info.php
  *
  * @param bool $limited
  */
@@ -114,10 +117,10 @@ function apc_sma_info($limited = false)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-store.php
+ * @see https://www.php.net/manual/en/function.apc-store.php
  *
- * @param $key
- * @param $var
+ * @param     $key
+ * @param     $var
  * @param int $ttl
  */
 function apc_store($key, $var, $ttl = 0)
@@ -125,9 +128,9 @@ function apc_store($key, $var, $ttl = 0)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-fetch.php
+ * @see https://www.php.net/manual/en/function.apc-fetch.php
  *
- * @param $key
+ * @param      $key
  * @param null $success
  *
  * @return mixed
@@ -137,7 +140,7 @@ function apc_fetch($key, &$success = null)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-delete.php
+ * @see https://www.php.net/manual/en/function.apc-delete.php
  *
  * @param $key
  */
@@ -146,9 +149,9 @@ function apc_delete($key)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-define-constants.php
+ * @see https://www.php.net/manual/en/function.apc-define-constants.php
  *
- * @param $key
+ * @param       $key
  * @param array $constants
  * @param bool  $case_sensitive
  */
@@ -157,10 +160,10 @@ function apc_define_constants($key, array $constants, $case_sensitive = true)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-add.php
+ * @see https://www.php.net/manual/en/function.apc-add.php
  *
- * @param $key
- * @param $var
+ * @param     $key
+ * @param     $var
  * @param int $ttl
  */
 function apc_add($key, $var, $ttl = 0)
@@ -168,9 +171,9 @@ function apc_add($key, $var, $ttl = 0)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-compile-file.php
+ * @see https://www.php.net/manual/en/function.apc-compile-file.php
  *
- * @param $filename
+ * @param      $filename
  * @param bool $atomic
  */
 function apc_compile_file($filename, $atomic = true)
@@ -178,9 +181,9 @@ function apc_compile_file($filename, $atomic = true)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-load-constants.php
+ * @see https://www.php.net/manual/en/function.apc-load-constants.php
  *
- * @param $key
+ * @param      $key
  * @param bool $case_sensitive
  */
 function apc_load_constants($key, $case_sensitive = true)
@@ -188,7 +191,7 @@ function apc_load_constants($key, $case_sensitive = true)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-exists.php
+ * @see https://www.php.net/manual/en/function.apc-exists.php
  *
  * @param $keys
  */
@@ -197,7 +200,7 @@ function apc_exists($keys)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-delete-file.php
+ * @see https://www.php.net/manual/en/function.apc-delete-file.php
  *
  * @param $keys
  */
@@ -206,9 +209,9 @@ function apc_delete_file($keys)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-inc.php
+ * @see https://www.php.net/manual/en/function.apc-inc.php
  *
- * @param $key
+ * @param      $key
  * @param int  $step
  * @param null $success
  */
@@ -217,9 +220,9 @@ function apc_inc($key, $step = 1, &$success = null)
 }
 
 /**
- * @see http://www.php.net/manual/en/function.apc-dec.php
+ * @see https://www.php.net/manual/en/function.apc-dec.php
  *
- * @param $key
+ * @param      $key
  * @param int  $step
  * @param null $success
  */
@@ -228,7 +231,7 @@ function apc_dec($key, $step = 1, &$success = null)
 }
 
 /**
- * @see http://php.net/manual/en/function.apc-cas.php
+ * @see https://php.net/manual/en/function.apc-cas.php
  *
  * @param $key
  * @param $old
@@ -239,7 +242,7 @@ function apc_cas($key, $old, $new)
 }
 
 /**
- * @see http://php.net/manual/en/function.apc-bin-dump.php
+ * @see https://php.net/manual/en/function.apc-bin-dump.php
  *
  * @param null $files
  * @param null $user_vars
@@ -249,11 +252,11 @@ function apc_bin_dump($files = null, $user_vars = null)
 }
 
 /**
- * @see http://php.net/manual/en/function.apc-bin-dumpfile.php
+ * @see https://php.net/manual/en/function.apc-bin-dumpfile.php
  *
- * @param $files
- * @param $user_vars
- * @param $filename
+ * @param      $files
+ * @param      $user_vars
+ * @param      $filename
  * @param int  $flags
  * @param null $context
  */
@@ -262,9 +265,9 @@ function apc_bin_dumpfile($files, $user_vars, $filename, $flags = 0, $context = 
 }
 
 /**
- * @see http://php.net/manual/en/function.apc-bin-load.php
+ * @see https://php.net/manual/en/function.apc-bin-load.php
  *
- * @param $data
+ * @param     $data
  * @param int $flags
  */
 function apc_bin_load($data, $flags = 0)
@@ -272,9 +275,9 @@ function apc_bin_load($data, $flags = 0)
 }
 
 /**
- * @see http://php.net/manual/en/function.apc-bin-loadfile.php
+ * @see https://php.net/manual/en/function.apc-bin-loadfile.php
  *
- * @param $filename
+ * @param      $filename
  * @param null $context
  * @param int  $flags
  */
