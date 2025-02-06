@@ -1226,8 +1226,8 @@ void zephir_crc32(zval *return_value, zval *str)
 	int use_copy = 0;
 	size_t nr;
 	char *p;
-	php_uint32 crc;
-	php_uint32 crcinit = 0;
+	uint32_t crc;
+	uint32_t crcinit = 0;
 
 	if (Z_TYPE_P(str) != IS_STRING) {
 		use_copy = zend_make_printable_zval(str, &copy);
