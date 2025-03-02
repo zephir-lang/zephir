@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use ReflectionException;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception\CompilerException;
 use Zephir\Variable\Variable;
@@ -32,51 +33,32 @@ class Call
 {
     /**
      * Call expression.
-     *
-     * @var Expression|null
      */
     protected ?Expression $expression = null;
-    /**
-     * @var bool
-     */
+
     protected bool $isExpecting = false;
-    /**
-     * @var array
-     */
+
     protected array $mustCheckForCopy = [];
-    /**
-     * @var bool
-     */
+
     protected bool $mustInit = false;
+
     /**
      * @var mixed|null
      */
     protected $reflection;
-    /**
-     * @var array
-     */
+
     protected array $resolvedDynamicTypes = [];
-    /**
-     * @var array
-     */
+
     protected array $resolvedParams = [];
-    /**
-     * @var array
-     */
+
     protected array $resolvedTypes = [];
-    /**
-     * @var Variable|null
-     */
+
     protected ?Variable $symbolVariable = null;
-    /**
-     * @var array
-     */
+
     protected array $temporalVariables = [];
 
     /**
      * Add the last-call-status flag to the current symbol table.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function addCallStatusFlag(CompilationContext $compilationContext): void
     {
@@ -94,9 +76,7 @@ class Call
     }
 
     /**
-     * Checks the last call status or make a label jump to the next catch block.
-     *
-     * @param CompilationContext $compilationContext
+     * Checks the last call status or make a label jump to the next catch block.t
      */
     public function addCallStatusOrJump(CompilationContext $compilationContext): void
     {
@@ -114,8 +94,6 @@ class Call
 
     /**
      * Checks if temporary parameters must be copied or not.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function checkTempParameters(CompilationContext $compilationContext): void
     {
@@ -127,8 +105,6 @@ class Call
 
     /**
      * Parameters to check if they must be copied.
-     *
-     * @return array
      */
     public function getMustCheckForCopyVariables(): array
     {
@@ -138,18 +114,13 @@ class Call
     /**
      * Resolve parameters using zvals in the stack and without allocating memory for constants.
      *
-     * @param array              $parameters
-     * @param CompilationContext $compilationContext
-     * @param array              $expression
-     *
-     * @return array
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function getReadOnlyResolvedParams(
         array $parameters,
         CompilationContext $compilationContext,
-        array $expression
+        array $expression,
     ): array {
         $codePrinter = $compilationContext->codePrinter;
         $exprParams  = $this->getResolvedParamsAsExpr($parameters, $compilationContext, $expression, true);
@@ -361,8 +332,6 @@ class Call
 
     /**
      * Return resolved parameter dynamic types.
-     *
-     * @return array
      */
     public function getResolvedDynamicTypes(): array
     {
@@ -374,6 +343,7 @@ class Call
      * the parameters.
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function getResolvedParams(
         array $parameters,
@@ -597,14 +567,8 @@ class Call
     /**
      * Resolves parameters.
      *
-     * @param array              $parameters
-     * @param CompilationContext $compilationContext
-     * @param array              $expression
-     * @param bool               $readOnly
-     *
-     * @return CompiledExpression[]|null
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function getResolvedParamsAsExpr(
         array $parameters,
@@ -612,98 +576,99 @@ class Call
         array $expression,
         bool $readOnly = false
     ): ?array {
-        if (!$this->resolvedParams) {
-            $hasParametersByName = false;
-            foreach ($parameters as $parameter) {
-                if (isset($parameter['name'])) {
-                    $hasParametersByName = true;
-                    break;
-                }
-            }
-
-            /**
-             * All parameters must be passed by name
-             */
-            if ($hasParametersByName) {
-                foreach ($parameters as $parameter) {
-                    if (!isset($parameter['name'])) {
-                        throw new CompilerException('All parameters must use named', $parameter);
-                    }
-                }
-            }
-
-            if ($hasParametersByName) {
-                if ($this->reflection) {
-                    $positionalParameters = [];
-                    foreach ($this->reflection->getParameters() as $position => $reflectionParameter) {
-                        if (is_object($reflectionParameter)) {
-                            $positionalParameters[$reflectionParameter->getName()] = $position;
-                        } else {
-                            $positionalParameters[$reflectionParameter['name']] = $position;
-                        }
-                    }
-                    $orderedParameters = [];
-                    foreach ($parameters as $parameter) {
-                        if (isset($positionalParameters[$parameter['name']])) {
-                            $orderedParameters[$positionalParameters[$parameter['name']]] = $parameter;
-                        } else {
-                            throw new CompilerException(
-                                'Named parameter "'
-                                . $parameter['name']
-                                . '" is not a valid parameter name, available: '
-                                . implode(', ', array_keys($positionalParameters)),
-                                $parameter['parameter']
-                            );
-                        }
-                    }
-                    $parameters_count = count($parameters);
-                    for ($i = 0; $i < $parameters_count; ++$i) {
-                        if (!isset($orderedParameters[$i])) {
-                            $orderedParameters[$i] = ['parameter' => ['type' => 'null']];
-                        }
-                    }
-                    $parameters = $orderedParameters;
-                }
-            }
-
-            $params = [];
-            foreach ($parameters as $parameter) {
-                if (is_array($parameter['parameter'])) {
-                    $paramExpr = new Expression($parameter['parameter']);
-
-                    switch ($parameter['parameter']['type']) {
-                        case 'property-access':
-                        case 'array-access':
-                        case 'static-property-access':
-                            $paramExpr->setReadOnly(true);
-                            break;
-
-                        default:
-                            $paramExpr->setReadOnly($readOnly);
-                            break;
-                    }
-
-                    $params[] = $paramExpr->compile($compilationContext);
-                    continue;
-                }
-
-                if ($parameter['parameter'] instanceof CompiledExpression) {
-                    $params[] = $parameter['parameter'];
-                    continue;
-                }
-
-                throw new CompilerException('Invalid expression ', $expression);
-            }
-            $this->resolvedParams = $params;
+        if ($this->resolvedParams) {
+            return $this->resolvedParams;
         }
+
+        $hasParametersByName = false;
+        foreach ($parameters as $parameter) {
+            if (isset($parameter['name'])) {
+                $hasParametersByName = true;
+                break;
+            }
+        }
+
+        /**
+         * All parameters must be passed by name
+         */
+        if ($hasParametersByName) {
+            foreach ($parameters as $parameter) {
+                if (!isset($parameter['name'])) {
+                    throw new CompilerException('All parameters must use named', $parameter);
+                }
+            }
+        }
+
+        if ($hasParametersByName) {
+            if ($this->reflection) {
+                $positionalParameters = [];
+                foreach ($this->reflection->getParameters() as $position => $reflectionParameter) {
+                    if (is_object($reflectionParameter)) {
+                        $positionalParameters[$reflectionParameter->getName()] = $position;
+                    } else {
+                        $positionalParameters[$reflectionParameter['name']] = $position;
+                    }
+                }
+                $orderedParameters = [];
+                foreach ($parameters as $parameter) {
+                    if (isset($positionalParameters[$parameter['name']])) {
+                        $orderedParameters[$positionalParameters[$parameter['name']]] = $parameter;
+                    } else {
+                        throw new CompilerException(
+                            'Named parameter "'
+                            . $parameter['name']
+                            . '" is not a valid parameter name, available: '
+                            . implode(', ', array_keys($positionalParameters)),
+                            $parameter['parameter']
+                        );
+                    }
+                }
+                $parameters_count = count($parameters);
+                for ($i = 0; $i < $parameters_count; ++$i) {
+                    if (!isset($orderedParameters[$i])) {
+                        $orderedParameters[$i] = ['parameter' => ['type' => 'null']];
+                    }
+                }
+                $parameters = $orderedParameters;
+            }
+        }
+
+        $params = [];
+        foreach ($parameters as $parameter) {
+            if (is_array($parameter['parameter'])) {
+                $paramExpr = new Expression($parameter['parameter']);
+
+                switch ($parameter['parameter']['type']) {
+                    case 'property-access':
+                    case 'array-access':
+                    case 'static-property-access':
+                        $paramExpr->setReadOnly(true);
+                        break;
+
+                    default:
+                        $paramExpr->setReadOnly($readOnly);
+                        break;
+                }
+
+                $params[] = $paramExpr->compile($compilationContext);
+                continue;
+            }
+
+            if ($parameter['parameter'] instanceof CompiledExpression) {
+                $params[] = $parameter['parameter'];
+                continue;
+            }
+
+            throw new CompilerException('Invalid expression ', $expression);
+        }
+
+        $this->resolvedParams = $params;
 
         return $this->resolvedParams;
     }
 
     /**
      * Return resolved parameter types.
-     *
-     * @return array
      */
     public function getResolvedTypes(): array
     {
@@ -712,11 +677,6 @@ class Call
 
     /**
      * Returns the symbol variable that must be returned by the call.
-     *
-     * @param bool                    $useTemp
-     * @param CompilationContext|null $compilationContext
-     *
-     * @return Variable|null
      */
     public function getSymbolVariable(bool $useTemp = false, ?CompilationContext $compilationContext = null): ?Variable
     {
@@ -741,8 +701,6 @@ class Call
 
     /**
      * Check if an external expression is expecting the call return a value.
-     *
-     * @return bool
      */
     public function isExpectingReturn(): bool
     {
@@ -751,8 +709,6 @@ class Call
 
     /**
      * Returns if the symbol to be returned by the call must be initialized.
-     *
-     * @return bool
      */
     public function mustInitSymbolVariable(): bool
     {
@@ -762,8 +718,6 @@ class Call
     /**
      * Processes the symbol variable that will be used to return
      * the result of the symbol call.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function processExpectedObservedReturn(CompilationContext $compilationContext): void
     {
@@ -804,21 +758,18 @@ class Call
     /**
      * Processes the symbol variable that will be used to return
      * the result of the symbol call.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function processExpectedReturn(CompilationContext $compilationContext): void
     {
-        $expr       = $this->expression;
-        $expression = $expr->getExpression();
+        $expression = $this->expression->getExpression();
 
         /**
          * Create temporary variable if needed.
          */
         $symbolVariable = null;
-        $isExpecting    = $expr->isExpectingReturn();
+        $isExpecting    = $this->expression->isExpectingReturn();
         if ($isExpecting) {
-            $symbolVariable = $expr->getExpectingVariable();
+            $symbolVariable = $this->expression->getExpectingVariable();
             if (is_object($symbolVariable)) {
                 $readDetector = new ReadDetector();
                 if ($readDetector->detect($symbolVariable->getName(), $expression)) {
