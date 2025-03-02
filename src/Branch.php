@@ -39,9 +39,6 @@ class Branch
      */
     private $uniqueId;
 
-    /**
-     * @return int
-     */
     public function getLevel(): int
     {
         return $this->level;
@@ -49,17 +46,12 @@ class Branch
 
     /**
      * Returns the branch's parent.
-     *
-     * @return Branch|null
      */
     public function getParentBranch(): ?self
     {
         return $this->parentBranch;
     }
 
-    /**
-     * @return StatementAbstract|null
-     */
     public function getRelatedStatement(): ?StatementAbstract
     {
         return $this->relatedStatement;
@@ -67,8 +59,6 @@ class Branch
 
     /**
      * Returns the branch type.
-     *
-     * @return int
      */
     public function getType(): int
     {
@@ -83,17 +73,11 @@ class Branch
         return $this->uniqueId;
     }
 
-    /**
-     * @return bool|null
-     */
     public function isUnreachable(): ?bool
     {
         return $this->unreachable;
     }
 
-    /**
-     * @param int $level
-     */
     public function setLevel(int $level): void
     {
         $this->level = $level;
@@ -101,17 +85,12 @@ class Branch
 
     /**
      * Set the branch's parent.
-     *
-     * @param Branch $parentBranch
      */
     public function setParentBranch(self $parentBranch): void
     {
         $this->parentBranch = $parentBranch;
     }
 
-    /**
-     * @param StatementAbstract $relatedStatement
-     */
     public function setRelatedStatement(StatementAbstract $relatedStatement): void
     {
         $this->relatedStatement = $relatedStatement;
@@ -119,17 +98,12 @@ class Branch
 
     /**
      * Set the type of branch. One of the TYPE_* constants.
-     *
-     * @param int $type
      */
     public function setType(int $type): void
     {
         $this->type = $type;
     }
 
-    /**
-     * @param $uniqueId
-     */
     public function setUniqueId($uniqueId): void
     {
         $this->uniqueId = $uniqueId;
@@ -137,8 +111,6 @@ class Branch
 
     /**
      * Sets if the branch is unreachable.
-     *
-     * @param bool|null $unreachable
      */
     public function setUnreachable(?bool $unreachable): void
     {
