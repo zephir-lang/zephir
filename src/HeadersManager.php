@@ -16,7 +16,6 @@ namespace Zephir;
 use InvalidArgumentException;
 
 use function array_merge;
-use function is_string;
 
 /**
  * Manages the c-headers that must be added to a file
@@ -35,52 +34,32 @@ class HeadersManager
 
     /**
      * List of headers.
-     *
-     * @var array
      */
     protected array $headers = [];
 
     /**
      * List of headers.
-     *
-     * @var array
      */
     protected array $headersFirst = [];
 
     /**
      * List of headers.
-     *
-     * @var array
      */
     protected array $headersLast = [];
 
     /**
      * Adds a header path to the manager.
      *
-     * @param string $path
-     * @param int    $position
-     *
      * @throws InvalidArgumentException
      */
-    public function add($path, $position = 0): void
+    public function add(string $path, int $position = 0): void
     {
-        if (!is_string($path)) {
-            throw new InvalidArgumentException('$path must be only string type');
-        }
-
         if (!$position) {
             $this->headers[$path] = $path;
-        } else {
-            switch ($position) {
-                case self::POSITION_FIRST:
-                    $this->headersFirst[$path] = $path;
-                    break;
-                case self::POSITION_LAST:
-                    $this->headersLast[$path] = $path;
-                    break;
-                default:
-                    break;
-            }
+        } elseif ($position === self::POSITION_FIRST) {
+            $this->headersFirst[$path] = $path;
+        } elseif ($position === self::POSITION_LAST) {
+            $this->headersLast[$path] = $path;
         }
     }
 
