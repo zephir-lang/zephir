@@ -36,7 +36,6 @@ use Zephir\StatementsBlock;
 use function count;
 use function explode;
 use function gettype;
-use function is_array;
 use function ltrim;
 use function metaphone;
 use function method_exists;
