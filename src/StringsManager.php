@@ -20,8 +20,6 @@ abstract class StringsManager
 {
     /**
      * List of headers.
-     *
-     * @var array
      */
     protected array $concatKeys = [
         'vv' => true,
@@ -31,8 +29,6 @@ abstract class StringsManager
 
     /**
      * Adds a concatenation combination to the manager.
-     *
-     * @param string $key
      */
     public function addConcatKey(string $key): void
     {
@@ -41,8 +37,6 @@ abstract class StringsManager
 
     /**
      * Generates the concatenation code.
-     *
-     * @return void
      */
     abstract public function genConcatCode(): void;
 }

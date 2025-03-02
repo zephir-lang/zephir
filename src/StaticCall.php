@@ -41,11 +41,6 @@ class StaticCall extends Call
     /**
      * Compiles a static method call.
      *
-     * @param Expression         $expr
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -356,6 +351,7 @@ class StaticCall extends Call
      * Calls static methods on the 'self/static' context.
      *
      * @throws Exception
+     * @throws ReflectionException
      */
     protected function call(
         string $context,
