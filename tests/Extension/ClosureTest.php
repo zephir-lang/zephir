@@ -38,4 +38,11 @@ final class ClosureTest extends TestCase
 
         $this->assertTrue($test->issue1036Call());
     }
+
+    public function testIssue1873(): void
+    {
+        $test = new Closures();
+
+        $this->assertInstanceOf(\Closure::class, $test->issue1873());
+    }
 }
