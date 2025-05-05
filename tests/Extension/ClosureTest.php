@@ -22,8 +22,19 @@ final class ClosureTest extends TestCase
     {
         $test = new Closures();
 
-        $this->assertSame(2, $test->testUseCommand()());
+        $this->assertSame(2, $test->testUseCommand(1)());
         $this->assertInstanceOf(\stdClass::class, $test->issue642());
+    }
+
+    public function testUseCommandMultiple(): void
+    {
+        $test = new Closures();
+
+        $callbackA = $test->testUseCommand(1);
+        $callbackB = $test->testUseCommand(2);
+
+        $this->assertSame(2, $callbackA());
+        $this->assertSame(3, $callbackB());
     }
 
     /**
