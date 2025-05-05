@@ -93,7 +93,7 @@ class Closure
             $classDefinition->addProperty(
                 new Property(
                     $classDefinition,
-                    ['public', 'static'],
+                    ['public'],
                     $var->getName(),
                     null,
                     null,
@@ -125,12 +125,13 @@ class Closure
 
         foreach ($staticVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
-                $compilationContext->backend->updateStaticProperty(
-                    $classDefinition->getClassEntry(),
+                $compilationContext->backend->updateProperty(
+                    $symbolVariable,
                     $var->getName(),
-                    $var,
+                    'null',
                     $compilationContext
                 );
+
                 continue;
             }
 
@@ -162,8 +163,8 @@ class Closure
                     break;
             }
 
-            $compilationContext->backend->updateStaticProperty(
-                $classDefinition->getClassEntry(),
+            $compilationContext->backend->updateProperty(
+                $symbolVariable,
                 $var->getName(),
                 $tempVariable,
                 $compilationContext

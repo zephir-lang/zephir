@@ -1223,9 +1223,9 @@ class Method
 
                 $codePrinter->preOutput(
                     sprintf(
-                        "\t" . 'zephir_read_static_property_ce(&%s, %s, SL("%s"), PH_NOISY_CC%s);',
+                        "\t" . 'zephir_read_property(&%s, %s, SL("%s"), PH_NOISY_CC%s);',
                         $staticVar->getName(),
-                        $this->classDefinition->getClassEntry(),
+                        "this_ptr",
                         $staticVar->getName(),
                         ''
                     )
