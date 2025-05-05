@@ -5,7 +5,7 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
-
+- Fixed bug with Closures using the `use` Statement in a loop always returning the last loop.
 ## [0.19.0] - 2025-05-13
 ### Added
 - Added support of PHP `8.4` [#2440](https://github.com/zephir-lang/zephir/issues/2440), [#2443](https://github.com/zephir-lang/zephir/pull/2443)

@@ -80,25 +80,60 @@ class Closure
 
         $block = $expression['right'] ?? [];
 
-        $staticVariables = [];
+        $useVariables = [];
+
         if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
-                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
+                $useVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
                     $parameter['name']
                 );
             }
         }
 
-        foreach ($staticVariables as $var) {
+        foreach ($useVariables as $var) {
             $classDefinition->addProperty(
                 new Property(
                     $classDefinition,
-                    ['public', 'static'],
+                    ['public'],
                     $var->getName(),
                     null,
                     null,
                     null
                 )
+            );
+
+            array_unshift(
+                $block,
+                [
+                    'type'      => 'declare',
+                    'data-type' => 'variable',
+                    'variables' => [
+                        [
+                            'variable' => $var->getName()
+                        ]
+                    ]
+                ],
+                [
+                    'type'      => 'let',
+                    'assignments' => [
+                        [
+                            'assign-type' => 'variable',
+                            'operator'    => 'assign',
+                            'variable'    => $var->getName(),
+                            'expr'        => [
+                                'type'      => 'property-access',
+                                'left'      => [
+                                    'type'      => 'variable',
+                                    'value'     => 'this',
+                                ],
+                                'right' => [
+                                    'type'      => 'variable',
+                                    'value'     => $var->getName(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             );
         }
 
@@ -111,7 +146,6 @@ class Closure
             null,
             null,
             $expression,
-            $staticVariables
         );
 
         $symbolVariable = $this->generateClosure(
@@ -123,14 +157,68 @@ class Closure
         );
         $compilationContext->headersManager->add('kernel/object');
 
-        foreach ($staticVariables as $var) {
+        //Only Compile Them If They Exist
+        if (count($useVariables)) {
+            $classDefinition->addMethod($this->buildConstructor($classDefinition, $expression['use']));
+            $this->compileVariables($compilationContext, $symbolVariable, $useVariables);
+        }
+
+        ++self::$id;
+
+        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+    }
+
+    private function buildConstructor(Definition $classDefinition, array $useProperties): Method
+    {
+        $useStatements = [];
+
+        foreach ($useProperties as $property) {
+            $useStatements[] = [
+                'type'      => 'let',
+                'assignments' => [
+                    [
+                        'assign-type' => 'variable',
+                        'operator'    => 'assign',
+                        'variable'    => $property['name'],
+                        'expr'        => [
+                            'type'      => 'property-access',
+                            'left'      => [
+                                'type'      => 'variable',
+                                'value'     => 'this',
+                            ],
+                            'right' => [
+                                'type'      => 'variable',
+                                'value'     => $property['name'],
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+
+        return new Method(
+            $classDefinition,
+            ['public', 'final'],
+            '__construct',
+            new Parameters($useProperties),
+            new StatementsBlock($useStatements),
+            null,
+            null,
+            [],
+        );
+    }
+
+    private function compileVariables(CompilationContext $compilationContext, Variable $symbolVariable, array $useVariables): void
+    {
+        foreach ($useVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
-                $compilationContext->backend->updateStaticProperty(
-                    $classDefinition->getClassEntry(),
+                $compilationContext->backend->updateRawProperty(
+                    $symbolVariable->getName(),
                     $var->getName(),
                     $var,
                     $compilationContext
                 );
+
                 continue;
             }
 
@@ -162,17 +250,13 @@ class Closure
                     break;
             }
 
-            $compilationContext->backend->updateStaticProperty(
-                $classDefinition->getClassEntry(),
+            $compilationContext->backend->updateRawProperty(
+                $symbolVariable->getName(),
                 $var->getName(),
                 $tempVariable,
                 $compilationContext
             );
         }
-
-        ++self::$id;
-
-        return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
     }
 
     /**
@@ -213,8 +297,6 @@ class Closure
     ): ?Variable {
         $classDefinition->addMethod($classMethod, $block);
 
-        $compilationContext->headersManager->add('kernel/object');
-
         if ($this->expecting) {
             if ($this->expectingVariable) {
                 $symbolVariable = $this->expectingVariable;
@@ -234,7 +316,12 @@ class Closure
         }
 
         $symbolVariable->initVariant($compilationContext);
-        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
+        $compilationContext->backend->createClosure(
+            $symbolVariable,
+            $classDefinition,
+            $compilationContext,
+            $expression['use'] ?? []
+        );
 
         return $symbolVariable;
     }

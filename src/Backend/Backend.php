@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
+use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
@@ -24,6 +25,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\FunctionDefinition;
 use Zephir\GlobalConstant;
 use Zephir\Name;
+use Zephir\StatementsBlock;
 use Zephir\Variable\Globals;
 use Zephir\Variable\Variable;
 
@@ -866,13 +868,42 @@ class Backend
         }
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context): void
+    public function createClosure(Variable $variable, Definition $classDefinition, CompilationContext $context, array $conArgs): void
     {
-        $symbol = $this->getVariableCode($variable);
-        $context->codePrinter->output(
-            'zephir_create_closure_ex(' . $symbol . ', NULL, ' . $classDefinition->getClassEntry(
-            ) . ', SL("__invoke"));'
-        );
+        $parameters = [];
+        foreach ($conArgs as $arg) {
+            $parameters[] = [
+                "parameter" => [
+                    'type' => $arg['data-type'],
+                    'value' => $arg['name'],
+                ]
+            ];
+        }
+
+        $statementBlocks = [
+            [
+                'type'      => 'let',
+                'assignments' => [
+                    [
+                        'assign-type' => 'variable',
+                        'operator'    => 'assign',
+                        'variable'    => $variable->getName(),
+                        'expr'        => [
+                            "type" => "new",
+                            "class" => "\\" . $classDefinition->getCompleteName(),
+                            "dynamic" => 0,
+                            "parameters" => $parameters,
+                            'file' => '',
+                            'line' => 0,
+                            'char' => 0
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $block = new StatementsBlock($statementBlocks);
+        $block->compile($context);
     }
 
     public function declareConstant($type, $name, $value, CompilationContext $context): void
@@ -1871,29 +1902,34 @@ class Backend
 
     public function updateProperty(Variable $variable, $property, $value, CompilationContext $context): void
     {
-        $value = $this->resolveValue($value, $context);
-
         if ($property instanceof Variable) {
             $context->codePrinter->output(
                 sprintf(
                     'zephir_update_property_zval_zval(%s, %s, %s);',
                     $this->getVariableCode($variable),
                     $this->getVariableCode($property),
-                    $value
+                    $this->resolveValue($value, $context)
                 )
             );
 
             return;
         }
 
+        $this->updateRawProperty($this->getVariableCode($variable), $property, $value, $context);
+    }
+
+    public function updateRawProperty(string $variableName, $property, $value, CompilationContext $context): void
+    {
         $template = 'zephir_update_property_zval(%s, ZEND_STRL("%s"), %s);';
         /* Are we going to init default object property value? */
         if ($context->currentMethod && $context->currentMethod->isInitializer()) {
             $template = 'zephir_update_property_zval_ex(%s, ZEND_STRL("%s"), %s);';
         }
 
+        $value = $this->resolveValue($value, $context);
+
         $context->codePrinter->output(
-            sprintf($template, $this->getVariableCode($variable), $property, $value)
+            sprintf($template, $variableName, $property, $value)
         );
     }
 

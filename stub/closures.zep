@@ -52,9 +52,8 @@ class Closures
 		return x => (x + 100) + (x * 150);
 	}
 
-	public function testUseCommand()
+	public function testUseCommand(var abc = 1)
 	{
-		var abc = 1;
 		return function() use (abc) {
 			return abc + 1;
 		};
