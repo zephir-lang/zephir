@@ -80,16 +80,17 @@ class Closure
 
         $block = $expression['right'] ?? [];
 
-        $staticVariables = [];
+        $useVariables = [];
+
         if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
-                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
+                $useVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
                     $parameter['name']
                 );
             }
         }
 
-        foreach ($staticVariables as $var) {
+        foreach ($useVariables as $var) {
             $classDefinition->addProperty(
                 new Property(
                     $classDefinition,
@@ -99,6 +100,40 @@ class Closure
                     null,
                     null
                 )
+            );
+
+            array_unshift(
+                $block,
+                [
+                    'type'      => 'declare',
+                    'data-type' => 'variable',
+                    'variables' => [
+                        [
+                            'variable' => $var->getName()
+                        ]
+                    ]
+                ],
+                [
+                    'type'      => 'let',
+                    'assignments' => [
+                        [
+                            'assign-type' => 'variable',
+                            'operator'    => 'assign',
+                            'variable'    => $var->getName(),
+                            'expr'        => [
+                                'type'      => 'property-access',
+                                'left'      => [
+                                    'type'      => 'variable',
+                                    'value'     => 'this',
+                                ],
+                                'right' => [
+                                    'type'      => 'variable',
+                                    'value'     => $var->getName(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             );
         }
 
@@ -111,7 +146,6 @@ class Closure
             null,
             null,
             $expression,
-            $staticVariables
         );
 
         $symbolVariable = $this->generateClosure(
@@ -123,12 +157,12 @@ class Closure
         );
         $compilationContext->headersManager->add('kernel/object');
 
-        foreach ($staticVariables as $var) {
+        foreach ($useVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
                 $compilationContext->backend->updateProperty(
                     $symbolVariable,
                     $var->getName(),
-                    'null',
+                    $var,
                     $compilationContext
                 );
 
