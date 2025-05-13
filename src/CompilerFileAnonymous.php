@@ -79,12 +79,7 @@ final class CompilerFileAnonymous implements FileInterface
         $compilationContext->logger         = $this->logger;
         $compilationContext->stringsManager = $stringsManager;
         $compilationContext->backend        = $compiler->backend;
-
-        /**
-         * Headers manager.
-         */
-        $headersManager                     = new HeadersManager();
-        $compilationContext->headersManager = $headersManager;
+        $compilationContext->headersManager = new HeadersManager();
 
         /**
          * Main code-printer for the file.
@@ -134,9 +129,6 @@ final class CompilerFileAnonymous implements FileInterface
         $this->compiledFile = $path . '.c';
     }
 
-    /**
-     * @return Definition
-     */
     public function getClassDefinition(): Definition
     {
         return $this->classDefinition;
@@ -156,11 +148,7 @@ final class CompilerFileAnonymous implements FileInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * Only implemented to satisfy the Zephir\Compiler\FileInterface interface.
-     *
-     * @param Compiler $compiler
      */
     public function preCompile(Compiler $compiler): void
     {
@@ -178,26 +166,22 @@ final class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the class/interface contained in the file.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
     private function compileClass(CompilationContext $compilationContext): void
     {
-        $classDefinition = $this->classDefinition;
-
         /**
          * Do the compilation
          */
-        $classDefinition->compile($compilationContext);
+        $this->classDefinition->compile($compilationContext);
 
-        $code = $this->generateCodeHeadersPre($classDefinition);
+        $code = $this->generateCodeHeadersPre($this->classDefinition);
 
         $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
         $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
 
-        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
+        $this->generateClassHeadersPost($code, $this->classDefinition, $compilationContext);
     }
 }

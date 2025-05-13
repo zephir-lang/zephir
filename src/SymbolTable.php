@@ -74,10 +74,6 @@ class SymbolTable
 
     /**
      * Adds a raw variable to the symbol table (root branch).
-     *
-     * @param Variable $variable
-     *
-     * @return Variable
      */
     public function addRawVariable(Variable $variable): Variable
     {
@@ -145,10 +141,6 @@ class SymbolTable
 
     /**
      * Returns the number of expected mutations for a variable.
-     *
-     * @param string $variable
-     *
-     * @return int
      */
     public function getExpectedMutations(string $variable): int
     {
@@ -163,8 +155,6 @@ class SymbolTable
      * Returns the last line where any kind of call was performed within the method
      * This is not necessary related to the symbol table but this information is gathered
      * by the LocalContextPass.
-     *
-     * @return int
      */
     public function getLastCallLine(): int
     {
@@ -179,8 +169,6 @@ class SymbolTable
      * Returns the last line where an 'unset' operation was made within the current method
      * This is not necessary related to the symbol table but this information is gathered
      * by the LocalContextPass.
-     *
-     * @return int
      */
     public function getLastUnsetLine(): int
     {
@@ -193,17 +181,12 @@ class SymbolTable
 
     /**
      * Returns if the current symbol label must add a memory frame.
-     *
-     * @return bool
      */
     public function getMustGrownStack(): bool
     {
         return $this->mustGrownStack;
     }
 
-    /**
-     * @return int
-     */
     public function getNextTempVar(): int
     {
         return $this->tempVarCount++;
@@ -213,13 +196,8 @@ class SymbolTable
      * Creates a temporary variable to be used in a write operation
      * the body of the variable is freed between iterations instead of
      * request a new full zval variable.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context)
+    public function getTempComplexLiteralVariableForWrite($type, CompilationContext $context): Variable
     {
         $variable = $this->reuseTempVariable($type, 'heap-literal');
         if (is_object($variable)) {
@@ -249,13 +227,8 @@ class SymbolTable
 
     /**
      * Creates a temporary variable to be used in a write operation.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function getTempLocalVariableForWrite($type, CompilationContext $context)
+    public function getTempLocalVariableForWrite($type, CompilationContext $context): Variable
     {
         $variable = $this->reuseTempVariable($type, 'stack');
         if (is_object($variable)) {
@@ -288,13 +261,8 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used in a read-only operation within native-array-access and property-access
      * These kind of variables MUST not be tracked by the Zephir memory manager.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function getTempNonTrackedUninitializedVariable($type, CompilationContext $context)
+    public function getTempNonTrackedUninitializedVariable(string $type, CompilationContext $context): Variable
     {
         $variable = $this->reuseTempVariable($type, 'non-tracked-uninitialized');
         if (is_object($variable)) {
@@ -320,14 +288,8 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used to point to a heap variable
      * These kind of variables MUST not be tracked by the Zephir memory manager.
-     *
-     * @param                    $type
-     * @param CompilationContext $context
-     * @param bool               $initNonReferenced
-     *
-     * @return Variable
      */
-    public function getTempNonTrackedVariable($type, CompilationContext $context, $initNonReferenced = false)
+    public function getTempNonTrackedVariable($type, CompilationContext $context, bool $initNonReferenced = false): Variable
     {
         $variable = $this->reuseTempVariable($type, 'non-tracked');
 
@@ -360,11 +322,6 @@ class SymbolTable
 
     /**
      * Returns a temporal variable.
-     *
-     * @param string             $type
-     * @param CompilationContext $compilationContext
-     *
-     * @return Variable
      */
     public function getTempVariable(string $type, CompilationContext $compilationContext): Variable
     {
@@ -378,13 +335,8 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used as intermediate variable of a read operation
      * Variables are automatically tracked by the memory manager.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function getTempVariableForObserve($type, CompilationContext $context)
+    public function getTempVariableForObserve($type, CompilationContext $context): Variable
     {
         $variable = $this->reuseTempVariable($type, 'observe');
         if (is_object($variable)) {
@@ -411,13 +363,8 @@ class SymbolTable
     /**
      * Creates a temporary variable to be used as intermediate variable in a call operation
      * Variables are automatically tracked by the memory manager.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     *
-     * @return Variable
      */
-    public function getTempVariableForObserveOrNullify($type, CompilationContext $context)
+    public function getTempVariableForObserveOrNullify(string $type, CompilationContext $context): Variable
     {
         $variable = $this->reuseTempVariable($type, 'observe-nullify');
         if (is_object($variable)) {
@@ -443,12 +390,6 @@ class SymbolTable
 
     /**
      * Creates a temporary variable to be used in a write operation.
-     *
-     * @param string             $type
-     * @param CompilationContext $context
-     * @param mixed              $init
-     *
-     * @return Variable
      */
     public function getTempVariableForWrite(string $type, CompilationContext $context, $init = true): Variable
     {
@@ -511,15 +452,9 @@ class SymbolTable
     /**
      * Return a variable in the symbol table, it will be used for a read operation.
      *
-     * @param string                  $name
-     * @param CompilationContext|null $compilationContext
-     * @param array|null              $statement
-     *
-     * @return Variable
-     *
      * @throws CompilerException
      */
-    public function getVariableForRead(string $name, ?CompilationContext $compilationContext = null, ?array $statement = null)
+    public function getVariableForRead(string $name, ?CompilationContext $compilationContext = null, ?array $statement = null): Variable|bool
     {
         /**
          * Validate that 'this' cannot be used in a static function
@@ -749,15 +684,9 @@ class SymbolTable
      * Return a variable in the symbol table, it will be used for a write operation
      * Some variables aren't writable themselves but their members do.
      *
-     * @param string             $name
-     * @param CompilationContext $compilationContext
-     * @param array|null         $statement
-     *
-     * @return bool|Variable
-     *
      * @throws CompilerException
      */
-    public function getVariableForWrite(string $name, CompilationContext $compilationContext, ?array $statement = null)
+    public function getVariableForWrite(string $name, CompilationContext $compilationContext, ?array $statement = null): Variable|bool
     {
         /**
          * Create superglobals just in time
@@ -821,11 +750,6 @@ class SymbolTable
 
     /**
      * Check if a variable is declared in the current symbol table.
-     *
-     * @param string                  $name
-     * @param CompilationContext|null $compilationContext
-     *
-     * @return bool
      */
     public function hasVariable(string $name, ?CompilationContext $compilationContext = null): bool
     {
@@ -871,8 +795,6 @@ class SymbolTable
 
     /**
      * Return a variable in the symbol table, it will be used for a write operation.
-     *
-     * @param bool $mustGrownStack
      */
     public function mustGrownStack(bool $mustGrownStack): void
     {
@@ -896,8 +818,6 @@ class SymbolTable
 
     /**
      * Sets the local context information.
-     *
-     * @param LocalContextPass $localContext
      */
     public function setLocalContext(LocalContextPass $localContext): void
     {
@@ -911,7 +831,7 @@ class SymbolTable
         string $type,
         string $location,
         Variable $variable,
-        ?CompilationContext $compilationContext = null
+        ?CompilationContext $compilationContext = null,
     ): void {
         $compilationContext = $compilationContext ?: $this->compilationContext;
         $branchId           = $compilationContext->branchManager->getCurrentBranchId();

@@ -252,8 +252,6 @@ final class Compiler
 
     /**
      * Check if the project must be phpized again.
-     *
-     * @return bool
      */
     public function checkIfPhpized(): bool
     {
@@ -262,9 +260,6 @@ final class Compiler
 
     /**
      * Compiles the extension without installing it.
-     *
-     * @param bool     $development
-     * @param int|null $jobs
      *
      * @throws Exception
      */
@@ -1928,11 +1923,6 @@ final class Compiler
 
     /**
      * Checks if a file must be copied.
-     *
-     * @param string $src
-     * @param string $dst
-     *
-     * @return bool
      */
     private function checkKernelFile(string $src, string $dst): bool
     {
@@ -2056,8 +2046,6 @@ final class Compiler
     /**
      * Registers C-constants as PHP constants from a C-file.
      *
-     * @param array $constantsSources
-     *
      * @throws Exception
      */
     private function loadConstantsSources(array $constantsSources): void
@@ -2106,11 +2094,6 @@ final class Compiler
 
     /**
      * Process config.w32 sections.
-     *
-     * @param array  $sources
-     * @param string $project
-     *
-     * @return array
      */
     private function processAddSources(array $sources, string $project): array
     {

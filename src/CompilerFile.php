@@ -62,67 +62,40 @@ final class CompilerFile implements FileInterface
     use CompilerTrait;
     use LoggerAwareTrait;
 
-    /**
-     * @var AliasManager
-     */
     private AliasManager $aliasManager;
-    /**
-     * @var Definition|null
-     */
+
     private ?Definition $classDefinition = null;
     private ?string     $className       = null;
-    /**
-     * @var string|null
-     */
+
     private ?string $compiledFile = null;
-    /**
-     * @var Config
-     */
+
     private Config $config;
-    /**
-     * @var bool
-     */
+
     private bool $external = false;
-    /**
-     * @var string|null
-     */
+
     private ?string $filePath = null;
-    /**
-     * @var FileSystemInterface
-     */
+
     private FileSystemInterface $filesystem;
-    /**
-     * @var FunctionDefinition[]
-     */
+
     private array $functionDefinitions = [];
 
-    /**
-     * @var array
-     */
     private array $headerCBlocks = [];
+
     /**
      * Original internal representation (IR) of the file.
-     *
-     * @var array|null
      */
     private ?array  $ir        = null;
     private ?string $namespace = null;
+
     /**
      * @var mixed
      */
     private $originalNode;
 
-    /**
-     * CompilerFile constructor.
-     *
-     * @param Config              $config
-     * @param AliasManager        $aliasManager
-     * @param FileSystemInterface $filesystem
-     */
     public function __construct(
         Config $config,
         AliasManager $aliasManager,
-        FileSystemInterface $filesystem
+        FileSystemInterface $filesystem,
     ) {
         $this->config       = $config;
         $this->logger       = new NullLogger();
@@ -132,10 +105,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Adds a function to the function definitions.
-     *
-     * @param Compiler           $compiler
-     * @param FunctionDefinition $func
-     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -155,11 +124,9 @@ final class CompilerFile implements FileInterface
 
     public function applyClassHeaders(CompilationContext $compilationContext): void
     {
-        $classDefinition = $this->classDefinition;
+        $code = $this->generateCodeHeadersPre($this->classDefinition);
 
-        $code = $this->generateCodeHeadersPre($classDefinition);
-
-        if ('class' == $classDefinition->getType()) {
+        if ('class' == $this->classDefinition->getType()) {
             $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
@@ -167,13 +134,11 @@ final class CompilerFile implements FileInterface
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         }
 
-        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
+        $this->generateClassHeadersPost($code, $this->classDefinition, $compilationContext);
     }
 
     /**
      * Check dependencies.
-     *
-     * @param Compiler $compiler
      *
      * @throws ReflectionException
      */
@@ -405,8 +370,6 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles the class/interface contained in the file.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -417,11 +380,8 @@ final class CompilerFile implements FileInterface
 
     /**
      * Compiles a comment as a top-level statement.
-     *
-     * @param CompilationContext $compilationContext
-     * @param array              $topStatement
      */
-    public function compileComment(CompilationContext $compilationContext, $topStatement): void
+    public function compileComment(CompilationContext $compilationContext, array $topStatement): void
     {
         $compilationContext->codePrinter->output('/' . $topStatement['value'] . '/');
     }
@@ -454,10 +414,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Compiles the file generating a JSON intermediate representation.
-     *
-     * @param Compiler $compiler
-     *
-     * @return array
      *
      * @throws ParseException
      * @throws IllegalStateException if the intermediate representation is not of type 'array'
@@ -518,8 +474,6 @@ final class CompilerFile implements FileInterface
      * Pre-compiles a Zephir file.
      *
      * Generates the IR and perform basic validations.
-     *
-     * @param Compiler $compiler
      *
      * @throws CompilerException
      * @throws IllegalStateException
