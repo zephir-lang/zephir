@@ -876,8 +876,7 @@ class Variable implements TypeAwareInterface
     public function setPossibleValue(
         CompiledExpression $possibleValue,
         CompilationContext $compilationContext,
-    ): void
-    {
+    ): void {
         $this->possibleValue       = $possibleValue;
         $this->possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
     }
