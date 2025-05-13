@@ -29,8 +29,6 @@ abstract class StatementAbstract
 
     /**
      * Compiles the statement.
-     *
-     * @param CompilationContext $compilationContext
      */
     abstract public function compile(CompilationContext $compilationContext);
 

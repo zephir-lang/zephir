@@ -50,8 +50,6 @@ class BranchManager
 
     /**
      * Returns the active branch in the manager.
-     *
-     * @return Branch|null
      */
     public function getCurrentBranch(): ?Branch
     {
@@ -65,8 +63,6 @@ class BranchManager
 
     /**
      * Removes a branch from the branch manager.
-     *
-     * @param Branch $branch
      */
     public function removeBranch(Branch $branch): void
     {

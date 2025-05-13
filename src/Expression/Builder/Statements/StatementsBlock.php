@@ -20,62 +20,31 @@ use Zephir\Expression\Builder\AbstractBuilder;
  */
 class StatementsBlock extends AbstractBuilder
 {
-    private $statements;
-
-    /**
-     * @param array|null $statements
-     */
-    public function __construct(array $statements = null)
+    public function __construct(private ?array $statements = null)
     {
         if (null !== $statements) {
             $this->setStatements($statements);
         }
     }
 
-    /**
-     * @param $statement
-     *
-     * @return $this
-     */
-    public function addStatement($statement)
-    {
-        $this->statements[] = $statement;
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function build()
+    public function build(): array
     {
         return $this->resolve($this->preBuild());
     }
 
-    /**
-     * @return array
-     */
-    public function getStatements()
+    public function getStatements(): array
     {
         return $this->statements;
     }
 
-    /**
-     * @param array $statements
-     *
-     * @return $this
-     */
-    public function setStatements($statements)
+    public function setStatements(array $statements): self
     {
         $this->statements = $statements;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         return $this->getStatements();
     }

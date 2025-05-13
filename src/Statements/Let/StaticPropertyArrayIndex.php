@@ -20,17 +20,11 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 
 /**
- * Zephir\Statements\Let\StaticPropertyArrayIndex.
- *
  * Updates object properties dynamically.
  */
 class StaticPropertyArrayIndex extends StaticPropertyAppend
 {
     /**
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
-     * @return array
      * @throws ReflectionException
      * @throws Exception
      */
@@ -38,30 +32,19 @@ class StaticPropertyArrayIndex extends StaticPropertyAppend
         array $statement,
         CompilationContext $compilationContext
     ): array {
-        /**
-         * Only string/variable/int.
-         */
+        $types = ['string', 'int', 'uint', 'ulong', 'long', 'variable'];
         $offsetExpressions = [];
         foreach ($statement['index-expr'] as $indexExpr) {
             $indexExpression = new Expression($indexExpr);
-
             $resolvedIndex = $indexExpression->compile($compilationContext);
-            switch ($resolvedIndex->getType()) {
-                case 'string':
-                case 'int':
-                case 'uint':
-                case 'ulong':
-                case 'long':
-                case 'variable':
-                    break;
-                default:
-                    throw new CompilerException(
-                        sprintf(
-                            'Expression: %s cannot be used as index without cast',
-                            $resolvedIndex->getType()
-                        ),
-                        $statement['index-expr']
-                    );
+            if (!in_array($resolvedIndex->getType(), $types, true)) {
+                throw new CompilerException(
+                    sprintf(
+                        'Expression: %s cannot be used as index without cast',
+                        $resolvedIndex->getType()
+                    ),
+                    $statement['index-expr']
+                );
             }
 
             $offsetExpressions[] = $resolvedIndex;

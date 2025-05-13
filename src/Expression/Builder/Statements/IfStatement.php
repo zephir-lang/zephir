@@ -16,32 +16,14 @@ namespace Zephir\Expression\Builder\Statements;
 use Zephir\Expression\Builder\Operators\AbstractOperator;
 
 /**
- * Allows to manually build a 'if' statement AST node
+ * Allows to manually build an 'if' statement AST node.
  */
 class IfStatement extends AbstractStatement
 {
-    /**
-     * @var AbstractOperator
-     */
-    private $condition;
-    /**
-     * @var StatementsBlock
-     */
-    private $elseStatements;
-    /**
-     * @var StatementsBlock
-     */
-    private $statements;
-
-    /**
-     * @param AbstractOperator|null $condition
-     * @param StatementsBlock|null  $statements
-     * @param StatementsBlock|null  $elseStatements
-     */
     public function __construct(
-        AbstractOperator $condition = null,
-        StatementsBlock $statements = null,
-        StatementsBlock $elseStatements = null
+        private ?AbstractOperator $condition = null,
+        private ?StatementsBlock $statements = null,
+        private ?StatementsBlock $elseStatements = null
     ) {
         if (null !== $condition) {
             $this->setCondition($condition);
@@ -56,70 +38,43 @@ class IfStatement extends AbstractStatement
         }
     }
 
-    /**
-     * @return AbstractOperator
-     */
-    public function getCondition()
+    public function getCondition(): ?AbstractOperator
     {
         return $this->condition;
     }
 
-    /**
-     * @return StatementsBlock
-     */
-    public function getElseStatements()
+    public function getElseStatements(): ?StatementsBlock
     {
         return $this->elseStatements;
     }
 
-    /**
-     * @return StatementsBlock
-     */
-    public function getStatements()
+    public function getStatements(): ?StatementsBlock
     {
         return $this->statements;
     }
 
-    /**
-     * @param AbstractOperator $condition
-     *
-     * @return $this
-     */
-    public function setCondition(AbstractOperator $condition)
+    public function setCondition(AbstractOperator $condition): self
     {
         $this->condition = $condition;
 
         return $this;
     }
 
-    /**
-     * @param StatementsBlock $elseStatements
-     *
-     * @return $this
-     */
-    public function setElseStatements(StatementsBlock $elseStatements)
+    public function setElseStatements(StatementsBlock $elseStatements): self
     {
         $this->elseStatements = $elseStatements;
 
         return $this;
     }
 
-    /**
-     * @param StatementsBlock $statements
-     *
-     * @return $this
-     */
-    public function setStatements(StatementsBlock $statements)
+    public function setStatements(StatementsBlock $statements): self
     {
         $this->statements = $statements;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         $expression = [
             'type'       => 'if',

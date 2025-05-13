@@ -23,8 +23,6 @@ use Zephir\Exception\CompilerException;
 use function in_array;
 
 /**
- * StaticPropertyAppend.
- *
  * Updates object properties dynamically
  */
 class StaticPropertyAppend extends ArrayIndex
@@ -32,14 +30,8 @@ class StaticPropertyAppend extends ArrayIndex
     /**
      * Compiles ClassName::foo[index] = {expr}.
      *
-     * @param string             $className
-     * @param string             $property
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
      * @throws Exception
-     * @throws CompilerException
+     * @throws ReflectionException
      */
     public function assignStatic(
         $className,
@@ -113,30 +105,22 @@ class StaticPropertyAppend extends ArrayIndex
 
         $compilationContext->headersManager->add('kernel/object');
         $classEntry = $classDefinition->getClassEntry($compilationContext);
-        $this->_assignStaticPropertyArrayMultipleIndex(
+        $this->assignStaticPropertyArrayMultipleIndex(
             $classEntry,
-            $property,
             $resolvedExpr,
             $compilationContext,
-            $statement
+            $statement,
         );
     }
 
     /**
      * Compiles x::y[a][b][] = {expr} (multiple offset assignment).
-     *
-     * @param string             $classEntry
-     * @param string             $property
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
      */
-    protected function _assignStaticPropertyArrayMultipleIndex(
+    protected function assignStaticPropertyArrayMultipleIndex(
         $classEntry,
-        string $property,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
-        array $statement
+        array $statement,
     ): void {
         $property = $statement['property'];
         $compilationContext->headersManager->add('kernel/object');
@@ -158,18 +142,8 @@ class StaticPropertyAppend extends ArrayIndex
         $this->checkVariableTemporal($variableExpr);
     }
 
-    /**
-     * @param array              $statement
-     * @param CompilationContext $compilationContext
-     *
-     * @return array
-     * @throws ReflectionException
-     * @throws Exception
-     */
-    protected function getOffsetExpressions(
-        array $statement,
-        CompilationContext $compilationContext
-    ): array {
+    protected function getOffsetExpressions(array $statement, CompilationContext $compilationContext): array
+    {
         $offsetExpressions[] = 'a';
 
         return $offsetExpressions;

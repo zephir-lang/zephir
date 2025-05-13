@@ -26,7 +26,7 @@ class memcache
     {
     }
 
-    public function addserver($host, $port = 11211, $persistent = null, $weight = null, $timeout = null, $retry_interval = null, $status = null, callable $failure_callback = null, $timeoutms = null)
+    public function addserver($host, $port = 11211, $persistent = null, $weight = null, $timeout = null, $retry_interval = null, $status = null, ?callable $failure_callback = null, $timeoutms = null)
     {
     }
 

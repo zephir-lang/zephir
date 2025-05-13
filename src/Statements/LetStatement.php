@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Statements;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
@@ -43,29 +45,22 @@ use Zephir\Statements\Let\StaticPropertySub as LetStaticPropertySub;
 use Zephir\Statements\Let\Variable as LetVariable;
 use Zephir\Statements\Let\VariableAppend as LetVariableAppend;
 
-use function is_object;
-
 /**
- * LetStatement.
- *
  * Let statement is used to assign variables
  */
 class LetStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
     public function compile(CompilationContext $compilationContext): void
     {
         $readDetector = new ReadDetector();
-
-        $statement = $this->statement;
-        foreach ($statement['assignments'] as $assignment) {
+        foreach ($this->statement['assignments'] as $assignment) {
             $variable = $assignment['variable'];
 
-            /*
+            /**
              * Get the symbol from the symbol table if necessary
              */
             $symbolVariable = match ($assignment['assign-type']) {
@@ -94,6 +89,7 @@ class LetStatement extends StatementAbstract
             /**
              * Incr/Decr assignments don't require an expression
              */
+            $resolvedExpr = null;
             if (isset($assignment['expr'])) {
                 /**
                  * Replace on direct-assignment if this bitwise-assignment
@@ -103,51 +99,30 @@ class LetStatement extends StatementAbstract
 
                 $expr = new Expression($assignment['expr']);
 
-                switch ($assignment['assign-type']) {
-                    case 'variable':
-                        if (!$readDetector->detect($variable, $assignment['expr'])) {
-                            if (isset($assignment['operator'])) {
-                                if ('assign' == $assignment['operator']) {
-                                    $expr->setExpectReturn(true, $symbolVariable);
-                                }
-                            } else {
-                                $expr->setExpectReturn(true, $symbolVariable);
-                            }
-                        } else {
-                            if (isset($assignment['operator'])) {
-                                if ('assign' == $assignment['operator']) {
-                                    $expr->setExpectReturn(true);
-                                }
-                            } else {
-                                $expr->setExpectReturn(true);
-                            }
+                if ($assignment['assign-type'] === 'variable') {
+                    if (!$readDetector->detect($variable, $assignment['expr'])) {
+                        if (!isset($assignment['operator']) || 'assign' === $assignment['operator']) {
+                            $expr->setExpectReturn(true, $symbolVariable);
                         }
-                        break;
+                    } else {
+                        if (!isset($assignment['operator']) || 'assign' === $assignment['operator']) {
+                            $expr->setExpectReturn(true);
+                        }
+                    }
                 }
 
-                switch ($assignment['expr']['type']) {
-                    case 'property-access':
-                    case 'array-access':
-                    case 'type-hint':
-                        $expr->setReadOnly(true);
-                        break;
+                if (in_array($assignment['expr']['type'], ['property-access', 'array-access', 'type-hint'])) {
+                    $expr->setReadOnly(true);
                 }
 
                 $resolvedExpr = $expr->compile($compilationContext);
-
-                /**
-                 * Bad implemented operators could return values different from objects
-                 */
-                if (!is_object($resolvedExpr)) {
-                    throw new CompilerException('Resolved expression is not valid', $assignment['expr']);
-                }
             }
 
             if ($symbolVariable) {
                 $variable = $symbolVariable->getName();
             }
 
-            /*
+            /**
              * There are four types of assignments
              */
             switch ($assignment['assign-type']) {
@@ -282,12 +257,12 @@ class LetStatement extends StatementAbstract
 
                 case 'dynamic-variable':
                     $let = new LetExportSymbol();
-                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assign($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 case 'dynamic-variable-string':
                     $let = new LetExportSymbolString();
-                    $let->assign($variable, $symbolVariable, $resolvedExpr, $compilationContext, $assignment);
+                    $let->assign($symbolVariable, $resolvedExpr, $compilationContext, $assignment);
                     break;
 
                 default:
@@ -297,10 +272,6 @@ class LetStatement extends StatementAbstract
     }
 
     /**
-     * @param array $assignment
-     *
-     * @return array
-     *
      * @throws CompilerException
      */
     protected function replaceAssignBitwiseOnDirect(array $assignment): array

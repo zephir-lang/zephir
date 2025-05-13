@@ -15,45 +15,28 @@ namespace Zephir\Expression\Builder\Statements;
 
 class RawStatement extends AbstractStatement
 {
-    /**
-     * @var array
-     */
-    private $expression;
+    private array $expression;
 
-    /**
-     * @param array|null $expression
-     */
-    public function __construct(array $expression = null)
+    public function __construct(?array $expression = null)
     {
         if (null !== $expression) {
             $this->setExpression($expression);
         }
     }
 
-    /**
-     * @return array
-     */
-    public function getExpression()
+    public function getExpression(): array
     {
         return $this->expression;
     }
 
-    /**
-     * @param array $expression
-     *
-     * @return $this
-     */
-    public function setExpression(array $expression)
+    public function setExpression(array $expression): self
     {
         $this->expression = $expression;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    protected function preBuild()
+    protected function preBuild(): array
     {
         return $this->getExpression();
     }

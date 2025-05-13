@@ -23,11 +23,6 @@ class NamespaceFile implements FileInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array
-     */
     public function getData(): array
     {
         return [
@@ -37,21 +32,11 @@ class NamespaceFile implements FileInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getOutputFile(): string
     {
         return Documentation::namespaceUrl($this->namespaceHelper->getFullNamespace());
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return string
-     */
     public function getTemplateName(): string
     {
         return 'namespace.phtml';

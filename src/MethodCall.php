@@ -55,11 +55,6 @@ class MethodCall extends Call
     /**
      * Compiles a method call.
      *
-     * @param Expression         $expr
-     * @param CompilationContext $compilationContext
-     *
-     * @return mixed|CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -173,14 +168,14 @@ class MethodCall extends Call
             }
         }
 
-        /*
+        /**
          * Method calls only return zvals, so we need to validate the target variable is also a zval
          */
         if (!$builtInType) {
             if ($isExpecting) {
                 $this->checkNotVariable($symbolVariable, $expression);
 
-                /*
+                /**
                  * At this point, we don't know the exact dynamic type returned by the method call
                  */
                 $symbolVariable->setDynamicTypes('undefined');
@@ -194,7 +189,7 @@ class MethodCall extends Call
             $check = $expression['check'];
         }
 
-        /*
+        /**
          * Try to check if the method exist in the callee, only when method call is self::CALL_NORMAL
          */
         if (self::CALL_NORMAL == $type) {
@@ -572,7 +567,6 @@ class MethodCall extends Call
                 $expression['parameters'],
                 $compilationContext,
                 $expression,
-                $method ?? null
             );
 
             if (count($references)) {
@@ -845,12 +839,6 @@ class MethodCall extends Call
 
     /**
      * Examine internal class information and returns the method called.
-     *
-     * @param CompilationContext $compilationContext
-     * @param Variable           $caller
-     * @param string             $methodName
-     *
-     * @return array
      *
      * @throws ReflectionException
      */

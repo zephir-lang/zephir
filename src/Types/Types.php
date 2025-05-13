@@ -50,7 +50,7 @@ final class Types
     /**
      * Gets PHP compatible return type from class method.
      */
-    public function getReturnTypeAnnotation(Method $method, array $returnTypes = null): string
+    public function getReturnTypeAnnotation(Method $method, ?array $returnTypes = null): string
     {
         if (!$method->hasReturnTypes() && !$method->isVoid()) {
             return '';

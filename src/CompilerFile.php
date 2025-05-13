@@ -62,67 +62,40 @@ final class CompilerFile implements FileInterface
     use CompilerTrait;
     use LoggerAwareTrait;
 
-    /**
-     * @var AliasManager
-     */
     private AliasManager $aliasManager;
-    /**
-     * @var Definition|null
-     */
+
     private ?Definition $classDefinition = null;
     private ?string     $className       = null;
-    /**
-     * @var string|null
-     */
+
     private ?string $compiledFile = null;
-    /**
-     * @var Config
-     */
+
     private Config $config;
-    /**
-     * @var bool
-     */
+
     private bool $external = false;
-    /**
-     * @var string|null
-     */
+
     private ?string $filePath = null;
-    /**
-     * @var FileSystemInterface
-     */
+
     private FileSystemInterface $filesystem;
-    /**
-     * @var FunctionDefinition[]
-     */
+
     private array $functionDefinitions = [];
 
-    /**
-     * @var array
-     */
     private array $headerCBlocks = [];
+
     /**
      * Original internal representation (IR) of the file.
-     *
-     * @var array|null
      */
     private ?array  $ir        = null;
     private ?string $namespace = null;
+
     /**
      * @var mixed
      */
     private $originalNode;
 
-    /**
-     * CompilerFile constructor.
-     *
-     * @param Config              $config
-     * @param AliasManager        $aliasManager
-     * @param FileSystemInterface $filesystem
-     */
     public function __construct(
         Config $config,
         AliasManager $aliasManager,
-        FileSystemInterface $filesystem
+        FileSystemInterface $filesystem,
     ) {
         $this->config       = $config;
         $this->logger       = new NullLogger();
@@ -132,10 +105,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Adds a function to the function definitions.
-     *
-     * @param Compiler           $compiler
-     * @param FunctionDefinition $func
-     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -155,11 +124,9 @@ final class CompilerFile implements FileInterface
 
     public function applyClassHeaders(CompilationContext $compilationContext): void
     {
-        $classDefinition = $this->classDefinition;
+        $code = $this->generateCodeHeadersPre($this->classDefinition);
 
-        $code = $this->generateCodeHeadersPre($classDefinition);
-
-        if ('class' == $classDefinition->getType()) {
+        if ('class' == $this->classDefinition->getType()) {
             $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
             $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
@@ -167,13 +134,11 @@ final class CompilerFile implements FileInterface
             $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         }
 
-        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
+        $this->generateClassHeadersPost($code, $this->classDefinition, $compilationContext);
     }
 
     /**
      * Check dependencies.
-     *
-     * @param Compiler $compiler
      *
      * @throws ReflectionException
      */
@@ -263,10 +228,8 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
-     * @param StringsManager $stringsManager
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
@@ -310,8 +273,7 @@ final class CompilerFile implements FileInterface
         /**
          * Headers manager.
          */
-        $headersManager                     = new HeadersManager();
-        $compilationContext->headersManager = $headersManager;
+        $compilationContext->headersManager = new HeadersManager();
 
         /**
          * Main code-printer for the file.
@@ -408,8 +370,6 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles the class/interface contained in the file.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -420,11 +380,8 @@ final class CompilerFile implements FileInterface
 
     /**
      * Compiles a comment as a top-level statement.
-     *
-     * @param CompilationContext $compilationContext
-     * @param array              $topStatement
      */
-    public function compileComment(CompilationContext $compilationContext, $topStatement): void
+    public function compileComment(CompilationContext $compilationContext, array $topStatement): void
     {
         $compilationContext->codePrinter->output('/' . $topStatement['value'] . '/');
     }
@@ -432,14 +389,12 @@ final class CompilerFile implements FileInterface
     /**
      * Compiles a function.
      *
-     * @param CompilationContext $compilationContext
-     * @param FunctionDefinition $functionDefinition
-     *
      * @throws Exception
+     * @throws ReflectionException
      */
     public function compileFunction(
         CompilationContext $compilationContext,
-        FunctionDefinition $functionDefinition
+        FunctionDefinition $functionDefinition,
     ): void {
         /** Make sure we do not produce calls like ZEPHIR_CALL_SELF */
         $bakClassDefinition                  = $compilationContext->classDefinition;
@@ -459,10 +414,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Compiles the file generating a JSON intermediate representation.
-     *
-     * @param Compiler $compiler
-     *
-     * @return array
      *
      * @throws ParseException
      * @throws IllegalStateException if the intermediate representation is not of type 'array'
@@ -491,12 +442,7 @@ final class CompilerFile implements FileInterface
         return $ir;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return Definition
-     */
-    public function getClassDefinition()
+    public function getClassDefinition(): ?Definition
     {
         $this->classDefinition->setAliasManager($this->aliasManager);
 
@@ -505,8 +451,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Returns the path to the compiled file.
-     *
-     * @return string
      */
     public function getCompiledFile(): string
     {
@@ -515,17 +459,12 @@ final class CompilerFile implements FileInterface
 
     /**
      * Returns the path to the source file.
-     *
-     * @return string
      */
     public function getFilePath(): string
     {
         return $this->filePath;
     }
 
-    /**
-     * @return bool
-     */
     public function isExternal(): bool
     {
         return $this->external;
@@ -535,8 +474,6 @@ final class CompilerFile implements FileInterface
      * Pre-compiles a Zephir file.
      *
      * Generates the IR and perform basic validations.
-     *
-     * @param Compiler $compiler
      *
      * @throws CompilerException
      * @throws IllegalStateException
@@ -724,14 +661,13 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates a definition for a class.
-     *
-     * @param CompilationContext $compilationContext
-     * @param string             $namespace
-     * @param array              $topStatement
-     * @param array              $docblock
      */
-    public function preCompileClass(CompilationContext $compilationContext, $namespace, $topStatement, $docblock): void
-    {
+    public function preCompileClass(
+        CompilationContext $compilationContext,
+        string $namespace,
+        array $topStatement,
+        ?array $docblock = null,
+    ): void {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
 
@@ -838,12 +774,8 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates a definition for an interface.
-     *
-     * @param string $namespace
-     * @param array  $topStatement
-     * @param array  $docblock
      */
-    public function preCompileInterface($namespace, $topStatement, $docblock): void
+    public function preCompileInterface(string $namespace, array $topStatement, ?array $docblock = null): void
     {
         $classDefinition = new Definition($namespace, $topStatement['name']);
         $classDefinition->setIsExternal($this->external);
@@ -857,7 +789,7 @@ final class CompilerFile implements FileInterface
 
         $classDefinition->setType(Definition::TYPE_INTERFACE);
 
-        if (is_array($docblock)) {
+        if ($docblock !== null) {
             $classDefinition->setDocBlock($docblock['value']);
         }
 
@@ -901,17 +833,11 @@ final class CompilerFile implements FileInterface
         $this->classDefinition = $classDefinition;
     }
 
-    /**
-     * @param string $className
-     */
     public function setClassName(string $className): void
     {
         $this->className = $className;
     }
 
-    /**
-     * @param string $filePath
-     */
     public function setFilePath(string $filePath): void
     {
         $this->filePath = $filePath;
@@ -919,8 +845,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
      */
     public function setIsExternal($external): void
     {
@@ -963,9 +887,6 @@ final class CompilerFile implements FileInterface
 
     /**
      * Creates the property shortcuts.
-     *
-     * @param array      $property
-     * @param Definition $classDefinition
      *
      * @throws CompilerException
      */

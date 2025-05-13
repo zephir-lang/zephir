@@ -30,8 +30,6 @@ use function implode;
 class SwitchStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws ReflectionException
      * @throws Exception
      */

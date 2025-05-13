@@ -81,7 +81,7 @@ class Manager
     /**
      * Sets the CallGathererPass.
      */
-    public function setGatherer(CallGathererPass $gatherer = null): void
+    public function setGatherer(?CallGathererPass $gatherer = null): void
     {
         $this->gatherer = $gatherer;
     }

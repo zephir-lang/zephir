@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable\Variable as ZephirVariable;
 
 /**
- * ArrayIndexAppend.
- *
  * Adds/Updates an array index
  */
 class ArrayIndexAppend extends ArrayIndex
@@ -29,13 +29,8 @@ class ArrayIndexAppend extends ArrayIndex
     /**
      * Compiles foo[y][] = {expr}.
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function assign(
         $variable,
@@ -44,14 +39,14 @@ class ArrayIndexAppend extends ArrayIndex
         CompilationContext $compilationContext,
         $statement
     ): void {
-        /*
+        /**
          * Arrays must be stored in the HEAP
          */
         $this->checkVariableInitialized($variable, $symbolVariable, $statement);
         $this->checkVariableReadOnly($variable, $symbolVariable, $statement);
         $this->checkVariableLocalOnly($variable, $symbolVariable, $statement);
 
-        /*
+        /**
          * Only dynamic variables and arrays can be used as arrays
          */
         if ($symbolVariable->isNotVariableAndArray()) {
@@ -65,7 +60,7 @@ class ArrayIndexAppend extends ArrayIndex
             throw CompilerException::cannotUseNonInitializedVariableAsObject($statement);
         }
 
-        /*
+        /**
          * Trying to use a non-object dynamic variable as object
          */
         if ($symbolVariable->hasDifferentDynamicType(['undefined', 'array', 'null'])) {
@@ -75,46 +70,35 @@ class ArrayIndexAppend extends ArrayIndex
             );
         }
 
-        $this->_assignArrayIndexMultiple($variable, $symbolVariable, $resolvedExpr, $compilationContext, $statement);
+        $this->assignArrayIndexMultiple($variable, $resolvedExpr, $compilationContext, $statement);
     }
 
     /**
      * Compiles foo[y][x][] = {expr} (multiple offset).
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @throws Exception
+     * @throws ReflectionException
      */
-    protected function _assignArrayIndexMultiple(
+    protected function assignArrayIndexMultiple(
         $variable,
-        ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
         $statement
     ): void {
         $offsetExprs = [];
+        $types = ['int', 'uint', 'long', 'ulong', 'string', 'variable'];
         foreach ($statement['index-expr'] as $indexExpr) {
             $expression = new Expression($indexExpr);
             $expression->setReadOnly(true);
             $exprIndex = $expression->compile($compilationContext);
 
-            switch ($exprIndex->getType()) {
-                case 'int':
-                case 'uint':
-                case 'long':
-                case 'ulong':
-                case 'string':
-                case 'variable':
-                    break;
-                default:
-                    throw new CompilerException(
-                        'Index: '
-                        . $exprIndex->getType()
-                        . ' cannot be used as array index in assignment without cast',
-                        $indexExpr
-                    );
+            if (!in_array($exprIndex->getType(), $types)) {
+                throw new CompilerException(
+                    'Index: '
+                    . $exprIndex->getType()
+                    . ' cannot be used as array index in assignment without cast',
+                    $indexExpr
+                );
             }
 
             $offsetExprs[] = $exprIndex;

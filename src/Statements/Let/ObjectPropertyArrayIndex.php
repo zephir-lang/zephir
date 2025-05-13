@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Statements\Let;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Variable\Variable as ZephirVariable;
@@ -23,20 +25,12 @@ use function count;
 use function current;
 
 /**
- * ObjectPropertyArrayIndex.
- *
  * Updates object properties dynamically
  */
 class ObjectPropertyArrayIndex extends ArrayIndex
 {
     /**
      * Compiles x->y[z] = foo.
-     *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext ,
-     * @param array              $statement
      *
      * @throws CompilerException
      */
@@ -70,16 +64,14 @@ class ObjectPropertyArrayIndex extends ArrayIndex
          */
         $symbolVariable->setUsed(true);
         if (1 == count($statement['index-expr'])) {
-            $this->_assignPropertyArraySingleIndex(
-                $variable,
+            $this->assignPropertyArraySingleIndex(
                 $symbolVariable,
                 $resolvedExpr,
                 $compilationContext,
                 $statement
             );
         } else {
-            $this->_assignPropertyArrayMultipleIndex(
-                $variable,
+            $this->assignPropertyArrayMultipleIndex(
                 $symbolVariable,
                 $resolvedExpr,
                 $compilationContext,
@@ -91,16 +83,15 @@ class ObjectPropertyArrayIndex extends ArrayIndex
     /**
      * Compiles x->y[a][b] = {expr} (multiple offset assignment).
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
+     * @param ZephirVariable $symbolVariable
      * @param CompiledExpression $resolvedExpr
      * @param CompilationContext $compilationContext
-     * @param array              $statement
+     * @param array $statement
      *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
-    protected function _assignPropertyArrayMultipleIndex(
-        $variable,
+    protected function assignPropertyArrayMultipleIndex(
         ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
@@ -156,16 +147,10 @@ class ObjectPropertyArrayIndex extends ArrayIndex
     /**
      * Compiles x->y[z] = {expr} (single offset assignment).
      *
-     * @param string             $variable
-     * @param ZephirVariable     $symbolVariable
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
-    protected function _assignPropertyArraySingleIndex(
-        $variable,
+    protected function assignPropertyArraySingleIndex(
         ZephirVariable $symbolVariable,
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
@@ -281,7 +266,7 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                 break;
         }
 
-        /*
+        /**
          * Check if the variable to update is defined
          */
         if ('this' == $symbolVariable->getRealName()) {

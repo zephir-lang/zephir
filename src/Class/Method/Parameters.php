@@ -52,9 +52,6 @@ class Parameters implements Countable, Iterator, ArrayAccess
         }
     }
 
-    /**
-     * @return int
-     */
     public function count(): int
     {
         return count($this->parameters);

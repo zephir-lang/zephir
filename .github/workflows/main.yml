@@ -24,7 +24,7 @@ env:
 jobs:
   analyze:
     name: Static Code Analysis
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -61,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0', '8.1', '8.2', '8.3' ]
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
         ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
@@ -73,9 +73,9 @@ jobs:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-latest, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
           # macOS
-          - { name: macos-clang, os: macos-12, compiler: clang }
+          - { name: macos-clang, os: macos-13, compiler: clang }
           # Windows
           - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
           - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
@@ -171,7 +171,7 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v3"
+        uses: "actions/upload-artifact@v4"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/output/clover.xml"
@@ -218,7 +218,7 @@ jobs:
           mkdir -p reports
 
       - name: "Download coverage files"
-        uses: "actions/download-artifact@v4.1.7"
+        uses: "actions/download-artifact@v4"
         with:
           path: "reports"
 
@@ -235,17 +235,9 @@ jobs:
           verbose: true
           name: codecov-umbrella
 
-      - name: "Upload to Qodana"
-        run: |
-          docker run \
-            -v $(pwd):/data/project/ \
-            -v ./reports/:/data/coverage \
-            -e QODANA_TOKEN="${{ secrets.QODANA_TOKEN }}" \
-            jetbrains/qodana-php
-
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |

@@ -27,8 +27,6 @@ use Zephir\StatementsBlock;
 class LoopStatement extends StatementAbstract
 {
     /**
-     * @param CompilationContext $compilationContext
-     *
      * @throws ReflectionException
      * @throws Exception
      */

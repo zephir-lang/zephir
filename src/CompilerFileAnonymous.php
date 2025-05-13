@@ -37,10 +37,7 @@ final class CompilerFileAnonymous implements FileInterface
     use CompilerTrait;
     use LoggerAwareTrait;
 
-    protected Definition          $classDefinition;
     protected ?string             $compiledFile  = null;
-    protected Config              $config;
-    protected ?CompilationContext $context       = null;
     protected bool                $external      = false;
     protected array               $headerCBlocks = [];
     protected ?string             $namespace     = null;
@@ -52,21 +49,18 @@ final class CompilerFileAnonymous implements FileInterface
      * @param Config                  $config
      * @param CompilationContext|null $context
      */
-    public function __construct(Definition $classDefinition, Config $config, CompilationContext $context = null)
-    {
-        $this->classDefinition = $classDefinition;
-        $this->config          = $config;
-        $this->context         = $context;
-        $this->logger          = new NullLogger();
+    public function __construct(
+        protected Definition $classDefinition,
+        protected Config $config,
+        protected ?CompilationContext $context = null
+    ) {
+        $this->logger = new NullLogger();
     }
 
     /**
      * Compiles the file.
      *
-     * @param Compiler       $compiler
-     * @param StringsManager $stringsManager
-     *
-     * @throws Exception
+     * @throws Exception|ReflectionException
      */
     public function compile(Compiler $compiler, StringsManager $stringsManager): void
     {
@@ -74,7 +68,6 @@ final class CompilerFileAnonymous implements FileInterface
          * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
-
         if ($this->context) {
             $compilationContext->aliasManager = $this->context->aliasManager;
         } else {
@@ -86,12 +79,7 @@ final class CompilerFileAnonymous implements FileInterface
         $compilationContext->logger         = $this->logger;
         $compilationContext->stringsManager = $stringsManager;
         $compilationContext->backend        = $compiler->backend;
-
-        /**
-         * Headers manager.
-         */
-        $headersManager                     = new HeadersManager();
-        $compilationContext->headersManager = $headersManager;
+        $compilationContext->headersManager = new HeadersManager();
 
         /**
          * Main code-printer for the file.
@@ -141,9 +129,6 @@ final class CompilerFileAnonymous implements FileInterface
         $this->compiledFile = $path . '.c';
     }
 
-    /**
-     * @return Definition
-     */
     public function getClassDefinition(): Definition
     {
         return $this->classDefinition;
@@ -151,28 +136,19 @@ final class CompilerFileAnonymous implements FileInterface
 
     /**
      * Returns the path to the compiled file.
-     *
-     * @return string
      */
-    public function getCompiledFile()
+    public function getCompiledFile(): string
     {
         return $this->compiledFile;
     }
 
-    /**
-     * @return bool
-     */
     public function isExternal(): bool
     {
         return $this->external;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * Only implemented to satisfy the Zephir\Compiler\FileInterface interface.
-     *
-     * @param Compiler $compiler
      */
     public function preCompile(Compiler $compiler): void
     {
@@ -181,8 +157,6 @@ final class CompilerFileAnonymous implements FileInterface
 
     /**
      * Sets if the class belongs to an external dependency or not.
-     *
-     * @param bool $external
      */
     public function setIsExternal($external): void
     {
@@ -192,26 +166,22 @@ final class CompilerFileAnonymous implements FileInterface
     /**
      * Compiles the class/interface contained in the file.
      *
-     * @param CompilationContext $compilationContext
-     *
      * @throws Exception
      * @throws ReflectionException
      */
     private function compileClass(CompilationContext $compilationContext): void
     {
-        $classDefinition = $this->classDefinition;
-
         /**
          * Do the compilation
          */
-        $classDefinition->compile($compilationContext);
+        $this->classDefinition->compile($compilationContext);
 
-        $code = $this->generateCodeHeadersPre($classDefinition);
+        $code = $this->generateCodeHeadersPre($this->classDefinition);
 
         $code .= '#include <Zend/zend_operators.h>' . PHP_EOL;
         $code .= '#include <Zend/zend_exceptions.h>' . PHP_EOL;
         $code .= '#include <Zend/zend_interfaces.h>' . PHP_EOL;
 
-        $this->generateClassHeadersPost($code, $classDefinition, $compilationContext);
+        $this->generateClassHeadersPost($code, $this->classDefinition, $compilationContext);
     }
 }

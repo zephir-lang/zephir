@@ -32,13 +32,6 @@ class StaticProperty extends StaticPropertySub
     protected string $methodName = 'updateStaticProperty';
 
     /**
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     * @param string             $classEntry
-     * @param string             $property
-     * @param Variable           $variableVariable
-     *
-     * @return void
      * @throws ReflectionException
      */
     protected function processDefaultType(
@@ -51,7 +44,6 @@ class StaticProperty extends StaticPropertySub
         switch ($variableVariable->getType()) {
             case 'string':
                 switch ($statement['operator']) {
-                    /* @noinspection PhpMissingBreakStatementInspection */
                     case 'concat-assign':
                         $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
                             'variable',
@@ -121,14 +113,6 @@ class StaticProperty extends StaticPropertySub
         }
     }
 
-
-    /**
-     * @param CompiledExpression $resolvedExpr
-     * @param CompilationContext $compilationContext
-     * @param array              $statement
-     *
-     * @return Variable
-     */
     protected function processStringType(
         CompiledExpression $resolvedExpr,
         CompilationContext $compilationContext,
@@ -150,12 +134,6 @@ class StaticProperty extends StaticPropertySub
         );
     }
 
-    /**
-     * @param array    $statement
-     * @param Variable $variableVariable
-     *
-     * @return void
-     */
     protected function processVariableDoubleType(
         array $statement,
         Variable $variableVariable
@@ -170,12 +148,6 @@ class StaticProperty extends StaticPropertySub
         }
     }
 
-    /**
-     * @param array    $statement
-     * @param Variable $variableVariable
-     *
-     * @return void
-     */
     protected function processVariableIntType(
         array $statement,
         Variable $variableVariable

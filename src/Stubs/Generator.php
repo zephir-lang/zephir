@@ -45,8 +45,6 @@ class Generator
 {
     /**
      * Not php visible style variants.
-     *
-     * @var array
      */
     protected array $ignoreModifiers = [
         'inline',
@@ -64,11 +62,6 @@ class Generator
 
     /**
      * Generates stubs.
-     *
-     * @param string $namespace
-     * @param string $path
-     * @param string $indent
-     * @param string $banner
      *
      * @throws Exception\LogicException
      */
@@ -111,12 +104,6 @@ class Generator
 
     /**
      * Build class.
-     *
-     * @param Definition $class
-     * @param string     $indent
-     * @param string     $banner
-     *
-     * @return string
      *
      * @throws Exception\RuntimeException
      */
@@ -229,12 +216,6 @@ class Generator
         return $source . '}' . PHP_EOL;
     }
 
-    /**
-     * @param Constant $constant
-     * @param string   $indent
-     *
-     * @return string
-     */
     protected function buildConstant(Constant $constant, string $indent): string
     {
         $source = 'const ' . $constant->getName();
@@ -246,13 +227,6 @@ class Generator
         return $this->fetchDocBlock($constant->getDocBlock(), $indent) . $indent . $source . ' = ' . $value . ';';
     }
 
-    /**
-     * @param Method $method
-     * @param bool   $isInterface
-     * @param string $indent
-     *
-     * @return string
-     */
     protected function buildMethod(Method $method, bool $isInterface, string $indent): string
     {
         $modifier = implode(' ', array_diff($method->getVisibility(), $this->ignoreModifiers));
@@ -363,11 +337,6 @@ class Generator
 
     /**
      * Build property.
-     *
-     * @param Property $property
-     * @param string   $indent
-     *
-     * @return string
      */
     protected function buildProperty(Property $property, string $indent): string
     {
@@ -395,10 +364,6 @@ class Generator
 
     /**
      * Prepare AST default value to PHP code print.
-     *
-     * @param array $parameter
-     *
-     * @return string
      *
      * @throws Exception\NotImplementedException
      */

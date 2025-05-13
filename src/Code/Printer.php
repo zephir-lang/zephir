@@ -135,8 +135,6 @@ class Printer
 
     /**
      * Add code to the output at the beginning.
-     *
-     * @param string $code
      */
     public function preOutput(string $code): void
     {

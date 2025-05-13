@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.19.0] - 2025-05-13
+### Added
+- Added support of PHP `8.4` [#2440](https://github.com/zephir-lang/zephir/issues/2440), [#2443](https://github.com/zephir-lang/zephir/pull/2443)
+
+### Changed
+- Refactor CUFA implementation [#2444](https://github.com/zephir-lang/zephir/pull/2444)
+
 ## [0.18.0] - 2024-09-29
 ### Added
 - Added support of PHP `8.3` [#2407](https://github.com/zephir-lang/zephir/issues/2407)

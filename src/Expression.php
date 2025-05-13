@@ -94,10 +94,6 @@ class Expression
     /**
      * Resolves an expression.
      *
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws CompilerException|Exception
      * @throws Exception
      * @throws ReflectionException
@@ -460,11 +456,6 @@ class Expression
 
     /**
      * Compiles foo = [].
-     *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
      */
     public function emptyArray(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
@@ -516,8 +507,6 @@ class Expression
     /**
      * Returns the variable which is expected to return the
      * result of the expression evaluation.
-     *
-     * @return Variable|null
      */
     public function getExpectingVariable(): ?Variable
     {
@@ -526,8 +515,6 @@ class Expression
 
     /**
      * Returns the original expression.
-     *
-     * @return array
      */
     public function getExpression(): array
     {
@@ -537,8 +524,6 @@ class Expression
     /**
      * Checks if the returned value by the expression
      * is expected to be assigned to an external symbol.
-     *
-     * @return bool
      */
     public function isExpectingReturn(): bool
     {
@@ -547,8 +532,6 @@ class Expression
 
     /**
      * Checks whether the expression must be resolved in "noisy" mode.
-     *
-     * @return bool
      */
     public function isNoisy(): bool
     {
@@ -557,8 +540,6 @@ class Expression
 
     /**
      * Checks if the result of the evaluated expression is read only.
-     *
-     * @return bool
      */
     public function isReadOnly(): bool
     {
@@ -567,8 +548,6 @@ class Expression
 
     /**
      * Sets if the expression is being evaluated in an evaluation like the ones in 'if' and 'while' statements.
-     *
-     * @param bool $evalMode
      */
     public function setEvalMode(bool $evalMode): void
     {
@@ -578,11 +557,8 @@ class Expression
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
-    public function setExpectReturn(bool $expecting, Variable $expectingVariable = null): void
+    public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
         $this->expecting         = $expecting;
         $this->expectingVariable = $expectingVariable;
@@ -590,8 +566,6 @@ class Expression
 
     /**
      * Sets whether the expression must be resolved in "noisy" mode.
-     *
-     * @param bool $noisy
      */
     public function setNoisy(bool $noisy): void
     {
@@ -600,8 +574,6 @@ class Expression
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {

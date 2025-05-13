@@ -36,7 +36,6 @@ use Zephir\StatementsBlock;
 use function count;
 use function explode;
 use function gettype;
-use function is_array;
 use function ltrim;
 use function metaphone;
 use function method_exists;
@@ -58,70 +57,62 @@ final class Definition extends AbstractDefinition
      * Contains "abstract" in the definition
      */
     protected bool $abstract = false;
-    /**
-     * @var AliasManager|null
-     */
+
     protected ?AliasManager $aliasManager = null;
-    /**
-     * @var Compiler
-     */
+
     protected Compiler $compiler;
     /**
      * @var Constant[]
      */
     protected array $constants = [];
-    /**
-     * @var int
-     */
+
     protected int $dependencyRank = 0;
-    /**
-     * @var string
-     */
+
     protected string $docBlock = '';
+
     /**
      * Name of inherited class
      */
     protected ?string $extendsClass = null;
+
     /**
      * Definition object of inherited class
      */
     protected ?AbstractDefinition $extendsClassDefinition = null;
+
     /**
      * When class is from external dependency
      */
     protected bool $external = false;
+
     /**
      * Contains "final" in the definition
      */
     protected bool $final = false;
-    /**
-     * @var array
-     */
+
     protected array $implementedInterfaceDefinitions = [];
+
     /**
      * List of implemented interfaces of current class
      */
     protected array $interfaces = [];
-    /**
-     * @var bool
-     */
+
     protected bool $isBundled = false;
+
     /**
      * @var Method[]
      */
     protected array $methods = [];
-    /**
-     * @var array
-     */
+
     protected array $originalNode = [];
-    /**
-     * @var Docblock|null
-     */
+
     protected ?Docblock $parsedDocblock = null;
+
     /**
      * @var Property[]
      */
     protected array $properties = [];
+
     /**
      * Class short name
      *
@@ -130,14 +121,17 @@ final class Definition extends AbstractDefinition
      * @see Definition::name
      */
     protected string $shortName;
+
     /**
      * Definition type
      */
     protected string $type = self::TYPE_CLASS;
 
-    public function __construct(protected string $namespace, string $name, string $shortName = null)
-    {
-        $this->name      = $name;
+    public function __construct(
+        protected string $namespace,
+        protected string $name,
+        ?string $shortName = null,
+    ) {
         $this->shortName = $shortName ?: $name;
     }
 
@@ -182,7 +176,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function addMethod(Method $method, array $statement = null): void
+    public function addMethod(Method $method, array $statement = []): void
     {
         $methodName = strtolower($method->getName());
         if (isset($this->methods[$methodName])) {
@@ -501,68 +495,62 @@ final class Definition extends AbstractDefinition
         /**
          * Implemented interfaces.
          */
-        $interfaces = $this->interfaces;
-        $compiler   = $compilationContext->compiler;
+        $codePrinter->outputBlankLine(true);
+        foreach ($this->interfaces as $interface) {
+            /**
+             * Try to find the interface.
+             */
+            $classEntry = null;
 
-        if (is_array($interfaces)) {
-            $codePrinter->outputBlankLine(true);
-
-            foreach ($interfaces as $interface) {
-                /**
-                 * Try to find the interface.
-                 */
-                $classEntry = null;
-
-                if ($compiler->isInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    $classEntry               = $classInterfaceDefinition->getClassEntry($compilationContext);
-                } elseif ($compiler->isBundledInterface($interface)) {
-                    $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
-                    $classEntry               = (new Entry(
-                        '\\' . $classInterfaceDefinition->getName(),
-                        $compilationContext
-                    ))->get();
-                }
-
-                if (!$classEntry) {
-                    if ($compiler->isClass($interface)) {
-                        throw new CompilerException(
-                            sprintf(
-                                'Cannot locate interface %s when implementing interfaces on %s. ' .
-                                '%s is currently a class',
-                                $interface,
-                                $this->getCompleteName(),
-                                $interface
-                            ),
-                            $this->originalNode
-                        );
-                    } else {
-                        throw new CompilerException(
-                            sprintf(
-                                'Cannot locate interface %s when implementing interfaces on %s',
-                                $interface,
-                                $this->getCompleteName()
-                            ),
-                            $this->originalNode
-                        );
-                    }
-                }
-
-                /**
-                 * We don't check if abstract classes implement the methods in their interfaces
-                 */
-                if (!$this->isAbstract() && !$this->isInterface()) {
-                    $this->checkInterfaceImplements($this, $classInterfaceDefinition);
-                }
-
-                $codePrinter->output(
-                    sprintf(
-                        'zend_class_implements(%s, 1, %s);',
-                        $this->getClassEntry(),
-                        $classEntry
-                    )
-                );
+            if ($compilationContext->compiler->isInterface($interface)) {
+                $classInterfaceDefinition = $compilationContext->compiler->getClassDefinition($interface);
+                $classEntry               = $classInterfaceDefinition->getClassEntry($compilationContext);
+            } elseif ($compilationContext->compiler->isBundledInterface($interface)) {
+                $classInterfaceDefinition = $compilationContext->compiler->getInternalClassDefinition($interface);
+                $classEntry               = (new Entry(
+                    '\\' . $classInterfaceDefinition->getName(),
+                    $compilationContext
+                ))->get();
             }
+
+            if (!$classEntry) {
+                if ($compilationContext->compiler->isClass($interface)) {
+                    throw new CompilerException(
+                        sprintf(
+                            'Cannot locate interface %s when implementing interfaces on %s. ' .
+                            '%s is currently a class',
+                            $interface,
+                            $this->getCompleteName(),
+                            $interface
+                        ),
+                        $this->originalNode
+                    );
+                } else {
+                    throw new CompilerException(
+                        sprintf(
+                            'Cannot locate interface %s when implementing interfaces on %s',
+                            $interface,
+                            $this->getCompleteName()
+                        ),
+                        $this->originalNode
+                    );
+                }
+            }
+
+            /**
+             * We don't check if abstract classes implement the methods in their interfaces
+             */
+            if (!$this->isAbstract() && !$this->isInterface()) {
+                $this->checkInterfaceImplements($this, $classInterfaceDefinition);
+            }
+
+            $codePrinter->output(
+                sprintf(
+                    'zend_class_implements(%s, 1, %s);',
+                    $this->getClassEntry(),
+                    $classEntry
+                )
+            );
         }
 
         if (!$this->isAbstract() && !$this->isInterface()) {
@@ -573,10 +561,13 @@ final class Definition extends AbstractDefinition
                 $interfaces = $classExtendsDefinition->getImplementedInterfaces();
                 foreach ($interfaces as $interface) {
                     $classInterfaceDefinition = null;
-                    if ($compiler->isInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getClassDefinition($interface);
-                    } elseif ($compiler->isBundledInterface($interface)) {
-                        $classInterfaceDefinition = $compiler->getInternalClassDefinition($interface);
+                    if ($compilationContext->compiler->isInterface($interface)) {
+                        $classInterfaceDefinition = $compilationContext->compiler->getClassDefinition($interface);
+                    } elseif ($compilationContext->compiler->isBundledInterface($interface)) {
+                        $classInterfaceDefinition = $compilationContext
+                            ->compiler
+                            ->getInternalClassDefinition($interface)
+                        ;
                     }
 
                     if ($classInterfaceDefinition !== null) {
@@ -782,7 +773,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws Exception
      */
-    public function getClassEntry(CompilationContext $compilationContext = null): string
+    public function getClassEntry(?CompilationContext $compilationContext = null): string
     {
         if ($this->external) {
             if ($compilationContext === null) {
@@ -888,7 +879,7 @@ final class Definition extends AbstractDefinition
      */
     public function getExtendsClassDefinition(): ?AbstractDefinition
     {
-        if (!$this->extendsClassDefinition && $this->extendsClass && $this->compiler) {
+        if (!$this->extendsClassDefinition && $this->extendsClass) {
             $this->setExtendsClassDefinition($this->compiler->getClassDefinition($this->extendsClass));
         }
 
@@ -1060,10 +1051,6 @@ final class Definition extends AbstractDefinition
 
     /**
      * Returns a method definition by its name.
-     *
-     * @param string $propertyName
-     *
-     * @return Property|null
      */
     public function getProperty(string $propertyName): ?Property
     {
@@ -1139,10 +1126,6 @@ final class Definition extends AbstractDefinition
 
     /**
      * Checks if the class implements a specific name.
-     *
-     * @param string $methodName
-     *
-     * @return bool
      */
     public function hasMethod(string $methodName): bool
     {
@@ -1368,7 +1351,7 @@ final class Definition extends AbstractDefinition
      *
      * @throws CompilerException
      */
-    public function updateMethod(Method $method, array $statement = null): void
+    public function updateMethod(Method $method, array $statement = []): void
     {
         $methodName = strtolower($method->getName());
         if (!isset($this->methods[$methodName])) {

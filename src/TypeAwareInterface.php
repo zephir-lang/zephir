@@ -17,8 +17,6 @@ interface TypeAwareInterface
 {
     /**
      * Returns the type name of the compiled expression.
-     *
-     * @return string
      */
     public function getType(): string;
 }

@@ -73,12 +73,8 @@ class FunctionCall extends Call
     /**
      * Compiles a function.
      *
-     * @param Expression         $expr
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
-     * @throws CompilerException|Exception
+     * @throws Exception
+     * @throws ReflectionException
      */
     public function compile(Expression $expr, CompilationContext $compilationContext)
     {
@@ -87,20 +83,15 @@ class FunctionCall extends Call
 
         return match ($expression['call-type']) {
             self::CALL_NORMAL  => $this->_callNormal($expression, $compilationContext),
-            self::CALL_DYNAMIC => $this->_callDynamic($expression, $compilationContext),
+            self::CALL_DYNAMIC => $this->callDynamic($expression, $compilationContext),
             default            => new CompiledExpression('null', null, $expression),
         };
     }
 
     /**
      * Checks if a function exists or is a built-in Zephir function.
-     *
-     * @param string             $functionName
-     * @param CompilationContext $context
-     *
-     * @return bool
      */
-    public function functionExists($functionName, CompilationContext $context)
+    public function functionExists(string $functionName, CompilationContext $context): bool
     {
         if (function_exists($functionName)) {
             return true;
@@ -128,20 +119,16 @@ class FunctionCall extends Call
 
     /**
      * Process the ReflectionFunction for the specified function name.
-     *
-     * @param string $funcName
-     *
-     * @return ReflectionFunction|null
      */
-    public function getReflector($funcName)
+    public function getReflector(string $funcName): ?ReflectionFunction
     {
-        /*
+        /**
          * Check if the optimizer is already cached
          */
         if (!isset(self::$functionReflection[$funcName])) {
             try {
                 $reflectionFunction = new ReflectionFunction($funcName);
-            } catch (ReflectionException $e) {
+            } catch (ReflectionException) {
                 $reflectionFunction = null;
             }
             self::$functionReflection[$funcName] = $reflectionFunction;
@@ -157,12 +144,8 @@ class FunctionCall extends Call
 
     /**
      * Checks if the function is a built-in provided by Zephir.
-     *
-     * @param string $functionName
-     *
-     * @return bool
      */
-    public function isBuiltInFunction(string $functionName)
+    public function isBuiltInFunction(string $functionName): bool
     {
         return match ($functionName) {
             'memstr',
@@ -185,14 +168,10 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
-     * @throws CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
-    protected function _callDynamic(array $expression, CompilationContext $compilationContext)
+    protected function callDynamic(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         $variable = $compilationContext->symbolTable->getVariableForRead(
             $expression['name'],
@@ -326,12 +305,8 @@ class FunctionCall extends Call
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
-     * @throws Exception|CompilerException
+     * @throws Exception
+     * @throws ReflectionException
      */
     protected function _callNormal(array $expression, CompilationContext $compilationContext)
     {
@@ -518,20 +493,15 @@ class FunctionCall extends Call
      * to check if any of their parameters are passed by reference
      * Built-in functions rarely change the parameters if they aren't passed by reference.
      *
-     * @param string $funcName
-     * @param array  $expression
-     *
-     * @return bool
-     *
      * @throws CompilerException
      */
-    protected function isReadOnly($funcName, array $expression)
+    protected function isReadOnly($funcName, array $expression): bool
     {
         if ($this->isBuiltInFunction($funcName)) {
             return false;
         }
 
-        /*
+        /**
          * These functions are supposed to be read-only, but they change parameters ref-count
          */
         switch ($funcName) {
@@ -658,17 +628,17 @@ class FunctionCall extends Call
      *
      * @throws Exception
      */
-    protected function optimize($funcName, array $expression, Call $call, CompilationContext $compilationContext)
+    protected function optimize(string $funcName, array $expression, Call $call, CompilationContext $compilationContext)
     {
         $optimizer = false;
 
-        /*
+        /**
          * Check if the optimizer is already cached
          */
         if (!isset(self::$optimizers[$funcName])) {
             $camelizeFunctionName = Name::camelize($funcName);
 
-            /*
+            /**
              * Check every optimizer directory for an optimizer
              */
             foreach (self::$optimizerDirectories as $directory) {

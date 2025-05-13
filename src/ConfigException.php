@@ -17,7 +17,7 @@ use const PHP_EOL;
 
 class ConfigException extends \Exception
 {
-    public function __construct($message = '', $code = 0, \Exception $previous = null)
+    public function __construct($message = '', $code = 0, ?\Exception $previous = null)
     {
         $message .= PHP_EOL . 'Please see https://docs.zephir-lang.com/0.12/en/config for more information';
 

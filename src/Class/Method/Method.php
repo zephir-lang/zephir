@@ -58,11 +58,12 @@ use const PHP_EOL;
 class Method
 {
     public bool $optimizable = true;
+
     /**
      * Call Gatherer Pass.
      */
     protected ?CallGathererPass $callGathererPass = null;
-    protected ?Definition       $classDefinition  = null;
+
     /**
      * Whether the method is abstract or not.
      */
@@ -130,17 +131,16 @@ class Method
     protected bool $void = false;
 
     public function __construct(
-        Definition $classDefinition,
-        protected array $visibility,
-        protected string $name,
+        protected ?Definition $classDefinition = null,
+        protected array $visibility = [],
+        protected string $name = '',
         protected ?Parameters $parameters = null,
         protected ?StatementsBlock $statements = null,
         protected ?string $docblock = null,
-        array $returnType = null,
+        ?array $returnType = null,
         protected ?array $expression = [],
         array $staticVariables = [],
     ) {
-        $this->classDefinition = $classDefinition;
         $this->staticVariables = $staticVariables;
 
         $this->checkVisibility($visibility, $name, $expression);
@@ -709,7 +709,7 @@ class Method
      *
      * @throws CompilerException
      */
-    public function checkVisibility(array $visibility, string $name, array $original = null): void
+    public function checkVisibility(array $visibility, string $name, ?array $original = null): void
     {
         if (count($visibility) > 1) {
             if (in_array('public', $visibility) && in_array('protected', $visibility)) {
@@ -1578,7 +1578,7 @@ class Method
     /**
      * Returns arginfo name for current method.
      */
-    public function getArgInfoName(Definition $classDefinition = null): string
+    public function getArgInfoName(?Definition $classDefinition = null): string
     {
         if ($classDefinition instanceof Definition) {
             return sprintf(
@@ -2248,7 +2248,7 @@ class Method
      *
      * @param array|null $returnType
      */
-    public function setReturnTypes(array $returnType = null): void
+    public function setReturnTypes(?array $returnType = null): void
     {
         $this->returnTypesRaw = $returnType;
         if (null === $returnType) {

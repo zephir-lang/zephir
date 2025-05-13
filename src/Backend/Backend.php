@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Zephir\Backend;
 
-use Zephir\Class\Definition\Definition;
 use Zephir\Class\Method\Method;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
@@ -512,7 +511,7 @@ class Backend
     ): void {
         [$keys, $offsetItems, $numberParams] = $this->resolveOffsetExprs($offsetExprs, $compilationContext);
 
-        $symbol  = $this->resolveValue($symbolVariable, $compilationContext, true);
+        $symbol  = $this->resolveValue($symbolVariable, $compilationContext);
         $varCode = $this->getVariableCode($variable);
         $compilationContext->codePrinter->output(
             sprintf(
@@ -617,14 +616,6 @@ class Backend
         );
     }
 
-    /**
-     * @param Variable             $variable
-     * @param string|Variable|null $value
-     * @param CompilationContext   $context
-     * @param bool                 $useCodePrinter
-     *
-     * @return string
-     */
     public function assignString(
         Variable $variable,
         $value,
@@ -642,10 +633,6 @@ class Backend
 
     /**
      * Assigns a zval to another.
-     *
-     * @param Variable           $variable
-     * @param string             $code
-     * @param CompilationContext $context
      */
     public function assignZval(Variable $variable, $code, CompilationContext $context): void
     {
@@ -998,15 +985,6 @@ class Backend
         return $output;
     }
 
-    /**
-     * @param Variable           $symbolVariable
-     * @param Variable           $variableVariable
-     * @param Variable|string    $property
-     * @param bool               $readOnly
-     * @param CompilationContext $context
-     *
-     * @return void
-     */
     public function fetchProperty(
         Variable $symbolVariable,
         Variable $variableVariable,
@@ -1048,12 +1026,6 @@ class Backend
     }
 
     /**
-     * @param Variable           $symbolVariable
-     * @param Definition         $classDefinition
-     * @param                    $property
-     * @param bool               $readOnly
-     * @param CompilationContext $context
-     *
      * @throws Exception
      */
     public function fetchStaticProperty(
@@ -1376,12 +1348,6 @@ class Backend
         return $this->kernelsPath;
     }
 
-    /**
-     * @param Method             $method
-     * @param CompilationContext $context
-     *
-     * @return string
-     */
     public function getInternalSignature(Method $method, CompilationContext $context): string
     {
         if ($method->isInitializer() && !$method->isStatic()) {
@@ -1426,12 +1392,6 @@ class Backend
         return "void {$method->getInternalName()}({$signaturePattern})";
     }
 
-    /**
-     * @param string             $type
-     * @param CompilationContext $compilationContext
-     *
-     * @return Variable
-     */
     public function getScalarTempVariable(
         string $type,
         CompilationContext $compilationContext,
@@ -1553,12 +1513,6 @@ class Backend
     }
 
     /**
-     * @param Variable $variableVariable
-     * @param string   $operator
-     * @param string   $value
-     *
-     * @return string
-     *
      * @throws CompilerException
      */
     public function getTypeofCondition(
@@ -1643,7 +1597,7 @@ class Backend
      *
      * @return void
      */
-    public function initArray(Variable $variable, CompilationContext $context, int $size = null): void
+    public function initArray(Variable $variable, CompilationContext $context, ?int $size = null): void
     {
         $code = $this->getVariableCode($variable);
 
@@ -1763,7 +1717,7 @@ class Backend
         return '';
     }
 
-    public function propertyIsset(Variable $var, $key)
+    public function propertyIsset(Variable $var, $key): CompiledExpression
     {
         return new CompiledExpression(
             'bool',
@@ -1773,11 +1727,6 @@ class Backend
     }
 
     /**
-     * @param                    $value
-     * @param CompilationContext $context
-     *
-     * @return bool|string|Variable
-     *
      * @throws CompilerException
      */
     public function resolveValue($value, CompilationContext $context): Variable | bool | string
@@ -1920,14 +1869,6 @@ class Backend
         }
     }
 
-    /**
-     * @param Variable           $variable
-     * @param string|Variable    $property
-     * @param mixed              $value
-     * @param CompilationContext $context
-     *
-     * @return void
-     */
     public function updateProperty(Variable $variable, $property, $value, CompilationContext $context): void
     {
         $value = $this->resolveValue($value, $context);
@@ -2039,11 +1980,6 @@ class Backend
 
     /**
      * Resolve expressions.
-     *
-     * @param CompiledExpression[]|string[] $offsetExprs
-     * @param CompilationContext            $compilationContext
-     *
-     * @return array
      *
      * @throws CompilerException
      */

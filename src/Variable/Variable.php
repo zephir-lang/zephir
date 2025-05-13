@@ -162,8 +162,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Get the branch where the variable was declared.
-     *
-     * @return Branch|null
      */
     public function getBranch(): ?Branch
     {
@@ -172,8 +170,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the PHP classes associated to the variable.
-     *
-     * @return array
      */
     public function getClassTypes(): array
     {
@@ -182,8 +178,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the default init value.
-     *
-     * @return mixed
      */
     public function getDefaultInitValue(): mixed
     {
@@ -192,8 +186,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the current dynamic type in a polymorphic variable.
-     *
-     * @return array
      */
     public function getDynamicTypes(): array
     {
@@ -202,8 +194,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Get init branch.
-     *
-     * @return bool
      */
     public function getInitBranch(): bool
     {
@@ -230,8 +220,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns variable's name.
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -240,8 +228,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the number of mutations performed over the variable.
-     *
-     * @return int
      */
     public function getNumberMutations(): int
     {
@@ -250,8 +236,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Return the number of uses.
-     *
-     * @return int
      */
     public function getNumberUses(): int
     {
@@ -260,8 +244,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the original AST node where the variable was declared.
-     *
-     * @return array
      */
     public function getOriginal(): array
     {
@@ -274,8 +256,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the latest CompiledExpression assigned to a variable.
-     *
-     * @return mixed
      */
     public function getPossibleValue(): mixed
     {
@@ -292,8 +272,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns variable's real name.
-     *
-     * @return string
      */
     public function getRealName(): string
     {
@@ -302,8 +280,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Get the number of initializations remaining to skip.
-     *
-     * @return int
      */
     public function getSkipVariant(): int
     {
@@ -312,8 +288,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns the type of variable.
-     *
-     * @return string
      */
     public function getType(): string
     {
@@ -322,8 +296,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Get the number of times the variable has been initialized.
-     *
-     * @return int
      */
     public function getVariantInits(): int
     {
@@ -332,10 +304,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if the variable has any of the passed dynamic.
-     *
-     * @param array|string $types
-     *
-     * @return bool
      */
     public function hasAnyDynamicType(array | string $types): bool
     {
@@ -354,10 +322,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Check if the variable has at least one dynamic type to the ones passed in the list.
-     *
-     * @param array $types
-     *
-     * @return bool
      */
     public function hasDifferentDynamicType(array $types): bool
     {
@@ -398,8 +362,6 @@ class Variable implements TypeAwareInterface
     /**
      * Initializes a variant variable that is intended to have the special
      * behavior of only freed its body value instead of the full variable.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function initComplexLiteralVariant(CompilationContext $compilationContext): void
     {
@@ -438,8 +400,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Allocate memory for variable and init it null val
-     *
-     * @param CompilationContext $compilationContext
      */
     public function initNonReferenced(CompilationContext $compilationContext): void
     {
@@ -448,8 +408,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Initializes a variant variable.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function initVariant(CompilationContext $compilationContext): void
     {
@@ -504,8 +462,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type double?
-     *
-     * @return bool
      */
     public function isArray(): bool
     {
@@ -514,8 +470,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type bool?
-     *
-     * @return bool
      */
     public function isBoolean(): bool
     {
@@ -524,8 +478,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type double?
-     *
-     * @return bool
      */
     public function isDouble(): bool
     {
@@ -542,8 +494,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Check if the variable is a parameter.
-     *
-     * @return bool
      */
     public function isExternal(): bool
     {
@@ -552,8 +502,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if the variable is idle.
-     *
-     * @return bool
      */
     public function isIdle(): bool
     {
@@ -562,8 +510,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Check if the variable is initialized or not.
-     *
-     * @return bool
      */
     public function isInitialized(): bool
     {
@@ -572,8 +518,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type int?
-     *
-     * @return bool
      */
     public function isInt(): bool
     {
@@ -582,8 +526,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if the variable is local-only scoped.
-     *
-     * @return bool
      */
     public function isLocalOnly(): bool
     {
@@ -592,8 +534,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if a variable is a local static.
-     *
-     * @return bool
      */
     public function isLocalStatic(): bool
     {
@@ -602,8 +542,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if the variable is tracked by the memory manager.
-     *
-     * @return bool
      */
     public function isMemoryTracked(): bool
     {
@@ -612,8 +550,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type mixed?
-     *
-     * @return bool
      */
     public function isMixed(): bool
     {
@@ -622,8 +558,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type variable or string?
-     *
-     * @return bool
      */
     public function isNotVariable(): bool
     {
@@ -632,8 +566,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type variable or array?
-     *
-     * @return bool
      */
     public function isNotVariableAndArray(): bool
     {
@@ -642,8 +574,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type variable or mixed or string?
-     *
-     * @return bool
      */
     public function isNotVariableAndMixedAndString(): bool
     {
@@ -652,8 +582,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type variable or string?
-     *
-     * @return bool
      */
     public function isNotVariableAndString(): bool
     {
@@ -662,8 +590,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns if the variable is read only.
-     *
-     * @return bool
      */
     public function isReadOnly(): bool
     {
@@ -672,8 +598,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if the temporary variable is reusable.
-     *
-     * @return bool
      */
     public function isReusable(): bool
     {
@@ -682,8 +606,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type string?
-     *
-     * @return bool
      */
     public function isString(): bool
     {
@@ -692,8 +614,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks if a variable is a super global.
-     *
-     * @return bool
      */
     public function isSuperGlobal(): bool
     {
@@ -702,8 +622,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Returns whether the variable is temporal or not.
-     *
-     * @return bool
      */
     public function isTemporal(): bool
     {
@@ -712,8 +630,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Checks whether the last value assigned was used.
-     *
-     * @return bool
      */
     public function isUsed(): bool
     {
@@ -722,8 +638,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Shortcut is type variable?
-     *
-     * @return bool
      */
     public function isVariable(): bool
     {
@@ -732,8 +646,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Get if the variable must be initialized to null.
-     *
-     * @return bool
      */
     public function mustInitNull(): bool
     {
@@ -743,8 +655,6 @@ class Variable implements TypeAwareInterface
     /**
      * Observes a variable in the memory frame without initialization or nullify
      * an existing allocated variable.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function observeOrNullifyVariant(CompilationContext $compilationContext): void
     {
@@ -774,8 +684,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Observes a variable in the memory frame without initialization.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function observeVariant(CompilationContext $compilationContext): void
     {
@@ -808,8 +716,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Separates variables before being updated.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function separate(CompilationContext $compilationContext): void
     {
@@ -822,8 +728,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the PHP class related to variable.
-     *
-     * @param ReflectionClass|Definition $associatedClass
      */
     public function setAssociatedClass(ReflectionClass | Definition $associatedClass): void
     {
@@ -832,8 +736,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the PHP class related to variable.
-     *
-     * @param array|string $classTypes
      */
     public function setClassTypes(array | string $classTypes): void
     {
@@ -854,8 +756,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the default init value.
-     *
-     * @param mixed $value
      */
     public function setDefaultInitValue(mixed $value): void
     {
@@ -864,8 +764,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the current dynamic type in a polymorphic variable.
-     *
-     * @param array|string $types
      */
     public function setDynamicTypes(array | string $types): void
     {
@@ -884,8 +782,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Once a temporal variable is unused in a specific branch it is marked as idle.
-     *
-     * @param bool $idle
      */
     public function setIdle(bool $idle): void
     {
@@ -900,8 +796,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Marks the variable to be defined as a double pointer.
-     *
-     * @param bool $doublePointer
      */
     public function setIsDoublePointer(bool $doublePointer): void
     {
@@ -910,8 +804,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Set if the symbol is a parameter of the method or not.
-     *
-     * @param bool $isExternal
      */
     public function setIsExternal(bool $isExternal): void
     {
@@ -922,9 +814,6 @@ class Variable implements TypeAwareInterface
     /**
      * Sets if the variable is initialized
      * This allow to throw an exception if the variable is being read without prior initialization.
-     *
-     * @param bool               $initialized
-     * @param CompilationContext $compilationContext
      */
     public function setIsInitialized(bool $initialized, CompilationContext $compilationContext): void
     {
@@ -943,8 +832,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets if the variable is local-only scoped.
-     *
-     * @param bool $localOnly
      */
     public function setLocalOnly(bool $localOnly): void
     {
@@ -953,8 +840,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the compiled variable's name.
-     *
-     * @param string $lowName
      */
     public function setLowName(string $lowName): void
     {
@@ -963,8 +848,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets if the variable is not tracked by the memory manager.
-     *
-     * @param bool $memoryTracked
      */
     public function setMemoryTracked(bool $memoryTracked): void
     {
@@ -973,8 +856,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Set if the variable must be initialized to null.
-     *
-     * @param bool $mustInitNull
      */
     public function setMustInitNull(bool $mustInitNull): void
     {
@@ -983,8 +864,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Set the original AST node where the variable was declared.
-     *
-     * @param array $node
      */
     public function setOriginal(array $node): void
     {
@@ -993,20 +872,17 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the latest CompiledExpression assigned to a variable.
-     *
-     * @param CompiledExpression $possibleValue
-     * @param CompilationContext $compilationContext
      */
-    public function setPossibleValue(CompiledExpression $possibleValue, CompilationContext $compilationContext): void
-    {
+    public function setPossibleValue(
+        CompiledExpression $possibleValue,
+        CompilationContext $compilationContext,
+    ): void {
         $this->possibleValue       = $possibleValue;
         $this->possibleValueBranch = $compilationContext->branchManager->getCurrentBranch();
     }
 
     /**
      * Sets if the variable is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {
@@ -1015,8 +891,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Some temporary variables can't be reused.
-     *
-     * @param bool $reusable
      */
     public function setReusable(bool $reusable): void
     {
@@ -1025,8 +899,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets whether the variable is temporal or not.
-     *
-     * @param bool $temporal
      */
     public function setTemporal(bool $temporal): void
     {
@@ -1035,8 +907,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the type of variable.
-     *
-     * @param string $type
      */
     public function setType(string $type): void
     {
@@ -1045,11 +915,8 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the latest node where a variable was used.
-     *
-     * @param bool       $used
-     * @param array|null $node
      */
-    public function setUsed(bool $used, array $node = null): void
+    public function setUsed(bool $used, ?array $node = null): void
     {
         $this->used     = $used;
         $this->usedNode = $node;
@@ -1057,8 +924,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Skips variable initialization.
-     *
-     * @param int $numberSkips
      */
     public function skipInitVariant(int $numberSkips): void
     {
@@ -1067,8 +932,6 @@ class Variable implements TypeAwareInterface
 
     /**
      * Tells the compiler a generated code will track the variable.
-     *
-     * @param CompilationContext $compilationContext
      */
     public function trackVariant(CompilationContext $compilationContext): void
     {
