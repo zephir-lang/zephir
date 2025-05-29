@@ -32,6 +32,7 @@ class BlockManager
      *
      * @throws InvalidArgumentException
      */
+    #[SuppressWarnings("php:S4790")]
     public function add(string $block): BlockManager
     {
         $this->blocks[md5($block)] = $block;
