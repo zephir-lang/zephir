@@ -55,7 +55,7 @@ final class CompilerFileAnonymous implements FileInterface
         protected ?CompilationContext $context = null
     ) {
         $this->logger = new NullLogger();
-        
+
         $this->headerCBlocks = new BlockManager();
     }
 
