@@ -155,12 +155,60 @@ class Closure
             $compilationContext,
             $expression
         );
+
         $compilationContext->headersManager->add('kernel/object');
+
+        $compilationContext->blockManager->add('#include <Zend/zend_closures.h>');
+
+        $compilationContext->blockManager->add(
+            <<<EOF
+typedef struct _zend_closure {
+	zend_object       std;
+	zend_function     func;
+	zval              this_ptr;
+	zend_class_entry *called_scope;
+	zif_handler       orig_internal_handler;
+} zend_closure;
+EOF
+        );
+
+        $closureVar = $compilationContext->symbolTable->getTempNonTrackedVariable(
+            'variable',
+            $compilationContext,
+            true
+        );
+
+//        $compilationContext->backend->fetchProperty(
+//            $closureVar,
+//            $symbolVariable,
+//            'func',
+//            false,
+//            $compilationContext
+//        );
+
+        $compilationContext->codePrinter->output('zend_closure *zephir_closure;');
+        $compilationContext->codePrinter->output(
+            sprintf(
+                'zephir_closure = (zend_closure*)Z_OBJ_P(%s);',
+                $symbolVariable->getName()
+            )
+        );
+
+//        $compilationContext->codePrinter->output(
+//            sprintf(
+//                '%s = closure->func*;',
+//                $closureVar->getName()
+//            )
+//        );
+
+        //zend_closure *closure;
+        //closure = (zend_closure*)Z_OBJ_P(return_value);
+        //closure->func.internal_function.handler = closure->orig_internal_handler;
 
         foreach ($useVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
                 $compilationContext->backend->updateProperty(
-                    $symbolVariable,
+                    $closureVar,
                     $var->getName(),
                     $var,
                     $compilationContext
@@ -198,7 +246,7 @@ class Closure
             }
 
             $compilationContext->backend->updateProperty(
-                $symbolVariable,
+                $closureVar,
                 $var->getName(),
                 $tempVariable,
                 $compilationContext
