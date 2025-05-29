@@ -79,8 +79,7 @@ final class CompilerFile implements FileInterface
 
     private array $functionDefinitions = [];
 
-    private array $headerCBlocks = [];
-
+    private BlockManager $headerCBlocks;
     /**
      * Original internal representation (IR) of the file.
      */
@@ -101,6 +100,8 @@ final class CompilerFile implements FileInterface
         $this->logger       = new NullLogger();
         $this->aliasManager = $aliasManager;
         $this->filesystem   = $filesystem;
+
+        $this->headerCBlocks = new BlockManager();
     }
 
     /**
@@ -274,6 +275,11 @@ final class CompilerFile implements FileInterface
          * Headers manager.
          */
         $compilationContext->headersManager = new HeadersManager();
+
+        /**
+         * C-Block manager.
+         */
+        $compilationContext->blockManager   = $this->headerCBlocks;
 
         /**
          * Main code-printer for the file.
@@ -522,7 +528,7 @@ final class CompilerFile implements FileInterface
                     break;
 
                 case 'cblock':
-                    $this->headerCBlocks[] = $topStatement['value'];
+                    $this->headerCBlocks->add($topStatement['value']);
                     break;
 
                 case 'function':
