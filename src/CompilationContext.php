@@ -75,6 +75,10 @@ class CompilationContext
      */
     public int $currentTryCatch = 0;
     /**
+     * Represents the c-blocks added to the file.
+     */
+    public ?BlockManager $blockManager = null;
+    /**
      * Current cycle/loop block.
      */
     public array $cycleBlocks = [];

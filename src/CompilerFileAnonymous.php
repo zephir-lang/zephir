@@ -39,7 +39,7 @@ final class CompilerFileAnonymous implements FileInterface
 
     protected ?string             $compiledFile  = null;
     protected bool                $external      = false;
-    protected array               $headerCBlocks = [];
+    protected BlockManager        $headerCBlocks;
     protected ?string             $namespace     = null;
 
     /**
@@ -55,6 +55,8 @@ final class CompilerFileAnonymous implements FileInterface
         protected ?CompilationContext $context = null
     ) {
         $this->logger = new NullLogger();
+
+        $this->headerCBlocks = new BlockManager();
     }
 
     /**
@@ -80,6 +82,11 @@ final class CompilerFileAnonymous implements FileInterface
         $compilationContext->stringsManager = $stringsManager;
         $compilationContext->backend        = $compiler->backend;
         $compilationContext->headersManager = new HeadersManager();
+
+        /**
+         * C-Block manager.
+         */
+        $compilationContext->blockManager   = $this->headerCBlocks;
 
         /**
          * Main code-printer for the file.

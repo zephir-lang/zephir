@@ -370,6 +370,10 @@ final class Compiler
                 $output,
                 $exit
             );
+
+            if ($exit !== 0) {
+                throw new CompilerException("Compilation failed. Check compile-errors.log");
+            }
         }
     }
 

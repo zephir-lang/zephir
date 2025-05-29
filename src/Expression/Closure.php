@@ -80,25 +80,60 @@ class Closure
 
         $block = $expression['right'] ?? [];
 
-        $staticVariables = [];
+        $useVariables = [];
+
         if (isset($expression['use']) && is_array($expression['use'])) {
             foreach ($expression['use'] as $parameter) {
-                $staticVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
+                $useVariables[$parameter['name']] = $compilationContext->symbolTable->getVariable(
                     $parameter['name']
                 );
             }
         }
 
-        foreach ($staticVariables as $var) {
+        foreach ($useVariables as $var) {
             $classDefinition->addProperty(
                 new Property(
                     $classDefinition,
-                    ['public', 'static'],
+                    ['public'],
                     $var->getName(),
                     null,
                     null,
                     null
                 )
+            );
+
+            array_unshift(
+                $block,
+                [
+                    'type'      => 'declare',
+                    'data-type' => 'variable',
+                    'variables' => [
+                        [
+                            'variable' => $var->getName()
+                        ]
+                    ]
+                ],
+                [
+                    'type'      => 'let',
+                    'assignments' => [
+                        [
+                            'assign-type' => 'variable',
+                            'operator'    => 'assign',
+                            'variable'    => $var->getName(),
+                            'expr'        => [
+                                'type'      => 'property-access',
+                                'left'      => [
+                                    'type'      => 'variable',
+                                    'value'     => 'this',
+                                ],
+                                'right' => [
+                                    'type'      => 'variable',
+                                    'value'     => $var->getName(),
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
             );
         }
 
@@ -111,7 +146,6 @@ class Closure
             null,
             null,
             $expression,
-            $staticVariables
         );
 
         $symbolVariable = $this->generateClosure(
@@ -121,16 +155,65 @@ class Closure
             $compilationContext,
             $expression
         );
+
         $compilationContext->headersManager->add('kernel/object');
 
-        foreach ($staticVariables as $var) {
+        $compilationContext->blockManager->add('#include <Zend/zend_closures.h>');
+
+        $compilationContext->blockManager->add(
+            <<<EOF
+typedef struct _zend_closure {
+	zend_object       std;
+	zend_function     func;
+	zval              this_ptr;
+	zend_class_entry *called_scope;
+	zif_handler       orig_internal_handler;
+} zend_closure;
+EOF
+        );
+
+        $closureVar = $compilationContext->symbolTable->getTempNonTrackedVariable(
+            'variable',
+            $compilationContext,
+            true
+        );
+
+//        $compilationContext->backend->fetchProperty(
+//            $closureVar,
+//            $symbolVariable,
+//            'func',
+//            false,
+//            $compilationContext
+//        );
+
+        $compilationContext->codePrinter->output('zend_closure *zephir_closure;');
+        $compilationContext->codePrinter->output(
+            sprintf(
+                'zephir_closure = (zend_closure*)Z_OBJ_P(%s);',
+                $symbolVariable->getName()
+            )
+        );
+
+//        $compilationContext->codePrinter->output(
+//            sprintf(
+//                '%s = closure->func*;',
+//                $closureVar->getName()
+//            )
+//        );
+
+        //zend_closure *closure;
+        //closure = (zend_closure*)Z_OBJ_P(return_value);
+        //closure->func.internal_function.handler = closure->orig_internal_handler;
+
+        foreach ($useVariables as $var) {
             if (in_array($var->getType(), ['variable', 'array'])) {
-                $compilationContext->backend->updateStaticProperty(
-                    $classDefinition->getClassEntry(),
+                $compilationContext->backend->updateProperty(
+                    $closureVar,
                     $var->getName(),
                     $var,
                     $compilationContext
                 );
+
                 continue;
             }
 
@@ -162,8 +245,8 @@ class Closure
                     break;
             }
 
-            $compilationContext->backend->updateStaticProperty(
-                $classDefinition->getClassEntry(),
+            $compilationContext->backend->updateProperty(
+                $closureVar,
                 $var->getName(),
                 $tempVariable,
                 $compilationContext
