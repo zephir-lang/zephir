@@ -62,8 +62,11 @@ trait CompilerTrait
             }
         }
 
-        if (count($this->headerCBlocks) > 0) {
-            $code .= implode(PHP_EOL, $this->headerCBlocks) . PHP_EOL;
+        $code .= PHP_EOL;
+
+        if (!$this->headerCBlocks->isEmpty()) {
+            $code .= implode(PHP_EOL, $this->headerCBlocks->get()) . PHP_EOL;
+            $code .= PHP_EOL;
         }
 
         /**

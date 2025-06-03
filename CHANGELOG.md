@@ -5,6 +5,8 @@ The format based on [Keep a Changelog](https://keepachangelog.com)
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+- Added Block Manager to Allow Modification of C-Headers Via Advanced Components of Zephir
+
 
 ## [0.19.0] - 2025-05-13
 ### Added
