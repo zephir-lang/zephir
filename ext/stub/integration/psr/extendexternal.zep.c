@@ -16,7 +16,7 @@
 
 ZEPHIR_INIT_CLASS(Stub_Integration_Psr_ExtendExternal)
 {
-	ZEPHIR_REGISTER_CLASS_EX(Stub\\Integration\\Psr, ExtendExternal, stub, integration_psr_extendexternal, zephir_get_internal_ce(SL("psr\\log\\abstractlogger")), NULL, 0);
+	ZEPHIR_REGISTER_CLASS_EX(Stub\\Integration\\Psr, ExtendExternal, stub, integration_psr_extendexternal, zephir_get_internal_ce(SL("psrext\\log\\abstractlogger")), NULL, 0);
 
 	return SUCCESS;
 }

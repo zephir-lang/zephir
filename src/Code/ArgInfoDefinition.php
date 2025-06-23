@@ -250,84 +250,21 @@ class ArgInfoDefinition
 
                 case '1:bool':
                 case '1:boolean':
-                    $gotDefault = isset($parameter['default']);
-                    $format = $gotDefault
-                        ? "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, %s, %d, \"%s\")"
-                        : "\tZEND_ARG_TYPE_INFO(%d, %s, %s, %d)";
-
-                    $args = [
-                        $this->passByReference($parameter),
-                        $parameter['name'],
-                        $this->booleanDefinition,
-                        (int)$this->allowNull($parameter),
-                    ];
-
-                    if ($gotDefault) {
-                        $args[] = $parameter['default']['value'] ?? 'null';
-                    }
-
-                    $this->codePrinter->output(vsprintf($format, $args));
+                    $this->emitTypedArgInfo($parameter, $this->booleanDefinition);
                     break;
                 case '1:uchar':
                 case '1:int':
                 case '1:uint':
                 case '1:long':
                 case '1:ulong':
-                    $gotDefault = isset($parameter['default']);
-                    $format = $gotDefault
-                        ? "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_LONG, %d, \"%s\")"
-                        : "\tZEND_ARG_TYPE_INFO(%d, %s, IS_LONG, %d)";
-
-                    $args = [
-                        $this->passByReference($parameter),
-                        $parameter['name'],
-                        (int)$this->allowNull($parameter),
-                    ];
-
-                    if ($gotDefault) {
-                        $args[] = $parameter['default']['value'] ?? 'null';
-                    }
-
-                    $this->codePrinter->output(vsprintf($format, $args));
+                    $this->emitTypedArgInfo($parameter, 'IS_LONG');
                     break;
                 case '1:double':
-                    $gotDefault = isset($parameter['default']);
-                    $format = $gotDefault
-                        ? "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_DOUBLE, %d, \"%s\")"
-                        : "\tZEND_ARG_TYPE_INFO(%d, %s, IS_DOUBLE, %d)";
-
-                    $args = [
-                        $this->passByReference($parameter),
-                        $parameter['name'],
-                        (int)$this->allowNull($parameter),
-                    ];
-
-                    if ($gotDefault) {
-                        $args[] = $parameter['default']['value'] ?? 'null';
-                    }
-
-                    $this->codePrinter->output(vsprintf($format, $args));
+                    $this->emitTypedArgInfo($parameter, 'IS_DOUBLE');
                     break;
                 case '1:char':
                 case '1:string':
-                    $gotDefault = isset($parameter['default']);
-                    $format = $gotDefault
-                        ? "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, IS_STRING, %d, \"%s\")"
-                        : "\tZEND_ARG_TYPE_INFO(%d, %s, IS_STRING, %d)";
-
-                    $args = [
-                        $this->passByReference($parameter),
-                        $parameter['name'],
-                        (int)$this->allowNull($parameter),
-                    ];
-
-                    if ($gotDefault) {
-                        $args[] = isset($parameter['default']['value'])
-                            ? $this->escapeString($parameter['default']['value'])
-                            : 'null';
-                    }
-
-                    $this->codePrinter->output(vsprintf($format, $args));
+                    $this->emitTypedArgInfo($parameter, 'IS_STRING');
                     break;
                 default:
                     $this->codePrinter->output(
@@ -340,6 +277,31 @@ class ArgInfoDefinition
                     break;
             }
         }
+    }
+
+    private function emitTypedArgInfo(array $parameter, string $zendType): void
+    {
+        $gotDefault = isset($parameter['default']);
+        $format = $gotDefault
+            ? "\tZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(%d, %s, %s, %d, \"%s\")"
+            : "\tZEND_ARG_TYPE_INFO(%d, %s, %s, %d)";
+
+        $args = [
+            $this->passByReference($parameter),
+            $parameter['name'],
+            $zendType,
+            (int)$this->allowNull($parameter),
+        ];
+
+        if ($gotDefault) {
+            if (isset($parameter['default']['value']) && $zendType === 'IS_STRING') {
+                $args[] = $this->escapeString($parameter['default']['value']);
+            } else {
+                $args[] = $parameter['default']['value'] ?? 'null';
+            }
+        }
+
+        $this->codePrinter->output(vsprintf($format, $args));
     }
 
     private function escapeString(string $value): string

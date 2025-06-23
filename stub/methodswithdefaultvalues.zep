@@ -3,7 +3,7 @@ namespace Stub;
 
 class MethodsWithDefaultValues
 {
-	public function testBool(bool param = true) -> void
+    public function testBool(bool param = true) -> void
     {
     }
 
