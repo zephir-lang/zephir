@@ -118,6 +118,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/mcallinternal.zep.c
 	stub/methodabstract.zep.c
 	stub/methodargs.zep.c
+	stub/methodswithdefaultvalues.zep.c
 	stub/namespaces/a/b/sub.zep.c
 	stub/namespaces/classentry.zep.c
 	stub/nativearray.zep.c

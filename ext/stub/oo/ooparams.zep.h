@@ -81,19 +81,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setstrictlist, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setagedefault, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, age, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, age, IS_LONG, 0, "25")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setaveragedefault, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, average, IS_DOUBLE, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, average, IS_DOUBLE, 0, "25")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setnamedefault, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, name, IS_STRING, 0, "'peter'")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setenableddefault, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, enabled, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, enabled, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setlistdefault, 0, 0, 0)
@@ -125,15 +125,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_setobjectclasscast, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvalue, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, i, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, i, IS_LONG, 0, "0")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvalue1, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, i, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, i, IS_LONG, 0, "1")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_ooparams_getdefaultparamvaluestr, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, str, IS_STRING, 0, "'default'")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_ooparams_method_entry) {

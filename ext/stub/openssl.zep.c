@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytes)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &length_param);
 	ZVAL_LONG(&_0, length);
-	ZEPHIR_RETURN_CALL_FUNCTION("openssl_random_pseudo_bytes", NULL, 74, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("openssl_random_pseudo_bytes", NULL, 76, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
 			ZVAL_LONG(&_3$$3, 10);
-			ZEPHIR_CALL_FUNCTION(&_4$$3, "openssl_random_pseudo_bytes", &_5, 74, &_3$$3);
+			ZEPHIR_CALL_FUNCTION(&_4$$3, "openssl_random_pseudo_bytes", &_5, 76, &_3$$3);
 			zephir_check_call_status();
 			zephir_array_append(&arr, &_4$$3, PH_SEPARATE, "stub/openssl.zep", 16);
 		}
@@ -114,7 +114,7 @@ PHP_METHOD(Stub_Openssl, opensslEncrypt)
 	ZVAL_LONG(&_2, 1);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "1234567890123456");
-	ZEPHIR_RETURN_CALL_FUNCTION("openssl_encrypt", NULL, 75, &data, &_0, &_1, &_2, &_3);
+	ZEPHIR_RETURN_CALL_FUNCTION("openssl_encrypt", NULL, 77, &data, &_0, &_1, &_2, &_3);
 	zephir_check_call_status();
 	RETURN_MM();
 }
