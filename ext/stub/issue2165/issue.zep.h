@@ -17,7 +17,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_issue2165_issue___construct, 0, 0, 1)
 	ZEND_ARG_ARRAY_INFO(0, a, 0)
-	ZEND_ARG_TYPE_INFO(0, validate, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, validate, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_issue2165_issue_quick, 0, 0, Stub\\Issue2165\\Issue, 0)

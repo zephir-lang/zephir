@@ -10,12 +10,12 @@ PHP_METHOD(Stub_Exists, testFileExists);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_exists_testclassexists, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, className)
-	ZEND_ARG_TYPE_INFO(0, autoload, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, autoload, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_exists_testinterfaceexists, 0, 1, _IS_BOOL, 0)
 	ZEND_ARG_INFO(0, interfaceName)
-	ZEND_ARG_TYPE_INFO(0, autoload, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, autoload, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_exists_testmethodexists, 0, 2, _IS_BOOL, 0)

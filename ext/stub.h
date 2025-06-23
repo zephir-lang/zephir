@@ -113,6 +113,7 @@
 #include "stub/mcallinternal.zep.h"
 #include "stub/methodabstract.zep.h"
 #include "stub/methodargs.zep.h"
+#include "stub/methodswithdefaultvalues.zep.h"
 #include "stub/namespaces/a/b/sub.zep.h"
 #include "stub/namespaces/classentry.zep.h"
 #include "stub/nativearray.zep.h"

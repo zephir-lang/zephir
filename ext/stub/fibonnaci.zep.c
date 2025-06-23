@@ -166,10 +166,10 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciRecursive)
 			RETURN_MM_LONG(1);
 		} else {
 			ZVAL_LONG(&_1$$6, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccirecursive", &_2, 40, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccirecursive", &_2, 42, &_1$$6);
 			zephir_check_call_status();
 			ZVAL_LONG(&_1$$6, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccirecursive", &_2, 40, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccirecursive", &_2, 42, &_1$$6);
 			zephir_check_call_status();
 			zephir_add_function(return_value, &_0$$6, &_3$$6);
 			RETURN_MM();
@@ -201,10 +201,10 @@ PHP_METHOD(Stub_Fibonnaci, fibonacciFinalRecursive)
 			RETURN_MM_LONG(1);
 		} else {
 			ZVAL_LONG(&_1$$6, (n - 1));
-			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccifinalrecursive", &_2, 41, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_0$$6, this_ptr, "fibonaccifinalrecursive", &_2, 43, &_1$$6);
 			zephir_check_call_status();
 			ZVAL_LONG(&_1$$6, (n - 2));
-			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccifinalrecursive", &_2, 41, &_1$$6);
+			ZEPHIR_CALL_METHOD(&_3$$6, this_ptr, "fibonaccifinalrecursive", &_2, 43, &_1$$6);
 			zephir_check_call_status();
 			zephir_add_function(return_value, &_0$$6, &_3$$6);
 			RETURN_MM();
