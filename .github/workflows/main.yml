@@ -17,7 +17,7 @@ on:
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.6.1
+  ZEPHIR_PARSER_VERSION: 1.8.0
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -77,10 +77,10 @@ jobs:
           # macOS
           - { name: macos-clang, os: macos-14, compiler: clang }
           # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           # Disabled due PSR extension wasn't complied for >=8.2
           #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
           #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
