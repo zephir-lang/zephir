@@ -2398,7 +2398,7 @@ class Method
      * Get data type of method's parameter
      */
     private function getParamDataType(array $parameter): string
-   {
+    {
         return $parameter['data-type'] ?? 'variable';
     }
 
