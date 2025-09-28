@@ -558,7 +558,7 @@ PHP_METHOD(Stub_Mcall, optionalRequereString)
 
 	ZVAL_UNDEF(&param);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR(param)
+		Z_PARAM_ZVAL(param_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -584,7 +584,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterString)
 	ZVAL_UNDEF(&param);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR(param)
+		Z_PARAM_ZVAL(param_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -608,7 +608,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterStringNull)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR_OR_NULL(param)
+		Z_PARAM_ZVAL_OR_NULL(param_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -749,7 +749,7 @@ PHP_METHOD(Stub_Mcall, testArrayParamWithDefaultEmptyArray)
 	ZVAL_UNDEF(&driverOptions);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY(driverOptions)
+		Z_PARAM_ZVAL(driverOptions_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -773,7 +773,7 @@ PHP_METHOD(Stub_Mcall, testArrayParamWithDefaultNullValue)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(driverOptions)
+		Z_PARAM_ZVAL_OR_NULL(driverOptions_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -794,7 +794,7 @@ PHP_METHOD(Stub_Mcall, testArrayParam)
 
 	ZVAL_UNDEF(&driverOptions);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(driverOptions)
+		Z_PARAM_ZVAL(driverOptions_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

@@ -154,7 +154,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, unserialize)
 
 	ZVAL_UNDEF(&serialized);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR(serialized)
+		Z_PARAM_ZVAL(serialized_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -177,7 +177,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, __unserialize)
 
 	ZVAL_UNDEF(&data);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(data)
+		Z_PARAM_ZVAL(data_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

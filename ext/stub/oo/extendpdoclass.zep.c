@@ -43,10 +43,10 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
-		Z_PARAM_STR(dsn)
+		Z_PARAM_ZVAL(dsn_param)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR_OR_NULL(username)
-		Z_PARAM_STR_OR_NULL(password)
+		Z_PARAM_ZVAL_OR_NULL(username_param)
+		Z_PARAM_ZVAL_OR_NULL(password_param)
 		Z_PARAM_ZVAL(attrs)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

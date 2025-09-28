@@ -79,8 +79,8 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&data);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_STR(key)
-		Z_PARAM_ARRAY(data)
+		Z_PARAM_ZVAL(key_param)
+		Z_PARAM_ZVAL(data_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -111,8 +111,8 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&dataFromProperty);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_STR(key)
-		Z_PARAM_ARRAY(dataFromProperty)
+		Z_PARAM_ZVAL(key_param)
+		Z_PARAM_ZVAL(dataFromProperty_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -198,7 +198,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		Z_PARAM_ZVAL_OR_NULL(items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -222,7 +222,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		Z_PARAM_ZVAL_OR_NULL(items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -247,7 +247,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		Z_PARAM_ZVAL_OR_NULL(items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -273,7 +273,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict)
 	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(params)
+		Z_PARAM_ZVAL(params_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -322,7 +322,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams)
 	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(params)
+		Z_PARAM_ZVAL(params_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -407,7 +407,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 168);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	ZVAL_STR(&_1, "key_a");
+	ZVAL_STRING(&_1, "key_a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset_string(&_2, SL("key_a"), PH_SEPARATE);

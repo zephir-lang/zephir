@@ -147,7 +147,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	ZVAL_UNDEF(&stringVal);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(intVal)
-		Z_PARAM_STR(stringVal)
+		Z_PARAM_ZVAL(stringVal_param)
 		Z_PARAM_ZVAL(mixedVal)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

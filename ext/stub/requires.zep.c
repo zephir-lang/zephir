@@ -127,7 +127,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_UNDEF(&_5$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_STR(templatePath)
+		Z_PARAM_ZVAL(templatePath_param)
 		Z_PARAM_ZVAL(params)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -203,7 +203,7 @@ PHP_METHOD(Stub_Requires, requireOnce)
 	ZVAL_UNDEF(&path);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_STR(path)
+		Z_PARAM_ZVAL(path_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
