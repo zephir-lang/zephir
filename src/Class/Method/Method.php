@@ -1518,9 +1518,9 @@ class Method
 
             case 'double':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s_param)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_DOUBLE(%s_param)', $name);
                 }
 
                 break;
@@ -1567,10 +1567,10 @@ class Method
 
             case 'string':
                 if ($hasDefaultNull) {
-                    // Use generic ZVAL_OR_NULL parsing to remain compatible with PHP 8.4 (zend_parse_arg_str expects zend_string**)
-                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    // $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_STR(%s)', $name);
                 }
 
                 break;
