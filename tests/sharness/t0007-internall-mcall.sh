@@ -13,7 +13,6 @@ test_expect_success "Return 'this' inside a method when 'internal-call-transform
   zephirc generate 2>&1 >/dev/null &&
   zephirc compile 2>&1 >/dev/null &&
   php -d extension=ext/modules/internaltest.so -r '$code' > ext/issue-1956.txt &&
-  cat ext/issue-1956.txt &&
   test_cmp expected/issue-1956.txt ext/issue-1956.txt
 "
 
