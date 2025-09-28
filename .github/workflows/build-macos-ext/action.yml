@@ -26,7 +26,7 @@ runs:
         HOMEBREW_NO_INSTALL_CLEANUP: 1
       run: |
         echo "::group::Install dependencies"
-        brew install re2c pcre2
+        brew install re2c
         echo "::endgroup::"
 
     - name: Compile Stub Extension
@@ -46,6 +46,21 @@ runs:
         echo "::endgroup::"
 
         echo "::group::Compile stage"
+        # Ensure Homebrew include/lib directories (e.g. /opt/homebrew/include) are visible to the compiler/linker.
+        # macOS default clang search paths do NOT include /opt/homebrew on Apple Silicon.
+        BREW_PREFIX="$(brew --prefix)"
+        export CPPFLAGS="-I${BREW_PREFIX}/include ${CPPFLAGS}" || true
+        export CFLAGS="${CFLAGS} -I${BREW_PREFIX}/include"
+        export CXXFLAGS="${CXXFLAGS} -I${BREW_PREFIX}/include"
+        export LDFLAGS="${LDFLAGS} -L${BREW_PREFIX}/lib"
+        # Also help pkg-config aware scripts find pcre2
+        export PKG_CONFIG_PATH="${BREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+        echo "Compiler: ${CC}"
+        echo "CFLAGS: ${CFLAGS}"
+        echo "LDFLAGS: ${LDFLAGS}"
+        echo "Using Homebrew prefix: ${BREW_PREFIX}"
+
         cd ./ext
         phpize
         ./configure --enable-stub

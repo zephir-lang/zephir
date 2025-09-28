@@ -95,7 +95,7 @@ jobs:
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
-          tools: phpize, php-config
+          tools: pecl, phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
           # enable_dl:       https://github.com/zephir-lang/zephir/pull/1654
