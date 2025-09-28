@@ -82,8 +82,8 @@ jobs:
           - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           # Disabled due PSR extension wasn't complied for >=8.2
-          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
-          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
+          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
 
     steps:
       - uses: actions/checkout@v4
@@ -142,6 +142,7 @@ jobs:
           ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
+          toolset: ${{ matrix.toolset }}
           cflags: '/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL'
           ldflags: '/LTCG'
         env:

@@ -12,6 +12,10 @@ inputs:
   msvc:
     description: 'Microsoft Visual C++ compiler toolset prefix (e.g: vc14, vs15, vs16)'
     required: true
+  toolset:
+    description: 'MSVC toolset version (e.g: 14.0, 15.0, 16.0)'
+    required: false
+    default: '' # Use default toolset version for the selected msvc
   arch:
     description: 'Target architecture (x64, x86)'
     required: false
@@ -71,16 +75,7 @@ runs:
       uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ inputs.arch }}
-
-    # Workaround for Windows-2019 and PHP 7.4 with old msvc version
-    # PHP Warning:  PHP Startup: Can't load module 'C:\tools\php\ext\php_stub.dll'
-    # as it's linked with 14.29, but the core is linked with 14.16 in Unknown on line 0
-    - name: Configure Developer Command Prompt for MSVC compiler
-      if: inputs.php_version == '7.4'
-      uses: ilammy/msvc-dev-cmd@v1.10.0
-      with:
-        arch: ${{ inputs.arch }}
-        toolset: 14.16
+        toolset: ${{ inputs.toolset }}
 
     - name: Generate C code
       shell: powershell
