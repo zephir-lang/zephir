@@ -54,7 +54,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	ZVAL_UNDEF(&property);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(obj)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -83,8 +83,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&obj);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
-		Z_PARAM_ZVAL(className_param)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(className)
+		Z_PARAM_STR(property)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -134,7 +134,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZVAL_UNDEF(&className);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(className_param)
+		Z_PARAM_STR(className)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

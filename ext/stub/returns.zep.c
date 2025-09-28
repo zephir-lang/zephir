@@ -60,7 +60,7 @@ PHP_METHOD(Stub_Returns, returnWithParameter)
 
 	ZVAL_UNDEF(&parameter);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(parameter_param)
+		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

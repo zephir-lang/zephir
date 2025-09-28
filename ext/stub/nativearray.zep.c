@@ -1834,8 +1834,8 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_1$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(prefix_param)
-		Z_PARAM_ZVAL(baseDir_param)
+		Z_PARAM_STR(prefix)
+		Z_PARAM_STR(baseDir)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$true, 1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -98,7 +98,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 	ZVAL_UNDEF(&property);
 	ZVAL_BOOL(&__$false, 0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -126,7 +126,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -157,7 +157,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -189,7 +189,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -220,7 +220,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
 	ZVAL_UNDEF(&property);
 	ZVAL_NULL(&__$null);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -249,7 +249,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -280,7 +280,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&a);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -311,7 +311,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -343,7 +343,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse)
 	ZVAL_UNDEF(&property);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(property_param)
+		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -389,7 +389,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 
 	ZVAL_UNDEF(&value);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(value_param)
+		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

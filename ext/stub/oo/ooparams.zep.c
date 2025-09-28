@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Oo_OoParams, setAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 	average = zephir_get_doubleval(average_param);
@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Oo_OoParams, setName)
 
 	ZVAL_UNDEF(&name);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(name_param)
+		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -156,7 +156,7 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 	if (UNEXPECTED(Z_TYPE_P(average_param) != IS_DOUBLE)) {
@@ -192,7 +192,7 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictName)
 
 	ZVAL_UNDEF(&name);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(name_param)
+		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -262,7 +262,7 @@ PHP_METHOD(Stub_Oo_OoParams, setAverageDefault)
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &average_param);
 	if (!average_param) {
@@ -282,7 +282,7 @@ PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 	ZVAL_UNDEF(&name);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(name_param)
+		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -354,7 +354,7 @@ PHP_METHOD(Stub_Oo_OoParams, setConstAverage)
 	double average;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(average_param)
+		Z_PARAM_DOUBLE(average_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &average_param);
 	average = zephir_get_doubleval(average_param);
@@ -456,7 +456,7 @@ PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
 	ZVAL_UNDEF(&str);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(str_param)
+		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

@@ -79,7 +79,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&data);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(key_param)
+		Z_PARAM_STR(key)
 		Z_PARAM_ARRAY(data_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&dataFromProperty);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(key_param)
+		Z_PARAM_STR(key)
 		Z_PARAM_ARRAY(dataFromProperty_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

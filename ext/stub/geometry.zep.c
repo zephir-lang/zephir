@@ -119,10 +119,10 @@ PHP_METHOD(Stub_Geometry, distanceStatic)
 
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(4, 4)
-		Z_PARAM_ZVAL(x1_param)
-		Z_PARAM_ZVAL(y1_param)
-		Z_PARAM_ZVAL(x2_param)
-		Z_PARAM_ZVAL(y2_param)
+		Z_PARAM_DOUBLE(x1_param)
+		Z_PARAM_DOUBLE(y1_param)
+		Z_PARAM_DOUBLE(x2_param)
+		Z_PARAM_DOUBLE(y2_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(4, 0, &x1_param, &y1_param, &x2_param, &y2_param);
 	x1 = zephir_get_doubleval(x1_param);

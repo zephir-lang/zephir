@@ -168,7 +168,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZVAL_UNDEF(&_34$$14);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
-		Z_PARAM_ZVAL(file_param)
+		Z_PARAM_STR(file)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_LONG_OR_NULL(width, is_null_true)
 		Z_PARAM_LONG_OR_NULL(height, is_null_true)

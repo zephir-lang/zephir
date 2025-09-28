@@ -60,8 +60,8 @@ PHP_METHOD(Stub_Compare, isLessDouble)
 	double a, b;
 
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(a_param)
-		Z_PARAM_ZVAL(b_param)
+		Z_PARAM_DOUBLE(a_param)
+		Z_PARAM_DOUBLE(b_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
 	a = zephir_get_doubleval(a_param);
@@ -75,7 +75,7 @@ PHP_METHOD(Stub_Compare, isLessThenPi)
 	double a;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(a_param)
+		Z_PARAM_DOUBLE(a_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 	a = zephir_get_doubleval(a_param);
@@ -88,7 +88,7 @@ PHP_METHOD(Stub_Compare, isMoreThenPi)
 	double a;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(a_param)
+		Z_PARAM_DOUBLE(a_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 	a = zephir_get_doubleval(a_param);
@@ -106,7 +106,7 @@ PHP_METHOD(Stub_Compare, testVarWithStringEquals)
 
 	ZVAL_UNDEF(&str);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(str_param)
+		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

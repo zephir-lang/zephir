@@ -164,7 +164,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetTypedArray)
 	ZVAL_UNDEF(&key);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ARRAY(arr_param)
-		Z_PARAM_ZVAL(key_param)
+		Z_PARAM_STR(key)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

@@ -149,7 +149,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 	ZVAL_UNDEF(&test);
 	ZVAL_UNDEF(&a);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(test_param)
+		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -175,7 +175,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 	ZVAL_UNDEF(&test);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT(a)
-		Z_PARAM_ZVAL(test_param)
+		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

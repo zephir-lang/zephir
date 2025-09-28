@@ -41,7 +41,7 @@ PHP_METHOD(Stub_Strings, camelize)
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
-		Z_PARAM_ZVAL(str_param)
+		Z_PARAM_STR(str)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
@@ -68,7 +68,7 @@ PHP_METHOD(Stub_Strings, uncamelize)
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
-		Z_PARAM_ZVAL(str_param)
+		Z_PARAM_STR(str)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
@@ -465,7 +465,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_5$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(value_param)
+		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -558,7 +558,7 @@ PHP_METHOD(Stub_Strings, issue2186)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -581,7 +581,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFault)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -609,7 +609,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -636,7 +636,7 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -663,7 +663,7 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -696,7 +696,7 @@ PHP_METHOD(Stub_Strings, issue2234Strict)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -732,7 +732,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -768,7 +768,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictChild)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -802,7 +802,7 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(val_param)
+		Z_PARAM_STR_OR_NULL(val)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -839,7 +839,7 @@ PHP_METHOD(Stub_Strings, issue2299NullableStringCondition)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(roleName_param)
+		Z_PARAM_STR_OR_NULL(roleName)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
