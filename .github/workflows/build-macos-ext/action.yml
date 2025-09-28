@@ -26,7 +26,7 @@ runs:
         HOMEBREW_NO_INSTALL_CLEANUP: 1
       run: |
         echo "::group::Install dependencies"
-        brew install re2c
+        brew install re2c pcre2
         echo "::endgroup::"
 
     - name: Compile Stub Extension
