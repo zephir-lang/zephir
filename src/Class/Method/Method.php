@@ -1491,9 +1491,9 @@ class Method
         switch ($parameter['data-type']) {
             case 'array':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s)', $name);
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ARRAY(%s)', $name);
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
                 }
 
                 break;
@@ -1516,13 +1516,33 @@ class Method
 
                 break;
 
+            case 'double':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                }
+
+                break;
+
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 if ($hasDefaultNull) {
                     $param = sprintf('Z_PARAM_LONG_OR_NULL(%s, is_null_true)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_LONG(%s)', $name);
+                }
+
+                break;
+
+            case 'char':
+            case 'uchar':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
                 }
 
                 break;
@@ -1547,9 +1567,10 @@ class Method
 
             case 'string':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                    // Use generic ZVAL_OR_NULL parsing to remain compatible with PHP 8.4 (zend_parse_arg_str expects zend_string**)
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
                 }
 
                 break;
@@ -2377,7 +2398,7 @@ class Method
      * Get data type of method's parameter
      */
     private function getParamDataType(array $parameter): string
-    {
+   {
         return $parameter['data-type'] ?? 'variable';
     }
 
