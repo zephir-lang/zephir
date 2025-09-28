@@ -77,13 +77,13 @@ jobs:
           # macOS
           - { name: macos-clang, os: macos-13, compiler: clang }
           # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
           # Disabled due PSR extension wasn't complied for >=8.2
-          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2019', compiler: 'vs16' }
 
     steps:
       - uses: actions/checkout@v4
