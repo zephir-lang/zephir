@@ -1491,9 +1491,9 @@ class Method
         switch ($parameter['data-type']) {
             case 'array':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s_param)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_ARRAY(%s_param)', $name);
                 }
 
                 break;
