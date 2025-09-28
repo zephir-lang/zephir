@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Geometry, run)
 	ZVAL_UNDEF(&_7$$3);
 	ZVAL_UNDEF(&_8$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(list_param)
+		Z_PARAM_ARRAY(list_param)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -87,7 +87,7 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(list_param)
+		Z_PARAM_ARRAY(list_param)
 		Z_PARAM_LONG(count)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
