@@ -175,7 +175,7 @@ PHP_METHOD(Stub_Concat, testConcat5)
 	ZVAL_UNDEF(&retval);
 	ZVAL_UNDEF(&left);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_DOUBLE(number_param)
+		Z_PARAM_ZVAL(number)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
