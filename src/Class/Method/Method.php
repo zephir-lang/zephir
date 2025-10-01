@@ -1491,9 +1491,9 @@ class Method
         switch ($parameter['data-type']) {
             case 'array':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s)', $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ARRAY(%s_param)', $name);
+                    $param = sprintf('Z_PARAM_ARRAY(%s)', $name);
                 }
 
                 break;
@@ -1512,15 +1512,6 @@ class Method
                     $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s, is_null_true)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_DOUBLE(%s)', $name);
-                }
-
-                break;
-
-            case 'double':
-                if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_DOUBLE_OR_NULL(%s_param)', $name);
-                } else {
-                    $param = sprintf('Z_PARAM_DOUBLE(%s_param)', $name);
                 }
 
                 break;
