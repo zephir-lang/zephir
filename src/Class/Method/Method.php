@@ -1519,10 +1519,21 @@ class Method
             case 'int':
             case 'uint':
             case 'long':
+            case 'ulong':
                 if ($hasDefaultNull) {
                     $param = sprintf('Z_PARAM_LONG_OR_NULL(%s, is_null_true)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_LONG(%s)', $name);
+                }
+
+                break;
+
+            case 'char':
+            case 'uchar':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
                 }
 
                 break;
@@ -1547,6 +1558,7 @@ class Method
 
             case 'string':
                 if ($hasDefaultNull) {
+                    // $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
                     $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_STR(%s)', $name);

@@ -17,7 +17,7 @@ on:
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.6.1
+  ZEPHIR_PARSER_VERSION: 1.8.0
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -73,17 +73,17 @@ jobs:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-24.04, compiler: gcc }
           # macOS
-          - { name: macos-clang, os: macos-13, compiler: clang }
+          - { name: macos-clang, os: macos-14, compiler: clang }
           # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           # Disabled due PSR extension wasn't complied for >=8.2
-          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
+          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
 
     steps:
       - uses: actions/checkout@v5
@@ -95,7 +95,7 @@ jobs:
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
-          tools: phpize, php-config
+          tools: pecl, phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
           # enable_dl:       https://github.com/zephir-lang/zephir/pull/1654
@@ -142,6 +142,7 @@ jobs:
           ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
+          toolset: ${{ matrix.toolset }}
           cflags: '/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL'
           ldflags: '/LTCG'
         env:

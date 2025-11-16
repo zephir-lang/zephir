@@ -41,7 +41,7 @@ PHP_METHOD(Stub_Chars, sumChars2)
 	char ch, chlower = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(ch)
+		Z_PARAM_ZVAL(ch_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
 	ch = zephir_get_charval(ch_param);
@@ -63,7 +63,7 @@ PHP_METHOD(Stub_Chars, diffChars2)
 	char ch, chlower = 0;
 
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(ch)
+		Z_PARAM_ZVAL(ch_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
 	ch = zephir_get_charval(ch_param);
