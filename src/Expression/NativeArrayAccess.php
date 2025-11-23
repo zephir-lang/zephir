@@ -117,12 +117,6 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array              $expression
-     * @param Variable           $variableVariable
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -288,12 +282,6 @@ class NativeArrayAccess
     }
 
     /**
-     * @param array              $expression
-     * @param Variable           $variableVariable
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws ReflectionException
      * @throws Exception
      */

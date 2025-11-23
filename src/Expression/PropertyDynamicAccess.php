@@ -33,11 +33,6 @@ class PropertyDynamicAccess
 
     /**
      * Resolves the access to a property in an object.
-     *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
      */
     public function compile($expression, CompilationContext $compilationContext)
     {

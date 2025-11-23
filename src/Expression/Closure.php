@@ -32,30 +32,18 @@ use function is_array;
  */
 class Closure
 {
-    /**
-     * @var bool
-     */
     protected bool $expecting = true;
-    /**
-     * @var Variable|null
-     */
+
     protected ?Variable $expectingVariable = null;
     /**
      * Unique closure ID.
      */
     protected static $id = 0;
-    /**
-     * @var bool
-     */
+
     protected bool $readOnly = false;
 
     /**
      * Creates a closure.
-     *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
      *
      * @throws Exception
      */
@@ -187,8 +175,6 @@ class Closure
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {

@@ -43,11 +43,6 @@ class NativeArray
     /**
      * Compiles an array initialization.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws ReflectionException
      * @throws Exception
      */
@@ -581,9 +576,6 @@ class NativeArray
     /**
      * Sets if the variable must be resolved into a direct variable symbol
      * create a temporary value or ignore the return value.
-     *
-     * @param bool          $expecting
-     * @param Variable|null $expectingVariable
      */
     public function setExpectReturn(bool $expecting, ?Variable $expectingVariable = null): void
     {
@@ -593,8 +585,6 @@ class NativeArray
 
     /**
      * Sets if the result of the evaluated expression is read only.
-     *
-     * @param bool $readOnly
      */
     public function setReadOnly(bool $readOnly): void
     {

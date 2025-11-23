@@ -59,6 +59,7 @@ class Constants
     ];
     protected bool      $expecting         = true;
     protected ?Variable $expectingVariable = null;
+
     /**
      * Magic constants.
      *
@@ -83,11 +84,6 @@ class Constants
 
     /**
      * Resolves a PHP constant value into C-code.
-     *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
      *
      * @throws CompilerException
      */
