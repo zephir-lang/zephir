@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Router, getRouteById);
 PHP_METHOD(Stub_Router, getRouteByName);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router___construct, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, defaultRoutes, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, defaultRoutes, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_router_setdi, 0, 0, 1)

@@ -34,12 +34,12 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_test88issue, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, param1, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, param2, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param2, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_test88issueparam2initstring, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, param1, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, param2, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param2, IS_STRING, 0, "'test string'")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_vars_testvardump2param, 0, 0, 2)

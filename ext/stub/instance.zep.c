@@ -45,17 +45,17 @@ PHP_METHOD(Stub_Instance, __construct)
 	ZVAL_UNDEF(&a10_sub);
 	ZVAL_UNDEF(&a11_sub);
 	ZEND_PARSE_PARAMETERS_START(11, 11)
-		Z_PARAM_OBJECT_OF_CLASS(a1, stub_arithmetic_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a2, stub_arrayobject_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a3, stub_assign_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a4, stub_bitwise_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a5, stub_branchprediction_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a6, stub_cast_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a7, stub_cblock_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a8, stub_chars_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a9, stub_closures_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a10, stub_compare_ce)
-		Z_PARAM_OBJECT_OF_CLASS(a11, stub_concat_ce)
+		Z_PARAM_OBJECT_OF_CLASS(a1, zephir_get_internal_ce(SL("stub\\arithmetic")))
+		Z_PARAM_OBJECT_OF_CLASS(a2, zephir_get_internal_ce(SL("stub\\arrayobject")))
+		Z_PARAM_OBJECT_OF_CLASS(a3, zephir_get_internal_ce(SL("stub\\assign")))
+		Z_PARAM_OBJECT_OF_CLASS(a4, zephir_get_internal_ce(SL("stub\\bitwise")))
+		Z_PARAM_OBJECT_OF_CLASS(a5, zephir_get_internal_ce(SL("stub\\branchprediction")))
+		Z_PARAM_OBJECT_OF_CLASS(a6, zephir_get_internal_ce(SL("stub\\cast")))
+		Z_PARAM_OBJECT_OF_CLASS(a7, zephir_get_internal_ce(SL("stub\\cblock")))
+		Z_PARAM_OBJECT_OF_CLASS(a8, zephir_get_internal_ce(SL("stub\\chars")))
+		Z_PARAM_OBJECT_OF_CLASS(a9, zephir_get_internal_ce(SL("stub\\closures")))
+		Z_PARAM_OBJECT_OF_CLASS(a10, zephir_get_internal_ce(SL("stub\\compare")))
+		Z_PARAM_OBJECT_OF_CLASS(a11, zephir_get_internal_ce(SL("stub\\concat")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(11, 0, &a1, &a2, &a3, &a4, &a5, &a6, &a7, &a8, &a9, &a10, &a11);
 }
@@ -83,7 +83,7 @@ PHP_METHOD(Stub_Instance, testIssue1339)
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
 	object_init_ex(&_0, stub_arrayobject_ce);
-	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 46);
+	ZEPHIR_CALL_METHOD(NULL, &_0, "__construct", NULL, 48);
 	zephir_check_call_status();
 	zephir_array_fast_append(&parameters, &_0);
 	ZEPHIR_INIT_NVAR(&_0);

@@ -9,7 +9,7 @@ PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir);
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arraysearch_simplesearch, 0, 0, 2)
 	ZEND_ARG_INFO(0, needle)
 	ZEND_ARG_ARRAY_INFO(0, haystack, 0)
-	ZEND_ARG_TYPE_INFO(0, strict, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, strict, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arraysearch_searchusingarrayinsidezephir, 0, 0, 0)

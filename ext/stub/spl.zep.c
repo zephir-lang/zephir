@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 	zephir_fetch_params(1, 1, 0, &file_param);
 	zephir_get_strval(&file, file_param);
 	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 102, &file);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 104, &file);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -77,7 +77,7 @@ ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_builtin_intmethods_getlog, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, num, IS_LONG, 0)
-	ZEND_ARG_TYPE_INFO(0, base, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, base, IS_LONG, 0, "-1")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_builtin_intmethods_method_entry) {

@@ -90,7 +90,7 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 84, path, this_ptr);
+	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 86, path, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "content");
 }

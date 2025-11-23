@@ -16,9 +16,9 @@ PHP_METHOD(Stub_TypeHinting_TestAbstract, returnChar);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_typehinting_testabstract_testfunc, 0, 0, 0)
 ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text, IS_ARRAY, 0, "[]")
-	ZEND_ARG_TYPE_INFO(0, text2, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, flag, _IS_BOOL, 0)
-	ZEND_ARG_TYPE_INFO(0, optional, IS_LONG, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, text2, IS_STRING, 0, "''")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, flag, _IS_BOOL, 0, "true")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, optional, IS_LONG, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_typehinting_testabstract_returnoneofscalar, 0, 0, 0)
