@@ -30,7 +30,7 @@ class ExportSymbolString extends ExportSymbol
         ?ZephirVariable $symbolVariable,
         ZephirVariable $variable,
         ?Printer $codePrinter,
-        ?array $statement
+        ?array $statement = [],
     ): void {
         $symbol = $compilationContext->backend->getVariableCode($variable);
         $codePrinter->output(
