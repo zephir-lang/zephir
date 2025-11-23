@@ -366,10 +366,8 @@ class StatementsBlock
 
     /**
      * Returns the type of the last statement executed.
-     *
-     * @return string
      */
-    public function getLastStatementType()
+    public function getLastStatementType(): string
     {
         return $this->lastStatement['type'];
     }
