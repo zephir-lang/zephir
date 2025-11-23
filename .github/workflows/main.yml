@@ -44,12 +44,6 @@ jobs:
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
-# Disabling for now until I figure out the rules
-#      - name: Run PHP CS Fixer
-#        if: always()
-#        run: |
-#          php-cs-fixer fix --diff --dry-run -v --using-cache=no
-
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
