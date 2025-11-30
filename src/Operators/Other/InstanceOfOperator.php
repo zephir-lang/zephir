@@ -28,11 +28,6 @@ use Zephir\Operators\AbstractOperator;
 class InstanceOfOperator extends AbstractOperator
 {
     /**
-     * @param                    $expression
-     * @param CompilationContext $context
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
