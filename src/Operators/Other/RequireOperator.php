@@ -31,11 +31,6 @@ class RequireOperator extends AbstractOperator
     protected string $zephirMethodRet = 'zephir_require_zval_ret';
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */

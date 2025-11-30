@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Optimizers\EvalExpression;
 use Zephir\Statements\LetStatement;
@@ -27,12 +29,10 @@ class TernaryOperator extends AbstractOperator
     /**
      * Compile ternary operator.
      *
-     * @param                    $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         /**
          * This variable is used to check if the compound and expression is evaluated as true or false:
