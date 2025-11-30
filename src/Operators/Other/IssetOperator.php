@@ -96,7 +96,6 @@ class IssetOperator extends AbstractOperator
                             $variable,
                             $resolvedExpr,
                             $left['right'],
-                            $compilationContext
                         );
 
                     case 'variable':
@@ -111,7 +110,6 @@ class IssetOperator extends AbstractOperator
                             $variable,
                             $indexVariable,
                             $left['right'],
-                            $compilationContext
                         );
 
 
