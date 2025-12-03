@@ -32,15 +32,10 @@ class UnlikelyOperator extends AbstractOperator
     /**
      * Compile likely/unlikely operator
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
-    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         if (!isset($expression['left'])) {
             throw new CompilerException(

@@ -32,11 +32,6 @@ class CastOperator extends AbstractOperator
     /**
      * Compiles a type cast operation.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression

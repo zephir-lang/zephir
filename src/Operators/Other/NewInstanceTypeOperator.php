@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\Builder\FunctionCallBuilder;
 use Zephir\Builder\Operators\CastOperatorBuilder;
 use Zephir\CompilationContext;
@@ -32,12 +33,7 @@ class NewInstanceTypeOperator extends AbstractOperator
     /**
      * Executes the operator.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {

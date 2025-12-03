@@ -280,7 +280,7 @@ class Backend
         return $output;
     }
 
-    public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
+    public function arrayIsset(Variable $var, $resolvedExpr, $expression): CompiledExpression
     {
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
@@ -296,11 +296,6 @@ class Backend
             }
         }
 
-        return $this->arrayIsset2($var, $resolvedExpr, $expression, $context);
-    }
-
-    public function arrayIsset2(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
-    {
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
@@ -312,16 +307,16 @@ class Backend
                     . '"))',
                     $expression
                 );
-            } else {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_long('
-                    . $this->getVariableCode($var)
-                    . ', '
-                    . $resolvedExpr->getCode() . ')',
-                    $expression
-                );
             }
+
+            return new CompiledExpression(
+                'bool',
+                'zephir_array_isset_long('
+                . $this->getVariableCode($var)
+                . ', '
+                . $resolvedExpr->getCode() . ')',
+                $expression
+            );
         }
 
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {

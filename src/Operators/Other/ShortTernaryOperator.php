@@ -13,12 +13,14 @@ declare(strict_types=1);
 
 namespace Zephir\Operators\Other;
 
+use ReflectionException;
 use Zephir\Builder\Operators\UnaryOperatorBuilder;
 use Zephir\Builder\Statements\IfStatementBuilder;
 use Zephir\Builder\Statements\LetStatementBuilder;
 use Zephir\Builder\StatementsBlockBuilder;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
+use Zephir\Exception;
 use Zephir\Operators\AbstractOperator;
 use Zephir\Statements\IfStatement;
 
@@ -32,12 +34,10 @@ class ShortTernaryOperator extends AbstractOperator
     /**
      * Compile ternary operator.
      *
-     * @param                    $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function compile($expression, CompilationContext $compilationContext): CompiledExpression
+    public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
     {
         /**
          * This variable is used to check if the compound and expression is evaluated as true or false:

@@ -29,11 +29,6 @@ class IssetOperator extends AbstractOperator
     /**
      * Compiles an 'isset' operator.
      *
-     * @param array $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -96,7 +91,6 @@ class IssetOperator extends AbstractOperator
                             $variable,
                             $resolvedExpr,
                             $left['right'],
-                            $compilationContext
                         );
 
                     case 'variable':
@@ -111,7 +105,6 @@ class IssetOperator extends AbstractOperator
                             $variable,
                             $indexVariable,
                             $left['right'],
-                            $compilationContext
                         );
 
 

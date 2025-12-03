@@ -36,11 +36,6 @@ class NewInstanceOperator extends AbstractOperator
     /**
      * Creates a new instance.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws ReflectionException
      * @throws Exception
      */
