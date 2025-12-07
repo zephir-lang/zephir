@@ -194,7 +194,7 @@ class MethodCache
     /**
      * Checks if the class is suitable for caching.
      */
-    private function isClassCacheable(Definition|ReflectionClass $classDefinition = null): bool
+    private function isClassCacheable(Definition|ReflectionClass|null $classDefinition = null): bool
     {
         if ($classDefinition instanceof Definition) {
             return true;
