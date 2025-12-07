@@ -907,6 +907,8 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the type of variable.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function setType(string $type): void
     {
