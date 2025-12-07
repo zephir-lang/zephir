@@ -710,11 +710,6 @@ class Backend
         }
     }
 
-    public function checkConstructor(Variable $var, CompilationContext $context): void
-    {
-        $context->codePrinter->output('if (zephir_has_constructor(' . $this->getVariableCode($var) . ')) {');
-    }
-
     public function checkStrictType($type, $var, CompilationContext $context): void
     {
         $codePrinter = $context->codePrinter;
