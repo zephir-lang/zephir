@@ -144,7 +144,7 @@ final class PregMatchOptimizerTest extends TestCase
             ->expects($this->once())
             ->method('getVariable')
             ->with('matches')
-            ->willReturn(false);
+            ->willReturn(null);
 
         $symbolTable = $context->getProperty('symbolTable');
         $symbolTable->setValue($this->contextMock, $this->symTableMock);
