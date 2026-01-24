@@ -21,6 +21,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Exception\IllegalOperationException;
 use Zephir\Name;
 use Zephir\Traits\VariablesTrait;
+use Zephir\Types\TypeRegistry;
 use Zephir\Variable\Variable as ZephirVariable;
 
 use function array_keys;
@@ -66,79 +67,62 @@ class Variable
         $symbolVariable->setPossibleValue($resolvedExpr, $compilationContext);
 
         $type = $symbolVariable->getType();
-        switch ($type) {
-            case 'int':
-            case 'uint':
-            case 'long':
-            case 'ulong':
-            case 'char':
-            case 'uchar':
-                $this->doNumericAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $variable,
-                    $statement,
-                    $compilationContext
-                );
-                break;
 
-            case 'double':
-                $this->doDoubleAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $variable,
-                    $statement,
-                    $compilationContext
-                );
-                break;
-
-            case 'array':
-                $this->doArrayAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $symbolVariable,
-                    $variable,
-                    $statement,
-                    $compilationContext
-                );
-                break;
-
-            case 'string':
-                $this->doStringAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $symbolVariable,
-                    $variable,
-                    $statement,
-                    $compilationContext
-                );
-                break;
-
-            case 'bool':
-                $this->doBoolAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $variable,
-                    $statement,
-                    $compilationContext
-                );
-                break;
-
-            case 'variable':
-            case 'mixed':
-                $this->doVariableAssignment(
-                    $codePrinter,
-                    $resolvedExpr,
-                    $symbolVariable,
-                    $variable,
-                    $statement,
-                    $compilationContext,
-                    $readDetector
-                );
-                break;
-
-            default:
-                throw new CompilerException('Unknown type: ' . $type, $statement);
+        // Use TypeRegistry for type classification
+        if (TypeRegistry::isIntegerOrChar($type)) {
+            $this->doNumericAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $variable,
+                $statement,
+                $compilationContext
+            );
+        } elseif ($type === 'double') {
+            $this->doDoubleAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $variable,
+                $statement,
+                $compilationContext
+            );
+        } elseif ($type === 'array') {
+            $this->doArrayAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $symbolVariable,
+                $variable,
+                $statement,
+                $compilationContext
+            );
+        } elseif ($type === 'string') {
+            $this->doStringAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $symbolVariable,
+                $variable,
+                $statement,
+                $compilationContext
+            );
+        } elseif (TypeRegistry::isBoolean($type)) {
+            $this->doBoolAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $variable,
+                $statement,
+                $compilationContext
+            );
+        } elseif (TypeRegistry::isDynamic($type)) {
+            $this->doVariableAssignment(
+                $codePrinter,
+                $resolvedExpr,
+                $symbolVariable,
+                $variable,
+                $statement,
+                $compilationContext,
+                $readDetector
+            );
+        } else {
+            throw new CompilerException('Unknown type: ' . $type, $statement);
         }
     }
 
@@ -538,29 +522,13 @@ class Variable
             case 'uint':
             case 'long':
             case 'ulong':
-                $operator = match ($statement['operator']) {
-                    'assign'     => ' = ',
-                    'add-assign' => ' += ',
-                    'sub-assign' => ' -= ',
-                    'mul-assign' => ' *= ',
-                    'div-assign' => ' /= ',
-                    'mod-assign' => ' %= ',
-                    default      => throw new IllegalOperationException($statement, $resolvedExpr)
-                };
-
+                $operator = OperatorResolver::resolveNumeric($statement['operator'], $statement, $resolvedExpr);
                 $codePrinter->output($variable . $operator . $resolvedExpr->getCode() . ';');
                 break;
 
             case 'char':
             case 'uchar':
-                $operator = match ($statement['operator']) {
-                    'assign'     => ' = ',
-                    'add-assign' => ' += ',
-                    'sub-assign' => ' -= ',
-                    'mul-assign' => ' *= ',
-                    default      => throw new IllegalOperationException($statement, $resolvedExpr)
-                };
-
+                $operator = OperatorResolver::resolveChar($statement['operator'], $statement, $resolvedExpr);
                 $codePrinter->output($variable . $operator . '\'' . $resolvedExpr->getCode() . '\';');
                 break;
 
@@ -575,13 +543,7 @@ class Variable
                 break;
 
             case 'bool':
-                $operator = match ($statement['operator']) {
-                    'assign'     => ' = ',
-                    'add-assign' => ' += ',
-                    'sub-assign' => ' -= ',
-                    default      => throw new IllegalOperationException($statement, $resolvedExpr)
-                };
-
+                $operator = OperatorResolver::resolveBool($statement['operator'], $statement, $resolvedExpr);
                 $codePrinter->output($variable . $operator . $resolvedExpr->getBooleanCode() . ';');
                 break;
 
@@ -591,56 +553,34 @@ class Variable
                     $compilationContext,
                     $statement
                 );
-                switch ($itemVariable->getType()) {
-                    case 'int':
-                    case 'uint':
-                    case 'long':
-                    case 'ulong':
-                    case 'bool':
-                    case 'char':
-                    case 'uchar':
-                        $operator = match ($statement['operator']) {
-                            'assign'     => ' = ',
-                            'add-assign' => ' += ',
-                            'sub-assign' => ' -= ',
-                            'mul-assign' => ' *= ',
-                            'div-assign' => ' /= ',
-                            'mod-assign' => ' %= ',
-                            default      => throw new IllegalOperationException($statement, $itemVariable)
-                        };
-
-                        $codePrinter->output($variable . $operator . $itemVariable->getName() . ';');
-                        break;
-
-                    case 'double':
-                        $this->doNumericAssignmentVar(
-                            $statement,
-                            $codePrinter,
-                            $variable,
-                            $itemVariable,
-                            '(long)'
-                        );
-                        break;
-
-                    case 'variable':
-                    case 'mixed':
-                        $compilationContext->headersManager->add('kernel/operators');
-                        $exprVariable = $compilationContext->symbolTable->getVariableForWrite(
-                            $resolvedExpr->resolve(null, $compilationContext),
-                            $compilationContext
-                        );
-                        $this->processDoNumericAssignmentMixed(
-                            $compilationContext,
-                            $exprVariable,
-                            $statement,
-                            $codePrinter,
-                            $variable,
-                            $itemVariable
-                        );
-                        break;
-
-                    default:
-                        throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
+                // Use TypeRegistry for variable type classification
+                if (TypeRegistry::isIntegerOrChar($itemVariable->getType()) || TypeRegistry::isBoolean($itemVariable->getType())) {
+                    $operator = OperatorResolver::resolveVariable($statement['operator'], $statement, $itemVariable);
+                    $codePrinter->output($variable . $operator . $itemVariable->getName() . ';');
+                } elseif ($itemVariable->getType() === 'double') {
+                    $this->doNumericAssignmentVar(
+                        $statement,
+                        $codePrinter,
+                        $variable,
+                        $itemVariable,
+                        '(long)'
+                    );
+                } elseif (TypeRegistry::isDynamic($itemVariable->getType())) {
+                    $compilationContext->headersManager->add('kernel/operators');
+                    $exprVariable = $compilationContext->symbolTable->getVariableForWrite(
+                        $resolvedExpr->resolve(null, $compilationContext),
+                        $compilationContext
+                    );
+                    $this->processDoNumericAssignmentMixed(
+                        $compilationContext,
+                        $exprVariable,
+                        $statement,
+                        $codePrinter,
+                        $variable,
+                        $itemVariable
+                    );
+                } else {
+                    throw new CompilerException('Unknown type: ' . $itemVariable->getType(), $statement);
                 }
                 break;
             default:

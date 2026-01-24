@@ -24,6 +24,11 @@ use function sprintf;
 abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
 {
     /**
+     * The PHP internal type constant to check (e.g., 'IS_STRING', 'IS_ARRAY')
+     */
+    protected string $typeConstant;
+
+    /**
      * @param array              $expression
      * @param Call               $call
      * @param CompilationContext $context
@@ -53,5 +58,11 @@ abstract class IsTypeOptimizerAbstract extends OptimizerAbstract
         return new CompiledExpression('bool', $condition, $expression);
     }
 
-    abstract protected function getType();
+    /**
+     * Get the type constant for this optimizer
+     */
+    protected function getType(): string
+    {
+        return $this->typeConstant;
+    }
 }

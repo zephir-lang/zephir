@@ -22,8 +22,5 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
  */
 class IsArrayOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_ARRAY';
-    }
+    protected string $typeConstant = 'IS_ARRAY';
 }
