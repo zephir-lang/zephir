@@ -21,7 +21,6 @@ use Zephir\Exception;
 use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Expression\Builder\BuilderFactory;
-use Zephir\Types\MethodMapTrait;
 
 use function array_unshift;
 use function method_exists;
