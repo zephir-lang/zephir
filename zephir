@@ -274,6 +274,17 @@ HELP);
                 system('cd ext && phpize --clean > /dev/null');
                 system('cd ext && ./clean > /dev/null');
             }
+
+            // Remove recursive .dep files inside the ext directory
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator('ext', FilesystemIterator::SKIP_DOTS),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            foreach ($iterator as $fileinfo) {
+                if ($fileinfo->isFile() && $fileinfo->getExtension() === 'dep') {
+                    unlink($fileinfo->getRealPath());
+                }
+            }
         } catch (FileSystemException $e) {
             fwrite(
                 STDERR,
