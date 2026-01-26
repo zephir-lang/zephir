@@ -124,12 +124,6 @@ class HardDisk implements FileSystemInterface
     /**
      * This function does not perform operations in the temporary
      * directory, but it caches the results to avoid reprocessing.
-     *
-     * @param string $algorithm
-     * @param string $sourceFile
-     * @param bool   $useCache
-     *
-     * @return string
      */
     public function getHashFile(string $algorithm, string $sourceFile, bool $useCache = false): string
     {
