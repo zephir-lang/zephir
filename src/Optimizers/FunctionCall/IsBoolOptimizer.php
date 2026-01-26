@@ -22,8 +22,5 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
  */
 class IsBoolOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_BOOL';
-    }
+    protected string $typeConstant = 'IS_BOOL';
 }

@@ -18,12 +18,9 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
 /**
  * IsObjectOptimizer.
  *
- * Optimizes calls to 'is_array' using internal function
+ * Optimizes calls to 'is_object' using internal function
  */
 class IsObjectOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_OBJECT';
-    }
+    protected string $typeConstant = 'IS_OBJECT';
 }

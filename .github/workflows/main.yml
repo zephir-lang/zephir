@@ -10,10 +10,6 @@ on:
       - '**/nightly.yml'
       - '**/release.yml'
       - '**/FUNDING.yml'
-  pull_request:
-    branches:
-      - master
-      - development
 
 env:
   RE2C_VERSION: 2.2
