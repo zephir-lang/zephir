@@ -48,8 +48,8 @@ final class CompilerFormatter extends LineFormatter
 
     public function format(array $record): string
     {
-        if ($this->config->get('silent')) {
-            return '';
+        if ($this->config->get("silent")) {
+            return "";
         }
 
         $vars = parent::normalize($record);
@@ -57,46 +57,63 @@ final class CompilerFormatter extends LineFormatter
         $output = $this->format;
 
         // unused
-        unset($vars['extra']);
-        $output = str_replace('%extra%', '', $output);
-        $output = str_replace('%context%', '', $output);
+        unset($vars["extra"]);
+        $output = str_replace("%extra%", "", $output);
+        $output = str_replace("%context%", "", $output);
 
         // ignore empty context or invalid format
         if (
-            !empty($vars['context']) &&
-            is_array($vars['context']) &&
-            2 == count($vars['context'])
+            !empty($vars["context"]) &&
+            is_array($vars["context"]) &&
+            2 == count($vars["context"])
         ) {
-            $type = $vars['context'][0];
-            $node = $vars['context'][1];
+            $type = $vars["context"][0];
+            $node = $vars["context"][1];
 
-            if (!$this->config->get($type, 'warnings')) {
-                return '';
+            if (!$this->config->get($type, "warnings")) {
+                return "";
             }
 
-            $vars['type'] = "[$type]";
+            $vars["type"] = "[$type]";
 
-            if (!isset($node['file'])) {
-                $vars['file'] = 'unknown';
-                $vars['line'] = '0';
+            if (!isset($node["file"])) {
+                $vars["file"] = "unknown";
+                $vars["line"] = "0";
             } else {
-                $vars['file'] = $node['file'];
-                $vars['line'] = $node['line'];
-                $output       .= PHP_EOL;
+                $vars["file"] = $node["file"];
+                $vars["line"] = $node["line"];
+                $output .= PHP_EOL;
 
-                $lines = $this->getFileContents($node['file']);
-                if (isset($lines[$node['line'] - 1])) {
-                    $line   = $lines[$node['line'] - 1];
-                    $output .= "\t" . str_replace("\t", ' ', $line);
-                    if (($node['char'] - 1) > 0) {
-                        $output .= PHP_EOL . "\t" . str_repeat('-', $node['char'] - 1) . '^' . PHP_EOL;
+                $lines = $this->getFileContents($node["file"]);
+                if (isset($lines[$node["line"] - 1])) {
+                    $line = $lines[$node["line"] - 1];
+                    $output .= "\t" . str_replace("\t", " ", $line);
+                    if ($node["char"] - 1 > 0) {
+                        $output .=
+                            PHP_EOL .
+                            "\t" .
+                            str_repeat("-", $node["char"] - 1) .
+                            "^" .
+                            PHP_EOL;
                     }
                 }
             }
 
-            $output = str_replace('%file%', $this->stringify($vars['file']), $output);
-            $output = str_replace('%line%', $this->stringify($vars['line']), $output);
-            $output = str_replace('%type%', $this->stringify($vars['type']), $output);
+            $output = str_replace(
+                "%file%",
+                $this->stringify($vars["file"]),
+                $output,
+            );
+            $output = str_replace(
+                "%line%",
+                $this->stringify($vars["line"]),
+                $output,
+            );
+            $output = str_replace(
+                "%type%",
+                $this->stringify($vars["type"]),
+                $output,
+            );
         }
 
         $output = $this->replacePlaceholders($vars, $output);
@@ -109,11 +126,11 @@ final class CompilerFormatter extends LineFormatter
      */
     private function cleanExtraPlaceholders(string $output): string
     {
-        if (str_contains($output, '%')) {
-            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
+        if (str_contains($output, "%")) {
+            $output = preg_replace("/%(?:extra|context)\..+?%/", "", $output);
             $output = preg_replace('/ %type%\n/', "\n", $output);
-            $output = preg_replace('/on line %line%/', '', $output);
-            $output = preg_replace('/ in %file% /', '', $output);
+            $output = preg_replace("/on line %line%/", "", $output);
+            $output = preg_replace("/ in %file% /", "", $output);
         }
 
         return $output;
@@ -131,32 +148,32 @@ final class CompilerFormatter extends LineFormatter
         return $this->filesContent[$file];
     }
 
-    private function replacePlaceholders(array $vars, $output)
+    private function replacePlaceholders(array $vars, string $output): string
     {
         // WARNING -> Warning
-        if (array_key_exists('level_name', $vars)) {
-            $vars['level_name'] = ucfirst(strtolower($vars['level_name']));
+        if (array_key_exists("level_name", $vars)) {
+            $vars["level_name"] = ucfirst(strtolower($vars["level_name"]));
         }
 
         foreach ($vars as $var => $val) {
-            $placeholder = '%' . $var . '%';
-            $realValue   = $this->stringify($val);
+            $placeholder = "%" . $var . "%";
+            $realValue = $this->stringify($val);
 
             if (!str_contains($output, $placeholder)) {
                 continue;
             }
 
             // Strip level name from entries like "Info: Installing..."
-            if ('%level_name%' === $placeholder) {
+            if ("%level_name%" === $placeholder) {
                 switch ($realValue) {
-                    case 'Debug':
-                    case 'Info':
-                        $output = str_replace('%level_name%: ', '', $output);
+                    case "Debug":
+                    case "Info":
+                        $output = str_replace("%level_name%: ", "", $output);
                         continue 2;
                 }
             }
 
-            $output = str_replace('%' . $var . '%', $realValue, $output);
+            $output = str_replace("%" . $var . "%", $realValue, $output);
         }
 
         return $output;
