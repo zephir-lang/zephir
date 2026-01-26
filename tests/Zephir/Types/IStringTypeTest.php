@@ -14,21 +14,21 @@ declare(strict_types=1);
 namespace Zephir\Test\Types;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\Types\IStringType;
+use Zephir\Types\IstringType;
 use Zephir\Types\Types;
 
 final class IStringTypeTest extends TestCase
 {
     public function testShouldGetTypeName(): void
     {
-        $stringType = new IStringType();
+        $stringType = new IstringType();
 
         $this->assertSame(Types::T_ISTRING, $stringType->getTypeName());
     }
 
     public function testShouldHaveMethodMap(): void
     {
-        $stringType = new IStringType();
+        $stringType = new IstringType();
 
         $this->assertIsArray($stringType->methodMap);
         $this->assertNotEmpty($stringType->methodMap);
