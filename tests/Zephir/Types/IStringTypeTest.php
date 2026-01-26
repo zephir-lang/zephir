@@ -23,7 +23,7 @@ final class IStringTypeTest extends TestCase
     {
         $stringType = new IStringType();
 
-        $this->assertSame(Types::T_STRING, $stringType->getTypeName());
+        $this->assertSame(Types::T_ISTRING, $stringType->getTypeName());
     }
 
     public function testShouldHaveMethodMap(): void
