@@ -55,7 +55,7 @@ jobs:
         run: .ci/build-phar.sh
 
       - name: Upload Zephir Phar
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: zephir.phar
           path: zephir.phar
