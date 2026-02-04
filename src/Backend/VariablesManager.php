@@ -15,6 +15,7 @@ namespace Zephir\Backend;
 
 use Zephir\CompilationContext as Context;
 use Zephir\Exception\CompilerException as Exception;
+use Zephir\Name;
 use Zephir\Types\Types;
 use Zephir\Variable\Variable;
 
@@ -22,7 +23,6 @@ use function in_array;
 use function sprintf;
 use function strlen;
 use function substr;
-use function Zephir\Backend\ZendEngine3\add_slashes;
 
 class VariablesManager
 {
@@ -130,7 +130,7 @@ class VariablesManager
                 break;
 
             case Types::T_STRING:
-                $string = add_slashes($value['value']);
+                $string = Name::addSlashes($value['value']);
                 $context->backend->assignString($variable, $string, $context);
                 break;
 
@@ -158,7 +158,7 @@ class VariablesManager
 
         switch ($value['type']) {
             case Types::T_STRING:
-                $string = add_slashes($value['value']);
+                $string = Name::addSlashes($value['value']);
                 $context->backend->assignString($variable, $string, $context);
                 break;
 
