@@ -276,7 +276,7 @@ HELP);
             }
 
             // Remove recursive .dep files inside the ext directory
-            $iterator = new RecursiveIteratorIterator(
+            /*$iterator = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator('ext', FilesystemIterator::SKIP_DOTS),
                 RecursiveIteratorIterator::CHILD_FIRST
             );
@@ -284,7 +284,7 @@ HELP);
                 if ($fileinfo->isFile() && $fileinfo->getExtension() === 'dep') {
                     unlink($fileinfo->getRealPath());
                 }
-            }
+            }*/
         } catch (FileSystemException $e) {
             fwrite(
                 STDERR,
