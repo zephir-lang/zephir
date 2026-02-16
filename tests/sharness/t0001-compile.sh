@@ -6,7 +6,7 @@ test_description="Test compile commands"
 # shellcheck disable=SC1091
 source ./setup.sh
 
-regexp="'-O2 -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
+regexp="'-O2 -Wno-incompatible-pointer-types -fvisibility=hidden -Wparentheses\( -flto\)\? -DZEPHIR_RELEASE=1'"
 test_expect_success "Compile the extension in production mode" "
   cd $FIXTURESDIR/devmode &&
   zephirc fullclean 2>&1 >/dev/null &&
