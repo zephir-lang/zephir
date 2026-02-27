@@ -1320,7 +1320,7 @@ final class Compiler
                     $gccFlags = '-O2 -Wno-incompatible-pointer-types -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
                 }
             } else {
-                $gccFlags = '-O0 -g3';
+                $gccFlags = '-O0 -Wno-incompatible-pointer-types -g3';
             }
         }
 
