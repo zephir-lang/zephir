@@ -15,7 +15,7 @@ test_expect_success "Compile the extension in production mode" "
   cat ext/config.nice | grep -q -e \"^CFLAGS=$regexp\"
 "
 
-regexp="'-O0 -g3'"
+regexp="'-O0 -Wno-incompatible-pointer-types -g3'"
 test_expect_success "Compile the extension in development mode" "
   cd $FIXTURESDIR/devmode &&
   zephirc fullclean 2>&1 >/dev/null &&
