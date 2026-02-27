@@ -22,6 +22,7 @@ use Zephir\Compiler\CompilerFileFactory;
 use Zephir\Config;
 use Zephir\Exception;
 use Zephir\FileSystem\HardDisk;
+use Zephir\Os;
 use Zephir\Parser\Manager;
 use Zephir\Parser\Parser;
 
@@ -40,6 +41,10 @@ final class ConstructorsCodeGenTest extends TestCase
 
     protected function setUp(): void
     {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Code generation tests do not run on Windows.');
+        }
+
         $this->originalCwd  = getcwd();
         // Resolve the fixtures path to absolute BEFORE any chdir(), so reads
         // work correctly even after we switch the working directory.
