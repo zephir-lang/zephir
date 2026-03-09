@@ -149,29 +149,17 @@ class MethodCache
                     $method->isFinal() ||
                     $method->isPrivate()
                 );
-            if ($number > 1 || $compilationContext->insideCycle) {
-                $cacheable = true;
-            } else {
-                $cacheable = false;
-            }
+            $cacheable = $number > 1 || $compilationContext->insideCycle;
         } else {
             $staticCacheable = false;
             $cacheable       = false;
         }
 
-        if ('this_ptr' !== $caller->getName()) {
-            $associatedClass = $caller->getAssociatedClass();
-            if ($this->isClassCacheable($associatedClass)) {
-                $staticCacheable = true;
-            }
+        if ('this_ptr' !== $caller->getName() && $this->isClassCacheable($caller->getAssociatedClass())) {
+            $staticCacheable = true;
         }
 
-        if ($staticCacheable) {
-            $cacheSlot = SlotsCache::getMethodSlot($method);
-        } else {
-            $cacheSlot = '0';
-        }
-
+        $cacheSlot = $staticCacheable ? SlotsCache::getMethodSlot($method) : '0';
         if ($cacheable) {
             $functionCacheVar = $compilationContext->symbolTable->getTempVariableForWrite(
                 'zephir_fcall_cache_entry',
