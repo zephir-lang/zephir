@@ -37,6 +37,7 @@ final class ConstructorsCodeGenTest extends TestCase
     private string $originalCwd;
     private string $tempDir;
     private string $fixturesDir;
+    private string $argsSingleFixturesDir;
     private Compiler $compiler;
 
     protected function setUp(): void
@@ -49,13 +50,16 @@ final class ConstructorsCodeGenTest extends TestCase
         // Resolve the fixtures path to absolute BEFORE any chdir(), so reads
         // work correctly even after we switch the working directory.
         $this->fixturesDir  = realpath(FIXTURES_PATH . '/constructors');
+        $this->argsSingleFixturesDir = realpath(FIXTURES_PATH . '/constructors/args/single');
 
         // Create an isolated temp working directory so that all relative
         // paths used by CompilerFile (e.g. "ext/stub/constructors/…") land
         // inside it and do not touch the real project tree.
         $this->tempDir = sys_get_temp_dir() . '/zephir_codegen_test_' . uniqid('', true);
         mkdir($this->tempDir . '/ext/stub/constructors', 0755, true);
+        mkdir($this->tempDir . '/ext/stub/args/single', 0755, true);
         mkdir($this->tempDir . '/stub/constructors', 0755, true);
+        mkdir($this->tempDir . '/stub/args/single', 0755, true);
 
         // Write the Zephir source under the path that matches the namespace
         // Stub\Constructors\Issue1803 → stub/constructors/issue1803.zep
@@ -80,6 +84,42 @@ ZEP;
         file_put_contents(
             $this->tempDir . '/stub/constructors/issue1803.zep',
             $zepCode
+        );
+
+        // Write Zephir source for Stub\Args\Single\Integer
+        $integerZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class Integer
+{
+    public function argInt(int i) -> int
+    {
+        return i;
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/integer.zep',
+            $integerZepCode
+        );
+
+        // Write Zephir source for Stub\Args\Single\Str
+        $strZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class Str
+{
+    public function argString(string str) -> string
+    {
+        return str;
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/str.zep',
+            $strZepCode
         );
 
         // Config::populate() reads config.json from CWD; write a minimal one
@@ -130,6 +170,41 @@ ZEP;
     }
 
     /**
+     * Compiles a single .zep file and returns a [cOutput, hOutput] pair
+     * with the raw generated file contents.
+     *
+     * @param  string $className  Fully-qualified Zephir class name (e.g. "Stub\Args\Single\Integer")
+     * @param  string $filePath   Relative path to the .zep source (e.g. "stub/args/single/integer.zep")
+     * @param  string $extPath    Relative path (without extension) to the generated output under ext/
+     *                            (e.g. "stub/args/single/integer")
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileZep(string $className, string $filePath, string $extPath): array
+    {
+        $factory      = new \ReflectionClass($this->compiler);
+        $factoryProp  = $factory->getProperty('compilerFileFactory');
+        $factoryProp->setAccessible(true);
+        /** @var CompilerFileFactory $compilerFileFactory */
+        $compilerFileFactory = $factoryProp->getValue($this->compiler);
+
+        /** @var \Zephir\CompilerFile $compilerFile */
+        $compilerFile = $compilerFileFactory->create($className, $filePath);
+        $compilerFile->preCompile($this->compiler);
+        $compilerFile->compile($this->compiler, new StringsManager());
+
+        $cFile = $this->tempDir . '/ext/' . $extPath . '.zep.c';
+        $hFile = $this->tempDir . '/ext/' . $extPath . '.zep.h';
+
+        return [
+            file_get_contents($cFile),
+            file_get_contents($hFile),
+        ];
+    }
+
+    /**
      * Compiles stub/constructors/issue1803.zep and returns a
      * [cOutput, hOutput] pair with the raw generated file contents.
      *
@@ -139,27 +214,45 @@ ZEP;
      */
     private function compileIssue1803(): array
     {
-        $factory      = new \ReflectionClass($this->compiler);
-        $factoryProp  = $factory->getProperty('compilerFileFactory');
-        $factoryProp->setAccessible(true);
-        /** @var CompilerFileFactory $compilerFileFactory */
-        $compilerFileFactory = $factoryProp->getValue($this->compiler);
+        return $this->compileZep(
+            'Stub\Constructors\Issue1803',
+            'stub/constructors/issue1803.zep',
+            'stub/constructors/issue1803'
+        );
+    }
 
-        $className = 'Stub\Constructors\Issue1803';
-        $filePath  = 'stub/constructors/issue1803.zep';
+    /**
+     * Compiles stub/args/single/integer.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleInteger(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\Integer',
+            'stub/args/single/integer.zep',
+            'stub/args/single/integer'
+        );
+    }
 
-        /** @var \Zephir\CompilerFile $compilerFile */
-        $compilerFile = $compilerFileFactory->create($className, $filePath);
-        $compilerFile->preCompile($this->compiler);
-        $compilerFile->compile($this->compiler, new StringsManager());
-
-        $cFile = $this->tempDir . '/ext/stub/constructors/issue1803.zep.c';
-        $hFile = $this->tempDir . '/ext/stub/constructors/issue1803.zep.h';
-
-        return [
-            file_get_contents($cFile),
-            file_get_contents($hFile),
-        ];
+    /**
+     * Compiles stub/args/single/str.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleStr(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\Str',
+            'stub/args/single/str.zep',
+            'stub/args/single/str'
+        );
     }
 
     /**
@@ -191,6 +284,70 @@ ZEP;
             $fixture,
             $hOutput,
             'Generated .h file does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\Integer must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleIntegerGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleInteger();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/integer.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated integer.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\Integer must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleIntegerGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleInteger();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/integer.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated integer.zep.h does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\Str must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleStr();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated str.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\Str must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleStr();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated str.zep.h does not match the reference fixture.'
         );
     }
 }
