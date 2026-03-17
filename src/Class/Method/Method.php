@@ -1061,7 +1061,6 @@ class Method
                                 $parameter['name'] . '_param',
                                 $compilationContext
                             );
-                            /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             $symbolParam->setIsDoublePointer(true);
 
                             if ('array' == $parameter['data-type']) {
