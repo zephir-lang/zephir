@@ -102,18 +102,14 @@ PHP_METHOD(Stub_EmptyTest, testNotEmptyString)
 
 PHP_METHOD(Stub_EmptyTest, testString)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a_param = NULL;
-	zval a;
+	zval a_zv;
+	zend_string *a = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&a_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(a)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &a_param);
-	zephir_get_strval(&a, a_param);
-	RETURN_MM_BOOL(ZEPHIR_IS_EMPTY(&a));
+	ZVAL_STR(&a_zv, a);
+	RETURN_BOOL(ZEPHIR_IS_EMPTY(&a_zv));
 }
 

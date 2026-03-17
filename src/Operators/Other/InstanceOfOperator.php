@@ -95,7 +95,13 @@ class InstanceOfOperator extends AbstractOperator
                                 }
                             }
                         } else {
-                            $code = $this->prepareBackendSpecificCode($resolvedVariable);
+                            $resolvedVar = $context->symbolTable->getVariableForRead(
+                                $resolvedVariable,
+                                $context,
+                                $expression
+                            );
+                            $varCode = $context->backend->getVariableCode($resolvedVar);
+                            $code = $this->prepareBackendSpecificCode($varCode);
                         }
                         break;
 
@@ -108,7 +114,9 @@ class InstanceOfOperator extends AbstractOperator
                         $context->codePrinter->output(
                             'zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');'
                         );
-                        $code = $this->prepareBackendSpecificCode($tempVariableName);
+                        $code = $this->prepareBackendSpecificCode(
+                            $context->backend->getVariableCode($tempVariable)
+                        );
                         break;
 
                     default:
@@ -133,11 +141,8 @@ class InstanceOfOperator extends AbstractOperator
         );
     }
 
-    private function prepareBackendSpecificCode($variable): string
+    private function prepareBackendSpecificCode($variableCode): string
     {
-        return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
-            ':name' => $variable,
-            ':p'    => '&',
-        ]);
+        return sprintf('Z_STRVAL_P(%s), Z_STRLEN_P(%s)', $variableCode, $variableCode);
     }
 }

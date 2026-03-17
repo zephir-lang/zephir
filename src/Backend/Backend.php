@@ -1540,7 +1540,25 @@ class Backend
             return $variable->getName();
         }
 
+        if ($variable->isNativeString()) {
+            return '&' . $variable->getName() . '_zv';
+        }
+
         return '&' . $variable->getName();
+    }
+
+    /**
+     * Wraps a zend_string * variable into a temp zval for use in zval-expecting operations.
+     * Returns the temp Variable (type 'variable') with ZVAL_STR already emitted.
+     */
+    public function wrapZendStringToZval(Variable $variable, CompilationContext $context): Variable
+    {
+        $tempVar = $context->symbolTable->getTempLocalVariableForWrite('variable', $context);
+        $context->codePrinter->output(
+            sprintf('ZVAL_STR(&%s, %s);', $tempVar->getName(), $variable->getName())
+        );
+
+        return $tempVar;
     }
 
     public function ifVariableValueUndefined(
@@ -1549,6 +1567,20 @@ class Backend
         $useBody = false,
         $useCodePrinter = true
     ): string {
+        /**
+         * Native zend_string * optional params: initialized to NULL,
+         * Z_PARAM_STR only sets the pointer when the argument is provided.
+         */
+        if ($var->isNativeString()) {
+            $body   = '!' . $var->getName();
+            $output = 'if (' . $body . ') {';
+            if ($useCodePrinter) {
+                $context->codePrinter->output($output);
+            }
+
+            return $useBody ? $body : $output;
+        }
+
         if ($var->isDoublePointer()) {
             return $this->ifVariableValueUndefined2($var, $context, $useBody, $useCodePrinter);
         }

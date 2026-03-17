@@ -20,7 +20,6 @@
 #include "kernel/array.h"
 #include "kernel/exception.h"
 #include "kernel/concat.h"
-#include "ext/spl/spl_exceptions.h"
 #include "kernel/string.h"
 
 
@@ -122,11 +121,11 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	zend_class_entry *_26$$11 = NULL, *_22$$12 = NULL, *_32$$14 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long width, height, ZEPHIR_LAST_CALL_STATUS;
-	zval *file_param = NULL, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _28$$4, _29$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _25$$11, _27$$11, _21$$12, _23$$12, _24$$12, _35$$13, _36$$13, _37$$13, _38$$13, _39$$13, _40$$13, _31$$14, _33$$14, _34$$14;
-	zval file;
+	zval file_zv, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _28$$4, _29$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _25$$11, _27$$11, _21$$12, _23$$12, _24$$12, _35$$13, _36$$13, _37$$13, _38$$13, _39$$13, _40$$13, _31$$14, _33$$14, _34$$14;
+	zend_string *file = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&file);
+	ZVAL_UNDEF(&file_zv);
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&imageinfo);
 	ZVAL_UNDEF(&_0);
@@ -175,16 +174,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 2, &file_param, &width_param, &height_param);
-	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be of the type string"));
-		RETURN_MM_NULL();
+	if (ZEND_NUM_ARGS() > 1) {
+		width_param = ZEND_CALL_ARG(execute_data, 2);
 	}
-	if (EXPECTED(Z_TYPE_P(file_param) == IS_STRING)) {
-		zephir_get_strval(&file, file_param);
-	} else {
-		ZEPHIR_INIT_VAR(&file);
+	if (ZEND_NUM_ARGS() > 2) {
+		height_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	ZVAL_STR_COPY(&file_zv, file);
 	if (!width_param) {
 		width = 0;
 	} else {
@@ -198,7 +194,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		ZEPHIR_CALL_SELF(NULL, "check", NULL, 0);
 		zephir_check_call_status();
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("file"), &file);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("file"), &file_zv);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
 	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property(&_2$$4, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);

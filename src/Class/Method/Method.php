@@ -422,6 +422,49 @@ class Method
                 break;
 
             case 'string':
+                /**
+                 * Native zend_string * params: emit zend_string_init() for string
+                 * defaults and ZVAL_STR() to hand ownership to the companion zval.
+                 * mustGrownStack was already set in Round 1 for this path.
+                 */
+                if ($paramVariable->isNativeString()) {
+                    switch ($parameter['default']['type']) {
+                        case 'string':
+                            $codePrinter->output(
+                                $parameter['name'] . ' = zend_string_init(ZEND_STRL("'
+                                . Name::addSlashes($parameter['default']['value'])
+                                . '"), 0);'
+                            );
+                            $codePrinter->output(
+                                'ZVAL_STR(&' . $parameter['name'] . '_zv, '
+                                . $parameter['name'] . ');'
+                            );
+                            break;
+
+                        case 'null':
+                            /**
+                             * zend_string * stays NULL (Z_PARAM_STR_OR_NULL
+                             * didn't set it). Set the companion zval to IS_NULL
+                             * so downstream ZEPHIR_IS_NULL() checks work.
+                             * ZEPHIR_INIT_VAR registers it in the memory frame.
+                             */
+                            $codePrinter->output(
+                                'ZEPHIR_INIT_VAR(&' . $parameter['name'] . '_zv);'
+                            );
+                            break;
+
+                        default:
+                            throw new CompilerException(
+                                sprintf(
+                                    'Default parameter value type: %s cannot be assigned to native string variable',
+                                    $parameter['default']['type']
+                                ),
+                                $parameter
+                            );
+                    }
+                    break;
+                }
+
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
 
@@ -634,6 +677,28 @@ class Method
             return '';
         }
 
+        /**
+         * Native zend_string * params: Z_PARAM_STR already populated the
+         * value. Just populate the companion zval. Must check before the
+         * _param variable lookup since native strings no longer have one.
+         */
+        if ($dataType === 'string') {
+            $inputParamVar = $compilationContext->symbolTable->getVariableForWrite(
+                $parameter['name'],
+                $compilationContext
+            );
+            if ($inputParamVar->isNativeString()) {
+                // Populate the companion zval from the native zend_string *.
+                // Use ZVAL_STR_COPY (owning ref) when memory-grow is active —
+                // the memory manager will free the companion on return.
+                // Use ZVAL_STR (non-owning) otherwise — the engine string is
+                // alive for the function duration and no cleanup is needed.
+                $macro = $compilationContext->symbolTable->getMustGrownStack()
+                    ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
+                return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+            }
+        }
+
         $compilationContext->headersManager->add('kernel/operators');
         $parameterVariable = $compilationContext->symbolTable->getVariableForWrite(
             $parameter['name'] . '_param',
@@ -689,6 +754,17 @@ class Method
     public function checkStrictType(array $parameter, CompilationContext $compilationContext): string
     {
         $dataType = $this->getParamDataType($parameter);
+
+        // Z_PARAM_STR already validates string type for native string params,
+        // but we still need to populate the companion zval.
+        if ($dataType === 'string') {
+            $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
+            if ($variable->isNativeString()) {
+                $macro = $compilationContext->symbolTable->getMustGrownStack()
+                    ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
+                return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+            }
+        }
 
         $compilationContext->headersManager->add('ext/spl/spl_exceptions');
         $compilationContext->headersManager->add('kernel/exception');
@@ -891,6 +967,92 @@ class Method
                             );
                             break;
 
+                        case 'string':
+                            /**
+                             * Only use native zend_string * for string parameters
+                             * that are NOT re-assigned inside the method body.
+                             * Mutation count of 1 = the parameter itself; >1 = has
+                             * let-assignments in the body.
+                             *
+                             * Eligible default types: no default, or string literal.
+                             * Null defaults → nullable semantics.
+                             * static-constant-access defaults → follow-up.
+                             */
+                            $mutations = ($this->localContext instanceof LocalContextPass)
+                                ? $this->localContext->getNumberOfMutations($parameter['name'])
+                                : PHP_INT_MAX;
+
+                            $defaultType = $parameter['default']['type'] ?? null;
+                            $canUseNativeString = $mutations <= 1
+                                && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
+
+                            $symbol = $symbolTable->addVariable(
+                                'string',
+                                $parameter['name'],
+                                $compilationContext
+                            );
+
+                            if ($canUseNativeString) {
+                                $symbol->setIsNativeString(true);
+                                $symbol->setMustInitNull(true);
+
+                                if ($defaultType === 'null') {
+                                    $symbol->setIsNullableNativeString(true);
+                                }
+
+                                /**
+                                 * Companion zval used transparently by getVariableCode()
+                                 * so that all existing zval-expecting operations work
+                                 * without any bridge patches.
+                                 */
+                                $companion = $symbolTable->addVariable(
+                                    'variable',
+                                    $parameter['name'] . '_zv',
+                                    $compilationContext
+                                );
+                                $companion->setIsInitialized(true, $compilationContext);
+                                $companion->increaseUses();
+
+                                /**
+                                 * Optional param with non-null string default allocates
+                                 * via zend_string_init(). The companion zval takes
+                                 * ownership, so memory-grow is required for the memory
+                                 * manager to free it on return.
+                                 *
+                                 * Null defaults also need memory-grow because
+                                 * ZEPHIR_INIT_VAR registers the companion zval in the
+                                 * memory frame for cleanup.
+                                 *
+                                 * Set mustGrownStack EARLY (Round 1, before statement
+                                 * compilation) so ReturnStatement sees it and emits
+                                 * RETURN_MM_STR instead of RETURN_STR.
+                                 */
+                                if ($defaultType === 'string' || $defaultType === 'null') {
+                                    $symbolTable->mustGrownStack(true);
+                                    $compilationContext->headersManager->add('kernel/memory');
+                                }
+                            } else {
+                                /* Mutated or unsupported-default string param: fall back to zval approach */
+                                $symbol->setMustInitNull(true);
+                            }
+
+                            /**
+                             * Only create the _param companion variable for
+                             * non-native-string params. Native-string params
+                             * are populated directly by Z_PARAM_STR and use
+                             * per-param ZEND_CALL_ARG in mixed methods, so
+                             * no _param sink is needed.
+                             */
+                            if (!$canUseNativeString) {
+                                $symbolParam = $symbolTable->addVariable(
+                                    'variable',
+                                    $parameter['name'] . '_param',
+                                    $compilationContext
+                                );
+                                $symbolParam->setIsDoublePointer(true);
+                            }
+                            break;
+
                         default:
                             $symbol      = $symbolTable->addVariable(
                                 $parameter['data-type'],
@@ -902,10 +1064,9 @@ class Method
                                 $parameter['name'] . '_param',
                                 $compilationContext
                             );
-                            /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             $symbolParam->setIsDoublePointer(true);
 
-                            if ('string' == $parameter['data-type'] || 'array' == $parameter['data-type']) {
+                            if ('array' == $parameter['data-type']) {
                                 $symbol->setMustInitNull(true);
                             }
                             break;
@@ -1037,6 +1198,62 @@ class Method
             $optionalParams       = $this->parameters->getOptionalParameters();
 
             /**
+             * Count native-string params to determine fetch strategy.
+             * - All native: skip fetching entirely (Phase 5).
+             * - Mixed (some native, some zval): emit per-param
+             *   ZEND_CALL_ARG for non-native params (Phase 5b).
+             * - No native: use zephir_fetch_params as before.
+             */
+            $nativeStringCount = 0;
+            $totalParamCount = count($this->parameters->getParameters());
+            foreach ($this->parameters->getParameters() as $parameter) {
+                $name = $parameter['name'];
+                $variable = $compilationContext->symbolTable->getVariable($name);
+                if ($variable && $variable->isNativeString()) {
+                    $nativeStringCount++;
+                }
+            }
+
+            $perParamFetchCode = '';
+            if ($nativeStringCount === $totalParamCount && $totalParamCount > 0) {
+                // All params are native strings — skip zephir_fetch_params
+                $params = [];
+            } elseif ($nativeStringCount > 0) {
+                // Mixed method — replace zephir_fetch_params with per-param
+                // ZEND_CALL_ARG() calls for non-native params.
+                $params = [];
+                $allParams = $this->parameters->getParameters();
+                foreach ($allParams as $index => $parameter) {
+                    $position = $index + 1; // 1-based
+                    $pName = $parameter['name'];
+                    $pVariable = $compilationContext->symbolTable->getVariable($pName);
+                    if ($pVariable && $pVariable->isNativeString()) {
+                        continue; // Z_PARAM_STR already populates it
+                    }
+
+                    $pDataType = $parameter['data-type'] ?? 'variable';
+                    $target = match ($pDataType) {
+                        'object', 'callable', 'resource', 'variable', 'mixed' => $pName,
+                        default => $pName . '_param',
+                    };
+
+                    if ($position <= $numberRequiredParams) {
+                        $perParamFetchCode .= "\t"
+                            . $target . ' = ZEND_CALL_ARG(execute_data, ' . $position . ');'
+                            . PHP_EOL;
+                    } else {
+                        $perParamFetchCode .= "\t"
+                            . 'if (ZEND_NUM_ARGS() > ' . ($position - 1) . ') {'
+                            . PHP_EOL
+                            . "\t\t" . $target . ' = ZEND_CALL_ARG(execute_data, ' . $position . ');'
+                            . PHP_EOL
+                            . "\t" . '}'
+                            . PHP_EOL;
+                    }
+                }
+            }
+
+            /**
              * Pass the write detector to the method statement block to check if the parameter
              * variable is modified so as do the proper separation.
              */
@@ -1068,6 +1285,29 @@ class Method
                             }
                             break;
                     }
+                }
+            }
+
+            /**
+             * Emit deprecation warning for string! parameters.
+             * Z_PARAM_STR already enforces strict string typing at the
+             * engine level, making the ! modifier redundant.
+             */
+            foreach ($this->parameters->getParameters() as $parameter) {
+                $paramMandatory = $parameter['mandatory'] ?? 0;
+                $paramDataType  = $this->getParamDataType($parameter);
+                if ($paramMandatory && $paramDataType === 'string') {
+                    $compilationContext->logger->warning(
+                        sprintf(
+                            "The '!' (strict) modifier on string parameter '%s' is deprecated "
+                            . "and will be removed in a future version. String parameters are "
+                            . "now strict by default via Z_PARAM_STR in %s::%s",
+                            $parameter['name'],
+                            $this->getClassDefinition()?->getCompleteName() ?? '[unknown]',
+                            $this->getName()
+                        ),
+                        ['deprecated-strict-string', $parameter]
+                    );
                 }
             }
 
@@ -1119,6 +1359,18 @@ class Method
                 };
 
                 /**
+                 * Native zend_string * optional params use the bare variable
+                 * name — the null-pointer check `if (!name)` replaces the
+                 * double-pointer check `if (!name_param)`.
+                 */
+                if ($dataType === 'string') {
+                    $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
+                    if ($variable && $variable->isNativeString()) {
+                        $name = $parameter['name'];
+                    }
+                }
+
+                /**
                  * Assign the default value according to the variable's type.
                  */
                 $targetVar = $compilationContext->symbolTable->getVariableForWrite($name, $compilationContext);
@@ -1163,27 +1415,36 @@ class Method
             $codePrinter->preOutputBlankLine();
 
             if (!$this->isInternal()) {
-                $compilationContext->headersManager->add('kernel/memory');
-                if ($symbolTable->getMustGrownStack()) {
-                    $code .= "\t"
-                        . 'zephir_fetch_params(1, '
-                        . $numberRequiredParams
-                        . ', '
-                        . $numberOptionalParams
-                        . ', '
-                        . implode(', ', $params)
-                        . ');'
-                        . PHP_EOL;
-                } else {
-                    $code .= "\t"
-                        . 'zephir_fetch_params_without_memory_grow('
-                        . $numberRequiredParams
-                        . ', '
-                        . $numberOptionalParams
-                        . ', '
-                        . implode(', ', $params)
-                        . ');'
-                        . PHP_EOL;
+                /**
+                 * Skip zephir_fetch_params entirely when all params are native
+                 * strings (populated directly by Z_PARAM_STR / Z_PARAM_STR_OR_NULL)
+                 * or when using per-param ZEND_CALL_ARG (mixed methods).
+                 */
+                if (!empty($perParamFetchCode)) {
+                    $code .= $perParamFetchCode;
+                } elseif (!empty($params)) {
+                    $compilationContext->headersManager->add('kernel/memory');
+                    if ($symbolTable->getMustGrownStack()) {
+                        $code .= "\t"
+                            . 'zephir_fetch_params(1, '
+                            . $numberRequiredParams
+                            . ', '
+                            . $numberOptionalParams
+                            . ', '
+                            . implode(', ', $params)
+                            . ');'
+                            . PHP_EOL;
+                    } else {
+                        $code .= "\t"
+                            . 'zephir_fetch_params_without_memory_grow('
+                            . $numberRequiredParams
+                            . ', '
+                            . $numberOptionalParams
+                            . ', '
+                            . implode(', ', $params)
+                            . ');'
+                            . PHP_EOL;
+                    }
                 }
             } else {
                 foreach ($params as $param) {
@@ -1292,6 +1553,10 @@ class Method
                 'return_value_ptr' !== $variable->getName()
             ) {
                 $type = $variable->getType();
+                // Native string params use zend_string * instead of zval for declaration
+                if ($type === 'string' && $variable->isNativeString()) {
+                    $type = 'zend_string';
+                }
                 if (!isset($usedVariables[$type])) {
                     $usedVariables[$type] = [];
                 }
@@ -1557,11 +1822,19 @@ class Method
                 break;
 
             case 'string':
-                if ($hasDefaultNull) {
-                    // $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
-                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                $variable = $compilationContext->symbolTable->getVariable($name);
+                if ($variable && $variable->isNativeString()) {
+                    if ($hasDefaultNull) {
+                        $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                    } else {
+                        $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    }
                 } else {
-                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    if ($hasDefaultNull) {
+                        $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    } else {
+                        $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                    }
                 }
 
                 break;

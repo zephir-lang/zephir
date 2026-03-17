@@ -563,6 +563,7 @@ class NativeArray
                     case Types::T_MIXED:
                         return $itemVariable;
 
+
                     default:
                         throw new CompilerException('Unknown ' . $itemVariable->getType(), $itemVariable);
                 }

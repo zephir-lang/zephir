@@ -76,11 +76,18 @@ class Call
     }
 
     /**
-     * Checks the last call status or make a label jump to the next catch block.t
+     * Checks the last call status or make a label jump to the next catch block.
+     *
+     * Both zephir_check_call_status() and zephir_check_call_status_or_jump()
+     * use ZEPHIR_MM_RESTORE() in their failure path, which requires
+     * ZEPHIR_METHOD_GLOBALS_PTR to be declared. Force memory-grow so the
+     * variable is always present.
      */
     public function addCallStatusOrJump(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/fcall');
+        $compilationContext->symbolTable->mustGrownStack(true);
+
         if ($compilationContext->insideTryCatch) {
             $compilationContext->codePrinter->output(
                 'zephir_check_call_status_or_jump(try_end_' . $compilationContext->currentTryCatch . ');'

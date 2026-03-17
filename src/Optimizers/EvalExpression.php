@@ -216,6 +216,20 @@ class EvalExpression
                         return $variableRight->getName();
 
                     case 'string':
+                        /**
+                         * Native zend_string * params: use the companion zval
+                         * for emptiness check (ZEPHIR_IS_EMPTY checks null,
+                         * false, and empty string). The raw pointer check
+                         * (!val) only tests for NULL, missing the empty-string
+                         * case.
+                         */
+                        if ($variableRight->isNativeString()) {
+                            $compilationContext->headersManager->add('kernel/operators');
+                            return '!(ZEPHIR_IS_EMPTY('
+                                . $compilationContext->backend->getVariableCode($variableRight)
+                                . '))';
+                        }
+
                         return '!('
                             . $compilationContext->backend->ifVariableValueUndefined(
                                 $variableRight,

@@ -224,11 +224,11 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch5Params)
 PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *str_param = NULL, *pattern_param = NULL, matches, _0;
-	zval str, pattern;
+	zval str_zv, pattern_zv, matches, _0;
+	zend_string *str = NULL, *pattern = NULL;
 
-	ZVAL_UNDEF(&str);
-	ZVAL_UNDEF(&pattern);
+	ZVAL_UNDEF(&str_zv);
+	ZVAL_UNDEF(&pattern_zv);
 	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -237,13 +237,12 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &str_param, &pattern_param);
-	zephir_get_strval(&str, str_param);
-	zephir_get_strval(&pattern, pattern_param);
+	ZVAL_STR_COPY(&str_zv, str);
+	ZVAL_STR_COPY(&pattern_zv, pattern);
 	ZEPHIR_INIT_VAR(&matches);
 	ZVAL_NULL(&matches);
 	ZEPHIR_INIT_VAR(&_0);
-	zephir_preg_match(&_0, &pattern, &str, &matches, 0, 0 , 0 );
+	zephir_preg_match(&_0, &pattern_zv, &str_zv, &matches, 0, 0 , 0 );
 	RETURN_CCTOR(&matches);
 }
 

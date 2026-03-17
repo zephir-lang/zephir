@@ -30,6 +30,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/scopetesterinterface.zep.c
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
+	stub/args/single/integer.zep.c
+	stub/args/single/str.zep.c
+	stub/args/single/strmixed.zep.c
 	stub/arithmetic.zep.c
 	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
@@ -238,7 +241,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/13__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
-	for dir in "stub stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do
+	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do
 		PHP_ADD_BUILD_DIR([$ext_builddir/$dir])
 	done
 	PHP_SUBST(STUB_SHARED_LIBADD)
