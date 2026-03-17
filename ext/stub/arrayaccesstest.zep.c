@@ -85,7 +85,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &key_param, &data_param);
-	ZVAL_STR_COPY(&key_zv, key);
+	ZVAL_STR(&key_zv, key);
 	zephir_get_arrval(&data, data_param);
 	zephir_array_unset(&data, &key_zv, PH_SEPARATE);
 	RETURN_CTOR(&data);
@@ -109,7 +109,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &key_param, &dataFromProperty_param);
-	ZVAL_STR_COPY(&key_zv, key);
+	ZVAL_STR(&key_zv, key);
 	zephir_get_arrval(&dataFromProperty, dataFromProperty_param);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("assigedFromMethod"), &dataFromProperty);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key_zv);

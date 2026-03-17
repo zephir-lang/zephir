@@ -122,6 +122,24 @@ ZEP;
             $strZepCode
         );
 
+        // Write Zephir source for Stub\Args\Single\StrOptional
+        $strOptionalZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrOptional
+{
+    public function argStringDefault(string param = "test string") -> string
+    {
+        return param;
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/stroptional.zep',
+            $strOptionalZepCode
+        );
+
         // Config::populate() reads config.json from CWD; write a minimal one
         // so the namespace is available without touching the project's own file.
         $configData = json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT);
@@ -350,5 +368,53 @@ ZEP;
             'Generated str.zep.h does not match the reference fixture.'
         );
     }
-}
 
+    /**
+     * Compiles stub/args/single/stroptional.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleStrOptional(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\StrOptional',
+            'stub/args/single/stroptional.zep',
+            'stub/args/single/stroptional'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\StrOptional must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrOptionalGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleStrOptional();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_optional.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated str_optional.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\StrOptional must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrOptionalGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleStrOptional();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_optional.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated str_optional.zep.h does not match the reference fixture.'
+        );
+    }
+}

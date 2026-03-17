@@ -155,7 +155,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &type_param);
-	ZVAL_STR_COPY(&type_zv, type);
+	ZVAL_STR(&type_zv, type);
 	do {
 		if (ZEPHIR_IS_STRING(&type_zv, "string")) {
 			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "Test", "stub/exceptions.zep", 56);

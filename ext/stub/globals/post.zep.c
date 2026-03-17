@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Globals_Post, hasValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
-	ZVAL_STR_COPY(&name_zv, name);
+	ZVAL_STR(&name_zv, name);
 	RETURN_BOOL(zephir_array_isset(&_POST, &name_zv));
 }
 

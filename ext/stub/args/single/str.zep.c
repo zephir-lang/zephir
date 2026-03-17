@@ -34,7 +34,7 @@ PHP_METHOD(Stub_Args_Single_Str, argString)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &str_param);
-	ZVAL_STR_COPY(&str_zv, str);
+	ZVAL_STR(&str_zv, str);
 	RETURN_STR(zend_string_copy(str));
 }
 

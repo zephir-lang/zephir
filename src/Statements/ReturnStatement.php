@@ -265,10 +265,19 @@ final class ReturnStatement extends StatementAbstract
                                  * coexist.  Plain RETURN_STR() would transfer ownership
                                  * without addref, causing use-after-free when the caller
                                  * releases the return value.
+                                 *
+                                 * Methods with memory-grow need RETURN_MM_STR to restore
+                                 * the memory frame (which frees the companion zval).
                                  */
-                                $codePrinter->output(
-                                    'RETURN_STR(zend_string_copy(' . $symbolVariable->getName() . '));'
-                                );
+                                if ($compilationContext->symbolTable->getMustGrownStack()) {
+                                    $codePrinter->output(
+                                        'RETURN_MM_STR(zend_string_copy(' . $symbolVariable->getName() . '));'
+                                    );
+                                } else {
+                                    $codePrinter->output(
+                                        'RETURN_STR(zend_string_copy(' . $symbolVariable->getName() . '));'
+                                    );
+                                }
                             } else {
                                 $codePrinter->output(
                                     'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'

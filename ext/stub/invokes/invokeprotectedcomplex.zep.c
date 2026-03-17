@@ -35,7 +35,7 @@ PHP_METHOD(Stub_Invokes_InvokeProtectedComplex, __construct)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &text_param);
-	ZVAL_STR_COPY(&text_zv, text);
+	ZVAL_STR(&text_zv, text);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("text"), &text_zv);
 }
 

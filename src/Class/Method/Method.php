@@ -422,6 +422,37 @@ class Method
                 break;
 
             case 'string':
+                /**
+                 * Native zend_string * params: emit zend_string_init() for string
+                 * defaults and ZVAL_STR() to hand ownership to the companion zval.
+                 * mustGrownStack was already set in Round 1 for this path.
+                 */
+                if ($paramVariable->isNativeString()) {
+                    switch ($parameter['default']['type']) {
+                        case 'string':
+                            $codePrinter->output(
+                                $parameter['name'] . ' = zend_string_init(ZEND_STRL("'
+                                . Name::addSlashes($parameter['default']['value'])
+                                . '"), 0);'
+                            );
+                            $codePrinter->output(
+                                'ZVAL_STR(&' . $parameter['name'] . '_zv, '
+                                . $parameter['name'] . ');'
+                            );
+                            break;
+
+                        default:
+                            throw new CompilerException(
+                                sprintf(
+                                    'Default parameter value type: %s cannot be assigned to native string variable',
+                                    $parameter['default']['type']
+                                ),
+                                $parameter
+                            );
+                    }
+                    break;
+                }
+
                 $compilationContext->symbolTable->mustGrownStack(true);
                 $compilationContext->headersManager->add('kernel/memory');
 
@@ -667,10 +698,13 @@ class Method
             case 'string':
                 if ($inputParamVar->isNativeString()) {
                     // Populate the companion zval from the native zend_string *.
-                    // ZVAL_STR_COPY increments the refcount so the companion
-                    // properly owns a reference — prevents use-after-free if any
-                    // kernel operation transiently releases the zval.
-                    return "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                    // Use ZVAL_STR_COPY (owning ref) when memory-grow is active —
+                    // the memory manager will free the companion on return.
+                    // Use ZVAL_STR (non-owning) otherwise — the engine string is
+                    // alive for the function duration and no cleanup is needed.
+                    $macro = $compilationContext->symbolTable->getMustGrownStack()
+                        ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
+                    return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
                 }
                 $compilationContext->symbolTable->mustGrownStack(true);
 
@@ -702,7 +736,9 @@ class Method
         if ($dataType === 'string') {
             $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
             if ($variable->isNativeString()) {
-                return "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                $macro = $compilationContext->symbolTable->getMustGrownStack()
+                    ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
+                return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
             }
         }
 
@@ -913,12 +949,20 @@ class Method
                              * that are NOT re-assigned inside the method body.
                              * Mutation count of 1 = the parameter itself; >1 = has
                              * let-assignments in the body.
+                             *
+                             * Eligible default types: no default, or string literal.
+                             * Null defaults → Phase 4 (nullable semantics).
+                             * static-constant-access defaults → follow-up.
                              */
                             $mutations = ($this->localContext instanceof LocalContextPass)
                                 ? $this->localContext->getNumberOfMutations($parameter['name'])
                                 : PHP_INT_MAX;
 
-                            if ($mutations <= 1 && !isset($parameter['default'])) {
+                            $defaultType = $parameter['default']['type'] ?? null;
+                            $canUseNativeString = $mutations <= 1
+                                && (!isset($parameter['default']) || $defaultType === 'string');
+
+                            if ($canUseNativeString) {
                                 $symbol = $symbolTable->addVariable(
                                     'string',
                                     $parameter['name'],
@@ -939,8 +983,23 @@ class Method
                                 );
                                 $companion->setIsInitialized(true, $compilationContext);
                                 $companion->increaseUses();
+
+                                /**
+                                 * Optional param with non-null string default allocates
+                                 * via zend_string_init(). The companion zval takes
+                                 * ownership, so memory-grow is required for the memory
+                                 * manager to free it on return.
+                                 *
+                                 * Set mustGrownStack EARLY (Round 1, before statement
+                                 * compilation) so ReturnStatement sees it and emits
+                                 * RETURN_MM_STR instead of RETURN_STR.
+                                 */
+                                if ($defaultType === 'string') {
+                                    $symbolTable->mustGrownStack(true);
+                                    $compilationContext->headersManager->add('kernel/memory');
+                                }
                             } else {
-                                /* Mutated string param: fall back to zval approach */
+                                /* Mutated or unsupported-default string param: fall back to zval approach */
                                 $symbol = $symbolTable->addVariable(
                                     'string',
                                     $parameter['name'],
@@ -1183,6 +1242,18 @@ class Method
                     'mixed' => $parameter['name'],
                     default => $parameter['name'] . '_param',
                 };
+
+                /**
+                 * Native zend_string * optional params use the bare variable
+                 * name — the null-pointer check `if (!name)` replaces the
+                 * double-pointer check `if (!name_param)`.
+                 */
+                if ($dataType === 'string') {
+                    $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
+                    if ($variable && $variable->isNativeString()) {
+                        $name = $parameter['name'];
+                    }
+                }
 
                 /**
                  * Assign the default value according to the variable's type.

@@ -1567,6 +1567,20 @@ class Backend
         $useBody = false,
         $useCodePrinter = true
     ): string {
+        /**
+         * Native zend_string * optional params: initialized to NULL,
+         * Z_PARAM_STR only sets the pointer when the argument is provided.
+         */
+        if ($var->isNativeString()) {
+            $body   = '!' . $var->getName();
+            $output = 'if (' . $body . ') {';
+            if ($useCodePrinter) {
+                $context->codePrinter->output($output);
+            }
+
+            return $useBody ? $body : $output;
+        }
+
         if ($var->isDoublePointer()) {
             return $this->ifVariableValueUndefined2($var, $context, $useBody, $useCodePrinter);
         }

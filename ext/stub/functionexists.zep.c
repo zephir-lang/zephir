@@ -36,7 +36,7 @@ PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 		Z_PARAM_STR(func)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &func_param);
-	ZVAL_STR_COPY(&func_zv, func);
+	ZVAL_STR(&func_zv, func);
 	RETURN_BOOL((zephir_function_exists(&func_zv) == SUCCESS));
 }
 

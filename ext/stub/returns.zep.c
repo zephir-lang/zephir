@@ -62,7 +62,7 @@ PHP_METHOD(Stub_Returns, returnWithParameter)
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &parameter_param);
-	ZVAL_STR_COPY(&parameter_zv, parameter);
+	ZVAL_STR(&parameter_zv, parameter);
 	RETURN_STRING("Return back");
 }
 

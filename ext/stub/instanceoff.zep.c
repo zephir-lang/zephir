@@ -177,7 +177,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &test_param);
-	ZVAL_STR_COPY(&test_zv, test);
+	ZVAL_STR(&test_zv, test);
 	RETURN_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test_zv), Z_STRLEN_P(&test_zv)));
 }
 

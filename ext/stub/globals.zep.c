@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Globals, setStringValue)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value_param);
-	ZVAL_STR_COPY(&value_zv, value);
+	ZVAL_STR(&value_zv, value);
 	ZEPHIR_GLOBAL(my_setting_5) = ZSTR_VAL(zval_get_string(&value_zv));
 }
 
@@ -108,7 +108,7 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCachePrefix)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value_param);
-	ZVAL_STR_COPY(&value_zv, value);
+	ZVAL_STR(&value_zv, value);
 	ZEPHIR_GLOBAL(orm).cache_prefix = ZSTR_VAL(zval_get_string(&value_zv));
 }
 

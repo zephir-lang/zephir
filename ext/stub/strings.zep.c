@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Strings, camelize)
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &str_param, &delimiter);
-	ZVAL_STR_COPY(&str_zv, str);
+	ZVAL_STR(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
 		delimiter = &__$null;
@@ -69,7 +69,7 @@ PHP_METHOD(Stub_Strings, uncamelize)
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 1, &str_param, &delimiter);
-	ZVAL_STR_COPY(&str_zv, str);
+	ZVAL_STR(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
 		delimiter = &__$null;

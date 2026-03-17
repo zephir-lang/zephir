@@ -560,31 +560,31 @@ PHP_METHOD(Stub_Mcall, optionalRequereString)
 		Z_PARAM_STR(param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &param_param);
-	ZVAL_STR_COPY(&param_zv, param);
+	ZVAL_STR(&param_zv, param);
 	RETURN_STR(zend_string_copy(param));
 }
 
 PHP_METHOD(Stub_Mcall, optionalParameterString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *param_param = NULL;
-	zval param;
+	zval param_zv, *param_param = NULL;
+	zend_string *param = NULL;
 
-	ZVAL_UNDEF(&param);
+	ZVAL_UNDEF(&param_zv);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param_param)
+		Z_PARAM_STR(param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 0, 1, &param_param);
-	if (!param_param) {
-		ZEPHIR_INIT_VAR(&param);
-		ZVAL_STRING(&param, "test string");
+	if (!param) {
+		param = zend_string_init(ZEND_STRL("test string"), 0);
+		ZVAL_STR(&param_zv, param);
 	} else {
-		zephir_get_strval(&param, param_param);
+		ZVAL_STR_COPY(&param_zv, param);
 	}
-	RETURN_CTOR(&param);
+	RETURN_MM_STR(zend_string_copy(param));
 }
 
 PHP_METHOD(Stub_Mcall, optionalParameterStringNull)

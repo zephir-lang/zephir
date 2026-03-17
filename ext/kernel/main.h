@@ -170,6 +170,9 @@ extern zend_string* i_self;
 #define RETURN_MM_STRING(str)       { RETVAL_STRING(str); ZEPHIR_MM_RESTORE(); return; }
 #define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); ZEPHIR_MM_RESTORE(); return; }
 
+/** Return zend_string restoring memory frame */
+#define RETURN_MM_STR(s)            { RETVAL_STR(s); ZEPHIR_MM_RESTORE(); return; }
+
 /* Return long */
 #define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }
 

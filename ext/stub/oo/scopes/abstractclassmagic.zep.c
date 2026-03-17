@@ -43,7 +43,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &name_param, &value);
-	ZVAL_STR_COPY(&name_zv, name);
+	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("setCount"), PH_NOISY_CC | PH_READONLY);
 	ZVAL_UNDEF(&_1);

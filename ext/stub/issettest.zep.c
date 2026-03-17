@@ -71,7 +71,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray3)
 		Z_PARAM_STR(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
-	ZVAL_STR_COPY(&b_zv, b);
+	ZVAL_STR(&b_zv, b);
 	RETURN_BOOL(zephir_array_isset(a, &b_zv));
 }
 

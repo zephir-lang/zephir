@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &message_param);
-	ZVAL_STR_COPY(&message_zv, message);
+	ZVAL_STR(&message_zv, message);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message_zv);
 }
 

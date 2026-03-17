@@ -35,7 +35,7 @@ PHP_METHOD(Stub_EvalTest, evalCode)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &code_param);
-	ZVAL_STR_COPY(&code_zv, code);
+	ZVAL_STR(&code_zv, code);
 	zephir_eval_php(&code_zv, return_value, "stub/evaltest.zep:7");
 	return;
 }

@@ -207,7 +207,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromParameterString)
 		Z_PARAM_STR(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	ZVAL_STR_COPY(&a_zv, a);
+	ZVAL_STR(&a_zv, a);
 	RETURN_LONG(zephir_get_intval(&a_zv));
 }
 

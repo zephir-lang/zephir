@@ -61,7 +61,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
-	ZVAL_STR_COPY(&property_zv, property);
+	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$true);
 }
 
@@ -77,7 +77,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
-	ZVAL_STR_COPY(&property_zv, property);
+	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$false);
 }
 
@@ -163,7 +163,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
-	ZVAL_STR_COPY(&property_zv, property);
+	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$null);
 }
 
@@ -288,7 +288,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &value_param);
-	ZVAL_STR_COPY(&value_zv, value);
+	ZVAL_STR(&value_zv, value);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("eproperty"), &value_zv);
 }
 
