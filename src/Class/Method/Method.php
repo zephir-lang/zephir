@@ -975,7 +975,7 @@ class Method
                              * let-assignments in the body.
                              *
                              * Eligible default types: no default, or string literal.
-                             * Null defaults → Phase 4 (nullable semantics).
+                             * Null defaults → nullable semantics.
                              * static-constant-access defaults → follow-up.
                              */
                             $mutations = ($this->localContext instanceof LocalContextPass)
@@ -986,12 +986,13 @@ class Method
                             $canUseNativeString = $mutations <= 1
                                 && (!isset($parameter['default']) || $defaultType === 'string' || $defaultType === 'null');
 
+                            $symbol = $symbolTable->addVariable(
+                                'string',
+                                $parameter['name'],
+                                $compilationContext
+                            );
+
                             if ($canUseNativeString) {
-                                $symbol = $symbolTable->addVariable(
-                                    'string',
-                                    $parameter['name'],
-                                    $compilationContext
-                                );
                                 $symbol->setIsNativeString(true);
                                 $symbol->setMustInitNull(true);
 
@@ -1032,11 +1033,6 @@ class Method
                                 }
                             } else {
                                 /* Mutated or unsupported-default string param: fall back to zval approach */
-                                $symbol = $symbolTable->addVariable(
-                                    'string',
-                                    $parameter['name'],
-                                    $compilationContext
-                                );
                                 $symbol->setMustInitNull(true);
                             }
 
@@ -1200,7 +1196,7 @@ class Method
             $optionalParams       = $this->parameters->getOptionalParameters();
 
             /**
-             * Phase 5: Remove native-string params from the $params array.
+             * Remove native-string params from the $params array.
              * They use Z_PARAM_STR / Z_PARAM_STR_OR_NULL directly — no
              * zephir_fetch_params argument needed.
              *
