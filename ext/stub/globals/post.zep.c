@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Post)
  */
 PHP_METHOD(Stub_Globals_Post, hasValue)
 {
-	zval name_zv, *name_param = NULL, _POST;
+	zval name_zv, _POST;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);

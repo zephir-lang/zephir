@@ -24,7 +24,7 @@ ZEPHIR_INIT_CLASS(Stub_Args_Single_Str)
 
 PHP_METHOD(Stub_Args_Single_Str, argString)
 {
-	zval str_zv, *str_param = NULL;
+	zval str_zv;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);

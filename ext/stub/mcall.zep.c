@@ -552,7 +552,7 @@ PHP_METHOD(Stub_Mcall, testCall22)
 
 PHP_METHOD(Stub_Mcall, optionalRequereString)
 {
-	zval param_zv, *param_param = NULL;
+	zval param_zv;
 	zend_string *param = NULL;
 
 	ZVAL_UNDEF(&param_zv);
@@ -566,7 +566,7 @@ PHP_METHOD(Stub_Mcall, optionalRequereString)
 PHP_METHOD(Stub_Mcall, optionalParameterString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param_zv, *param_param = NULL;
+	zval param_zv;
 	zend_string *param = NULL;
 
 	ZVAL_UNDEF(&param_zv);
@@ -588,7 +588,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterString)
 PHP_METHOD(Stub_Mcall, optionalParameterStringNull)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param_zv, *param_param = NULL;
+	zval param_zv;
 	zend_string *param = NULL;
 
 	ZVAL_UNDEF(&param_zv);

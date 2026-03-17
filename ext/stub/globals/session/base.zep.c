@@ -13,9 +13,9 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Globals_Session_Base)
@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Session_Base)
 
 PHP_METHOD(Stub_Globals_Session_Base, set)
 {
-	zval index_zv, *index_param = NULL, *value, value_sub, _SESSION;
+	zval index_zv, *value, value_sub, _SESSION;
 	zend_string *index = NULL;
 
 	ZVAL_UNDEF(&index_zv);
@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Globals_Session_Base, set)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
-	zephir_fetch_params_without_memory_grow(2, 0, &index_param, &value);
+	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&index_zv, index);
 	zephir_array_update_zval(&_SESSION, &index_zv, value, PH_COPY | PH_SEPARATE);
 	RETVAL_ZVAL(&_SESSION, 1, 0);
@@ -47,7 +47,7 @@ PHP_METHOD(Stub_Globals_Session_Base, set)
 
 PHP_METHOD(Stub_Globals_Session_Base, remove)
 {
-	zval index_zv, *index_param = NULL, _SESSION;
+	zval index_zv, _SESSION;
 	zend_string *index = NULL;
 
 	ZVAL_UNDEF(&index_zv);
@@ -64,7 +64,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __set)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval index_zv, *index_param = NULL, *value, value_sub;
+	zval index_zv, *value, value_sub;
 	zend_string *index = NULL;
 	zval *this_ptr = getThis();
 
@@ -76,7 +76,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __set)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &index_param, &value);
+	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR_COPY(&index_zv, index);
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "set", NULL, 0, &index_zv, value);
 	zephir_check_call_status();
@@ -87,7 +87,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __unset)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval index_zv, *index_param = NULL;
+	zval index_zv;
 	zend_string *index = NULL;
 	zval *this_ptr = getThis();
 

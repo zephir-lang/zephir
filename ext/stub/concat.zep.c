@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Concat, getTestProperty)
 PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval title_zv, *title_param = NULL, _0;
+	zval title_zv, _0;
 	zend_string *title = NULL;
 
 	ZVAL_UNDEF(&title_zv);

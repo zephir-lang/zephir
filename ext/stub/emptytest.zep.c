@@ -102,7 +102,7 @@ PHP_METHOD(Stub_EmptyTest, testNotEmptyString)
 
 PHP_METHOD(Stub_EmptyTest, testString)
 {
-	zval a_zv, *a_param = NULL;
+	zval a_zv;
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);

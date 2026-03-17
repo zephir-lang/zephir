@@ -110,7 +110,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	zend_ulong _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval templatePath_zv, *templatePath_param = NULL, *params, params_sub, _0, key, value, _7, *_1$$3, _2$$3, _5$$4, _6$$5;
+	zval templatePath_zv, *params, params_sub, _0, key, value, _7, *_1$$3, _2$$3, _5$$4, _6$$5;
 	zend_string *templatePath = NULL, *_4$$3;
 
 	ZVAL_UNDEF(&templatePath_zv);
@@ -128,7 +128,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &templatePath_param, &params);
+	params = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR_COPY(&templatePath_zv, templatePath);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CREATE_SYMBOL_TABLE();
@@ -185,7 +185,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 PHP_METHOD(Stub_Requires, requireOnce)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval path_zv, *path_param = NULL, _0;
+	zval path_zv, _0;
 	zend_string *path = NULL;
 
 	ZVAL_UNDEF(&path_zv);

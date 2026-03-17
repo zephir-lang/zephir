@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClass)
@@ -27,7 +26,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClass)
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 {
-	zval name_zv, *name_param = NULL, *value, value_sub;
+	zval name_zv, *value, value_sub;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
@@ -37,7 +36,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &name_param, &value);
+	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
 	RETURN_THISW();

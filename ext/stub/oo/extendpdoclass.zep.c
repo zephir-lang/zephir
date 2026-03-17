@@ -31,7 +31,7 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval dsn_zv, *dsn_param = NULL, username_zv, *username_param = NULL, password_zv, *password_param = NULL, *attrs = NULL, attrs_sub, _1;
+	zval dsn_zv, username_zv, password_zv, *attrs = NULL, attrs_sub, _1;
 	zend_string *dsn = NULL, *username = NULL, *password = NULL;
 
 	ZVAL_UNDEF(&dsn_zv);
@@ -50,7 +50,9 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 3, &dsn_param, &username_param, &password_param, &attrs);
+	if (ZEND_NUM_ARGS() > 3) {
+		attrs = ZEND_CALL_ARG(execute_data, 4);
+	}
 	ZVAL_STR_COPY(&dsn_zv, dsn);
 	if (!username) {
 		ZEPHIR_INIT_VAR(&username_zv);

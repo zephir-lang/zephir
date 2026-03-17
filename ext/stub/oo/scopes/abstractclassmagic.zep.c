@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClassMagic)
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 {
-	zval name_zv, *name_param = NULL, *value, value_sub, _0, _1;
+	zval name_zv, *value, value_sub, _0, _1;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &name_param, &value);
+	value = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("setCount"), PH_NOISY_CC | PH_READONLY);
@@ -54,7 +54,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __get)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval name_zv, *name_param = NULL, _0;
+	zval name_zv, _0;
 	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 

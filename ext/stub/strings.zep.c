@@ -13,8 +13,8 @@
 
 #include "kernel/main.h"
 #include "kernel/string.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 #include "kernel/operators.h"
 #include "kernel/fcall.h"
 #include "kernel/array.h"
@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Strings)
 
 PHP_METHOD(Stub_Strings, camelize)
 {
-	zval str_zv, *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null;
+	zval str_zv, *delimiter = NULL, delimiter_sub, __$null;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -42,7 +42,9 @@ PHP_METHOD(Stub_Strings, camelize)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 1, &str_param, &delimiter);
+	if (ZEND_NUM_ARGS() > 1) {
+		delimiter = ZEND_CALL_ARG(execute_data, 2);
+	}
 	ZVAL_STR(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -54,7 +56,7 @@ PHP_METHOD(Stub_Strings, camelize)
 
 PHP_METHOD(Stub_Strings, uncamelize)
 {
-	zval str_zv, *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null;
+	zval str_zv, *delimiter = NULL, delimiter_sub, __$null;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -66,7 +68,9 @@ PHP_METHOD(Stub_Strings, uncamelize)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL_OR_NULL(delimiter)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 1, &str_param, &delimiter);
+	if (ZEND_NUM_ARGS() > 1) {
+		delimiter = ZEND_CALL_ARG(execute_data, 2);
+	}
 	ZVAL_STR(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -448,7 +452,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i;
 	zephir_fcall_cache_entry *_4 = NULL, *_6 = NULL;
-	zval value_zv, *value_param = NULL, _0, _2$$3, _3$$3, _5$$3;
+	zval value_zv, _0, _2$$3, _3$$3, _5$$3;
 	zend_string *value = NULL;
 
 	ZVAL_UNDEF(&value_zv);
@@ -543,7 +547,7 @@ PHP_METHOD(Stub_Strings, issue1267)
 PHP_METHOD(Stub_Strings, issue2186)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -565,7 +569,7 @@ PHP_METHOD(Stub_Strings, issue2186)
 PHP_METHOD(Stub_Strings, issue2186SegFault)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -591,7 +595,7 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 	zval *this_ptr = getThis();
 
@@ -617,7 +621,7 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 	zval *this_ptr = getThis();
 
@@ -643,7 +647,7 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 {
 	zval _0$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL, output;
+	zval val_zv, output;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -677,7 +681,7 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 PHP_METHOD(Stub_Strings, issue2234Strict)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -703,7 +707,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 	zval *this_ptr = getThis();
 
@@ -731,7 +735,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 PHP_METHOD(Stub_Strings, issue2234StrictChild)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -759,7 +763,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictChild)
 PHP_METHOD(Stub_Strings, nullableStringReturnType)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval val_zv, *val_param = NULL;
+	zval val_zv;
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
@@ -790,7 +794,7 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 PHP_METHOD(Stub_Strings, issue2299NullableStringCondition)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval roleName_zv, *roleName_param = NULL;
+	zval roleName_zv;
 	zend_string *roleName = NULL;
 
 	ZVAL_UNDEF(&roleName_zv);

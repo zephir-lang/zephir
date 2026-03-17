@@ -1037,17 +1037,20 @@ class Method
                             }
 
                             /**
-                             * Always create the _param companion variable.
-                             * For native-string params it's unused but needed
-                             * as a sink by zephir_fetch_params in mixed methods
-                             * (some native-string, some zval params).
+                             * Only create the _param companion variable for
+                             * non-native-string params. Native-string params
+                             * are populated directly by Z_PARAM_STR and use
+                             * per-param ZEND_CALL_ARG in mixed methods, so
+                             * no _param sink is needed.
                              */
-                            $symbolParam = $symbolTable->addVariable(
-                                'variable',
-                                $parameter['name'] . '_param',
-                                $compilationContext
-                            );
-                            $symbolParam->setIsDoublePointer(true);
+                            if (!$canUseNativeString) {
+                                $symbolParam = $symbolTable->addVariable(
+                                    'variable',
+                                    $parameter['name'] . '_param',
+                                    $compilationContext
+                                );
+                                $symbolParam->setIsDoublePointer(true);
+                            }
                             break;
 
                         default:
@@ -1195,15 +1198,11 @@ class Method
             $optionalParams       = $this->parameters->getOptionalParameters();
 
             /**
-             * Remove native-string params from the $params array.
-             * They use Z_PARAM_STR / Z_PARAM_STR_OR_NULL directly — no
-             * zephir_fetch_params argument needed.
-             *
-             * IMPORTANT: zephir_fetch_params iterates ZEND_NUM_ARGS() times
-             * and pops that many zval** pointers from varargs. We can only
-             * skip it entirely when ALL params are native strings. For mixed
-             * methods (some native-string, some zval), we must keep every
-             * entry so zephir_fetch_params has a pointer for each arg slot.
+             * Count native-string params to determine fetch strategy.
+             * - All native: skip fetching entirely (Phase 5).
+             * - Mixed (some native, some zval): emit per-param
+             *   ZEND_CALL_ARG for non-native params (Phase 5b).
+             * - No native: use zephir_fetch_params as before.
              */
             $nativeStringCount = 0;
             $totalParamCount = count($this->parameters->getParameters());
@@ -1214,9 +1213,44 @@ class Method
                     $nativeStringCount++;
                 }
             }
-            $allParamsAreNativeString = ($nativeStringCount === $totalParamCount && $totalParamCount > 0);
-            if ($allParamsAreNativeString) {
+
+            $perParamFetchCode = '';
+            if ($nativeStringCount === $totalParamCount && $totalParamCount > 0) {
+                // All params are native strings — skip zephir_fetch_params
                 $params = [];
+            } elseif ($nativeStringCount > 0) {
+                // Mixed method — replace zephir_fetch_params with per-param
+                // ZEND_CALL_ARG() calls for non-native params.
+                $params = [];
+                $allParams = $this->parameters->getParameters();
+                foreach ($allParams as $index => $parameter) {
+                    $position = $index + 1; // 1-based
+                    $pName = $parameter['name'];
+                    $pVariable = $compilationContext->symbolTable->getVariable($pName);
+                    if ($pVariable && $pVariable->isNativeString()) {
+                        continue; // Z_PARAM_STR already populates it
+                    }
+
+                    $pDataType = $parameter['data-type'] ?? 'variable';
+                    $target = match ($pDataType) {
+                        'object', 'callable', 'resource', 'variable', 'mixed' => $pName,
+                        default => $pName . '_param',
+                    };
+
+                    if ($position <= $numberRequiredParams) {
+                        $perParamFetchCode .= "\t"
+                            . $target . ' = ZEND_CALL_ARG(execute_data, ' . $position . ');'
+                            . PHP_EOL;
+                    } else {
+                        $perParamFetchCode .= "\t"
+                            . 'if (ZEND_NUM_ARGS() > ' . ($position - 1) . ') {'
+                            . PHP_EOL
+                            . "\t\t" . $target . ' = ZEND_CALL_ARG(execute_data, ' . $position . ');'
+                            . PHP_EOL
+                            . "\t" . '}'
+                            . PHP_EOL;
+                    }
+                }
             }
 
             /**
@@ -1383,9 +1417,12 @@ class Method
             if (!$this->isInternal()) {
                 /**
                  * Skip zephir_fetch_params entirely when all params are native
-                 * strings (populated directly by Z_PARAM_STR / Z_PARAM_STR_OR_NULL).
+                 * strings (populated directly by Z_PARAM_STR / Z_PARAM_STR_OR_NULL)
+                 * or when using per-param ZEND_CALL_ARG (mixed methods).
                  */
-                if (!empty($params)) {
+                if (!empty($perParamFetchCode)) {
+                    $code .= $perParamFetchCode;
+                } elseif (!empty($params)) {
                     $compilationContext->headersManager->add('kernel/memory');
                     if ($symbolTable->getMustGrownStack()) {
                         $code .= "\t"

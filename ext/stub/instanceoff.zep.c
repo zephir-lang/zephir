@@ -142,7 +142,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval test_zv, *test_param = NULL, a;
+	zval test_zv, a;
 	zend_string *test = NULL;
 
 	ZVAL_UNDEF(&test_zv);
@@ -166,7 +166,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 {
 	zend_string *test = NULL;
-	zval *a, a_sub, test_zv, *test_param = NULL;
+	zval *a, a_sub, test_zv;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&test_zv);
@@ -174,7 +174,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 		Z_PARAM_OBJECT(a)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(2, 0, &a, &test_param);
+	a = ZEND_CALL_ARG(execute_data, 1);
 	ZVAL_STR(&test_zv, test);
 	RETURN_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test_zv), Z_STRLEN_P(&test_zv)));
 }

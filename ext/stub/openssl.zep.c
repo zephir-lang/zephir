@@ -92,7 +92,7 @@ PHP_METHOD(Stub_Openssl, opensslEncrypt)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval data_zv, *data_param = NULL, _0, _1, _2, _3;
+	zval data_zv, _0, _1, _2, _3;
 	zend_string *data = NULL;
 
 	ZVAL_UNDEF(&data_zv);

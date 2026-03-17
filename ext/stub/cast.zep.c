@@ -199,7 +199,7 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableString)
 
 PHP_METHOD(Stub_Cast, testIntCastFromParameterString)
 {
-	zval a_zv, *a_param = NULL;
+	zval a_zv;
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);

@@ -32,7 +32,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod1)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval text_zv, *text_param = NULL, ret;
+	zval text_zv, ret;
 	zend_string *text = NULL;
 
 	ZVAL_UNDEF(&text_zv);
@@ -54,7 +54,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod2)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval text_zv, *text_param = NULL, ret;
+	zval text_zv, ret;
 	zend_string *text = NULL;
 
 	ZVAL_UNDEF(&text_zv);
@@ -77,7 +77,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElements)
 	zval _0, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval text_zv, *text_param = NULL, _1;
+	zval text_zv, _1;
 	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	zval result;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval text_zv, *text_param = NULL, item, _1, *_3, _4, _5$$3, _7$$3, _8$$3, _9$$4, _11$$4, _12$$4;
+	zval text_zv, item, _1, *_3, _4, _5$$3, _7$$3, _8$$3, _9$$4, _11$$4, _12$$4;
 	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 

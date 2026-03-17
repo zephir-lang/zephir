@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Exception)
  */
 PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 {
-	zval message_zv, *message_param = NULL;
+	zval message_zv;
 	zend_string *message = NULL;
 	zval *this_ptr = getThis();
 

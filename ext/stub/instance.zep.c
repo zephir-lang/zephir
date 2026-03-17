@@ -168,7 +168,7 @@ PHP_METHOD(Stub_Instance, testInstanceCreate)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval className_zv, *className_param = NULL;
+	zval className_zv;
 	zend_string *className = NULL;
 
 	ZVAL_UNDEF(&className_zv);

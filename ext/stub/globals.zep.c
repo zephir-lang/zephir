@@ -61,7 +61,7 @@ PHP_METHOD(Stub_Globals, setCharValue)
 
 PHP_METHOD(Stub_Globals, setStringValue)
 {
-	zval value_zv, *value_param = NULL;
+	zval value_zv;
 	zend_string *value = NULL;
 
 	ZVAL_UNDEF(&value_zv);
@@ -98,7 +98,7 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCacheLevel)
 
 PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCachePrefix)
 {
-	zval value_zv, *value_param = NULL;
+	zval value_zv;
 	zend_string *value = NULL;
 
 	ZVAL_UNDEF(&value_zv);

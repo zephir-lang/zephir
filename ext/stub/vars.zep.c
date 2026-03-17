@@ -185,7 +185,7 @@ PHP_METHOD(Stub_Vars, testVarExport)
 PHP_METHOD(Stub_Vars, test88Issue)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param1_zv, *param1_param = NULL, param2_zv, *param2_param = NULL, _0, _1, _2, _3;
+	zval param1_zv, param2_zv, _0, _1, _2, _3;
 	zend_string *param1 = NULL, *param2 = NULL;
 
 	ZVAL_UNDEF(&param1_zv);
@@ -226,7 +226,7 @@ PHP_METHOD(Stub_Vars, test88Issue)
 PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param1_zv, *param1_param = NULL, param2_zv, *param2_param = NULL, _0;
+	zval param1_zv, param2_zv, _0;
 	zend_string *param1 = NULL, *param2 = NULL;
 
 	ZVAL_UNDEF(&param1_zv);

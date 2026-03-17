@@ -147,7 +147,7 @@ PHP_METHOD(Stub_Exceptions, testException5)
 
 PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 {
-	zval type_zv, *type_param = NULL;
+	zval type_zv;
 	zend_string *type = NULL;
 
 	ZVAL_UNDEF(&type_zv);
@@ -180,7 +180,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval name_zv, *name_param = NULL, _0, _1;
+	zval name_zv, _0, _1;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);
@@ -205,7 +205,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval framework_zv, *framework_param = NULL, language_zv, *language_param = NULL;
+	zval framework_zv, language_zv;
 	zend_string *framework = NULL, *language = NULL;
 
 	ZVAL_UNDEF(&framework_zv);

@@ -89,7 +89,7 @@ PHP_METHOD(Stub_Oo_OoParams, setAverage)
 
 PHP_METHOD(Stub_Oo_OoParams, setName)
 {
-	zval name_zv, *name_param = NULL;
+	zval name_zv;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);
@@ -182,7 +182,7 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictNameFromZephirLand)
 
 PHP_METHOD(Stub_Oo_OoParams, setStrictName)
 {
-	zval name_zv, *name_param = NULL;
+	zval name_zv;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);
@@ -260,7 +260,7 @@ PHP_METHOD(Stub_Oo_OoParams, setAverageDefault)
 PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval name_zv, *name_param = NULL;
+	zval name_zv;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);
@@ -433,7 +433,7 @@ PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValue1)
 PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL;
+	zval str_zv;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);

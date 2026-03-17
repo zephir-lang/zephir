@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_DynamicProp)
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -50,7 +50,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
 
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 {
-	zval property_zv, *property_param = NULL, __$true;
+	zval property_zv, __$true;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -65,7 +65,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 {
-	zval property_zv, *property_param = NULL, __$false;
+	zval property_zv, __$false;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -81,7 +81,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar)
 {
 	char a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -126,7 +126,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
 {
 	unsigned char a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -147,7 +147,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
 
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
 {
-	zval property_zv, *property_param = NULL, __$null;
+	zval property_zv, __$null;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -164,7 +164,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
 {
 	zend_long a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -186,7 +186,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
 PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, a;
+	zval property_zv, a;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -208,7 +208,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue)
 {
 	zend_bool a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -231,7 +231,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse)
 {
 	zend_bool a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property_zv, *property_param = NULL, _0;
+	zval property_zv, _0;
 	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
@@ -268,7 +268,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringProperty)
 
 PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 {
-	zval value_zv, *value_param = NULL;
+	zval value_zv;
 	zend_string *value = NULL;
 	zval *this_ptr = getThis();
 

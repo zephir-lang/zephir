@@ -994,7 +994,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray4)
 PHP_METHOD(Stub_Assign, testPropertyArray5)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval index_zv, *index_param = NULL, __$null, __$false, __$true, _0, _1, _2, _3, _4;
+	zval index_zv, __$null, __$false, __$true, _0, _1, _2, _3, _4;
 	zend_string *index = NULL;
 	zval *this_ptr = getThis();
 
@@ -1197,7 +1197,7 @@ PHP_METHOD(Stub_Assign, testPropertyArray9)
 PHP_METHOD(Stub_Assign, testPropertyArray10)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval index_zv, *index_param = NULL, __$null, __$false, __$true, _0, _1;
+	zval index_zv, __$null, __$false, __$true, _0, _1;
 	zend_string *index = NULL;
 	zval *this_ptr = getThis();
 

@@ -27,6 +27,7 @@
 #include "stub/properties/publicproperties.zep.h"
 #include "stub/args/single/integer.zep.h"
 #include "stub/args/single/str.zep.h"
+#include "stub/args/single/strmixed.zep.h"
 #include "stub/arithmetic.zep.h"
 #include "stub/arrayaccessarr.zep.h"
 #include "stub/arrayaccessobj.zep.h"

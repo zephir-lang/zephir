@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_BuiltIn_StringMethods)
 PHP_METHOD(Stub_BuiltIn_StringMethods, camelize)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null, _0;
+	zval str_zv, *delimiter = NULL, delimiter_sub, __$null, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -45,7 +45,9 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, camelize)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+	if (ZEND_NUM_ARGS() > 1) {
+		delimiter = ZEND_CALL_ARG(execute_data, 2);
+	}
 	ZVAL_STR_COPY(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -59,7 +61,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, camelize)
 PHP_METHOD(Stub_BuiltIn_StringMethods, uncamelize)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, *delimiter = NULL, delimiter_sub, __$null, _0;
+	zval str_zv, *delimiter = NULL, delimiter_sub, __$null, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -74,7 +76,9 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, uncamelize)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 1, &str_param, &delimiter);
+	if (ZEND_NUM_ARGS() > 1) {
+		delimiter = ZEND_CALL_ARG(execute_data, 2);
+	}
 	ZVAL_STR_COPY(&str_zv, str);
 	if (!delimiter) {
 		delimiter = &delimiter_sub;
@@ -129,7 +133,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength3)
 
 PHP_METHOD(Stub_BuiltIn_StringMethods, getLength4)
 {
-	zval a_zv, *a_param = NULL;
+	zval a_zv;
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);
@@ -144,7 +148,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength5)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval a_zv, *a_param = NULL;
+	zval a_zv;
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);
@@ -163,7 +167,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength5)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getIndex)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, needle_zv, *needle_param = NULL, _0;
+	zval str_zv, needle_zv, _0;
 	zend_string *str = NULL, *needle = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -186,7 +190,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getIndexWithPosition)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long position;
-	zval str_zv, *str_param = NULL, needle_zv, *needle_param = NULL, *position_param = NULL, _0, _1;
+	zval str_zv, needle_zv, *position_param = NULL, _0, _1;
 	zend_string *str = NULL, *needle = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -200,7 +204,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getIndexWithPosition)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 3, 0, &str_param, &needle_param, &position_param);
+	position_param = ZEND_CALL_ARG(execute_data, 3);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZVAL_STR_COPY(&needle_zv, needle);
 	ZVAL_LONG(&_0, position);
@@ -229,7 +233,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getTrimmed)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getTrimmed1)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -248,7 +252,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getTrimmed1)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getLeftTrimmed)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -267,7 +271,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLeftTrimmed)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getRightTrimmed)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -286,7 +290,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getRightTrimmed)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getLower)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -305,7 +309,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLower)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getUpper)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -325,7 +329,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLowerFirst)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -344,7 +348,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLowerFirst)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getUpperFirst)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -364,7 +368,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getFormatted)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0, _1;
+	zval str_zv, _0, _1;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -386,7 +390,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getFormatted)
 PHP_METHOD(Stub_BuiltIn_StringMethods, getMd5)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -406,7 +410,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSha1)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -426,7 +430,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getNl2br)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -446,7 +450,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedCsv)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -466,7 +470,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedJson)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_bool assoc;
-	zval str_zv, *str_param = NULL, *assoc_param = NULL, _0, _1;
+	zval str_zv, *assoc_param = NULL, _0, _1;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -479,7 +483,9 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedJson)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 1, &str_param, &assoc_param);
+	if (ZEND_NUM_ARGS() > 1) {
+		assoc_param = ZEND_CALL_ARG(execute_data, 2);
+	}
 	ZVAL_STR_COPY(&str_zv, str);
 	if (!assoc_param) {
 		assoc = 1;
@@ -495,7 +501,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getRepeatted)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long count, ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, *count_param = NULL, _0, _1;
+	zval str_zv, *count_param = NULL, _0, _1;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -507,7 +513,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getRepeatted)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &str_param, &count_param);
+	count_param = ZEND_CALL_ARG(execute_data, 2);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZVAL_LONG(&_0, count);
 	ZEPHIR_CALL_FUNCTION(&_1, "str_repeat", NULL, 21, &str_zv, &_0);
@@ -519,7 +525,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getShuffled)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -539,7 +545,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSplited)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, del_zv, *del_param = NULL, _0;
+	zval str_zv, del_zv, _0;
 	zend_string *str = NULL, *del = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -562,7 +568,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompare)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval left_zv, *left_param = NULL, right_zv, *right_param = NULL, _0;
+	zval left_zv, right_zv, _0;
 	zend_string *left = NULL, *right = NULL;
 
 	ZVAL_UNDEF(&left_zv);
@@ -585,7 +591,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompareLocale)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval left_zv, *left_param = NULL, right_zv, *right_param = NULL, _0;
+	zval left_zv, right_zv, _0;
 	zend_string *left = NULL, *right = NULL;
 
 	ZVAL_UNDEF(&left_zv);
@@ -608,7 +614,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getReversed)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
@@ -628,7 +634,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getHtmlSpecialChars)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval str_zv, *str_param = NULL, _0;
+	zval str_zv, _0;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);

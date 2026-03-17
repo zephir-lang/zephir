@@ -129,7 +129,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_string *b = NULL;
-	zval *a, a_sub, b_zv, *b_param = NULL, c;
+	zval *a, a_sub, b_zv, c;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_zv);
@@ -140,7 +140,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &a, &b_param);
+	a = ZEND_CALL_ARG(execute_data, 1);
 	ZVAL_STR_COPY(&b_zv, b);
 	zephir_memory_observe(&c);
 	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b_zv, 0));
@@ -150,7 +150,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray6)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_string *b = NULL;
-	zval *a = NULL, a_sub, b_zv, *b_param = NULL;
+	zval *a = NULL, a_sub, b_zv;
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&b_zv);
@@ -160,7 +160,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray6)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &a, &b_param);
+	a = ZEND_CALL_ARG(execute_data, 1);
 	ZEPHIR_SEPARATE_PARAM(a);
 	ZVAL_STR_COPY(&b_zv, b);
 	ZEPHIR_OBS_NVAR(a);

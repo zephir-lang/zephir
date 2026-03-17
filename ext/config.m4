@@ -32,6 +32,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/publicproperties.zep.c
 	stub/args/single/integer.zep.c
 	stub/args/single/str.zep.c
+	stub/args/single/strmixed.zep.c
 	stub/arithmetic.zep.c
 	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c

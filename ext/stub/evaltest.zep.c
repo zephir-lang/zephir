@@ -25,7 +25,7 @@ ZEPHIR_INIT_CLASS(Stub_EvalTest)
 
 PHP_METHOD(Stub_EvalTest, evalCode)
 {
-	zval code_zv, *code_param = NULL;
+	zval code_zv;
 	zend_string *code = NULL;
 
 	ZVAL_UNDEF(&code_zv);

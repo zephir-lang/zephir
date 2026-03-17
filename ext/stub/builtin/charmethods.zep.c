@@ -47,7 +47,7 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 	long _0;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, o, _1$$3, _2$$3, _3$$3;
+	zval str_zv, o, _1$$3, _2$$3, _3$$3;
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);

@@ -224,7 +224,7 @@ PHP_METHOD(Stub_Pregmatch, testPregMatch5Params)
 PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval str_zv, *str_param = NULL, pattern_zv, *pattern_param = NULL, matches, _0;
+	zval str_zv, pattern_zv, matches, _0;
 	zend_string *str = NULL, *pattern = NULL;
 
 	ZVAL_UNDEF(&str_zv);

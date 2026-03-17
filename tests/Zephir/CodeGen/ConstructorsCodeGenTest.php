@@ -158,6 +158,24 @@ ZEP;
             $strNullableZepCode
         );
 
+        // Write Zephir source for Stub\Args\Single\StrMixed
+        $strMixedZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrMixed
+{
+    public function argStringAndInt(string str, int position) -> string
+    {
+        return str;
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/strmixed.zep',
+            $strMixedZepCode
+        );
+
         // Config::populate() reads config.json from CWD; write a minimal one
         // so the namespace is available without touching the project's own file.
         $configData = json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT);
@@ -482,6 +500,55 @@ ZEP;
             $fixture,
             $hOutput,
             'Generated str_nullable.zep.h does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * Compiles stub/args/single/strmixed.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleStrMixed(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\StrMixed',
+            'stub/args/single/strmixed.zep',
+            'stub/args/single/strmixed'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\StrMixed must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrMixedGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleStrMixed();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_mixed.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated str_mixed.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\StrMixed must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrMixedGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleStrMixed();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_mixed.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated str_mixed.zep.h does not match the reference fixture.'
         );
     }
 }

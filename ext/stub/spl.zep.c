@@ -32,7 +32,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval file_zv, *file_param = NULL;
+	zval file_zv;
 	zend_string *file = NULL;
 
 	ZVAL_UNDEF(&file_zv);

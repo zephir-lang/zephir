@@ -24,7 +24,7 @@ ZEPHIR_INIT_CLASS(Stub_Invokes_InvokeProtected)
 
 PHP_METHOD(Stub_Invokes_InvokeProtected, __construct)
 {
-	zval text_zv, *text_param = NULL;
+	zval text_zv;
 	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 

@@ -35,7 +35,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
 	zend_string *seq = NULL;
-	zval *n, n_sub, seq_zv, *seq_param = NULL, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
+	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
 
 	ZVAL_UNDEF(&n_sub);
 	ZVAL_UNDEF(&seq_zv);
@@ -68,7 +68,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &n, &seq_param);
+	n = ZEND_CALL_ARG(execute_data, 1);
 	ZVAL_STR_COPY(&seq_zv, seq);
 	seqi = 0;
 	ZEPHIR_INIT_VAR(&len);

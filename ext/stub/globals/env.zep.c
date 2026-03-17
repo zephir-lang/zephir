@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Env)
 PHP_METHOD(Stub_Globals_Env, read)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval name_zv, *name_param = NULL, _ENV, _0;
+	zval name_zv, _ENV, _0;
 	zend_string *name = NULL;
 
 	ZVAL_UNDEF(&name_zv);

@@ -27,7 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_FunctionExists)
 
 PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 {
-	zval func_zv, *func_param = NULL;
+	zval func_zv;
 	zend_string *func = NULL;
 
 	ZVAL_UNDEF(&func_zv);

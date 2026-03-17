@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Returns, testReturnCast4)
 
 PHP_METHOD(Stub_Returns, returnWithParameter)
 {
-	zval parameter_zv, *parameter_param = NULL;
+	zval parameter_zv;
 	zend_string *parameter = NULL;
 
 	ZVAL_UNDEF(&parameter_zv);

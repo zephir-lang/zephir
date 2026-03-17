@@ -139,7 +139,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *mixedVal;
 	zend_string *stringVal = NULL;
-	zval *intVal_param = NULL, stringVal_zv, *stringVal_param = NULL, mixedVal_sub, _0;
+	zval *intVal_param = NULL, stringVal_zv, mixedVal_sub, _0;
 	zend_long intVal;
 
 	ZVAL_UNDEF(&stringVal_zv);
@@ -152,7 +152,8 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 3, 0, &intVal_param, &stringVal_param, &mixedVal);
+	intVal_param = ZEND_CALL_ARG(execute_data, 1);
+	mixedVal = ZEND_CALL_ARG(execute_data, 3);
 	ZVAL_STR_COPY(&stringVal_zv, stringVal);
 	zephir_create_array(return_value, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);

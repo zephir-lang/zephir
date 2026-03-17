@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_string *property = NULL;
-	zval *obj, obj_sub, property_zv, *property_param = NULL, *value, value_sub, _0;
+	zval *obj, obj_sub, property_zv, *value, value_sub, _0;
 
 	ZVAL_UNDEF(&obj_sub);
 	ZVAL_UNDEF(&property_zv);
@@ -58,7 +58,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 3, 0, &obj, &property_param, &value);
+	obj = ZEND_CALL_ARG(execute_data, 1);
+	value = ZEND_CALL_ARG(execute_data, 3);
 	ZEPHIR_SEPARATE_PARAM(obj);
 	ZVAL_STR_COPY(&property_zv, property);
 	zephir_update_property_zval_zval(obj, &property_zv, value);
@@ -74,7 +75,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval className_zv, *className_param = NULL, property_zv, *property_param = NULL, *value, value_sub, obj;
+	zval className_zv, property_zv, *value, value_sub, obj;
 	zend_string *className = NULL, *property = NULL;
 
 	ZVAL_UNDEF(&className_zv);
@@ -88,7 +89,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 3, 0, &className_param, &property_param, &value);
+	value = ZEND_CALL_ARG(execute_data, 3);
 	ZVAL_STR_COPY(&className_zv, className);
 	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&obj);
@@ -126,7 +127,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval className_zv, *className_param = NULL, _0;
+	zval className_zv, _0;
 	zend_string *className = NULL;
 	zval *this_ptr = getThis();
 

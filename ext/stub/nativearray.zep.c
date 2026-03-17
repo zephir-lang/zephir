@@ -1823,7 +1823,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval prefix_zv, *prefix_param = NULL, baseDir_zv, *baseDir_param = NULL, _0, _2, _3, _1$$3;
+	zval prefix_zv, baseDir_zv, _0, _2, _3, _1$$3;
 	zend_string *prefix = NULL, *baseDir = NULL;
 	zval *this_ptr = getThis();
 
