@@ -1012,7 +1012,6 @@ PHP_METHOD(Stub_Assign, testPropertyArray5)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &index_param);
 	ZVAL_STR_COPY(&index_zv, index);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);
@@ -1213,7 +1212,6 @@ PHP_METHOD(Stub_Assign, testPropertyArray10)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &index_param);
 	ZVAL_STR_COPY(&index_zv, index);
 	ZEPHIR_INIT_VAR(&_0);
 	array_init(&_0);

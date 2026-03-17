@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -41,7 +39,6 @@ PHP_METHOD(Stub_Globals_Post, hasValue)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
 	ZVAL_STR(&name_zv, name);
 	RETURN_BOOL(zephir_array_isset(&_POST, &name_zv));
 }

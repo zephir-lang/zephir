@@ -14,9 +14,9 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/string.h"
-#include "kernel/operators.h"
 #include "kernel/object.h"
 #include "kernel/concat.h"
+#include "kernel/operators.h"
 #include "kernel/fcall.h"
 
 
@@ -136,7 +136,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength4)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(a)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
 	ZVAL_STR(&a_zv, a);
 	RETURN_LONG(zephir_fast_strlen_ev(&a_zv));
 }
@@ -155,7 +154,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLength5)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_STR_COPY(&a_zv, a);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SV(&_0, "hello", &a_zv);
@@ -177,7 +175,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getIndex)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &str_param, &needle_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZVAL_STR_COPY(&needle_zv, needle);
 	ZEPHIR_INIT_VAR(&_0);
@@ -242,7 +239,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getTrimmed1)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_trim(&_0, &str_zv, NULL , ZEPHIR_TRIM_BOTH);
@@ -262,7 +258,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLeftTrimmed)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_trim(&_0, &str_zv, NULL , ZEPHIR_TRIM_LEFT);
@@ -282,7 +277,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getRightTrimmed)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_trim(&_0, &str_zv, NULL , ZEPHIR_TRIM_RIGHT);
@@ -302,7 +296,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLower)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_strtolower(&_0, &str_zv);
@@ -322,7 +315,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getUpper)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_fast_strtoupper(&_0, &str_zv);
@@ -343,7 +335,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLowerFirst)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, 16, &str_zv);
 	zephir_check_call_status();
@@ -363,7 +354,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getUpperFirst)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_ucfirst(&_0, &str_zv);
@@ -385,7 +375,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getFormatted)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello %s!");
@@ -407,7 +396,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getMd5)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_md5(&_0, &str_zv);
@@ -428,7 +416,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSha1)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "sha1", NULL, 18, &str_zv);
 	zephir_check_call_status();
@@ -449,7 +436,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getNl2br)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "nl2br", NULL, 19, &str_zv);
 	zephir_check_call_status();
@@ -470,7 +456,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedCsv)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "str_getcsv", NULL, 20, &str_zv);
 	zephir_check_call_status();
@@ -544,7 +529,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getShuffled)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "str_shuffle", NULL, 22, &str_zv);
 	zephir_check_call_status();
@@ -567,7 +551,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSplited)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &str_param, &del_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZVAL_STR_COPY(&del_zv, del);
 	ZEPHIR_CALL_FUNCTION(&_0, "str_split", NULL, 23, &str_zv, &del_zv);
@@ -591,7 +574,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompare)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &left_param, &right_param);
 	ZVAL_STR_COPY(&left_zv, left);
 	ZVAL_STR_COPY(&right_zv, right);
 	ZEPHIR_CALL_FUNCTION(&_0, "strcmp", NULL, 24, &left_zv, &right_zv);
@@ -615,7 +597,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompareLocale)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &left_param, &right_param);
 	ZVAL_STR_COPY(&left_zv, left);
 	ZVAL_STR_COPY(&right_zv, right);
 	ZEPHIR_CALL_FUNCTION(&_0, "strcoll", NULL, 25, &left_zv, &right_zv);
@@ -637,7 +618,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getReversed)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "strrev", NULL, 26, &str_zv);
 	zephir_check_call_status();
@@ -658,7 +638,6 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getHtmlSpecialChars)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_CALL_FUNCTION(&_0, "htmlspecialchars", NULL, 27, &str_zv);
 	zephir_check_call_status();

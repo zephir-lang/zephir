@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Returns)
@@ -61,7 +59,6 @@ PHP_METHOD(Stub_Returns, returnWithParameter)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &parameter_param);
 	ZVAL_STR(&parameter_zv, parameter);
 	RETURN_STRING("Return back");
 }

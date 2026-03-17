@@ -105,7 +105,6 @@ PHP_METHOD(Stub_Openssl, opensslEncrypt)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &data_param);
 	ZVAL_STR_COPY(&data_zv, data);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "AES-256-CBC");

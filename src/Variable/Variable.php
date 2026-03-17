@@ -68,6 +68,11 @@ class Variable implements TypeAwareInterface
      */
     protected bool $isNativeString = false;
     /**
+     * When true, the native zend_string * parameter can be NULL (null default).
+     * Used by ReturnStatement to emit a null guard before zend_string_copy().
+     */
+    protected bool $isNullableNativeString = false;
+    /**
      * Compiled variable's name.
      */
     protected string $lowName       = '';
@@ -631,6 +636,22 @@ class Variable implements TypeAwareInterface
     public function setIsNativeString(bool $isNativeString): void
     {
         $this->isNativeString = $isNativeString;
+    }
+
+    /**
+     * Returns whether this native zend_string * can be NULL (null-default param).
+     */
+    public function isNullableNativeString(): bool
+    {
+        return $this->isNullableNativeString;
+    }
+
+    /**
+     * Marks this native zend_string * as nullable (null-default param).
+     */
+    public function setIsNullableNativeString(bool $nullable): void
+    {
+        $this->isNullableNativeString = $nullable;
     }
 
     /**

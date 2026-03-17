@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/memory.h"
 
 
 /**
@@ -39,7 +38,6 @@ PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &message_param);
 	ZVAL_STR(&message_zv, message);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message_zv);
 }

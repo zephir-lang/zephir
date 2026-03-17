@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
@@ -57,7 +56,6 @@ PHP_METHOD(Stub_Globals_Session_Base, remove)
 		Z_PARAM_STR(index)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_SESSION, SL("_SESSION"));
-	zephir_fetch_params_without_memory_grow(1, 0, &index_param);
 	ZVAL_STR(&index_zv, index);
 	zephir_array_unset(&_SESSION, &index_zv, PH_SEPARATE);
 }
@@ -99,7 +97,6 @@ PHP_METHOD(Stub_Globals_Session_Base, __unset)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &index_param);
 	ZVAL_STR_COPY(&index_zv, index);
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "remove", NULL, 0, &index_zv);
 	zephir_check_call_status();

@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -34,7 +32,6 @@ PHP_METHOD(Stub_EvalTest, evalCode)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &code_param);
 	ZVAL_STR(&code_zv, code);
 	zephir_eval_php(&code_zv, return_value, "stub/evaltest.zep:7");
 	return;

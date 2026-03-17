@@ -16,7 +16,6 @@
 #include "kernel/require.h"
 #include "kernel/object.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Requires)
@@ -196,7 +195,6 @@ PHP_METHOD(Stub_Requires, requireOnce)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &path_param);
 	ZVAL_STR_COPY(&path_zv, path);
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
 	if (zephir_require_once_zval_ret(&_0, &path_zv) == FAILURE) {

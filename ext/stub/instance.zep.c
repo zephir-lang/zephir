@@ -16,7 +16,6 @@
 #include "kernel/object.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
 
 
 /**
@@ -178,7 +177,6 @@ PHP_METHOD(Stub_Instance, testInstanceCreate)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &className_param);
 	ZVAL_STR_COPY(&className_zv, className);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(return_value, &className_zv);
 	zephir_check_call_status();

@@ -12,8 +12,6 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -33,7 +31,6 @@ PHP_METHOD(Stub_Args_Single_Str, argString)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &str_param);
 	ZVAL_STR(&str_zv, str);
 	RETURN_STR(zend_string_copy(str));
 }

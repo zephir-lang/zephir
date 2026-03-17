@@ -140,6 +140,24 @@ ZEP;
             $strOptionalZepCode
         );
 
+        // Write Zephir source for Stub\Args\Single\StrNullable
+        $strNullableZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class StrNullable
+{
+    public function argStringNull(string param = null) -> string | null
+    {
+        return param;
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/strnullable.zep',
+            $strNullableZepCode
+        );
+
         // Config::populate() reads config.json from CWD; write a minimal one
         // so the namespace is available without touching the project's own file.
         $configData = json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT);
@@ -415,6 +433,55 @@ ZEP;
             $fixture,
             $hOutput,
             'Generated str_optional.zep.h does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * Compiles stub/args/single/strnullable.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleStrNullable(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\StrNullable',
+            'stub/args/single/strnullable.zep',
+            'stub/args/single/strnullable'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\StrNullable must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrNullableGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleStrNullable();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_nullable.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated str_nullable.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\StrNullable must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleStrNullableGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleStrNullable();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/str_nullable.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated str_nullable.zep.h does not match the reference fixture.'
         );
     }
 }

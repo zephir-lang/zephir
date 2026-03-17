@@ -185,42 +185,40 @@ PHP_METHOD(Stub_Vars, testVarExport)
 PHP_METHOD(Stub_Vars, test88Issue)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval param2;
-	zval param1_zv, *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
-	zend_string *param1 = NULL;
+	zval param1_zv, *param1_param = NULL, param2_zv, *param2_param = NULL, _0, _1, _2, _3;
+	zend_string *param1 = NULL, *param2 = NULL;
 
 	ZVAL_UNDEF(&param1_zv);
+	ZVAL_UNDEF(&param2_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
-	ZVAL_UNDEF(&param2);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(param2_param)
+		Z_PARAM_STR_OR_NULL(param2)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 	ZVAL_STR_COPY(&param1_zv, param1);
-	if (!param2_param) {
-		ZEPHIR_INIT_VAR(&param2);
+	if (!param2) {
+		ZEPHIR_INIT_VAR(&param2_zv);
 	} else {
-		zephir_get_strval(&param2, param2_param);
+		ZVAL_STR_COPY(&param2_zv, param2);
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &param1_zv);
 	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
-	ZEPHIR_CPY_WRT(&_1, &param2);
+	ZEPHIR_CPY_WRT(&_1, &param2_zv);
 	zephir_var_dump(&_1);
 	ZEPHIR_INIT_VAR(&_2);
 	ZEPHIR_CPY_WRT(&_2, &param1_zv);
 	zephir_var_export(&_2);
 	ZEPHIR_INIT_VAR(&_3);
-	ZEPHIR_CPY_WRT(&_3, &param2);
+	ZEPHIR_CPY_WRT(&_3, &param2_zv);
 	zephir_var_export(&_3);
 	ZEPHIR_MM_RESTORE();
 }
@@ -241,7 +239,6 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
 	ZVAL_STR_COPY(&param1_zv, param1);
 	if (!param2) {
 		param2 = zend_string_init(ZEND_STRL("test string"), 0);

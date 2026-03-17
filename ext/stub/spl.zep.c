@@ -14,9 +14,8 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_directory.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Spl)
@@ -42,7 +41,6 @@ PHP_METHOD(Stub_Spl, issue1212)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &file_param);
 	ZVAL_STR_COPY(&file_zv, file);
 	object_init_ex(return_value, spl_ce_SplFileObject);
 	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 102, &file_zv);

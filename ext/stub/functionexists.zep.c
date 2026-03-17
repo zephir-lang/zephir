@@ -13,7 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
@@ -35,7 +34,6 @@ PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(func)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &func_param);
 	ZVAL_STR(&func_zv, func);
 	RETURN_BOOL((zephir_function_exists(&func_zv) == SUCCESS));
 }

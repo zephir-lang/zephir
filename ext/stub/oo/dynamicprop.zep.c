@@ -41,7 +41,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
@@ -60,7 +59,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
 	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$true);
 }
@@ -76,7 +74,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
 	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$false);
 }
@@ -95,7 +92,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "string");
@@ -118,7 +114,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	a = 'A';
 	ZEPHIR_INIT_VAR(&_0);
@@ -142,7 +137,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	a = 'A';
 	ZEPHIR_INIT_VAR(&_0);
@@ -162,7 +156,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &property_param);
 	ZVAL_STR(&property_zv, property);
 	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$null);
 }
@@ -182,7 +175,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	a = 10;
 	ZEPHIR_INIT_VAR(&_0);
@@ -205,7 +197,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "test");
@@ -228,7 +219,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	a = 1;
 	ZEPHIR_INIT_VAR(&_0);
@@ -252,7 +242,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &property_param);
 	ZVAL_STR_COPY(&property_zv, property);
 	a = 0;
 	ZEPHIR_INIT_VAR(&_0);
@@ -287,7 +276,6 @@ PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &value_param);
 	ZVAL_STR(&value_zv, value);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("eproperty"), &value_zv);
 }

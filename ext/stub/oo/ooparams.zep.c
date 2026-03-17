@@ -96,7 +96,6 @@ PHP_METHOD(Stub_Oo_OoParams, setName)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
 	ZVAL_STR(&name_zv, name);
 	RETURN_STR(zend_string_copy(name));
 }
@@ -190,7 +189,6 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictName)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
 	ZVAL_STR(&name_zv, name);
 	RETURN_STR(zend_string_copy(name));
 }
@@ -272,7 +270,6 @@ PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 0, 1, &name_param);
 	if (!name) {
 		name = zend_string_init(ZEND_STRL("peter"), 0);
 		ZVAL_STR(&name_zv, name);
@@ -446,7 +443,6 @@ PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 0, 1, &str_param);
 	if (!str) {
 		str = zend_string_init(ZEND_STRL("default"), 0);
 		ZVAL_STR(&str_zv, str);

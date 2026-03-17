@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Invokes_InvokeProtected)
@@ -34,7 +32,6 @@ PHP_METHOD(Stub_Invokes_InvokeProtected, __construct)
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &text_param);
 	ZVAL_STR(&text_zv, text);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("text"), &text_zv);
 }

@@ -65,7 +65,6 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __get)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &name_param);
 	ZVAL_STR_COPY(&name_zv, name);
 	zephir_memory_observe(&_0);
 	zephir_read_property_zval(&_0, this_ptr, &name_zv, PH_NOISY_CC);
