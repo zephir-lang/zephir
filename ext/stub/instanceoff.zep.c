@@ -143,10 +143,10 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *test_param = NULL, a;
-	zval test;
+	zval test_zv, *test_param = NULL, a;
+	zend_string *test = NULL;
 
-	ZVAL_UNDEF(&test);
+	ZVAL_UNDEF(&test_zv);
 	ZVAL_UNDEF(&a);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(test)
@@ -154,7 +154,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &test_param);
-	zephir_get_strval(&test, test_param);
+	ZVAL_STR_COPY(&test_zv, test);
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, stub_instanceoff_ce);
 	if (zephir_has_constructor(&a)) {
@@ -162,25 +162,22 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 		zephir_check_call_status();
 	}
 
-	RETURN_MM_BOOL(zephir_is_instance_of(&a, Z_STRVAL_P(&test), Z_STRLEN_P(&test)));
+	RETURN_MM_BOOL(zephir_is_instance_of(&a, Z_STRVAL_P(&test_zv), Z_STRLEN_P(&test_zv)));
 }
 
 PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval test;
-	zval *a, a_sub, *test_param = NULL;
+	zend_string *test = NULL;
+	zval *a, a_sub, test_zv, *test_param = NULL;
 
 	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&test);
+	ZVAL_UNDEF(&test_zv);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT(a)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &a, &test_param);
-	zephir_get_strval(&test, test_param);
-	RETURN_MM_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test), Z_STRLEN_P(&test)));
+	zephir_fetch_params_without_memory_grow(2, 0, &a, &test_param);
+	ZVAL_STR_COPY(&test_zv, test);
+	RETURN_BOOL(zephir_is_instance_of(a, Z_STRVAL_P(&test_zv), Z_STRLEN_P(&test_zv)));
 }
 

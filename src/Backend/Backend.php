@@ -1540,7 +1540,25 @@ class Backend
             return $variable->getName();
         }
 
+        if ($variable->isNativeString()) {
+            return '&' . $variable->getName() . '_zv';
+        }
+
         return '&' . $variable->getName();
+    }
+
+    /**
+     * Wraps a zend_string * variable into a temp zval for use in zval-expecting operations.
+     * Returns the temp Variable (type 'variable') with ZVAL_STR already emitted.
+     */
+    public function wrapZendStringToZval(Variable $variable, CompilationContext $context): Variable
+    {
+        $tempVar = $context->symbolTable->getTempLocalVariableForWrite('variable', $context);
+        $context->codePrinter->output(
+            sprintf('ZVAL_STR(&%s, %s);', $tempVar->getName(), $variable->getName())
+        );
+
+        return $tempVar;
     }
 
     public function ifVariableValueUndefined(

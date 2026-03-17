@@ -45,13 +45,13 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, run)
 PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval property;
-	zval *obj, obj_sub, *property_param = NULL, *value, value_sub, _0;
+	zend_string *property = NULL;
+	zval *obj, obj_sub, property_zv, *property_param = NULL, *value, value_sub, _0;
 
 	ZVAL_UNDEF(&obj_sub);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&property);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(obj)
 		Z_PARAM_STR(property)
@@ -61,10 +61,10 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &obj, &property_param, &value);
 	ZEPHIR_SEPARATE_PARAM(obj);
-	zephir_get_strval(&property, property_param);
-	zephir_update_property_zval_zval(obj, &property, value);
+	ZVAL_STR_COPY(&property_zv, property);
+	zephir_update_property_zval_zval(obj, &property_zv, value);
 	zephir_memory_observe(&_0);
-	zephir_read_property_zval(&_0, obj, &property, PH_NOISY_CC);
+	zephir_read_property_zval(&_0, obj, &property_zv, PH_NOISY_CC);
 	RETURN_CCTOR(&_0);
 }
 
@@ -75,11 +75,11 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *className_param = NULL, *property_param = NULL, *value, value_sub, obj;
-	zval className, property;
+	zval className_zv, *className_param = NULL, property_zv, *property_param = NULL, *value, value_sub, obj;
+	zend_string *className = NULL, *property = NULL;
 
-	ZVAL_UNDEF(&className);
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&className_zv);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&obj);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
@@ -90,12 +90,12 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 3, 0, &className_param, &property_param, &value);
-	zephir_get_strval(&className, className_param);
-	zephir_get_strval(&property, property_param);
+	ZVAL_STR_COPY(&className_zv, className);
+	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&obj);
-	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&obj, &className);
+	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&obj, &className_zv);
 	zephir_check_call_status();
-	zephir_update_property_zval_zval(&obj, &property, value);
+	zephir_update_property_zval_zval(&obj, &property_zv, value);
 	RETURN_CCTOR(&obj);
 }
 
@@ -127,11 +127,11 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *className_param = NULL, _0;
-	zval className;
+	zval className_zv, *className_param = NULL, _0;
+	zend_string *className = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&className);
+	ZVAL_UNDEF(&className_zv);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(className)
@@ -139,9 +139,9 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &className_param);
-	zephir_get_strval(&className, className_param);
+	ZVAL_STR_COPY(&className_zv, className);
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&_0, &className);
+	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&_0, &className_zv);
 	zephir_check_call_status();
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "getobjvars", NULL, 0, &_0);
 	zephir_check_call_status();

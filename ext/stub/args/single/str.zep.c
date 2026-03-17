@@ -26,18 +26,15 @@ ZEPHIR_INIT_CLASS(Stub_Args_Single_Str)
 
 PHP_METHOD(Stub_Args_Single_Str, argString)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *str_param = NULL;
-	zval str;
+	zval str_zv, *str_param = NULL;
+	zend_string *str = NULL;
 
-	ZVAL_UNDEF(&str);
+	ZVAL_UNDEF(&str_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &str_param);
-	zephir_get_strval(&str, str_param);
-	RETURN_CTOR(&str);
+	zephir_fetch_params_without_memory_grow(1, 0, &str_param);
+	ZVAL_STR_COPY(&str_zv, str);
+	RETURN_STR(zend_string_copy(str));
 }
 

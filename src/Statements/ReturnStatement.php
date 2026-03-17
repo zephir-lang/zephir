@@ -258,10 +258,24 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_STRING:
                         case Types::T_ISTRING:
                         case Types::T_ARRAY:
-                            $codePrinter->output(
-                                'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
-                            );
+                            if ($symbolVariable->isNativeString()) {
+                                /**
+                                 * zend_string_copy() increments the refcount so that both
+                                 * the return_value and the caller's argument zval can safely
+                                 * coexist.  Plain RETURN_STR() would transfer ownership
+                                 * without addref, causing use-after-free when the caller
+                                 * releases the return value.
+                                 */
+                                $codePrinter->output(
+                                    'RETURN_STR(zend_string_copy(' . $symbolVariable->getName() . '));'
+                                );
+                            } else {
+                                $codePrinter->output(
+                                    'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+                                );
+                            }
                             break;
+
 
                         case Types::T_BOOL:
                             $codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');

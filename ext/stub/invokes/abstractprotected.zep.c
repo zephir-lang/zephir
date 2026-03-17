@@ -30,44 +30,46 @@ ZEPHIR_INIT_CLASS(Stub_Invokes_AbstractProtected)
 
 PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod1)
 {
+	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *text_param = NULL, ret;
-	zval text, _0;
+	zval text_zv, *text_param = NULL, ret;
+	zend_string *text = NULL;
 
-	ZVAL_UNDEF(&text);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&text_zv);
 	ZVAL_UNDEF(&ret);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
-	zephir_get_strval(&text, text_param);
+	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_CONCAT_VS(&_0, &text, "1");
+	ZEPHIR_CONCAT_VS(&_0, &text_zv, "1");
 	ZEPHIR_CPY_WRT(&ret, &_0);
 	RETURN_CCTOR(&ret);
 }
 
 PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod2)
 {
+	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *text_param = NULL, ret;
-	zval text, _0;
+	zval text_zv, *text_param = NULL, ret;
+	zend_string *text = NULL;
 
-	ZVAL_UNDEF(&text);
-	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&text_zv);
 	ZVAL_UNDEF(&ret);
+	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
-	zephir_get_strval(&text, text_param);
+	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_CONCAT_VS(&_0, &text, "2");
+	ZEPHIR_CONCAT_VS(&_0, &text_zv, "2");
 	ZEPHIR_CPY_WRT(&ret, &_0);
 	RETURN_CCTOR(&ret);
 }
@@ -77,11 +79,11 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElements)
 	zval _0, _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *text_param = NULL, _1;
-	zval text;
+	zval text_zv, *text_param = NULL, _1;
+	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&text);
+	ZVAL_UNDEF(&text_zv);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
@@ -91,7 +93,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElements)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
-	zephir_get_strval(&text, text_param);
+	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 2, 0);
 	zephir_array_fast_append(&_0, this_ptr);
@@ -100,7 +102,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElements)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 1, 0);
-	zephir_array_fast_append(&_2, &text);
+	zephir_array_fast_append(&_2, &text_zv);
 	ZEPHIR_CALL_USER_FUNC_ARRAY(return_value, &_0, &_2);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -109,14 +111,14 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElements)
 PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 {
 	zval elements, _0, _2, _6$$3, _10$$4;
+	zval result;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *text_param = NULL, item, _1, *_3, _4, _5$$3, _7$$3, _8$$3, _9$$4, _11$$4, _12$$4;
-	zval text, result;
+	zval text_zv, *text_param = NULL, item, _1, *_3, _4, _5$$3, _7$$3, _8$$3, _9$$4, _11$$4, _12$$4;
+	zend_string *text = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&text);
-	ZVAL_UNDEF(&result);
+	ZVAL_UNDEF(&text_zv);
 	ZVAL_UNDEF(&item);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_4);
@@ -126,6 +128,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	ZVAL_UNDEF(&_9$$4);
 	ZVAL_UNDEF(&_11$$4);
 	ZVAL_UNDEF(&_12$$4);
+	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&elements);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
@@ -137,7 +140,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &text_param);
-	zephir_get_strval(&text, text_param);
+	ZVAL_STR_COPY(&text_zv, text);
 	ZEPHIR_INIT_VAR(&result);
 	ZEPHIR_INIT_VAR(&elements);
 	zephir_create_array(&elements, 2, 0);
@@ -148,7 +151,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_VAR(&_2);
 	zephir_create_array(&_2, 1, 0);
-	zephir_array_fast_append(&_2, &text);
+	zephir_array_fast_append(&_2, &text_zv);
 	zephir_array_fast_append(&_0, &_2);
 	zephir_array_fast_append(&elements, &_0);
 	ZEPHIR_INIT_NVAR(&_0);
@@ -158,7 +161,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	zephir_array_fast_append(&_0, &_1);
 	ZEPHIR_INIT_NVAR(&_2);
 	zephir_create_array(&_2, 1, 0);
-	zephir_array_fast_append(&_2, &text);
+	zephir_array_fast_append(&_2, &text_zv);
 	zephir_array_fast_append(&_0, &_2);
 	zephir_array_fast_append(&elements, &_0);
 	zephir_is_iterable(&elements, 0, "stub/invokes/abstractprotected.zep", 49);

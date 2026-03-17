@@ -89,19 +89,16 @@ PHP_METHOD(Stub_Oo_OoParams, setAverage)
 
 PHP_METHOD(Stub_Oo_OoParams, setName)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL;
-	zval name;
+	zval name_zv, *name_param = NULL;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &name_param);
-	zephir_get_strval(&name, name_param);
-	RETURN_CTOR(&name);
+	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
+	ZVAL_STR_COPY(&name_zv, name);
+	RETURN_STR(zend_string_copy(name));
 }
 
 PHP_METHOD(Stub_Oo_OoParams, setEnabled)
@@ -186,27 +183,16 @@ PHP_METHOD(Stub_Oo_OoParams, setStrictNameFromZephirLand)
 
 PHP_METHOD(Stub_Oo_OoParams, setStrictName)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL;
-	zval name;
+	zval name_zv, *name_param = NULL;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &name_param);
-	if (UNEXPECTED(Z_TYPE_P(name_param) != IS_STRING && Z_TYPE_P(name_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'name' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(name_param) == IS_STRING)) {
-		zephir_get_strval(&name, name_param);
-	} else {
-		ZEPHIR_INIT_VAR(&name);
-	}
-	RETURN_CTOR(&name);
+	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
+	ZVAL_STR_COPY(&name_zv, name);
+	RETURN_STR(zend_string_copy(name));
 }
 
 PHP_METHOD(Stub_Oo_OoParams, setStrictEnabled)
@@ -282,7 +268,7 @@ PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 	ZVAL_UNDEF(&name);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR(name)
+		Z_PARAM_ZVAL(name_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -456,7 +442,7 @@ PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
 	ZVAL_UNDEF(&str);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR(str)
+		Z_PARAM_ZVAL(str_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

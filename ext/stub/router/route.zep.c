@@ -214,22 +214,15 @@ PHP_METHOD(Stub_Router_Route, via)
 PHP_METHOD(Stub_Router_Route, extractNamedParams)
 {
 	long _0, _5$$11, _26$$19;
+	zval route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
 	zend_bool notValid, _6$$12, _7$$12, _8$$12, _9$$12, _10$$12, _11$$12, _12$$12, _13$$12, _14$$12, _15$$12, _16$$12, _17$$12, _25$$18;
 	zend_long tmp = 0, cursor = 0, cursorVar = 0, marker = 0, bracketCount, parenthesesCount, foundPattern, intermediate, numberMatches;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *pattern_param = NULL, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
-	zval pattern, route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
+	zval pattern_zv, *pattern_param = NULL, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
+	zend_string *pattern = NULL;
 
-	ZVAL_UNDEF(&pattern);
-	ZVAL_UNDEF(&route);
-	ZVAL_UNDEF(&item);
-	ZVAL_UNDEF(&variable);
-	ZVAL_UNDEF(&regexp);
-	ZVAL_UNDEF(&_4$$11);
-	ZVAL_UNDEF(&_21$$16);
-	ZVAL_UNDEF(&_24$$16);
-	ZVAL_UNDEF(&_29$$29);
+	ZVAL_UNDEF(&pattern_zv);
 	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&_1$$11);
 	ZVAL_UNDEF(&_2$$11);
@@ -241,28 +234,36 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 	ZVAL_UNDEF(&_23$$16);
 	ZVAL_UNDEF(&_27$$19);
 	ZVAL_UNDEF(&_28$$28);
+	ZVAL_UNDEF(&route);
+	ZVAL_UNDEF(&item);
+	ZVAL_UNDEF(&variable);
+	ZVAL_UNDEF(&regexp);
+	ZVAL_UNDEF(&_4$$11);
+	ZVAL_UNDEF(&_21$$16);
+	ZVAL_UNDEF(&_24$$16);
+	ZVAL_UNDEF(&_29$$29);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(pattern)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &pattern_param);
-	zephir_get_strval(&pattern, pattern_param);
+	ZVAL_STR_COPY(&pattern_zv, pattern);
 	notValid = 0;
 	bracketCount = 0;
 	parenthesesCount = 0;
 	foundPattern = 0;
 	intermediate = 0;
 	numberMatches = 0;
-	if (zephir_fast_strlen_ev(&pattern) <= 0) {
+	if (zephir_fast_strlen_ev(&pattern_zv) <= 0) {
 		RETURN_MM_BOOL(0);
 	}
 	ZEPHIR_INIT_VAR(&matches);
 	array_init(&matches);
 	ZEPHIR_INIT_VAR(&route);
-	for (_0 = 0; _0 < Z_STRLEN_P(&pattern); _0++) {
+	for (_0 = 0; _0 < Z_STRLEN_P(&pattern_zv); _0++) {
 		cursor = _0; 
-		ch = ZEPHIR_STRING_OFFSET(&pattern, _0);
+		ch = ZEPHIR_STRING_OFFSET(&pattern_zv, _0);
 		if (parenthesesCount == 0) {
 			if (ch == '{') {
 				if (bracketCount == 0) {
@@ -282,7 +283,7 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 							ZVAL_LONG(&_1$$11, marker);
 							ZVAL_LONG(&_2$$11, (cursor - marker));
 							ZEPHIR_INIT_NVAR(&_3$$11);
-							zephir_substr(&_3$$11, &pattern, zephir_get_intval(&_1$$11), zephir_get_intval(&_2$$11), 0);
+							zephir_substr(&_3$$11, &pattern_zv, zephir_get_intval(&_1$$11), zephir_get_intval(&_2$$11), 0);
 							zephir_cast_to_string(&_4$$11, &_3$$11);
 							ZEPHIR_CPY_WRT(&item, &_4$$11);
 							for (_5$$11 = 0; _5$$11 < Z_STRLEN_P(&item); _5$$11++) {

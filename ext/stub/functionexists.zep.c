@@ -28,19 +28,16 @@ ZEPHIR_INIT_CLASS(Stub_FunctionExists)
 
 PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *func_param = NULL;
-	zval func;
+	zval func_zv, *func_param = NULL;
+	zend_string *func = NULL;
 
-	ZVAL_UNDEF(&func);
+	ZVAL_UNDEF(&func_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(func)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &func_param);
-	zephir_get_strval(&func, func_param);
-	RETURN_MM_BOOL((zephir_function_exists(&func) == SUCCESS));
+	zephir_fetch_params_without_memory_grow(1, 0, &func_param);
+	ZVAL_STR_COPY(&func_zv, func);
+	RETURN_BOOL((zephir_function_exists(&func_zv) == SUCCESS));
 }
 
 PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)

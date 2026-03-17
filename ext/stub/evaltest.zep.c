@@ -27,19 +27,16 @@ ZEPHIR_INIT_CLASS(Stub_EvalTest)
 
 PHP_METHOD(Stub_EvalTest, evalCode)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *code_param = NULL;
-	zval code;
+	zval code_zv, *code_param = NULL;
+	zend_string *code = NULL;
 
-	ZVAL_UNDEF(&code);
+	ZVAL_UNDEF(&code_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &code_param);
-	zephir_get_strval(&code, code_param);
-	zephir_eval_php(&code, return_value, "stub/evaltest.zep:7");
-	RETURN_MM();
+	zephir_fetch_params_without_memory_grow(1, 0, &code_param);
+	ZVAL_STR_COPY(&code_zv, code);
+	zephir_eval_php(&code_zv, return_value, "stub/evaltest.zep:7");
+	return;
 }
 

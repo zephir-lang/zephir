@@ -1823,12 +1823,12 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *prefix_param = NULL, *baseDir_param = NULL, _0, _2, _3, _1$$3;
-	zval prefix, baseDir;
+	zval prefix_zv, *prefix_param = NULL, baseDir_zv, *baseDir_param = NULL, _0, _2, _3, _1$$3;
+	zend_string *prefix = NULL, *baseDir = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&prefix);
-	ZVAL_UNDEF(&baseDir);
+	ZVAL_UNDEF(&prefix_zv);
+	ZVAL_UNDEF(&baseDir_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
@@ -1840,18 +1840,18 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &prefix_param, &baseDir_param);
-	zephir_get_strval(&prefix, prefix_param);
-	zephir_get_strval(&baseDir, baseDir_param);
+	ZVAL_STR_COPY(&prefix_zv, prefix);
+	ZVAL_STR_COPY(&baseDir_zv, baseDir);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
-	if (!(zephir_array_isset(&_0, &prefix))) {
+	if (!(zephir_array_isset(&_0, &prefix_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
-		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix, &_1$$3);
+		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix_zv, &_1$$3);
 	}
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_fetch(&_3, &_2, &prefix, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
+	zephir_array_fetch(&_3, &_2, &prefix_zv, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
 	ZEPHIR_MAKE_REF(&_3);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 64, &_3, &baseDir);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 64, &_3, &baseDir_zv);
 	ZEPHIR_UNREF(&_3);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");

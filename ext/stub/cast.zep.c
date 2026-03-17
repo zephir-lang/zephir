@@ -199,19 +199,16 @@ PHP_METHOD(Stub_Cast, testIntCastFromVariableString)
 
 PHP_METHOD(Stub_Cast, testIntCastFromParameterString)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a_param = NULL;
-	zval a;
+	zval a_zv, *a_param = NULL;
+	zend_string *a = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_UNDEF(&a_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(a)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &a_param);
-	zephir_get_strval(&a, a_param);
-	RETURN_MM_LONG(zephir_get_intval(&a));
+	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
+	ZVAL_STR_COPY(&a_zv, a);
+	RETURN_LONG(zephir_get_intval(&a_zv));
 }
 
 PHP_METHOD(Stub_Cast, testIntCastFromNull)

@@ -84,6 +84,12 @@ class CreateInstanceOptimizer extends OptimizerAbstract
         $context->codePrinter->output($this->getOutput($symbol, $resolvedParams));
 
         $this->getTempParameters($call, $context);
+
+        /**
+         * zephir_check_call_status() uses ZEPHIR_MM_RESTORE() in the failure
+         * path, which needs ZEPHIR_METHOD_GLOBALS_PTR to be declared.
+         */
+        $context->symbolTable->mustGrownStack(true);
         $call->addCallStatusOrJump($context);
 
         return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);

@@ -32,27 +32,28 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *dsn_param = NULL, *username_param = NULL, *password_param = NULL, *attrs = NULL, attrs_sub, _1;
-	zval dsn, username, password;
+	zval username, password;
+	zval dsn_zv, *dsn_param = NULL, *username_param = NULL, *password_param = NULL, *attrs = NULL, attrs_sub, _1;
+	zend_string *dsn = NULL;
 
-	ZVAL_UNDEF(&dsn);
-	ZVAL_UNDEF(&username);
-	ZVAL_UNDEF(&password);
+	ZVAL_UNDEF(&dsn_zv);
 	ZVAL_UNDEF(&attrs_sub);
 	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&username);
+	ZVAL_UNDEF(&password);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 4)
 		Z_PARAM_STR(dsn)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR_OR_NULL(username)
-		Z_PARAM_STR_OR_NULL(password)
+		Z_PARAM_ZVAL_OR_NULL(username_param)
+		Z_PARAM_ZVAL_OR_NULL(password_param)
 		Z_PARAM_ZVAL(attrs)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 3, &dsn_param, &username_param, &password_param, &attrs);
-	zephir_get_strval(&dsn, dsn_param);
+	ZVAL_STR_COPY(&dsn_zv, dsn);
 	if (!username_param) {
 		ZEPHIR_INIT_VAR(&username);
 	} else {
@@ -76,7 +77,7 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_STRING(&_1, "Stub\\PdoStatement");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_array_update_long(attrs, 13, &_0, PH_COPY | PH_SEPARATE ZEPHIR_DEBUG_PARAMS_DUMMY);
-	ZEPHIR_CALL_PARENT(NULL, stub_oo_extendpdoclass_ce, getThis(), "__construct", NULL, 0, &dsn, &username, &password, attrs);
+	ZEPHIR_CALL_PARENT(NULL, stub_oo_extendpdoclass_ce, getThis(), "__construct", NULL, 0, &dsn_zv, &username, &password, attrs);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
 }

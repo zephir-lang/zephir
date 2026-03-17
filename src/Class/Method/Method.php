@@ -665,6 +665,13 @@ class Method
                 return "\t" . $parameter['name'] . ' = zephir_get_doubleval(' . $parameterCode . ');' . PHP_EOL;
 
             case 'string':
+                if ($inputParamVar->isNativeString()) {
+                    // Populate the companion zval from the native zend_string *.
+                    // ZVAL_STR_COPY increments the refcount so the companion
+                    // properly owns a reference — prevents use-after-free if any
+                    // kernel operation transiently releases the zval.
+                    return "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                }
                 $compilationContext->symbolTable->mustGrownStack(true);
 
                 return "\t" . 'zephir_get_strval(' . $inputParamCode . ', ' . $parameterCode . ');' . PHP_EOL;
@@ -689,6 +696,15 @@ class Method
     public function checkStrictType(array $parameter, CompilationContext $compilationContext): string
     {
         $dataType = $this->getParamDataType($parameter);
+
+        // Z_PARAM_STR already validates string type for native string params,
+        // but we still need to populate the companion zval.
+        if ($dataType === 'string') {
+            $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
+            if ($variable->isNativeString()) {
+                return "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+            }
+        }
 
         $compilationContext->headersManager->add('ext/spl/spl_exceptions');
         $compilationContext->headersManager->add('kernel/exception');
@@ -891,6 +907,56 @@ class Method
                             );
                             break;
 
+                        case 'string':
+                            /**
+                             * Only use native zend_string * for string parameters
+                             * that are NOT re-assigned inside the method body.
+                             * Mutation count of 1 = the parameter itself; >1 = has
+                             * let-assignments in the body.
+                             */
+                            $mutations = ($this->localContext instanceof LocalContextPass)
+                                ? $this->localContext->getNumberOfMutations($parameter['name'])
+                                : PHP_INT_MAX;
+
+                            if ($mutations <= 1 && !isset($parameter['default'])) {
+                                $symbol = $symbolTable->addVariable(
+                                    'string',
+                                    $parameter['name'],
+                                    $compilationContext
+                                );
+                                $symbol->setIsNativeString(true);
+                                $symbol->setMustInitNull(true);
+
+                                /**
+                                 * Companion zval used transparently by getVariableCode()
+                                 * so that all existing zval-expecting operations work
+                                 * without any bridge patches.
+                                 */
+                                $companion = $symbolTable->addVariable(
+                                    'variable',
+                                    $parameter['name'] . '_zv',
+                                    $compilationContext
+                                );
+                                $companion->setIsInitialized(true, $compilationContext);
+                                $companion->increaseUses();
+                            } else {
+                                /* Mutated string param: fall back to zval approach */
+                                $symbol = $symbolTable->addVariable(
+                                    'string',
+                                    $parameter['name'],
+                                    $compilationContext
+                                );
+                                $symbol->setMustInitNull(true);
+                            }
+
+                            $symbolParam = $symbolTable->addVariable(
+                                'variable',
+                                $parameter['name'] . '_param',
+                                $compilationContext
+                            );
+                            $symbolParam->setIsDoublePointer(true);
+                            break;
+
                         default:
                             $symbol      = $symbolTable->addVariable(
                                 $parameter['data-type'],
@@ -905,7 +971,7 @@ class Method
                             /* TODO: Move this to the respective backend, which requires refactoring how this works */
                             $symbolParam->setIsDoublePointer(true);
 
-                            if ('string' == $parameter['data-type'] || 'array' == $parameter['data-type']) {
+                            if ('array' == $parameter['data-type']) {
                                 $symbol->setMustInitNull(true);
                             }
                             break;
@@ -1292,6 +1358,10 @@ class Method
                 'return_value_ptr' !== $variable->getName()
             ) {
                 $type = $variable->getType();
+                // Native string params use zend_string * instead of zval for declaration
+                if ($type === 'string' && $variable->isNativeString()) {
+                    $type = 'zend_string';
+                }
                 if (!isset($usedVariables[$type])) {
                     $usedVariables[$type] = [];
                 }
@@ -1557,11 +1627,19 @@ class Method
                 break;
 
             case 'string':
-                if ($hasDefaultNull) {
-                    // $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
-                    $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                $variable = $compilationContext->symbolTable->getVariable($name);
+                if ($variable && $variable->isNativeString()) {
+                    if ($hasDefaultNull) {
+                        $param = sprintf('Z_PARAM_STR_OR_NULL(%s)', $name);
+                    } else {
+                        $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    }
                 } else {
-                    $param = sprintf('Z_PARAM_STR(%s)', $name);
+                    if ($hasDefaultNull) {
+                        $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                    } else {
+                        $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
+                    }
                 }
 
                 break;

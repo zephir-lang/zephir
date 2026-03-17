@@ -63,6 +63,11 @@ class Variable implements TypeAwareInterface
     protected bool $isExternal  = false;
     protected bool $localOnly   = false;
     /**
+     * When true, the variable is a string parameter using native zend_string *
+     * instead of zval. getType() still returns 'string' for compatibility.
+     */
+    protected bool $isNativeString = false;
+    /**
      * Compiled variable's name.
      */
     protected string $lowName       = '';
@@ -610,6 +615,22 @@ class Variable implements TypeAwareInterface
     public function isString(): bool
     {
         return 'string' === $this->type;
+    }
+
+    /**
+     * Returns whether this is a native zend_string * parameter.
+     */
+    public function isNativeString(): bool
+    {
+        return $this->isNativeString;
+    }
+
+    /**
+     * Marks this variable as a native zend_string * parameter.
+     */
+    public function setIsNativeString(bool $isNativeString): void
+    {
+        $this->isNativeString = $isNativeString;
     }
 
     /**

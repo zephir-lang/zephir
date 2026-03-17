@@ -185,46 +185,39 @@ PHP_METHOD(Stub_Vars, testVarExport)
 PHP_METHOD(Stub_Vars, test88Issue)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
-	zval param1, param2;
+	zval param2;
+	zval param1_zv, *param1_param = NULL, *param2_param = NULL, _0, _1, _2, _3;
+	zend_string *param1 = NULL;
 
-	ZVAL_UNDEF(&param1);
-	ZVAL_UNDEF(&param2);
+	ZVAL_UNDEF(&param1_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
+	ZVAL_UNDEF(&param2);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR_OR_NULL(param2)
+		Z_PARAM_ZVAL_OR_NULL(param2_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
-	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
-		zephir_get_strval(&param1, param1_param);
-	} else {
-		ZEPHIR_INIT_VAR(&param1);
-	}
+	ZVAL_STR_COPY(&param1_zv, param1);
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);
 	} else {
 		zephir_get_strval(&param2, param2_param);
 	}
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_CPY_WRT(&_0, &param1);
+	ZEPHIR_CPY_WRT(&_0, &param1_zv);
 	zephir_var_dump(&_0);
 	ZEPHIR_INIT_VAR(&_1);
 	ZEPHIR_CPY_WRT(&_1, &param2);
 	zephir_var_dump(&_1);
 	ZEPHIR_INIT_VAR(&_2);
-	ZEPHIR_CPY_WRT(&_2, &param1);
+	ZEPHIR_CPY_WRT(&_2, &param1_zv);
 	zephir_var_export(&_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_CPY_WRT(&_3, &param2);
@@ -235,29 +228,22 @@ PHP_METHOD(Stub_Vars, test88Issue)
 PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *param1_param = NULL, *param2_param = NULL, _0;
-	zval param1, param2;
+	zval param2;
+	zval param1_zv, *param1_param = NULL, *param2_param = NULL, _0;
+	zend_string *param1 = NULL;
 
-	ZVAL_UNDEF(&param1);
-	ZVAL_UNDEF(&param2);
+	ZVAL_UNDEF(&param1_zv);
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&param2);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_STR(param1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_STR(param2)
+		Z_PARAM_ZVAL(param2_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &param1_param, &param2_param);
-	if (UNEXPECTED(Z_TYPE_P(param1_param) != IS_STRING && Z_TYPE_P(param1_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'param1' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(param1_param) == IS_STRING)) {
-		zephir_get_strval(&param1, param1_param);
-	} else {
-		ZEPHIR_INIT_VAR(&param1);
-	}
+	ZVAL_STR_COPY(&param1_zv, param1);
 	if (!param2_param) {
 		ZEPHIR_INIT_VAR(&param2);
 		ZVAL_STRING(&param2, "test string");

@@ -38,10 +38,10 @@ PHP_METHOD(Stub_Concat, getTestProperty)
 PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *title_param = NULL, _0;
-	zval title;
+	zval title_zv, *title_param = NULL, _0;
+	zend_string *title = NULL;
 
-	ZVAL_UNDEF(&title);
+	ZVAL_UNDEF(&title_zv);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(title)
@@ -49,12 +49,12 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &title_param);
-	zephir_get_strval(&title, title_param);
+	ZVAL_STR_COPY(&title_zv, title);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC);
-	SEPARATE_ZVAL(&title);
-	zephir_concat_function(&title, &_0, &title);
-	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &title);
+	SEPARATE_ZVAL(&title_zv);
+	zephir_concat_function(&title_zv, &_0, &title_zv);
+	zephir_update_static_property_ce(stub_concat_ce, ZEND_STRL("testProperty"), &title_zv);
 	ZEPHIR_MM_RESTORE();
 }
 

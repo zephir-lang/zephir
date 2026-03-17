@@ -32,20 +32,17 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Post)
  */
 PHP_METHOD(Stub_Globals_Post, hasValue)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL, _POST;
-	zval name;
+	zval name_zv, *name_param = NULL, _POST;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&_POST);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params(1, 1, 0, &name_param);
-	zephir_get_strval(&name, name_param);
-	RETURN_MM_BOOL(zephir_array_isset(&_POST, &name));
+	zephir_fetch_params_without_memory_grow(1, 0, &name_param);
+	ZVAL_STR_COPY(&name_zv, name);
+	RETURN_BOOL(zephir_array_isset(&_POST, &name_zv));
 }
 
