@@ -824,7 +824,7 @@ void zephir_array_update_multi_ex(zval *arr, zval *value, const char *types, int
 	zval *item;
 	zval pzv;
 	zend_array *p;
-	int i, j, l, ll, re_update, must_continue, wrap_tmp;
+	int i, l, ll, re_update, must_continue, wrap_tmp;
 
 	ZVAL_UNDEF(&pzv);
 
@@ -1002,21 +1002,19 @@ int zephir_array_update_multi(zval *arr, zval *value, const char *types, int typ
 int zephir_fast_in_array(zval *value, zval *haystack)
 {
 	zval *entry;
-	zend_ulong num_idx;
-	zend_string *str_idx;
 
 	if (Z_TYPE_P(haystack) != IS_ARRAY) {
 		return 0;
 	}
 
 	if (Z_TYPE_P(value) == IS_STRING) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(haystack), num_idx, str_idx, entry) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(haystack), entry) {
 			if (fast_equal_check_string(value, entry)) {
 				return 1;
 			}
 		} ZEND_HASH_FOREACH_END();
 	} else {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(haystack), num_idx, str_idx, entry) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(haystack), entry) {
 			if (fast_equal_check_function(value, entry)) {
 				return 1;
 			}
