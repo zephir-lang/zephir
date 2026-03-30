@@ -1756,9 +1756,9 @@ class Method
         switch ($parameter['data-type']) {
             case 'array':
                 if ($hasDefaultNull) {
-                    $param = sprintf('Z_PARAM_ARRAY_OR_NULL(%s)', $name);
+                    $param = sprintf('ZEPHIR_Z_PARAM_ARRAY_OR_NULL(%s, %s_param)', $name, $name);
                 } else {
-                    $param = sprintf('Z_PARAM_ARRAY(%s)', $name);
+                    $param = sprintf('ZEPHIR_Z_PARAM_ARRAY(%s, %s_param)', $name, $name);
                 }
 
                 break;
@@ -1768,6 +1768,15 @@ class Method
                     $param = sprintf('Z_PARAM_BOOL_OR_NULL(%s, is_null_true)', $name);
                 } else {
                     $param = sprintf('Z_PARAM_BOOL(%s)', $name);
+                }
+
+                break;
+
+            case 'double':
+                if ($hasDefaultNull) {
+                    $param = sprintf('Z_PARAM_ZVAL_OR_NULL(%s_param)', $name);
+                } else {
+                    $param = sprintf('Z_PARAM_ZVAL(%s_param)', $name);
                 }
 
                 break;
