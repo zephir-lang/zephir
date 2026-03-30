@@ -1315,12 +1315,12 @@ final class Compiler
             if (false === $development) {
                 $gccVersion = $this->getGccVersion();
                 if (version_compare($gccVersion, '4.6.0', '>=')) {
-                    $gccFlags = '-O2 -Wno-incompatible-pointer-types -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -flto -DZEPHIR_RELEASE=1';
                 } else {
-                    $gccFlags = '-O2 -Wno-incompatible-pointer-types -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
+                    $gccFlags = '-O2 -fvisibility=hidden -Wparentheses -DZEPHIR_RELEASE=1';
                 }
             } else {
-                $gccFlags = '-O0 -Wno-incompatible-pointer-types -g3';
+                $gccFlags = '-O0 -g3';
             }
         }
 

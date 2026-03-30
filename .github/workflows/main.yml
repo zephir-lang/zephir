@@ -114,7 +114,7 @@ jobs:
         uses: ./.github/workflows/build-linux-ext
         with:
           compiler: ${{ matrix.compiler }}
-          cflags: '-O2 -Wno-incompatible-pointer-types -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
+          cflags: '-O2 -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
           ldflags: '--coverage'
 
       - name: Build Test Extension (macOS)
