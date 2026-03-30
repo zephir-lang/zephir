@@ -61,11 +61,11 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 5)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(server)
-		Z_PARAM_ARRAY_OR_NULL(get)
-		Z_PARAM_ARRAY_OR_NULL(post)
-		Z_PARAM_ARRAY_OR_NULL(cookies)
-		Z_PARAM_ARRAY_OR_NULL(files)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(server, server_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(get, get_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(post, post_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(cookies, cookies_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(files, files_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -163,7 +163,7 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 	ZVAL_UNDEF(&super);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(source)
-		Z_PARAM_ARRAY(super)
+		ZEPHIR_Z_PARAM_ARRAY(super, super_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

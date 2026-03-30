@@ -320,4 +320,19 @@ void zephir_get_arg(zval* return_value, zend_long idx);
 
 void zephir_module_init();
 
+/**
+ * PHP 8.5 changed zend_parse_arg_array() to accept zval** instead of zval*.
+ * The Z_PARAM_ARRAY(dest) macro passes &dest, so on 8.5+ dest must be a
+ * zval* (pointer) variable, whereas on older versions it must be a zval
+ * (value) variable.  These compat macros let the code generator emit a
+ * single call that works on every supported PHP version (8.0 – 8.5+).
+ */
+#if PHP_VERSION_ID >= 80500
+# define ZEPHIR_Z_PARAM_ARRAY(dest, dest_ptr)              Z_PARAM_ARRAY(dest_ptr)
+# define ZEPHIR_Z_PARAM_ARRAY_OR_NULL(dest, dest_ptr)      Z_PARAM_ARRAY_OR_NULL(dest_ptr)
+#else
+# define ZEPHIR_Z_PARAM_ARRAY(dest, dest_ptr)              Z_PARAM_ARRAY(dest)
+# define ZEPHIR_Z_PARAM_ARRAY_OR_NULL(dest, dest_ptr)      Z_PARAM_ARRAY_OR_NULL(dest)
+#endif
+
 #endif /* ZEPHIR_KERNEL_MAIN_H */
