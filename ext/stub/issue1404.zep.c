@@ -37,7 +37,7 @@ PHP_METHOD(Stub_Issue1404, testIsPhpVersionUsingDouble70100)
 PHP_METHOD(Stub_Issue1404, testIsPhpVersionUsingLong70000)
 {
 
-	RETURN_BOOL(zephir_is_php_version(21474836470000));
+	RETURN_BOOL(0);
 }
 
 PHP_METHOD(Stub_Issue1404, testIsPhpVersionUsingString70000)

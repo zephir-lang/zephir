@@ -141,7 +141,7 @@ PHP_METHOD(Stub_MethodsWithDefaultValues, testDouble)
 
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(param)
+		Z_PARAM_ZVAL(param_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &param_param);
 	if (!param_param) {
@@ -159,7 +159,7 @@ PHP_METHOD(Stub_MethodsWithDefaultValues, testNullableDouble)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL_OR_NULL(param)
+		Z_PARAM_ZVAL_OR_NULL(param_param)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(0, 1, &param_param);
 	if (!param_param) {

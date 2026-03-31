@@ -102,7 +102,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeArrayVar)
 
 	ZVAL_UNDEF(&someArrayVar);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(someArrayVar)
+		ZEPHIR_Z_PARAM_ARRAY(someArrayVar, someArrayVar_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

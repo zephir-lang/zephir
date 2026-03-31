@@ -88,6 +88,16 @@ class IsPhpVersionOptimizer extends OptimizerAbstract
 
         $versionId = (int)($majorVersion + $minorVersion + $releaseVersion);
 
+        /**
+         * The C function zephir_is_php_version() takes an unsigned int.
+         * If the computed version id overflows that range no real PHP version
+         * could ever match, so we short-circuit to false (0) and avoid a
+         * -Woverflow warning from the C compiler.
+         */
+        if ($versionId < 0 || $versionId > 0xFFFFFFFF) {
+            return new CompiledExpression('bool', '0', $expression);
+        }
+
         return new CompiledExpression('bool', 'zephir_is_php_version(' . $versionId . ')', $expression);
     }
 }
