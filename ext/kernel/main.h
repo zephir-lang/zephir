@@ -12,6 +12,7 @@
 #ifndef ZEPHIR_KERNEL_MAIN_H
 #define ZEPHIR_KERNEL_MAIN_H
 
+#include <php.h>
 #include <Zend/zend_interfaces.h>
 #include <ext/spl/spl_exceptions.h>
 #include <ext/spl/spl_iterators.h>
@@ -321,13 +322,16 @@ void zephir_get_arg(zval* return_value, zend_long idx);
 void zephir_module_init();
 
 /**
- * PHP 8.5 changed zend_parse_arg_array() to accept zval** instead of zval*.
- * The Z_PARAM_ARRAY(dest) macro passes &dest, so on 8.5+ dest must be a
- * zval* (pointer) variable, whereas on older versions it must be a zval
- * (value) variable.  These compat macros let the code generator emit a
- * single call that works on every supported PHP version (8.0 – 8.5+).
+ * PHP changed zend_parse_arg_array() to accept zval** instead of zval*.
+ * The Z_PARAM_ARRAY(dest) macro passes &dest, so on the new API dest must
+ * be a zval* (pointer) variable, whereas on the old API it must be a zval
+ * (value) variable.  The change was first introduced in PHP 8.5 and then
+ * backported to all maintained branches (8.1.34+, 8.2.28+, 8.3.21+,
+ * 8.4.7+).  Because a simple PHP_VERSION_ID check cannot reliably detect
+ * the backport, config.m4 runs a compile test and defines
+ * ZEPHIR_ARRAY_PARAM_DOUBLE_PTR when the new signature is in use.
  */
-#if PHP_VERSION_ID >= 80500
+#ifdef ZEPHIR_ARRAY_PARAM_DOUBLE_PTR
 # define ZEPHIR_Z_PARAM_ARRAY(dest, dest_ptr)              Z_PARAM_ARRAY(dest_ptr)
 # define ZEPHIR_Z_PARAM_ARRAY_OR_NULL(dest, dest_ptr)      Z_PARAM_ARRAY_OR_NULL(dest_ptr)
 #else

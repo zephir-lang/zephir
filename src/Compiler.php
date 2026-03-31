@@ -1551,31 +1551,18 @@ final class Compiler
      */
     public function preCompileHeaders(): void
     {
-        if (Os::isWindows()) {
-            // TODO: Add Windows support
-            return;
-        }
-
-        $phpIncludes = $this->getPhpIncludeDirs();
-
-        /** @var DirectoryIterator $file */
-        foreach (new DirectoryIterator('ext/kernel') as $file) {
-            if ($file->isDir() || $file->getExtension() !== 'h') {
-                continue;
-            }
-
-            $command = sprintf(
-                'cd ext && gcc -c kernel/%s  -I. %s  -o kernel/%s.gch',
-                $file->getBaseName(),
-                $phpIncludes,
-                $file->getBaseName()
-            );
-
-            $path = $file->getRealPath();
-            if (!file_exists($path . '.gch') || filemtime($path) > filemtime($path . '.gch')) {
-                $this->filesystem->system($command, 'stdout', 'compile-header');
-            }
-        }
+        // Intentionally left empty.
+        //
+        // Previously this method pre-compiled every kernel/*.h file into a GCC
+        // precompiled header (.gch).  However, GCC can only use a PCH when it
+        // is the *first* #include in a translation unit, which is never the
+        // case for kernel headers (the generated .zep.c files include php.h
+        // and other headers first).  The .gch files therefore provided zero
+        // compilation speed-up while actively causing bugs: because the
+        // headers were compiled *standalone* (without php.h), macros such as
+        // PHP_VERSION_ID were undefined, and the wrong preprocessor branches
+        // were baked into the PCH — leading to -Wincompatible-pointer-types
+        // warnings on PHP 8.5+.
     }
 
     /**

@@ -285,6 +285,24 @@ if test "$PHP_STUB" = "yes"; then
 
 	CPPFLAGS=$old_CPPFLAGS
 
+	AC_MSG_CHECKING([whether zend_parse_arg_array uses zval**])
+	old_CPPFLAGS=$CPPFLAGS
+	CPPFLAGS="$CPPFLAGS $INCLUDES"
+	AC_COMPILE_IFELSE(
+		[AC_LANG_PROGRAM(
+			[[#include "main/php.h"
+			  #include "Zend/zend_API.h"]],
+			[[zval *p = (void*)0;
+			  zend_parse_arg_array((void*)0, &p, 0, 0);]]
+		)],
+		[
+			AC_DEFINE([ZEPHIR_ARRAY_PARAM_DOUBLE_PTR], [1], [Whether zend_parse_arg_array accepts zval**])
+			AC_MSG_RESULT([yes])
+		],
+		[AC_MSG_RESULT([no])]
+	)
+	CPPFLAGS=$old_CPPFLAGS
+
 	PHP_INSTALL_HEADERS([ext/stub], [php_STUB.h])
 
 fi
