@@ -328,20 +328,24 @@ class GeneratorTest extends TestCase
 
     public function typedConstantProvider(): array
     {
-        $typed = PHP_VERSION_ID >= 80300;
+        $typed   = PHP_VERSION_ID >= 80300;
+        $docPart = "/**\n * @var %s\n */\n";
 
         return [
             [
-                'int', 1, '/** @var int */', $typed ? 'const int TEST = 1;' : 'const TEST = 1;',
+                'int', 1, '@var int',
+                sprintf($docPart, 'int') . ($typed ? 'const int TEST = 1;' : 'const TEST = 1;'),
             ],
             [
-                'string', 'Foo', '/** @var string */', $typed ? "const string TEST = 'Foo';" : "const TEST = 'Foo';",
+                'string', 'Foo', '@var string',
+                sprintf($docPart, 'string') . ($typed ? "const string TEST = 'Foo';" : "const TEST = 'Foo';"),
             ],
             [
-                'bool', 1, '/** @var bool */', $typed ? 'const bool TEST = 1;' : 'const TEST = 1;',
+                'bool', 1, '@var bool',
+                sprintf($docPart, 'bool') . ($typed ? 'const bool TEST = 1;' : 'const TEST = 1;'),
             ],
             [
-                'string', 'bar', null, 'const TEST = \'bar\';',
+                'string', 'bar', null, "const TEST = 'bar';",
             ],
         ];
     }
