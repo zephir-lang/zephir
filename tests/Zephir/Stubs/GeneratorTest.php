@@ -326,6 +326,59 @@ class GeneratorTest extends TestCase
         ];
     }
 
+    public function typedConstantProvider(): array
+    {
+        $typed = PHP_VERSION_ID >= 80300;
+
+        return [
+            [
+                'int', 1, '/** @var int */', $typed ? 'const int TEST = 1;' : 'const TEST = 1;',
+            ],
+            [
+                'string', 'Foo', '/** @var string */', $typed ? "const string TEST = 'Foo';" : "const TEST = 'Foo';",
+            ],
+            [
+                'bool', 1, '/** @var bool */', $typed ? 'const bool TEST = 1;' : 'const TEST = 1;',
+            ],
+            [
+                'string', 'bar', null, 'const TEST = \'bar\';',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider typedConstantProvider
+     *
+     * @throws \ReflectionException
+     */
+    public function testShouldBuildTypedConstant(string $type, mixed $value, ?string $docBlock, string $expected): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $buildClass = $this->getMethod('buildConstant');
+
+        $classConstant = new Constant(
+            'TEST',
+            [
+                'type'  => $type,
+                'value' => $value,
+            ],
+            $docBlock
+        );
+
+        $actual = $buildClass->invokeArgs(
+            $this->testClass,
+            [
+                $classConstant,
+                '',
+            ]
+        );
+
+        $this->assertSame($expected, $actual);
+    }
+
     /**
      * @dataProvider constantProvider
      *
