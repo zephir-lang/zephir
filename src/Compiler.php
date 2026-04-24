@@ -1507,11 +1507,11 @@ final class Compiler
      * @throws IllegalStateException
      * @throws ParseException
      */
-    public function loadExternalClass(string $className, string $location): bool
+    public function loadExternalClass(string $originalClass, string $location): bool
     {
         $filePath = $location
             . DIRECTORY_SEPARATOR
-            . str_replace('\\', DIRECTORY_SEPARATOR, $className)
+            . str_replace('\\', DIRECTORY_SEPARATOR, $originalClass)
             . '.zep';
 
         /**
@@ -1521,7 +1521,7 @@ final class Compiler
             '\\',
             array_map(
                 'ucfirst',
-                explode('\\', $className)
+                explode('\\', $originalClass)
             )
         );
 
@@ -1530,12 +1530,12 @@ final class Compiler
         }
 
         if (!file_exists($filePath)) {
-            if (strtolower($className) === $className) {
+            if (strtolower($originalClass) === $originalClass) {
                 return false;
             }
 
             // strtolower Called For Backward Compatability.
-            return $this->loadExternalClass(strtolower($className), $location);
+            return $this->loadExternalClass(strtolower($originalClass), $location);
         }
 
         /** @var CompilerFile|CompilerFileAnonymous $compilerFile */
