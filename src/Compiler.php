@@ -1530,6 +1530,10 @@ final class Compiler
         }
 
         if (!file_exists($filePath)) {
+            if (strtolower($className) === $className) {
+                return false;
+            }
+
             // strtolower Called For Backward Compatability.
             return $this->loadExternalClass(strtolower($className), $location);
         }
