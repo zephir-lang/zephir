@@ -31,6 +31,7 @@ use function in_array;
 use function is_dir;
 use function key;
 use function mkdir;
+use function preg_match;
 use function realpath;
 use function sprintf;
 use function str_ireplace;
@@ -40,6 +41,7 @@ use function ucfirst;
 
 use const DIRECTORY_SEPARATOR;
 use const PHP_EOL;
+use const PHP_VERSION_ID;
 
 class Generator
 {
@@ -218,7 +220,8 @@ class Generator
 
     protected function buildConstant(Constant $constant, string $indent): string
     {
-        $source = 'const ' . $constant->getName();
+        $type   = PHP_VERSION_ID >= 80300 ? $this->extractVarTypeFromDocBlock($constant->getDocBlock()) : '';
+        $source = 'const ' . ($type !== '' ? $type . ' ' : '') . $constant->getName();
 
         $value = $this->wrapPHPValue([
             'default' => $constant->getValue(),
@@ -425,6 +428,19 @@ class Generator
         }
 
         return (string)$returnValue;
+    }
+
+    private function extractVarTypeFromDocBlock(?string $docBlock): string
+    {
+        if ($docBlock === null) {
+            return '';
+        }
+
+        if (preg_match('/@var\s+([\w\\\\|]+)/', $docBlock, $matches)) {
+            return $matches[1];
+        }
+
+        return '';
     }
 
     private function fetchDocBlock(?string $docBlock, string $indent): string
