@@ -1511,9 +1511,7 @@ final class Compiler
     {
         $filePath = $location
             . DIRECTORY_SEPARATOR
-            . strtolower(
-                str_replace('\\', DIRECTORY_SEPARATOR, $className)
-            )
+            . str_replace('\\', DIRECTORY_SEPARATOR, $className)
             . '.zep';
 
         /**
@@ -1532,7 +1530,8 @@ final class Compiler
         }
 
         if (!file_exists($filePath)) {
-            return false;
+            // strtolower Called For Backward Compatability.
+            return $this->loadExternalClass(strtolower($className), $location);
         }
 
         /** @var CompilerFile|CompilerFileAnonymous $compilerFile */
