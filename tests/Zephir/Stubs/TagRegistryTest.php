@@ -86,4 +86,58 @@ final class TagRegistryTest extends TestCase
     {
         $this->assertFalse(TagRegistry::isPreservedTag($tag));
     }
+
+    public function preservedLineProvider(): array
+    {
+        return [
+            ['@phpstan-return static|null'],
+            ['@phpstan-param array<string, mixed> $parameters'],
+            ['@psalm-return Foo<int>'],
+            ['@template T of \Phalcon\Mvc\ModelInterface'],
+            ['@template-covariant TItem'],
+            ['@template-contravariant TIn'],
+            ['@extends \Phalcon\Mvc\Model<T>'],
+            ['@implements \Foo\BarInterface<T>'],
+        ];
+    }
+
+    /**
+     * @dataProvider preservedLineProvider
+     */
+    public function testIsPreservedLineMatches(string $line): void
+    {
+        $this->assertTrue(TagRegistry::isPreservedLine($line));
+    }
+
+    public function notPreservedLineProvider(): array
+    {
+        return [
+            'plain text'        => ['Hello world'],
+            'param tag'         => ['@param string $foo'],
+            'return tag'        => ['@return int'],
+            'var tag'           => ['@var mixed'],
+            'throws tag'        => ['@throws \Exception'],
+            'no leading at'     => ['phpstan-return Foo'],
+            'unknown tag'       => ['@phan-return Foo'],
+            'empty string'      => [''],
+            'just at sign'      => ['@'],
+            'whitespace only'   => ['   '],
+            'partial prefix'    => ['@phpstan'],
+            'partial prefix 2'  => ['@psalm'],
+        ];
+    }
+
+    /**
+     * @dataProvider notPreservedLineProvider
+     */
+    public function testIsPreservedLineRejects(string $line): void
+    {
+        $this->assertFalse(TagRegistry::isPreservedLine($line));
+    }
+
+    public function testIsPreservedLineHandlesLeadingWhitespace(): void
+    {
+        $this->assertTrue(TagRegistry::isPreservedLine("   @phpstan-return Foo"));
+        $this->assertTrue(TagRegistry::isPreservedLine("\t@template T"));
+    }
 }

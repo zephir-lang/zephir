@@ -271,4 +271,180 @@ final class DocBlockTest extends TestCase
 
         $this->assertSame($expected, (string) $docBlock);
     }
+
+    public function testIsPreservedTagLineDelegatesToRegistry(): void
+    {
+        // DocBlock::isPreservedTagLine is protected; expose via anonymous subclass.
+        $probe = new class ('') extends \Zephir\Stubs\DocBlock {
+            public function check(string $line): bool
+            {
+                return $this->isPreservedTagLine($line);
+            }
+        };
+
+        $this->assertTrue($probe->check('@phpstan-return Foo'));
+        $this->assertTrue($probe->check('@template T'));
+        $this->assertFalse($probe->check('@param string $x'));
+        $this->assertFalse($probe->check('plain text'));
+    }
+
+    public function testPreservesExtendsImplementsTags(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * @extends \Phalcon\Mvc\Model<T>
+             * @implements \Foo\BarInterface<int, string>
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * @extends \Phalcon\Mvc\Model<T>
+                 * @implements \Foo\BarInterface<int, string>
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
+
+    public function testPreservesMixedTagsWithDescription(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * Find records matching parameters.
+             *
+             * @phpstan-return \Phalcon\Mvc\Model\Resultset\Simple<array-key, static>
+             * @return \Phalcon\Mvc\Model\Resultset\Simple
+             * @throws \Phalcon\Mvc\Model\Exception
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * Find records matching parameters.
+                 *
+                 * @phpstan-return \Phalcon\Mvc\Model\Resultset\Simple<array-key, static>
+                 * @return \Phalcon\Mvc\Model\Resultset\Simple
+                 * @throws \Phalcon\Mvc\Model\Exception
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
+
+    public function testPreservesMultilinePhpStanType(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * @phpstan-type FindParams array{
+             *     conditions?: string,
+             *     bind?: array<string, mixed>,
+             *     limit?: int,
+             * }
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * @phpstan-type FindParams array{
+                 *     conditions?: string,
+                 *     bind?: array<string, mixed>,
+                 *     limit?: int,
+                 * }
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
+
+    public function testPreservesPhpStanTags(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * @phpstan-return static|null
+             * @phpstan-param array<string, mixed> \$parameters
+             * @phpstan-type FindParams array{conditions?: string, limit?: int}
+             * @phpstan-template T of object
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * @phpstan-return static|null
+                 * @phpstan-param array<string, mixed> \$parameters
+                 * @phpstan-type FindParams array{conditions?: string, limit?: int}
+                 * @phpstan-template T of object
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
+
+    public function testPreservesPsalmTags(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * @psalm-return Foo<int>
+             * @psalm-param positive-int \$count
+             * @psalm-var non-empty-string
+             * @psalm-template T of \Bar
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * @psalm-return Foo<int>
+                 * @psalm-param positive-int \$count
+                 * @psalm-var non-empty-string
+                 * @psalm-template T of \Bar
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
+
+    public function testPreservesTemplateTags(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $doc = <<<DOC
+            /**
+             * @template T of \Phalcon\Mvc\ModelInterface
+             * @template-covariant TItem
+             * @template-contravariant TIn of object
+             */
+            DOC;
+
+        $expected = <<<DOC
+                /**
+                 * @template T of \Phalcon\Mvc\ModelInterface
+                 * @template-covariant TItem
+                 * @template-contravariant TIn of object
+                 */
+            DOC;
+
+        $this->assertSame($expected, (string) new DocBlock($doc));
+    }
 }
