@@ -116,4 +116,17 @@ class DocBlock
 
         return '' === $doc ? '' : "$indent/**$doc\n$indent */";
     }
+
+    /**
+     * Returns true if the given line is a docblock tag listed in
+     * TagRegistry's preservation whitelist (e.g. @phpstan-*, @psalm-*,
+     * @template, @extends, @implements). Subclasses use this to skip
+     * tag-aware processing for whitelisted tags.
+     *
+     * @return bool
+     */
+    protected function isPreservedTagLine(string $line): bool
+    {
+        return TagRegistry::isPreservedLine($line);
+    }
 }
