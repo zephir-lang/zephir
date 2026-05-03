@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use function in_array;
+use function ltrim;
+use function preg_match;
 use function str_starts_with;
 
 /**
@@ -47,6 +49,8 @@ final class TagRegistry
 
     /**
      * @param string $tagName Tag name without the leading @
+     *
+     * @return bool
      */
     public static function isPreservedTag(string $tagName): bool
     {
@@ -65,5 +69,27 @@ final class TagRegistry
         }
 
         return false;
+    }
+
+    /**
+     * @param string $line A docblock line (with or without leading whitespace
+     *                     and asterisks already stripped by DocBlock parsing).
+     *
+     * @return bool
+     */
+    public static function isPreservedLine(string $line): bool
+    {
+        $trimmed = ltrim($line);
+
+        // Fast path: skip regex for non-tag lines.
+        if ('' === $trimmed || $trimmed[0] !== '@') {
+            return false;
+        }
+
+        if (1 !== preg_match('/^@([a-zA-Z][a-zA-Z0-9_-]*)/', $trimmed, $matches)) {
+            return false;
+        }
+
+        return self::isPreservedTag($matches[1]);
     }
 }
