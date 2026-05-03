@@ -103,6 +103,11 @@ class MethodDocBlock extends DocBlock
         $lines = [];
 
         foreach ($this->lines as $line) {
+            if ($this->isPreservedTagLine($line)) {
+                $lines[] = $line;
+                continue;
+            }
+
             $parsedLine = $this->parseDocBlockParam($line);
             $docType    = $parsedLine['doctype'] ?? null;
 
