@@ -195,6 +195,17 @@ class MethodCall extends Call
         if (self::CALL_NORMAL == $type) {
             if ('this' == $variableVariable->getRealName()) {
                 $classDefinition = $compilationContext->classDefinition;
+
+                /**
+                 * If this is a closure class with an enclosing class, resolve
+                 * method calls on `this` against the enclosing class definition.
+                 * @see https://github.com/zephir-lang/zephir/issues/2497
+                 */
+                $enclosingClassDefinition = $classDefinition->getEnclosingClassDefinition();
+                if ($enclosingClassDefinition !== null) {
+                    $classDefinition = $enclosingClassDefinition;
+                }
+
                 if (!$classDefinition->hasMethod($methodName)) {
                     if ($check) {
                         $found = false;

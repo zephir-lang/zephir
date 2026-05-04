@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added closure `this` and `use` support: closures can now reference `this` to call methods and access properties of the enclosing class [#2497](https://github.com/zephir-lang/zephir/issues/2497)
+
+### Fixed
 - Fixed missing default values in reflection metadata for method parameters with scalar types.
 
 ## [0.19.0] - 2025-05-13

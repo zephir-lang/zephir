@@ -15,16 +15,16 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(stub_13__closure)
+ZEPHIR_INIT_CLASS(stub_15__closure)
 {
-	ZEPHIR_REGISTER_CLASS(stub, 13__closure, stub, 13__closure, stub_13__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(stub, 15__closure, stub, 15__closure, stub_15__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 }
 
-PHP_METHOD(stub_13__closure, __invoke)
+PHP_METHOD(stub_15__closure, __invoke)
 {
 
-	RETURN_MEMBER(getThis(), "_name");
+	RETURN_LONG(5);
 }
 

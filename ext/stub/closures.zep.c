@@ -26,6 +26,7 @@ ZEPHIR_INIT_CLASS(Stub_Closures)
 
 	zend_declare_property_null(stub_closures_ce, SL("_argument"), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(stub_closures_ce, SL("_function"), ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_closures_ce, SL("_name"), "default", ZEND_ACC_PROTECTED);
 	return SUCCESS;
 }
 
@@ -185,5 +186,57 @@ PHP_METHOD(Stub_Closures, issue1036Call)
 	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 28, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2497
+ */
+PHP_METHOD(Stub_Closures, issue2497Helper)
+{
+
+	RETURN_STRING("hello");
+}
+
+PHP_METHOD(Stub_Closures, issue2497ClosureThis)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_11__closure_ce, SL("__invoke"));
+	return;
+}
+
+PHP_METHOD(Stub_Closures, issue2497ClosureThisWithUse)
+{
+	zval *name, name_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&name_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(name)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &name);
+	zephir_create_closure_ex(return_value, this_ptr, stub_12__closure_ce, SL("__invoke"));
+	zephir_update_static_property_ce(stub_12__closure_ce, ZEND_STRL("name"), name);
+	return;
+}
+
+PHP_METHOD(Stub_Closures, issue2497PropertyAccess)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_13__closure_ce, SL("__invoke"));
+	return;
+}
+
+PHP_METHOD(Stub_Closures, issue2497SetName)
+{
+	zval name_zv;
+	zend_string *name = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&name_zv);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(name)
+	ZEND_PARSE_PARAMETERS_END();
+	ZVAL_STR(&name_zv, name);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("_name"), &name_zv);
 }
 
