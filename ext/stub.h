@@ -234,5 +234,8 @@
 #include "stub/11__closure.zep.h"
 #include "stub/12__closure.zep.h"
 #include "stub/13__closure.zep.h"
+#include "stub/14__closure.zep.h"
+#include "stub/15__closure.zep.h"
+#include "stub/16__closure.zep.h"
 
 #endif

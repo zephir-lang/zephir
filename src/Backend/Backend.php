@@ -856,11 +856,12 @@ class Backend
         }
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context): void
+    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context, bool $bindThis = false): void
     {
         $symbol = $this->getVariableCode($variable);
+        $thisArg = $bindThis ? 'this_ptr' : 'NULL';
         $context->codePrinter->output(
-            'zephir_create_closure_ex(' . $symbol . ', NULL, ' . $classDefinition->getClassEntry(
+            'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classDefinition->getClassEntry(
             ) . ', SL("__invoke"));'
         );
     }

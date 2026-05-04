@@ -43,6 +43,30 @@ class Closure
     protected bool $readOnly = false;
 
     /**
+     * Recursively checks if an AST node references `this`.
+     */
+    protected static function astReferencesThis(mixed $node): bool
+    {
+        if (!is_array($node)) {
+            return false;
+        }
+
+        // Check if current node is a `this` variable reference
+        if (isset($node['type']) && $node['type'] === 'variable' && isset($node['value']) && $node['value'] === 'this') {
+            return true;
+        }
+
+        // Recurse into all array children
+        foreach ($node as $child) {
+            if (is_array($child) && self::astReferencesThis($child)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Creates a closure.
      *
      * @throws Exception
@@ -102,12 +126,28 @@ class Closure
             $staticVariables
         );
 
+        /**
+         * Detect if the closure body references `this`.
+         * If so, we need to bind the enclosing object's `this_ptr` to the closure
+         * and set the enclosing class definition for compile-time resolution.
+         */
+        $bindThis = self::astReferencesThis($block);
+        if ($bindThis) {
+            $classDefinition->setEnclosingClassDefinition($compilationContext->classDefinition);
+
+            // Ensure this_ptr is declared and not stripped in the enclosing method
+            if ($compilationContext->symbolTable->hasVariable('this')) {
+                $compilationContext->symbolTable->getVariable('this')->setUsed(true);
+            }
+        }
+
         $symbolVariable = $this->generateClosure(
             $classDefinition,
             $classMethod,
             $block,
             $compilationContext,
-            $expression
+            $expression,
+            $bindThis
         );
         $compilationContext->headersManager->add('kernel/object');
 
@@ -195,7 +235,8 @@ class Closure
         Method $classMethod,
         mixed $block,
         CompilationContext $compilationContext,
-        array $expression
+        array $expression,
+        bool $bindThis = false
     ): ?Variable {
         $classDefinition->addMethod($classMethod, $block);
 
@@ -220,7 +261,7 @@ class Closure
         }
 
         $symbolVariable->initVariant($compilationContext);
-        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext);
+        $compilationContext->backend->createClosure($symbolVariable, $classDefinition, $compilationContext, $bindThis);
 
         return $symbolVariable;
     }

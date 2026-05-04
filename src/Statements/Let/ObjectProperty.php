@@ -92,9 +92,21 @@ class ObjectProperty
          * Try to check if property is implemented on related object
          */
         if ('this' == $variable) {
-            if (!$context->classDefinition->hasProperty($propertyName)) {
+            $classDefForCheck = $context->classDefinition;
+
+            /**
+             * If this is a closure class with an enclosing class, resolve
+             * property checks against the enclosing class definition.
+             * @see https://github.com/zephir-lang/zephir/issues/2497
+             */
+            $enclosingClassDefinition = $classDefForCheck->getEnclosingClassDefinition();
+            if ($enclosingClassDefinition !== null) {
+                $classDefForCheck = $enclosingClassDefinition;
+            }
+
+            if (!$classDefForCheck->hasProperty($propertyName)) {
                 throw new Exception(
-                    "Property '{$propertyName}' is not defined on class '{$className}'",
+                    "Property '{$propertyName}' is not defined on class '{$classDefForCheck->getCompleteName()}'",
                     $statement
                 );
             }

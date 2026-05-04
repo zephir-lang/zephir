@@ -12,6 +12,7 @@
 #ifndef ZEPHIR_RELEASE
 #if defined(linux) && !defined(ALPINE_LINUX) || defined(DARWIN) || defined(__APPLE__)
 
+#include <php.h>
 #include <execinfo.h>
 #include <Zend/zend.h>
 #if PHP_VERSION_ID < 80500
