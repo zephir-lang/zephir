@@ -121,6 +121,44 @@ final class PhpStanPassthroughGeneratorTest extends TestCase
         $this->assertSame($expected, $actual);
     }
 
+    public function testInvalidShapeStillPassesThroughToStubAfterWarning(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $classDefinition = new Definition('Stub\\PhpStan', 'PhpStanInvalid');
+        $classDefinition->setAliasManager(new AliasManager());
+
+        $methodDocBlock = "/**\n"
+            . " * Method with deliberately malformed PHPStan return.\n"
+            . " *\n"
+            . " * @phpstan-return array<int string>\n"
+            . " */";
+
+        $method = new Method(
+            $classDefinition,
+            ['public'],
+            'doStuff',
+            null,
+            null,
+            $methodDocBlock
+        );
+
+        $classDefinition->setMethod('doStuff', $method);
+
+        $generator  = new Generator([]);
+        $reflection = new \ReflectionClass(Generator::class);
+        $buildClass = $reflection->getMethod('buildClass');
+        $buildClass->setAccessible(true);
+
+        $actual = $buildClass->invokeArgs($generator, [$classDefinition, '    ', '']);
+
+        // The malformed tag MUST appear verbatim in the generated stub.
+        // Phase 2's validator emits a warning; it never mutates output.
+        $this->assertStringContainsString('@phpstan-return array<int string>', $actual);
+    }
+
     public function testNonWhitelistedTagsStillPassThrough(): void
     {
         if (Os::isWindows()) {

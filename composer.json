@@ -29,7 +29,8 @@
         "ext-xml": "*",
         "ext-zlib": "*",
         "monolog/monolog": "^2.3",
-        "phalcon/cli-options-parser": "^2.0"
+        "phalcon/cli-options-parser": "^2.0",
+        "phpstan/phpdoc-parser": "^1.24"
     },
     "require-dev": {
         "ext-gmp": "*",
