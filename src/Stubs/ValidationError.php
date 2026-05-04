@@ -20,8 +20,8 @@ namespace Zephir\Stubs;
 final class ValidationError
 {
     public function __construct(
-        public readonly string $message,
-        public readonly int $column,
+        public string $message,
+        public int $column,
     ) {
     }
 }
