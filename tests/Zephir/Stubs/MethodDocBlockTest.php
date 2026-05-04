@@ -264,4 +264,157 @@ final class MethodDocBlockTest extends TestCase
 
         $this->assertSame($expected, $docblock->processMethodDocBlock());
     }
+
+    public function preservedTagProvider(): array
+    {
+        return [
+            'phpstan-return' => [
+                '@phpstan-return static|null',
+                '@phpstan-return static|null',
+            ],
+            'phpstan-param' => [
+                '@phpstan-param array<string, mixed> $parameters',
+                '@phpstan-param array<string, mixed> $parameters',
+            ],
+            'phpstan-type' => [
+                '@phpstan-type FindParams array{conditions?: string, limit?: int}',
+                '@phpstan-type FindParams array{conditions?: string, limit?: int}',
+            ],
+            'psalm-return' => [
+                '@psalm-return Foo<int>',
+                '@psalm-return Foo<int>',
+            ],
+            'psalm-param' => [
+                '@psalm-param positive-int $count',
+                '@psalm-param positive-int $count',
+            ],
+            'template' => [
+                '@template T of \Phalcon\Mvc\ModelInterface',
+                '@template T of \Phalcon\Mvc\ModelInterface',
+            ],
+            'template-covariant' => [
+                '@template-covariant TItem',
+                '@template-covariant TItem',
+            ],
+            'extends' => [
+                '@extends \Phalcon\Mvc\Model<T>',
+                '@extends \Phalcon\Mvc\Model<T>',
+            ],
+            'implements' => [
+                '@implements \Foo\BarInterface<int, string>',
+                '@implements \Foo\BarInterface<int, string>',
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider preservedTagProvider
+     */
+    public function testPreservedTagsPassThroughMethodDocBlock(
+        string $zephirDocBlock,
+        string $phpDocBlock
+    ): void {
+        $classMethod = new Method(
+            new Definition('Zephir', 'testMethod'),
+            ['public'],
+            'exampleMethodName',
+            null,
+            null,
+            "/**\n * {$zephirDocBlock}\n */"
+        );
+
+        $docblock = new MethodDocBlock($classMethod, new AliasManager(), '');
+        $expected = "/**\n * {$phpDocBlock}\n */";
+
+        $this->assertSame($expected, $docblock->processMethodDocBlock());
+    }
+
+    public function testPhpStanReturnDoesNotSuppressAutoReturn(): void
+    {
+        $returnType = [
+            'type' => 'return-type',
+            'list' => [
+                ['type' => 'return-type-parameter', 'data-type' => 'int', 'mandatory' => 0],
+            ],
+            'void' => 0,
+        ];
+
+        $classMethod = new Method(
+            new Definition('Zephir', 'testMethod'),
+            ['public'],
+            'count',
+            null,
+            null,
+            "/**\n * @phpstan-return positive-int\n */",
+            $returnType
+        );
+
+        $docblock = new MethodDocBlock($classMethod, new AliasManager(), '');
+        $output   = $docblock->processMethodDocBlock();
+
+        $this->assertStringContainsString('@phpstan-return positive-int', $output);
+        $this->assertStringContainsString('@return int', $output);
+    }
+
+    public function testPhpStanParamDoesNotSuppressAutoParam(): void
+    {
+        $methodParams = new Parameters([
+            [
+                'type' => 'parameter',
+                'name' => 'parameters',
+                'const' => 0,
+                'data-type' => 'array',
+                'mandatory' => 0,
+            ],
+        ]);
+
+        $classMethod = new Method(
+            new Definition('Zephir', 'testMethod'),
+            ['public'],
+            'find',
+            $methodParams,
+            null,
+            "/**\n * @phpstan-param array<string, mixed> \$parameters\n */"
+        );
+
+        $docblock = new MethodDocBlock($classMethod, new AliasManager(), '');
+        $output   = $docblock->processMethodDocBlock();
+
+        $this->assertStringContainsString(
+            '@phpstan-param array<string, mixed> $parameters',
+            $output
+        );
+        $this->assertStringContainsString('@param array $parameters', $output);
+    }
+
+    public function testPreservedTagInsideCodeBlock(): void
+    {
+        $docBlock = "/**\n"
+            . " * Example.\n"
+            . " *\n"
+            . " * <code>\n"
+            . " * @phpstan-return static\n"
+            . " * </code>\n"
+            . " *\n"
+            . " * @phpstan-return static|null\n"
+            . " */";
+
+        $classMethod = new Method(
+            new Definition('Zephir', 'testMethod'),
+            ['public'],
+            'findFirst',
+            null,
+            null,
+            $docBlock
+        );
+
+        $output = (new MethodDocBlock($classMethod, new AliasManager(), ''))
+            ->processMethodDocBlock();
+
+        // The real tag (outside the code block) is preserved.
+        $this->assertStringContainsString('@phpstan-return static|null', $output);
+        // The code block survives intact.
+        $this->assertStringContainsString('<code>', $output);
+        $this->assertStringContainsString('</code>', $output);
+    }
 }
