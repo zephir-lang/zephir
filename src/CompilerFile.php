@@ -245,6 +245,12 @@ final class CompilerFile implements FileInterface
         }
 
         /**
+         * Validate PHPStan/Psalm type expressions in docblocks.
+         * Emits warnings only; never blocks compilation.
+         */
+        $this->validatePhpStanAnnotations();
+
+        /**
          * Compilation context stores common objects required by compilation entities.
          */
         $compilationContext = new CompilationContext();
@@ -447,6 +453,84 @@ final class CompilerFile implements FileInterface
         $this->classDefinition->setAliasManager($this->aliasManager);
 
         return $this->classDefinition;
+    }
+
+    /**
+     * Validates the value portion of type-bearing PHPStan/Psalm docblock
+     * tags on the class definition (top-of-class, properties, constants,
+     * methods). Emits one logger warning per malformed tag occurrence.
+     *
+     * Never blocks compilation. Stub generation is unaffected.
+     */
+    public function validatePhpStanAnnotations(): void
+    {
+        if ($this->classDefinition === null) {
+            return;
+        }
+
+        $validator = new \Zephir\Stubs\PhpStanTagValidator();
+
+        $this->validateDocblockForPhpStan(
+            $this->classDefinition->getDocBlock(),
+            $validator,
+            'class ' . $this->classDefinition->getCompleteName(),
+        );
+
+        foreach ($this->classDefinition->getProperties() as $property) {
+            $this->validateDocblockForPhpStan(
+                $property->getDocBlock(),
+                $validator,
+                'property ' . $property->getName(),
+            );
+        }
+
+        foreach ($this->classDefinition->getConstants() as $constant) {
+            $this->validateDocblockForPhpStan(
+                $constant->getDocBlock(),
+                $validator,
+                'constant ' . $constant->getName(),
+            );
+        }
+
+        foreach ($this->classDefinition->getMethods() as $method) {
+            $this->validateDocblockForPhpStan(
+                $method->getDocBlock(),
+                $validator,
+                'method ' . $method->getName(),
+            );
+        }
+    }
+
+    private function validateDocblockForPhpStan(
+        ?string $docBlock,
+        \Zephir\Stubs\PhpStanTagValidator $validator,
+        string $location,
+    ): void {
+        if ($docBlock === null || trim($docBlock) === '') {
+            return;
+        }
+
+        $parsed = (new DocblockParser('/' . $docBlock . '/'))->parse();
+
+        foreach ($parsed->getAnnotations() as $annotation) {
+            $name = $annotation->getName();
+
+            if (!\Zephir\Stubs\PhpStanTagValidator::isTypeBearingTag($name)) {
+                continue;
+            }
+
+            $error = $validator->validateTagValue($name, $annotation->getString());
+            if ($error === null) {
+                continue;
+            }
+
+            $this->logger->warning(sprintf(
+                "%s: PHPStan annotation '@%s' has invalid type expression: %s",
+                $location,
+                $name,
+                $error->message,
+            ));
+        }
     }
 
     /**
