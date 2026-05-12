@@ -48,6 +48,7 @@ PHP_METHOD(Stub_Concat, testConcatBySelfProperty)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&title_zv);
 	ZVAL_STR_COPY(&title_zv, title);
 	ZEPHIR_OBS_NVAR(&_0);
 	zephir_read_static_property_ce(&_0, stub_concat_ce, SL("testProperty"), PH_NOISY_CC);

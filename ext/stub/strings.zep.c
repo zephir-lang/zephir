@@ -466,6 +466,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
 	i = 0;
 	ZEPHIR_INIT_VAR(&ret);
@@ -561,7 +562,8 @@ PHP_METHOD(Stub_Strings, issue2186)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
-		ZVAL_STR_COPY(&val_zv, val);
+		zephir_memory_observe(&val_zv);
+	ZVAL_STR_COPY(&val_zv, val);
 	}
 	RETURN_MM_BOOL(ZEPHIR_IS_NULL(&val_zv));
 }
@@ -583,7 +585,8 @@ PHP_METHOD(Stub_Strings, issue2186SegFault)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
-		ZVAL_STR_COPY(&val_zv, val);
+		zephir_memory_observe(&val_zv);
+	ZVAL_STR_COPY(&val_zv, val);
 	}
 	if (!(ZEPHIR_IS_EMPTY(&val_zv))) {
 		RETURN_MM_BOOL(1);
@@ -610,7 +613,8 @@ PHP_METHOD(Stub_Strings, issue2186SegFaultCall)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
-		ZVAL_STR_COPY(&val_zv, val);
+		zephir_memory_observe(&val_zv);
+	ZVAL_STR_COPY(&val_zv, val);
 	}
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child1", NULL, 0, &val_zv);
 	zephir_check_call_status();
@@ -636,7 +640,8 @@ PHP_METHOD(Stub_Strings, issue2186Child1)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
-		ZVAL_STR_COPY(&val_zv, val);
+		zephir_memory_observe(&val_zv);
+	ZVAL_STR_COPY(&val_zv, val);
 	}
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2186child2", NULL, 0, &val_zv);
 	zephir_check_call_status();
@@ -663,7 +668,8 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
-		ZVAL_STR_COPY(&val_zv, val);
+		zephir_memory_observe(&val_zv);
+	ZVAL_STR_COPY(&val_zv, val);
 	}
 	ZEPHIR_INIT_VAR(&output);
 	ZVAL_STRING(&output, "");
@@ -695,6 +701,7 @@ PHP_METHOD(Stub_Strings, issue2234Strict)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
+	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
 	RETURN_MM_BOOL(ZEPHIR_IS_NULL(&val_zv));
@@ -722,6 +729,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictParent)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
+	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
 	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2234strictchild", NULL, 0, &val_zv);
@@ -749,6 +757,7 @@ PHP_METHOD(Stub_Strings, issue2234StrictChild)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
+	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
 	if (val) {
@@ -777,6 +786,7 @@ PHP_METHOD(Stub_Strings, nullableStringReturnType)
 	if (!val) {
 		ZEPHIR_INIT_VAR(&val_zv);
 	} else {
+	zephir_memory_observe(&val_zv);
 	ZVAL_STR_COPY(&val_zv, val);
 	}
 	if (!ZEPHIR_IS_NULL(&val_zv)) {
@@ -808,7 +818,8 @@ PHP_METHOD(Stub_Strings, issue2299NullableStringCondition)
 	if (!roleName) {
 		ZEPHIR_INIT_VAR(&roleName_zv);
 	} else {
-		ZVAL_STR_COPY(&roleName_zv, roleName);
+		zephir_memory_observe(&roleName_zv);
+	ZVAL_STR_COPY(&roleName_zv, roleName);
 	}
 	if (Z_TYPE_P(&roleName_zv) != IS_NULL) {
 		if (roleName) {

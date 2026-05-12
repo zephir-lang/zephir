@@ -152,6 +152,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&test_zv);
 	ZVAL_STR_COPY(&test_zv, test);
 	ZEPHIR_INIT_VAR(&a);
 	object_init_ex(&a, stub_instanceoff_ce);

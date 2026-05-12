@@ -53,16 +53,19 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	if (ZEND_NUM_ARGS() > 3) {
 		attrs = ZEND_CALL_ARG(execute_data, 4);
 	}
+	zephir_memory_observe(&dsn_zv);
 	ZVAL_STR_COPY(&dsn_zv, dsn);
 	if (!username) {
 		ZEPHIR_INIT_VAR(&username_zv);
 	} else {
-		ZVAL_STR_COPY(&username_zv, username);
+		zephir_memory_observe(&username_zv);
+	ZVAL_STR_COPY(&username_zv, username);
 	}
 	if (!password) {
 		ZEPHIR_INIT_VAR(&password_zv);
 	} else {
-		ZVAL_STR_COPY(&password_zv, password);
+		zephir_memory_observe(&password_zv);
+	ZVAL_STR_COPY(&password_zv, password);
 	}
 	if (!attrs) {
 		attrs = &attrs_sub;

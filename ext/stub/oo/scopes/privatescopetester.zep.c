@@ -61,6 +61,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	obj = ZEND_CALL_ARG(execute_data, 1);
 	value = ZEND_CALL_ARG(execute_data, 3);
 	ZEPHIR_SEPARATE_PARAM(obj);
+	zephir_memory_observe(&property_zv);
 	ZVAL_STR_COPY(&property_zv, property);
 	zephir_update_property_zval_zval(obj, &property_zv, value);
 	zephir_memory_observe(&_0);
@@ -90,7 +91,9 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	value = ZEND_CALL_ARG(execute_data, 3);
+	zephir_memory_observe(&className_zv);
 	ZVAL_STR_COPY(&className_zv, className);
+	zephir_memory_observe(&property_zv);
 	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&obj);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&obj, &className_zv);
@@ -138,6 +141,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getNewVars)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&className_zv);
 	ZVAL_STR_COPY(&className_zv, className);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_LAST_CALL_STATUS = zephir_create_instance(&_0, &className_zv);

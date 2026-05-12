@@ -41,6 +41,7 @@ PHP_METHOD(Stub_Spl, issue1212)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
 	object_init_ex(return_value, spl_ce_SplFileObject);
 	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 102, &file_zv);
