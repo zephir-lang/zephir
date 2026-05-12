@@ -431,6 +431,8 @@ class Call
                     $dynamicTypes[]            = $compiledExpression->getType();
                     break;
 
+                case 'char':
+                case 'uchar':
                 case 'ulong':
                 case 'string':
                 case 'istring':
@@ -506,6 +508,30 @@ class Call
                                 $parameterTempVariable
                             );
                             $this->temporalVariables[] = $parameterTempVariable;
+                            $types[]                   = $parameterVariable->getType();
+                            $dynamicTypes[]            = $parameterVariable->getType();
+                            break;
+
+                        case 'char':
+                        case 'uchar':
+                            $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                'variable',
+                                $compilationContext,
+                                $expression
+                            );
+                            // A C char is a single byte; wrap it into a length-1 zend_string
+                            // so the call site receives a zval and the callee can re-extract
+                            // the byte via zephir_get_charval().
+                            $codePrinter->output(
+                                sprintf(
+                                    'ZVAL_STRINGL(&%s, &%s, 1);',
+                                    $parameterTempVariable->getName(),
+                                    $parameterVariable->getName()
+                                )
+                            );
+
+                            $this->temporalVariables[] = $parameterTempVariable;
+                            $params[]                  = '&' . $parameterTempVariable->getName();
                             $types[]                   = $parameterVariable->getType();
                             $dynamicTypes[]            = $parameterVariable->getType();
                             break;
