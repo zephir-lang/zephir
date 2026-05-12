@@ -40,7 +40,8 @@ PHP_METHOD(Stub_Args_Single_StrNullable, argStringNull)
 	if (!param) {
 		ZEPHIR_INIT_VAR(&param_zv);
 	} else {
-		ZVAL_STR_COPY(&param_zv, param);
+		zephir_memory_observe(&param_zv);
+	ZVAL_STR_COPY(&param_zv, param);
 	}
 	if (param) {
 		RETURN_MM_STR(zend_string_copy(param));
