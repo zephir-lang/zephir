@@ -146,7 +146,8 @@ class Struct
         return match ($type) {
             'boolean', 'bool'                                => 'zend_bool',
             'hash'                                           => 'HashTable* ',
-            'string'                                         => 'zend_string* ',
+            // Use a plain C string pointer for struct globals to align with STD_PHP_INI_ENTRY expectations
+            'string'                                         => 'char *',
             'int', 'uint', 'long', 'char', 'uchar', 'double' => $type,
             default                                          => throw new InvalidArgumentException(
                 'Unknown global type: ' . $type

@@ -70,6 +70,17 @@ final class ReturnStatement extends StatementAbstract
                              */
                             $property        = $statement['expr']['right']['value'];
                             $classDefinition = $compilationContext->classDefinition;
+
+                            /**
+                             * If this is a closure class with an enclosing class, resolve
+                             * property access on `this` against the enclosing class definition.
+                             * @see https://github.com/zephir-lang/zephir/issues/2497
+                             */
+                            $enclosingClassDefinition = $classDefinition->getEnclosingClassDefinition();
+                            if ($enclosingClassDefinition !== null) {
+                                $classDefinition = $enclosingClassDefinition;
+                            }
+
                             $this->checkClassHasProperty(
                                 $classDefinition,
                                 $property,
@@ -258,10 +269,56 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_STRING:
                         case Types::T_ISTRING:
                         case Types::T_ARRAY:
-                            $codePrinter->output(
-                                'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
-                            );
+                            if ($symbolVariable->isNativeString()) {
+                                $name = $symbolVariable->getName();
+                                $mustGrow = $compilationContext->symbolTable->getMustGrownStack();
+
+                                /**
+                                 * Nullable native strings (null-default) can be
+                                 * NULL at runtime. Guard with a null check to
+                                 * prevent zend_string_copy(NULL) segfault.
+                                 */
+                                if ($symbolVariable->isNullableNativeString()) {
+                                    $codePrinter->output('if (' . $name . ') {');
+                                    if ($mustGrow) {
+                                        $codePrinter->output("\t" . 'RETURN_MM_STR(zend_string_copy(' . $name . '));');
+                                    } else {
+                                        $codePrinter->output("\t" . 'RETURN_STR(zend_string_copy(' . $name . '));');
+                                    }
+                                    $codePrinter->output('}');
+                                    if ($mustGrow) {
+                                        $codePrinter->output('RETURN_MM_NULL();');
+                                    } else {
+                                        $codePrinter->output('RETURN_NULL();');
+                                    }
+                                } else {
+                                    /**
+                                     * zend_string_copy() increments the refcount so that both
+                                     * the return_value and the caller's argument zval can safely
+                                     * coexist.  Plain RETURN_STR() would transfer ownership
+                                     * without addref, causing use-after-free when the caller
+                                     * releases the return value.
+                                     *
+                                     * Methods with memory-grow need RETURN_MM_STR to restore
+                                     * the memory frame (which frees the companion zval).
+                                     */
+                                    if ($mustGrow) {
+                                        $codePrinter->output(
+                                            'RETURN_MM_STR(zend_string_copy(' . $name . '));'
+                                        );
+                                    } else {
+                                        $codePrinter->output(
+                                            'RETURN_STR(zend_string_copy(' . $name . '));'
+                                        );
+                                    }
+                                }
+                            } else {
+                                $codePrinter->output(
+                                    'RETURN_CTOR(' . $compilationContext->backend->getVariableCode($symbolVariable) . ');'
+                                );
+                            }
                             break;
+
 
                         case Types::T_BOOL:
                             $codePrinter->output('RETURN_MM_BOOL(' . $symbolVariable->getName() . ');');

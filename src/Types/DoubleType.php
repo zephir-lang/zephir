@@ -18,22 +18,14 @@ namespace Zephir\Types;
  */
 class DoubleType extends AbstractType
 {
-    public array $methodMap = [
-        'abs'      => 'abs',
-        'tobinary' => 'decbin',
-        'tohex'    => 'dechex',
-        'tooctal'  => 'decoct',
-        'pow'      => 'pow',
-        'sqrt'     => 'sqrt',
-        'exp'      => 'exp',
-        'sin'      => 'sin',
-        'cos'      => 'cos',
-        'tan'      => 'tan',
-        'asin'     => 'asin',
-        'acos'     => 'acos',
-        'atan'     => 'atan',
-        'log'      => 'log',
-    ];
+    use NumericTypeTrait;
+
+    public array $methodMap = [];
+
+    public function __construct()
+    {
+        $this->methodMap = $this->getNumericMethodMap();
+    }
 
     public function getTypeName(): string
     {

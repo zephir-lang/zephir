@@ -28,6 +28,8 @@ use function sprintf;
 
 abstract class AbstractType
 {
+    use MethodMapTrait;
+
     /**
      * The array of methods in zephir mapped to PHP internal methods.
      */

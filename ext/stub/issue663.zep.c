@@ -48,7 +48,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 53, arr);
+	ZEPHIR_RETURN_CALL_STATIC("is_array_assoc_internal", &_1, 54, arr);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -63,7 +63,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 
 	ZVAL_UNDEF(&arr);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(arr)
+		ZEPHIR_Z_PARAM_ARRAY(arr, arr_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -115,7 +115,7 @@ PHP_METHOD(Stub_Issue663, is_array_indexed)
 	if (_0) {
 		RETURN_MM_BOOL(0);
 	}
-	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 53, arr);
+	ZEPHIR_CALL_STATIC(&_1, "is_array_assoc_internal", &_2, 54, arr);
 	zephir_check_call_status();
 	RETURN_MM_BOOL(!zephir_is_true(&_1));
 }

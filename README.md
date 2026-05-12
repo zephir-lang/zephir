@@ -53,7 +53,7 @@ Zephir licensed under the MIT License. See the [LICENSE](./LICENSE) file for mor
 [facebook]:         https://www.facebook.com/groups/zephir.language
 [discord]:          https://phalcon.io/discord
 [discussions]:      https://github.com/zephir-lang/zephir/discussions
-[zephir logo]:      https://assets.phalconphp.com/zephir/zephir_logo-105x36.svg
+[zephir logo]:      https://assets.phalcon.io/zephir/zephir_logo-105x36.svg
 [web site]:         https://zephir-lang.com
 
 [actions link]:     https://github.com/zephir-lang/zephir/actions

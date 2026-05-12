@@ -147,48 +147,43 @@ PHP_METHOD(Stub_Exceptions, testException5)
 
 PHP_METHOD(Stub_Exceptions, testExceptionLiteral)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *type_param = NULL;
-	zval type;
+	zval type_zv;
+	zend_string *type = NULL;
 
-	ZVAL_UNDEF(&type);
+	ZVAL_UNDEF(&type_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(type)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &type_param);
-	zephir_get_strval(&type, type_param);
+	ZVAL_STR(&type_zv, type);
 	do {
-		if (ZEPHIR_IS_STRING(&type, "string")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "Test", "stub/exceptions.zep", 56);
+		if (ZEPHIR_IS_STRING(&type_zv, "string")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "Test", "stub/exceptions.zep", 56);
 			return;
 		}
-		if (ZEPHIR_IS_STRING(&type, "char")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "t", "stub/exceptions.zep", 58);
+		if (ZEPHIR_IS_STRING(&type_zv, "char")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "t", "stub/exceptions.zep", 58);
 			return;
 		}
-		if (ZEPHIR_IS_STRING(&type, "int")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "123", "stub/exceptions.zep", 60);
+		if (ZEPHIR_IS_STRING(&type_zv, "int")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123", "stub/exceptions.zep", 60);
 			return;
 		}
-		if (ZEPHIR_IS_STRING(&type, "double")) {
-			ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_exception_ce, "123.123", "stub/exceptions.zep", 62);
+		if (ZEPHIR_IS_STRING(&type_zv, "double")) {
+			ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(stub_exception_ce, "123.123", "stub/exceptions.zep", 62);
 			return;
 		}
 	} while(0);
 
-	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *name_param = NULL, _0, _1;
-	zval name;
+	zval name_zv, _0, _1;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -196,11 +191,11 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &name_param);
-	zephir_get_strval(&name, name_param);
+	zephir_memory_observe(&name_zv);
+	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Hello, %s");
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 17, &_0, &name);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 17, &_0, &name_zv);
 	zephir_check_call_status();
 	zephir_throw_exception_debug(&_1, "stub/exceptions.zep", 68);
 	ZEPHIR_MM_RESTORE();
@@ -209,12 +204,13 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 
 PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 {
+	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *framework_param = NULL, *language_param = NULL;
-	zval framework, language, _0;
+	zval framework_zv, language_zv;
+	zend_string *framework = NULL, *language = NULL;
 
-	ZVAL_UNDEF(&framework);
-	ZVAL_UNDEF(&language);
+	ZVAL_UNDEF(&framework_zv);
+	ZVAL_UNDEF(&language_zv);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(framework)
@@ -222,11 +218,12 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &framework_param, &language_param);
-	zephir_get_strval(&framework, framework_param);
-	zephir_get_strval(&language, language_param);
+	zephir_memory_observe(&framework_zv);
+	ZVAL_STR_COPY(&framework_zv, framework);
+	zephir_memory_observe(&language_zv);
+	ZVAL_STR_COPY(&language_zv, language);
 	ZEPHIR_INIT_VAR(&_0);
-	ZEPHIR_CONCAT_SVSV(&_0, "Framework ", &framework, " written using ", &language);
+	ZEPHIR_CONCAT_SVSV(&_0, "Framework ", &framework_zv, " written using ", &language_zv);
 	zephir_throw_exception_debug(&_0, "stub/exceptions.zep", 73);
 	ZEPHIR_MM_RESTORE();
 	return;

@@ -401,7 +401,7 @@ static inline zend_class_entry *zephir_lookup_class_ce(
 ) {
 	zend_class_entry *original_ce = ce;
 	zend_property_info *info;
-	zend_class_entry *scope;
+	const zend_class_entry *scope;
 	zval member;
 
 	ZVAL_STRINGL(&member, property_name, property_length);
@@ -445,7 +445,7 @@ int zephir_read_property_ex(
 	const char *property_name,
 	uint32_t property_length, int flags
 ) {
-	zend_class_entry *scope;
+	const zend_class_entry *scope;
 	int retval;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
@@ -586,7 +586,7 @@ int zephir_update_property_zval_ex(
 	unsigned int property_length,
 	zval *value
 ) {
-	zend_class_entry *scope;
+	const zend_class_entry *scope;
 	int retval;
 
 	if (Z_TYPE_P(object) == IS_OBJECT) {
@@ -904,7 +904,7 @@ int zephir_unset_property(zval* object, const char* name)
 	}
 
 	zval member;
-	zend_class_entry *scope;
+	const zend_class_entry *scope;
 
 	ZVAL_STRING(&member, name);
 
@@ -1213,13 +1213,20 @@ int zephir_create_closure_ex(zval *return_value, zval *this_ptr, zend_class_entr
 {
 	zend_function *function_ptr;
 	zend_closure *closure;
+	zend_class_entry *scope_ce;
 
 	if ((function_ptr = zend_hash_str_find_ptr(&ce->function_table, method_name, method_length)) == NULL) {
 		ZVAL_NULL(return_value);
 		return FAILURE;
 	}
 
-	zend_create_closure(return_value, function_ptr, ce, ce, this_ptr);
+	/**
+	 * When this_ptr is provided, use its class as the scope so the closure
+	 * can access protected/private members of the enclosing object.
+	 */
+	scope_ce = (this_ptr && Z_TYPE_P(this_ptr) == IS_OBJECT) ? Z_OBJCE_P(this_ptr) : ce;
+
+	zend_create_closure(return_value, function_ptr, scope_ce, scope_ce, this_ptr);
 	// Make sure we can use a closure multiple times
 	closure = (zend_closure*)Z_OBJ_P(return_value);
 	closure->func.internal_function.handler = closure->orig_internal_handler;

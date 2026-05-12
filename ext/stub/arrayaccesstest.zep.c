@@ -16,9 +16,9 @@
 #include "kernel/fcall.h"
 #include "kernel/array.h"
 #include "kernel/object.h"
+#include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
-#include "kernel/operators.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_ArrayAccessTest)
@@ -73,29 +73,21 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval data;
-	zval *key_param = NULL, *data_param = NULL;
-	zval key;
+	zval key_zv, *data_param = NULL;
+	zend_string *key = NULL;
 
-	ZVAL_UNDEF(&key);
+	ZVAL_UNDEF(&key_zv);
 	ZVAL_UNDEF(&data);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(key)
-		Z_PARAM_ARRAY(data)
+		ZEPHIR_Z_PARAM_ARRAY(data, data_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &key_param, &data_param);
-	if (UNEXPECTED(Z_TYPE_P(key_param) != IS_STRING && Z_TYPE_P(key_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'key' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(key_param) == IS_STRING)) {
-		zephir_get_strval(&key, key_param);
-	} else {
-		ZEPHIR_INIT_VAR(&key);
-	}
+	data_param = ZEND_CALL_ARG(execute_data, 2);
+	ZVAL_STR(&key_zv, key);
 	zephir_get_arrval(&data, data_param);
-	zephir_array_unset(&data, &key, PH_SEPARATE);
+	zephir_array_unset(&data, &key_zv, PH_SEPARATE);
 	RETURN_CTOR(&data);
 }
 
@@ -103,34 +95,26 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval dataFromProperty;
-	zval *key_param = NULL, *dataFromProperty_param = NULL, _0;
-	zval key;
+	zval key_zv, *dataFromProperty_param = NULL, _0;
+	zend_string *key = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&key);
+	ZVAL_UNDEF(&key_zv);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&dataFromProperty);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(key)
-		Z_PARAM_ARRAY(dataFromProperty)
+		ZEPHIR_Z_PARAM_ARRAY(dataFromProperty, dataFromProperty_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &key_param, &dataFromProperty_param);
-	if (UNEXPECTED(Z_TYPE_P(key_param) != IS_STRING && Z_TYPE_P(key_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'key' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(key_param) == IS_STRING)) {
-		zephir_get_strval(&key, key_param);
-	} else {
-		ZEPHIR_INIT_VAR(&key);
-	}
+	dataFromProperty_param = ZEND_CALL_ARG(execute_data, 2);
+	ZVAL_STR(&key_zv, key);
 	zephir_get_arrval(&dataFromProperty, dataFromProperty_param);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("assigedFromMethod"), &dataFromProperty);
-	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key);
+	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key_zv);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("assigedFromMethod"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_unset(&_0, &key, PH_SEPARATE);
+	zephir_array_unset(&_0, &key_zv, PH_SEPARATE);
 	RETURN_MM_MEMBER(getThis(), "assigedFromMethod");
 }
 
@@ -198,7 +182,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(items, items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -222,7 +206,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(items, items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -247,7 +231,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1094Test3)
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(items)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(items, items_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -273,7 +257,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086Strict)
 	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(params)
+		ZEPHIR_Z_PARAM_ARRAY(params, params_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -322,7 +306,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1086NotStrictParams)
 	ZVAL_UNDEF(&params);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(params)
+		ZEPHIR_Z_PARAM_ARRAY(params, params_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -407,7 +391,7 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 168);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	ZVAL_STR(&_1, "key_a");
+	ZVAL_STRING(&_1, "key_a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset_string(&_2, SL("key_a"), PH_SEPARATE);

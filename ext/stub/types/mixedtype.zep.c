@@ -138,13 +138,13 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *mixedVal;
-	zval stringVal;
-	zval *intVal_param = NULL, *stringVal_param = NULL, mixedVal_sub, _0;
+	zend_string *stringVal = NULL;
+	zval *intVal_param = NULL, stringVal_zv, mixedVal_sub, _0;
 	zend_long intVal;
 
+	ZVAL_UNDEF(&stringVal_zv);
 	ZVAL_UNDEF(&mixedVal_sub);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&stringVal);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_LONG(intVal)
 		Z_PARAM_STR(stringVal)
@@ -152,13 +152,15 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 3, 0, &intVal_param, &stringVal_param, &mixedVal);
-	zephir_get_strval(&stringVal, stringVal_param);
+	intVal_param = ZEND_CALL_ARG(execute_data, 1);
+	mixedVal = ZEND_CALL_ARG(execute_data, 3);
+	zephir_memory_observe(&stringVal_zv);
+	ZVAL_STR_COPY(&stringVal_zv, stringVal);
 	zephir_create_array(return_value, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, intVal);
 	zephir_array_fast_append(return_value, &_0);
-	zephir_array_fast_append(return_value, &stringVal);
+	zephir_array_fast_append(return_value, &stringVal_zv);
 	zephir_array_fast_append(return_value, mixedVal);
 	RETURN_MM();
 }

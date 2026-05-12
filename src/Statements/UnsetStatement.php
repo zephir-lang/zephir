@@ -146,7 +146,7 @@ class UnsetStatement extends StatementAbstract
                 switch ($expression['right']['type']) {
                     case 'string':
                         $compilationContext->codePrinter->output(
-                            'ZVAL_STR(' . $variableRef . ', "' . $expression['right']['value'] . '");'
+                            'ZVAL_STRING(' . $variableRef . ', "' . $expression['right']['value'] . '");'
                         );
                         break;
 

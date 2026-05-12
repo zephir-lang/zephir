@@ -22,8 +22,5 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
  */
 class IsStringOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_STRING';
-    }
+    protected string $typeConstant = 'IS_STRING';
 }

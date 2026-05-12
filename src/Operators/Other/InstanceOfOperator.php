@@ -28,11 +28,6 @@ use Zephir\Operators\AbstractOperator;
 class InstanceOfOperator extends AbstractOperator
 {
     /**
-     * @param                    $expression
-     * @param CompilationContext $context
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */
@@ -100,7 +95,13 @@ class InstanceOfOperator extends AbstractOperator
                                 }
                             }
                         } else {
-                            $code = $this->prepareBackendSpecificCode($resolvedVariable, $context);
+                            $resolvedVar = $context->symbolTable->getVariableForRead(
+                                $resolvedVariable,
+                                $context,
+                                $expression
+                            );
+                            $varCode = $context->backend->getVariableCode($resolvedVar);
+                            $code = $this->prepareBackendSpecificCode($varCode);
                         }
                         break;
 
@@ -113,7 +114,9 @@ class InstanceOfOperator extends AbstractOperator
                         $context->codePrinter->output(
                             'zephir_get_strval(' . $tempVariableName . ', ' . $resolvedVariable . ');'
                         );
-                        $code = $this->prepareBackendSpecificCode($tempVariableName, $context);
+                        $code = $this->prepareBackendSpecificCode(
+                            $context->backend->getVariableCode($tempVariable)
+                        );
                         break;
 
                     default:
@@ -138,11 +141,8 @@ class InstanceOfOperator extends AbstractOperator
         );
     }
 
-    private function prepareBackendSpecificCode($variable, CompilationContext $context): string
+    private function prepareBackendSpecificCode($variableCode): string
     {
-        return strtr('Z_STRVAL_P(:p:name), Z_STRLEN_P(:p:name)', [
-            ':name' => $variable,
-            ':p'    => '&',
-        ]);
+        return sprintf('Z_STRVAL_P(%s), Z_STRLEN_P(%s)', $variableCode, $variableCode);
     }
 }

@@ -36,7 +36,7 @@ PHP_METHOD(Stub_Functional, map1)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ARRAY(a)
+		ZEPHIR_Z_PARAM_ARRAY(a, a_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -44,7 +44,7 @@ PHP_METHOD(Stub_Functional, map1)
 	zephir_get_arrval(&a, a_param);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_11__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, stub_14__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_FUNCTION(&_1, "array_map", NULL, 8, &_0, &a);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
@@ -61,7 +61,7 @@ PHP_METHOD(Stub_Functional, map2)
 	ZVAL_UNDEF(&b_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ARRAY(a)
+		ZEPHIR_Z_PARAM_ARRAY(a, a_param)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

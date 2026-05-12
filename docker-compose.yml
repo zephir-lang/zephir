@@ -50,3 +50,13 @@ services:
       - "USER=Zephir"
     volumes:
       - .:/srv
+
+  zephir-8.5:
+    container_name: zephir-8.5
+    hostname: zephir-85
+    build: .docker/8.5
+    working_dir: /srv
+    environment:
+      - "USER=Zephir"
+    volumes:
+      - .:/srv

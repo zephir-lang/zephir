@@ -13,10 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Optimizers;
 
+use ReflectionException;
 use Zephir\Call;
 use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
-use Zephir\Exception\CompilerException;
+use Zephir\Exception;
 
 use function count;
 
@@ -25,15 +26,10 @@ abstract class MathOptimizer extends OptimizerAbstract
     protected string $zephirMethod = '';
 
     /**
-     * @param array              $expression
-     * @param Call               $call
-     * @param CompilationContext $context
-     *
-     * @return bool|CompiledExpression|mixed
-     *
-     * @throws CompilerException
+     * @throws ReflectionException
+     * @throws Exception
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    public function optimize(array $expression, Call $call, CompilationContext $context): false|CompiledExpression
     {
         if (!isset($expression['parameters'])) {
             return false;
@@ -64,9 +60,7 @@ abstract class MathOptimizer extends OptimizerAbstract
             case 'ulong':
             case 'double':
                 $context->headersManager->add('math');
-
                 return $this->passNativeFCall($compiledExpression, $expression);
-                break;
             case 'variable':
                 $variable = $context->symbolTable->getVariable($compiledExpression->getCode());
                 switch ($variable->getType()) {
@@ -76,9 +70,7 @@ abstract class MathOptimizer extends OptimizerAbstract
                     case 'ulong':
                     case 'double':
                         $context->headersManager->add('math');
-
                         return $this->passNativeFCall($compiledExpression, $expression);
-                        break;
                     case 'variable':
                         $context->headersManager->add('kernel/math');
 
@@ -94,13 +86,7 @@ abstract class MathOptimizer extends OptimizerAbstract
         return false;
     }
 
-    /**
-     * @param CompiledExpression $compiledExpression
-     * @param array              $expression
-     *
-     * @return CompiledExpression
-     */
-    protected function passNativeFCall($compiledExpression, $expression)
+    protected function passNativeFCall(CompiledExpression $compiledExpression, array $expression): CompiledExpression
     {
         return new CompiledExpression(
             'double',

@@ -22,8 +22,5 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
  */
 class IsIntOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_LONG';
-    }
+    protected string $typeConstant = 'IS_LONG';
 }

@@ -12,6 +12,7 @@
 #ifndef ZEPHIR_KERNEL_MAIN_H
 #define ZEPHIR_KERNEL_MAIN_H
 
+#include <php.h>
 #include <Zend/zend_interfaces.h>
 #include <ext/spl/spl_exceptions.h>
 #include <ext/spl/spl_iterators.h>
@@ -170,6 +171,9 @@ extern zend_string* i_self;
 #define RETURN_MM_STRING(str)       { RETVAL_STRING(str); ZEPHIR_MM_RESTORE(); return; }
 #define RETURN_MM_EMPTY_STRING()    { RETVAL_EMPTY_STRING(); ZEPHIR_MM_RESTORE(); return; }
 
+/** Return zend_string restoring memory frame */
+#define RETURN_MM_STR(s)            { RETVAL_STR(s); ZEPHIR_MM_RESTORE(); return; }
+
 /* Return long */
 #define RETURN_MM_LONG(value)       { RETVAL_LONG(value); ZEPHIR_MM_RESTORE(); return; }
 
@@ -243,7 +247,7 @@ int zephir_is_iterable_ex(zval *arr, int duplicate);
 /** Check if an array is iterable or not */
 #define zephir_is_iterable(var, duplicate, file, line) \
 	if (!zephir_is_iterable_ex(var, duplicate)) { \
-		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_exception_get_default(), "The argument is not initialized or iterable()", file, line); \
+		ZEPHIR_THROW_EXCEPTION_DEBUG_STRW(zend_ce_exception, "The argument is not initialized or iterable()", file, line); \
 		ZEPHIR_MM_RESTORE(); \
 		return; \
 	}
@@ -316,5 +320,30 @@ void zephir_get_args(zval* return_value);
 void zephir_get_arg(zval* return_value, zend_long idx);
 
 void zephir_module_init();
+
+/**
+ * Z_PARAM_ARRAY(dest) expands to a call to zend_parse_arg_array(_arg, &dest, ...).
+ * The inline function has taken `zval **dest` since at least PHP 7.0, so the
+ * variable passed to the macro must be a `zval *` for `&dest` to have the
+ * correct type. Zephir always emits a `<name>_param` companion of type `zval *`
+ * for array parameters; we forward that here.
+ *
+ * Historical note: previous versions of this header conditionally selected
+ * between `dest` (a `zval` value) and `dest_ptr` (a `zval *`) based on a
+ * config.m4 autoconf probe (`ZEPHIR_ARRAY_PARAM_DOUBLE_PTR`). The `dest`
+ * branch was always wrong — the underlying signature has been `zval **dest`
+ * since PHP 7.0 — but it only surfaced as a warning once GCC 14 promoted
+ * `-Wincompatible-pointer-types` to default-on. Downstream projects that
+ * ship a stale `config.m4` (e.g. cphalcon) didn't get the probe defined and
+ * fell into the broken branch, producing hundreds of warnings on PHP 8.5
+ * (see https://github.com/zephir-lang/zephir/issues/2462).
+ *
+ * The probe is no longer needed and has been removed from
+ * templates/engine/config.m4. The legacy `ZEPHIR_ARRAY_PARAM_DOUBLE_PTR`
+ * macro is now a no-op — if a stale generated `config.m4` still emits it,
+ * the definition is harmless.
+ */
+#define ZEPHIR_Z_PARAM_ARRAY(dest, dest_ptr)              Z_PARAM_ARRAY(dest_ptr)
+#define ZEPHIR_Z_PARAM_ARRAY_OR_NULL(dest, dest_ptr)      Z_PARAM_ARRAY_OR_NULL(dest_ptr)
 
 #endif /* ZEPHIR_KERNEL_MAIN_H */

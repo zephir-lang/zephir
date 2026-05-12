@@ -61,21 +61,18 @@ PHP_METHOD(Stub_IssetTest, testIssetArray2)
 
 PHP_METHOD(Stub_IssetTest, testIssetArray3)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval b;
-	zval *a, a_sub, *b_param = NULL;
+	zend_string *b = NULL;
+	zval *a, a_sub, b_zv;
 
 	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b);
+	ZVAL_UNDEF(&b_zv);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_STR(b)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &a, &b_param);
-	zephir_get_strval(&b, b_param);
-	RETURN_MM_BOOL(zephir_array_isset(a, &b));
+	a = ZEND_CALL_ARG(execute_data, 1);
+	ZVAL_STR(&b_zv, b);
+	RETURN_BOOL(zephir_array_isset(a, &b_zv));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetArray4)

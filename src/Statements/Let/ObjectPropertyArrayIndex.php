@@ -262,6 +262,8 @@ class ObjectPropertyArrayIndex extends ArrayIndex
                         );
                         $compilationContext->backend->assignLong($indexVariable, $variableIndex, $compilationContext);
                         break;
+                    case 'string':
+                        break;
                 }
                 break;
         }

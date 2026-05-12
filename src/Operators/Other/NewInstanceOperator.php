@@ -36,11 +36,6 @@ class NewInstanceOperator extends AbstractOperator
     /**
      * Creates a new instance.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws ReflectionException
      * @throws Exception
      */
@@ -269,9 +264,9 @@ class NewInstanceOperator extends AbstractOperator
             $methodCall->compile($callExpr, $compilationContext);
         } else {
             $compilationContext->headersManager->add('kernel/fcall');
-
-            /* TODO:, generate the code using builders */
-            $compilationContext->backend->checkConstructor($symbolVariable, $compilationContext);
+            $compilationContext->codePrinter->output(
+                'if (zephir_has_constructor(' . $compilationContext->backend->getVariableCode($symbolVariable) . ')) {'
+            );
             $codePrinter->increaseLevel();
 
             $methodCall = new MethodCall();

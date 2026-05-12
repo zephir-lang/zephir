@@ -34,10 +34,11 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	zval _2, _5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
-	zval seq;
-	zval *n, n_sub, *seq_param = NULL, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
+	zend_string *seq = NULL;
+	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
 
 	ZVAL_UNDEF(&n_sub);
+	ZVAL_UNDEF(&seq_zv);
 	ZVAL_UNDEF(&len);
 	ZVAL_UNDEF(&j);
 	ZVAL_UNDEF(&k);
@@ -59,7 +60,6 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZVAL_UNDEF(&_13$$7);
 	ZVAL_UNDEF(&_14$$7);
 	ZVAL_UNDEF(&_15$$7);
-	ZVAL_UNDEF(&seq);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -68,17 +68,18 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &n, &seq_param);
-	zephir_get_strval(&seq, seq_param);
+	n = ZEND_CALL_ARG(execute_data, 1);
+	zephir_memory_observe(&seq_zv);
+	ZVAL_STR_COPY(&seq_zv, seq);
 	seqi = 0;
 	ZEPHIR_INIT_VAR(&len);
-	ZVAL_LONG(&len, zephir_fast_strlen_ev(&seq));
+	ZVAL_LONG(&len, zephir_fast_strlen_ev(&seq_zv));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_1, ((zephir_get_numberval(&len) * 60) + 1));
 	zephir_create_array(&_0, zephir_get_intval(&_1), 1);
 	zephir_get_arrval(&_2, &_0);
 	ZEPHIR_INIT_VAR(&str);
-	zephir_fast_join(&str, &seq, &_2);
+	zephir_fast_join(&str, &seq_zv, &_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_INIT_VAR(&_4);
 	mul_function(&_4, &len, &len);

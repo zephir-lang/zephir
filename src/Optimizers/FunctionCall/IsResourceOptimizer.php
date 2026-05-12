@@ -16,14 +16,11 @@ namespace Zephir\Optimizers\FunctionCall;
 use Zephir\Optimizers\IsTypeOptimizerAbstract;
 
 /**
- * IsStringOptimizer.
+ * IsResourceOptimizer.
  *
- * Optimizes calls to 'is_string' using internal function
+ * Optimizes calls to 'is_resource' using internal function
  */
 class IsResourceOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_RESOURCE';
-    }
+    protected string $typeConstant = 'IS_RESOURCE';
 }

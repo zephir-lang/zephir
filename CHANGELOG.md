@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.20.0] - 2026-05-12
+### Added
+- Added support of PHP `8.5` [#2459](https://github.com/zephir-lang/zephir/issues/2459), [#2461](https://github.com/zephir-lang/zephir/pull/2461)
+- Added closure `this` and `use` support: closures can now reference `this` to call methods and access properties of the enclosing class [#2497](https://github.com/zephir-lang/zephir/issues/2497), [#2503](https://github.com/zephir-lang/zephir/pull/2503)
+- Added support for `char` and `uchar` literal/variable values as method arguments to parameters typed `char`/`uchar` [#2469](https://github.com/zephir-lang/zephir/issues/2469), [#2507](https://github.com/zephir-lang/zephir/pull/2507)
+- Added support for typed constants (PHP 8.3+) in generated stubs [#2498](https://github.com/zephir-lang/zephir/pull/2498)
+- Added PhpStan/Psalm tag pass-through whitelist for class-level docblocks in generated stubs [#2501](https://github.com/zephir-lang/zephir/pull/2501)
+- Added validation of `@phpstan-return`, `@phpstan-var`, `@phpstan-type`, `@phpstan-param`, `@phpstan-import-type` and Psalm equivalents (delegates parsing to `phpstan/phpdoc-parser`) [#2502](https://github.com/zephir-lang/zephir/pull/2502)
+- Added `ConstructorsCodeGenTest` to verify generated C/H files against reference fixtures [#2482](https://github.com/zephir-lang/zephir/pull/2482)
+
+### Changed
+- Refactored string parameter handling to use native `zend_string *` (with companion `zval`) where the parameter isn't mutated, reducing engine round-trips for string params [#2462](https://github.com/zephir-lang/zephir/issues/2462), [#2484](https://github.com/zephir-lang/zephir/pull/2484)
+- Refactored type optimizers and added more tests [#2470](https://github.com/zephir-lang/zephir/pull/2470)
+- Refactored header compilation logic and updated compatibility checks for PHP 8.5 [#2489](https://github.com/zephir-lang/zephir/pull/2489)
+- Bumped `phpstan/phpdoc-parser` from `1.33.0` to `2.3.2` [#2504](https://github.com/zephir-lang/zephir/pull/2504)
+- Bumped `squizlabs/php_codesniffer` from `3.13.5` to `4.0.1` [#2473](https://github.com/zephir-lang/zephir/pull/2473)
+- Bumped `phpunit/phpunit` from `9.6.32` to `9.6.33` [#2471](https://github.com/zephir-lang/zephir/pull/2471)
+- Bumped `codecov/codecov-action` from `3` to `6` [#2472](https://github.com/zephir-lang/zephir/pull/2472), [#2488](https://github.com/zephir-lang/zephir/pull/2488)
+- Bumped `actions/checkout` to `6`, `actions/cache` to `5`, `actions/upload-artifact` to `7`, `actions/download-artifact` to `8` [#2474](https://github.com/zephir-lang/zephir/pull/2474), [#2475](https://github.com/zephir-lang/zephir/pull/2475), [#2476](https://github.com/zephir-lang/zephir/pull/2476), [#2477](https://github.com/zephir-lang/zephir/pull/2477), [#2480](https://github.com/zephir-lang/zephir/pull/2480), [#2481](https://github.com/zephir-lang/zephir/pull/2481), [#2464](https://github.com/zephir-lang/zephir/pull/2464)
+
+### Fixed
+- Fixed `-Wincompatible-pointer-types` warnings on PHP 8.5+ for `zend_parse_arg_array` (`Z_PARAM_ARRAY`/`Z_PARAM_ARRAY_OR_NULL`) — promoted to error by GCC 14+ [#2462](https://github.com/zephir-lang/zephir/issues/2462), [#2463](https://github.com/zephir-lang/zephir/pull/2463), [#2483](https://github.com/zephir-lang/zephir/pull/2483), [#2508](https://github.com/zephir-lang/zephir/pull/2508)
+- Fixed `-Wdiscarded-qualifiers` warnings introduced on PHP 8.5 where `EG(fake_scope)` became `const zend_class_entry *` ([kernel/object.c](kernel/object.c), [kernel/require.c](kernel/require.c), `ZEPHIR_BACKUP_SCOPE`/`ZEPHIR_RESTORE_SCOPE` macros) [#2462](https://github.com/zephir-lang/zephir/issues/2462)
+- Fixed memory leak in generated code where native `zend_string *` parameters incremented refcount via `ZVAL_STR_COPY` without a matching decrement on the return path (~3.4 KB per call) [#2500](https://github.com/zephir-lang/zephir/issues/2500), [#2506](https://github.com/zephir-lang/zephir/pull/2506)
+- Fixed crash when passing a `char`/`uchar` literal or variable to a method parameter declared as `char`/`uchar` (TypeError in `getResolvedParams`) [#2469](https://github.com/zephir-lang/zephir/issues/2469), [#2507](https://github.com/zephir-lang/zephir/pull/2507)
+- Fixed stale `.dep` dependency files causing compilation failures when switching between PHP 8.x versions (now removed during `fullclean`; build order corrected so `make clean` runs before `phpize --clean`) [#2490](https://github.com/zephir-lang/zephir/issues/2490), [#2491](https://github.com/zephir-lang/zephir/pull/2491)
+- Fixed missing default values in reflection metadata for method parameters with scalar types [#2457](https://github.com/zephir-lang/zephir/pull/2457)
+- Fixed various compiler warnings surfaced by recent GCC/Clang [#2445](https://github.com/zephir-lang/zephir/pull/2445)
+- Fixed `backtrace.c` so `PHP_VERSION_ID` is visible (added missing PHP header include)
+
 ## [0.19.0] - 2025-05-13
 ### Added
 - Added support of PHP `8.4` [#2440](https://github.com/zephir-lang/zephir/issues/2440), [#2443](https://github.com/zephir-lang/zephir/pull/2443)
@@ -610,7 +640,10 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.17.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.0...HEAD
+[0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
+[0.19.0]: https://github.com/zephir-lang/zephir/compare/0.18.0...0.19.0
+[0.18.0]: https://github.com/zephir-lang/zephir/compare/0.17.0...0.18.0
 [0.17.0]: https://github.com/zephir-lang/zephir/compare/0.16.3...0.17.0
 [0.16.3]: https://github.com/zephir-lang/zephir/compare/0.16.2...0.16.3
 [0.16.2]: https://github.com/zephir-lang/zephir/compare/0.16.1...0.16.2

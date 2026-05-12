@@ -76,11 +76,18 @@ class Call
     }
 
     /**
-     * Checks the last call status or make a label jump to the next catch block.t
+     * Checks the last call status or make a label jump to the next catch block.
+     *
+     * Both zephir_check_call_status() and zephir_check_call_status_or_jump()
+     * use ZEPHIR_MM_RESTORE() in their failure path, which requires
+     * ZEPHIR_METHOD_GLOBALS_PTR to be declared. Force memory-grow so the
+     * variable is always present.
      */
     public function addCallStatusOrJump(CompilationContext $compilationContext): void
     {
         $compilationContext->headersManager->add('kernel/fcall');
+        $compilationContext->symbolTable->mustGrownStack(true);
+
         if ($compilationContext->insideTryCatch) {
             $compilationContext->codePrinter->output(
                 'zephir_check_call_status_or_jump(try_end_' . $compilationContext->currentTryCatch . ');'
@@ -424,6 +431,8 @@ class Call
                     $dynamicTypes[]            = $compiledExpression->getType();
                     break;
 
+                case 'char':
+                case 'uchar':
                 case 'ulong':
                 case 'string':
                 case 'istring':
@@ -499,6 +508,30 @@ class Call
                                 $parameterTempVariable
                             );
                             $this->temporalVariables[] = $parameterTempVariable;
+                            $types[]                   = $parameterVariable->getType();
+                            $dynamicTypes[]            = $parameterVariable->getType();
+                            break;
+
+                        case 'char':
+                        case 'uchar':
+                            $parameterTempVariable = $compilationContext->symbolTable->getTempVariableForWrite(
+                                'variable',
+                                $compilationContext,
+                                $expression
+                            );
+                            // A C char is a single byte; wrap it into a length-1 zend_string
+                            // so the call site receives a zval and the callee can re-extract
+                            // the byte via zephir_get_charval().
+                            $codePrinter->output(
+                                sprintf(
+                                    'ZVAL_STRINGL(&%s, &%s, 1);',
+                                    $parameterTempVariable->getName(),
+                                    $parameterVariable->getName()
+                                )
+                            );
+
+                            $this->temporalVariables[] = $parameterTempVariable;
+                            $params[]                  = '&' . $parameterTempVariable->getName();
                             $types[]                   = $parameterVariable->getType();
                             $dynamicTypes[]            = $parameterVariable->getType();
                             break;

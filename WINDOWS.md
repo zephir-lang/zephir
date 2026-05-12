@@ -5,7 +5,7 @@ Some parts are optional, when you have a specific PHP version.
 Parts which are only necessary for a specific PHP version, are marked as such.
 PHP-Version requirements are marked using `[ ]`
 
-## Software Requirements [PHP 5.5 or later]
+## Software Requirements
 
 - [Install Visual Studio 2012 Express](https://www.microsoft.com/en-US/download/details.aspx?id=34673)
 (You should start it and activate it)

@@ -63,6 +63,16 @@ class Variable implements TypeAwareInterface
     protected bool $isExternal  = false;
     protected bool $localOnly   = false;
     /**
+     * When true, the variable is a string parameter using native zend_string *
+     * instead of zval. getType() still returns 'string' for compatibility.
+     */
+    protected bool $isNativeString = false;
+    /**
+     * When true, the native zend_string * parameter can be NULL (null default).
+     * Used by ReturnStatement to emit a null guard before zend_string_copy().
+     */
+    protected bool $isNullableNativeString = false;
+    /**
      * Compiled variable's name.
      */
     protected string $lowName       = '';
@@ -613,6 +623,38 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Returns whether this is a native zend_string * parameter.
+     */
+    public function isNativeString(): bool
+    {
+        return $this->isNativeString;
+    }
+
+    /**
+     * Marks this variable as a native zend_string * parameter.
+     */
+    public function setIsNativeString(bool $isNativeString): void
+    {
+        $this->isNativeString = $isNativeString;
+    }
+
+    /**
+     * Returns whether this native zend_string * can be NULL (null-default param).
+     */
+    public function isNullableNativeString(): bool
+    {
+        return $this->isNullableNativeString;
+    }
+
+    /**
+     * Marks this native zend_string * as nullable (null-default param).
+     */
+    public function setIsNullableNativeString(bool $nullable): void
+    {
+        $this->isNullableNativeString = $nullable;
+    }
+
+    /**
      * Checks if a variable is a super global.
      */
     public function isSuperGlobal(): bool
@@ -907,6 +949,8 @@ class Variable implements TypeAwareInterface
 
     /**
      * Sets the type of variable.
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function setType(string $type): void
     {

@@ -97,7 +97,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 	ZVAL_UNDEF(&_10$$4);
 	ZVAL_UNDEF(&_11$$4);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(x)
+		Z_PARAM_ZVAL(x_param)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -338,13 +338,13 @@ PHP_METHOD(Stub_Quantum, harmos)
 					ZVAL_STRING(&_52$$9, "%16.8lf %16.8lf %16.8lf \n");
 					ZVAL_DOUBLE(&_53$$9, ((double) i * dx));
 					ZVAL_DOUBLE(&_54$$9, ((double) n * dt));
-					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 80, &fp, &_52$$9, &_53$$9, &_54$$9, &_51$$9);
+					ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 81, &fp, &_52$$9, &_53$$9, &_54$$9, &_51$$9);
 					zephir_check_call_status();
 					i = (i + 10);
 				}
 				ZEPHIR_INIT_NVAR(&_56$$8);
 				ZVAL_STRING(&_56$$8, "\n");
-				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 80, &fp, &_56$$8);
+				ZEPHIR_CALL_FUNCTION(NULL, "fprintf", &_55, 81, &fp, &_56$$8);
 				zephir_check_call_status();
 			}
 			j = 1;

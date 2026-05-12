@@ -31,11 +31,6 @@ class ConcatOperator extends AbstractOperator
     /**
      * Performs concat compilation.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws CompilerException
      */
     public function compile(array $expression, CompilationContext $compilationContext): CompiledExpression
@@ -119,12 +114,6 @@ class ConcatOperator extends AbstractOperator
     }
 
     /**
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     * @param bool               $isFullString
-     *
-     * @return array
-     *
      * @throws CompilerException
      */
     private function _getOptimizedConcat(

@@ -268,11 +268,24 @@ HELP);
         }
 
         try {
-            if (Os::isWindows()) {
-                system('cd ext && phpize --clean');
-            } else {
-                system('cd ext && phpize --clean > /dev/null');
-                system('cd ext && ./clean > /dev/null');
+            if (is_dir('ext')) {
+                if (Os::isWindows()) {
+                    system('cd ext && phpize --clean');
+                } else {
+                    system('cd ext && make clean > /dev/null 2>&1');
+                    system('cd ext && phpize --clean > /dev/null');
+                }
+
+                // Remove recursive .dep files inside the ext directory
+                $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator('ext', FilesystemIterator::SKIP_DOTS),
+                    RecursiveIteratorIterator::CHILD_FIRST
+                );
+                foreach ($iterator as $fileinfo) {
+                    if ($fileinfo->isFile() && $fileinfo->getExtension() === 'dep') {
+                        unlink($fileinfo->getRealPath());
+                    }
+                }
             }
         } catch (FileSystemException $e) {
             fwrite(

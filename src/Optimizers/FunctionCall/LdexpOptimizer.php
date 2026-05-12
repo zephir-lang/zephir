@@ -39,7 +39,7 @@ class LdexpOptimizer extends MathOptimizer
      *
      * @throws CompilerException
      */
-    public function optimize(array $expression, Call $call, CompilationContext $context)
+    public function optimize(array $expression, Call $call, CompilationContext $context): false|CompiledExpression
     {
         if (!isset($expression['parameters']) || 2 != count($expression['parameters'])) {
             throw new CompilerException(

@@ -56,6 +56,10 @@ if test "$PHP_%PROJECT_UPPER%" = "yes"; then
 
 	CPPFLAGS=$old_CPPFLAGS
 
+	dnl Detection of zend_parse_arg_array(zval **) was removed; the inline
+	dnl function has always taken zval** since PHP 7.0. ZEPHIR_Z_PARAM_ARRAY
+	dnl now unconditionally feeds the zval* companion. See kernel/main.h.
+
 	PHP_INSTALL_HEADERS([ext/%PROJECT_LOWER%], [%HEADERS_COMPILED%])
 
 fi

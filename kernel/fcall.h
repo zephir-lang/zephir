@@ -45,7 +45,6 @@ typedef enum _zephir_call_type {
 
 #define ZEPHIR_CALL_FUNCTION(return_value_ptr, func_name, cache, cache_slot, ...) \
 	do { \
-		zephir_fcall_cache_entry **cache_entry_ = cache; \
 		zval *params_[] = {ZEPHIR_FETCH_VA_ARGS __VA_ARGS__}; \
 		ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(return_value_ptr); \
 		ZEPHIR_LAST_CALL_STATUS = zephir_call_func_aparams(return_value_ptr, func_name, strlen(func_name), cache, cache_slot, ZEPHIR_CALL_NUM_PARAMS(params_), ZEPHIR_PASS_CALL_PARAMS(params_)); \
@@ -70,7 +69,7 @@ typedef enum _zephir_call_type {
 	else { ZEPHIR_SET_THIS_EXPLICIT_NULL(); } \
 
 #define ZEPHIR_BACKUP_SCOPE() \
-	zend_class_entry *old_scope = EG(fake_scope); \
+	const zend_class_entry *old_scope = EG(fake_scope); \
 	zend_execute_data *old_call = execute_data; \
 	zend_execute_data *old_execute_data = EG(current_execute_data), new_execute_data; \
 	if (!EG(current_execute_data)) { \
@@ -86,7 +85,7 @@ typedef enum _zephir_call_type {
 	}
 
 #define ZEPHIR_RESTORE_SCOPE() \
-	EG(fake_scope) = old_scope; \
+	EG(fake_scope) = (zend_class_entry *) old_scope; \
 	execute_data = old_call; \
 	EG(current_execute_data) = old_execute_data;
 

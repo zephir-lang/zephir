@@ -22,8 +22,5 @@ use Zephir\Optimizers\IsTypeOptimizerAbstract;
  */
 class IsNullOptimizer extends IsTypeOptimizerAbstract
 {
-    protected function getType()
-    {
-        return 'IS_NULL';
-    }
+    protected string $typeConstant = 'IS_NULL';
 }

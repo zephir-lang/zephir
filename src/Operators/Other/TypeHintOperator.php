@@ -26,11 +26,6 @@ class TypeHintOperator extends AbstractOperator
     /**
      * Performs type-hint compilation.
      *
-     * @param array              $expression
-     * @param CompilationContext $compilationContext
-     *
-     * @return CompiledExpression
-     *
      * @throws Exception
      * @throws ReflectionException
      */

@@ -280,7 +280,7 @@ class Backend
         return $output;
     }
 
-    public function arrayIsset(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
+    public function arrayIsset(Variable $var, $resolvedExpr, $expression): CompiledExpression
     {
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
@@ -296,11 +296,6 @@ class Backend
             }
         }
 
-        return $this->arrayIsset2($var, $resolvedExpr, $expression, $context);
-    }
-
-    public function arrayIsset2(Variable $var, $resolvedExpr, $expression, CompilationContext $context)
-    {
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
@@ -312,16 +307,16 @@ class Backend
                     . '"))',
                     $expression
                 );
-            } else {
-                return new CompiledExpression(
-                    'bool',
-                    'zephir_array_isset_long('
-                    . $this->getVariableCode($var)
-                    . ', '
-                    . $resolvedExpr->getCode() . ')',
-                    $expression
-                );
             }
+
+            return new CompiledExpression(
+                'bool',
+                'zephir_array_isset_long('
+                . $this->getVariableCode($var)
+                . ', '
+                . $resolvedExpr->getCode() . ')',
+                $expression
+            );
         }
 
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
@@ -715,11 +710,6 @@ class Backend
         }
     }
 
-    public function checkConstructor(Variable $var, CompilationContext $context): void
-    {
-        $context->codePrinter->output('if (zephir_has_constructor(' . $this->getVariableCode($var) . ')) {');
-    }
-
     public function checkStrictType($type, $var, CompilationContext $context): void
     {
         $codePrinter = $context->codePrinter;
@@ -866,11 +856,12 @@ class Backend
         }
     }
 
-    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context): void
+    public function createClosure(Variable $variable, $classDefinition, CompilationContext $context, bool $bindThis = false): void
     {
         $symbol = $this->getVariableCode($variable);
+        $thisArg = $bindThis ? 'this_ptr' : 'NULL';
         $context->codePrinter->output(
-            'zephir_create_closure_ex(' . $symbol . ', NULL, ' . $classDefinition->getClassEntry(
+            'zephir_create_closure_ex(' . $symbol . ', ' . $thisArg . ', ' . $classDefinition->getClassEntry(
             ) . ', SL("__invoke"));'
         );
     }
@@ -1550,7 +1541,25 @@ class Backend
             return $variable->getName();
         }
 
+        if ($variable->isNativeString()) {
+            return '&' . $variable->getName() . '_zv';
+        }
+
         return '&' . $variable->getName();
+    }
+
+    /**
+     * Wraps a zend_string * variable into a temp zval for use in zval-expecting operations.
+     * Returns the temp Variable (type 'variable') with ZVAL_STR already emitted.
+     */
+    public function wrapZendStringToZval(Variable $variable, CompilationContext $context): Variable
+    {
+        $tempVar = $context->symbolTable->getTempLocalVariableForWrite('variable', $context);
+        $context->codePrinter->output(
+            sprintf('ZVAL_STR(&%s, %s);', $tempVar->getName(), $variable->getName())
+        );
+
+        return $tempVar;
     }
 
     public function ifVariableValueUndefined(
@@ -1559,6 +1568,20 @@ class Backend
         $useBody = false,
         $useCodePrinter = true
     ): string {
+        /**
+         * Native zend_string * optional params: initialized to NULL,
+         * Z_PARAM_STR only sets the pointer when the argument is provided.
+         */
+        if ($var->isNativeString()) {
+            $body   = '!' . $var->getName();
+            $output = 'if (' . $body . ') {';
+            if ($useCodePrinter) {
+                $context->codePrinter->output($output);
+            }
+
+            return $useBody ? $body : $output;
+        }
+
         if ($var->isDoublePointer()) {
             return $this->ifVariableValueUndefined2($var, $context, $useBody, $useCodePrinter);
         }

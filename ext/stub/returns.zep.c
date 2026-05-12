@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Returns)
@@ -54,19 +52,15 @@ PHP_METHOD(Stub_Returns, testReturnCast4)
 
 PHP_METHOD(Stub_Returns, returnWithParameter)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *parameter_param = NULL;
-	zval parameter;
+	zval parameter_zv;
+	zend_string *parameter = NULL;
 
-	ZVAL_UNDEF(&parameter);
+	ZVAL_UNDEF(&parameter_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(parameter)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 1, 0, &parameter_param);
-	zephir_get_strval(&parameter, parameter_param);
-	RETURN_MM_STRING("Return back");
+	ZVAL_STR(&parameter_zv, parameter);
+	RETURN_STRING("Return back");
 }
 
 PHP_METHOD(Stub_Returns, returnWithoutParameter)

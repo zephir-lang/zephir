@@ -15,23 +15,8 @@ namespace Zephir;
 
 use ReflectionException;
 use Zephir\Passes\MutateGathererPass;
-use Zephir\Statements\BreakStatement;
-use Zephir\Statements\ContinueStatement;
-use Zephir\Statements\DeclareStatement;
-use Zephir\Statements\DoWhileStatement;
-use Zephir\Statements\EchoStatement;
-use Zephir\Statements\ForStatement;
-use Zephir\Statements\IfStatement;
-use Zephir\Statements\LetStatement;
-use Zephir\Statements\LoopStatement;
-use Zephir\Statements\RequireOnceStatement;
-use Zephir\Statements\RequireStatement;
-use Zephir\Statements\ReturnStatement;
-use Zephir\Statements\SwitchStatement;
-use Zephir\Statements\ThrowStatement;
-use Zephir\Statements\TryCatchStatement;
-use Zephir\Statements\UnsetStatement;
-use Zephir\Statements\WhileStatement;
+use Zephir\Statements\StatementFactory;
+use Zephir\Types\TypeRegistry;
 
 use function array_pop;
 use function count;
@@ -185,147 +170,63 @@ class StatementsBlock
                 }
             }
 
-            switch ($statement['type']) {
-                case 'let':
-                    $letStatement = new LetStatement($statement);
-                    $letStatement->compile($compilationContext);
-                    break;
+            // Handle standard statements using factory pattern
+            if (StatementFactory::isSupported($statement['type'])) {
+                $statementInstance = StatementFactory::create($statement);
+                $statementInstance->compile($compilationContext);
 
-                case 'echo':
-                    $echoStatement = new EchoStatement($statement);
-                    $echoStatement->compile($compilationContext);
-                    break;
-
-                case 'declare':
-                    $declareStatement = new DeclareStatement($statement);
-                    $declareStatement->compile($compilationContext);
-                    break;
-
-                case 'if':
-                    $ifStatement = new IfStatement($statement);
-                    $ifStatement->compile($compilationContext);
-                    break;
-
-                case 'while':
-                    $whileStatement = new WhileStatement($statement);
-                    $whileStatement->compile($compilationContext);
-                    break;
-
-                case 'do-while':
-                    $doWhileStatement = new DoWhileStatement($statement);
-                    $doWhileStatement->compile($compilationContext);
-                    break;
-
-                case 'switch':
-                    $switchStatement = new SwitchStatement($statement);
-                    $switchStatement->compile($compilationContext);
-                    break;
-
-                case 'for':
-                    $forStatement = new ForStatement($statement);
-                    $forStatement->compile($compilationContext);
-                    break;
-
-                case 'return':
-                    $returnStatement = new ReturnStatement($statement);
-                    $returnStatement->compile($compilationContext);
+                // Mark unreachable for control flow statements
+                if (in_array($statement['type'], ['return', 'break', 'continue', 'throw'], true)) {
                     $this->unreachable = true;
-                    break;
-
-                case 'require':
-                    $requireStatement = new RequireStatement($statement);
-                    $requireStatement->compile($compilationContext);
-                    break;
-
-                case 'require_once':
-                    $requireOnceStatement = new RequireOnceStatement($statement);
-                    $requireOnceStatement->compile($compilationContext);
-                    break;
-
-                case 'loop':
-                    $loopStatement = new LoopStatement($statement);
-                    $loopStatement->compile($compilationContext);
-                    break;
-
-                case 'break':
-                    $breakStatement = new BreakStatement($statement);
-                    $breakStatement->compile($compilationContext);
-                    $this->unreachable = true;
-                    break;
-
-                case 'continue':
-                    $continueStatement = new ContinueStatement($statement);
-                    $continueStatement->compile($compilationContext);
-                    $this->unreachable = true;
-                    break;
-
-                case 'unset':
-                    $unsetStatement = new UnsetStatement($statement);
-                    $unsetStatement->compile($compilationContext);
-                    break;
-
-                case 'throw':
-                    $throwStatement = new ThrowStatement($statement);
-                    $throwStatement->compile($compilationContext);
-                    $this->unreachable = true;
-                    break;
-
-                case 'try-catch':
-                    $throwStatement = new TryCatchStatement($statement);
-                    $throwStatement->compile($compilationContext);
+                } elseif ($statement['type'] === 'try-catch') {
                     $this->unreachable = false;
-                    break;
+                }
+            } else {
+                // Handle special cases that don't fit the factory pattern
+                switch ($statement['type']) {
+                    case 'fetch':
+                        $expr = new Expression($statement['expr']);
+                        $expr->setExpectReturn(false);
+                        $compiledExpression = $expr->compile($compilationContext);
+                        $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
+                        break;
 
-                case 'fetch':
-                    $expr = new Expression($statement['expr']);
-                    $expr->setExpectReturn(false);
-                    $compiledExpression = $expr->compile($compilationContext);
-                    $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
-                    break;
+                    case 'mcall':
+                        $methodCall = new MethodCall();
+                        $expr       = new Expression($statement['expr']);
+                        $expr->setExpectReturn(false);
+                        $methodCall->compile($expr, $compilationContext);
+                        break;
 
-                case 'mcall':
-                    $methodCall = new MethodCall();
-                    $expr       = new Expression($statement['expr']);
-                    $expr->setExpectReturn(false);
-                    $methodCall->compile($expr, $compilationContext);
-                    break;
-
-                case 'fcall':
-                    $functionCall = new FunctionCall();
-                    $expr         = new Expression($statement['expr']);
-                    $expr->setExpectReturn(false);
-                    $compiledExpression = $functionCall->compile($expr, $compilationContext);
-                    switch ($compiledExpression->getType()) {
-                        case 'int':
-                        case 'double':
-                        case 'uint':
-                        case 'long':
-                        case 'ulong':
-                        case 'char':
-                        case 'uchar':
-                        case 'bool':
+                    case 'fcall':
+                        $functionCall = new FunctionCall();
+                        $expr         = new Expression($statement['expr']);
+                        $expr->setExpectReturn(false);
+                        $compiledExpression = $functionCall->compile($expr, $compilationContext);
+                        // Use TypeRegistry instead of switch for type checking
+                        if (TypeRegistry::isScalar($compiledExpression->getType())) {
                             $compilationContext->codePrinter->output($compiledExpression->getCode() . ';');
-                            break;
-                    }
-                    break;
+                        }
+                        break;
 
-                case 'scall':
-                    $methodCall = new StaticCall();
-                    $expr       = new Expression($statement['expr']);
-                    $expr->setExpectReturn(false);
-                    $methodCall->compile($expr, $compilationContext);
-                    break;
+                    case 'scall':
+                        $methodCall = new StaticCall();
+                        $expr       = new Expression($statement['expr']);
+                        $expr->setExpectReturn(false);
+                        $methodCall->compile($expr, $compilationContext);
+                        break;
 
-                case 'cblock':
-                    $compilationContext->codePrinter->output($statement['value']);
-                    break;
+                    case 'cblock':
+                        $compilationContext->codePrinter->output($statement['value']);
+                        break;
 
-                case 'comment':
-                case 'empty':
-                    break;
+                    case 'comment':
+                    case 'empty':
+                        break;
 
-                default:
-                    throw new Exception('Unsupported statement: ' . $statement['type']);
+                    default:
+                        throw new Exception('Unsupported statement: ' . $statement['type']);
+                }
             }
 
             if ('comment' != $statement['type']) {
@@ -366,10 +267,8 @@ class StatementsBlock
 
     /**
      * Returns the type of the last statement executed.
-     *
-     * @return string
      */
-    public function getLastStatementType()
+    public function getLastStatementType(): string
     {
         return $this->lastStatement['type'];
     }

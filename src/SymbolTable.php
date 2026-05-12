@@ -422,7 +422,7 @@ class SymbolTable
     /**
      * Returns a variable in the symbol table.
      */
-    public function getVariable(string $name, ?CompilationContext $compilationContext = null)
+    public function getVariable(string $name, ?CompilationContext $compilationContext = null): ?Variable
     {
         /* Check if the variable already is referencing a branch */
         $pos = strpos($name, Variable::BRANCH_MAGIC);
@@ -433,14 +433,14 @@ class SymbolTable
             $compilationContext = $compilationContext ?: $this->compilationContext;
             $branch             = $this->resolveVariableToBranch($name, $compilationContext);
             if (!$branch) {
-                return false;
+                return null;
             }
 
             $branchId = $branch->getUniqueId();
         }
 
         if (!isset($this->branchVariables[$branchId]) || !isset($this->branchVariables[$branchId][$name])) {
-            return false;
+            return null;
         }
 
         $variable = $this->branchVariables[$branchId][$name];
@@ -753,7 +753,7 @@ class SymbolTable
      */
     public function hasVariable(string $name, ?CompilationContext $compilationContext = null): bool
     {
-        return false !== $this->getVariable($name, $compilationContext ?: $this->compilationContext);
+        return null !== $this->getVariable($name, $compilationContext ?: $this->compilationContext);
     }
 
     public function hasVariableInBranch(

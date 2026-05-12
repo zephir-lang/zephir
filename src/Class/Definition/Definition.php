@@ -81,6 +81,12 @@ final class Definition extends AbstractDefinition
     protected ?AbstractDefinition $extendsClassDefinition = null;
 
     /**
+     * For closure classes: the enclosing class definition where the closure is defined.
+     * Used for compile-time method/property resolution when `this` is used inside a closure.
+     */
+    protected ?Definition $enclosingClassDefinition = null;
+
+    /**
      * When class is from external dependency
      */
     protected bool $external = false;
@@ -1269,6 +1275,22 @@ final class Definition extends AbstractDefinition
     public function setExtendsClassDefinition(AbstractDefinition $classDefinition): void
     {
         $this->extendsClassDefinition = $classDefinition;
+    }
+
+    /**
+     * Sets the enclosing class definition for closure classes.
+     */
+    public function setEnclosingClassDefinition(Definition $classDefinition): void
+    {
+        $this->enclosingClassDefinition = $classDefinition;
+    }
+
+    /**
+     * Returns the enclosing class definition for closure classes.
+     */
+    public function getEnclosingClassDefinition(): ?Definition
+    {
+        return $this->enclosingClassDefinition;
     }
 
     /**

@@ -87,6 +87,17 @@ class PropertyAccess
          */
         if ('this' == $variableVariable->getRealName()) {
             $classDefinition = $currentClassDefinition;
+
+            /**
+             * If this is a closure class with an enclosing class, resolve
+             * property access on `this` against the enclosing class definition.
+             * @see https://github.com/zephir-lang/zephir/issues/2497
+             */
+            $enclosingClassDefinition = $classDefinition->getEnclosingClassDefinition();
+            if ($enclosingClassDefinition !== null) {
+                $classDefinition = $enclosingClassDefinition;
+            }
+
             $this->checkClassHasProperty(
                 $classDefinition,
                 $property,

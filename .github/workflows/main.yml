@@ -10,14 +10,10 @@ on:
       - '**/nightly.yml'
       - '**/release.yml'
       - '**/FUNDING.yml'
-  pull_request:
-    branches:
-      - master
-      - development
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 1.6.1
+  ZEPHIR_PARSER_VERSION: 1.8.0
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -26,7 +22,7 @@ jobs:
     name: Static Code Analysis
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -44,12 +40,6 @@ jobs:
           phpcs --version
           phpcs --runtime-set ignore_warnings_on_exit true
 
-# Disabling for now until I figure out the rules
-#      - name: Run PHP CS Fixer
-#        if: always()
-#        run: |
-#          php-cs-fixer fix --diff --dry-run -v --using-cache=no
-
       - name: Run Shell Check
         if: always()
         run: shellcheck .ci/*.sh
@@ -61,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '8.0', '8.1', '8.2', '8.3', '8.4' ]
+        php: [ '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
         ts: [ 'ts', 'nts' ]
         arch: [ 'x64' ]
 
@@ -73,20 +63,20 @@ jobs:
         #     {php}-{ts}-{os.name}-{compiler}-{arch}
         include:
           # Linux
-          - { name: ubuntu-gcc, os: ubuntu-22.04, compiler: gcc }
+          - { name: ubuntu-gcc, os: ubuntu-24.04, compiler: gcc }
           # macOS
-          - { name: macos-clang, os: macos-13, compiler: clang }
+          - { name: macos-clang, os: macos-14, compiler: clang }
           # Windows
-          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          - { php: '8.0', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.0', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
+          - { php: '8.1', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '14.29' }
           # Disabled due PSR extension wasn't complied for >=8.2
-          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
-          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2019-vs16', os: 'windows-2019', compiler: 'vs16' }
+          #- { php: '8.2', ts: 'ts',  arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
+          #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 5
 
@@ -95,7 +85,7 @@ jobs:
         with:
           php-version: '${{ matrix.php }}'
           extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
-          tools: phpize, php-config
+          tools: pecl, phpize, php-config
           coverage: xdebug
           # variables_order: https://github.com/zephir-lang/zephir/pull/1537
           # enable_dl:       https://github.com/zephir-lang/zephir/pull/1654
@@ -124,7 +114,7 @@ jobs:
         uses: ./.github/workflows/build-linux-ext
         with:
           compiler: ${{ matrix.compiler }}
-          cflags: '-O2 -Wall -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
+          cflags: '-O2 -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
           ldflags: '--coverage'
 
       - name: Build Test Extension (macOS)
@@ -142,6 +132,7 @@ jobs:
           ts: ${{ matrix.ts }}
           msvc: ${{ matrix.compiler }}
           arch: ${{ matrix.arch }}
+          toolset: ${{ matrix.toolset }}
           cflags: '/D ZEPHIR_RELEASE /Oi /Ot /Oy /Ob2 /Gs /GF /Gy /GL'
           ldflags: '/LTCG'
         env:
@@ -171,7 +162,7 @@ jobs:
           XDEBUG_MODE: coverage
 
       - name: "Upload coverage file artifact"
-        uses: "actions/upload-artifact@v4"
+        uses: "actions/upload-artifact@v7"
         with:
           name: "unit-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}.coverage"
           path: "tests/output/clover.xml"
@@ -193,7 +184,7 @@ jobs:
       - "build-and-test"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 2
 
@@ -218,7 +209,7 @@ jobs:
           mkdir -p reports
 
       - name: "Download coverage files"
-        uses: "actions/download-artifact@v4"
+        uses: "actions/download-artifact@v8"
         with:
           path: "reports"
 
@@ -227,7 +218,7 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codecov"
-        uses: "codecov/codecov-action@v3"
+        uses: "codecov/codecov-action@v6"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: reports
@@ -237,7 +228,7 @@ jobs:
 
       - name: Upload build artifacts after Failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: debug-PHP-${{ matrix.php }}-${{ matrix.ts }}-${{ matrix.name }}-${{ matrix.arch }}
           path: |

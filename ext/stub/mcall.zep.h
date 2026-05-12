@@ -181,15 +181,15 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalrequerestring, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterstring, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, param, IS_STRING, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param, IS_STRING, 0, "'test string'")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterstringnull, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, param, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterint, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, param, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param, IS_LONG, 0, "2")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparametervar, 0, 0, 0)
@@ -197,19 +197,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparametervar, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterbooltrue, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, param, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterboolfalse, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, param, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, param, _IS_BOOL, 0, "false")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterboolean, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, start, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, start, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_optionalparameterbooleannull, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO(0, value, _IS_BOOL, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, value, _IS_BOOL, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_mcall_testarrayparamwithdefaultemptyarray, 0, 0, 0)

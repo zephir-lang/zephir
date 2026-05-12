@@ -16,6 +16,11 @@ PHP_METHOD(Stub_Closures, issue642);
 PHP_METHOD(Stub_Closures, issue1036SetArgument);
 PHP_METHOD(Stub_Closures, issue1036SetFunction);
 PHP_METHOD(Stub_Closures, issue1036Call);
+PHP_METHOD(Stub_Closures, issue2497Helper);
+PHP_METHOD(Stub_Closures, issue2497ClosureThis);
+PHP_METHOD(Stub_Closures, issue2497ClosureThisWithUse);
+PHP_METHOD(Stub_Closures, issue2497PropertyAccess);
+PHP_METHOD(Stub_Closures, issue2497SetName);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_simple1, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -59,6 +64,24 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_closures_issue1036call, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2497helper, 0, 0, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2497closurethis, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2497closurethiswithuse, 0, 1, Closure, 0)
+	ZEND_ARG_INFO(0, name)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2497propertyaccess, 0, 0, Closure, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2497setname, 0, 1, IS_VOID, 0)
+
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_closures_method_entry) {
 PHP_ME(Stub_Closures, simple1, arginfo_stub_closures_simple1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Closures, simple2, arginfo_stub_closures_simple2, ZEND_ACC_PUBLIC)
@@ -73,5 +96,10 @@ PHP_ME(Stub_Closures, issue642, arginfo_stub_closures_issue642, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue1036SetArgument, arginfo_stub_closures_issue1036setargument, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue1036SetFunction, arginfo_stub_closures_issue1036setfunction, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Closures, issue1036Call, arginfo_stub_closures_issue1036call, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2497Helper, arginfo_stub_closures_issue2497helper, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2497ClosureThis, arginfo_stub_closures_issue2497closurethis, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2497ClosureThisWithUse, arginfo_stub_closures_issue2497closurethiswithuse, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2497PropertyAccess, arginfo_stub_closures_issue2497propertyaccess, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2497SetName, arginfo_stub_closures_issue2497setname, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

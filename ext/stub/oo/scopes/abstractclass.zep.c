@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClass)
@@ -28,23 +26,20 @@ ZEPHIR_INIT_CLASS(Stub_Oo_Scopes_AbstractClass)
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, setProperty)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL, *value, value_sub;
-	zval name;
+	zval name_zv, *value, value_sub;
+	zend_string *name = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(name)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
-	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &name_param, &value);
-	zephir_get_strval(&name, name_param);
-	zephir_update_property_zval_zval(this_ptr, &name, value);
-	RETURN_THIS();
+	value = ZEND_CALL_ARG(execute_data, 2);
+	ZVAL_STR(&name_zv, name);
+	zephir_update_property_zval_zval(this_ptr, &name_zv, value);
+	RETURN_THISW();
 }
 
 PHP_METHOD(Stub_Oo_Scopes_AbstractClass, getPrivateProperty2)
