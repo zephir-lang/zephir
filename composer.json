@@ -30,7 +30,7 @@
         "ext-zlib": "*",
         "monolog/monolog": "^2.3",
         "phalcon/cli-options-parser": "^2.0",
-        "phpstan/phpdoc-parser": "^1.24"
+        "phpstan/phpdoc-parser": "^2.3"
     },
     "require-dev": {
         "ext-gmp": "*",
