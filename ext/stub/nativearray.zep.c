@@ -1803,7 +1803,7 @@ PHP_METHOD(Stub_NativeArray, issue709)
 			ZEPHIR_INIT_NVAR(&_3$$3);
 			ZVAL_LONG(&_3$$3, 2);
 			zephir_array_fast_append(&arr, &_3$$3);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 63, &arr);
+			ZEPHIR_CALL_FUNCTION(&_5$$3, "array_rand", &_6, 64, &arr);
 			zephir_check_call_status();
 			zephir_array_fetch(&_4$$3, &arr, &_5$$3, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 626);
 			ZEPHIR_CPY_WRT(&arr, &_4$$3);
@@ -1852,7 +1852,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_fetch(&_3, &_2, &prefix_zv, PH_NOISY | PH_READONLY, "stub/nativearray.zep", 639);
 	ZEPHIR_MAKE_REF(&_3);
-	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 64, &_3, &baseDir_zv);
+	ZEPHIR_CALL_FUNCTION(NULL, "array_push", NULL, 65, &_3, &baseDir_zv);
 	ZEPHIR_UNREF(&_3);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "prefixes");
@@ -1883,11 +1883,11 @@ zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_typ
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
-	
+
 
 		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
+
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Fixed missing default values in reflection metadata for method parameters with scalar types.
+- Fixed crash when passing a `char`/`uchar` literal or variable to a method parameter declared as `char`/`uchar` [#2469](https://github.com/zephir-lang/zephir/issues/2469)
 
 ## [0.19.0] - 2025-05-13
 ### Added

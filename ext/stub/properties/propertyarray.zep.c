@@ -128,12 +128,12 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		}
 		zephir_read_property(&_0$$3, this_ptr, ZEND_STRL("otherArray"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_MAKE_REF(&_0$$3);
-		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 77, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&info, "array_shift", &_1, 78, &_0$$3);
 		ZEPHIR_UNREF(&_0$$3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "header");
-		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 78, &info, &_2$$3);
+		ZEPHIR_CALL_FUNCTION(&_3$$3, "stripos", &_4, 79, &info, &_2$$3);
 		zephir_check_call_status();
 		if (!ZEPHIR_IS_FALSE_IDENTICAL(&_3$$3)) {
 			zephir_array_append(&headers, &info, PH_SEPARATE, "stub/properties/propertyarray.zep", 51);
@@ -141,7 +141,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 		} else {
 			zephir_read_property(&_5$$5, this_ptr, ZEND_STRL("otherArray"), PH_NOISY_CC | PH_READONLY);
 			ZEPHIR_MAKE_REF(&_5$$5);
-			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 79, &_5$$5, &info);
+			ZEPHIR_CALL_FUNCTION(NULL, "array_unshift", &_6, 80, &_5$$5, &info);
 			ZEPHIR_UNREF(&_5$$5);
 			zephir_check_call_status();
 			break;
@@ -162,11 +162,11 @@ zend_object *zephir_init_properties_Stub_Properties_PropertyArray(zend_class_ent
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_3$$4);
-	
+
 
 		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	
+
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);
