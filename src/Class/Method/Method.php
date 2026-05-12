@@ -435,6 +435,12 @@ class Method
                                 . Name::addSlashes($parameter['default']['value'])
                                 . '"), 0);'
                             );
+                            // Register the companion zval in the memory frame so that
+                            // ZEPHIR_MM_RESTORE() decrements the refcount of the freshly
+                            // allocated zend_string on return, balancing zend_string_init().
+                            $codePrinter->output(
+                                'zephir_memory_observe(&' . $parameter['name'] . '_zv);'
+                            );
                             $codePrinter->output(
                                 'ZVAL_STR(&' . $parameter['name'] . '_zv, '
                                 . $parameter['name'] . ');'
@@ -689,13 +695,20 @@ class Method
             );
             if ($inputParamVar->isNativeString()) {
                 // Populate the companion zval from the native zend_string *.
-                // Use ZVAL_STR_COPY (owning ref) when memory-grow is active —
-                // the memory manager will free the companion on return.
-                // Use ZVAL_STR (non-owning) otherwise — the engine string is
-                // alive for the function duration and no cleanup is needed.
-                $macro = $compilationContext->symbolTable->getMustGrownStack()
-                    ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
-                return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                // When memory-grow is active, take an owning reference via
+                // ZVAL_STR_COPY and register the companion in the memory frame
+                // so ZEPHIR_MM_RESTORE() decrements the refcount on return.
+                // Without the matching observe, the refcount incremented by
+                // ZVAL_STR_COPY would never be released (memory leak, #2500).
+                // When memory-grow is NOT active, the caller's zend_string is
+                // alive for the entire function duration, so a non-owning
+                // ZVAL_STR view is sufficient and needs no cleanup.
+                if ($compilationContext->symbolTable->getMustGrownStack()) {
+                    return "\t" . 'zephir_memory_observe(&' . $parameter['name'] . '_zv);' . PHP_EOL
+                        . "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                }
+
+                return "\t" . 'ZVAL_STR(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
             }
         }
 
@@ -756,13 +769,18 @@ class Method
         $dataType = $this->getParamDataType($parameter);
 
         // Z_PARAM_STR already validates string type for native string params,
-        // but we still need to populate the companion zval.
+        // but we still need to populate the companion zval. See assignZvalValue()
+        // for why memory-grow active requires observe + ZVAL_STR_COPY to avoid
+        // the refcount leak reported in #2500.
         if ($dataType === 'string') {
             $variable = $compilationContext->symbolTable->getVariable($parameter['name']);
             if ($variable->isNativeString()) {
-                $macro = $compilationContext->symbolTable->getMustGrownStack()
-                    ? 'ZVAL_STR_COPY' : 'ZVAL_STR';
-                return "\t" . $macro . '(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                if ($compilationContext->symbolTable->getMustGrownStack()) {
+                    return "\t" . 'zephir_memory_observe(&' . $parameter['name'] . '_zv);' . PHP_EOL
+                        . "\t" . 'ZVAL_STR_COPY(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
+                }
+
+                return "\t" . 'ZVAL_STR(&' . $parameter['name'] . '_zv, ' . $parameter['name'] . ');' . PHP_EOL;
             }
         }
 
