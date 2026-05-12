@@ -129,6 +129,7 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	params = ZEND_CALL_ARG(execute_data, 2);
+	zephir_memory_observe(&templatePath_zv);
 	ZVAL_STR_COPY(&templatePath_zv, templatePath);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CREATE_SYMBOL_TABLE();
@@ -195,6 +196,7 @@ PHP_METHOD(Stub_Requires, requireOnce)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&path_zv);
 	ZVAL_STR_COPY(&path_zv, path);
 	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_0);
 	if (zephir_require_once_zval_ret(&_0, &path_zv) == FAILURE) {

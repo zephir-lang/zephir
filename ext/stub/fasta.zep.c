@@ -69,6 +69,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	n = ZEND_CALL_ARG(execute_data, 1);
+	zephir_memory_observe(&seq_zv);
 	ZVAL_STR_COPY(&seq_zv, seq);
 	seqi = 0;
 	ZEPHIR_INIT_VAR(&len);

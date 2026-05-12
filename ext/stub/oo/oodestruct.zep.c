@@ -180,6 +180,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	if (ZEND_NUM_ARGS() > 2) {
 		height_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&file_zv);
 	ZVAL_STR_COPY(&file_zv, file);
 	if (!width_param) {
 		width = 0;

@@ -191,6 +191,7 @@ PHP_METHOD(Stub_Exceptions, testExceptionSprintf)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Hello, %s");
@@ -217,7 +218,9 @@ PHP_METHOD(Stub_Exceptions, testExceptionConcat)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&framework_zv);
 	ZVAL_STR_COPY(&framework_zv, framework);
+	zephir_memory_observe(&language_zv);
 	ZVAL_STR_COPY(&language_zv, language);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SVSV(&_0, "Framework ", &framework_zv, " written using ", &language_zv);

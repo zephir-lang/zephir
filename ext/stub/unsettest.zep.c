@@ -170,6 +170,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetTypedArray)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	arr_param = ZEND_CALL_ARG(execute_data, 1);
 	zephir_get_arrval(&arr, arr_param);
+	zephir_memory_observe(&key_zv);
 	ZVAL_STR_COPY(&key_zv, key);
 	zephir_array_unset(&arr, &key_zv, PH_SEPARATE);
 	RETURN_CTOR(&arr);

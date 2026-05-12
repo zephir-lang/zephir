@@ -38,9 +38,11 @@ PHP_METHOD(Stub_Args_Single_StrOptional, argStringDefault)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	if (!param) {
 		param = zend_string_init(ZEND_STRL("test string"), 0);
+		zephir_memory_observe(&param_zv);
 		ZVAL_STR(&param_zv, param);
 	} else {
-		ZVAL_STR_COPY(&param_zv, param);
+		zephir_memory_observe(&param_zv);
+	ZVAL_STR_COPY(&param_zv, param);
 	}
 	RETURN_MM_STR(zend_string_copy(param));
 }

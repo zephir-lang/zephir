@@ -141,6 +141,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	a = ZEND_CALL_ARG(execute_data, 1);
+	zephir_memory_observe(&b_zv);
 	ZVAL_STR_COPY(&b_zv, b);
 	zephir_memory_observe(&c);
 	RETURN_MM_BOOL(zephir_array_isset_fetch(&c, a, &b_zv, 0));
@@ -162,6 +163,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray6)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	a = ZEND_CALL_ARG(execute_data, 1);
 	ZEPHIR_SEPARATE_PARAM(a);
+	zephir_memory_observe(&b_zv);
 	ZVAL_STR_COPY(&b_zv, b);
 	ZEPHIR_OBS_NVAR(a);
 	RETURN_MM_BOOL(zephir_array_isset_fetch(a, a, &b_zv, 0));

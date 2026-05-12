@@ -272,9 +272,11 @@ PHP_METHOD(Stub_Oo_OoParams, setNameDefault)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	if (!name) {
 		name = zend_string_init(ZEND_STRL("peter"), 0);
+		zephir_memory_observe(&name_zv);
 		ZVAL_STR(&name_zv, name);
 	} else {
-		ZVAL_STR_COPY(&name_zv, name);
+		zephir_memory_observe(&name_zv);
+	ZVAL_STR_COPY(&name_zv, name);
 	}
 	RETURN_MM_STR(zend_string_copy(name));
 }
@@ -445,9 +447,11 @@ PHP_METHOD(Stub_Oo_OoParams, getDefaultParamValueStr)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	if (!str) {
 		str = zend_string_init(ZEND_STRL("default"), 0);
+		zephir_memory_observe(&str_zv);
 		ZVAL_STR(&str_zv, str);
 	} else {
-		ZVAL_STR_COPY(&str_zv, str);
+		zephir_memory_observe(&str_zv);
+	ZVAL_STR_COPY(&str_zv, str);
 	}
 	RETURN_MM_STR(zend_string_copy(str));
 }

@@ -60,6 +60,7 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&o);
 	ZVAL_STRING(&o, "");

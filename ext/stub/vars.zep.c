@@ -202,11 +202,13 @@ PHP_METHOD(Stub_Vars, test88Issue)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&param1_zv);
 	ZVAL_STR_COPY(&param1_zv, param1);
 	if (!param2) {
 		ZEPHIR_INIT_VAR(&param2_zv);
 	} else {
-		ZVAL_STR_COPY(&param2_zv, param2);
+		zephir_memory_observe(&param2_zv);
+	ZVAL_STR_COPY(&param2_zv, param2);
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &param1_zv);
@@ -239,12 +241,15 @@ PHP_METHOD(Stub_Vars, test88IssueParam2InitString)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&param1_zv);
 	ZVAL_STR_COPY(&param1_zv, param1);
 	if (!param2) {
 		param2 = zend_string_init(ZEND_STRL("test string"), 0);
+		zephir_memory_observe(&param2_zv);
 		ZVAL_STR(&param2_zv, param2);
 	} else {
-		ZVAL_STR_COPY(&param2_zv, param2);
+		zephir_memory_observe(&param2_zv);
+	ZVAL_STR_COPY(&param2_zv, param2);
 	}
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CPY_WRT(&_0, &param2_zv);

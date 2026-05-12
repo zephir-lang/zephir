@@ -154,6 +154,7 @@ PHP_METHOD(Stub_Types_MixedType, paramMixedWithMulti)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	intVal_param = ZEND_CALL_ARG(execute_data, 1);
 	mixedVal = ZEND_CALL_ARG(execute_data, 3);
+	zephir_memory_observe(&stringVal_zv);
 	ZVAL_STR_COPY(&stringVal_zv, stringVal);
 	zephir_create_array(return_value, 3, 0);
 	ZEPHIR_INIT_VAR(&_0);

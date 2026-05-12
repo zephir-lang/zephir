@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Stubs;
 
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\ParserException;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
@@ -63,10 +64,11 @@ final class PhpStanTagValidator
         }
 
         // phpstan/phpdoc-parser >=2.0 uses ParserConfig; <2.0 uses no-arg ctors.
+        // In 2.x, TypeParser requires a ConstExprParser as its second argument.
         if (class_exists(ParserConfig::class)) {
             $config           = new ParserConfig([]);
             $this->lexer      = $lexer ?? new Lexer($config);
-            $this->typeParser = $typeParser ?? new TypeParser($config);
+            $this->typeParser = $typeParser ?? new TypeParser($config, new ConstExprParser($config));
         } else {
             $this->lexer      = $lexer ?? new Lexer();
             $this->typeParser = $typeParser ?? new TypeParser();

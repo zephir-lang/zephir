@@ -237,7 +237,9 @@ PHP_METHOD(Stub_Pregmatch, testPregMatchSaveMatches)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
+	zephir_memory_observe(&pattern_zv);
 	ZVAL_STR_COPY(&pattern_zv, pattern);
 	ZEPHIR_INIT_VAR(&matches);
 	ZVAL_NULL(&matches);
