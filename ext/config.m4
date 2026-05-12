@@ -2,7 +2,7 @@ PHP_ARG_ENABLE(stub, whether to enable stub, [ --enable-stub   Enable Stub])
 
 if test "$PHP_STUB" = "yes"; then
 
-	
+
 
 	if ! test "x" = "x"; then
 		PHP_EVAL_LIBLINE(, STUB_SHARED_LIBADD)
@@ -107,6 +107,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
+	stub/issue2469.zep.c
 	stub/issue663.zep.c
 	stub/issue887.zep.c
 	stub/issue893.zep.c
