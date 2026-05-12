@@ -1883,11 +1883,11 @@ zend_object *zephir_init_properties_Stub_NativeArray(zend_class_entry *class_typ
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 		ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
-
+	
 
 		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
+	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);

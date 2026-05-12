@@ -162,11 +162,11 @@ zend_object *zephir_init_properties_Stub_Properties_PropertyArray(zend_class_ent
 	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_3$$4);
-
+	
 
 		ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 		zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-
+	
 	{
 		zval local_this_ptr, *this_ptr = &local_this_ptr;
 		ZEPHIR_CREATE_OBJECT(this_ptr, class_type);

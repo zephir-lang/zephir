@@ -629,7 +629,7 @@ PHP_METHOD(Stub_Router, handle)
 						ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&paths), _11$$28, _12$$28, _9$$28)
 						{
 							ZEPHIR_INIT_NVAR(&part);
-							if (_12$$28 != NULL) {
+							if (_12$$28 != NULL) { 
 								ZVAL_STR_COPY(&part, _12$$28);
 							} else {
 								ZVAL_LONG(&part, _11$$28);
@@ -793,7 +793,7 @@ PHP_METHOD(Stub_Router, handle)
 							ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&paths), _20$$62, _21$$62, _18$$62)
 							{
 								ZEPHIR_INIT_NVAR(&part);
-								if (_21$$62 != NULL) {
+								if (_21$$62 != NULL) { 
 									ZVAL_STR_COPY(&part, _21$$62);
 								} else {
 									ZVAL_LONG(&part, _20$$62);

@@ -79,7 +79,7 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	zephir_fetch_params(1, 1, 0, &path);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CREATE_SYMBOL_TABLE();
-
+	
 	ZEPHIR_INIT_VAR(&external3);
 	object_init_ex(&external3, stub_requires_external3_ce);
 	if (zephir_has_constructor(&external3)) {
@@ -133,14 +133,14 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_STR_COPY(&templatePath_zv, templatePath);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CREATE_SYMBOL_TABLE();
-
+	
 	if (Z_TYPE_P(params) == IS_ARRAY) {
 		zephir_is_iterable(params, 0, "stub/requires.zep", 47);
 		if (Z_TYPE_P(params) == IS_ARRAY) {
 			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(params), _3$$3, _4$$3, _1$$3)
 			{
 				ZEPHIR_INIT_NVAR(&key);
-				if (_4$$3 != NULL) {
+				if (_4$$3 != NULL) { 
 					ZVAL_STR_COPY(&key, _4$$3);
 				} else {
 					ZVAL_LONG(&key, _3$$3);

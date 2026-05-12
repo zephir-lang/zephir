@@ -56,23 +56,9 @@ if test "$PHP_%PROJECT_UPPER%" = "yes"; then
 
 	CPPFLAGS=$old_CPPFLAGS
 
-	AC_MSG_CHECKING([whether zend_parse_arg_array uses zval**])
-	old_CPPFLAGS=$CPPFLAGS
-	CPPFLAGS="$CPPFLAGS $INCLUDES"
-	AC_COMPILE_IFELSE(
-		[AC_LANG_PROGRAM(
-			[[#include "main/php.h"
-			  #include "Zend/zend_API.h"]],
-			[[zval *p = (void*)0;
-			  zend_parse_arg_array((void*)0, &p, 0, 0);]]
-		)],
-		[
-			AC_DEFINE([ZEPHIR_ARRAY_PARAM_DOUBLE_PTR], [1], [Whether zend_parse_arg_array accepts zval**])
-			AC_MSG_RESULT([yes])
-		],
-		[AC_MSG_RESULT([no])]
-	)
-	CPPFLAGS=$old_CPPFLAGS
+	dnl Detection of zend_parse_arg_array(zval **) was removed; the inline
+	dnl function has always taken zval** since PHP 7.0. ZEPHIR_Z_PARAM_ARRAY
+	dnl now unconditionally feeds the zval* companion. See kernel/main.h.
 
 	PHP_INSTALL_HEADERS([ext/%PROJECT_LOWER%], [%HEADERS_COMPILED%])
 
