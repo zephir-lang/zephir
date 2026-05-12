@@ -59,7 +59,7 @@ PHP_METHOD(Stub_Vars, testParam)
 		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
 		{
 			ZEPHIR_INIT_NVAR(&k);
-			if (_4 != NULL) {
+			if (_4 != NULL) { 
 				ZVAL_STR_COPY(&k, _4);
 			} else {
 				ZVAL_LONG(&k, _3);
