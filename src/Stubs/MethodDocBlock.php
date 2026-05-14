@@ -82,12 +82,42 @@ class MethodDocBlock extends DocBlock
 
     /**
      * Parse DocBlock and returns extracted groups.
+     *
+     * The `type` group is matched non-greedily and accepts any non-whitespace
+     * payload, then optionally followed by `$name`. This deliberately tolerates
+     * modern PHPDoc/PHPStan/Psalm type syntax — generics (`array<int|string,
+     * mixed>`), array shapes (`array{key: string}`), nullable / union /
+     * intersection (`?int`, `Foo|Bar`, `Foo&Bar`), callable signatures
+     * (`callable(int): bool`), and chained brackets (`Foo[]`) — without
+     * enumerating each shape in the regex. When `$name` is absent (e.g.
+     * `@return Foo`), the optional group is skipped and the entire trailing
+     * remainder is treated as the type.
      */
     protected function parseDocBlockParam(string $line): array
     {
+        // The `type` alternation extends the original word/union/array-bracket
+        // grammar with three more block forms commonly used by modern PHPDoc
+        // dialects:
+        //   - `<...>` for generic types  : `array<int|string, mixed>`
+        //   - `{...}` for array shapes   : `array{key: string, ...}`
+        //   - `(...)` for callable arglists / grouped unions
+        // Each block is non-nesting (one level only); annotations with nested
+        // generics like `array<array<int>>` are rare in zephir source and can
+        // still fall back to the catch-all description capture if not parsed.
         $pattern = '~
             @(?P<doctype>param|return|var)\s+
-            (?P<type>[\\\\\w]+(:?\s*\|\s*[\\\\\w]+|\s*\[]+)*)\s*
+            (?P<type>
+                \?? [\\\\\w]+
+                (?:
+                    \s*\|\s*\?? [\\\\\w]+
+                    | \s*&\s*\?? [\\\\\w]+
+                    | \s*\[]+
+                    | < [^<>]* >
+                    | \{ [^{}]* \}
+                    | \( [^()]* \)
+                    | :\s*[\\\\\w|]+
+                )*
+            )\s*
             (?P<dollar>\$)?
             (?P<name>[a-z_][a-z0-9_]*)?\s*
             (?P<description>(.|\s)*)?

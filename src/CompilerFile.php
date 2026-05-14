@@ -474,13 +474,18 @@ final class CompilerFile implements FileInterface
             $this->classDefinition->getDocBlock(),
             $validator,
             'class ' . $this->classDefinition->getCompleteName(),
+            null,
         );
 
         foreach ($this->classDefinition->getProperties() as $property) {
+            $original = $property->getOriginal();
+            $line     = is_array($original) && isset($original['line']) ? (int) $original['line'] : null;
+
             $this->validateDocblockForPhpStan(
                 $property->getDocBlock(),
                 $validator,
-                'property ' . $property->getName(),
+                'property $' . $property->getName(),
+                $line,
             );
         }
 
@@ -489,22 +494,31 @@ final class CompilerFile implements FileInterface
                 $constant->getDocBlock(),
                 $validator,
                 'constant ' . $constant->getName(),
+                null,
             );
         }
 
         foreach ($this->classDefinition->getMethods() as $method) {
+            $line = $method->getLine();
             $this->validateDocblockForPhpStan(
                 $method->getDocBlock(),
                 $validator,
-                'method ' . $method->getName(),
+                'method ' . $method->getName() . '()',
+                is_int($line) ? $line : null,
             );
         }
     }
 
+    /**
+     * Emits a logger warning for an invalid PHPStan annotation, including
+     * the originating .zep file path and (when available) the line number
+     * of the offending member so the developer can jump straight to it.
+     */
     private function validateDocblockForPhpStan(
         ?string $docBlock,
         \Zephir\Stubs\PhpStanTagValidator $validator,
         string $location,
+        ?int $line,
     ): void {
         if ($docBlock === null || trim($docBlock) === '') {
             return;
@@ -524,8 +538,14 @@ final class CompilerFile implements FileInterface
                 continue;
             }
 
+            $where = $this->filePath;
+            if ($line !== null) {
+                $where .= ':' . $line;
+            }
+
             $this->logger->warning(sprintf(
-                "%s: PHPStan annotation '@%s' has invalid type expression: %s",
+                "%s in %s: PHPStan annotation '@%s' has invalid type expression: %s",
+                $where,
                 $location,
                 $name,
                 $error->message,

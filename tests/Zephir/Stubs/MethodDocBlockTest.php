@@ -239,6 +239,45 @@ final class MethodDocBlockTest extends TestCase
                 // php
                 '@param Foo[] $name - some description',
             ],
+            'with PHPStan generic type' => [
+                // Zep
+                '@param array<int|string, mixed> $data',
+                // Php — verbatim round-trip; no duplicate @param appended
+                // because the regex now captures `<...>` blocks inside the
+                // type group so $data is properly registered as the param
+                // name.
+                '@param array<int|string, mixed> $data',
+            ],
+            'with PHPStan array shape' => [
+                // Zep
+                '@param array{key: string, value: int} $row',
+                // Php
+                '@param array{key: string, value: int} $row',
+            ],
+            'with nullable prefix' => [
+                // Zep
+                '@param ?int $count - optional count',
+                // Php
+                '@param ?int $count - optional count',
+            ],
+            'with intersection types' => [
+                // Zep
+                '@param Foo&Bar $thing',
+                // Php
+                '@param Foo&Bar $thing',
+            ],
+            'with callable signature' => [
+                // Zep
+                '@param callable(int, string): bool $cb',
+                // Php
+                '@param callable(int, string): bool $cb',
+            ],
+            'generic-only return without name' => [
+                // Zep
+                '@return array<int, string>',
+                // Php
+                '@return array<int, string>',
+            ],
         ];
     }
 
