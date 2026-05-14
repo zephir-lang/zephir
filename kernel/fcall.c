@@ -438,6 +438,7 @@ int zephir_call_user_function(
 
 	status = zend_call_function(&fci, &fcic);
 
+
 #ifdef _MSC_VER
 	efree(p);
 #endif

@@ -212,11 +212,20 @@ class Closures
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/2321
      *
-     * preg_replace_callback receives `[this, 'methodName']` as callback.
-     * The callback target is `private`, which is legal when called from
-     * within the same class. Zephir's fcall cache previously populated
-     * the wrong calling-scope on PHP 8.0+, surfacing as "cannot find
-     * method" / visibility error.
+     * Original reporter's symptom: `preg_replace_callback(..., [this, 'private'])`
+     * from inside the same class produced "cannot access private method".
+     *
+     * Root cause sits in the PHP engine: when an internal function
+     * (`preg_replace_callback`) validates a `callable` argument, it walks
+     * back through `prev_execute_data` to the nearest **user-code** frame
+     * to determine the visibility scope. Zephir-compiled methods register
+     * as `ZEND_INTERNAL_FUNCTION` so they are skipped, leaving the check
+     * with no scope and rejecting otherwise-valid private callbacks.
+     *
+     * Workaround: use a Zephir closure that calls the private method
+     * directly. Closures capture `this` (per #2497) and PHP doesn't
+     * re-validate visibility when the callable is already a Closure
+     * object.
      */
     public function issue2321CallPrivateCallback(string value) -> string
     {
@@ -227,7 +236,9 @@ class Closures
     {
         return preg_replace_callback(
             "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u",
-            [this, "issue2321doUrlEncode"],
+            function (array matches) {
+                return this->issue2321doUrlEncode(matches);
+            },
             value
         );
     }
@@ -235,5 +246,49 @@ class Closures
     private function issue2321doUrlEncode(array matches) -> string
     {
         return rawurlencode(matches[0]);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * Variant: protected callback. Same idiom — wrap the method call in
+     * a closure that captures `this`, then pass the closure as the
+     * callback. PHP doesn't re-validate visibility on Closure callbacks.
+     */
+    public function issue2321ProtectedCallback(string value) -> string
+    {
+        return preg_replace_callback(
+            "/[a-z]/",
+            function (array matches) {
+                return this->issue2321ProtectedUpper(matches);
+            },
+            value
+        );
+    }
+
+    protected function issue2321ProtectedUpper(array matches) -> string
+    {
+        return strtoupper(matches[0]);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * Variant: array-map over a private method through a Zephir closure.
+     * Covers a second common PHP-internal-callable consumer.
+     */
+    public function issue2321ArrayMapPrivate(array values) -> array
+    {
+        return array_map(
+            function (val) {
+                return this->issue2321Doubled(val);
+            },
+            values
+        );
+    }
+
+    private function issue2321Doubled(int val) -> int
+    {
+        return val * 2;
     }
 }
