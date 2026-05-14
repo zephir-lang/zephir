@@ -133,7 +133,7 @@ PHP_METHOD(Stub_Quantum, harmos)
 	ZVAL_STRING(&_0, "harmos.txt");
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "w");
-	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 33, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&fp, "fopen", NULL, 34, &_0, &_1);
 	zephir_check_call_status();
 	if (!(zephir_is_true(&fp))) {
 		RETURN_MM_LONG(1);

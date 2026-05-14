@@ -53,6 +53,32 @@ class MethodCall extends Call
     public const CALL_NORMAL = 1;
 
     /**
+     * Built-in array-method names that we dispatch via ArrayType even when the
+     * caller is statically a generic `variable` (i.e. `var`). These are names
+     * that effectively don't exist as real object methods in PHP land, so
+     * redispatching them as PHP function calls does the right thing without
+     * silently breaking any object dispatch a user might have relied on.
+     *
+     * Methods that overlap with common object APIs (count, push, pop, shift,
+     * sort, current, next, end, key, reset, each) are deliberately excluded
+     * to avoid changing semantics for objects implementing Iterator/Countable.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/733
+     */
+    private const ARRAY_BUILTIN_METHODS_ON_VAR = [
+        'join',
+        'reversed',
+        'rev',
+        'tojson',
+        'haskey',
+        'mergerecursive',
+        'replacerecursive',
+        'sortbykey',
+        'reversesort',
+        'reversesortbykey',
+    ];
+
+    /**
      * Compiles a method call.
      *
      * @throws Exception
@@ -77,6 +103,28 @@ class MethodCall extends Call
                 switch ($variableVariable->getType()) {
                     case 'variable':
                         $caller = $variableVariable;
+
+                        /**
+                         * Built-in array methods called on a `var` variable.
+                         *
+                         * When the caller is statically `variable` (e.g. a `var` parameter
+                         * or an array stored in a `var` slot) we previously emitted
+                         * ZEPHIR_CALL_METHOD(b, "join", ...) which fails at runtime with
+                         * "Trying to call method on non-object" the moment `b` actually
+                         * holds an array. Several Zephir-only built-in array method names
+                         * cannot meaningfully exist as real object methods, so for those
+                         * we dispatch via ArrayType (which lowers to PHP's matching
+                         * function call). If the runtime value isn't an array, PHP's
+                         * function will surface a proper TypeError instead of the
+                         * misleading "non-object" message.
+                         *
+                         * @see https://github.com/zephir-lang/zephir/issues/733
+                         */
+                        $methodName = strtolower($expression['name'] ?? '');
+                        if (in_array($methodName, self::ARRAY_BUILTIN_METHODS_ON_VAR, true)) {
+                            $builtInType = new \Zephir\Types\ArrayType();
+                            $caller      = $exprCompiledVariable;
+                        }
                         break;
                     default:
                         /* Check if there is a built-in type optimizer available */

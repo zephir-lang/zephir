@@ -353,7 +353,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getLowerFirst)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, 16, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "lcfirst", NULL, 17, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -397,7 +397,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getFormatted)
 	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "hello %s!");
-	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 17, &_0, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_1, "sprintf", NULL, 18, &_0, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -438,7 +438,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSha1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "sha1", NULL, 18, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "sha1", NULL, 19, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -459,7 +459,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getNl2br)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "nl2br", NULL, 19, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "nl2br", NULL, 20, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -480,7 +480,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getParsedCsv)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "str_getcsv", NULL, 20, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_getcsv", NULL, 21, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -537,7 +537,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getRepeatted)
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
 	ZVAL_LONG(&_0, count);
-	ZEPHIR_CALL_FUNCTION(&_1, "str_repeat", NULL, 21, &str_zv, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "str_repeat", NULL, 22, &str_zv, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -558,7 +558,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getShuffled)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "str_shuffle", NULL, 22, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_shuffle", NULL, 23, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -583,7 +583,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getSplited)
 	ZVAL_STR_COPY(&str_zv, str);
 	zephir_memory_observe(&del_zv);
 	ZVAL_STR_COPY(&del_zv, del);
-	ZEPHIR_CALL_FUNCTION(&_0, "str_split", NULL, 23, &str_zv, &del_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "str_split", NULL, 24, &str_zv, &del_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -608,7 +608,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompare)
 	ZVAL_STR_COPY(&left_zv, left);
 	zephir_memory_observe(&right_zv);
 	ZVAL_STR_COPY(&right_zv, right);
-	ZEPHIR_CALL_FUNCTION(&_0, "strcmp", NULL, 24, &left_zv, &right_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "strcmp", NULL, 25, &left_zv, &right_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -633,7 +633,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getCompareLocale)
 	ZVAL_STR_COPY(&left_zv, left);
 	zephir_memory_observe(&right_zv);
 	ZVAL_STR_COPY(&right_zv, right);
-	ZEPHIR_CALL_FUNCTION(&_0, "strcoll", NULL, 25, &left_zv, &right_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "strcoll", NULL, 26, &left_zv, &right_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -654,7 +654,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getReversed)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "strrev", NULL, 26, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "strrev", NULL, 27, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
@@ -675,7 +675,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, getHtmlSpecialChars)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&str_zv);
 	ZVAL_STR_COPY(&str_zv, str);
-	ZEPHIR_CALL_FUNCTION(&_0, "htmlspecialchars", NULL, 27, &str_zv);
+	ZEPHIR_CALL_FUNCTION(&_0, "htmlspecialchars", NULL, 28, &str_zv);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_0);
 }
