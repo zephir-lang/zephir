@@ -30,15 +30,13 @@ PHP_METHOD(Stub_Properties_StaticPrivateProperties, getInstance)
 	zval localInstance, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&localInstance);
 	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_OBS_VAR(&localInstance);
+	zephir_memory_observe(&localInstance);
 	zephir_read_static_property_ce(&localInstance, stub_properties_staticprivateproperties_ce, SL("instance"), PH_NOISY_CC);
 	if (UNEXPECTED(Z_TYPE_P(&localInstance) != IS_OBJECT)) {
 		ZEPHIR_INIT_NVAR(&localInstance);

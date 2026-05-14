@@ -25,9 +25,7 @@ ZEPHIR_INIT_CLASS(Stub_InternalInterfaces)
 
 PHP_METHOD(Stub_InternalInterfaces, count)
 {
-	zval *this_ptr = getThis();
 
-
-
+	RETURN_LONG(0);
 }
 

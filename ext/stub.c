@@ -54,6 +54,9 @@ zend_class_entry *stub_10__closure_ce;
 zend_class_entry *stub_11__closure_ce;
 zend_class_entry *stub_12__closure_ce;
 zend_class_entry *stub_13__closure_ce;
+zend_class_entry *stub_14__closure_ce;
+zend_class_entry *stub_15__closure_ce;
+zend_class_entry *stub_16__closure_ce;
 zend_class_entry *stub_1__closure_ce;
 zend_class_entry *stub_2__closure_ce;
 zend_class_entry *stub_3__closure_ce;
@@ -63,7 +66,11 @@ zend_class_entry *stub_6__closure_ce;
 zend_class_entry *stub_7__closure_ce;
 zend_class_entry *stub_8__closure_ce;
 zend_class_entry *stub_9__closure_ce;
+zend_class_entry *stub_args_single_integer_ce;
+zend_class_entry *stub_args_single_str_ce;
+zend_class_entry *stub_args_single_strmixed_ce;
 zend_class_entry *stub_arithmetic_ce;
+zend_class_entry *stub_arrayaccessarr_ce;
 zend_class_entry *stub_arrayaccessobj_ce;
 zend_class_entry *stub_arrayaccesstest_ce;
 zend_class_entry *stub_arrayiterator_ce;
@@ -119,6 +126,7 @@ zend_class_entry *stub_globals_serverrequestfactory_ce;
 zend_class_entry *stub_globals_session_child_ce;
 zend_class_entry *stub_instance_ce;
 zend_class_entry *stub_instanceoff_ce;
+zend_class_entry *stub_integration_psr_extendexternal_ce;
 zend_class_entry *stub_interfaces_implementint_ce;
 zend_class_entry *stub_interfaces_implementinterface_ce;
 zend_class_entry *stub_internalclasses_ce;
@@ -131,6 +139,7 @@ zend_class_entry *stub_issue1134_ce;
 zend_class_entry *stub_issue1404_ce;
 zend_class_entry *stub_issue1521_ce;
 zend_class_entry *stub_issue2165_issue_ce;
+zend_class_entry *stub_issue2469_ce;
 zend_class_entry *stub_issue663_ce;
 zend_class_entry *stub_issue887_ce;
 zend_class_entry *stub_issue893_ce;
@@ -145,6 +154,7 @@ zend_class_entry *stub_mcalldynamic_ce;
 zend_class_entry *stub_mcallinternal_ce;
 zend_class_entry *stub_methodabstract_ce;
 zend_class_entry *stub_methodargs_ce;
+zend_class_entry *stub_methodswithdefaultvalues_ce;
 zend_class_entry *stub_namespaces_a_b_sub_ce;
 zend_class_entry *stub_namespaces_classentry_ce;
 zend_class_entry *stub_nativearray_ce;
@@ -184,6 +194,7 @@ zend_class_entry *stub_oo_propertyaccess_ce;
 zend_class_entry *stub_oo_scopes_abstractclass_ce;
 zend_class_entry *stub_oo_scopes_abstractclassmagic_ce;
 zend_class_entry *stub_oo_scopes_privatescopetester_ce;
+zend_class_entry *stub_openssl_ce;
 zend_class_entry *stub_operator_ce;
 zend_class_entry *stub_optimizers_acos_ce;
 zend_class_entry *stub_optimizers_arraymerge_ce;
@@ -239,6 +250,9 @@ zend_class_entry *stub_trytest_ce;
 zend_class_entry *stub_typehinting_testabstract_ce;
 zend_class_entry *stub_typeinstances_ce;
 zend_class_entry *stub_typeoff_ce;
+zend_class_entry *stub_types_maybe_ce;
+zend_class_entry *stub_types_mixedtype_ce;
+zend_class_entry *stub_types_obj_ce;
 zend_class_entry *stub_unknownclass_ce;
 zend_class_entry *stub_unsettest_ce;
 zend_class_entry *stub_usetest_ce;
@@ -252,9 +266,11 @@ PHP_INI_BEGIN()
 	
 	
 	STD_PHP_INI_BOOLEAN("stub.orm.cache_enable", "1", PHP_INI_ALL, OnUpdateBool, orm.cache_enable, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.orm.cache_prefix", "prefix-string-", PHP_INI_ALL, NULL, orm.cache_prefix, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("extension.test_ini_variable", "1", PHP_INI_ALL, OnUpdateBool, extension.test_ini_variable, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("ini-entry.my_setting_1", "1", PHP_INI_ALL, OnUpdateBool, my_setting_1, zend_stub_globals, stub_globals)
 	STD_PHP_INI_BOOLEAN("stub.test_setting_1", "1", PHP_INI_ALL, OnUpdateBool, test_setting_1, zend_stub_globals, stub_globals)
+	STD_PHP_INI_ENTRY("stub.my_setting_5", "custom_value", PHP_INI_ALL, NULL, my_setting_5, zend_stub_globals, stub_globals)
 PHP_INI_END()
 
 static PHP_MINIT_FUNCTION(stub)
@@ -287,7 +303,11 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_OoDynamicA);
 	ZEPHIR_INIT(Stub_Oo_Scopes_HasPrivateMethod);
 	ZEPHIR_INIT(Stub_Properties_PublicProperties);
+	ZEPHIR_INIT(Stub_Args_Single_Integer);
+	ZEPHIR_INIT(Stub_Args_Single_Str);
+	ZEPHIR_INIT(Stub_Args_Single_StrMixed);
 	ZEPHIR_INIT(Stub_Arithmetic);
+	ZEPHIR_INIT(Stub_ArrayAccessArr);
 	ZEPHIR_INIT(Stub_ArrayAccessObj);
 	ZEPHIR_INIT(Stub_ArrayAccessTest);
 	ZEPHIR_INIT(Stub_ArrayIterator);
@@ -343,6 +363,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Globals_Session_Child);
 	ZEPHIR_INIT(Stub_Instance);
 	ZEPHIR_INIT(Stub_Instanceoff);
+	ZEPHIR_INIT(Stub_Integration_Psr_ExtendExternal);
 	ZEPHIR_INIT(Stub_Interfaces_ImplementInt);
 	ZEPHIR_INIT(Stub_Interfaces_ImplementInterface);
 	ZEPHIR_INIT(Stub_InternalClasses);
@@ -355,6 +376,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Issue1404);
 	ZEPHIR_INIT(Stub_Issue1521);
 	ZEPHIR_INIT(Stub_Issue2165_Issue);
+	ZEPHIR_INIT(Stub_Issue2469);
 	ZEPHIR_INIT(Stub_Issue663);
 	ZEPHIR_INIT(Stub_Issue887);
 	ZEPHIR_INIT(Stub_Issue893);
@@ -369,6 +391,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Mcall_Caller);
 	ZEPHIR_INIT(Stub_MethodAbstract);
 	ZEPHIR_INIT(Stub_MethodArgs);
+	ZEPHIR_INIT(Stub_MethodsWithDefaultValues);
 	ZEPHIR_INIT(Stub_Namespaces_A_B_Sub);
 	ZEPHIR_INIT(Stub_Namespaces_ClassEntry);
 	ZEPHIR_INIT(Stub_NativeArray);
@@ -408,6 +431,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClass);
 	ZEPHIR_INIT(Stub_Oo_Scopes_AbstractClassMagic);
 	ZEPHIR_INIT(Stub_Oo_Scopes_PrivateScopeTester);
+	ZEPHIR_INIT(Stub_Openssl);
 	ZEPHIR_INIT(Stub_Operator);
 	ZEPHIR_INIT(Stub_Optimizers_ACos);
 	ZEPHIR_INIT(Stub_Optimizers_ASin);
@@ -463,6 +487,9 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_TypeHinting_TestAbstract);
 	ZEPHIR_INIT(Stub_TypeInstances);
 	ZEPHIR_INIT(Stub_Typeoff);
+	ZEPHIR_INIT(Stub_Types_MayBe);
+	ZEPHIR_INIT(Stub_Types_MixedType);
+	ZEPHIR_INIT(Stub_Types_Obj);
 	ZEPHIR_INIT(Stub_UnknownClass);
 	ZEPHIR_INIT(Stub_Unsettest);
 	ZEPHIR_INIT(Stub_UseTest);
@@ -472,6 +499,9 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(stub_11__closure);
 	ZEPHIR_INIT(stub_12__closure);
 	ZEPHIR_INIT(stub_13__closure);
+	ZEPHIR_INIT(stub_14__closure);
+	ZEPHIR_INIT(stub_15__closure);
+	ZEPHIR_INIT(stub_16__closure);
 	ZEPHIR_INIT(stub_1__closure);
 	ZEPHIR_INIT(stub_2__closure);
 	ZEPHIR_INIT(stub_3__closure);
@@ -516,13 +546,14 @@ static void php_zephir_init_globals(zend_stub_globals *stub_globals)
 	stub_globals->db.my_setting_3 = 7.5;
 	stub_globals->orm.cache_level = 3;
 
+	stub_globals->orm.cache_prefix = ZSTR_VAL(zend_string_init(ZEND_STRL("prefix-string-"), 0));
 
 	stub_globals->my_setting_1 = 1;
 	stub_globals->test_setting_1 = 1;
 	stub_globals->my_setting_2 = 10;
 	stub_globals->my_setting_3 = 15.2;
 	stub_globals->my_setting_4 = 'A';
-
+	stub_globals->my_setting_5 = ZSTR_VAL(zend_string_init(ZEND_STRL("custom_value"), 0));
 	
 }
 
@@ -573,7 +604,7 @@ static PHP_MINFO_FUNCTION(stub)
 		php_info_print_table_start();
 	php_info_print_table_header(2, "Test Extension support", "Value");
 	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions&#039; compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Test variable", "Value");

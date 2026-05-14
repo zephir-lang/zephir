@@ -16,7 +16,7 @@ ZEPHIR_INIT_CLASS(Stub_Integration_Psr_Http_Message_MessageInterfaceEx)
 {
 	ZEPHIR_REGISTER_INTERFACE(Stub\\Integration\\Psr\\Http\\Message, MessageInterfaceEx, stub, integration_psr_http_message_messageinterfaceex, NULL);
 
-	zend_class_implements(stub_integration_psr_http_message_messageinterfaceex_ce, 1, zephir_get_internal_ce(SL("psr\\http\\message\\messageinterface")));
+	zend_class_implements(stub_integration_psr_http_message_messageinterfaceex_ce, 1, zephir_get_internal_ce(SL("psrext\\http\\message\\messageinterface")));
 	return SUCCESS;
 }
 

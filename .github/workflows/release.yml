@@ -1,4 +1,4 @@
-name: Upload Release Asset
+name: Upload Release Assets
 
 on:
   push:
@@ -6,22 +6,22 @@ on:
       - '*'
 
 jobs:
-  build:
-    runs-on: ubuntu-18.04
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    env:
+      BOX_VERSION: 4.2.0
 
     steps:
-      - name: Setup Environment Variables
-        run: echo "BOX_VERSION=3.10.0" >> $GITHUB_ENV
-
-      - name: Checkout Code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 5
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.2'
           extensions: intl, zip, zlib
           coverage: none
           ini-values: memory_limit=1G, phar.readonly=0
@@ -31,27 +31,20 @@ jobs:
         run: echo ::set-output name=dir::$(composer config cache-files-dir)
 
       - name: Setup Composer Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Setup GitHub Token
-        run: |
-          # To increase the GitHub rate limit we're use GitHub authentication
-          if [ ! -z '${{ secrets.COMPOSER_TOKEN }}' ]; then
-            composer config github-oauth.github.com ${{ secrets.COMPOSER_TOKEN }}
-          fi
-
       - name: Install Project Dependencies
-        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress --no-suggest
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
 
       - name: Install Box
         run: |
           wget \
-            "https://github.com/humbug/box/releases/download/${BOX_VERSION}/box.phar" \
+            "https://github.com/humbug/box/releases/download/${{ env.BOX_VERSION }}/box.phar" \
             --quiet \
             -O ./box
 
@@ -61,20 +54,28 @@ jobs:
       - name: Build Zephir PHAR
         run: .ci/build-phar.sh
 
-      - name: Geting Tag Name
+      - name: Upload Zephir Phar
+        uses: actions/upload-artifact@v7
+        with:
+          name: zephir.phar
+          path: zephir.phar
+
+      - name: Get the release version
         id: get-version
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        run: |
+          echo ::set-output name=version::${GITHUB_REF#refs/tags/}
+
+      - name: Prepare Release Notes
+        run: |
+          ./.ci/release-notes.sh ./CHANGELOG.md > ./release-notes.md
 
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          # This token is provided by GitHub Actions.
-          # You DO NOT need to create your own token.
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ steps.get-version.outputs.version }}
           tag: ${{ steps.get-version.outputs.version }}
-          body: 'All notable changes to this version has been documented in the CHANGELOG.md file.'
-          # This will update existing tags if any
+          bodyFile: "./release-notes.md"
           allowUpdates: true
           artifacts: zephir.phar
           artifactContentType: application/x-php

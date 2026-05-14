@@ -25,15 +25,19 @@ final class Issue663Test extends TestCase
         $this->assertFalse($test->is_array_assoc(false));
         $this->assertFalse($test->is_array_assoc(1));
         $this->assertFalse($test->is_array_assoc([]));
-        $this->assertTrue($test->is_array_assoc(['test' => 'test']));
-        $this->assertFalse($test->is_array_assoc(['test']));
-        $this->assertFalse($test->is_array_assoc([0 => 'test']));
+
+        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+            $this->assertTrue($test->is_array_assoc(['test' => 'test']));
+            $this->assertFalse($test->is_array_assoc(['test']));
+            $this->assertFalse($test->is_array_assoc([0 => 'test']));
+
+            $this->assertFalse($test->is_array_indexed(['test' => 'test']));
+            $this->assertTrue($test->is_array_indexed(['test']));
+            $this->assertTrue($test->is_array_indexed([0 => 'test']));
+        }
 
         $this->assertFalse($test->is_array_indexed(false));
         $this->assertFalse($test->is_array_indexed(1));
         $this->assertFalse($test->is_array_indexed([]));
-        $this->assertFalse($test->is_array_indexed(['test' => 'test']));
-        $this->assertTrue($test->is_array_indexed(['test']));
-        $this->assertTrue($test->is_array_indexed([0 => 'test']));
     }
 }

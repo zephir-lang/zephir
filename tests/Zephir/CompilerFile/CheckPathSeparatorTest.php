@@ -22,6 +22,6 @@ final class CheckPathSeparatorTest extends TestCase
         $configM4Path = realpath(__DIR__.'/../../../ext/config.m4');
         $configM4Contents = file_get_contents($configM4Path);
 
-        $this->assertTrue(strpos($configM4Contents, 'stub/oo/abstractstatic.zep.c') !== false);
+        $this->assertTrue(str_contains($configM4Contents, 'stub/oo/abstractstatic.zep.c'));
     }
 }

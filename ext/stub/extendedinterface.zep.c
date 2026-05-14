@@ -16,7 +16,7 @@ ZEPHIR_INIT_CLASS(Stub_ExtendedInterface)
 {
 	ZEPHIR_REGISTER_INTERFACE(Stub, ExtendedInterface, stub, extendedinterface, NULL);
 
-	zend_class_implements(stub_extendedinterface_ce, 1, zephir_get_internal_ce(SL("iteratoraggregate")));
+	zend_class_implements(stub_extendedinterface_ce, 1, zend_ce_aggregate);
 	zend_class_implements(stub_extendedinterface_ce, 1, zend_ce_countable);
 	return SUCCESS;
 }

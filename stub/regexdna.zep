@@ -4,7 +4,7 @@ namespace Stub;
 /**
  * RegexDNA
  *
- * @see http://www.haskell.org/haskellwiki/Shootout/Regex_DNA
+ * @see https://www.haskell.org/haskellwiki/Shootout/Regex_DNA
  */
 class RegexDNA
 {

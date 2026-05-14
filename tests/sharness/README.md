@@ -21,9 +21,9 @@ Here's an example of parallel testing powered by a recent version of [prove][:3:
 ```shell
 $ prove --jobs 15 ./t[0-9]*.sh
 
-./t0003-init-errors.sh .. ok                                            
-./t0002-generate.sh ..... ok                                            
-./t0001-compile.sh ...... ok   
+./t0003-init-errors.sh .. ok
+./t0002-generate.sh ..... ok
+./t0001-compile.sh ...... ok
 All tests successful.
 Files=3, Tests=6, 30 wallclock secs ( 0.04 usr  0.01 sys + 33.47 cusr  9.56 csys = 43.08 CPU)
 Result: PASS
@@ -55,5 +55,5 @@ $ ./t0001-compile.sh -v -i
 ```
 
 [:1:]: https://github.com/mlafeldt/sharness/
-[:2:]: http://testanything.org
+[:2:]: https://testanything.org
 [:3:]: https://linux.die.net/man/1/prove

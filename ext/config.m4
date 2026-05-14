@@ -30,7 +30,11 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/scopetesterinterface.zep.c
 	stub/ooimpl/zbeginning.zep.c
 	stub/properties/publicproperties.zep.c
+	stub/args/single/integer.zep.c
+	stub/args/single/str.zep.c
+	stub/args/single/strmixed.zep.c
 	stub/arithmetic.zep.c
+	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c
@@ -88,6 +92,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/globals/session/child.zep.c
 	stub/instance.zep.c
 	stub/instanceoff.zep.c
+	stub/integration/psr/extendexternal.zep.c
 	stub/integration/psr/http/message/messageinterfaceex.zep.c
 	stub/interfaces/implementint.zep.c
 	stub/interfaces/implementinterface.zep.c
@@ -102,6 +107,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
+	stub/issue2469.zep.c
 	stub/issue663.zep.c
 	stub/issue887.zep.c
 	stub/issue893.zep.c
@@ -116,6 +122,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/mcallinternal.zep.c
 	stub/methodabstract.zep.c
 	stub/methodargs.zep.c
+	stub/methodswithdefaultvalues.zep.c
 	stub/namespaces/a/b/sub.zep.c
 	stub/namespaces/classentry.zep.c
 	stub/nativearray.zep.c
@@ -156,6 +163,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/abstractclassmagic.zep.c
 	stub/oo/scopes/privatescopetester.zep.c
 	stub/ooimpl/abeginning.zep.c
+	stub/openssl.zep.c
 	stub/operator.zep.c
 	stub/optimizers/isscalar.zep.c
 	stub/optimizers/acos.zep.c
@@ -211,6 +219,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/typehinting/testabstract.zep.c
 	stub/typeinstances.zep.c
 	stub/typeoff.zep.c
+	stub/types/maybe.zep.c
+	stub/types/mixedtype.zep.c
+	stub/types/obj.zep.c
 	stub/unknownclass.zep.c
 	stub/unsettest.zep.c
 	stub/usetest.zep.c
@@ -228,10 +239,13 @@ if test "$PHP_STUB" = "yes"; then
 	stub/10__closure.zep.c
 	stub/11__closure.zep.c
 	stub/12__closure.zep.c
-	stub/13__closure.zep.c "
+	stub/13__closure.zep.c
+	stub/14__closure.zep.c
+	stub/15__closure.zep.c
+	stub/16__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
-	for dir in "stub stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting"; do
+	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do
 		PHP_ADD_BUILD_DIR([$ext_builddir/$dir])
 	done
 	PHP_SUBST(STUB_SHARED_LIBADD)
@@ -274,6 +288,10 @@ if test "$PHP_STUB" = "yes"; then
 	)
 
 	CPPFLAGS=$old_CPPFLAGS
+
+	dnl Detection of zend_parse_arg_array(zval **) was removed; the inline
+	dnl function has always taken zval** since PHP 7.0. ZEPHIR_Z_PARAM_ARRAY
+	dnl now unconditionally feeds the zval* companion. See kernel/main.h.
 
 	PHP_INSTALL_HEADERS([ext/stub], [php_STUB.h])
 

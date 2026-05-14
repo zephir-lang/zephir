@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Extension\Namespaces;
 
 use PHPUnit\Framework\TestCase;
-use Stub\Namespaces\ClassEntry;
 use Stub\Namespaces\A\B\Sub;
+use Stub\Namespaces\ClassEntry;
 
 final class ClassEntryTest extends TestCase
 {

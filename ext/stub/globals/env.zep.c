@@ -14,7 +14,6 @@
 #include "kernel/main.h"
 #include "kernel/memory.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
 #include "kernel/object.h"
 
 
@@ -28,31 +27,26 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Env)
 PHP_METHOD(Stub_Globals_Env, read)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL, _ENV, _0;
-	zval name;
-	zval *this_ptr = getThis();
+	zval name_zv, _ENV, _0;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&_ENV);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_ENV, SL("_ENV"));
-	zephir_fetch_params(1, 1, 0, &name_param);
-	zephir_get_strval(&name, name_param);
-
-
+	zephir_memory_observe(&name_zv);
+	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
-	if (zephir_array_isset(&_ENV, &name)) {
-		zephir_array_fetch(&_0, &_ENV, &name, PH_NOISY, "stub/globals/env.zep", 8);
+	if (zephir_array_isset(&_ENV, &name_zv)) {
+		ZEPHIR_OBS_NVAR(&_0);
+		zephir_array_fetch(&_0, &_ENV, &name_zv, PH_NOISY, "stub/globals/env.zep", 8);
 	} else {
+		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_BOOL(&_0, 0);
 	}
 	RETURN_CCTOR(&_0);

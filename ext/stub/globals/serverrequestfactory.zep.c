@@ -58,20 +58,17 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 5)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ARRAY_OR_NULL(server)
-		Z_PARAM_ARRAY_OR_NULL(get)
-		Z_PARAM_ARRAY_OR_NULL(post)
-		Z_PARAM_ARRAY_OR_NULL(cookies)
-		Z_PARAM_ARRAY_OR_NULL(files)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(server, server_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(get, get_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(post, post_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(cookies, cookies_param)
+		ZEPHIR_Z_PARAM_ARRAY_OR_NULL(files, files_param)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_get_global(&_SERVER, SL("_SERVER"));
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_get_global(&_GET, SL("_GET"));
@@ -103,8 +100,6 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, load)
 	} else {
 		zephir_get_arrval(&files, files_param);
 	}
-
-
 	ZEPHIR_INIT_VAR(&globalCookies);
 	array_init(&globalCookies);
 	ZEPHIR_INIT_VAR(&globalFiles);
@@ -163,24 +158,17 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval super;
 	zval *source, source_sub, *super_param = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&source_sub);
 	ZVAL_UNDEF(&super);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(source)
-		Z_PARAM_ARRAY(super)
+		ZEPHIR_Z_PARAM_ARRAY(super, super_param)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &source, &super_param);
 	zephir_get_arrval(&super, super_param);
-
-
 	if (UNEXPECTED(Z_TYPE_P(source) == IS_NULL)) {
 		RETURN_CTOR(&super);
 	}

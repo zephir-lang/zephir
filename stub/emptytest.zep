@@ -6,7 +6,7 @@
 namespace Stub;
 
 /**
- * @link http://ru2.php.net/empty
+ * @link https://ru2.php.net/empty
  */
 class EmptyTest
 {

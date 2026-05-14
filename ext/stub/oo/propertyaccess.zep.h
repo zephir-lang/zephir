@@ -18,16 +18,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_oo_propertyaccess_getprivatevariable, 0, 0, 
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_propertyaccess_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_PropertyAccess, __construct, arginfo_stub_oo_propertyaccess___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#else
-	PHP_ME(Stub_Oo_PropertyAccess, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#endif
+PHP_ME(Stub_Oo_PropertyAccess, __construct, arginfo_stub_oo_propertyaccess___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_Oo_PropertyAccess, setPrivatevariable, arginfo_stub_oo_propertyaccess_setprivatevariable, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_PropertyAccess, getPrivatevariable, arginfo_stub_oo_propertyaccess_getprivatevariable, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Oo_PropertyAccess, getPrivatevariable, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Oo_PropertyAccess, getPrivatevariable, arginfo_stub_oo_propertyaccess_getprivatevariable, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

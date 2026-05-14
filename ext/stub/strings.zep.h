@@ -38,6 +38,11 @@ PHP_METHOD(Stub_Strings, issue2186SegFault);
 PHP_METHOD(Stub_Strings, issue2186SegFaultCall);
 PHP_METHOD(Stub_Strings, issue2186Child1);
 PHP_METHOD(Stub_Strings, issue2186Child2);
+PHP_METHOD(Stub_Strings, issue2234Strict);
+PHP_METHOD(Stub_Strings, issue2234StrictParent);
+PHP_METHOD(Stub_Strings, issue2234StrictChild);
+PHP_METHOD(Stub_Strings, nullableStringReturnType);
+PHP_METHOD(Stub_Strings, issue2299NullableStringCondition);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_camelize, 0, 0, 1)
 	ZEND_ARG_TYPE_INFO(0, str, IS_STRING, 0)
@@ -169,23 +174,43 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue1267, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186, 0, 0, _IS_BOOL, 0)
-	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186segfault, 0, 0, _IS_BOOL, 0)
-	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186segfaultcall, 0, 0, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186child1, 0, 0, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2186child2, 0, 0, IS_STRING, 0)
-	ZEND_ARG_TYPE_INFO(0, val, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2234strict, 0, 0, _IS_BOOL, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue2234strictparent, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_strings_issue2234strictchild, 0, 0, 0)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_nullablestringreturntype, 0, 0, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, val, IS_STRING, 1, "null")
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_strings_issue2299nullablestringcondition, 0, 0, IS_STRING, 1)
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, roleName, IS_STRING, 1, "null")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
@@ -211,36 +236,12 @@ ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, testStripslashes, arginfo_stub_strings_teststripslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testStripcslashes, arginfo_stub_strings_teststripcslashes, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, testHashEquals, arginfo_stub_strings_testhashequals, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testHardcodedMultilineString, arginfo_stub_strings_testhardcodedmultilinestring, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testHardcodedMultilineString, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testEchoMultilineString, arginfo_stub_strings_testechomultilinestring, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testEchoMultilineString, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testTrimMultilineString, arginfo_stub_strings_testtrimmultilinestring, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testTrimMultilineString, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testWellEscapedMultilineString, arginfo_stub_strings_testwellescapedmultilinestring, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testWellEscapedMultilineString, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testInternedString1, arginfo_stub_strings_testinternedstring1, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testInternedString1, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Strings, testInternedString2, arginfo_stub_strings_testinternedstring2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Strings, testInternedString2, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Strings, testHardcodedMultilineString, arginfo_stub_strings_testhardcodedmultilinestring, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Strings, testEchoMultilineString, arginfo_stub_strings_testechomultilinestring, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Strings, testTrimMultilineString, arginfo_stub_strings_testtrimmultilinestring, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Strings, testWellEscapedMultilineString, arginfo_stub_strings_testwellescapedmultilinestring, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Strings, testInternedString1, arginfo_stub_strings_testinternedstring1, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Strings, testInternedString2, arginfo_stub_strings_testinternedstring2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, strToHex, arginfo_stub_strings_strtohex, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue1267, arginfo_stub_strings_issue1267, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue2186, arginfo_stub_strings_issue2186, ZEND_ACC_PUBLIC)
@@ -248,5 +249,10 @@ ZEPHIR_INIT_FUNCS(stub_strings_method_entry) {
 	PHP_ME(Stub_Strings, issue2186SegFaultCall, arginfo_stub_strings_issue2186segfaultcall, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Strings, issue2186Child1, arginfo_stub_strings_issue2186child1, ZEND_ACC_PROTECTED)
 	PHP_ME(Stub_Strings, issue2186Child2, arginfo_stub_strings_issue2186child2, ZEND_ACC_PROTECTED)
+	PHP_ME(Stub_Strings, issue2234Strict, arginfo_stub_strings_issue2234strict, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, issue2234StrictParent, arginfo_stub_strings_issue2234strictparent, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, issue2234StrictChild, arginfo_stub_strings_issue2234strictchild, ZEND_ACC_PROTECTED)
+	PHP_ME(Stub_Strings, nullableStringReturnType, arginfo_stub_strings_nullablestringreturntype, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Strings, issue2299NullableStringCondition, arginfo_stub_strings_issue2299nullablestringcondition, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -27,9 +27,6 @@ ZEPHIR_INIT_CLASS(Stub_Oo_OoConstruct)
 
 PHP_METHOD(Stub_Oo_OoConstruct, __construct)
 {
-	zval *this_ptr = getThis();
-
-
 
 }
 

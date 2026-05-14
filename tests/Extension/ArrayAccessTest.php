@@ -21,9 +21,9 @@ final class ArrayAccessTest extends TestCase
         'key_a' => 'marcin',
         'key_b' => 'paula',
         3 => 'long value',
-        //3.14 => 'double value', // Not supported yet
-        //false => 'bool value', // Not supported yet
-        //null => 'null value', // Not supported yet
+        // 3.14 => 'double value', // Not supported yet
+        // false => 'bool value', // Not supported yet
+        // null => 'null value', // Not supported yet
     ];
 
     public function testTest(): void
@@ -32,6 +32,22 @@ final class ArrayAccessTest extends TestCase
 
         $this->assertTrue($class->exits('one'));
         $this->assertSame(2, $class->get());
+    }
+
+    public function testUnsetByKeyFromArray(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame([], $class->unsetByKeyFromArray('not-exist', []));
+    }
+
+    public function testUnsetByKeyFromProperty(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame([], $class->unsetByKeyFromProperty('ok', ['ok' => true]));
+        $this->assertSame(['another' => 'value'], $class->unsetByKeyFromProperty('ok', ['ok' => true, 'another' => 'value']));
+        $this->assertSame([], $class->unsetByKeyFromProperty('not-exist', []));
     }
 
     /**
@@ -76,6 +92,10 @@ final class ArrayAccessTest extends TestCase
      */
     public function testIssue1086StaticallyCalledFunctionWithArrayAsArgMustReturnArray(): void
     {
+        if (version_compare(PHP_VERSION, '8.2.0', '>=')) {
+            $this->markTestSkipped('Deprecated Callable Patterns');
+        }
+
         $class = new \Stub\ArrayAccessTest();
 
         $actual = $class->issue1086WontNullArrayAfterPassViaStaticWithStrictParams();

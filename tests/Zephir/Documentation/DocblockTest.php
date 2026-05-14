@@ -75,16 +75,16 @@ final class DocblockTest extends TestCase
     public function testShouldGenerateDocblock(): void
     {
         $expected = <<<DOC
-**
- * Example summary block.
- *
- *
- * Example description block.
- *
- * @see https://github.com/zephir-lang/zephir Zephir homepage
- * @return void
- *
-DOC;
+            **
+             * Example summary block.
+             *
+             *
+             * Example description block.
+             *
+             * @see https://github.com/zephir-lang/zephir Zephir homepage
+             * @return void
+             *
+            DOC;
         $this->docblock->setDescription('Example description block.');
         $this->docblock->setSummary('Example summary block.');
         $this->docblock->setAnnotations([

@@ -23,7 +23,9 @@ final class InterfaceMethodSignatureTest extends TestCase
     {
         $class = new ImplementInt();
 
-        $this->assertNull($class->get());
+        // ImplementInt::val now defaults to 0 instead of null so that
+        // `get(): int` doesn't violate its own return type (#1991).
+        $this->assertSame(0, $class->get());
         $class->set(1);
         $this->assertSame(1, $class->get());
         $this->assertSame(1, (new ImplementInterface())->get($class));
@@ -32,7 +34,7 @@ final class InterfaceMethodSignatureTest extends TestCase
     public function testImplementInterfaceInMethodSignatureInt(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessageMatches('/must be of (the\s)?type int, bool given/');
+        $this->expectExceptionMessageMatches('/must be of type int, (true|bool) given/');
 
         (new ImplementInt())->set(true);
     }
@@ -41,7 +43,7 @@ final class InterfaceMethodSignatureTest extends TestCase
     {
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessageMatches(
-            '/(must be of type|implement interface) Stub\\\\Interfaces\\\\InterfaceInt, bool given/'
+            '/(must be of type) Stub\\\\Interfaces\\\\InterfaceInt, (true|bool) given/'
         );
 
         (new ImplementInterface())->getVoid(true);

@@ -1,3 +1,4 @@
+
 namespace Stub;
 
 class Strings
@@ -165,7 +166,7 @@ class Strings
 	{
 		var x;
 		let value = str_replace(["\\", "\"", "'"], "", value);
-		let value = filter_var(value, FILTER_SANITIZE_STRING);
+		let value = filter_var(value, FILTER_UNSAFE_RAW);
 		let x = trim(stripslashes(strip_tags(value)));
 		return trim(stripcslashes(strip_tags(value)));
 	}
@@ -203,5 +204,53 @@ class Strings
         }
 
         return output;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    public function issue2234Strict(string! val = null) -> bool
+    {
+        return val === null;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    public function issue2234StrictParent(string! val = null)
+    {
+        return this->issue2234StrictChild(val);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2234
+     */
+    protected function issue2234StrictChild(string! val = null)
+    {
+        return val;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1932
+     */
+    public function nullableStringReturnType(string! val = null) -> string | null
+    {
+        if (val !== null) {
+            return val;
+        }
+
+        return null;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2299
+     */
+    public function issue2299NullableStringCondition(string roleName = null) -> string | null
+    {
+        if null !== roleName {
+            return roleName;
+        }
+
+        return null;
     }
 }

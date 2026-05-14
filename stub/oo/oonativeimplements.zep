@@ -10,7 +10,8 @@ class OoNativeImplements implements
 							\Iterator,
 							\OuterIterator,
 							\RecursiveIterator,
-							\SeekableIterator
+							\SeekableIterator,
+							\Serializable
 							// \IteratorAggregate
 {
 
@@ -22,19 +23,19 @@ class OoNativeImplements implements
 
 	/* Iterator */
 
-	public function current()
+	public function current() -> mixed
 	{
 	}
 
-	public function key()
+	public function key() -> mixed
 	{
 	}
 
-	public function next()
+	public function next() -> void
 	{
 	}
 
-	public function rewind()
+	public function rewind() -> void
 	{
 	}
 
@@ -44,7 +45,7 @@ class OoNativeImplements implements
 
 	/* OuterIterator */
 
-	public function getInnerIterator()
+	public function getInnerIterator() -> <\Iterator>|null
 	{
 	}
 
@@ -59,7 +60,7 @@ class OoNativeImplements implements
 
 	/* SeekableIterator */
 
-	public function seek (position)
+	public function seek(int position) -> void
 	{
 	}
 
@@ -90,7 +91,16 @@ class OoNativeImplements implements
 	{
 	}
 
-	public function unserialize(string serialized)
+	public function unserialize(string serialized) -> void
+	{
+	}
+
+	public function __serialize() -> array
+	{
+	    return [];
+	}
+
+	public function __unserialize(array data) -> void
 	{
 	}
 }

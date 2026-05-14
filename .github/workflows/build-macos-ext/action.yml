@@ -1,0 +1,81 @@
+name: 'Zephir Stub PHP Extension Build'
+description: 'Build Stub extension for macOS according to various php versions.'
+
+inputs:
+  compiler:
+    description: 'compiler name'
+    required: false
+    default: 'clang'
+
+  cflags:
+    description: 'CFLAGS for GCC compiler'
+    required: false
+    default: ''
+
+  ldflags:
+    description: 'LDFLAGS for Linker'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Prerequisites
+      shell: bash
+      env:
+        HOMEBREW_NO_INSTALL_CLEANUP: 1
+      run: |
+        echo "::group::Install dependencies"
+        brew install re2c
+        echo "::endgroup::"
+
+    - name: Compile Stub Extension
+      shell: bash
+      env:
+        CC: ${{ inputs.compiler }}
+        CFLAGS: ${{ inputs.cflags }}
+        CXXFLAGS: ${{ inputs.cflags }}
+        LDFLAGS: ${{ inputs.ldflags }}
+      run: |
+        echo "::group::Init stage"
+        php zephir fullclean
+        echo "::endgroup::"
+
+        echo "::group::Generate stage"
+        php zephir generate
+        echo "::endgroup::"
+
+        echo "::group::Compile stage"
+        # TODO: Remove this after MacOS-15
+        # Ensure Homebrew include/lib directories (e.g. /opt/homebrew/include) are visible to the compiler/linker.
+        # macOS default clang search paths do NOT include /opt/homebrew on Apple Silicon.
+        BREW_PREFIX="$(brew --prefix)"
+        export CPPFLAGS="-I${BREW_PREFIX}/include ${CPPFLAGS}" || true
+        export CFLAGS="${CFLAGS} -I${BREW_PREFIX}/include"
+        export CXXFLAGS="${CXXFLAGS} -I${BREW_PREFIX}/include"
+        export LDFLAGS="${LDFLAGS} -L${BREW_PREFIX}/lib"
+        # Also help pkg-config aware scripts find pcre2
+        export PKG_CONFIG_PATH="${BREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+        echo "Compiler: ${CC}"
+        echo "CFLAGS: ${CFLAGS}"
+        echo "LDFLAGS: ${LDFLAGS}"
+        echo "Using Homebrew prefix: ${BREW_PREFIX}"
+
+        cd ./ext
+        phpize
+        ./configure --enable-stub
+        make -j$(getconf _NPROCESSORS_ONLN)
+        echo "::endgroup::"
+
+    - name: Enable Stub Extension
+      shell: bash
+      run: |
+        cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
+        if [ "${{ matrix.ts }}" = "ts" ]; then
+          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
+          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d/99-stub.ini
+        else
+          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
+          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        fi
