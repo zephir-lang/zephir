@@ -29,13 +29,11 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHex)
 {
 	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_VAR(&_1);
@@ -49,32 +47,25 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 	long _0;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *str_param = NULL, o, _1$$3, _2$$3, _3$$3;
-	zval str;
-	zval *this_ptr = getThis();
+	zval str_zv, o, _1$$3, _2$$3, _3$$3;
+	zend_string *str = NULL;
 
-	ZVAL_UNDEF(&str);
+	ZVAL_UNDEF(&str_zv);
 	ZVAL_UNDEF(&o);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(str)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &str_param);
-	zephir_get_strval(&str, str_param);
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&str_zv);
+	ZVAL_STR_COPY(&str_zv, str);
 	ZEPHIR_INIT_VAR(&o);
 	ZVAL_STRING(&o, "");
-	for (_0 = 0; _0 < Z_STRLEN_P(&str); _0++) {
-		ch = ZEPHIR_STRING_OFFSET(&str, _0);
+	for (_0 = 0; _0 < Z_STRLEN_P(&str_zv); _0++) {
+		ch = ZEPHIR_STRING_OFFSET(&str_zv, _0);
 		ZEPHIR_INIT_NVAR(&_2$$3);
 		ZEPHIR_INIT_NVAR(&_3$$3);
 		ZVAL_STRINGL(&_3$$3, &ch, 1);

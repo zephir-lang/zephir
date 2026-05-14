@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 use Stub\Issue1134;
 
 /**
@@ -24,11 +22,11 @@ use Stub\Issue1134;
 final class Issue1134Test extends TestCase
 {
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function testIssue914ReflectionParamDefaultValueShouldReturnTrue(): void
     {
-        $ref = new ReflectionClass(Issue1134::class);
+        $ref = new \ReflectionClass(Issue1134::class);
         $constructor = $ref->getConstructor();
         $params = $constructor->getParameters();
 

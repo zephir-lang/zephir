@@ -35,9 +35,8 @@ PHP_METHOD(Stub_ArrayAccessObj, __construct)
 
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&obj);
 	object_init(&obj);
@@ -65,20 +64,14 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&value_sub);
 	ZVAL_UNDEF(&obj);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(offset)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 2, 0, &offset, &value);
-
-
-	ZEPHIR_OBS_VAR(&obj);
+	zephir_memory_observe(&obj);
 	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
 	if (!(Z_TYPE_P(offset) == IS_NULL)) {
 		zephir_update_property_zval_zval(&obj, offset, value);
@@ -96,19 +89,13 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&obj);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &offset);
-
-
-	ZEPHIR_OBS_VAR(&obj);
+	zephir_memory_observe(&obj);
 	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
 	RETURN_MM_BOOL(zephir_isset_property_zval(&obj, offset));
 }
@@ -124,19 +111,13 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	ZVAL_UNDEF(&offset_sub);
 	ZVAL_UNDEF(&obj);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &offset);
-
-
-	ZEPHIR_OBS_VAR(&obj);
+	zephir_memory_observe(&obj);
 	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
 	zephir_get_arrval(&_0, &obj);
 	ZEPHIR_CPY_WRT(&obj, &_0);
@@ -157,25 +138,21 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &offset);
-
-
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_isset_property_zval(&_1, offset)) {
-		ZEPHIR_OBS_VAR(&_2);
+		zephir_memory_observe(&_2);
 		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
+		ZEPHIR_OBS_NVAR(&_0);
 		zephir_read_property_zval(&_0, &_2, offset, PH_NOISY_CC);
 	} else {
+		ZEPHIR_INIT_NVAR(&_0);
 		ZVAL_NULL(&_0);
 	}
 	RETURN_CCTOR(&_0);

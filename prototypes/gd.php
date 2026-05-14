@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -8,7 +8,6 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
 if (!function_exists('gd_info')) {
     /**
      * Retrieve information about the currently installed GD library.
@@ -60,7 +59,7 @@ if (!function_exists('image_type_to_extension')) {
      *
      * @see https://www.php.net/manual/en/function.image-type-to-extension.php
      *
-     * @param $imagetype
+     * @param      $imagetype
      * @param bool $include_dot
      *
      * @return string

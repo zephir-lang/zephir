@@ -126,4 +126,19 @@ class OoParams
 	{
 		return parameter;
 	}
+
+	public function getDefaultParamValue(int i = 0)
+	{
+	    return i;
+	}
+
+	public function getDefaultParamValue1(int i = 1)
+    {
+        return i;
+    }
+
+    public function getDefaultParamValueStr(string str = "default")
+    {
+        return str;
+    }
 }

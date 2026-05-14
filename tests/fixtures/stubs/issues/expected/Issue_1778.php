@@ -44,7 +44,7 @@ class Issue_1778
      * @return mixed|null
      * @param string $key
      */
-    public function getVar(string $key)
+    public function getVar(string $key): mixed
     {
     }
 }

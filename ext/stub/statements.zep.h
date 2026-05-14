@@ -35,11 +35,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_statements_test544issuewithvariable, 0, 0, 1
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_statements_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Statements, testPropertyAcccessAvoidTmpReuse, arginfo_stub_statements_testpropertyacccessavoidtmpreuse, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Statements, testPropertyAcccessAvoidTmpReuse, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Statements, testPropertyAcccessAvoidTmpReuse, arginfo_stub_statements_testpropertyacccessavoidtmpreuse, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Statements, testElseIf, arginfo_stub_statements_testelseif, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Statements, testElseIf1, arginfo_stub_statements_testelseif1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Statements, testElseIf2, arginfo_stub_statements_testelseif2, ZEND_ACC_PUBLIC)

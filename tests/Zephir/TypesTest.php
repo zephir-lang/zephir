@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\Types;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Types\Types;
 
 final class TypesTest extends TestCase
 {
@@ -101,10 +101,10 @@ final class TypesTest extends TestCase
      * @param array $testData   - dataProvider data set
      * @param int   $definition - (optional) one of mandatory/collection flag
      */
-    private function buildMethod(array $testData, int $definition = 0): ClassMethod
+    private function buildMethod(array $testData, int $definition = 0): Method
     {
-        return new ClassMethod(
-            new ClassDefinition('Zephir', 'testMethod'),
+        return new Method(
+            new Definition('Zephir', 'testMethod'),
             ['public'],
             'exampleMethodName',
             null,
@@ -285,7 +285,7 @@ final class TypesTest extends TestCase
         $typesList = [];
         $collections = [];
         foreach ($returnTypes as $type) {
-            if (false !== strpos($type, '[]')) {
+            if (str_contains($type, '[]')) {
                 $typesList[] = $this->variableReturnTypeDefinition([$type], 1)[0];
                 $collectionType = trim($type, '<>');
                 $collections[$collectionType] = $collectionType;

@@ -7,6 +7,7 @@ use InvalidArgumentException;
  */
 class Issue implements IssueInterface
 {
+    protected a;
     protected m;
     protected n;
 

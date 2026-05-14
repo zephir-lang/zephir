@@ -14,9 +14,8 @@
 #include "kernel/main.h"
 #include "ext/spl/spl_directory.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Spl)
@@ -33,26 +32,19 @@ PHP_METHOD(Stub_Spl, issue1212)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *file_param = NULL;
-	zval file;
-	zval *this_ptr = getThis();
+	zval file_zv;
+	zend_string *file = NULL;
 
-	ZVAL_UNDEF(&file);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
+	ZVAL_UNDEF(&file_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(file)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &file_param);
-	zephir_get_strval(&file, file_param);
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&file_zv);
+	ZVAL_STR_COPY(&file_zv, file);
 	object_init_ex(return_value, spl_ce_SplFileObject);
-	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 98, &file);
+	ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 103, &file_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

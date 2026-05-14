@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -62,7 +62,7 @@ final class TypeoffTest extends TestCase
 
     public function testCallable(): void
     {
-        $callback = function () {
+        $callback = function (): void {
         };
         $this->assertTrue($this->test->testCallableTypeOf($callback));
         $this->assertFalse($this->test->testCallableTypeOf(true));

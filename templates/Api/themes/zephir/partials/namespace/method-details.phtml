@@ -1,6 +1,6 @@
 <?php
 
-/* @var $method Zephir\ClassMethod */
+/* @var $method \Zephir\Class\Method\Method */
 
 ?>
 
@@ -16,7 +16,7 @@
                 <?= $method->isFinal() ? 'final' : '' ?>
                 <?= implode(" ",$method->getVisibility()) ?>
                 function <span class="method-name"><?= $method->getName() ?></span>(<?= $this->partial('partials/class/method-summary-params.phtml' ) ?>)
-                
+
                 <div>
                 <?= $method->getDocBlock() ?>
                 </div>

@@ -25,54 +25,36 @@ ZEPHIR_INIT_CLASS(Stub_ConstantsInterfaceB)
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_NULL();
 }
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(0);
 }
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(1);
 }
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant4)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(10);
 }
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant5)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(10.25);
 }
 
 PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant6)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("test");
 }

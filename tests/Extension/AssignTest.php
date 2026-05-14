@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -178,7 +178,7 @@ final class AssignTest extends TestCase
         $this->assertCount($getCount + 2, $_GET);
     }
 
-    public function testIssue597()
+    public function testIssue597(): void
     {
         $_GET = [];
         $this->test->issue597();

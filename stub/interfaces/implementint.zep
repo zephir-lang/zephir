@@ -2,7 +2,7 @@ namespace Stub\Interfaces;
 
 class ImplementInt implements InterfaceInt
 {
-    protected val = null;
+    protected val = 0;
 
     public function set(int val) -> void
     {

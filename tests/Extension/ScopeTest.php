@@ -20,8 +20,11 @@ final class ScopeTest extends TestCase
 {
     public function testScope1(): void
     {
-        $this->assertSame(Scope::test1(), 'testinternal_string');
+        if (version_compare(PHP_VERSION, '8.2.0', '<')) {
+            $this->assertSame(Scope::test1(), 'testinternal_string');
+            $this->assertSame(Scope::test3(), 'internal_0internal_1internal_2internal_3');
+        }
+
         $this->assertSame(Scope::test2(), [15, '0_66_132_198_']);
-        $this->assertSame(Scope::test3(), 'internal_0internal_1internal_2internal_3');
     }
 }

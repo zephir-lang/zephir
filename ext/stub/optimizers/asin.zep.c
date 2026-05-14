@@ -30,12 +30,8 @@ PHP_METHOD(Stub_Optimizers_ASin, testInt)
 {
 	zval _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	a = 1;
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(asin(a));
@@ -45,12 +41,8 @@ PHP_METHOD(Stub_Optimizers_ASin, testVar)
 {
 	zval _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	a = 1;
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(asin(a));
@@ -59,12 +51,8 @@ PHP_METHOD(Stub_Optimizers_ASin, testVar)
 PHP_METHOD(Stub_Optimizers_ASin, testIntValue1)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	ZVAL_LONG(&_0, 0);
 	RETURN_DOUBLE(asin(0));
 }
@@ -73,21 +61,12 @@ PHP_METHOD(Stub_Optimizers_ASin, testIntParameter)
 {
 	zval *a_param = NULL, _0;
 	zend_long a;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_LONG(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a_param);
-	a = zephir_get_intval(a_param);
-
-
 	ZVAL_LONG(&_0, a);
 	RETURN_DOUBLE(asin(a));
 }
@@ -95,20 +74,12 @@ PHP_METHOD(Stub_Optimizers_ASin, testIntParameter)
 PHP_METHOD(Stub_Optimizers_ASin, testVarParameter)
 {
 	zval *a, a_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-
-
 	RETURN_DOUBLE(zephir_asin(a));
 }
 

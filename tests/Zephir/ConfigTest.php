@@ -15,7 +15,7 @@ namespace Zephir\Test;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Config;
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class ConfigTest extends TestCase
 {
@@ -65,15 +65,15 @@ final class ConfigTest extends TestCase
     private function stubsBanner(): string
     {
         return <<<DOC
-/**
- * This file is part of the Zephir.
- *
- * (c) Phalcon Team <team@zephir-lang.com>
- *
- * For the full copyright and license information, please view
- * the LICENSE file that was distributed with this source code.
- */
-DOC;
+            /**
+             * This file is part of the Zephir.
+             *
+             * (c) Phalcon Team <team@zephir-lang.com>
+             *
+             * For the full copyright and license information, please view
+             * the LICENSE file that was distributed with this source code.
+             */
+            DOC;
     }
 
     /**
@@ -132,7 +132,7 @@ DOC;
      */
     public function testShouldSetConfigParams(array $test, $expected): void
     {
-        list($key, $value, $namespace) = $test;
+        [$key, $value, $namespace] = $test;
         $this->config->set($key, $value, $namespace);
 
         $actual = $this->config->get($key, $namespace);
@@ -167,9 +167,9 @@ DOC;
      * @param string $key
      * @param mixed  $expected
      */
-    public function testShouldGetDefaultConfigParams($namespace, string $key, $expected)
+    public function testShouldGetDefaultConfigParams($namespace, string $key, $expected): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -229,7 +229,7 @@ DOC;
 
     public function testShouldGetBannerFromConfig(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 

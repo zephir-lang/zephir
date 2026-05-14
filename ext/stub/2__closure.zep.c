@@ -24,9 +24,6 @@ ZEPHIR_INIT_CLASS(stub_2__closure)
 
 PHP_METHOD(stub_2__closure, __invoke)
 {
-	zval *this_ptr = getThis();
-
-
 
 }
 

@@ -20,7 +20,6 @@
 #include "kernel/array.h"
 #include "kernel/exception.h"
 #include "kernel/concat.h"
-#include "ext/spl/spl_exceptions.h"
 #include "kernel/string.h"
 
 
@@ -69,18 +68,12 @@ ZEPHIR_INIT_CLASS(Stub_Oo_OoDestruct)
  */
 PHP_METHOD(Stub_Oo_OoDestruct, getHeight)
 {
-	zval *this_ptr = getThis();
 
-
-
-	RETURN_MEMBER(getThis(), "height");
+	RETURN_MEMBER_TYPED(getThis(), "height", IS_LONG);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, getImage)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "image");
 }
@@ -90,18 +83,12 @@ PHP_METHOD(Stub_Oo_OoDestruct, getImage)
  */
 PHP_METHOD(Stub_Oo_OoDestruct, getMime)
 {
-	zval *this_ptr = getThis();
 
-
-
-	RETURN_MEMBER(getThis(), "mime");
+	RETURN_MEMBER_TYPED(getThis(), "mime", IS_STRING);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, getRealpath)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "realpath");
 }
@@ -115,11 +102,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, getRealpath)
  */
 PHP_METHOD(Stub_Oo_OoDestruct, getType)
 {
-	zval *this_ptr = getThis();
 
-
-
-	RETURN_MEMBER(getThis(), "type");
+	RETURN_MEMBER_TYPED(getThis(), "type", IS_LONG);
 }
 
 /**
@@ -127,11 +111,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, getType)
  */
 PHP_METHOD(Stub_Oo_OoDestruct, getWidth)
 {
-	zval *this_ptr = getThis();
 
-
-
-	RETURN_MEMBER(getThis(), "width");
+	RETURN_MEMBER_TYPED(getThis(), "width", IS_LONG);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, __construct)
@@ -140,11 +121,11 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	zend_class_entry *_26$$11 = NULL, *_22$$12 = NULL, *_32$$14 = NULL;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long width, height, ZEPHIR_LAST_CALL_STATUS;
-	zval *file_param = NULL, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _28$$4, _29$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _25$$11, _27$$11, _21$$12, _23$$12, _24$$12, _35$$13, _36$$13, _37$$13, _38$$13, _39$$13, _40$$13, _31$$14, _33$$14, _34$$14;
-	zval file;
+	zval file_zv, *width_param = NULL, *height_param = NULL, __$true, imageinfo, _0, _1, _2$$4, _3$$4, _4$$4, _9$$4, _28$$4, _29$$4, _5$$5, _6$$5, _7$$5, _8$$5, _10$$6, _11$$6, _12$$7, _13$$7, _14$$8, _15$$8, _16$$9, _17$$9, _18$$10, _19$$10, _20$$11, _25$$11, _27$$11, _21$$12, _23$$12, _24$$12, _35$$13, _36$$13, _37$$13, _38$$13, _39$$13, _40$$13, _31$$14, _33$$14, _34$$14;
+	zend_string *file = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&file);
+	ZVAL_UNDEF(&file_zv);
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&imageinfo);
 	ZVAL_UNDEF(&_0);
@@ -184,7 +165,6 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 	ZVAL_UNDEF(&_31$$14);
 	ZVAL_UNDEF(&_33$$14);
 	ZVAL_UNDEF(&_34$$14);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_STR(file)
@@ -192,46 +172,38 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		Z_PARAM_LONG_OR_NULL(width, is_null_true)
 		Z_PARAM_LONG_OR_NULL(height, is_null_true)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 2, &file_param, &width_param, &height_param);
-	if (UNEXPECTED(Z_TYPE_P(file_param) != IS_STRING && Z_TYPE_P(file_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'file' must be of the type string"));
-		RETURN_MM_NULL();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	if (ZEND_NUM_ARGS() > 1) {
+		width_param = ZEND_CALL_ARG(execute_data, 2);
 	}
-	if (EXPECTED(Z_TYPE_P(file_param) == IS_STRING)) {
-		zephir_get_strval(&file, file_param);
-	} else {
-		ZEPHIR_INIT_VAR(&file);
+	if (ZEND_NUM_ARGS() > 2) {
+		height_param = ZEND_CALL_ARG(execute_data, 3);
 	}
+	zephir_memory_observe(&file_zv);
+	ZVAL_STR_COPY(&file_zv, file);
 	if (!width_param) {
 		width = 0;
 	} else {
-		width = zephir_get_intval(width_param);
-	}
+		}
 	if (!height_param) {
 		height = 0;
 	} else {
-		height = zephir_get_intval(height_param);
-	}
-
-
+		}
 	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
 	if (!(zephir_is_true(&_0))) {
 		ZEPHIR_CALL_SELF(NULL, "check", NULL, 0);
 		zephir_check_call_status();
 	}
-	zephir_update_property_zval(this_ptr, ZEND_STRL("file"), &file);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("file"), &file_zv);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
 	if ((zephir_file_exists(&_1) == SUCCESS)) {
 		zephir_read_property(&_2$$4, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 66, &_2$$4);
+		ZEPHIR_CALL_FUNCTION(&_3$$4, "realpath", NULL, 70, &_2$$4);
 		zephir_check_call_status();
 		zephir_update_property_zval(this_ptr, ZEND_STRL("realpath"), &_3$$4);
 		zephir_read_property(&_4$$4, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 67, &_4$$4);
+		ZEPHIR_CALL_FUNCTION(&imageinfo, "getimagesize", NULL, 71, &_4$$4);
 		zephir_check_call_status();
 		if (zephir_is_true(&imageinfo)) {
 			zephir_array_fetch_long(&_5$$5, &imageinfo, 0, PH_NOISY | PH_READONLY, "stub/oo/oodestruct.zep", 62);
@@ -349,7 +321,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_check_call_status();
 		zephir_update_property_zval(this_ptr, ZEND_STRL("image"), &_37$$13);
 		zephir_read_property(&_35$$13, this_ptr, ZEND_STRL("image"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 68, &_35$$13, &__$true);
+		ZEPHIR_CALL_FUNCTION(NULL, "imagealphablending", NULL, 72, &_35$$13, &__$true);
 		zephir_check_call_status();
 		zephir_read_property(&_36$$13, this_ptr, ZEND_STRL("image"), PH_NOISY_CC | PH_READONLY);
 		ZVAL_BOOL(&_38$$13, 1);
@@ -357,13 +329,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 		zephir_check_call_status();
 		zephir_read_property(&_38$$13, this_ptr, ZEND_STRL("file"), PH_NOISY_CC | PH_READONLY);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("realpath"), &_38$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, width);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("width"), &_39$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, height);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("height"), &_39$$13);
-		ZEPHIR_INIT_ZVAL_NREF(_39$$13);
+		ZVAL_UNDEF(&_39$$13);
 		ZVAL_LONG(&_39$$13, 3);
 		zephir_update_property_zval(this_ptr, ZEND_STRL("type"), &_39$$13);
 		ZEPHIR_INIT_VAR(&_40$$13);
@@ -383,9 +355,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, __destruct)
 
 	ZVAL_UNDEF(&image);
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("image"), PH_NOISY_CC | PH_READONLY);
 	ZEPHIR_CPY_WRT(&image, &_0);
@@ -402,7 +373,6 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval __$true, version, _0, _4, _5, _6, _10, _1$$4, _3$$4, _7$$5, _9$$5;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_UNDEF(&version);
@@ -415,9 +385,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_UNDEF(&_3$$4);
 	ZVAL_UNDEF(&_7$$5);
 	ZVAL_UNDEF(&_9$$5);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	zephir_read_static_property_ce(&_0, stub_oo_oodestruct_ce, SL("checked"), PH_NOISY_CC | PH_READONLY);
 	if (zephir_is_true(&_0)) {
@@ -446,7 +415,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	ZVAL_STRING(&_4, "2.0.1");
 	ZEPHIR_INIT_VAR(&_5);
 	ZVAL_STRING(&_5, ">=");
-	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 58, &version, &_4, &_5);
+	ZEPHIR_CALL_FUNCTION(&_6, "version_compare", NULL, 62, &version, &_4, &_5);
 	zephir_check_call_status();
 	if (UNEXPECTED(!zephir_is_true(&_6))) {
 		ZEPHIR_INIT_VAR(&_7$$5);
@@ -476,7 +445,6 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	zval version, info, matches, _3, _4, _0$$3, _2$$3, _5$$5, _6$$5, _7$$5, _8$$5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&version);
 	ZVAL_UNDEF(&info);
@@ -489,9 +457,8 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_UNDEF(&_6$$5);
 	ZVAL_UNDEF(&_7$$5);
 	ZVAL_UNDEF(&_8$$5);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	if (UNEXPECTED(!((zephir_function_exists_ex(ZEND_STRL("gd_info")) == SUCCESS)))) {
 		ZEPHIR_INIT_VAR(&_0$$3);
@@ -514,13 +481,13 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	ZVAL_NULL(&version);
 	ZEPHIR_INIT_VAR(&_3);
 	ZVAL_STRING(&_3, "GD_VERSION");
-	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 69, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "defined", NULL, 73, &_3);
 	zephir_check_call_status();
 	if (zephir_is_true(&_4)) {
 		ZEPHIR_INIT_NVAR(&version);
 		ZEPHIR_GET_CONSTANT(&version, "GD_VERSION");
 	} else {
-		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 70);
+		ZEPHIR_CALL_FUNCTION(&info, "gd_info", NULL, 74);
 		zephir_check_call_status();
 		ZEPHIR_INIT_VAR(&matches);
 		ZVAL_NULL(&matches);

@@ -21,11 +21,7 @@ ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_fasta_method_entry) {
 	PHP_ME(Stub_Fasta, fastaRepeat, arginfo_stub_fasta_fastarepeat, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Fasta, fastRandom, arginfo_stub_fasta_fastrandom, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Fasta, fastRandom, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Fasta, fastRandom, arginfo_stub_fasta_fastrandom, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Fasta, main, arginfo_stub_fasta_main, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

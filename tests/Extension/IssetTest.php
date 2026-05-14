@@ -52,6 +52,10 @@ final class IssetTest extends TestCase
 
     public function testIssetDynamicProperty(): void
     {
+        if (version_compare(PHP_VERSION, '8.2.0', '>=')) {
+            $this->markTestSkipped(' Creation of dynamic property is deprecated');
+        }
+
         $this->assertTrue($this->test->testIssetDynamicProperty1());
         $this->assertTrue(!$this->test->testIssetDynamicProperty2($this));
         $this->s = ['a' => 'true'];

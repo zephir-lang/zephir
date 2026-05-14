@@ -46,6 +46,22 @@ runs:
         echo "::endgroup::"
 
         echo "::group::Compile stage"
+        # TODO: Remove this after MacOS-15
+        # Ensure Homebrew include/lib directories (e.g. /opt/homebrew/include) are visible to the compiler/linker.
+        # macOS default clang search paths do NOT include /opt/homebrew on Apple Silicon.
+        BREW_PREFIX="$(brew --prefix)"
+        export CPPFLAGS="-I${BREW_PREFIX}/include ${CPPFLAGS}" || true
+        export CFLAGS="${CFLAGS} -I${BREW_PREFIX}/include"
+        export CXXFLAGS="${CXXFLAGS} -I${BREW_PREFIX}/include"
+        export LDFLAGS="${LDFLAGS} -L${BREW_PREFIX}/lib"
+        # Also help pkg-config aware scripts find pcre2
+        export PKG_CONFIG_PATH="${BREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}"
+
+        echo "Compiler: ${CC}"
+        echo "CFLAGS: ${CFLAGS}"
+        echo "LDFLAGS: ${LDFLAGS}"
+        echo "Using Homebrew prefix: ${BREW_PREFIX}"
+
         cd ./ext
         phpize
         ./configure --enable-stub
@@ -56,4 +72,10 @@ runs:
       shell: bash
       run: |
         cp ./ext/modules/stub.so "$(php -r 'echo ini_get("extension_dir");')/stub.so"
-        echo "extension=stub.so" > /usr/local/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        if [ "${{ matrix.ts }}" = "ts" ]; then
+          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
+          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d/99-stub.ini
+        else
+          mkdir -p /opt/homebrew/etc/php/${{ matrix.php }}-zts/conf.d
+          echo "extension=stub.so" > /opt/homebrew/etc/php/${{ matrix.php }}/conf.d/99-stub.ini
+        fi

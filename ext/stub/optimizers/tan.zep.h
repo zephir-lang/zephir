@@ -35,31 +35,11 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_optimizers_tan_testvarparameter, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_optimizers_tan_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Optimizers_Tan, testInt, arginfo_stub_optimizers_tan_testint, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Optimizers_Tan, testInt, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Optimizers_Tan, testVar, arginfo_stub_optimizers_tan_testvar, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Optimizers_Tan, testVar, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Optimizers_Tan, testVar2, arginfo_stub_optimizers_tan_testvar2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Optimizers_Tan, testVar2, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Optimizers_Tan, testIntValue1, arginfo_stub_optimizers_tan_testintvalue1, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Optimizers_Tan, testIntValue1, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Optimizers_Tan, testIntValue2, arginfo_stub_optimizers_tan_testintvalue2, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Optimizers_Tan, testIntValue2, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Optimizers_Tan, testInt, arginfo_stub_optimizers_tan_testint, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Optimizers_Tan, testVar, arginfo_stub_optimizers_tan_testvar, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Optimizers_Tan, testVar2, arginfo_stub_optimizers_tan_testvar2, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Optimizers_Tan, testIntValue1, arginfo_stub_optimizers_tan_testintvalue1, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Optimizers_Tan, testIntValue2, arginfo_stub_optimizers_tan_testintvalue2, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Optimizers_Tan, testIntParameter, arginfo_stub_optimizers_tan_testintparameter, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Optimizers_Tan, testVarParameter, arginfo_stub_optimizers_tan_testvarparameter, ZEND_ACC_PUBLIC)
 	PHP_FE_END

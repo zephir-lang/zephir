@@ -29,11 +29,8 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall)
 	zend_class_entry *_0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *this_ptr = getThis();
-
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	_0 = zephir_fetch_class_str_ex(SL("Phalcon\\Di"), ZEND_FETCH_CLASS_AUTO);
 	ZEPHIR_RETURN_CALL_CE_STATIC(_0, "getdefault", NULL, 0);
@@ -43,9 +40,6 @@ PHP_METHOD(Stub_InternalClasses, testStaticCall)
 
 PHP_METHOD(Stub_InternalClasses, testStaticPropertyFetch)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(303);
 }

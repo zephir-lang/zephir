@@ -13,8 +13,6 @@
 
 #include "kernel/main.h"
 #include "kernel/array.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
@@ -32,27 +30,16 @@ ZEPHIR_INIT_CLASS(Stub_Globals_Post)
  */
 PHP_METHOD(Stub_Globals_Post, hasValue)
 {
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *name_param = NULL, _POST;
-	zval name;
-	zval *this_ptr = getThis();
+	zval name_zv, _POST;
+	zend_string *name = NULL;
 
-	ZVAL_UNDEF(&name);
+	ZVAL_UNDEF(&name_zv);
 	ZVAL_UNDEF(&_POST);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(name)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
-	ZEPHIR_MM_GROW();
 	zephir_get_global(&_POST, SL("_POST"));
-	zephir_fetch_params(1, 1, 0, &name_param);
-	zephir_get_strval(&name, name_param);
-
-
-	RETURN_MM_BOOL(zephir_array_isset(&_POST, &name));
+	ZVAL_STR(&name_zv, name);
+	RETURN_BOOL(zephir_array_isset(&_POST, &name_zv));
 }
 

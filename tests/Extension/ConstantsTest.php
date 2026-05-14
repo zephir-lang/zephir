@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -11,6 +9,8 @@ declare(strict_types=1);
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
@@ -19,8 +19,8 @@ use Stub\Oo\ConstantsInterface;
 
 final class ConstantsTest extends TestCase
 {
-    const EXPECTED_DOUBLE_DELIMITER = '.';
-    const EXPECTED_CONST_VARS = '$SOME/CSRF/KEY$';
+    public const EXPECTED_DOUBLE_DELIMITER = '.';
+    public const EXPECTED_CONST_VARS = '$SOME/CSRF/KEY$';
 
     protected ?Constants $test = null;
 

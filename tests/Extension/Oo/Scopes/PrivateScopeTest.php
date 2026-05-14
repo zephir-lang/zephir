@@ -13,16 +13,9 @@ declare(strict_types=1);
 
 namespace Extension\Oo\Scopes;
 
-use Error;
 use PHPUnit\Framework\Error\Notice;
 use PHPUnit\Framework\TestCase;
 use Stub\Oo\Scopes\PrivateScopeTester;
-use TestScopeExtending;
-use TestScopeExtendingMagic;
-use TestScopePhp;
-use TestScopePhpMagic;
-use TestScopePhpMagicExtending;
-use UserExample;
 
 final class PrivateScopeTest extends TestCase
 {
@@ -36,13 +29,13 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyObjPhp(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopePhp::$privateProperty'
         );
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyObj(new TestScopePhp(), 'privateProperty', 'test');
+        $tester->setPropertyObj(new \TestScopePhp(), 'privateProperty', 'test');
     }
 
     /**
@@ -50,13 +43,13 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyNewPhp(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopePhp::$privateProperty'
         );
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyNew(TestScopePhp::class, 'privateProperty', 'test');
+        $tester->setPropertyNew(\TestScopePhp::class, 'privateProperty', 'test');
     }
 
     /**
@@ -64,13 +57,13 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyObjInternal(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtending::$privateProperty'
         );
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyObj(new TestScopeExtending(), 'privateProperty', 'test');
+        $tester->setPropertyObj(new \TestScopeExtending(), 'privateProperty', 'test');
     }
 
     /**
@@ -78,13 +71,13 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyNewInternal(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtending::$privateProperty'
         );
 
         $tester = new PrivateScopeTester();
-        $tester->setPropertyNew(TestScopeExtending::class, 'privateProperty', 'test');
+        $tester->setPropertyNew(\TestScopeExtending::class, 'privateProperty', 'test');
     }
 
     /**
@@ -92,7 +85,7 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldSetPrivatePropertyObjPhp(): void
     {
-        $object = new TestScopePhpMagic();
+        $object = new \TestScopePhpMagic();
         $tester = new PrivateScopeTester();
 
         $actual = $tester->setPropertyObj($object, 'privateProperty', 'test');
@@ -106,7 +99,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldSetPrivatePropertyNewPhp(): void
     {
         $tester = new PrivateScopeTester();
-        $obj = $tester->setPropertyNew(TestScopePhpMagic::class, 'privateProperty', 'test');
+        $obj = $tester->setPropertyNew(\TestScopePhpMagic::class, 'privateProperty', 'test');
 
         $this->assertEquals('test', $obj->privateProperty);
         $this->assertEquals(1, $obj->setCount);
@@ -118,7 +111,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldSetPrivatePropertyObjInternal(): void
     {
         $tester = new PrivateScopeTester();
-        $object = new TestScopeExtendingMagic();
+        $object = new \TestScopeExtendingMagic();
 
         $actual = $tester->setPropertyObj($object, 'privateProperty', 'test');
         $this->assertEquals('test', $actual);
@@ -131,7 +124,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldSetPrivatePropertyNewInternal(): void
     {
         $tester = new PrivateScopeTester();
-        $obj = $tester->setPropertyNew(TestScopeExtendingMagic::class, 'privateProperty', 'test');
+        $obj = $tester->setPropertyNew(\TestScopeExtendingMagic::class, 'privateProperty', 'test');
 
         $this->assertEquals('test', $obj->privateProperty);
         $this->assertEquals(1, $obj->setCount);
@@ -142,12 +135,12 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyViaThis(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtending::$privateProperty'
         );
 
-        $obj = new TestScopeExtending();
+        $obj = new \TestScopeExtending();
         $obj->setProperty('privateProperty', 'test');
     }
 
@@ -156,7 +149,7 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldSetPrivatePropertyViaThis(): void
     {
-        $obj = new TestScopeExtending();
+        $obj = new \TestScopeExtending();
         $obj->setProperty('privateProperty2', 'test');
 
         $this->assertEquals('test', $obj->getPrivateProperty2());
@@ -167,12 +160,12 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicObjInternal(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
         );
 
-        $object = new TestScopeExtendingMagic();
+        $object = new \TestScopeExtendingMagic();
         $tester = new PrivateScopeTester();
 
         $this->assertEquals('private', $object->getPrivateProperty2());
@@ -184,14 +177,14 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicNewInternal(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopeExtendingMagic::$privateProperty2'
         );
 
         $tester = new PrivateScopeTester();
         $tester->setPropertyNew(
-            TestScopeExtendingMagic::class,
+            \TestScopeExtendingMagic::class,
             'privateProperty2',
             'CHANGED'
         );
@@ -208,13 +201,13 @@ final class PrivateScopeTest extends TestCase
                 'Undefined property: TestScopePhpMagicExtending::$privateProperty2'
             );
         } else {
-            $this->expectException(Error::class);
+            $this->expectException(\Error::class);
             $this->expectExceptionMessage(
                 'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
             );
         }
 
-        $obj = new TestScopePhpMagicExtending();
+        $obj = new \TestScopePhpMagicExtending();
 
         $tester = new PrivateScopeTester();
         $tester->setPropertyObj($obj, 'privateProperty2', 'test');
@@ -225,14 +218,14 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldNotSetPrivatePropertyExtendedMagicNewPhp(): void
     {
-        $this->expectException(Error::class);
+        $this->expectException(\Error::class);
         $this->expectExceptionMessage(
             'Cannot access private property TestScopePhpMagicExtending::$privateProperty2'
         );
 
         $tester = new PrivateScopeTester();
         $tester->setPropertyNew(
-            TestScopePhpMagicExtending::class,
+            \TestScopePhpMagicExtending::class,
             'privateProperty2',
             'CHANGED'
         );
@@ -244,7 +237,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldNotGetObjectVarsPrivatePropertyObjPhp(): void
     {
         $tester = new PrivateScopeTester();
-        $object = new TestScopePhp();
+        $object = new \TestScopePhp();
 
         $objectVars = $tester->getObjVars($object);
         $this->assertArrayNotHasKey('privateProperty', $objectVars);
@@ -256,7 +249,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldNotGetObjectVarsPrivatePropertyNewPhp(): void
     {
         $tester = new PrivateScopeTester();
-        $objectVars = $tester->getNewVars(TestScopePhp::class);
+        $objectVars = $tester->getNewVars(\TestScopePhp::class);
 
         $this->assertArrayNotHasKey('privateProperty', $objectVars);
     }
@@ -267,7 +260,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldNotGetObjectVarsPrivatePropertyObjInternal(): void
     {
         $tester = new PrivateScopeTester();
-        $object = new TestScopeExtending();
+        $object = new \TestScopeExtending();
         $objectVars = $tester->getObjVars($object);
 
         $this->assertArrayNotHasKey('privateProperty', $objectVars);
@@ -279,7 +272,7 @@ final class PrivateScopeTest extends TestCase
     public function testShouldNotGetObjectVarsPrivatePropertyNewInternal(): void
     {
         $tester = new PrivateScopeTester();
-        $objectVars = $tester->getNewVars(TestScopeExtending::class);
+        $objectVars = $tester->getNewVars(\TestScopeExtending::class);
 
         $this->assertArrayNotHasKey('privateProperty', $objectVars);
     }
@@ -289,7 +282,7 @@ final class PrivateScopeTest extends TestCase
      */
     public function testShouldGetAndSetPrivatePropertyUsingParentGetterAndSetter(): void
     {
-        $tester = new UserExample();
+        $tester = new \UserExample();
         $tester->setPrivateVariable('test');
 
         $this->assertEquals('test', $tester->getPrivateVariable());

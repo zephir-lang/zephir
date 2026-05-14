@@ -53,3 +53,5 @@ release-notes.md
 LATER
 php-zephir-parser/
 
+.idea/
+.vscode/

@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionParameter;
 use Stub\Mcall;
 use Stub\Oo\Param;
 
@@ -132,7 +130,7 @@ final class MCallTest extends TestCase
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame(\StdClass::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertSame(\stdClass::class, $this->getMethodFirstParameter()->getType()->getName());
         $this->assertInstanceOf(\stdClass::class, $this->test->testObjectParamCastStdClass(new \stdClass()));
     }
 
@@ -145,7 +143,7 @@ final class MCallTest extends TestCase
         $this->assertInstanceOf(Param::class, $this->test->testObjectParamCastOoParam(new Param()));
     }
 
-    protected function getMethodFirstParameter(): ReflectionParameter
+    protected function getMethodFirstParameter(): \ReflectionParameter
     {
         $methodInfo = $this->reflection->getMethod($this->getName());
         $parameters = $methodInfo->getParameters();
@@ -154,12 +152,12 @@ final class MCallTest extends TestCase
     }
 
     /**
-     * @return mixed|ReflectionClass
+     * @return mixed|\ReflectionClass
      */
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new ReflectionClass(Mcall::class);
+            return $this->reflection = new \ReflectionClass(Mcall::class);
         }
 
         return $this->reflection;

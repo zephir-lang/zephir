@@ -59,26 +59,16 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeVar)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someVar_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someVar)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &someVar);
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("someVar"), someVar);
 	RETURN_THISW();
 }
 
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeVar)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_MEMBER(getThis(), "someVar");
 }
@@ -86,12 +76,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeVar)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNull)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someNull"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -99,32 +85,20 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNull)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeNull)
 {
 	zval *param, param_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&param_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
-
-
 	zephir_update_static_property_ce(stub_properties_staticprotectedproperties_ce, ZEND_STRL("someNull"), param);
 }
 
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNullInitial)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someNullInitial"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -132,12 +106,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeNullInitial)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeFalse)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someFalse"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -145,12 +115,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeFalse)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeTrue)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someTrue"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -158,12 +124,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeTrue)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeInteger)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someInteger"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -171,12 +133,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeInteger)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeDouble)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someDouble"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -184,12 +142,8 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeDouble)
 PHP_METHOD(Stub_Properties_StaticProtectedProperties, getSomeString)
 {
 	zval _0;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someString"), PH_NOISY_CC | PH_READONLY);
 	RETURN_CTORW(&_0);
 }
@@ -201,15 +155,13 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull)
 {
 	zval someNull, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&someNull);
 	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
-
-	ZEPHIR_MM_GROW();
-
-	ZEPHIR_OBS_VAR(&_0);
+	zephir_memory_observe(&_0);
 	zephir_read_static_property_ce(&_0, stub_properties_staticprotectedproperties_ce, SL("someNull"), PH_NOISY_CC);
 	ZEPHIR_CPY_WRT(&someNull, &_0);
 	if (Z_TYPE_P(&someNull) == IS_NULL) {

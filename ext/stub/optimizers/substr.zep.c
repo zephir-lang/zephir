@@ -28,22 +28,14 @@ ZEPHIR_INIT_CLASS(Stub_Optimizers_Substr)
 PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments)
 {
 	zval *str, str_sub, *start, start_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &str, &start);
-
-
 	zephir_substr(return_value, str, zephir_get_intval(start), 0, ZEPHIR_SUBSTR_NO_LENGTH);
 	return;
 }
@@ -51,24 +43,16 @@ PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments)
 PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments)
 {
 	zval *str, str_sub, *start, start_sub, *offset, offset_sub;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&str_sub);
 	ZVAL_UNDEF(&start_sub);
 	ZVAL_UNDEF(&offset_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(3, 0, &str, &start, &offset);
-
-
 	zephir_substr(return_value, str, zephir_get_intval(start), zephir_get_intval(offset), 0);
 	return;
 }

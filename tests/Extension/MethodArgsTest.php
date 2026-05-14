@@ -27,7 +27,7 @@ final class MethodArgsTest extends TestCase
 
     public function testCallable(): void
     {
-        $callback = function () {
+        $callback = function (): void {
         };
 
         $this->test->setCallable($callback);

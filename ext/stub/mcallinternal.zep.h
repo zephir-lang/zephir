@@ -55,26 +55,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_mcallinternal_issue1956, 0, 
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_mcallinternal_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_McallInternal, e, arginfo_stub_mcallinternal_e, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_McallInternal, e, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_McallInternal, d, arginfo_stub_mcallinternal_d, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_McallInternal, d, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_McallInternal, f, arginfo_stub_mcallinternal_f, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_McallInternal, f, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_McallInternal, g, arginfo_stub_mcallinternal_g, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_McallInternal, g, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_McallInternal, e, arginfo_stub_mcallinternal_e, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_McallInternal, d, arginfo_stub_mcallinternal_d, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_McallInternal, f, arginfo_stub_mcallinternal_f, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_McallInternal, g, arginfo_stub_mcallinternal_g, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_McallInternal, callFibonacci, arginfo_stub_mcallinternal_callfibonacci, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_McallInternal, issue1956, arginfo_stub_mcallinternal_issue1956, ZEND_ACC_PUBLIC)
 	PHP_FE_END

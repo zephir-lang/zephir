@@ -25,108 +25,72 @@ ZEPHIR_INIT_CLASS(Stub_ConstantsInterface)
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_NULL();
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(0);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(1);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant4)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(10);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant5)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(10.25);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInterfaceConstant6)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("test");
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant1)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_NULL();
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant2)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(0);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant3)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_BOOL(1);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant4)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_LONG(10);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant5)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_DOUBLE(10.25);
 }
 
 PHP_METHOD(Stub_ConstantsInterface, testReadInheritanceFromInterfaceConstant6)
 {
-	zval *this_ptr = getThis();
-
-
 
 	RETURN_STRING("test");
 }
