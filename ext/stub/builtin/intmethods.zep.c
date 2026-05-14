@@ -41,7 +41,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 9, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 10, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -58,7 +58,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAbs1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, -5);
-	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 9, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "abs", NULL, 10, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -78,7 +78,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getBinary)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "decbin", NULL, 10, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "decbin", NULL, 11, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -98,7 +98,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getHex)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "dechex", NULL, 11, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "dechex", NULL, 12, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -118,7 +118,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getOctal)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "decoct", NULL, 12, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "decoct", NULL, 13, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -141,7 +141,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getPow)
 	zephir_fetch_params(1, 2, 0, &num_param, &exp_param);
 	ZVAL_LONG(&_0, num);
 	ZVAL_LONG(&_1, exp);
-	ZEPHIR_CALL_FUNCTION(&_2, "pow", NULL, 13, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "pow", NULL, 14, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_2);
 }
@@ -265,7 +265,7 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getAtan)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &num_param);
 	ZVAL_LONG(&_0, num);
-	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 14, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "atan", NULL, 15, &_0);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);
 }
@@ -295,13 +295,13 @@ PHP_METHOD(Stub_BuiltIn_IntMethods, getLog)
 		}
 	if (base == -1) {
 		ZVAL_LONG(&_0$$3, num);
-		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 15, &_0$$3);
+		ZEPHIR_CALL_FUNCTION(&_1$$3, "log", NULL, 16, &_0$$3);
 		zephir_check_call_status();
 		RETURN_CCTOR(&_1$$3);
 	}
 	ZVAL_LONG(&_2, num);
 	ZVAL_LONG(&_3, base);
-	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 15, &_2, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "log", NULL, 16, &_2, &_3);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_4);
 }

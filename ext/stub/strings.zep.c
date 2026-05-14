@@ -479,7 +479,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 		ZVAL_STRINGL(&_2$$3, &_1$$3, 1);
 		ZEPHIR_CALL_FUNCTION(&_3$$3, "ord", &_4, 104, &_2$$3);
 		zephir_check_call_status();
-		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 11, &_3$$3);
+		ZEPHIR_CALL_FUNCTION(&_5$$3, "dechex", &_6, 12, &_3$$3);
 		zephir_check_call_status();
 		zephir_concat_self(&ret, &_5$$3);
 		i++;
@@ -528,7 +528,7 @@ PHP_METHOD(Stub_Strings, issue1267)
 	zephir_fast_str_replace(&_0, &_1, &_2, value);
 	ZEPHIR_CPY_WRT(value, &_0);
 	ZVAL_LONG(&_3, 516);
-	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 44, value, &_3);
+	ZEPHIR_CALL_FUNCTION(&_4, "filter_var", NULL, 45, value, &_3);
 	zephir_check_call_status();
 	ZEPHIR_CPY_WRT(value, &_4);
 	ZEPHIR_INIT_NVAR(&_0);
