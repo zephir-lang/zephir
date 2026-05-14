@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_Closures)
 	zend_declare_property_null(stub_closures_ce, SL("_argument"), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(stub_closures_ce, SL("_function"), ZEND_ACC_PROTECTED);
 	zend_declare_property_string(stub_closures_ce, SL("_name"), "default", ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_closures_ce, SL("property1873"), "call from closure", ZEND_ACC_PROTECTED);
 	return SUCCESS;
 }
 
@@ -238,5 +239,87 @@ PHP_METHOD(Stub_Closures, issue2497SetName)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_name"), &name_zv);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Original reporter's minimal repro: a closure returned from a method
+ * that reads a protected property of the enclosing class via `this->`.
+ * Note the return type is `<\Closure>`, not `string` — the PR draft
+ * (#2203) declared it `-> string` which is itself a type bug under the
+ * runtime-return-type enforcement added for #1991.
+ */
+PHP_METHOD(Stub_Closures, issue1873)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_14__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads an array property and joins it inside the body.
+ * Exercises the property-access + intra-closure expression combination.
+ */
+PHP_METHOD(Stub_Closures, issue1873ArrayProperty)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_15__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads multiple properties and concatenates them.
+ * Ensures multi-property reads inside a single closure compile cleanly.
+ */
+PHP_METHOD(Stub_Closures, issue1873MultipleProperties)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_16__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure both reads and writes a property — the binding via
+ * Closure::bindTo must preserve mutability of the enclosing instance.
+ */
+PHP_METHOD(Stub_Closures, issue1873PropertyWriter)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_17__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads a property AND uses a captured local via
+ * `use()`. Verifies #1873 (property) and #2497 (use) compose.
+ *
+ * The captured variable is `var` (not `string`) because Zephir's
+ * native-string parameter refactor (#2462) stores string params as
+ * `zend_string *` which the `use()` plumbing in closure stubs doesn't
+ * yet wrap to a zval — that's an orthogonal limitation worth tracking
+ * separately.
+ */
+PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
+{
+	zval *prefix, prefix_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&prefix_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(prefix)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &prefix);
+	zephir_create_closure_ex(return_value, this_ptr, stub_18__closure_ce, SL("__invoke"));
+	zephir_update_static_property_ce(stub_18__closure_ce, ZEND_STRL("prefix"), prefix);
+	return;
 }
 

@@ -6,6 +6,7 @@ class Closures
     protected _argument;
     protected _function;
     protected _name = "default";
+    protected property1873 = "call from closure";
 
 	public function simple1()
 	{
@@ -132,5 +133,79 @@ class Closures
     public function issue2497SetName(string name) -> void
     {
         let this->_name = name;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Original reporter's minimal repro: a closure returned from a method
+     * that reads a protected property of the enclosing class via `this->`.
+     * Note the return type is `<\Closure>`, not `string` — the PR draft
+     * (#2203) declared it `-> string` which is itself a type bug under the
+     * runtime-return-type enforcement added for #1991.
+     */
+    public function issue1873() -> <\Closure>
+    {
+        return function () {
+            return this->property1873;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure reads an array property and joins it inside the body.
+     * Exercises the property-access + intra-closure expression combination.
+     */
+    public function issue1873ArrayProperty() -> <\Closure>
+    {
+        return function () {
+            return this->_argument;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure reads multiple properties and concatenates them.
+     * Ensures multi-property reads inside a single closure compile cleanly.
+     */
+    public function issue1873MultipleProperties() -> <\Closure>
+    {
+        return function () {
+            return this->_name . ":" . this->property1873;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure both reads and writes a property — the binding via
+     * Closure::bindTo must preserve mutability of the enclosing instance.
+     */
+    public function issue1873PropertyWriter() -> <\Closure>
+    {
+        return function (string value) {
+            let this->_name = value;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure reads a property AND uses a captured local via
+     * `use()`. Verifies #1873 (property) and #2497 (use) compose.
+     *
+     * The captured variable is `var` (not `string`) because Zephir's
+     * native-string parameter refactor (#2462) stores string params as
+     * `zend_string *` which the `use()` plumbing in closure stubs doesn't
+     * yet wrap to a zval — that's an orthogonal limitation worth tracking
+     * separately.
+     */
+    public function issue1873PropertyAndUse(var prefix) -> <\Closure>
+    {
+        return function () use (prefix) {
+            return prefix . ":" . this->property1873;
+        };
     }
 }
