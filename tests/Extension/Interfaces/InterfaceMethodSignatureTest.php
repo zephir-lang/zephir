@@ -23,7 +23,9 @@ final class InterfaceMethodSignatureTest extends TestCase
     {
         $class = new ImplementInt();
 
-        $this->assertNull($class->get());
+        // ImplementInt::val now defaults to 0 instead of null so that
+        // `get(): int` doesn't violate its own return type (#1991).
+        $this->assertSame(0, $class->get());
         $class->set(1);
         $this->assertSame(1, $class->get());
         $this->assertSame(1, (new ImplementInterface())->get($class));
