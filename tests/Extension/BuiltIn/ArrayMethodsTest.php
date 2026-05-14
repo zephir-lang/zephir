@@ -44,4 +44,37 @@ final class ArrayMethodsTest extends TestCase
     {
         $this->assertSame('có', $this->arrayMethods->issue733BuiltInJoinSpecialChars('ålcó', ['å', 'l']));
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function testIssue733JoinOnVar(): void
+    {
+        $this->assertSame('1,2,3', $this->arrayMethods->issue733JoinOnVar([1, 2, 3]));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function testIssue733JoinOnVarEmpty(): void
+    {
+        $this->assertSame('', $this->arrayMethods->issue733JoinOnVar([]));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function testIssue733ReversedOnVar(): void
+    {
+        $this->assertSame(['c', 'b', 'a'], $this->arrayMethods->issue733ReversedOnVar(['a', 'b', 'c']));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     * Regression: the typed-array dispatch path must keep working.
+     */
+    public function testIssue733JoinOnLiteralArray(): void
+    {
+        $this->assertSame('a|b|c', $this->arrayMethods->issue733JoinOnLiteralArray());
+    }
 }
