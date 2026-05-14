@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed method return-type enforcement at runtime for `return this->property`: methods declared with a strict scalar return type (`-> string`, `-> int`, `-> double`, `-> array`) now throw `TypeError` when the property holds a mismatching value instead of silently returning it. PHP only verifies internal-function return types in `ZEND_DEBUG=1` builds, so the generated C code now emits a runtime check via new `RETURN_MEMBER_TYPED` / `RETURN_MM_MEMBER_TYPED` kernel macros. The error message matches PHP's userland format: `Class::method(): Return value must be of type X, Y returned`. Nullable return types (`string | null`) and union/`mixed` returns are left unchecked, as before. [#1991](https://github.com/zephir-lang/zephir/issues/1991), [#2196](https://github.com/zephir-lang/zephir/pull/2196)
+
 ## [0.20.0] - 2026-05-12
 ### Added
 - Added support of PHP `8.5` [#2459](https://github.com/zephir-lang/zephir/issues/2459), [#2461](https://github.com/zephir-lang/zephir/pull/2461)
