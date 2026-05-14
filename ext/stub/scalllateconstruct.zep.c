@@ -67,6 +67,6 @@ PHP_METHOD(Stub_ScallLateConstruct, testPublicInit)
 PHP_METHOD(Stub_ScallLateConstruct, varValue)
 {
 
-	RETURN_MEMBER(getThis(), "protectedVar");
+	RETURN_MEMBER_TYPED(getThis(), "protectedVar", IS_STRING);
 }
 

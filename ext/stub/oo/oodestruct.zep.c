@@ -69,7 +69,7 @@ ZEPHIR_INIT_CLASS(Stub_Oo_OoDestruct)
 PHP_METHOD(Stub_Oo_OoDestruct, getHeight)
 {
 
-	RETURN_MEMBER(getThis(), "height");
+	RETURN_MEMBER_TYPED(getThis(), "height", IS_LONG);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, getImage)
@@ -84,7 +84,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, getImage)
 PHP_METHOD(Stub_Oo_OoDestruct, getMime)
 {
 
-	RETURN_MEMBER(getThis(), "mime");
+	RETURN_MEMBER_TYPED(getThis(), "mime", IS_STRING);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, getRealpath)
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, getRealpath)
 PHP_METHOD(Stub_Oo_OoDestruct, getType)
 {
 
-	RETURN_MEMBER(getThis(), "type");
+	RETURN_MEMBER_TYPED(getThis(), "type", IS_LONG);
 }
 
 /**
@@ -112,7 +112,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, getType)
 PHP_METHOD(Stub_Oo_OoDestruct, getWidth)
 {
 
-	RETURN_MEMBER(getThis(), "width");
+	RETURN_MEMBER_TYPED(getThis(), "width", IS_LONG);
 }
 
 PHP_METHOD(Stub_Oo_OoDestruct, __construct)

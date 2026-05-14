@@ -115,7 +115,7 @@ PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty)
 	zephir_unset_property_array(this_ptr, ZEND_STRL("assigedFromMethod"), &key_zv);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("assigedFromMethod"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset(&_0, &key_zv, PH_SEPARATE);
-	RETURN_MM_MEMBER(getThis(), "assigedFromMethod");
+	RETURN_MM_MEMBER_TYPED(getThis(), "assigedFromMethod", IS_ARRAY);
 }
 
 /**
