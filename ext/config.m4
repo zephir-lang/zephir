@@ -242,7 +242,12 @@ if test "$PHP_STUB" = "yes"; then
 	stub/13__closure.zep.c
 	stub/14__closure.zep.c
 	stub/15__closure.zep.c
-	stub/16__closure.zep.c "
+	stub/16__closure.zep.c
+	stub/17__closure.zep.c
+	stub/18__closure.zep.c
+	stub/19__closure.zep.c
+	stub/20__closure.zep.c
+	stub/21__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do
