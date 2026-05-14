@@ -22,24 +22,23 @@
 #include "kernel/fcall.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Fasta) {
-
+ZEPHIR_INIT_CLASS(Stub_Fasta)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Fasta, stub, fasta, stub_fasta_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Fasta, fastaRepeat) {
-
+PHP_METHOD(Stub_Fasta, fastaRepeat)
+{
 	zval _2, _5;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, seqi, i = 0;
-	zval seq;
-	zval *n, n_sub, *seq_param = NULL, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
-	zval *this_ptr = getThis();
+	zend_string *seq = NULL;
+	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
 
 	ZVAL_UNDEF(&n_sub);
+	ZVAL_UNDEF(&seq_zv);
 	ZVAL_UNDEF(&len);
 	ZVAL_UNDEF(&j);
 	ZVAL_UNDEF(&k);
@@ -61,34 +60,26 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 	ZVAL_UNDEF(&_13$$7);
 	ZVAL_UNDEF(&_14$$7);
 	ZVAL_UNDEF(&_15$$7);
-	ZVAL_UNDEF(&seq);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_5);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(n)
 		Z_PARAM_STR(seq)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 2, 0, &n, &seq_param);
-
-	zephir_get_strval(&seq, seq_param);
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	n = ZEND_CALL_ARG(execute_data, 1);
+	zephir_memory_observe(&seq_zv);
+	ZVAL_STR_COPY(&seq_zv, seq);
 	seqi = 0;
 	ZEPHIR_INIT_VAR(&len);
-	ZVAL_LONG(&len, zephir_fast_strlen_ev(&seq));
+	ZVAL_LONG(&len, zephir_fast_strlen_ev(&seq_zv));
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_1, ((zephir_get_numberval(&len) * 60) + 1));
 	zephir_create_array(&_0, zephir_get_intval(&_1), 1);
 	zephir_get_arrval(&_2, &_0);
 	ZEPHIR_INIT_VAR(&str);
-	zephir_fast_join(&str, &seq, &_2);
+	zephir_fast_join(&str, &seq_zv, &_2);
 	ZEPHIR_INIT_VAR(&_3);
 	ZEPHIR_INIT_VAR(&_4);
 	mul_function(&_4, &len, &len);
@@ -102,7 +93,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 		if (ZEPHIR_LE_LONG(&j, -1)) {
 			break;
 		}
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_decrement(&j);
 		ZVAL_LONG(&_6$$3, (60 * zephir_get_numberval(&j)));
 		ZVAL_LONG(&_7$$3, 60);
@@ -125,7 +116,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 			break;
 		}
 		zend_print_zval(&block, 0);
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
 	ZEPHIR_INIT_NVAR(&j);
@@ -138,7 +129,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 		}
 		zephir_array_fetch(&_11$$6, &lines, &j, PH_NOISY | PH_READONLY, "stub/fasta.zep", 38);
 		zend_print_zval(&_11$$6, 0);
-		ZEPHIR_SEPARATE(&j);
+		SEPARATE_ZVAL(&j);
 		zephir_increment(&j);
 	}
 	if (zephir_safe_mod_zval_long(n, 60) > 0) {
@@ -150,20 +141,15 @@ PHP_METHOD(Stub_Fasta, fastaRepeat) {
 		zend_print_zval(&_15$$7, 0);
 	}
 	ZEPHIR_MM_RESTORE();
+}
+
+PHP_METHOD(Stub_Fasta, fastRandom)
+{
 
 }
 
-PHP_METHOD(Stub_Fasta, fastRandom) {
-
-	zval *this_ptr = getThis();
-
-
-
-
-}
-
-PHP_METHOD(Stub_Fasta, main) {
-
+PHP_METHOD(Stub_Fasta, main)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -176,20 +162,12 @@ PHP_METHOD(Stub_Fasta, main) {
 	ZVAL_UNDEF(&homoSap);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &n);
-
-
-
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_CONCAT_SSSSSSS(&_0, "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG", "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA", "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT", "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA", "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG", "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC", "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA");
 	ZEPHIR_CPY_WRT(&alu, &_0);
@@ -221,6 +199,5 @@ PHP_METHOD(Stub_Fasta, main) {
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", NULL, 0, &_1, &alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();
-
 }
 

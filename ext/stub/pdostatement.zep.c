@@ -15,11 +15,10 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_PdoStatement) {
-
+ZEPHIR_INIT_CLASS(Stub_PdoStatement)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub, PdoStatement, stub, pdostatement, zephir_get_internal_ce(SL("pdostatement")), NULL, 0);
 
 	return SUCCESS;
-
 }
 

@@ -22,54 +22,36 @@
 /**
  * Arithmetic operations
  */
-ZEPHIR_INIT_CLASS(Stub_Logical) {
-
+ZEPHIR_INIT_CLASS(Stub_Logical)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Logical, stub, logical, stub_logical_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd1) {
-
+PHP_METHOD(Stub_Logical, testAnd1)
+{
 	zend_bool _0;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((0) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd2) {
-
+PHP_METHOD(Stub_Logical, testAnd2)
+{
 	zend_bool _0;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((1.5 != 0.0) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd3) {
-
+PHP_METHOD(Stub_Logical, testAnd3)
+{
 	zend_bool _0, _1;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((1.5 != 0.0) ? 1 : 0);
@@ -79,17 +61,11 @@ PHP_METHOD(Stub_Logical, testAnd3) {
 		_1 = (('A') ? 1 : 0);
 	}
 	RETURN_BOOL(_1);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd4) {
-
+PHP_METHOD(Stub_Logical, testAnd4)
+{
 	zend_bool _0, _1;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((1) ? 1 : 0);
 	if (_0) {
 		_0 = ((0) ? 1 : 0);
@@ -99,33 +75,21 @@ PHP_METHOD(Stub_Logical, testAnd4) {
 		_1 = 0;
 	}
 	RETURN_BOOL(_1);
-
 }
 
-PHP_METHOD(Stub_Logical, testAnd9) {
-
+PHP_METHOD(Stub_Logical, testAnd9)
+{
 	zend_bool _0;
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, _1$$3;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
-
-	b = zephir_get_intval(b_param);
-
-
 	_0 = Z_TYPE_P(a) == IS_ARRAY;
 	if (_0) {
 		_0 = zephir_array_isset_long(a, b);
@@ -135,50 +99,32 @@ PHP_METHOD(Stub_Logical, testAnd9) {
 		RETURN_CTORW(&_1$$3);
 	}
 	RETURN_NULL();
-
 }
 
-PHP_METHOD(Stub_Logical, testOr1) {
-
+PHP_METHOD(Stub_Logical, testOr1)
+{
 	zend_bool _0;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (!(_0)) {
 		_0 = ((1) ? 1 : 0);
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testOr2) {
-
+PHP_METHOD(Stub_Logical, testOr2)
+{
 	zend_bool _0;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (!(_0)) {
 		_0 = 1;
 	}
 	RETURN_BOOL(_0);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed1) {
-
+PHP_METHOD(Stub_Logical, testMixed1)
+{
 	zend_bool _0, _1;
 	zend_long first = 0, second = 0;
-	zval *this_ptr = getThis();
-
-
-
-
 	first = 0;
 	second = 1;
 	_0 = ((first) ? 1 : 0);
@@ -194,32 +140,21 @@ PHP_METHOD(Stub_Logical, testMixed1) {
 	} else {
 		php_printf("%s", "wrong");
 	}
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed2) {
-
+PHP_METHOD(Stub_Logical, testMixed2)
+{
 	zend_bool _0, _1;
 	zval *match, match_sub, *minLength, minLength_sub, _2;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&match_sub);
 	ZVAL_UNDEF(&minLength_sub);
 	ZVAL_UNDEF(&_2);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(match)
 		Z_PARAM_ZVAL(minLength)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &match, &minLength);
-
-
-
 	_0 = Z_TYPE_P(match) == IS_ARRAY;
 	if (_0) {
 		_0 = zephir_fast_count_int(match) == 2;
@@ -233,17 +168,11 @@ PHP_METHOD(Stub_Logical, testMixed2) {
 		RETURN_BOOL(1);
 	}
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed3) {
-
+PHP_METHOD(Stub_Logical, testMixed3)
+{
 	zend_bool a = 0, b = 0, _0, _1, _2, _3;
-	zval *this_ptr = getThis();
-
-
-
-
 	_0 = ((0) ? 1 : 0);
 	if (_0) {
 		_0 = ((1) ? 1 : 0);
@@ -263,31 +192,18 @@ PHP_METHOD(Stub_Logical, testMixed3) {
 	}
 	b = _3;
 	RETURN_BOOL(a == b);
-
 }
 
-PHP_METHOD(Stub_Logical, testMixed4) {
-
+PHP_METHOD(Stub_Logical, testMixed4)
+{
 	zval *a_param = NULL, *b_param = NULL;
 	zend_bool a, b, _0, _1, _2;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_BOOL(a)
 		Z_PARAM_BOOL(b)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &a_param, &b_param);
-
-	a = zephir_get_boolval(a_param);
-	b = zephir_get_boolval(b_param);
-
-
 	_0 = !a;
 	if (_0) {
 		_0 = !b;
@@ -301,6 +217,5 @@ PHP_METHOD(Stub_Logical, testMixed4) {
 		_1 = _2;
 	}
 	RETURN_BOOL(_1);
-
 }
 

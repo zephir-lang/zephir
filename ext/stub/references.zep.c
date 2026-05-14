@@ -15,20 +15,15 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_References) {
-
+ZEPHIR_INIT_CLASS(Stub_References)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, References, stub, references, stub_references_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_References, assignByRef) {
-
-	zval *this_ptr = getThis();
-
-
-
+PHP_METHOD(Stub_References, assignByRef)
+{
 
 }
 

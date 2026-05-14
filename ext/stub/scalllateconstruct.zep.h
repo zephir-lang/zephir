@@ -21,17 +21,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_scalllateconstruct_varvalue
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_scalllateconstruct_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_ScallLateConstruct, __construct, arginfo_stub_scalllateconstruct___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#else
-	PHP_ME(Stub_ScallLateConstruct, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-#endif
+PHP_ME(Stub_ScallLateConstruct, __construct, arginfo_stub_scalllateconstruct___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_ScallLateConstruct, testStaticInit, arginfo_stub_scalllateconstruct_teststaticinit, ZEND_ACC_STATIC|ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_ScallLateConstruct, testPublicInit, arginfo_stub_scalllateconstruct_testpublicinit, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_ScallLateConstruct, testPublicInit, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_ScallLateConstruct, testPublicInit, arginfo_stub_scalllateconstruct_testpublicinit, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ScallLateConstruct, varValue, arginfo_stub_scalllateconstruct_varvalue, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

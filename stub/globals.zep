@@ -20,6 +20,11 @@ class Globals
 		globals_set("my_setting_4", value);
 	}
 
+	public function setStringValue(string value) -> void
+	{
+	    globals_set("my_setting_5", value);
+	}
+
 	public function setBoolValue(value) -> void
 	{
 		globals_set("my_setting_1", value);
@@ -28,6 +33,11 @@ class Globals
 	public function setDefaultGlobalsOrmCacheLevel(value) -> void
 	{
 		globals_set("orm.cache_level", value);
+	}
+
+	public function setDefaultGlobalsOrmCachePrefix(string value) -> void
+	{
+	    globals_set("orm.cache_prefix", value);
 	}
 
 	/* Get Default Properties */
@@ -89,10 +99,26 @@ class Globals
 	}
 
 	/**
+     * @return mixed
+     */
+    public function getDefaultGlobals8()
+    {
+        return globals_get("my_setting_5");
+    }
+
+	/**
 	 * @return mixed
 	 */
 	public function getDefaultGlobalsOrmCacheLevel()
 	{
 		return globals_get("orm.cache_level");
 	}
+
+	/**
+     * @return mixed
+     */
+    public function getDefaultGlobalsOrmCachePrefix()
+    {
+        return globals_get("orm.cache_prefix");
+    }
 }

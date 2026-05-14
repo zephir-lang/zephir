@@ -15,72 +15,47 @@
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_ConstantsInterfaceB) {
-
+ZEPHIR_INIT_CLASS(Stub_ConstantsInterfaceB)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, ConstantsInterfaceB, stub, constantsinterfaceb, stub_constantsinterfaceb_method_entry, 0);
 
 	zend_class_implements(stub_constantsinterfaceb_ce, 1, stub_testinterface_ce);
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant1) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant1)
+{
 
 	RETURN_NULL();
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant2) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant2)
+{
 
 	RETURN_BOOL(0);
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant3) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant3)
+{
 
 	RETURN_BOOL(1);
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant4) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant4)
+{
 
 	RETURN_LONG(10);
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant5) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant5)
+{
 
 	RETURN_DOUBLE(10.25);
-
 }
 
-PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant6) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_ConstantsInterfaceB, testReadInterfaceConstant6)
+{
 
 	RETURN_STRING("test");
-
 }
 

@@ -68,20 +68,8 @@ ZEPHIR_INIT_FUNCS(stub_compare_method_entry) {
 	PHP_ME(Stub_Compare, testVarWithStringEquals, arginfo_stub_compare_testvarwithstringequals, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Compare, testVarEqualsNull, arginfo_stub_compare_testvarequalsnull, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Compare, testNullEqualsVar, arginfo_stub_compare_testnullequalsvar, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Compare, testNotIdenticalZeroVar, arginfo_stub_compare_testnotidenticalzerovar, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Compare, testNotIdenticalZeroVar, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Compare, testNotIdenticalZeroInt, arginfo_stub_compare_testnotidenticalzeroint, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Compare, testNotIdenticalZeroInt, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Compare, testNotIdenticalZeroLong, arginfo_stub_compare_testnotidenticalzerolong, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Compare, testNotIdenticalZeroLong, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Compare, testNotIdenticalZeroVar, arginfo_stub_compare_testnotidenticalzerovar, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Compare, testNotIdenticalZeroInt, arginfo_stub_compare_testnotidenticalzeroint, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Compare, testNotIdenticalZeroLong, arginfo_stub_compare_testnotidenticalzerolong, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

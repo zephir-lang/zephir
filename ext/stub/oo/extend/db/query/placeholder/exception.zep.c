@@ -14,11 +14,10 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Db_Query_Placeholder_Exception) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Db_Query_Placeholder_Exception)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Db\\Query\\Placeholder, Exception, stub, oo_extend_db_query_placeholder_exception, stub_oo_extend_db_query_exception_ce, NULL, 0);
 
 	return SUCCESS;
-
 }
 

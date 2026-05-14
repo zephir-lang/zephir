@@ -82,5 +82,5 @@ Phalcon Team
 [team]: https://phalcon.io/en-us/team
 [issues]: https://github.com/zephir-lang/zephir/issues
 [docs]: https://docs.zephir-lang.com
-[git rebase]: http://git-scm.com/book/en/Git-Branching-Rebasing
+[git rebase]: https://git-scm.com/book/en/Git-Branching-Rebasing
 [psr-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md

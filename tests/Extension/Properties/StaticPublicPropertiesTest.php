@@ -49,9 +49,9 @@ final class StaticPublicPropertiesTest extends TestCase
         $this->assertEquals(-1, StaticPublicProperties::$someSub);
 
         // PHP Notice:  A non well formed numeric value encountered
-        //\Stub\Properties\StaticPublicProperties::testAddAndSub2();
-        //$this->assertEquals(2, \Stub\Properties\StaticPublicProperties::$someAdd);
-        //$this->assertEquals(-2, \Stub\Properties\StaticPublicProperties::$someSub);
+        // \Stub\Properties\StaticPublicProperties::testAddAndSub2();
+        // $this->assertEquals(2, \Stub\Properties\StaticPublicProperties::$someAdd);
+        // $this->assertEquals(-2, \Stub\Properties\StaticPublicProperties::$someSub);
 
         StaticPublicProperties::testAddAndSub3();
         $this->assertEquals(2, StaticPublicProperties::$someAdd);

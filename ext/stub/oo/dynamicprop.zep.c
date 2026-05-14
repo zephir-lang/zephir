@@ -14,538 +14,293 @@
 #include "kernel/main.h"
 #include "kernel/object.h"
 #include "kernel/memory.h"
-#include "ext/spl/spl_exceptions.h"
-#include "kernel/exception.h"
-#include "kernel/operators.h"
 
 
 /**
  *
  */
-ZEPHIR_INIT_CLASS(Stub_Oo_DynamicProp) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_DynamicProp)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, DynamicProp, stub, oo_dynamicprop, stub_oo_dynamicprop_method_entry, 0);
 
 	zend_declare_property_null(stub_oo_dynamicprop_ce, SL("test"), ZEND_ACC_PUBLIC);
-
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyInt)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, 10);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue) {
-
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, __$true;
-	zval property;
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolTrue)
+{
+	zval property_zv, __$true;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_BOOL(&__$true, 1);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
-	zephir_update_property_zval_zval(this_ptr, &property, &__$true);
-	ZEPHIR_MM_RESTORE();
-
+	ZVAL_STR(&property_zv, property);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$true);
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse) {
-
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, __$false;
-	zval property;
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyBoolFalse)
+{
+	zval property_zv, __$false;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_BOOL(&__$false, 0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
-	zephir_update_property_zval_zval(this_ptr, &property, &__$false);
-	ZEPHIR_MM_RESTORE();
-
+	ZVAL_STR(&property_zv, property);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$false);
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyString)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "string");
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyChar)
+{
 	char a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	a = 'A';
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, a);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyUChar)
+{
 	unsigned char a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	a = 'A';
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, a);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull) {
-
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, __$null;
-	zval property;
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyNull)
+{
+	zval property_zv, __$null;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
-	zephir_update_property_zval_zval(this_ptr, &property, &__$null);
-	ZEPHIR_MM_RESTORE();
-
+	ZVAL_STR(&property_zv, property);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &__$null);
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableInt)
+{
 	zend_long a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	a = 10;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_LONG(&_0, a);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, a;
-	zval property;
+	zval property_zv, a;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&a);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "test");
-	zephir_update_property_zval_zval(this_ptr, &property, &a);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &a);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolTrue)
+{
 	zend_bool a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	a = 1;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, a);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableBoolFalse)
+{
 	zend_bool a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *property_param = NULL, _0;
-	zval property;
+	zval property_zv, _0;
+	zend_string *property = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&property);
+	ZVAL_UNDEF(&property_zv);
 	ZVAL_UNDEF(&_0);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &property_param);
-
-	if (UNEXPECTED(Z_TYPE_P(property_param) != IS_STRING && Z_TYPE_P(property_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'property' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(property_param) == IS_STRING)) {
-		zephir_get_strval(&property, property_param);
-	} else {
-		ZEPHIR_INIT_VAR(&property);
-		ZVAL_EMPTY_STRING(&property);
-	}
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&property_zv);
+	ZVAL_STR_COPY(&property_zv, property);
 	a = 0;
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_BOOL(&_0, a);
-	zephir_update_property_zval_zval(this_ptr, &property, &_0);
+	zephir_update_property_zval_zval(this_ptr, &property_zv, &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringProperty) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringProperty)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
 	zephir_update_property_zval(this_ptr, ZEND_STRL("test"), &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString) {
-
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *value_param = NULL;
-	zval value;
+PHP_METHOD(Stub_Oo_DynamicProp, setExistingStringPropertyString)
+{
+	zval value_zv;
+	zend_string *value = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&value);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
+	ZVAL_UNDEF(&value_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(value)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &value_param);
-
-	if (UNEXPECTED(Z_TYPE_P(value_param) != IS_STRING && Z_TYPE_P(value_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'value' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(value_param) == IS_STRING)) {
-		zephir_get_strval(&value, value_param);
-	} else {
-		ZEPHIR_INIT_VAR(&value);
-		ZVAL_EMPTY_STRING(&value);
-	}
-
-
-	zephir_update_property_zval(this_ptr, ZEND_STRL("eproperty"), &value);
-	ZEPHIR_MM_RESTORE();
-
+	ZVAL_STR(&value_zv, value);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("eproperty"), &value_zv);
 }
 
-PHP_METHOD(Stub_Oo_DynamicProp, setNonExistingStringProperty) {
-
+PHP_METHOD(Stub_Oo_DynamicProp, setNonExistingStringProperty)
+{
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "works");
 	zephir_update_property_zval(this_ptr, ZEND_STRL("property"), &_0);
 	ZEPHIR_MM_RESTORE();
-
 }
 

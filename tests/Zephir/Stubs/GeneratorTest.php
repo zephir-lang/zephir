@@ -14,16 +14,14 @@ declare(strict_types=1);
 namespace Zephir\Test\Stubs;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 use Zephir\AliasManager;
-use Zephir\ClassConstant;
-use Zephir\ClassDefinition;
-use Zephir\ClassMethod;
-use Zephir\ClassMethodParameters;
-use Zephir\ClassProperty;
+use Zephir\Class\Constant;
+use Zephir\Class\Definition\Definition;
+use Zephir\Class\Method\Method;
+use Zephir\Class\Method\Parameters;
+use Zephir\Class\Property;
+use Zephir\Os;
 use Zephir\Stubs\Generator;
-
-use function Zephir\is_windows;
 
 class GeneratorTest extends TestCase
 {
@@ -32,21 +30,23 @@ class GeneratorTest extends TestCase
      */
     private $generatorClass;
     private Generator $testClass;
-    private ClassDefinition $classDefinition;
+    private Definition $classDefinition;
 
     protected function setUp(): void
     {
         $this->generatorClass = new \ReflectionClass(Generator::class);
         $this->testClass = new Generator([]);
-        $this->classDefinition = new ClassDefinition('Stub\Stubs', 'StubsBuildClass');
+        $this->classDefinition = new Definition('Stub\Stubs', 'StubsBuildClass');
     }
 
     /**
      * Modify method visibility to call protected.
      *
      * @param string $name - method name
+     *
      * @return mixed
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      */
     private function getMethod(string $name)
     {
@@ -58,52 +58,50 @@ class GeneratorTest extends TestCase
 
     public function testShouldBuildClass(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
         $expected = <<<DOC
-<?php
+            <?php
 
-namespace Stub\Stubs;
+            namespace Stub\Stubs;
 
-use Stub\Extendable\BaseTestClass;
-use Stub\Events\EventInterface as EventsManagerInterface;
+            use Stub\Extendable\BaseTestClass;
+            use Stub\Events\EventInterface as EventsManagerInterface;
 
-/**
- * Class description example
- */
-final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsManagerInterface
-{
-    /**
-     * Default path delimiter
-     */
-    const DEFAULT_PATH_DELIMITER = '.';
+            /**
+             * Class description example
+             */
+            final class StubsBuildClass extends BaseTestClass implements \Iterator, EventsManagerInterface
+            {
+                /**
+                 * Default path delimiter
+                 */
+                const DEFAULT_PATH_DELIMITER = '.';
 
-    /**
-     * Default path delimiter class property
-     */
-    static public \$defaultPathDelimiter = null;
+                /**
+                 * Default path delimiter class property
+                 */
+                static public \$defaultPathDelimiter = null;
 
+                /**
+                 * @param string \$key
+                 * @param int \$priority
+                 */
+                public static function init(string \$key, int \$priority = 1)
+                {
+                }
+            }
 
-    /**
-     * @param string \$key
-     * @param int \$priority
-     */
-    public static function init(string \$key, int \$priority = 1)
-    {
-    }
-
-}
-
-DOC;
+            DOC;
 
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildClass');
 
-        $extendsClassDefinition = new ClassDefinition('Stub\Extendable', 'BaseTestClass');
-        $implementClassDefinition = new ClassDefinition('Stub\Events', 'EventsManagerInterface');
+        $extendsClassDefinition = new Definition('Stub\Extendable', 'BaseTestClass');
+        $implementClassDefinition = new Definition('Stub\Events', 'EventsManagerInterface');
         $aliasManager = new AliasManager();
 
         // Definitions
@@ -129,14 +127,14 @@ DOC;
             ],
         ];
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'init',
-            new ClassMethodParameters($methodParamsDefinition)
+            new Parameters($methodParamsDefinition)
         );
 
-        $constantsDefinition = new ClassConstant(
+        $constantsDefinition = new Constant(
             'DEFAULT_PATH_DELIMITER',
             [
                 'type' => 'string',
@@ -145,7 +143,7 @@ DOC;
             'Default path delimiter'
         );
 
-        $propertyDefinition = new ClassProperty(
+        $propertyDefinition = new Property(
             $this->classDefinition,
             ['public', 'static'],
             'defaultPathDelimiter',
@@ -229,7 +227,7 @@ DOC;
                 ['static'], 'string', 'A', 'static private $testProperty = \'A\';',
             ],
             [
-                ['static', 'error'], 'empty-array', null, 'static private $testProperty = array();',
+                ['static', 'error'], 'empty-array', null, 'static private $testProperty = [];',
             ],
             [
                 [], 'null', null, 'private $testProperty = null;',
@@ -239,17 +237,19 @@ DOC;
 
     /**
      * @dataProvider propertyProvider
+     *
      * @covers       \Zephir\Stubs\Generator::buildProperty
      *
-     * @param array $visibility
+     * @param array  $visibility
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      */
     public function testShouldBuildProperty(array $visibility, string $type, $value, string $expected): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -263,7 +263,7 @@ DOC;
         // Test requirements initialization
 
         $buildClass = $this->getMethod('buildProperty');
-        $classProperty = new ClassProperty(
+        $classProperty = new Property(
             $this->classDefinition,
             $visibility,
             'testProperty',
@@ -281,7 +281,7 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function constantProvider(): array
@@ -298,7 +298,7 @@ DOC;
                 'char', 'A', 'const TEST = \'A\';',
             ],
             [
-                'empty-array', null, 'const TEST = array();',
+                'empty-array', null, 'const TEST = [];',
             ],
             [
                 'static-constant-access', ['left' => '\Pdo', 'right' => 'FETCH_LAZY'], 'const TEST = \\Pdo::FETCH_LAZY;',
@@ -321,22 +321,80 @@ DOC;
                         ],
                     ],
                 ],
-                'const TEST = array(\'first\' => 1, \'second\' => 2, 3 => 0);',
+                'const TEST = [\'first\' => 1, \'second\' => 2, 3 => 0];',
             ],
         ];
+    }
+
+    public function typedConstantProvider(): array
+    {
+        $typed   = PHP_VERSION_ID >= 80300;
+        $docPart = "/**\n * @var %s\n */\n";
+
+        return [
+            [
+                'int', 1, '@var int',
+                sprintf($docPart, 'int') . ($typed ? 'const int TEST = 1;' : 'const TEST = 1;'),
+            ],
+            [
+                'string', 'Foo', '@var string',
+                sprintf($docPart, 'string') . ($typed ? "const string TEST = 'Foo';" : "const TEST = 'Foo';"),
+            ],
+            [
+                'bool', 1, '@var bool',
+                sprintf($docPart, 'bool') . ($typed ? 'const bool TEST = 1;' : 'const TEST = 1;'),
+            ],
+            [
+                'string', 'bar', null, "const TEST = 'bar';",
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider typedConstantProvider
+     *
+     * @throws \ReflectionException
+     */
+    public function testShouldBuildTypedConstant(string $type, mixed $value, ?string $docBlock, string $expected): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $buildClass = $this->getMethod('buildConstant');
+
+        $classConstant = new Constant(
+            'TEST',
+            [
+                'type'  => $type,
+                'value' => $value,
+            ],
+            $docBlock
+        );
+
+        $actual = $buildClass->invokeArgs(
+            $this->testClass,
+            [
+                $classConstant,
+                '',
+            ]
+        );
+
+        $this->assertSame($expected, $actual);
     }
 
     /**
      * @dataProvider constantProvider
      *
      * @param string $type
-     * @param $value
+     * @param        $value
      * @param string $expected
-     * @throws ReflectionException
+     *
+     * @throws \ReflectionException
      */
     public function testShouldBuildConstant(string $type, $value, string $expected): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -358,7 +416,7 @@ DOC;
             $extended = $value;
         }
 
-        $classConstant = new ClassConstant(
+        $classConstant = new Constant(
             'TEST',
             [
                 'type' => $type,
@@ -376,12 +434,12 @@ DOC;
             ]
         );
 
-        $this->assertSame(PHP_EOL.$expected, $actual);
+        $this->assertSame($expected, $actual);
     }
 
     public function testShouldBuildMethod(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('Warning: Strings contain different line endings!');
         }
 
@@ -407,7 +465,7 @@ DOC;
                 ],
             ],
         ];
-        $methodParams = new ClassMethodParameters($methodParamsDefinition);
+        $methodParams = new Parameters($methodParamsDefinition);
 
         $returnType = [
             'type' => 'return-type',
@@ -423,7 +481,7 @@ DOC;
 
         $this->classDefinition->setAliasManager(new AliasManager());
 
-        $classMethod = new ClassMethod(
+        $classMethod = new Method(
             $this->classDefinition,
             ['public', 'static'],
             'testName',
@@ -434,17 +492,17 @@ DOC;
         );
 
         $expected = <<<DOC
-/**
- * Example description for testName method.
- *
- * @param string \$key
- * @param int \$priority
- * @return bool
- */
-public static function testName(string \$key, int \$priority = 1): bool
-{
-}
-DOC;
+            /**
+             * Example description for testName method.
+             *
+             * @param string \$key
+             * @param int \$priority
+             * @return bool
+             */
+            public static function testName(string \$key, int \$priority = 1): bool
+            {
+            }
+            DOC;
 
         // protected function buildMethod(ClassMethod $method, bool $isInterface, string $indent): string
         $actual = $buildClass->invokeArgs(

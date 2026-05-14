@@ -223,7 +223,7 @@ class Mcall
 		return driverOptions;
 	}
 
-	public function testObjectParamCastStdClass(<\StdClass> param)
+	public function testObjectParamCastStdClass(<\stdClass> param)
 	{
 		return param;
 	}
@@ -262,4 +262,25 @@ class Mcall
 		let a = new self;
 		return a->bb();
 	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1136
+     */
+    public function issue1136()
+    {
+        var _finfo;
+
+        if version_compare(PHP_VERSION, "8.0.0", ">=") {
+            let _finfo = new \finfo();
+        } else {
+            let _finfo = finfo_open();
+        }
+
+        return _finfo;
+    }
+
+    public function issue2245VarArgumentNullable(var param = null)
+    {
+        return param;
+    }
 }

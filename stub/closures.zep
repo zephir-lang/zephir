@@ -3,6 +3,10 @@ namespace Stub;
 
 class Closures
 {
+    protected _argument;
+    protected _function;
+    protected _name = "default";
+
 	public function simple1()
 	{
 		return function(){ };
@@ -76,4 +80,57 @@ class Closures
 
         return call_user_func_array(closure, [obj]);
 	}
+
+	public function issue1036SetArgument(var argument)
+	{
+	    let this->_argument = argument;
+	}
+
+	public function issue1036SetFunction(callable func)
+	{
+	    let this->_function = func;
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1036
+     */
+	public function issue1036Call()
+	{
+	    return call_user_func(this->_function, this->_argument);
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+
+    public function issue2497Helper() -> string
+    {
+        return "hello";
+    }
+
+    public function issue2497ClosureThis() -> <\Closure>
+    {
+        return function() {
+            return this->issue2497Helper();
+        };
+    }
+
+    public function issue2497ClosureThisWithUse(var name) -> <\Closure>
+    {
+        return function() use (name) {
+            return this->issue2497Helper() . ":" . name;
+        };
+    }
+
+    public function issue2497PropertyAccess() -> <\Closure>
+    {
+        return function() {
+            return this->_name;
+        };
+    }
+
+    public function issue2497SetName(string name) -> void
+    {
+        let this->_name = name;
+    }
 }

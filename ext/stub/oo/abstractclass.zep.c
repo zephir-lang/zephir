@@ -14,43 +14,42 @@
 #include "kernel/main.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_AbstractClass) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_AbstractClass)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Oo, AbstractClass, stub, oo_abstractclass, stub_oo_abstractclass_method_entry, ZEND_ACC_EXPLICIT_ABSTRACT_CLASS);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclaration) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclaration)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithReturnType) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithReturnType)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithParameter) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithParameter)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithParameterAndReturnType) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testMethodDeclarationWithParameterAndReturnType)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclaration) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclaration)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithReturnType) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithReturnType)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithParameter) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithParameter)
+{
 }
 
-PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithParameterAndReturnType) {
-
+PHP_METHOD(Stub_Oo_AbstractClass, testAbstractMethodDeclarationWithParameterAndReturnType)
+{
 }
 

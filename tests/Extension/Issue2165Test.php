@@ -23,6 +23,10 @@ final class Issue2165Test extends TestCase
 {
     public function testIssue2165(): void
     {
+        if (version_compare(PHP_VERSION, '8.2.0', '>=')) {
+            $this->markTestSkipped('Creation of dynamic property is deprecated');
+        }
+
         $class = Issue2165Class::build([
             [22, -17, 12],
             [4, 11, -2],

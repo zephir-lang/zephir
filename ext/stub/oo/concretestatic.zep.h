@@ -21,16 +21,8 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_oo_concretestatic_simplesta
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_oo_concretestatic_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_ConcreteStatic, parentFunction, arginfo_stub_oo_concretestatic_parentfunction, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#else
-	PHP_ME(Stub_Oo_ConcreteStatic, parentFunction, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Oo_ConcreteStatic, childFunction, arginfo_stub_oo_concretestatic_childfunction, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#else
-	PHP_ME(Stub_Oo_ConcreteStatic, childFunction, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-#endif
+PHP_ME(Stub_Oo_ConcreteStatic, parentFunction, arginfo_stub_oo_concretestatic_parentfunction, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+PHP_ME(Stub_Oo_ConcreteStatic, childFunction, arginfo_stub_oo_concretestatic_childfunction, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_Oo_ConcreteStatic, callParentFunction, arginfo_stub_oo_concretestatic_callparentfunction, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_ME(Stub_Oo_ConcreteStatic, simpleStaticIntReturn, arginfo_stub_oo_concretestatic_simplestaticintreturn, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 	PHP_FE_END

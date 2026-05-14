@@ -20,7 +20,7 @@ use Zephir\CompilationContext;
 use Zephir\Exception\CompilerException;
 use Zephir\Optimizers\FunctionCall\PregMatchOptimizer;
 use Zephir\SymbolTable;
-use Zephir\Variable;
+use Zephir\Variable\Variable;
 
 final class PregMatchOptimizerTest extends TestCase
 {
@@ -144,7 +144,7 @@ final class PregMatchOptimizerTest extends TestCase
             ->expects($this->once())
             ->method('getVariable')
             ->with('matches')
-            ->willReturn(false);
+            ->willReturn(null);
 
         $symbolTable = $context->getProperty('symbolTable');
         $symbolTable->setValue($this->contextMock, $this->symTableMock);

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Zephir\Test;
 
@@ -121,7 +121,7 @@ final class AliasManagerTest extends TestCase
      * @dataProvider statementProvider
      *
      * @param array $useStatements
-     * @param bool $expected
+     * @param bool  $expected
      */
     public function testShouldCheckAliasedStatement(array $useStatements, bool $expected): void
     {
@@ -153,7 +153,7 @@ final class AliasManagerTest extends TestCase
     /**
      * @dataProvider classNameDataProvider
      *
-     * @param array $useStatements
+     * @param array  $useStatements
      * @param string $expected
      */
     public function testShouldGetAliasForClassName(array $useStatements, string $expected): void

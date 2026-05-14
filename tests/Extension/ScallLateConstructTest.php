@@ -20,7 +20,7 @@ final class ScallLateConstructTest extends TestCase
 {
     /**
      * @issue https://github.com/zephir-lang/zephir/issues/2111
-     */    
+     */
     public function testConstruct(): void
     {
         $test = new ScallLateConstruct();

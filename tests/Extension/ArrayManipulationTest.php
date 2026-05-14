@@ -26,4 +26,14 @@ final class ArrayManipulationTest extends TestCase
         $this->assertIsArray($array);
         $this->assertCount(1000000, $array);
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/774
+     */
+    public function testIssue774(): void
+    {
+        $class = new ArrayManipulation();
+
+        $this->assertSame(['prop0' => 0, 'prop1' => 1], $class->issue774());
+    }
 }

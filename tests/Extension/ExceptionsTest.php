@@ -9,6 +9,8 @@
  * the LICENSE file that was distributed with this source code.
  */
 
+declare(strict_types=1);
+
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
@@ -83,7 +85,7 @@ final class ExceptionsTest extends TestCase
     public function testExceptionInt(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(123);
+        $this->expectExceptionMessage('123');
 
         $this->test->testExceptionLiteral('int');
     }
@@ -91,7 +93,7 @@ final class ExceptionsTest extends TestCase
     public function testExceptionDouble(): void
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage(123.123);
+        $this->expectExceptionMessage('123.123');
 
         $this->test->testExceptionLiteral('double');
     }
@@ -130,9 +132,7 @@ final class ExceptionsTest extends TestCase
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
 
-        $this->test->internalExceptionCallable = function () {
-            return false;
-        };
+        $this->test->internalExceptionCallable = fn () => false;
 
         try {
             $value = $this->test->testMultiException('test', new Exception('Some Exception'));
@@ -147,9 +147,7 @@ final class ExceptionsTest extends TestCase
             $this->assertSame($e->getMessage(), 'Some Exception');
         }
 
-        $this->test->exceptionCallable = function () {
-            return false;
-        };
+        $this->test->exceptionCallable = fn () => false;
 
         try {
             $this->test->testMultiException('test', new \Exception('Some Exception'));

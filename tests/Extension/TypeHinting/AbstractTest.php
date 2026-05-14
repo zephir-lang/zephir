@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Extension\TypeHinting;
 
 use PHPUnit\Framework\TestCase;
-use TestConcreteClass;
 
 final class AbstractTest extends TestCase
 {
@@ -23,7 +22,7 @@ final class AbstractTest extends TestCase
      */
     public function testShouldCreateCompatibleChildClassUsingTypeHintedParams(): void
     {
-        $childClass = new TestConcreteClass();
+        $childClass = new \TestConcreteClass();
 
         $this->assertEquals(
             [[1667], '/', true, null],
@@ -41,7 +40,7 @@ final class AbstractTest extends TestCase
      */
     public function testShouldCreateCompatibleChildClassWithMultipleReturnTypesHint(): void
     {
-        $childClass = new TestConcreteClass();
+        $childClass = new \TestConcreteClass();
         $this->assertEquals('TestConcreteClass::returnOneOfScalar', $childClass->returnOneOfScalar());
     }
 
@@ -50,7 +49,7 @@ final class AbstractTest extends TestCase
      */
     public function testShouldCreateCompatibleChildClassWithScalarType(): void
     {
-        $childClass = new TestConcreteClass();
+        $childClass = new \TestConcreteClass();
 
         $this->assertEquals(1, $childClass->returnInt());
         $this->assertEquals(1, $childClass->returnUint());

@@ -258,11 +258,26 @@ final class ArithmeticTest extends TestCase
         $this->assertSame($this->class->letStatementVarMinus(-1), 1);
         $this->assertSame($this->class->letStatementVarMinus(true), -true);
         $this->assertSame($this->class->letStatementVarMinus(false), -false);
-        $this->assertSame($this->class->letStatementVarMinus(''), @-(int)'');
+        $this->assertSame($this->class->letStatementVarMinus(''), @-(int) '');
         $this->assertTrue($this->class->letStatementBoolMinus(-1)); // it is zend_bool not zend_var
         $this->assertTrue($this->class->letStatementBoolMinus(1));
         $this->assertTrue($this->class->letStatementBoolMinus(true));
         $this->assertFalse($this->class->letStatementBoolMinus(false));
         $this->assertFalse($this->class->letStatementBoolMinus(0));
+    }
+
+    public function testIssue812(): void
+    {
+        $this->assertSame(1, $this->class->absParam(1));
+        $this->assertSame(1, $this->class->absParam(-1));
+        $this->assertSame(1234567, $this->class->absParam(-1234567));
+
+        $this->assertSame(-1, $this->class->negativeInt(-1));
+        $this->assertSame(-1234567, $this->class->negativeInt(-1234567));
+        $this->assertSame(1234567, $this->class->negativeInt(1234567));
+
+        $this->assertSame(-1, $this->class->negativeLong(-1));
+        $this->assertSame(-1234567, $this->class->negativeLong(-1234567));
+        $this->assertSame(1234567, $this->class->negativeLong(1234567));
     }
 }

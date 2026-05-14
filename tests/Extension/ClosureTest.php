@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * This file is part of the Zephir.
  *
@@ -10,6 +8,8 @@ declare(strict_types=1);
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
+
+declare(strict_types=1);
 
 namespace Extension;
 
@@ -24,5 +24,57 @@ final class ClosureTest extends TestCase
 
         $this->assertSame(2, $test->testUseCommand()());
         $this->assertInstanceOf(\stdClass::class, $test->issue642());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1036
+     */
+    public function testIssue1036(): void
+    {
+        $test = new Closures();
+
+        $test->issue1036SetArgument(true);
+        $test->issue1036SetFunction(fn ($argument) => $argument);
+
+        $this->assertTrue($test->issue1036Call());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497ClosureThis(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2497ClosureThis();
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('hello', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497ClosureThisWithUse(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2497ClosureThisWithUse('world');
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('hello:world', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497PropertyAccess(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2497PropertyAccess();
+        $this->assertSame('default', $closure());
+
+        $test->issue2497SetName('custom');
+        $closure2 = $test->issue2497PropertyAccess();
+        $this->assertSame('custom', $closure2());
     }
 }

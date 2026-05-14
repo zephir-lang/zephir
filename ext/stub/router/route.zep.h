@@ -104,60 +104,20 @@ ZEPHIR_INIT_FUNCS(stub_router_route_method_entry) {
 	PHP_ME(Stub_Router_Route, via, arginfo_stub_router_route_via, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, extractNamedParams, arginfo_stub_router_route_extractnamedparams, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, reConfigure, arginfo_stub_router_route_reconfigure, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getName, arginfo_stub_router_route_getname, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getName, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Router_Route, getName, arginfo_stub_router_route_getname, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, setName, arginfo_stub_router_route_setname, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, beforeMatch, arginfo_stub_router_route_beforematch, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getBeforeMatch, arginfo_stub_router_route_getbeforematch, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getBeforeMatch, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getRouteId, arginfo_stub_router_route_getrouteid, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getRouteId, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getPattern, arginfo_stub_router_route_getpattern, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getPattern, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getCompiledPattern, arginfo_stub_router_route_getcompiledpattern, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getCompiledPattern, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getPaths, arginfo_stub_router_route_getpaths, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getPaths, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getReversedPaths, arginfo_stub_router_route_getreversedpaths, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getReversedPaths, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Router_Route, getBeforeMatch, arginfo_stub_router_route_getbeforematch, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Router_Route, getRouteId, arginfo_stub_router_route_getrouteid, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Router_Route, getPattern, arginfo_stub_router_route_getpattern, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Router_Route, getCompiledPattern, arginfo_stub_router_route_getcompiledpattern, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Router_Route, getPaths, arginfo_stub_router_route_getpaths, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Router_Route, getReversedPaths, arginfo_stub_router_route_getreversedpaths, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, setHttpMethods, arginfo_stub_router_route_sethttpmethods, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getHttpMethods, arginfo_stub_router_route_gethttpmethods, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getHttpMethods, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Router_Route, getHttpMethods, arginfo_stub_router_route_gethttpmethods, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, setHostname, arginfo_stub_router_route_sethostname, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getHostname, arginfo_stub_router_route_gethostname, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getHostname, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Router_Route, getHostname, arginfo_stub_router_route_gethostname, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Router_Route, convert, arginfo_stub_router_route_convert, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Router_Route, getConverters, arginfo_stub_router_route_getconverters, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Router_Route, getConverters, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Router_Route, getConverters, arginfo_stub_router_route_getconverters, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };
