@@ -29,7 +29,7 @@ class Cast
     // To string cast
 
     /**
-     * @see https://github.com/zephir-lang/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastChar() -> string
     {
@@ -37,11 +37,21 @@ class Cast
     }
 
     /**
-     * @see https://github.com/zephir-lang/zephir/issues/1988
+     * @issue https://github.com/zephir-lang/zephir/issues/1988
      */
     public function testStringCastVariableChar() -> string
     {
         char a = 'X';
+        return (string) a;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2232
+     */
+    public function testStringCastFromNull() -> string
+    {
+        var a = null;
+
         return (string) a;
     }
 
@@ -154,7 +164,7 @@ class Cast
      */
     public function testIntCastFromStdClass() -> int
     {
-        return (int) (new \StdClass);
+        return (int) (new \stdClass);
     }
 
     /**
@@ -164,7 +174,7 @@ class Cast
     public function testIntCastFromVariableStdClass() -> int
     {
         var a;
-        let a = new \StdClass;
+        let a = new \stdClass;
         return (int) a;
     }
 
@@ -261,7 +271,7 @@ class Cast
      */
     public function testFloatCastFromStdClass() -> float
     {
-        return (float) (new \StdClass);
+        return (float) (new \stdClass);
     }
 
     /**
@@ -271,7 +281,7 @@ class Cast
     public function testFloatCastFromVariableStdClass() -> float
     {
         var a;
-        let a = new \StdClass;
+        let a = new \stdClass;
         return (float) a;
     }
 
@@ -314,7 +324,7 @@ class Cast
     public function testBooleanCastFromObject() -> boolean
     {
         var simpleObject;
-        let simpleObject = new \StdClass();
+        let simpleObject = new \stdClass();
         return (boolean) simpleObject;
     }
 
@@ -476,7 +486,7 @@ class Cast
     public function testArrayCastFromVariableStdClass() -> array
     {
         var uids;
-        let uids = new \StdClass;
+        let uids = new \stdClass;
         let uids->p1 = "v1";
         let uids->p2 = "v2";
         let uids = (array) uids;

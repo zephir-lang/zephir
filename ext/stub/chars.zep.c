@@ -20,89 +20,54 @@
 /**
  * Chars specific tests
  */
-ZEPHIR_INIT_CLASS(Stub_Chars) {
-
+ZEPHIR_INIT_CLASS(Stub_Chars)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Chars, stub, chars, stub_chars_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Chars, sumChars1) {
-
+PHP_METHOD(Stub_Chars, sumChars1)
+{
 	char ch, chlower = 0;
-	zval *this_ptr = getThis();
-
-
-
-
 	ch = 'A';
 	chlower = (ch + 32);
 	RETURN_LONG(chlower);
-
 }
 
-PHP_METHOD(Stub_Chars, sumChars2) {
-
+PHP_METHOD(Stub_Chars, sumChars2)
+{
 	zval *ch_param = NULL;
 	char ch, chlower = 0;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(ch)
+		Z_PARAM_ZVAL(ch_param)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
-
 	ch = zephir_get_charval(ch_param);
-
-
 	chlower = (ch + 32);
 	RETURN_LONG(chlower);
-
 }
 
-PHP_METHOD(Stub_Chars, diffChars1) {
-
+PHP_METHOD(Stub_Chars, diffChars1)
+{
 	char ch, chlower = 0;
-	zval *this_ptr = getThis();
-
-
-
-
 	ch = 'a';
 	chlower = (ch - 32);
 	RETURN_LONG(chlower);
-
 }
 
-PHP_METHOD(Stub_Chars, diffChars2) {
-
+PHP_METHOD(Stub_Chars, diffChars2)
+{
 	zval *ch_param = NULL;
 	char ch, chlower = 0;
-	zval *this_ptr = getThis();
 
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(ch)
+		Z_PARAM_ZVAL(ch_param)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
-
 	ch = zephir_get_charval(ch_param);
-
-
 	chlower = (ch - 32);
 	RETURN_LONG(chlower);
-
 }
 

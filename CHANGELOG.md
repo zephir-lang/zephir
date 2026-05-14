@@ -1,15 +1,167 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-The format based on [Keep a Changelog](http://keepachangelog.com)
-and this project adheres to [Semantic Versioning](http://semver.org).
+The format based on [Keep a Changelog](https://keepachangelog.com)
+and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
+
+### Fixed
+- Fixed method return-type enforcement at runtime for `return this->property`: methods declared with a strict scalar return type (`-> string`, `-> int`, `-> double`, `-> array`) now throw `TypeError` when the property holds a mismatching value instead of silently returning it. PHP only verifies internal-function return types in `ZEND_DEBUG=1` builds, so the generated C code now emits a runtime check via new `RETURN_MEMBER_TYPED` / `RETURN_MM_MEMBER_TYPED` kernel macros. The error message matches PHP's userland format: `Class::method(): Return value must be of type X, Y returned`. Nullable return types (`string | null`) and union/`mixed` returns are left unchecked, as before. [#1991](https://github.com/zephir-lang/zephir/issues/1991), [#2196](https://github.com/zephir-lang/zephir/pull/2196)
+- Fixed built-in array methods called on a `var`-typed variable (e.g. `let b = b->join("");` where `b` is declared `var`). Previously these were emitted as `ZEPHIR_CALL_METHOD(b, "join", …)` and surfaced as a `RuntimeException: Trying to call method join on a non-object` (originally a segfault, reduced to an exception over time). When the method name is one of the array-specific built-in names that can't meaningfully be a real object method (`join`, `reversed`, `rev`, `tojson`, `haskey`, `mergerecursive`, `replacerecursive`, `sortbykey`, `reversesort`, `reversesortbykey`), the compiler now dispatches via `ArrayType` — lowering to the matching PHP function call (e.g. `join(glue, array)`), just like statically-typed array variables already did. Common Iterator/Countable-style method names (`count`, `push`, `pop`, `shift`, `sort`, `next`, `current`, `end`, `key`, `reset`, `each`) are deliberately excluded so object dispatch on those is preserved. [#733](https://github.com/zephir-lang/zephir/issues/733), [#2228](https://github.com/zephir-lang/zephir/pull/2228)
+
+## [0.20.0] - 2026-05-12
+### Added
+- Added support of PHP `8.5` [#2459](https://github.com/zephir-lang/zephir/issues/2459), [#2461](https://github.com/zephir-lang/zephir/pull/2461)
+- Added closure `this` and `use` support: closures can now reference `this` to call methods and access properties of the enclosing class [#2497](https://github.com/zephir-lang/zephir/issues/2497), [#2503](https://github.com/zephir-lang/zephir/pull/2503)
+- Added support for `char` and `uchar` literal/variable values as method arguments to parameters typed `char`/`uchar` [#2469](https://github.com/zephir-lang/zephir/issues/2469), [#2507](https://github.com/zephir-lang/zephir/pull/2507)
+- Added support for typed constants (PHP 8.3+) in generated stubs [#2498](https://github.com/zephir-lang/zephir/pull/2498)
+- Added PhpStan/Psalm tag pass-through whitelist for class-level docblocks in generated stubs [#2501](https://github.com/zephir-lang/zephir/pull/2501)
+- Added validation of `@phpstan-return`, `@phpstan-var`, `@phpstan-type`, `@phpstan-param`, `@phpstan-import-type` and Psalm equivalents (delegates parsing to `phpstan/phpdoc-parser`) [#2502](https://github.com/zephir-lang/zephir/pull/2502)
+- Added `ConstructorsCodeGenTest` to verify generated C/H files against reference fixtures [#2482](https://github.com/zephir-lang/zephir/pull/2482)
+
+### Changed
+- Refactored string parameter handling to use native `zend_string *` (with companion `zval`) where the parameter isn't mutated, reducing engine round-trips for string params [#2462](https://github.com/zephir-lang/zephir/issues/2462), [#2484](https://github.com/zephir-lang/zephir/pull/2484)
+- Refactored type optimizers and added more tests [#2470](https://github.com/zephir-lang/zephir/pull/2470)
+- Refactored header compilation logic and updated compatibility checks for PHP 8.5 [#2489](https://github.com/zephir-lang/zephir/pull/2489)
+- Bumped `phpstan/phpdoc-parser` from `1.33.0` to `2.3.2` [#2504](https://github.com/zephir-lang/zephir/pull/2504)
+- Bumped `squizlabs/php_codesniffer` from `3.13.5` to `4.0.1` [#2473](https://github.com/zephir-lang/zephir/pull/2473)
+- Bumped `phpunit/phpunit` from `9.6.32` to `9.6.33` [#2471](https://github.com/zephir-lang/zephir/pull/2471)
+- Bumped `codecov/codecov-action` from `3` to `6` [#2472](https://github.com/zephir-lang/zephir/pull/2472), [#2488](https://github.com/zephir-lang/zephir/pull/2488)
+- Bumped `actions/checkout` to `6`, `actions/cache` to `5`, `actions/upload-artifact` to `7`, `actions/download-artifact` to `8` [#2474](https://github.com/zephir-lang/zephir/pull/2474), [#2475](https://github.com/zephir-lang/zephir/pull/2475), [#2476](https://github.com/zephir-lang/zephir/pull/2476), [#2477](https://github.com/zephir-lang/zephir/pull/2477), [#2480](https://github.com/zephir-lang/zephir/pull/2480), [#2481](https://github.com/zephir-lang/zephir/pull/2481), [#2464](https://github.com/zephir-lang/zephir/pull/2464)
+
+### Fixed
+- Fixed `-Wincompatible-pointer-types` warnings on PHP 8.5+ for `zend_parse_arg_array` (`Z_PARAM_ARRAY`/`Z_PARAM_ARRAY_OR_NULL`) — promoted to error by GCC 14+ [#2462](https://github.com/zephir-lang/zephir/issues/2462), [#2463](https://github.com/zephir-lang/zephir/pull/2463), [#2483](https://github.com/zephir-lang/zephir/pull/2483), [#2508](https://github.com/zephir-lang/zephir/pull/2508)
+- Fixed `-Wdiscarded-qualifiers` warnings introduced on PHP 8.5 where `EG(fake_scope)` became `const zend_class_entry *` ([kernel/object.c](kernel/object.c), [kernel/require.c](kernel/require.c), `ZEPHIR_BACKUP_SCOPE`/`ZEPHIR_RESTORE_SCOPE` macros) [#2462](https://github.com/zephir-lang/zephir/issues/2462)
+- Fixed memory leak in generated code where native `zend_string *` parameters incremented refcount via `ZVAL_STR_COPY` without a matching decrement on the return path (~3.4 KB per call) [#2500](https://github.com/zephir-lang/zephir/issues/2500), [#2506](https://github.com/zephir-lang/zephir/pull/2506)
+- Fixed crash when passing a `char`/`uchar` literal or variable to a method parameter declared as `char`/`uchar` (TypeError in `getResolvedParams`) [#2469](https://github.com/zephir-lang/zephir/issues/2469), [#2507](https://github.com/zephir-lang/zephir/pull/2507)
+- Fixed stale `.dep` dependency files causing compilation failures when switching between PHP 8.x versions (now removed during `fullclean`; build order corrected so `make clean` runs before `phpize --clean`) [#2490](https://github.com/zephir-lang/zephir/issues/2490), [#2491](https://github.com/zephir-lang/zephir/pull/2491)
+- Fixed missing default values in reflection metadata for method parameters with scalar types [#2457](https://github.com/zephir-lang/zephir/pull/2457)
+- Fixed various compiler warnings surfaced by recent GCC/Clang [#2445](https://github.com/zephir-lang/zephir/pull/2445)
+- Fixed `backtrace.c` so `PHP_VERSION_ID` is visible (added missing PHP header include)
+
+## [0.19.0] - 2025-05-13
+### Added
+- Added support of PHP `8.4` [#2440](https://github.com/zephir-lang/zephir/issues/2440), [#2443](https://github.com/zephir-lang/zephir/pull/2443)
+
+### Changed
+- Refactor CUFA implementation [#2444](https://github.com/zephir-lang/zephir/pull/2444)
+
+## [0.18.0] - 2024-09-29
+### Added
+- Added support of PHP `8.3` [#2407](https://github.com/zephir-lang/zephir/issues/2407)
+- Added support of multiple return types in stubs
+- Changed `PHP_DEBUG` const usage to `ZEND_DEBUG_BUILD`
+
+### Changed
+- Changed minimal PHP version to `8.0` [#2407](https://github.com/zephir-lang/zephir/issues/2407)
+
+## [0.17.0] - 2023-02-11
+### Added
+- Added support of PHP `8.2` [#2255](https://github.com/zephir-lang/zephir/issues/2370)
+
+### Fixed
+- Fixed backtrace on alpine [#2397](https://github.com/zephir-lang/zephir/issues/2397)
+
+## [0.16.3] - 2022-09-17
+### Fixed
+- Fixed segmentation fault on `mixed` return type and PHP 7.4 [#2387](https://github.com/zephir-lang/zephir/issues/2387)
+
+## [0.16.2] - 2022-08-22
+### Added
+- Added support for `object` return type [#2374](https://github.com/zephir-lang/zephir/issues/2374)
+
+## [0.16.1] - 2022-08-21
+### Changed
+- Changed usage of `utf8_decode()` function in favour of `mb_convert_encoding()` [#2376](https://github.com/zephir-lang/zephir/issues/2376)
+
+### Fixed
+- Fixed generation of `ARG_INFO` for nullable object (`?object`) [#2374](https://github.com/zephir-lang/zephir/issues/2374)
+
+## [0.16.0] - 2022-03-20
+### Added
+- Added custom list of arg info definition (Phalcon only) [#2341](https://github.com/zephir-lang/zephir/issues/2341)
+- Added support for `int|false` return type (PHP >= 8.0 only) [#2338](https://github.com/zephir-lang/zephir/issues/2338)
+- Added support of PHP `8.1` [#2255](https://github.com/zephir-lang/zephir/issues/2255)
+
+### Fixed
+- Fixed left `null` with `string` condition [#2299](https://github.com/zephir-lang/zephir/issues/2299)
+- Improved support of `mixed` type [#2330](https://github.com/zephir-lang/zephir/issues/2330)
+- Fixed Interfaces Breaking Child Projects Of Same Root Level Namespace [#2334](https://github.com/zephir-lang/zephir/issues/2334)
+
+## [0.15.2] - 2021-10-24
+### Fixed
+- Fixed output of `string` type INI in globals [#2312](https://github.com/zephir-lang/zephir/issues/2312)
+
+## [0.15.1] - 2021-10-08
+### Fixed
+- Fixed support of `string` type in struct globals [#2308](https://github.com/zephir-lang/zephir/issues/2308)
+
+## [0.15.0] - 2021-10-05
+### Added
+- Added support for `string` type in php.ini [#2280](https://github.com/zephir-lang/zephir/issues/2280)
+- Added support for `mixed` [#2276](https://github.com/zephir-lang/zephir/issues/2276)
+
+### Fixed
+- Fixed multiple return types in stubs [#2283](https://github.com/zephir-lang/zephir/issues/2283)
+- Fixed `bool` return type in stubs [#2272](https://github.com/zephir-lang/zephir/issues/2272)
+
+### Changed
+- Removed `.zep` from stubs filenames [#2273](https://github.com/zephir-lang/zephir/issues/2273)
+
+## [0.14.0] - 2021-09-18
+### Added
+- Added support for `require_once` [#2253](https://github.com/zephir-lang/zephir/issues/2253)
+
+### Changed
+- Bumped minimal version of Zephir Parser to `1.4.1`. [#2284](https://github.com/zephir-lang/zephir/issues/2284)
+
+## [0.14.0-beta.3] - 2021-08-06
+### Fixed
+- Fixed class entry generation of external class [#2261](https://github.com/zephir-lang/zephir/issues/2261)
+
+## [0.14.0-beta.2] - 2021-08-06
+### Fixed
+- Fixed missing `config/` directory in `zephir.phar` [#2259](https://github.com/zephir-lang/zephir/issues/2259)
+
+## [0.14.0-beta.1] - 2021-08-06
+### Fixed
+- Fixed nullable dynamic argument definition [#2245](https://github.com/zephir-lang/zephir/issues/2245)
+
+### Changed
+- Changed detection of external class entries [#2213](https://github.com/zephir-lang/zephir/issues/2213)
+
+## [0.13.5] - 2021-05-09
+### Fixed
+- Fixed `zephir build` command [#2240](https://github.com/zephir-lang/zephir/pull/2240)
+- Fixed `zephir generate` when processing Closure [#2241](https://github.com/zephir-lang/zephir/pull/2241)
+- Fixed stubs generation with variable-length argument [#2239](https://github.com/zephir-lang/zephir/issues/2239)
+
+
+## [0.13.4] - 2021-04-26
+### Fixed
+- Fixed cast string from null [#2232](https://github.com/zephir-lang/zephir/issues/2232)
+- Fixed strict nullable string type when `null` is passed [#2234](https://github.com/zephir-lang/zephir/issues/2234)
+
+
+## [0.13.3] - 2021-04-25
+### Fixed
+- Fixed nullable array [#1094](https://github.com/zephir-lang/zephir/issues/1094)
+- Fixed default value detection with Reflection (only PHP 8.0) [#1134](https://github.com/zephir-lang/zephir/issues/1134)
+- Updated supported list of class entries for PHP date extension [#2226](https://github.com/zephir-lang/zephir/issues/2226)
+- Fixed unset from class property [#1259](https://github.com/zephir-lang/zephir/issues/1259)
+
+### Added
+- Added support syntax assign-bitwise operators [#1103](https://github.com/zephir-lang/zephir/issues/1103)
+
+
+## [0.13.2] - 2021-04-10
 ### Fixed
 - Fixed default value of nullable string parameter [#2180](https://github.com/zephir-lang/zephir/issues/2180)
 - Fixed cast of `string` to `int` and `float` [#828](https://github.com/zephir-lang/zephir/issues/828)
 - Fix `uint` cast to `unsigned int` in function params [#812](https://github.com/zephir-lang/zephir/issues/812)
 - Fixed `null` strict check when variable is `string` type [#2186](https://github.com/zephir-lang/zephir/issues/2186)
+
 
 ## [0.13.1] - 2021-03-31
 ### Added
@@ -18,6 +170,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Fixed not used arginfo for interface static method without parameters (PHP `>= 8.0` only) [#2178](https://github.com/zephir-lang/zephir/pull/2178)
 - Fixed `zephir install` command [#2175](https://github.com/zephir-lang/zephir/issues/2175)
+
 
 ## [0.13.0] - 2021-03-25
 ### Added
@@ -32,9 +185,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed parameters type detection in methods/functions (PHP `>= 8.0` only)
 - Fixed not adding all build directories [#2144](https://github.com/zephir-lang/zephir/pull/2144)
 
+
 ## [0.12.21] - 2021-03-05
 ### Fixed
 - Fixed path separators in generated `config.m4` file on Windows [#2153](https://github.com/zephir-lang/zephir/issues/2153)
+
 
 ## [0.12.20] - 2020-12-16
 ### Added
@@ -46,6 +201,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed missing kernel directory at build time [ice/framework#271](https://github.com/ice/framework/issues/271)
 - Fixed stubs generation for case with array declaration with square brackets in params
 - Fixed parameters positioning for `implode()` php function [#2120](https://github.com/zephir-lang/zephir/issues/2120)
+
 
 ## [0.12.19] - 2020-05-13
 ### Fixed
@@ -59,6 +215,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Improved stubs generation for methods which may return object or null
   [#2092](https://github.com/zephir-lang/zephir/issues/2092)
 
+
 ## [0.12.18] - 2020-04-25
 ### Fixed
 - In some cases for C "control characters" aren't properly escaped
@@ -69,6 +226,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [phalcon/cphalcon#14810](https://github.com/phalcon/cphalcon/issues/14810),
   [phalcon/cphalcon#14766](https://github.com/phalcon/cphalcon/issues/14766)
 
+
 ## [0.12.17] - 2020-02-14
 ### Fixed
 - On some platforms special alpha characters aren't correctly escaped.
@@ -77,6 +235,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Changed
 - Changed the internal DI environment mode when compile PHAR
   [#2049](https://github.com/zephir-lang/zephir/pull/2049)
+
 
 ## [0.12.16] - 2020-01-16
 ### Fixed
@@ -103,13 +262,16 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Improved type hint for arrays when generating stubs
   [#2026](https://github.com/zephir-lang/zephir/issues/2026)
 
+
 ## [0.12.15] - 2019-12-12
 ### Removed
 - Removed `uint` typedef usage
 
+
 ## [0.12.14] - 2019-12-11
 ### Removed
 - Removed `zend_uint` typedef usage
+
 
 ## [0.12.13] - 2019-12-08
 ### Fixed
@@ -117,6 +279,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Removed
 - Removed `uint` and `ulong` typedefs usage
+
 
 ## [0.12.12] - 2019-11-25
 ### Added
@@ -138,6 +301,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed incorrect stubs generation for classes in the same namespace
   [#2016](https://github.com/zephir-lang/zephir/issues/2016)
 
+
 ## [0.12.11] - 2019-11-02
 ### Fixed
 - Fixed arithmetical operations with `zvals` which stores `double` numbers
@@ -151,6 +315,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1986](https://github.com/zephir-lang/zephir/issues/1986)
 - Fixed incorrect namespace on type hinted return when generating API docs
   [#1229](https://github.com/zephir-lang/zephir/issues/1229)
+
 
 ## [0.12.10] - 2019-10-19
 ### Fixed
@@ -169,6 +334,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [zendframework/zend-code#160](https://github.com/zendframework/zend-code/issues/160)
 - Introduced support of multi line `@param` body for generated stubs
   [#1968](https://github.com/zephir-lang/zephir/issues/1968)
+
 
 ## [0.12.9] - 2019-10-14
 ### Added
@@ -195,12 +361,14 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Removed
 - Removed no longer used `zephir_dtor` macro
 
+
 ## [0.12.8] - 2019-10-03
 ### Fixed
 - Fixed `zephir_preg_match` to use `ZVAL_NULL` instead of `ZEPHIR_NULL`
   [#1946](https://github.com/zephir-lang/zephir/issues/1946)
 - Fixed `Extension\InternalClassesTest` test to be able run full test suite
   without Phalcon [#1949](https://github.com/zephir-lang/zephir/issues/1949)
+
 
 ## [0.12.7] - 2019-10-03
 ### Fixed
@@ -210,10 +378,12 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1940](https://github.com/zephir-lang/zephir/issues/1940)
 - Fixed sitemap API generator [#1940](https://github.com/zephir-lang/zephir/issues/1940)
 
+
 ## [0.12.6] - 2019-10-03
 ### Fixed
 - Fixed regression introduced in `0.12.5` for those users who doesn't use
   bundled `ext/json/php_json.h` [#1940](https://github.com/zephir-lang/zephir/issues/1940)
+
 
 ## [0.12.5] - 2019-10-02
 ### Changed
@@ -232,9 +402,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1934](https://github.com/zephir-lang/zephir/issues/1934),
   [phalcon/cphalcon#14426](https://github.com/phalcon/cphalcon/issues/14426)
 
+
 ## [0.12.4] - 2019-09-22
 ### Fixed
 - Fixed install template
+
 
 ## [0.12.3] - 2019-09-22
 ### Fixed
@@ -245,6 +417,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed updating array properties
   [#1915](https://github.com/zephir-lang/zephir/issues/1915)
 
+
 ## [0.12.2] - 2019-08-05
 ### Added
 - Introduced initial ability to generate `zend_module_deps`
@@ -254,6 +427,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 
 ### Changed
 - Write errors compiler to stderr if available
+
 
 ## [0.12.1] - 2019-07-30
 ### Added
@@ -277,6 +451,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Optimize memory usage [#1882](https://github.com/zephir-lang/zephir/pull/1882)
 - Fixed modifying array values in loops
   [#1879](https://github.com/zephir-lang/zephir/issues/1879)
+
 
 ## [0.12.0] - 2019-06-20
 ### Added
@@ -306,6 +481,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed exception on call undefined method
   [#1863](https://github.com/zephir-lang/zephir/issues/1863)
 
+
 ## [0.11.12] - 2019-03-24
 ### Fixed
 - Compilation error for instanceof [#1828](https://github.com/zephir-lang/zephir/issues/1828)
@@ -314,6 +490,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed reference counting while changing object's properties that are arrays
   [#1833](https://github.com/zephir-lang/zephir/pull/1833)
 
+
 ## [0.11.11] - 2019-02-26
 ### Fixed
 - Objects are not traversable with `foreach`
@@ -321,6 +498,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1595](https://github.com/zephir-lang/zephir/issues/1595)
 - Recursion for array_push on PHP 7 [#1140](https://github.com/zephir-lang/zephir/issues/1140)
 - Invalid array initialization [#1159](https://github.com/zephir-lang/zephir/issues/1159)
+
 
 ## [0.11.10] - 2019-02-23
 ### Changed
@@ -342,8 +520,10 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed incorrect behavior during work with ArrayAccess [#1061](https://github.com/zephir-lang/zephir/issues/1061),
   [#1400](https://github.com/zephir-lang/zephir/issues/1400)
 
+
 ## [0.11.9] - 2019-01-15
 - Fixed `zend_closure` declaration to reflect PHP 7.3 changes
+
 
 ## [0.11.8] - 2018-12-01
 ### Fixed
@@ -351,6 +531,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1758](https://github.com/zephir-lang/zephir/issues/1758)
 - Fixed compilation error when a new file is added or removed to the project
   [#1776](https://github.com/zephir-lang/zephir/issues/1776)
+
 
 ## [0.11.7] - 2018-11-27
 ### Changed
@@ -367,12 +548,14 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
 
+
 ## [0.11.6] - 2018-11-19
 ### Fixed
 - Fixed incorrect behavior of `require` statement for ZendEngine3
   [#1621](https://github.com/zephir-lang/zephir/issues/1621)
   [#1403](https://github.com/zephir-lang/zephir/issues/1403)
   [#1428](https://github.com/zephir-lang/zephir/pull/1428)
+
 
 ## [0.11.4] - 2018-11-18
 ### Added
@@ -390,6 +573,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed regression introduced in the 0.10.12 related to `require` file using protocols
   [#1713](https://github.com/zephir-lang/zephir/issues/1713)
 
+
 ## [0.11.3] - 2018-11-13
 ### Changed
 - Remove legacy installers and provide a common way to install Zephir
@@ -398,6 +582,7 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   - Install as a PHAR file. (this feature currently in the testing phase and not released officially)
   - Install as a Git clone (using `git clone` and `composer install` inside cloned project)
   - Install as a project's dependency (using `composer require`)
+
 
 ## [0.11.2] - 2018-11-11
 ### Added
@@ -413,19 +598,23 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 ### Fixed
 - Correct return types hint check
 
+
 ## [0.11.1] - 2018-10-19
 ### Added
 - Initial support of PHP 7.3 (ported from the 0.10.x branch)
+
 
 ## [0.11.0] - 2018-08-05
 ### Added
 - Add type hints for scalar arguments and return values in ZendEngine 3
   [1656](https://github.com/zephir-lang/zephir/issues/1656)
 
+
 ## [0.10.14] - 2018-11-20
 ### Fixed
 - Fixed incorrect behavior of `func_get_arg` and `func_get_args` functions for PHP 7.3
   (backported from the upstream)
+
 
 ## [0.10.13] - 2018-11-18
 ### Fixed
@@ -437,9 +626,11 @@ and this project adheres to [Semantic Versioning](http://semver.org).
   [#1428](https://github.com/zephir-lang/zephir/pull/1428)
   (backported from the upstream)
 
+
 ## [0.10.12] - 2018-10-19
 ### Added
 - Initial support of PHP 7.3
+
 
 ## [0.10.11] - 2018-08-05
 ### Added
@@ -452,7 +643,27 @@ and this project adheres to [Semantic Versioning](http://semver.org).
 - Fixed casting resource to int (only ZendEngine 3)
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.13.1...HEAD
+
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.0...HEAD
+[0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
+[0.19.0]: https://github.com/zephir-lang/zephir/compare/0.18.0...0.19.0
+[0.18.0]: https://github.com/zephir-lang/zephir/compare/0.17.0...0.18.0
+[0.17.0]: https://github.com/zephir-lang/zephir/compare/0.16.3...0.17.0
+[0.16.3]: https://github.com/zephir-lang/zephir/compare/0.16.2...0.16.3
+[0.16.2]: https://github.com/zephir-lang/zephir/compare/0.16.1...0.16.2
+[0.16.1]: https://github.com/zephir-lang/zephir/compare/0.16.0...0.16.1
+[0.16.0]: https://github.com/zephir-lang/zephir/compare/0.15.2...0.16.0
+[0.15.2]: https://github.com/zephir-lang/zephir/compare/0.15.1...0.15.2
+[0.15.1]: https://github.com/zephir-lang/zephir/compare/0.15.0...0.15.1
+[0.15.0]: https://github.com/zephir-lang/zephir/compare/0.14.0...0.15.0
+[0.14.0]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.3...0.14.0
+[0.14.0-beta.3]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.2...0.14.0-beta.3
+[0.14.0-beta.2]: https://github.com/zephir-lang/zephir/compare/0.14.0-beta.1...0.14.0-beta.2
+[0.14.0-beta.1]: https://github.com/zephir-lang/zephir/compare/0.13.5...0.14.0-beta.1
+[0.13.5]: https://github.com/zephir-lang/zephir/compare/0.13.4...0.13.5
+[0.13.4]: https://github.com/zephir-lang/zephir/compare/0.13.3...0.13.4
+[0.13.3]: https://github.com/zephir-lang/zephir/compare/0.13.2...0.13.3
+[0.13.2]: https://github.com/zephir-lang/zephir/compare/0.13.1...0.13.2
 [0.13.1]: https://github.com/zephir-lang/zephir/compare/0.13.0...0.13.1
 [0.13.0]: https://github.com/zephir-lang/zephir/compare/0.12.21...0.13.0
 [0.12.21]: https://github.com/zephir-lang/zephir/compare/0.12.20...0.12.21

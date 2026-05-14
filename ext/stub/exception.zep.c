@@ -13,60 +13,32 @@
 
 #include "kernel/main.h"
 #include "kernel/object.h"
-#include "ext/spl/spl_exceptions.h"
-#include "kernel/exception.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 
 
 /**
  * Sample exception class
  */
-ZEPHIR_INIT_CLASS(Stub_Exception) {
-
+ZEPHIR_INIT_CLASS(Stub_Exception)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub, Exception, stub, exception, zend_ce_exception, stub_exception_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
 /**
  * @link https://github.com/zephir-lang/zephir/issues/915
  */
-PHP_METHOD(Stub_Exception, testRuntimePropertyFetch) {
-
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *message_param = NULL;
-	zval message;
+PHP_METHOD(Stub_Exception, testRuntimePropertyFetch)
+{
+	zval message_zv;
+	zend_string *message = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&message);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
+	ZVAL_UNDEF(&message_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(message)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &message_param);
-
-	if (UNEXPECTED(Z_TYPE_P(message_param) != IS_STRING && Z_TYPE_P(message_param) != IS_NULL)) {
-		zephir_throw_exception_string(spl_ce_InvalidArgumentException, SL("Parameter 'message' must be of the type string"));
-		RETURN_MM_NULL();
-	}
-	if (EXPECTED(Z_TYPE_P(message_param) == IS_STRING)) {
-		zephir_get_strval(&message, message_param);
-	} else {
-		ZEPHIR_INIT_VAR(&message);
-		ZVAL_EMPTY_STRING(&message);
-	}
-
-
-	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message);
-	ZEPHIR_MM_RESTORE();
-
+	ZVAL_STR(&message_zv, message);
+	zephir_update_property_zval(this_ptr, ZEND_STRL("message"), &message_zv);
 }
 

@@ -3,8 +3,8 @@ namespace Stub;
 
 class InternalInterfaces implements \Countable
 {
-	public function count()
+	public function count() -> int
 	{
-
+	    return 0;
 	}
 }

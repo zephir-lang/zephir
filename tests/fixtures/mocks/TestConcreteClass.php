@@ -12,7 +12,7 @@ use Stub\TypeHinting\TestAbstract;
 
 class TestConcreteClass extends TestAbstract
 {
-    public function testFunc(array $text = [], string $text2 = '', bool $flag = true, int $optional = null)
+    public function testFunc(array $text = [], string $text2 = '', bool $flag = true, ?int $optional = null)
     {
         return func_get_args();
     }

@@ -36,43 +36,30 @@ static long fibonacci(long n) {
 /**
  * CBLOCK tests
  */
-ZEPHIR_INIT_CLASS(Stub_Cblock) {
-
+ZEPHIR_INIT_CLASS(Stub_Cblock)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Cblock, stub, cblock, stub_cblock_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Cblock, testCblock1) {
-
+PHP_METHOD(Stub_Cblock, testCblock1)
+{
 	zend_long a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	
 			a = MAX_FACTOR;
 		
 	RETURN_LONG(a);
-
 }
 
-PHP_METHOD(Stub_Cblock, testCblock2) {
-
+PHP_METHOD(Stub_Cblock, testCblock2)
+{
 	long a;
-	zval *this_ptr = getThis();
-
-
-
-
 	a = 0;
 	
 			a = fibonacci(MAX_FACTOR);
 		
 	RETURN_LONG(a);
-
 }
 

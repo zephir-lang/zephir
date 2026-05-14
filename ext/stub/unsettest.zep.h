@@ -50,26 +50,14 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_unsettest_testunsettypedarray, 0, 0, 2)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_unsettest_method_entry) {
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Unsettest, getProperty, arginfo_stub_unsettest_getproperty, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Unsettest, getProperty, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Unsettest, getProperty, arginfo_stub_unsettest_getproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, has, arginfo_stub_unsettest_has, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, addValueToProperty, arginfo_stub_unsettest_addvaluetoproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, testUnsetValueFromProperty, arginfo_stub_unsettest_testunsetvaluefromproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, testUnsetFromArray, arginfo_stub_unsettest_testunsetfromarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, testUnsetFromArrayByIndexVar, arginfo_stub_unsettest_testunsetfromarraybyindexvar, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Unsettest, testUnsetProperty, arginfo_stub_unsettest_testunsetproperty, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Unsettest, testUnsetProperty, NULL, ZEND_ACC_PUBLIC)
-#endif
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Unsettest, testStdClassUnset, arginfo_stub_unsettest_teststdclassunset, ZEND_ACC_PUBLIC)
-#else
-	PHP_ME(Stub_Unsettest, testStdClassUnset, NULL, ZEND_ACC_PUBLIC)
-#endif
+PHP_ME(Stub_Unsettest, testUnsetProperty, arginfo_stub_unsettest_testunsetproperty, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Unsettest, testStdClassUnset, arginfo_stub_unsettest_teststdclassunset, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Unsettest, testUnsetTypedArray, arginfo_stub_unsettest_testunsettypedarray, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

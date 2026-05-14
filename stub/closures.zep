@@ -5,6 +5,7 @@ class Closures
 {
     protected _argument;
     protected _function;
+    protected _name = "default";
     protected property1873 = "call from closure";
 
 	public function simple1()
@@ -99,10 +100,54 @@ class Closures
 	    return call_user_func(this->_function, this->_argument);
 	}
 
-	public function issue1873() -> string
-	{
-	    return function () {
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+
+    public function issue2497Helper() -> string
+    {
+        return "hello";
+    }
+
+    public function issue2497ClosureThis() -> <\Closure>
+    {
+        return function() {
+            return this->issue2497Helper();
+        };
+    }
+
+    public function issue2497ClosureThisWithUse(var name) -> <\Closure>
+    {
+        return function() use (name) {
+            return this->issue2497Helper() . ":" . name;
+        };
+    }
+
+    public function issue2497PropertyAccess() -> <\Closure>
+    {
+        return function() {
+            return this->_name;
+        };
+    }
+
+    public function issue2497SetName(string name) -> void
+    {
+        let this->_name = name;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Original reporter's minimal repro: a closure returned from a method
+     * that reads a protected property of the enclosing class via `this->`.
+     * Note the return type is `<\Closure>`, not `string` — the PR draft
+     * (#2203) declared it `-> string` which is itself a type bug under the
+     * runtime-return-type enforcement added for #1991.
+     */
+    public function issue1873() -> <\Closure>
+    {
+        return function () {
             return this->property1873;
         };
-	}
+    }
 }

@@ -15,11 +15,10 @@
 #include "ext/spl/spl_fixedarray.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_FixedArray) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_FixedArray)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, FixedArray, stub, oo_extend_spl_fixedarray, spl_ce_SplFixedArray, NULL, 0);
 
 	return SUCCESS;
-
 }
 

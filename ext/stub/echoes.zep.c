@@ -18,61 +18,40 @@
 /**
  * Printing output
  */
-ZEPHIR_INIT_CLASS(Stub_Echoes) {
-
+ZEPHIR_INIT_CLASS(Stub_Echoes)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, Echoes, stub, echoes, stub_echoes_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_Echoes, testEcho1) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Echoes, testEcho1)
+{
 
 	php_printf("%d", 1);
-
 }
 
-PHP_METHOD(Stub_Echoes, testEcho2) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Echoes, testEcho2)
+{
 
 	php_printf("%f", 1.0);
-
 }
 
-PHP_METHOD(Stub_Echoes, testEcho3) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Echoes, testEcho3)
+{
 
 	php_printf("%s", 1 ? "1": "");
-
 }
 
-PHP_METHOD(Stub_Echoes, testEcho4) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Echoes, testEcho4)
+{
 
 	php_printf("%s", 0 ? "1": "");
-
 }
 
-PHP_METHOD(Stub_Echoes, testEcho5) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Echoes, testEcho5)
+{
 
 	php_printf("%s", "hello");
-
 }
 

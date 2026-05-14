@@ -15,12 +15,11 @@ namespace Extension;
 
 use PHPUnit\Framework\TestCase;
 use Stub\Strings;
-
-use function Zephir\is_windows;
+use Zephir\Os;
 
 final class StringTest extends TestCase
 {
-    private Strings $test;
+    private ?Strings $test = null;
 
     protected function setUp(): void
     {
@@ -200,8 +199,8 @@ final class StringTest extends TestCase
      * @dataProvider providerSubstring
      *
      * @param string $input
-     * @param int $start
-     * @param int $end
+     * @param int    $start
+     * @param int    $end
      * @param string $expected
      */
     public function testSubstr(string $input, int $start, int $end, string $expected): void
@@ -259,7 +258,7 @@ final class StringTest extends TestCase
 
     public function testMultilineStrings(): void
     {
-        if (is_windows()) {
+        if (Os::isWindows()) {
             $this->markTestSkipped('String will contain different line endings.');
         }
 
@@ -286,11 +285,58 @@ final class StringTest extends TestCase
     {
         $this->assertTrue($this->test->issue2186());
         $this->assertTrue($this->test->issue2186(null));
-
         $this->assertFalse($this->test->issue2186(''));
         $this->assertFalse($this->test->issue2186('string'));
         $this->assertFalse($this->test->issue2186('0'));
         $this->assertFalse($this->test->issue2186('1'));
+
+        $this->assertTrue($this->test->issue2234Strict());
+        $this->assertTrue($this->test->issue2234Strict(null));
+        $this->assertFalse($this->test->issue2234Strict(''));
+        $this->assertFalse($this->test->issue2234Strict('string'));
+        $this->assertFalse($this->test->issue2234Strict('0'));
+        $this->assertFalse($this->test->issue2234Strict('1'));
+
+        $this->assertFalse($this->test->issue2186SegFault());
+        $this->assertFalse($this->test->issue2186SegFault(null));
+        $this->assertFalse($this->test->issue2186SegFault(''));
+
+        /**
+         * Assert PHP and Zephir behavior
+         */
+        $zeroString = false;
+        if ('0') {
+            $zeroString = true;
+        }
+
+        $this->assertFalse(!empty('0'));
+        $this->assertFalse($zeroString);
+        $this->assertFalse($this->test->issue2186SegFault('0'));
+
+        $this->assertTrue($this->test->issue2186SegFault('string'));
+
+        $this->assertSame('', $this->test->issue2186SegFaultCall());
+        $this->assertSame('ok all ok', $this->test->issue2186SegFaultCall('ok'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1932
+     */
+    public function testNullableStringReturnType(): void
+    {
+        $this->assertNull($this->test->nullableStringReturnType());
+        $this->assertNull($this->test->nullableStringReturnType(null));
+        $this->assertSame('string', $this->test->nullableStringReturnType('string'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2299
+     */
+    public function testIssue2299NullableStringCondition(): void
+    {
+        $this->assertSame(null, $this->test->issue2299NullableStringCondition());
+        $this->assertSame('not-null', $this->test->issue2299NullableStringCondition('not-null'));
+        $this->assertSame('test', $this->test->issue2299NullableStringCondition('test'));
     }
 
     public function providerHashEquals(): array
@@ -367,9 +413,7 @@ final class StringTest extends TestCase
             [0],
             [[]],
             [
-                function () {
-                    return '-';
-                },
+                fn () => '-',
             ],
             [new \stdClass()],
         ];

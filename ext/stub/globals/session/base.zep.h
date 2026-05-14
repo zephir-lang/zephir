@@ -35,10 +35,6 @@ ZEPHIR_INIT_FUNCS(stub_globals_session_base_method_entry) {
 	PHP_ME(Stub_Globals_Session_Base, remove, arginfo_stub_globals_session_base_remove, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Session_Base, __set, arginfo_stub_globals_session_base___set, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Globals_Session_Base, __unset, arginfo_stub_globals_session_base___unset, ZEND_ACC_PUBLIC)
-#if PHP_VERSION_ID >= 80000
-	PHP_ME(Stub_Globals_Session_Base, removeSessionData, arginfo_stub_globals_session_base_removesessiondata, ZEND_ACC_PROTECTED)
-#else
-	PHP_ME(Stub_Globals_Session_Base, removeSessionData, NULL, ZEND_ACC_PROTECTED)
-#endif
+PHP_ME(Stub_Globals_Session_Base, removeSessionData, arginfo_stub_globals_session_base_removesessiondata, ZEND_ACC_PROTECTED)
 	PHP_FE_END
 };

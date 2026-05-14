@@ -15,11 +15,10 @@
 #include "ext/spl/spl_heap.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_MaxHeap) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_MaxHeap)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, MaxHeap, stub, oo_extend_spl_maxheap, spl_ce_SplMaxHeap, NULL, 0);
 
 	return SUCCESS;
-
 }
 

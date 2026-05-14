@@ -21,30 +21,16 @@
         }
     ],
     "require": {
-        "php": ">=7.4.1",
+        "php": ">=8.0",
         "ext-ctype": "*",
         "ext-hash": "*",
-        "ext-json": "*",
         "ext-mbstring": "*",
         "ext-pcre": "*",
         "ext-xml": "*",
         "ext-zlib": "*",
-        "ocramius/proxy-manager": "^2.10",
-        "oneup/flysystem-bundle": "^1.14 || ^3.0",
-        "symfony/cache": "3.4.*",
-        "symfony/config": "3.4.*",
-        "symfony/console": "3.4.*",
-        "symfony/dependency-injection": "3.4.*",
-        "symfony/event-dispatcher": "3.4.*",
-        "symfony/filesystem": "3.4.*",
-        "symfony/finder": "3.4.*",
-        "symfony/framework-bundle": "3.4.*",
-        "symfony/http-kernel": "3.4.*",
-        "symfony/monolog-bridge": "3.4.*",
-        "symfony/monolog-bundle": "3.3.*",
-        "symfony/proxy-manager-bridge": "3.4.*",
-        "symfony/routing": "3.4.*",
-        "symfony/yaml": "3.4.*"
+        "monolog/monolog": "^2.3",
+        "phalcon/cli-options-parser": "^2.0",
+        "phpstan/phpdoc-parser": "^2.3"
     },
     "require-dev": {
         "ext-gmp": "*",
@@ -52,7 +38,8 @@
         "ext-pdo_sqlite": "*",
         "ext-zip": "*",
         "phpunit/phpunit": "^9.5",
-        "psr/log": "1.1.*"
+        "psr/log": "1.1.*",
+        "squizlabs/php_codesniffer": "^4.0"
     },
     "config": {
         "optimize-autoloader": true,
@@ -62,11 +49,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Zephir\\": "Library"
-        },
-        "files": [
-            "Library/functions.php"
-        ]
+            "Zephir\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -87,5 +71,19 @@
         "source": "https://github.com/zephir-lang/zephir",
         "irc": "irc://irc.freenode.net/zephir",
         "docs": "https://docs.zephir-lang.com"
-    }
+    },
+  "scripts": {
+    "cs": "./vendor/bin/phpcs --standard=phpcs.xml.dist",
+    "cs-fix": "./vendor/bin/phpcbf --standard=phpcs.xml.dist",
+    "test": "./vendor/bin/phpunit --testsuite Zephir",
+    "test-coverage": "./vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/coverage/coverage.xml",
+    "test-coverage-html": "./vendor/bin/phpunit --testsuite Zephir --coverage-html ./tests/output/coverage"
+  },
+  "scripts-descriptions": {
+    "cs": "Run PHPCS",
+    "cs-fix": "Run PHPCBF",
+    "test": "Run all tests",
+    "test-coverage": "Run all tests with coverage (clover)",
+    "test-coverage-html": "Run all tests with coverage (HTML)"
+  }
 }

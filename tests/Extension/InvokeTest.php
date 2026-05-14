@@ -33,7 +33,7 @@ final class InvokeTest extends TestCase
         $fromProtected = new InvokeProtected('random');
 
         $this->assertInstanceOf(InvokeProtected::class, $fromProtected());
-        $this->assertSame('random2', (string)$fromProtected());
+        $this->assertSame('random2', (string) $fromProtected());
         $this->assertSame('random2', $fromProtected()->__toString());
     }
 
@@ -43,7 +43,7 @@ final class InvokeTest extends TestCase
         $fromProtected = new InvokeProtectedComplex('random');
 
         $this->assertInstanceOf(InvokeProtectedComplex::class, $fromProtected());
-        $this->assertSame($expected, (string)$fromProtected());
+        $this->assertSame($expected, (string) $fromProtected());
         $this->assertSame($expected, $fromProtected()->__toString());
     }
 }

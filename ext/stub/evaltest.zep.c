@@ -13,44 +13,27 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
-#include "kernel/operators.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_EvalTest) {
-
+ZEPHIR_INIT_CLASS(Stub_EvalTest)
+{
 	ZEPHIR_REGISTER_CLASS(Stub, EvalTest, stub, evaltest, stub_evaltest_method_entry, 0);
 
 	return SUCCESS;
-
 }
 
-PHP_METHOD(Stub_EvalTest, evalCode) {
+PHP_METHOD(Stub_EvalTest, evalCode)
+{
+	zval code_zv;
+	zend_string *code = NULL;
 
-	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *code_param = NULL;
-	zval code;
-	zval *this_ptr = getThis();
-
-	ZVAL_UNDEF(&code);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
+	ZVAL_UNDEF(&code_zv);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(code)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &code_param);
-
-	zephir_get_strval(&code, code_param);
-
-
-	zephir_eval_php(&code, return_value, "stub/evaltest.zep:7");
-	RETURN_MM();
-
+	ZVAL_STR(&code_zv, code);
+	zephir_eval_php(&code_zv, return_value, "stub/evaltest.zep:7");
+	return;
 }
 

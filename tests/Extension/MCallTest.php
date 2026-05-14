@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace Extension;
 
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
 use Stub\Mcall;
 use Stub\Oo\Param;
 
@@ -114,7 +111,7 @@ final class MCallTest extends TestCase
         $this->assertNumberOfRequiredParameters(0);
 
         $this->assertSame('array', $this->getMethodFirstParameter()->getType()->getName());
-        $this->assertSame($this->test->testArrayParamWithDefaultNullValue(), []);
+        $this->assertNull($this->test->testArrayParamWithDefaultNullValue());
         $this->assertSame($this->test->testArrayParamWithDefaultNullValue([1]), [1]);
     }
 
@@ -133,7 +130,7 @@ final class MCallTest extends TestCase
         $this->assertNumberOfParameters(1);
         $this->assertNumberOfRequiredParameters(1);
 
-        $this->assertSame(\StdClass::class, $this->getMethodFirstParameter()->getType()->getName());
+        $this->assertSame(\stdClass::class, $this->getMethodFirstParameter()->getType()->getName());
         $this->assertInstanceOf(\stdClass::class, $this->test->testObjectParamCastStdClass(new \stdClass()));
     }
 
@@ -146,7 +143,7 @@ final class MCallTest extends TestCase
         $this->assertInstanceOf(Param::class, $this->test->testObjectParamCastOoParam(new Param()));
     }
 
-    protected function getMethodFirstParameter(): ReflectionParameter
+    protected function getMethodFirstParameter(): \ReflectionParameter
     {
         $methodInfo = $this->reflection->getMethod($this->getName());
         $parameters = $methodInfo->getParameters();
@@ -155,18 +152,18 @@ final class MCallTest extends TestCase
     }
 
     /**
-     * @return mixed|ReflectionClass
+     * @return mixed|\ReflectionClass
      */
     private function getReflection()
     {
         if (null === $this->reflection) {
-            return $this->reflection = new ReflectionClass(Mcall::class);
+            return $this->reflection = new \ReflectionClass(Mcall::class);
         }
 
         return $this->reflection;
     }
 
-    public function testSouldThrowTypeErrorForOptionalBoolean1(): void
+    public function testShouldThrowTypeErrorForOptionalBoolean1(): void
     {
         $test = new Mcall();
 
@@ -199,10 +196,17 @@ final class MCallTest extends TestCase
     {
         $test = new Mcall();
 
-        if (version_compare(PHP_VERSION, "8.0.0", ">=")) {
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
             $this->assertInstanceOf(\finfo::class, $test->issue1136());
         } else {
             $this->assertIsResource($test->issue1136());
         }
+    }
+
+    public function testIssue2245DynamicNullableArgMustBeNullableAsDefault(): void
+    {
+        $test = new Mcall();
+
+        $this->assertNull($test->issue2245VarArgumentNullable());
     }
 }

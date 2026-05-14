@@ -34,17 +34,66 @@ final class ClosureTest extends TestCase
         $test = new Closures();
 
         $test->issue1036SetArgument(true);
-        $test->issue1036SetFunction(function ($argument) {
-            return $argument;
-        });
+        $test->issue1036SetFunction(fn ($argument) => $argument);
 
         $this->assertTrue($test->issue1036Call());
     }
 
-    public function testIssue1873(): void
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497ClosureThis(): void
     {
         $test = new Closures();
 
-        $this->assertInstanceOf(\Closure::class, $test->issue1873());
+        $closure = $test->issue2497ClosureThis();
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('hello', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497ClosureThisWithUse(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2497ClosureThisWithUse('world');
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('hello:world', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2497
+     */
+    public function testIssue2497PropertyAccess(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2497PropertyAccess();
+        $this->assertSame('default', $closure());
+
+        $test->issue2497SetName('custom');
+        $closure2 = $test->issue2497PropertyAccess();
+        $this->assertSame('custom', $closure2());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Original reporter's minimal repro from 2019: a closure returned from
+     * a method that reads `this->property` should bind to the enclosing
+     * instance and return the property's value when invoked.
+     *
+     * The exact scenario was resolved by the closure `this`/`use` support
+     * added for #2497; this test pins the #1873 fixture to prevent regression.
+     */
+    public function testIssue1873ClosureUsesProperty(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue1873();
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('call from closure', $closure());
     }
 }

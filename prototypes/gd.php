@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Zephir.
  *
  * (c) Phalcon Team <team@zephir-lang.com>
@@ -8,12 +8,11 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-
 if (!function_exists('gd_info')) {
     /**
      * Retrieve information about the currently installed GD library.
      *
-     * @see http://www.php.net/manual/en/function.gd-info.php
+     * @see https://www.php.net/manual/en/function.gd-info.php
      *
      * @return array
      */
@@ -60,7 +59,7 @@ if (!function_exists('image_type_to_extension')) {
      *
      * @see https://www.php.net/manual/en/function.image-type-to-extension.php
      *
-     * @param $imagetype
+     * @param      $imagetype
      * @param bool $include_dot
      *
      * @return string
@@ -170,7 +169,7 @@ if (!function_exists('imagearc')) {
     /**
      * Draws an arc.
      *
-     * @see http://www.php.net/manual/ru/function.imagearc.php
+     * @see https://www.php.net/manual/ru/function.imagearc.php
      *
      * @param resource $image
      * @param int      $cx
@@ -357,7 +356,7 @@ if (!function_exists('imagecolorexact')) {
     /**
      * Get the index of the specified color.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolorexact.php
+     * @see https://www.php.net/manual/ru/function.imagecolorexact.php
      *
      * @param resource $image
      * @param int      $red
@@ -394,7 +393,7 @@ if (!function_exists('imagecolormatch')) {
     /**
      * Makes the colors of the palette version of an image more closely match the true color version.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolormatch.php
+     * @see https://www.php.net/manual/ru/function.imagecolormatch.php
      *
      * @param resource $image1
      * @param resource $image2
@@ -410,7 +409,7 @@ if (!function_exists('imagecolorresolve')) {
     /**
      * Get the index of the specified color or its closest possible alternative.
      *
-     * @see http://www.php.net/manual/ru/function.imagecolorresolve.php
+     * @see https://www.php.net/manual/ru/function.imagecolorresolve.php
      *
      * @param resource $image
      * @param int      $red

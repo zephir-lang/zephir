@@ -27,30 +27,20 @@
  *
  * This class represents every route added to the router
  */
-ZEPHIR_INIT_CLASS(Stub_Router_Route) {
-
+ZEPHIR_INIT_CLASS(Stub_Router_Route)
+{
 	ZEPHIR_REGISTER_CLASS(Stub\\Router, Route, stub, router_route, stub_router_route_method_entry, 0);
 
 	zend_declare_property_null(stub_router_route_ce, SL("_pattern"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_compiledPattern"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_paths"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_methods"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_hostname"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_converters"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_id"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_name"), ZEND_ACC_PROTECTED);
-
 	zend_declare_property_null(stub_router_route_ce, SL("_beforeMatch"), ZEND_ACC_PROTECTED);
-
 	return SUCCESS;
-
 }
 
 /**
@@ -60,8 +50,8 @@ ZEPHIR_INIT_CLASS(Stub_Router_Route) {
  * @param array paths
  * @param array|string httpMethods
  */
-PHP_METHOD(Stub_Router_Route, __construct) {
-
+PHP_METHOD(Stub_Router_Route, __construct)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, *httpMethods = NULL, httpMethods_sub, __$null;
@@ -71,21 +61,16 @@ PHP_METHOD(Stub_Router_Route, __construct) {
 	ZVAL_UNDEF(&paths_sub);
 	ZVAL_UNDEF(&httpMethods_sub);
 	ZVAL_NULL(&__$null);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
-		Z_PARAM_ZVAL(httpMethods)
+		Z_PARAM_ZVAL_OR_NULL(paths)
+		Z_PARAM_ZVAL_OR_NULL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 2, &pattern, &paths, &httpMethods);
-
 	if (!paths) {
 		paths = &paths_sub;
 		paths = &__$null;
@@ -94,13 +79,10 @@ PHP_METHOD(Stub_Router_Route, __construct) {
 		httpMethods = &httpMethods_sub;
 		httpMethods = &__$null;
 	}
-
-
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "reconfigure", NULL, 0, pattern, paths);
 	zephir_check_call_status();
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	ZEPHIR_MM_RESTORE();
-
 }
 
 /**
@@ -109,11 +91,10 @@ PHP_METHOD(Stub_Router_Route, __construct) {
  * @param string pattern
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, compilePattern) {
-
+PHP_METHOD(Stub_Router_Route, compilePattern)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *pattern = NULL, pattern_sub, idPattern, _0$$4, _1$$4, _2$$5, _3$$5, _4$$6, _5$$6, _6$$7, _7$$7, _8$$8, _9$$8, _10$$8, _11$$9, _12$$9, _13$$9;
-	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&pattern_sub);
 	ZVAL_UNDEF(&idPattern);
@@ -131,21 +112,13 @@ PHP_METHOD(Stub_Router_Route, compilePattern) {
 	ZVAL_UNDEF(&_11$$9);
 	ZVAL_UNDEF(&_12$$9);
 	ZVAL_UNDEF(&_13$$9);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(pattern)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &pattern);
-
 	ZEPHIR_SEPARATE_PARAM(pattern);
-
-
 	if (zephir_memnstr_str(pattern, SL(":"), "stub/router/route.zep", 56)) {
 		ZEPHIR_INIT_VAR(&idPattern);
 		ZVAL_STRING(&idPattern, "/([a-zA-Z0-9\\_\\-]+)");
@@ -206,7 +179,6 @@ PHP_METHOD(Stub_Router_Route, compilePattern) {
 	}
 	RETVAL_ZVAL(pattern, 1, 0);
 	RETURN_MM();
-
 }
 
 /**
@@ -220,28 +192,18 @@ PHP_METHOD(Stub_Router_Route, compilePattern) {
  * @param string|array httpMethods
  * @return Stub\Router\Route
  */
-PHP_METHOD(Stub_Router_Route, via) {
-
+PHP_METHOD(Stub_Router_Route, via)
+{
 	zval *httpMethods, httpMethods_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
-
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	RETURN_THISW();
-
 }
 
 /**
@@ -249,26 +211,18 @@ PHP_METHOD(Stub_Router_Route, via) {
  *
  * @param string pattern
  */
-PHP_METHOD(Stub_Router_Route, extractNamedParams) {
-
+PHP_METHOD(Stub_Router_Route, extractNamedParams)
+{
 	long _0, _5$$11, _26$$19;
+	zval route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
 	zend_bool notValid, _6$$12, _7$$12, _8$$12, _9$$12, _10$$12, _11$$12, _12$$12, _13$$12, _14$$12, _15$$12, _16$$12, _17$$12, _25$$18;
 	zend_long tmp = 0, cursor = 0, cursorVar = 0, marker = 0, bracketCount, parenthesesCount, foundPattern, intermediate, numberMatches;
 	char ch = 0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *pattern_param = NULL, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
-	zval pattern, route, item, variable, regexp, _4$$11, _21$$16, _24$$16, _29$$29;
-	zval *this_ptr = getThis();
+	zval pattern_zv, matches, _1$$11, _2$$11, _3$$11, _18$$16, _19$$16, _20$$16, _22$$16, _23$$16, _27$$19, _28$$28;
+	zend_string *pattern = NULL;
 
-	ZVAL_UNDEF(&pattern);
-	ZVAL_UNDEF(&route);
-	ZVAL_UNDEF(&item);
-	ZVAL_UNDEF(&variable);
-	ZVAL_UNDEF(&regexp);
-	ZVAL_UNDEF(&_4$$11);
-	ZVAL_UNDEF(&_21$$16);
-	ZVAL_UNDEF(&_24$$16);
-	ZVAL_UNDEF(&_29$$29);
+	ZVAL_UNDEF(&pattern_zv);
 	ZVAL_UNDEF(&matches);
 	ZVAL_UNDEF(&_1$$11);
 	ZVAL_UNDEF(&_2$$11);
@@ -280,36 +234,36 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 	ZVAL_UNDEF(&_23$$16);
 	ZVAL_UNDEF(&_27$$19);
 	ZVAL_UNDEF(&_28$$28);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
+	ZVAL_UNDEF(&route);
+	ZVAL_UNDEF(&item);
+	ZVAL_UNDEF(&variable);
+	ZVAL_UNDEF(&regexp);
+	ZVAL_UNDEF(&_4$$11);
+	ZVAL_UNDEF(&_21$$16);
+	ZVAL_UNDEF(&_24$$16);
+	ZVAL_UNDEF(&_29$$29);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(pattern)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
-	zephir_fetch_params(1, 1, 0, &pattern_param);
-
-	zephir_get_strval(&pattern, pattern_param);
-
-
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&pattern_zv);
+	ZVAL_STR_COPY(&pattern_zv, pattern);
 	notValid = 0;
 	bracketCount = 0;
 	parenthesesCount = 0;
 	foundPattern = 0;
 	intermediate = 0;
 	numberMatches = 0;
-	if (zephir_fast_strlen_ev(&pattern) <= 0) {
+	if (zephir_fast_strlen_ev(&pattern_zv) <= 0) {
 		RETURN_MM_BOOL(0);
 	}
 	ZEPHIR_INIT_VAR(&matches);
 	array_init(&matches);
 	ZEPHIR_INIT_VAR(&route);
-	for (_0 = 0; _0 < Z_STRLEN_P(&pattern); _0++) {
+	for (_0 = 0; _0 < Z_STRLEN_P(&pattern_zv); _0++) {
 		cursor = _0; 
-		ch = ZEPHIR_STRING_OFFSET(&pattern, _0);
+		ch = ZEPHIR_STRING_OFFSET(&pattern_zv, _0);
 		if (parenthesesCount == 0) {
 			if (ch == '{') {
 				if (bracketCount == 0) {
@@ -329,8 +283,8 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 							ZVAL_LONG(&_1$$11, marker);
 							ZVAL_LONG(&_2$$11, (cursor - marker));
 							ZEPHIR_INIT_NVAR(&_3$$11);
-							zephir_substr(&_3$$11, &pattern, zephir_get_intval(&_1$$11), zephir_get_intval(&_2$$11), 0);
-							zephir_get_strval(&_4$$11, &_3$$11);
+							zephir_substr(&_3$$11, &pattern_zv, zephir_get_intval(&_1$$11), zephir_get_intval(&_2$$11), 0);
+							zephir_cast_to_string(&_4$$11, &_3$$11);
 							ZEPHIR_CPY_WRT(&item, &_4$$11);
 							for (_5$$11 = 0; _5$$11 < Z_STRLEN_P(&item); _5$$11++) {
 								cursorVar = _5$$11; 
@@ -396,12 +350,12 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 										ZVAL_LONG(&_19$$16, cursorVar);
 										ZEPHIR_INIT_NVAR(&_20$$16);
 										zephir_substr(&_20$$16, &item, 0 , zephir_get_intval(&_19$$16), 0);
-										zephir_get_strval(&_21$$16, &_20$$16);
+										zephir_cast_to_string(&_21$$16, &_20$$16);
 										ZEPHIR_CPY_WRT(&variable, &_21$$16);
 										ZVAL_LONG(&_22$$16, (cursorVar + 1));
 										ZEPHIR_INIT_NVAR(&_23$$16);
 										zephir_substr(&_23$$16, &item, zephir_get_intval(&_22$$16), 0, ZEPHIR_SUBSTR_NO_LENGTH);
-										zephir_get_strval(&_24$$16, &_23$$16);
+										zephir_cast_to_string(&_24$$16, &_23$$16);
 										ZEPHIR_CPY_WRT(&regexp, &_24$$16);
 										break;
 									}
@@ -483,7 +437,6 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
 	zephir_array_fast_append(return_value, &route);
 	zephir_array_fast_append(return_value, &matches);
 	RETURN_MM();
-
 }
 
 /**
@@ -492,8 +445,8 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams) {
  * @param string pattern
  * @param array paths
  */
-PHP_METHOD(Stub_Router_Route, reConfigure) {
-
+PHP_METHOD(Stub_Router_Route, reConfigure)
+{
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, _0$$5;
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, moduleName, controllerName, actionName, parts, routePaths, realClassName, namespaceName, pcrePattern, compiledPattern, extracted, _1$$10, _2$$19, _3$$19;
@@ -515,26 +468,19 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
 	ZVAL_UNDEF(&_1$$10);
 	ZVAL_UNDEF(&_2$$19);
 	ZVAL_UNDEF(&_3$$19);
-#if PHP_VERSION_ID >= 80000
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(pattern)
 		Z_PARAM_OPTIONAL
-		Z_PARAM_ZVAL(paths)
+		Z_PARAM_ZVAL_OR_NULL(paths)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 1, &pattern, &paths);
-
 	if (!paths) {
 		paths = &paths_sub;
 		paths = &__$null;
 	}
-
-
 	if (Z_TYPE_P(pattern) != IS_STRING) {
 		ZEPHIR_THROW_EXCEPTION_DEBUG_STR(stub_router_exception_ce, "The pattern must be string", "stub/router/route.zep", 270);
 		return;
@@ -592,7 +538,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
 					ZEPHIR_CPY_WRT(&realClassName, &controllerName);
 				}
 				ZEPHIR_INIT_VAR(&_1$$10);
-				zephir_uncamelize(&_1$$10, &realClassName, NULL  );
+				zephir_uncamelize(&_1$$10, &realClassName, NULL );
 				zephir_array_update_string(&routePaths, SL("controller"), &_1$$10, PH_COPY | PH_SEPARATE);
 			}
 			if (Z_TYPE_P(&actionName) != IS_NULL) {
@@ -613,7 +559,7 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
 		if (zephir_memnstr_str(pattern, SL("{"), "stub/router/route.zep", 348)) {
 			ZEPHIR_CALL_METHOD(&extracted, this_ptr, "extractnamedparams", NULL, 0, pattern);
 			zephir_check_call_status();
-			ZEPHIR_OBS_VAR(&pcrePattern);
+			zephir_memory_observe(&pcrePattern);
 			zephir_array_fetch_long(&pcrePattern, &extracted, 0, PH_NOISY, "stub/router/route.zep", 351);
 			ZEPHIR_INIT_VAR(&_2$$19);
 			zephir_array_fetch_long(&_3$$19, &extracted, 1, PH_NOISY | PH_READONLY, "stub/router/route.zep", 352);
@@ -631,7 +577,6 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_compiledPattern"), &compiledPattern);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_paths"), &routePaths);
 	ZEPHIR_MM_RESTORE();
-
 }
 
 /**
@@ -639,14 +584,10 @@ PHP_METHOD(Stub_Router_Route, reConfigure) {
  *
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, getName) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getName)
+{
 
 	RETURN_MEMBER(getThis(), "_name");
-
 }
 
 /**
@@ -661,28 +602,18 @@ PHP_METHOD(Stub_Router_Route, getName) {
  * @param string name
  * @return Route
  */
-PHP_METHOD(Stub_Router_Route, setName) {
-
+PHP_METHOD(Stub_Router_Route, setName)
+{
 	zval *name, name_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
-
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_name"), name);
 	RETURN_THISW();
-
 }
 
 /**
@@ -693,28 +624,18 @@ PHP_METHOD(Stub_Router_Route, setName) {
  * @param callback callback
  * @return Stub\Router\Route
  */
-PHP_METHOD(Stub_Router_Route, beforeMatch) {
-
+PHP_METHOD(Stub_Router_Route, beforeMatch)
+{
 	zval *callback, callback_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&callback_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(callback)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &callback);
-
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_beforeMatch"), callback);
 	RETURN_THISW();
-
 }
 
 /**
@@ -722,14 +643,10 @@ PHP_METHOD(Stub_Router_Route, beforeMatch) {
  *
  * @return mixed
  */
-PHP_METHOD(Stub_Router_Route, getBeforeMatch) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getBeforeMatch)
+{
 
 	RETURN_MEMBER(getThis(), "_beforeMatch");
-
 }
 
 /**
@@ -737,14 +654,10 @@ PHP_METHOD(Stub_Router_Route, getBeforeMatch) {
  *
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, getRouteId) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getRouteId)
+{
 
 	RETURN_MEMBER(getThis(), "_id");
-
 }
 
 /**
@@ -752,14 +665,10 @@ PHP_METHOD(Stub_Router_Route, getRouteId) {
  *
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, getPattern) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getPattern)
+{
 
 	RETURN_MEMBER(getThis(), "_pattern");
-
 }
 
 /**
@@ -767,14 +676,10 @@ PHP_METHOD(Stub_Router_Route, getPattern) {
  *
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, getCompiledPattern) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getCompiledPattern)
+{
 
 	RETURN_MEMBER(getThis(), "_compiledPattern");
-
 }
 
 /**
@@ -782,14 +687,10 @@ PHP_METHOD(Stub_Router_Route, getCompiledPattern) {
  *
  * @return array
  */
-PHP_METHOD(Stub_Router_Route, getPaths) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getPaths)
+{
 
 	RETURN_MEMBER(getThis(), "_paths");
-
 }
 
 /**
@@ -797,8 +698,8 @@ PHP_METHOD(Stub_Router_Route, getPaths) {
  *
  * @return array
  */
-PHP_METHOD(Stub_Router_Route, getReversedPaths) {
-
+PHP_METHOD(Stub_Router_Route, getReversedPaths)
+{
 	zend_string *_4;
 	zend_ulong _3;
 	zval reversed, path, position, _0, *_1, _2;
@@ -811,9 +712,8 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths) {
 	ZVAL_UNDEF(&position);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
-
-
-	ZEPHIR_MM_GROW();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&reversed);
 	array_init(&reversed);
@@ -853,7 +753,6 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths) {
 	ZEPHIR_INIT_NVAR(&position);
 	ZEPHIR_INIT_NVAR(&path);
 	RETURN_CCTOR(&reversed);
-
 }
 
 /**
@@ -867,28 +766,18 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths) {
  * @param string|array httpMethods
  * @return Stub\Router\Route
  */
-PHP_METHOD(Stub_Router_Route, setHttpMethods) {
-
+PHP_METHOD(Stub_Router_Route, setHttpMethods)
+{
 	zval *httpMethods, httpMethods_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&httpMethods_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &httpMethods);
-
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_methods"), httpMethods);
 	RETURN_THISW();
-
 }
 
 /**
@@ -896,14 +785,10 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods) {
  *
  * @return string|array
  */
-PHP_METHOD(Stub_Router_Route, getHttpMethods) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getHttpMethods)
+{
 
 	RETURN_MEMBER(getThis(), "_methods");
-
 }
 
 /**
@@ -916,28 +801,18 @@ PHP_METHOD(Stub_Router_Route, getHttpMethods) {
  * @param string|array httpMethods
  * @return Stub\Router\Route
  */
-PHP_METHOD(Stub_Router_Route, setHostname) {
-
+PHP_METHOD(Stub_Router_Route, setHostname)
+{
 	zval *hostname, hostname_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&hostname_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(hostname)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(1, 0, &hostname);
-
-
-
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_hostname"), hostname);
 	RETURN_THISW();
-
 }
 
 /**
@@ -945,14 +820,10 @@ PHP_METHOD(Stub_Router_Route, setHostname) {
  *
  * @return string
  */
-PHP_METHOD(Stub_Router_Route, getHostname) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getHostname)
+{
 
 	RETURN_MEMBER(getThis(), "_hostname");
-
 }
 
 /**
@@ -962,30 +833,20 @@ PHP_METHOD(Stub_Router_Route, getHostname) {
  * @param callable converter
  * @return Stub\Router\Route
  */
-PHP_METHOD(Stub_Router_Route, convert) {
-
+PHP_METHOD(Stub_Router_Route, convert)
+{
 	zval *name, name_sub, *converter, converter_sub;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_sub);
 	ZVAL_UNDEF(&converter_sub);
-#if PHP_VERSION_ID >= 80000
-	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(name)
 		Z_PARAM_ZVAL(converter)
 	ZEND_PARSE_PARAMETERS_END();
-
-#endif
-
-
 	zephir_fetch_params_without_memory_grow(2, 0, &name, &converter);
-
-
-
 	zephir_update_property_array(this_ptr, SL("_converters"), name, converter);
 	RETURN_THISW();
-
 }
 
 /**
@@ -993,13 +854,9 @@ PHP_METHOD(Stub_Router_Route, convert) {
  *
  * @return array
  */
-PHP_METHOD(Stub_Router_Route, getConverters) {
-
-	zval *this_ptr = getThis();
-
-
+PHP_METHOD(Stub_Router_Route, getConverters)
+{
 
 	RETURN_MEMBER(getThis(), "_converters");
-
 }
 

@@ -184,9 +184,7 @@ final class StringMethodTest extends TestCase
             [0],
             [[]],
             [
-                function () {
-                    return '-';
-                },
+                fn () => '-',
             ],
             [new \stdClass()],
         ];

@@ -15,11 +15,10 @@
 #include "ext/spl/spl_dllist.h"
 
 
-ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_Stack) {
-
+ZEPHIR_INIT_CLASS(Stub_Oo_Extend_Spl_Stack)
+{
 	ZEPHIR_REGISTER_CLASS_EX(Stub\\Oo\\Extend\\Spl, Stack, stub, oo_extend_spl_stack, spl_ce_SplStack, NULL, 0);
 
 	return SUCCESS;
-
 }
 
