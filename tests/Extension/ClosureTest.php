@@ -96,4 +96,66 @@ final class ClosureTest extends TestCase
         $this->assertInstanceOf(\Closure::class, $closure);
         $this->assertSame('call from closure', $closure());
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: array-typed property accessed inside closure.
+     */
+    public function testIssue1873ClosureReadsArrayProperty(): void
+    {
+        $test = new Closures();
+        $test->issue1036SetArgument(['a', 'b', 'c']);
+
+        $closure = $test->issue1873ArrayProperty();
+        $this->assertSame(['a', 'b', 'c'], $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure reads two properties and concatenates them.
+     */
+    public function testIssue1873ClosureReadsMultipleProperties(): void
+    {
+        $test = new Closures();
+        $test->issue2497SetName('Hello');
+
+        $closure = $test->issue1873MultipleProperties();
+        $this->assertSame('Hello:call from closure', $closure());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: closure WRITES to an enclosing property. The binding must
+     * keep the same underlying instance so the mutation is visible after
+     * the closure returns.
+     */
+    public function testIssue1873ClosureWritesProperty(): void
+    {
+        $test = new Closures();
+        $test->issue2497SetName('initial');
+
+        $writer = $test->issue1873PropertyWriter();
+        $writer('mutated');
+
+        // The reader from #2497 should now see the mutated value.
+        $reader = $test->issue2497PropertyAccess();
+        $this->assertSame('mutated', $reader());
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1873
+     *
+     * Variant: combines #1873 (property access) with #2497 `use()` capture.
+     * Both features must compose.
+     */
+    public function testIssue1873PropertyAndUseCompose(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue1873PropertyAndUse('prefix');
+        $this->assertSame('prefix:call from closure', $closure());
+    }
 }
