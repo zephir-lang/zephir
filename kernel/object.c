@@ -432,6 +432,19 @@ int zephir_isset_property_value_zval(zval *object, const zval *property)
 	return Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), Z_STR_P(property), 0, NULL);
 }
 
+int zephir_isset_property_value_fast(zval *object, zend_string *property_name)
+{
+	if (Z_TYPE_P(object) != IS_OBJECT) {
+		return 0;
+	}
+
+	if (!Z_OBJ_HT_P(object)->has_property) {
+		return 0;
+	}
+
+	return Z_OBJ_HT_P(object)->has_property(Z_OBJ_P(object), property_name, 0, NULL);
+}
+
 /**
  * Lookup for the real owner of the property
  */

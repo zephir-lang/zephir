@@ -149,7 +149,11 @@ class IssetOperator extends AbstractOperator
                 $variableCode = $compilationContext->backend->getVariableCode($variable);
 
                 if ('property-access' === $left['type']) {
-                    return $compilationContext->backend->propertyIsset($variable, $left['right']['value']);
+                    return $compilationContext->backend->propertyIsset(
+                        $variable,
+                        $left['right']['value'],
+                        $compilationContext,
+                    );
                 }
 
                 $expr = new Expression($left['right']);

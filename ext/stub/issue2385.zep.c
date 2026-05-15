@@ -49,19 +49,31 @@ PHP_METHOD(Stub_Issue2385, __construct)
 PHP_METHOD(Stub_Issue2385, checkDeclaredOnly)
 {
 	zval *this_ptr = getThis();
-	RETURN_BOOL(zephir_isset_property_value(this_ptr, SL("declaredOnly")));
+	static zend_string *_zephir_isset_0 = NULL;
+	if (UNEXPECTED(!_zephir_isset_0)) {
+		_zephir_isset_0 = zend_string_init("declaredOnly", 12, 1);
+	}
+	RETURN_BOOL(zephir_isset_property_value_fast(this_ptr, _zephir_isset_0));
 }
 
 PHP_METHOD(Stub_Issue2385, checkAssignedNull)
 {
 	zval *this_ptr = getThis();
-	RETURN_BOOL(zephir_isset_property_value(this_ptr, SL("assignedNull")));
+	static zend_string *_zephir_isset_0 = NULL;
+	if (UNEXPECTED(!_zephir_isset_0)) {
+		_zephir_isset_0 = zend_string_init("assignedNull", 12, 1);
+	}
+	RETURN_BOOL(zephir_isset_property_value_fast(this_ptr, _zephir_isset_0));
 }
 
 PHP_METHOD(Stub_Issue2385, checkAssignedValue)
 {
 	zval *this_ptr = getThis();
-	RETURN_BOOL(zephir_isset_property_value(this_ptr, SL("assignedValue")));
+	static zend_string *_zephir_isset_0 = NULL;
+	if (UNEXPECTED(!_zephir_isset_0)) {
+		_zephir_isset_0 = zend_string_init("assignedValue", 13, 1);
+	}
+	RETURN_BOOL(zephir_isset_property_value_fast(this_ptr, _zephir_isset_0));
 }
 
 PHP_METHOD(Stub_Issue2385, checkDynamicKeyNull)

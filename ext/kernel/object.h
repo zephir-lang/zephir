@@ -56,6 +56,15 @@ int zephir_isset_property_zval(zval *object, const zval *property);
 int zephir_isset_property_value(zval *object, const char *property_name, unsigned int property_length);
 int zephir_isset_property_value_zval(zval *object, const zval *property);
 
+/**
+ * Same as zephir_isset_property_value() but takes a pre-allocated zend_string,
+ * skipping the per-call zend_string_init/release. Intended for compile-time
+ * known property names: the codegen emits a method-static zend_string * slot
+ * that is lazily initialized on first use and reused for the lifetime of the
+ * worker process.
+ */
+int zephir_isset_property_value_fast(zval *object, zend_string *property_name);
+
 /** Reading properties */
 int zephir_read_property_ex(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);
 int zephir_read_property(zval *result, zval *object, const char *property_name, uint32_t property_length, int silent);

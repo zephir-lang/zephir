@@ -1746,9 +1746,42 @@ class Backend
         return '';
     }
 
-    public function propertyIsset(Variable $var, $key): CompiledExpression
+    public function propertyIsset(Variable $var, $key, ?CompilationContext $context = null): CompiledExpression
     {
-        /* PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385. */
+        /*
+         * PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385.
+         *
+         * Static-name property isset goes through has_property, which needs
+         * a zend_string. Allocating one per call would mean a heap alloc per
+         * isset; instead emit a method-static zend_string * slot that the
+         * generated method initializes lazily on first call and reuses for
+         * the lifetime of the worker. Repeated isset() of the same property
+         * within a method shares one slot.
+         */
+        if ($context !== null) {
+            if (!isset($context->issetPropertyCache[$key])) {
+                $cacheVar = '_zephir_isset_' . $context->issetPropertyCacheCounter++;
+                $context->issetPropertyCache[$key] = $cacheVar;
+
+                $escapedKey = addslashes($key);
+                $context->codePrinter->output('static zend_string *' . $cacheVar . ' = NULL;');
+                $context->codePrinter->output('if (UNEXPECTED(!' . $cacheVar . ')) {');
+                $context->codePrinter->output(
+                    "\t" . $cacheVar . ' = zend_string_init("' . $escapedKey . '", '
+                    . strlen($key) . ', 1);'
+                );
+                $context->codePrinter->output('}');
+            }
+
+            return new CompiledExpression(
+                'bool',
+                'zephir_isset_property_value_fast(' . $this->getVariableCode($var) . ', '
+                . $context->issetPropertyCache[$key] . ')',
+                null
+            );
+        }
+
+        /* Fallback for callers that don't pass a CompilationContext. */
         return new CompiledExpression(
             'bool',
             'zephir_isset_property_value(' . $this->getVariableCode($var) . ', SL("' . $key . '"))',
