@@ -53,13 +53,12 @@ class DeclareStatement extends StatementAbstract
              * parameter symbol (losing its isDoublePointer flag) and produces
              * uncompilable C — see https://github.com/zephir-lang/zephir/issues/2009.
              */
-            $currentMethod = $compilationContext->currentMethod ?? null;
-            if ($currentMethod !== null && $currentMethod->getParameters() !== null) {
-                foreach ($currentMethod->getParameters()->getParameters() as $parameter) {
+            if ($compilationContext?->currentMethod?->getParameters() !== null) {
+                foreach ($compilationContext->currentMethod->getParameters()->getParameters() as $parameter) {
                     if ($parameter['name'] === $varName) {
                         throw new CompilerException(
                             "Variable '" . $varName . "' was already declared as a parameter of method '"
-                            . $currentMethod->getName() . "'",
+                            . $compilationContext->currentMethod->getName() . "'",
                             $variable
                         );
                     }
