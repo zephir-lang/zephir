@@ -158,4 +158,58 @@ final class ClosureTest extends TestCase
         $closure = $test->issue1873PropertyAndUse('prefix');
         $this->assertSame('prefix:call from closure', $closure());
     }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * `preg_replace_callback` with a private callback. The Zephir fixture
+     * uses a closure-with-`this` wrapper around the private method (the
+     * working idiom) rather than `[this, 'method']` which PHP's internal
+     * callable-visibility walk-back rejects for Zephir frames.
+     */
+    public function testIssue2321PrivateCallback(): void
+    {
+        $test = new Closures();
+
+        // No special chars — callback returns the (unmodified) match.
+        $this->assertSame('hello', $test->issue2321CallPrivateCallback('hello'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * Variant: callback IS actually invoked (matches contain special chars),
+     * proving private-method dispatch works through the closure wrapper.
+     */
+    public function testIssue2321PrivateCallbackInvoked(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame('hello%20world', $test->issue2321CallPrivateCallback('hello world'));
+        $this->assertSame('%C3%A5lc%C3%B3', $test->issue2321CallPrivateCallback('ålcó'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * Variant: protected callback. Same idiom should work.
+     */
+    public function testIssue2321ProtectedCallback(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame('HELLO123', $test->issue2321ProtectedCallback('hello123'));
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2321
+     *
+     * Variant: `array_map` with a private callback through a closure.
+     */
+    public function testIssue2321ArrayMapPrivateCallback(): void
+    {
+        $test = new Closures();
+
+        $this->assertSame([2, 4, 6, 8], $test->issue2321ArrayMapPrivate([1, 2, 3, 4]));
+    }
 }

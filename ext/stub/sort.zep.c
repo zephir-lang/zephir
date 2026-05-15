@@ -93,16 +93,16 @@ PHP_METHOD(Stub_Sort, quick)
 			}
 		}
 	}
-	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 94, &left);
+	ZEPHIR_CALL_METHOD(&_7, this_ptr, "quick", &_8, 97, &left);
 	zephir_check_call_status();
 	ZEPHIR_INIT_VAR(&_9);
 	zephir_create_array(&_9, 1, 0);
 	ZEPHIR_INIT_VAR(&_10);
 	ZVAL_LONG(&_10, pivot);
 	zephir_array_fast_append(&_9, &_10);
-	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 94, &right);
+	ZEPHIR_CALL_METHOD(&_11, this_ptr, "quick", &_8, 97, &right);
 	zephir_check_call_status();
-	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 95, &_7, &_9, &_11);
+	ZEPHIR_RETURN_CALL_FUNCTION("array_merge", NULL, 98, &_7, &_9, &_11);
 	zephir_check_call_status();
 	RETURN_MM();
 }
