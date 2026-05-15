@@ -469,7 +469,7 @@ PHP_METHOD(Stub_Bench_Foo, issetProp)
 			}
 			ZEPHIR_INIT_NVAR(&i);
 			ZVAL_LONG(&i, _1);
-			x = zephir_isset_property(this_ptr, SL("b"));
+			x = zephir_isset_property_value(this_ptr, SL("b"));
 		}
 	}
 	ZEPHIR_MM_RESTORE();

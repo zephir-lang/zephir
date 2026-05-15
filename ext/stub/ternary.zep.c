@@ -103,7 +103,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 			zephir_check_call_status();
 		} else {
 			ZEPHIR_INIT_NVAR(&_0);
-			ZVAL_BOOL(&_0, zephir_array_isset(a, y));
+			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
 		}
 	}
 	RETURN_CCTOR(&_0);
@@ -138,7 +138,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 			zephir_check_call_status();
 		} else {
 			ZEPHIR_INIT_NVAR(&_0);
-			ZVAL_BOOL(&_0, zephir_array_isset(a, y));
+			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
 		}
 	}
 	RETURN_MM_LONG((5 + zephir_get_numberval(&_0)));
@@ -193,7 +193,7 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 	ZVAL_STRING(&_0, "_c_");
 	zephir_array_fast_append(&var2, &_0);
 	ZEPHIR_INIT_VAR(&_1);
-	if (zephir_array_isset_long(&var2, 1)) {
+	if (zephir_array_isset_value_long(&var2, 1)) {
 		ZEPHIR_OBS_NVAR(&_1);
 		zephir_array_fetch_long(&_1, &var2, 1, PH_NOISY, "stub/ternary.zep", 44);
 	} else {

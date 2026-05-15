@@ -282,11 +282,17 @@ class Backend
 
     public function arrayIsset(Variable $var, $resolvedExpr, $expression): CompiledExpression
     {
+        /**
+         * isset() must match PHP semantics: key exists AND value is not null.
+         * The *_isset_value_* helpers do both checks; *_isset_* (key-only) is
+         * kept for callers that legitimately want existence semantics.
+         * See https://github.com/zephir-lang/zephir/issues/2385.
+         */
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string('
+                    'zephir_array_isset_value_string('
                     . $this->getVariableCode($var)
                     . ', SL("'
                     . $resolvedExpr->getCode()
@@ -300,7 +306,7 @@ class Backend
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string('
+                    'zephir_array_isset_value_string('
                     . $this->getVariableCode($var)
                     . ', SS("'
                     . $resolvedExpr->getCode()
@@ -311,7 +317,7 @@ class Backend
 
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset_long('
+                'zephir_array_isset_value_long('
                 . $this->getVariableCode($var)
                 . ', '
                 . $resolvedExpr->getCode() . ')',
@@ -322,7 +328,7 @@ class Backend
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset_long('
+                'zephir_array_isset_value_long('
                 . $this->getVariableCode($var)
                 . ', '
                 . $this->getVariableCode($resolvedExpr)
@@ -336,7 +342,7 @@ class Backend
         ) {
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode(
+                'zephir_array_isset_value(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode(
                     $resolvedExpr
                 ) . ')',
                 $expression
@@ -1742,9 +1748,10 @@ class Backend
 
     public function propertyIsset(Variable $var, $key): CompiledExpression
     {
+        /* PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385. */
         return new CompiledExpression(
             'bool',
-            'zephir_isset_property(' . $this->getVariableCode($var) . ', SL("' . $key . '"))',
+            'zephir_isset_property_value(' . $this->getVariableCode($var) . ', SL("' . $key . '"))',
             null
         );
     }

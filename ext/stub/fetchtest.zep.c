@@ -242,11 +242,11 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
 	zephir_fetch_params_without_memory_grow(1, 0, &name);
-	if (zephir_array_isset(&_POST, name)) {
+	if (zephir_array_isset_value(&_POST, name)) {
 		RETURN_BOOL(1);
 	} else {
 		zephir_read_property(&_0$$4, this_ptr, ZEND_STRL("values"), PH_NOISY_CC | PH_READONLY);
-		if (zephir_array_isset(&_0$$4, name)) {
+		if (zephir_array_isset_value(&_0$$4, name)) {
 			RETURN_BOOL(1);
 		}
 	}

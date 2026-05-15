@@ -84,7 +84,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc_internal)
 				_0 = 1;
 			}
 			i = _1;
-			if (!(zephir_array_isset_long(&arr, i))) {
+			if (!(zephir_array_isset_value_long(&arr, i))) {
 				RETURN_MM_BOOL(1);
 			}
 		}

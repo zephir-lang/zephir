@@ -170,9 +170,10 @@ class IssetOperator extends AbstractOperator
                             case 'string':
                                 $indexVariableCode = $compilationContext->backend->getVariableCode($indexVariable);
 
+                                /* PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385. */
                                 return new CompiledExpression(
                                     'bool',
-                                    'zephir_isset_property_zval(' . $variableCode . ', ' . $indexVariableCode . ')',
+                                    'zephir_isset_property_value_zval(' . $variableCode . ', ' . $indexVariableCode . ')',
                                     $left['right']
                                 );
 

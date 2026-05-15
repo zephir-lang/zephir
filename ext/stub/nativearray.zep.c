@@ -1691,7 +1691,7 @@ PHP_METHOD(Stub_NativeArray, issue264)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &tokens_param);
 	zephir_get_arrval(&tokens, tokens_param);
-	RETURN_MM_BOOL(!(zephir_array_isset_long(&tokens, 1)));
+	RETURN_MM_BOOL(!(zephir_array_isset_value_long(&tokens, 1)));
 }
 
 PHP_METHOD(Stub_NativeArray, issue743a)
@@ -1844,7 +1844,7 @@ PHP_METHOD(Stub_NativeArray, Issue1140)
 	zephir_memory_observe(&baseDir_zv);
 	ZVAL_STR_COPY(&baseDir_zv, baseDir);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("prefixes"), PH_NOISY_CC | PH_READONLY);
-	if (!(zephir_array_isset(&_0, &prefix_zv))) {
+	if (!(zephir_array_isset_value(&_0, &prefix_zv))) {
 		ZEPHIR_INIT_VAR(&_1$$3);
 		array_init(&_1$$3);
 		zephir_update_property_array(this_ptr, SL("prefixes"), &prefix_zv, &_1$$3);

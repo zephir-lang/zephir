@@ -42,7 +42,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray1)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	RETURN_BOOL(zephir_array_isset(a, b));
+	RETURN_BOOL(zephir_array_isset_value(a, b));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetArray2)
@@ -56,7 +56,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray2)
 		Z_PARAM_LONG(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
-	RETURN_BOOL(zephir_array_isset_long(a, b));
+	RETURN_BOOL(zephir_array_isset_value_long(a, b));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetArray3)
@@ -72,7 +72,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray3)
 	ZEND_PARSE_PARAMETERS_END();
 	a = ZEND_CALL_ARG(execute_data, 1);
 	ZVAL_STR(&b_zv, b);
-	RETURN_BOOL(zephir_array_isset(a, &b_zv));
+	RETURN_BOOL(zephir_array_isset_value(a, &b_zv));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetArray4)
@@ -84,7 +84,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray4)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(zephir_array_isset_long(a, 0));
+	RETURN_BOOL(zephir_array_isset_value_long(a, 0));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetArray5)
@@ -96,7 +96,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray5)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(zephir_array_isset_string(a, SL("a")));
+	RETURN_BOOL(zephir_array_isset_value_string(a, SL("a")));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty1)
@@ -108,7 +108,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &a);
-	RETURN_BOOL(zephir_isset_property(a, SL("b")));
+	RETURN_BOOL(zephir_isset_property_value(a, SL("b")));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty2)
@@ -122,7 +122,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b);
-	RETURN_BOOL(zephir_isset_property_zval(a, b));
+	RETURN_BOOL(zephir_isset_property_value_zval(a, b));
 }
 
 PHP_METHOD(Stub_IssetTest, testIssetProperty3)
@@ -149,7 +149,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
 
 	zephir_memory_observe(&g);
 	zephir_read_property(&g, this_ptr, ZEND_STRL("s"), PH_NOISY_CC);
-	if (zephir_array_isset_string(&g, SL("a"))) {
+	if (zephir_array_isset_value_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
 	RETURN_MM_BOOL(0);
@@ -170,7 +170,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2)
 	zephir_fetch_params(1, 1, 0, &inp);
 	zephir_memory_observe(&g);
 	zephir_read_property(&g, inp, ZEND_STRL("s"), PH_NOISY_CC);
-	if (zephir_array_isset_string(&g, SL("a"))) {
+	if (zephir_array_isset_value_string(&g, SL("a"))) {
 		RETURN_MM_BOOL(1);
 	}
 	RETURN_MM_BOOL(0);

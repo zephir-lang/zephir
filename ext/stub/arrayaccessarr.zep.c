@@ -78,7 +78,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetExists)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &offset);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	RETURN_BOOL(zephir_array_isset(&_0, offset));
+	RETURN_BOOL(zephir_array_isset_value(&_0, offset));
 }
 
 PHP_METHOD(Stub_ArrayAccessArr, offsetUnset)
@@ -117,7 +117,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetGet)
 	zephir_fetch_params(1, 1, 0, &offset);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	if (zephir_array_isset(&_1, offset)) {
+	if (zephir_array_isset_value(&_1, offset)) {
 		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
 		ZEPHIR_OBS_NVAR(&_0);
 		zephir_array_fetch(&_0, &_2, offset, PH_NOISY, "stub/arrayaccessarr.zep", 37);

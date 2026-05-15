@@ -97,7 +97,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 	zephir_fetch_params(1, 1, 0, &offset);
 	zephir_memory_observe(&obj);
 	zephir_read_property(&obj, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
-	RETURN_MM_BOOL(zephir_isset_property_zval(&obj, offset));
+	RETURN_MM_BOOL(zephir_isset_property_value_zval(&obj, offset));
 }
 
 PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
@@ -146,7 +146,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 	zephir_fetch_params(1, 1, 0, &offset);
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("test"), PH_NOISY_CC | PH_READONLY);
-	if (zephir_isset_property_zval(&_1, offset)) {
+	if (zephir_isset_property_value_zval(&_1, offset)) {
 		zephir_memory_observe(&_2);
 		zephir_read_property(&_2, this_ptr, ZEND_STRL("test"), PH_NOISY_CC);
 		ZEPHIR_OBS_NVAR(&_0);
