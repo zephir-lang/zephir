@@ -314,6 +314,14 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 				 * `[this, 'methodName']` style callback. When `ce` is set,
 				 * pin the calling scope to it so the engine permits access
 				 * to private/protected methods declared on `ce`.
+				 *
+				 * If `ce` is NULL we still need to leave `fcic` in a
+				 * well-defined state — `fcic` is stack-allocated by the
+				 * caller and not zeroed, so skipping the writes here would
+				 * leak whatever a prior `zend_is_callable_at_frame()` left
+				 * behind (or stack garbage on its failure path) into
+				 * `zend_call_function()`. Derive scope from `this_ptr`,
+				 * matching the pre-#2321 fallback.
 				 */
 				if (ce) {
 					fcic->calling_scope = ce;
@@ -321,7 +329,11 @@ static void populate_fcic(zend_fcall_info_cache* fcic, zephir_call_type type, ze
 #if PHP_VERSION_ID >= 80000
 					fcic->function_handler = zend_hash_find_ptr(&ce->function_table, Z_STR_P(func));
 #endif
+				} else {
+					fcic->calling_scope = this_ptr ? Z_OBJCE_P(this_ptr) : NULL;
 				}
+
+				fcic->called_scope = fcic->calling_scope;
 			}
 
 			break;
