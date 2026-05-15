@@ -35,7 +35,6 @@ $finder = PhpCsFixer\Finder::create()
         'templates/Api',
         'tests/ext-bootstrap',
         'tests/fixtures',
-        'tests/sharness',
     ])
     ->notPath('#config/class-entries.php#')
     ->notPath('#tests/fixtures/stubs/.*#')
