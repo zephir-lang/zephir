@@ -29,7 +29,7 @@ final class InfoCommandsTest extends TestCase
         $this->setUpZephirRunner();
 
         $this->cwd = sys_get_temp_dir() . '/zephir-info-' . bin2hex(random_bytes(6));
-        mkdir($this->cwd, 0o777, true);
+        mkdir($this->cwd, 0777, true);
         $this->cleanupPath($this->cwd);
     }
 
