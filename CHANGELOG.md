@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Fixed silent generation of uncompilable C when a local `var` was re-declared with the same name as a method parameter. [#2009](https://github.com/zephir-lang/zephir/issues/2009)
+- Fixed `string` locals that were initialized to the empty string (`string s = "";` or `let s = "";`) ending up as `null` at runtime when subsequent code paths did not reassign them. [#2393](https://github.com/zephir-lang/zephir/issues/2393)
 
 ## [0.20.1] - 2026-05-15
 
