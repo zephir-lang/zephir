@@ -1046,6 +1046,7 @@ PHP_METHOD(Stub_Flow, testFor11)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
@@ -1078,6 +1079,7 @@ PHP_METHOD(Stub_Flow, testFor12)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1110,6 +1112,7 @@ PHP_METHOD(Stub_Flow, testFor13)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
@@ -1142,6 +1145,7 @@ PHP_METHOD(Stub_Flow, testFor14)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
@@ -1470,6 +1474,7 @@ PHP_METHOD(Stub_Flow, testFor23)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1509,6 +1514,7 @@ PHP_METHOD(Stub_Flow, testFor24)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);

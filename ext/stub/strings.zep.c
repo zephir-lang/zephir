@@ -470,6 +470,7 @@ PHP_METHOD(Stub_Strings, strToHex)
 	ZVAL_STR_COPY(&value_zv, value);
 	i = 0;
 	ZEPHIR_INIT_VAR(&ret);
+	ZVAL_STRING(&ret, "");
 	while (1) {
 		if (!(i < zephir_fast_strlen_ev(&value_zv))) {
 			break;
