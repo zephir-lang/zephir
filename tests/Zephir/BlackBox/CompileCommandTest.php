@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Zephir\Test\BlackBox;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Os;
 
 /**
  * Equivalent of sharness `t0001-compile.sh`.
@@ -26,6 +27,10 @@ final class CompileCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('compile invokes phpize/configure/make, which are not available on Windows.');
+        }
+
         $this->setUpZephirRunner();
     }
 
