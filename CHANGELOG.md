@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed silent generation of uncompilable C when a local `var` was re-declared with the same name as a method parameter. [#2009](https://github.com/zephir-lang/zephir/issues/2009)
+
 ## [0.20.1] - 2026-05-15
 
 ### Changed
