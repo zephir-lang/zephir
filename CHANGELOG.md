@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.20.1] - 2026-05-15
+
 ### Changed
 - Migrated Black-box Testing from Sharness to PHPUnit. [#2492](https://github.com/zephir-lang/zephir/issues/2492)
 
@@ -649,7 +651,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.1...HEAD
+[0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/zephir-lang/zephir/compare/0.18.0...0.19.0
 [0.18.0]: https://github.com/zephir-lang/zephir/compare/0.17.0...0.18.0
