@@ -43,9 +43,9 @@ final class GenerateValidationTest extends TestCase
         $result = $this->runZephir('generate --no-ansi', $projectDir);
 
         $this->assertSame(1, $result['exitCode']);
-        $this->assertStringEqualsFile(
-            $this->fixturesDir() . '/genfailure1',
-            $result['stderr'],
+        $this->assertSame(
+            $this->normalize((string) file_get_contents($this->fixturesDir() . '/genfailure1')),
+            $this->normalize($result['stderr']),
         );
     }
 
@@ -56,10 +56,15 @@ final class GenerateValidationTest extends TestCase
         $result = $this->runZephir('generate --no-ansi', $cwd);
 
         $this->assertSame(1, $result['exitCode']);
-        $this->assertStringEqualsFile(
-            $this->fixturesDir() . '/genfailure2',
-            $result['stderr'],
+        $this->assertSame(
+            $this->normalize((string) file_get_contents($this->fixturesDir() . '/genfailure2')),
+            $this->normalize($result['stderr']),
         );
+    }
+
+    private function normalize(string $value): string
+    {
+        return str_replace("\r\n", "\n", $value);
     }
 
     public function testDifferentProjectsDoNotShareCache(): void

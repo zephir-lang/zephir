@@ -67,7 +67,22 @@ final class StubsCommandTest extends TestCase
         $actual = $this->stubsOutDir . '/' . $fileName;
 
         $this->assertFileExists($actual);
-        $this->assertFileEquals($expected, $actual);
+        $this->assertSame(
+            $this->readNormalized($expected),
+            $this->readNormalized($actual),
+        );
+    }
+
+    /**
+     * Reads a file and normalizes line endings to LF.
+     *
+     * Windows checkouts may convert fixture line endings to CRLF, while the
+     * stub generator emits some sections (e.g. docblocks) with LF regardless
+     * of platform. Compare on normalized content so the assertion is stable.
+     */
+    private function readNormalized(string $path): string
+    {
+        return str_replace("\r\n", "\n", (string) file_get_contents($path));
     }
 
     public static function stubFileProvider(): array

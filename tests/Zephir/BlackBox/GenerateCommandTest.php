@@ -41,9 +41,9 @@ final class GenerateCommandTest extends TestCase
         $this->assertSame(0, $this->runZephir('fullclean', $cwd)['exitCode']);
         $this->assertSame(0, $this->runZephir('generate', $cwd)['exitCode']);
 
-        $this->assertFileEquals(
-            $cwd . '/expected3.c',
-            $cwd . '/ext/lifecycle.c',
+        $this->assertSame(
+            str_replace("\r\n", "\n", (string) file_get_contents($cwd . '/expected3.c')),
+            str_replace("\r\n", "\n", (string) file_get_contents($cwd . '/ext/lifecycle.c')),
         );
     }
 }
