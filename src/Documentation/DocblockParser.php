@@ -24,6 +24,15 @@ use const PHP_EOL;
 class DocblockParser
 {
     protected $annotation;
+    /**
+     * Tracks the depth of brackets/braces/parens/angles opened inside the
+     * current annotation body. Multi-line PHPStan/PSALM annotations
+     * (`@phpstan-type Foo array{...}`, multi-line `@method` signatures,
+     * generic types split across lines, etc.) only terminate when this
+     * counter is back to zero, so newlines inside an unclosed structure
+     * keep accumulating into the same annotation rather than splitting it.
+     */
+    protected $annotationBracketDepth = 0;
     protected $annotationLen;
     protected $annotationNameOpen;
     protected $annotationOpen;
@@ -74,13 +83,14 @@ class DocblockParser
     {
         $this->docblockObj = new Docblock();
 
-        $this->ignoreSpaces       = false;
-        $this->ignoreStar         = true;
-        $this->commentOpen        = false;
-        $this->annotationNameOpen = false;
-        $this->annotationOpen     = false;
-        $this->summaryOpen        = true;
-        $this->descriptionOpen    = false;
+        $this->ignoreSpaces           = false;
+        $this->ignoreStar             = true;
+        $this->commentOpen            = false;
+        $this->annotationNameOpen     = false;
+        $this->annotationOpen         = false;
+        $this->annotationBracketDepth = 0;
+        $this->summaryOpen            = true;
+        $this->descriptionOpen        = false;
 
         $this->currentAnnotationStr        = null;
         $this->currentAnnotationContentStr = null;
@@ -133,9 +143,19 @@ class DocblockParser
                         $this->ignoreSpaces       = false;
                         $this->annotationNameOpen = true;
                     } elseif ($this->annotationNameOpen || $this->annotationOpen) {
-                        // stop annotation parsing on new line
+                        // stop annotation parsing on new line, unless we are
+                        // inside an unclosed bracket/brace/paren/angle (then
+                        // the annotation body keeps growing across lines).
                         if ("\n" == $currentChar || "\r" == $currentChar) {
-                            $this->__tryRegisterAnnotation();
+                            if ($this->annotationOpen && $this->annotationBracketDepth > 0) {
+                                // collapse line break into a single space so
+                                // the downstream type parser sees clean
+                                // whitespace; leading `*` of the next line is
+                                // swallowed by $ignoreStar below.
+                                $this->currentAnnotationContentStr .= ' ';
+                            } else {
+                                $this->__tryRegisterAnnotation();
+                            }
 
                             $this->ignoreSpaces = false;
                             $this->ignoreStar   = true;
@@ -147,6 +167,23 @@ class DocblockParser
                                 $this->currentAnnotationStr .= $currentChar;
                             }
                         } elseif ($this->annotationOpen) {
+                            if (
+                                '{' === $currentChar
+                                || '(' === $currentChar
+                                || '[' === $currentChar
+                                || '<' === $currentChar
+                            ) {
+                                ++$this->annotationBracketDepth;
+                            } elseif (
+                                '}' === $currentChar
+                                || ')' === $currentChar
+                                || ']' === $currentChar
+                                || '>' === $currentChar
+                            ) {
+                                if ($this->annotationBracketDepth > 0) {
+                                    --$this->annotationBracketDepth;
+                                }
+                            }
                             $this->currentAnnotationContentStr .= $currentChar;
                         }
                     } elseif ($this->summaryOpen) {
@@ -220,8 +257,9 @@ class DocblockParser
             $this->docblockObj->addAnnotation($annotation);
         }
 
-        $this->annotationNameOpen = false;
-        $this->annotationOpen     = false;
+        $this->annotationNameOpen     = false;
+        $this->annotationOpen         = false;
+        $this->annotationBracketDepth = 0;
     }
 
     /**

@@ -238,5 +238,13 @@
 #include "stub/14__closure.zep.h"
 #include "stub/15__closure.zep.h"
 #include "stub/16__closure.zep.h"
+#include "stub/17__closure.zep.h"
+#include "stub/18__closure.zep.h"
+#include "stub/19__closure.zep.h"
+#include "stub/20__closure.zep.h"
+#include "stub/21__closure.zep.h"
+#include "stub/22__closure.zep.h"
+#include "stub/23__closure.zep.h"
+#include "stub/24__closure.zep.h"
 
 #endif

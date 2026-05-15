@@ -118,7 +118,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeArrayVar)
 PHP_METHOD(Stub_Properties_ProtectedProperties, getSomeArrayVar)
 {
 
-	RETURN_MEMBER(getThis(), "someArrayVar");
+	RETURN_MEMBER_TYPED(getThis(), "someArrayVar", IS_ARRAY);
 }
 
 /**

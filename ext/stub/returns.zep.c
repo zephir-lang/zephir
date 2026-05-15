@@ -19,6 +19,12 @@ ZEPHIR_INIT_CLASS(Stub_Returns)
 {
 	ZEPHIR_REGISTER_CLASS(Stub, Returns, stub, returns, stub_returns_method_entry, 0);
 
+	zend_declare_property_null(stub_returns_ce, SL("stringDefaultNull"), ZEND_ACC_PROTECTED);
+	zend_declare_property_null(stub_returns_ce, SL("intDefaultNull"), ZEND_ACC_PROTECTED);
+	zend_declare_property_null(stub_returns_ce, SL("arrayDefaultNull"), ZEND_ACC_PROTECTED);
+	zend_declare_property_null(stub_returns_ce, SL("doubleDefaultNull"), ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_returns_ce, SL("validString"), "hello", ZEND_ACC_PROTECTED);
+	zend_declare_property_null(stub_returns_ce, SL("nullableProperty"), ZEND_ACC_PROTECTED);
 	return SUCCESS;
 }
 
@@ -67,5 +73,61 @@ PHP_METHOD(Stub_Returns, returnWithoutParameter)
 {
 
 	RETURN_STRING("Return back");
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ */
+PHP_METHOD(Stub_Returns, returnNullOnString)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "stringDefaultNull", IS_STRING);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ */
+PHP_METHOD(Stub_Returns, returnNullOnInt)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "intDefaultNull", IS_LONG);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ */
+PHP_METHOD(Stub_Returns, returnNullOnArray)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "arrayDefaultNull", IS_ARRAY);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ */
+PHP_METHOD(Stub_Returns, returnNullOnDouble)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "doubleDefaultNull", IS_DOUBLE);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ * Happy path: the property already holds a string, so no TypeError.
+ */
+PHP_METHOD(Stub_Returns, returnValidString)
+{
+
+	RETURN_MEMBER_TYPED(getThis(), "validString", IS_STRING);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1991
+ * Nullable return type — returning null must NOT throw.
+ */
+PHP_METHOD(Stub_Returns, returnNullOnNullableString)
+{
+
+	RETURN_MEMBER(getThis(), "nullableProperty");
 }
 

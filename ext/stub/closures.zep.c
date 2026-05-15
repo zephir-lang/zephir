@@ -18,6 +18,8 @@
 #include "kernel/memory.h"
 #include "kernel/array.h"
 #include "kernel/fcall.h"
+#include "kernel/operators.h"
+#include "kernel/string.h"
 
 
 ZEPHIR_INIT_CLASS(Stub_Closures)
@@ -27,6 +29,7 @@ ZEPHIR_INIT_CLASS(Stub_Closures)
 	zend_declare_property_null(stub_closures_ce, SL("_argument"), ZEND_ACC_PROTECTED);
 	zend_declare_property_null(stub_closures_ce, SL("_function"), ZEND_ACC_PROTECTED);
 	zend_declare_property_string(stub_closures_ce, SL("_name"), "default", ZEND_ACC_PROTECTED);
+	zend_declare_property_string(stub_closures_ce, SL("property1873"), "call from closure", ZEND_ACC_PROTECTED);
 	return SUCCESS;
 }
 
@@ -183,7 +186,7 @@ PHP_METHOD(Stub_Closures, issue1036Call)
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_function"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("_argument"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 28, &_0, &_1);
+	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 29, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -238,5 +241,274 @@ PHP_METHOD(Stub_Closures, issue2497SetName)
 	ZEND_PARSE_PARAMETERS_END();
 	ZVAL_STR(&name_zv, name);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_name"), &name_zv);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Original reporter's minimal repro: a closure returned from a method
+ * that reads a protected property of the enclosing class via `this->`.
+ * Note the return type is `<\Closure>`, not `string` — the PR draft
+ * (#2203) declared it `-> string` which is itself a type bug under the
+ * runtime-return-type enforcement added for #1991.
+ */
+PHP_METHOD(Stub_Closures, issue1873)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_14__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads an array property and joins it inside the body.
+ * Exercises the property-access + intra-closure expression combination.
+ */
+PHP_METHOD(Stub_Closures, issue1873ArrayProperty)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_15__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads multiple properties and concatenates them.
+ * Ensures multi-property reads inside a single closure compile cleanly.
+ */
+PHP_METHOD(Stub_Closures, issue1873MultipleProperties)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_16__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure both reads and writes a property — the binding via
+ * Closure::bindTo must preserve mutability of the enclosing instance.
+ */
+PHP_METHOD(Stub_Closures, issue1873PropertyWriter)
+{
+	zval *this_ptr = getThis();
+	zephir_create_closure_ex(return_value, this_ptr, stub_17__closure_ce, SL("__invoke"));
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1873
+ *
+ * Variant: closure reads a property AND uses a captured local via
+ * `use()`. Verifies #1873 (property) and #2497 (use) compose.
+ *
+ * The captured variable is `var` (not `string`) because Zephir's
+ * native-string parameter refactor (#2462) stores string params as
+ * `zend_string *` which the `use()` plumbing in closure stubs doesn't
+ * yet wrap to a zval — that's an orthogonal limitation worth tracking
+ * separately.
+ */
+PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
+{
+	zval *prefix, prefix_sub;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&prefix_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(prefix)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &prefix);
+	zephir_create_closure_ex(return_value, this_ptr, stub_18__closure_ce, SL("__invoke"));
+	zephir_update_static_property_ce(stub_18__closure_ce, ZEND_STRL("prefix"), prefix);
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2321
+ *
+ * Original reporter's symptom: `preg_replace_callback(..., [this, 'private'])`
+ * from inside the same class produced "cannot access private method".
+ *
+ * Root cause sits in the PHP engine: when an internal function
+ * (`preg_replace_callback`) validates a `callable` argument, it walks
+ * back through `prev_execute_data` to the nearest **user-code** frame
+ * to determine the visibility scope. Zephir-compiled methods register
+ * as `ZEND_INTERNAL_FUNCTION` so they are skipped, leaving the check
+ * with no scope and rejecting otherwise-valid private callbacks.
+ *
+ * Workaround: use a Zephir closure that calls the private method
+ * directly. Closures capture `this` (per #2497) and PHP doesn't
+ * re-validate visibility when the callable is already a Closure
+ * object.
+ */
+PHP_METHOD(Stub_Closures, issue2321CallPrivateCallback)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval value_zv;
+	zend_string *value = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_zv);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&value_zv);
+	ZVAL_STR_COPY(&value_zv, value);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 30, &value_zv);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Closures, issue2321filterQuery)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval value_zv, _0, _1;
+	zend_string *value = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_zv);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&value_zv);
+	ZVAL_STR_COPY(&value_zv, value);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_create_closure_ex(&_0, this_ptr, stub_19__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_STRING(&_1, "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u");
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 31, &_1, &_0, &value_zv);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *matches_param = NULL, _0;
+	zval matches;
+
+	ZVAL_UNDEF(&matches);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(matches, matches_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &matches_param);
+	zephir_get_arrval(&matches, matches_param);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 248);
+	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 32, &_0);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2321
+ *
+ * Variant: protected callback. Same idiom — wrap the method call in
+ * a closure that captures `this`, then pass the closure as the
+ * callback. PHP doesn't re-validate visibility on Closure callbacks.
+ */
+PHP_METHOD(Stub_Closures, issue2321ProtectedCallback)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval value_zv, _0, _1;
+	zend_string *value = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&value_zv);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(value)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_memory_observe(&value_zv);
+	ZVAL_STR_COPY(&value_zv, value);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_create_closure_ex(&_0, this_ptr, stub_20__closure_ce, SL("__invoke"));
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_STRING(&_1, "/[a-z]/");
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 31, &_1, &_0, &value_zv);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Closures, issue2321ProtectedUpper)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *matches_param = NULL, _0;
+	zval matches;
+
+	ZVAL_UNDEF(&matches);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(matches, matches_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &matches_param);
+	zephir_get_arrval(&matches, matches_param);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 271);
+	zephir_fast_strtoupper(return_value, &_0);
+	RETURN_MM();
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2321
+ *
+ * Variant: array-map over a private method through a Zephir closure.
+ * Covers a second common PHP-internal-callable consumer.
+ */
+PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *values_param = NULL, _0;
+	zval values;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&values);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(values, values_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &values_param);
+	zephir_get_arrval(&values, values_param);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	zephir_create_closure_ex(&_0, this_ptr, stub_21__closure_ce, SL("__invoke"));
+	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 8, &_0, &values);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Closures, issue2321Doubled)
+{
+	zval *val_param = NULL;
+	zend_long val;
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(val)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
+	RETURN_LONG((val * 2));
 }
 

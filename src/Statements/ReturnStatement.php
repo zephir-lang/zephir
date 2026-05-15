@@ -88,7 +88,24 @@ final class ReturnStatement extends StatementAbstract
                             );
 
                             $compilationContext->headersManager->add('kernel/object');
-                            $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
+
+                            /**
+                             * If the method declares a strict scalar return type, emit a
+                             * runtime type check after reading the property. PHP's engine
+                             * does not verify return types of internal/extension methods in
+                             * release builds, so without this `return this->prop` could leak
+                             * a NULL (or other mismatching type) past a `-> string` hint.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/1991
+                             */
+                            $expectedType = $this->resolveStrictScalarReturnTypeConst($currentMethod);
+                            if ($expectedType !== null) {
+                                $codePrinter->output(
+                                    'RETURN_MM_MEMBER_TYPED(getThis(), "' . $property . '", ' . $expectedType . ');'
+                                );
+                            } else {
+                                $codePrinter->output('RETURN_MM_MEMBER(getThis(), "' . $property . '");');
+                            }
 
                             return;
                         }
@@ -391,5 +408,42 @@ final class ReturnStatement extends StatementAbstract
          * Return without an expression
          */
         $codePrinter->output('RETURN_MM_NULL();');
+    }
+
+    /**
+     * Returns the IS_* type constant for a method declared with a single,
+     * strict, non-nullable scalar return type that we can enforce at runtime
+     * via `RETURN_MM_MEMBER_TYPED`. Returns null for any case we don't yet
+     * verify (nullable, union types, mixed, object, bool, void).
+     *
+     * `bool` is intentionally not enforced here because PHP uses two distinct
+     * zval types (IS_TRUE / IS_FALSE) which would require a more elaborate
+     * macro. `object` would need class-hierarchy checks. `mixed` accepts
+     * anything by definition. These are left to a future change.
+     */
+    private function resolveStrictScalarReturnTypeConst($currentMethod): ?string
+    {
+        if (!$currentMethod->hasReturnTypes()) {
+            return null;
+        }
+
+        if ($currentMethod->isMixed() || $currentMethod->areReturnTypesNullCompatible()) {
+            return null;
+        }
+
+        $returnTypes = $currentMethod->getReturnTypes();
+        if (count($returnTypes) !== 1) {
+            return null;
+        }
+
+        $type = array_key_first($returnTypes);
+
+        return match ($type) {
+            'string', 'istring' => 'IS_STRING',
+            'int', 'uint', 'long', 'ulong', 'char', 'uchar' => 'IS_LONG',
+            'double' => 'IS_DOUBLE',
+            'array' => 'IS_ARRAY',
+            default => null,
+        };
     }
 }

@@ -57,7 +57,7 @@ PHP_METHOD(Stub_Issue2469, callWithLiteral)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "a");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 53, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 57, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -77,7 +77,7 @@ PHP_METHOD(Stub_Issue2469, callWithVariable)
 	chTmp = '>';
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRINGL(&_0, &chTmp, 1);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 53, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 57, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Issue2469, callWithLiteralUchar)
 
 	ZEPHIR_INIT_VAR(&_0);
 	ZVAL_STRING(&_0, "Z");
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 53, &_0);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "peek", NULL, 57, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

@@ -1940,7 +1940,7 @@ class Method
      */
     public function getLine(): mixed
     {
-        return $this->expression['line'];
+        return $this->expression['line'] ?? null;
     }
 
     public function getMayBeArgTypes(): array

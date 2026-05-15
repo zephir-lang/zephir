@@ -21,7 +21,7 @@ ZEPHIR_INIT_CLASS(Stub_Interfaces_ImplementInt)
 {
 	ZEPHIR_REGISTER_CLASS(Stub\\Interfaces, ImplementInt, stub, interfaces_implementint, stub_interfaces_implementint_method_entry, 0);
 
-	zend_declare_property_null(stub_interfaces_implementint_ce, SL("val"), ZEND_ACC_PROTECTED);
+	zend_declare_property_long(stub_interfaces_implementint_ce, SL("val"), 0, ZEND_ACC_PROTECTED);
 	zend_class_implements(stub_interfaces_implementint_ce, 1, stub_interfaces_interfaceint_ce);
 	return SUCCESS;
 }
@@ -45,6 +45,6 @@ PHP_METHOD(Stub_Interfaces_ImplementInt, set)
 PHP_METHOD(Stub_Interfaces_ImplementInt, get)
 {
 
-	RETURN_MEMBER(getThis(), "val");
+	RETURN_MEMBER_TYPED(getThis(), "val", IS_LONG);
 }
 

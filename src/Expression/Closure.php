@@ -44,6 +44,17 @@ class Closure
 
     /**
      * Recursively checks if an AST node references `this`.
+     *
+     * Two AST shapes need to be detected:
+     *   1. Read of `this` — `{type: variable, value: this}` (e.g. inside
+     *      `return this->prop` or `this->method()` expressions).
+     *   2. Write to `this->prop` — let-statement assignments encode the
+     *      target object as a plain string field on the assignment node:
+     *      `{assign-type: object-property*, variable: "this", property: ...}`.
+     *      Without recognising this, `let this->prop = …` inside a closure
+     *      slips past the binding check, the enclosing class isn't carried
+     *      over and ObjectProperty::assign reports the property missing on
+     *      the synthetic closure class. (see #1873.)
      */
     protected static function astReferencesThis(mixed $node): bool
     {
@@ -51,8 +62,20 @@ class Closure
             return false;
         }
 
-        // Check if current node is a `this` variable reference
+        // Read: `{type: variable, value: this}` (e.g. inside expressions).
         if (isset($node['type']) && $node['type'] === 'variable' && isset($node['value']) && $node['value'] === 'this') {
+            return true;
+        }
+
+        // Write: let-statement assignment target. `assign-type` ∈
+        // {object-property, object-property-append, object-property-array-index, ...}
+        // and the `variable` field is the bare string `"this"`.
+        if (
+            isset($node['assign-type'], $node['variable'])
+            && $node['variable'] === 'this'
+            && \is_string($node['assign-type'])
+            && \str_starts_with($node['assign-type'], 'object-property')
+        ) {
             return true;
         }
 

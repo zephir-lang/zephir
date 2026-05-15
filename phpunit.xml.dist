@@ -22,6 +22,10 @@
         </testsuite>
         <testsuite name="Zephir">
             <directory suffix=".php">tests/Zephir</directory>
+            <exclude>tests/Zephir/BlackBox</exclude>
+        </testsuite>
+        <testsuite name="BlackBox">
+            <directory suffix="Test.php">tests/Zephir/BlackBox</directory>
         </testsuite>
     </testsuites>
 
