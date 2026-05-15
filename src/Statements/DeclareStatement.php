@@ -45,6 +45,27 @@ class DeclareStatement extends StatementAbstract
                 throw new CompilerException("Variable '" . $varName . "' is already defined", $variable);
             }
 
+            /**
+             * Parameter symbols live in a synthetic EXTERNAL branch created
+             * before the function body branch is opened, so the branch-scoped
+             * check above misses them. Without this guard a `var x;` that
+             * collides with a parameter named `x` silently overwrites the
+             * parameter symbol (losing its isDoublePointer flag) and produces
+             * uncompilable C — see https://github.com/zephir-lang/zephir/issues/2009.
+             */
+            $currentMethod = $compilationContext->currentMethod ?? null;
+            if ($currentMethod !== null && $currentMethod->getParameters() !== null) {
+                foreach ($currentMethod->getParameters()->getParameters() as $parameter) {
+                    if ($parameter['name'] === $varName) {
+                        throw new CompilerException(
+                            "Variable '" . $varName . "' was already declared as a parameter of method '"
+                            . $currentMethod->getName() . "'",
+                            $variable
+                        );
+                    }
+                }
+            }
+
             $currentType = $this->statement['data-type'];
 
             /**
