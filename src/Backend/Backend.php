@@ -282,11 +282,17 @@ class Backend
 
     public function arrayIsset(Variable $var, $resolvedExpr, $expression): CompiledExpression
     {
+        /**
+         * isset() must match PHP semantics: key exists AND value is not null.
+         * The *_isset_value_* helpers do both checks; *_isset_* (key-only) is
+         * kept for callers that legitimately want existence semantics.
+         * See https://github.com/zephir-lang/zephir/issues/2385.
+         */
         if (!($resolvedExpr instanceof Variable)) {
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string('
+                    'zephir_array_isset_value_string('
                     . $this->getVariableCode($var)
                     . ', SL("'
                     . $resolvedExpr->getCode()
@@ -300,7 +306,7 @@ class Backend
             if ('string' == $resolvedExpr->getType()) {
                 return new CompiledExpression(
                     'bool',
-                    'zephir_array_isset_string('
+                    'zephir_array_isset_value_string('
                     . $this->getVariableCode($var)
                     . ', SS("'
                     . $resolvedExpr->getCode()
@@ -311,7 +317,7 @@ class Backend
 
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset_long('
+                'zephir_array_isset_value_long('
                 . $this->getVariableCode($var)
                 . ', '
                 . $resolvedExpr->getCode() . ')',
@@ -322,7 +328,7 @@ class Backend
         if ('int' == $resolvedExpr->getType() || 'long' == $resolvedExpr->getType()) {
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset_long('
+                'zephir_array_isset_value_long('
                 . $this->getVariableCode($var)
                 . ', '
                 . $this->getVariableCode($resolvedExpr)
@@ -336,7 +342,7 @@ class Backend
         ) {
             return new CompiledExpression(
                 'bool',
-                'zephir_array_isset(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode(
+                'zephir_array_isset_value(' . $this->getVariableCode($var) . ', ' . $this->getVariableCode(
                     $resolvedExpr
                 ) . ')',
                 $expression
@@ -1740,11 +1746,45 @@ class Backend
         return '';
     }
 
-    public function propertyIsset(Variable $var, $key): CompiledExpression
+    public function propertyIsset(Variable $var, $key, ?CompilationContext $context = null): CompiledExpression
     {
+        /*
+         * PHP isset() semantics — see https://github.com/zephir-lang/zephir/issues/2385.
+         *
+         * Static-name property isset goes through has_property, which needs
+         * a zend_string. Allocating one per call would mean a heap alloc per
+         * isset; instead emit a method-static zend_string * slot that the
+         * generated method initializes lazily on first call and reuses for
+         * the lifetime of the worker. Repeated isset() of the same property
+         * within a method shares one slot.
+         */
+        if ($context !== null) {
+            if (!isset($context->issetPropertyCache[$key])) {
+                $cacheVar = '_zephir_isset_' . $context->issetPropertyCacheCounter++;
+                $context->issetPropertyCache[$key] = $cacheVar;
+
+                $escapedKey = addslashes($key);
+                $context->codePrinter->output('static zend_string *' . $cacheVar . ' = NULL;');
+                $context->codePrinter->output('if (UNEXPECTED(!' . $cacheVar . ')) {');
+                $context->codePrinter->output(
+                    "\t" . $cacheVar . ' = zend_string_init("' . $escapedKey . '", '
+                    . strlen($key) . ', 1);'
+                );
+                $context->codePrinter->output('}');
+            }
+
+            return new CompiledExpression(
+                'bool',
+                'zephir_isset_property_value_fast(' . $this->getVariableCode($var) . ', '
+                . $context->issetPropertyCache[$key] . ')',
+                null
+            );
+        }
+
+        /* Fallback for callers that don't pass a CompilationContext. */
         return new CompiledExpression(
             'bool',
-            'zephir_isset_property(' . $this->getVariableCode($var) . ', SL("' . $key . '"))',
+            'zephir_isset_property_value(' . $this->getVariableCode($var) . ', SL("' . $key . '"))',
             null
         );
     }

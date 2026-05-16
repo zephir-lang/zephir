@@ -47,7 +47,7 @@ PHP_METHOD(Stub_ArrayAccessTest, exits)
 	object_init_ex(&arr, stub_arrayaccessarr_ce);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 3);
 	zephir_check_call_status();
-	RETURN_MM_BOOL(zephir_array_isset_string(&arr, SL("one")));
+	RETURN_MM_BOOL(zephir_array_isset_value_string(&arr, SL("one")));
 }
 
 PHP_METHOD(Stub_ArrayAccessTest, get)

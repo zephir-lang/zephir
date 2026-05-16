@@ -639,14 +639,14 @@ PHP_METHOD(Stub_Router, handle)
 							ZEPHIR_OBS_NVAR(&matchPosition);
 							if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 								if (Z_TYPE_P(&converters) == IS_ARRAY) {
-									if (zephir_array_isset(&converters, &part)) {
+									if (zephir_array_isset_value(&converters, &part)) {
 										continue;
 									}
 								}
 								zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 							} else {
 								if (Z_TYPE_P(&converters) == IS_ARRAY) {
-									if (zephir_array_isset(&converters, &part)) {
+									if (zephir_array_isset_value(&converters, &part)) {
 									}
 								}
 							}
@@ -667,14 +667,14 @@ PHP_METHOD(Stub_Router, handle)
 								ZEPHIR_OBS_NVAR(&matchPosition);
 								if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 											continue;
 										}
 									}
 									zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 								} else {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 										}
 									}
 								}
@@ -803,14 +803,14 @@ PHP_METHOD(Stub_Router, handle)
 								ZEPHIR_OBS_NVAR(&matchPosition);
 								if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 											continue;
 										}
 									}
 									zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 								} else {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 										}
 									}
 								}
@@ -831,14 +831,14 @@ PHP_METHOD(Stub_Router, handle)
 									ZEPHIR_OBS_NVAR(&matchPosition);
 									if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 										if (Z_TYPE_P(&converters) == IS_ARRAY) {
-											if (zephir_array_isset(&converters, &part)) {
+											if (zephir_array_isset_value(&converters, &part)) {
 												continue;
 											}
 										}
 										zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 									} else {
 										if (Z_TYPE_P(&converters) == IS_ARRAY) {
-											if (zephir_array_isset(&converters, &part)) {
+											if (zephir_array_isset_value(&converters, &part)) {
 											}
 										}
 									}

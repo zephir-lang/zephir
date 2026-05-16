@@ -92,7 +92,7 @@ PHP_METHOD(Stub_Logical, testAnd9)
 	zephir_fetch_params_without_memory_grow(2, 0, &a, &b_param);
 	_0 = Z_TYPE_P(a) == IS_ARRAY;
 	if (_0) {
-		_0 = zephir_array_isset_long(a, b);
+		_0 = zephir_array_isset_value_long(a, b);
 	}
 	if (_0) {
 		zephir_array_fetch_long(&_1$$3, a, b, PH_NOISY | PH_READONLY, "stub/logical.zep", 35);

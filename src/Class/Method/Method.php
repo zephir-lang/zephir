@@ -956,6 +956,12 @@ class Method
         $compilationContext->insideTryCatch  = 0;
         $compilationContext->currentTryCatch = 0;
 
+        /**
+         * Reset per-method isset() interned-string cache.
+         */
+        $compilationContext->issetPropertyCache        = [];
+        $compilationContext->issetPropertyCacheCounter = 0;
+
         if ($this->parameters instanceof Parameters) {
             /**
              * Round 1. Create variables in parameters in the symbol table.

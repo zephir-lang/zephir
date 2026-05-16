@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Fixed
 - Fixed silent generation of uncompilable C when a local `var` was re-declared with the same name as a method parameter. [#2009](https://github.com/zephir-lang/zephir/issues/2009)
 - Fixed `string` locals that were initialized to the empty string (`string s = "";` or `let s = "";`) ending up as `null` at runtime when subsequent code paths did not reassign them. [#2393](https://github.com/zephir-lang/zephir/issues/2393)
+- Fixed `isset()` returning `true` for object properties and array offsets whose value is `null`. Previously the `isset()` operator emitted `zephir_isset_property*` / `zephir_array_isset*` kernel helpers that only performed key/property existence checks — equivalent to `property_exists()` / `array_key_exists()` — so `isset(obj->p)` where `obj->p === null`, `isset(arr["k"])` where `arr["k"] === null`, and `isset(obj->declaredButNeverAssigned)` all returned `true` instead of PHP's `false`. The codegen now emits new `zephir_isset_property_value*` / `zephir_array_isset_value*` helpers that also reject `IS_NULL`; for objects this delegates to the `has_property` handler with `ZEND_PROPERTY_ISSET` (same path the engine uses for the `ZEND_ISSET_ISEMPTY_PROP_OBJ` opcode), so `__isset` magic and inaccessible/private property scoping behave correctly. The existing key-only helpers stay available for internal callers that genuinely want existence semantics (e.g. `array_key_exists`). [#2385](https://github.com/zephir-lang/zephir/issues/2385)
 
 ## [0.20.1] - 2026-05-15
 
