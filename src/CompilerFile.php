@@ -715,6 +715,42 @@ final class CompilerFile implements FileInterface
                         );
                     }
                     $this->aliasManager->add($topStatement);
+
+                    /**
+                     * Validate that each `use Foo\Bar` references an existing
+                     * class/interface/trait. Without this check, typos in the
+                     * FQCN flow through silently and surface at runtime as the
+                     * opaque "Fatal error: During class fetch" — the user has
+                     * to bisect their code to find the misspelled `use`. Same
+                     * `nonexistent-class` warning channel that `extends`,
+                     * `implements`, `new ClassName()` and `obj->method()` use,
+                     * so the existing `-Wno-nonexistent-class` opt-out works
+                     * for any legitimate runtime-only class references.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2435.
+                     */
+                    foreach ($topStatement['aliases'] as $useAlias) {
+                        $fqcn = $useAlias['name'];
+                        if (
+                            $compiler->isClass($fqcn)
+                            || $compiler->isInterface($fqcn)
+                            || $compiler->isBundledClass($fqcn)
+                            || $compiler->isBundledInterface($fqcn)
+                            || class_exists($fqcn, false)
+                            || interface_exists($fqcn, false)
+                            || trait_exists($fqcn, false)
+                        ) {
+                            continue;
+                        }
+
+                        $this->logger->warning(
+                            sprintf(
+                                'Class or interface "%s" used in `use` statement does not exist at compile time',
+                                $fqcn
+                            ),
+                            ['nonexistent-class', $useAlias]
+                        );
+                    }
                     break;
 
                 case 'comment':
