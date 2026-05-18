@@ -23,6 +23,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/invokes/abstractinvokercomplex.zep.c
 	stub/issue2165/issueinterface.zep.c
 	stub/issue2324.zep.c
+	stub/issue2505.zep.c
 	stub/methodinterface.zep.c
 	stub/oo/abstractstatic.zep.c
 	stub/oo/extend/db/query/exception.zep.c
@@ -111,6 +112,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2324extended.zep.c
 	stub/issue2385.zep.c
 	stub/issue2469.zep.c
+	stub/issue2505extended.zep.c
 	stub/issue663.zep.c
 	stub/issue887.zep.c
 	stub/issue893.zep.c

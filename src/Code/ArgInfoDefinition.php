@@ -368,7 +368,20 @@ class ArgInfoDefinition
             1 === count($this->functionLike->getReturnClassTypes())
         ) {
             $class = key($this->functionLike->getReturnClassTypes());
-            $class = Entry::escape($this->compilationContext->getFullName($class));
+
+            /**
+             * `self`, `static`, and `parent` are PHP-reserved return-type
+             * names; they must reach the engine as-is so reflection and
+             * subclass return covariance work. Passing them through
+             * getFullName() would namespace-prefix them, producing a bogus
+             * literal class name like `Stub\self`.
+             * See https://github.com/zephir-lang/zephir/issues/2505.
+             */
+            if (in_array(strtolower($class), ['self', 'static', 'parent'], true)) {
+                $class = strtolower($class);
+            } else {
+                $class = Entry::escape($this->compilationContext->getFullName($class));
+            }
 
             $this->codePrinter->output(
                 sprintf(
