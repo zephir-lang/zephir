@@ -59,4 +59,40 @@ final class InfoCommandsTest extends TestCase
         $this->assertSame(0, $this->runZephir('--help', $this->cwd)['exitCode']);
         $this->assertDirectoryDoesNotExist($this->cwd . '/.zephir');
     }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2454
+     */
+    public function testVernumPrintsZeroPaddedNumericVersion(): void
+    {
+        $result = $this->runZephir('--vernum', $this->cwd);
+
+        $this->assertSame(0, $result['exitCode']);
+
+        // Format: %01d%02d%02d — zero-padded MAJOR(1) + MINOR(2) + PATCH(2).
+        // For 0.20.1 → "02001". Avoid hard-coding the exact value so the
+        // test survives version bumps; assert shape + that it round-trips
+        // to the current Zephir::VERSION major.minor.patch.
+        $stdout = trim($result['stdout']);
+        $this->assertMatchesRegularExpression('/^\d{5}$/', $stdout, "stdout was: '$stdout'");
+
+        $declared = explode('-', \Zephir\Zephir::VERSION)[0];
+        [$major, $minor, $patch] = array_pad(explode('.', $declared), 3, '0');
+        $expected = sprintf('%01d%02d%02d', (int) $major, (int) $minor, (int) $patch);
+        $this->assertSame($expected, $stdout);
+
+        $this->assertDirectoryDoesNotExist($this->cwd . '/.zephir');
+    }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/2454
+     */
+    public function testVernumDoesNotPrintHelpScreen(): void
+    {
+        $result = $this->runZephir('--vernum', $this->cwd);
+
+        // Help text contains "Usage:" — --vernum must not fall through to it.
+        $this->assertStringNotContainsString('Usage:', $result['stdout']);
+        $this->assertStringNotContainsString('Available commands:', $result['stdout']);
+    }
 }

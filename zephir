@@ -102,6 +102,22 @@ $compiler->setLogger($logger);
 $cli = new CliParser();
 $params = $cli->parse();
 
+/**
+ * Version flags must be handled before falling through to the command
+ * switch (where unknown commands print the help screen). Restores parity
+ * with the Symfony-based CLI in 0.18.0 — see
+ * https://github.com/zephir-lang/zephir/issues/2454.
+ */
+if (isset($params['vernum'])) {
+    [$major, $minor, $patch] = array_pad(
+        explode('.', explode('-', Zephir::VERSION)[0]),
+        3,
+        '0'
+    );
+    fwrite(STDOUT, sprintf('%01d%02d%02d', (int) $major, (int) $minor, (int) $patch) . PHP_EOL);
+    exit(0);
+}
+
 $showHelp = isset($params['help']) || isset($params['h']);
 $devMode = isset($params['dev']);
 $trace = isset($params['trace']);
