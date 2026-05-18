@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Fixed
 - Fixed segfault when `for k, v in iterator(x)` was given a non-Iterator operand (e.g. `stdClass`, plain array, scalar). [#820](https://github.com/zephir-lang/zephir/issues/820)
+- Fixed `--vernum` CLI option silently falling through to the help screen instead of printing the numeric version. [#2454](https://github.com/zephir-lang/zephir/issues/2454)
 - Fixed silent generation of uncompilable C when a local `var` was re-declared with the same name as a method parameter. [#2009](https://github.com/zephir-lang/zephir/issues/2009)
 - Fixed `string` locals that were initialized to the empty string (`string s = "";` or `let s = "";`) ending up as `null` at runtime when subsequent code paths did not reassign them. [#2393](https://github.com/zephir-lang/zephir/issues/2393)
 - Fixed `new static()` falling back to early binding. [#2324](https://github.com/zephir-lang/zephir/issues/2324)
