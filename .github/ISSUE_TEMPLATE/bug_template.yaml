@@ -1,0 +1,62 @@
+name: "Bug Report"
+description: "Create a report to help us improve"
+labels: ["Type: Bug", "need triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+
+  - type: textarea
+    id: version
+    attributes:
+      label: Version
+      description: Version of Zephir and PHP
+      placeholder: |
+        - Zephir 0.y.z
+        - PHP 8.y.z
+        - OS: Linux / macOS / Windows
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "Describe what you wanted to do."
+      placeholder: |
+        I am trying to test...
+        I executed the following command...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Reproduction"
+      description: "Provide a code snippet that causes the error."
+      placeholder: |
+        With the following code:
+        ```zep
+        class Foo {
+            public function bar()
+            {
+                // ...
+            }
+        }
+        ```
+        Here is the message from the console
+        ```
+        Error: ...
+        ```
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Expected"
+      description: "Explain what you expected."
+      placeholder: "I expected the Foo class to..."
+    validations:
+      required: false

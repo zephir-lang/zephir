@@ -1,0 +1,30 @@
+name: "Feature request"
+description: "Suggest an idea for this project "
+labels: ["Type: Feature", "Status: Need Triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Suggest an idea for this project
+
+  - type: textarea
+    id: feature
+    attributes:
+      label: "Feature"
+      description: "What problem does this solve? How does this improve Zephir?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: "Example"
+      description: "Describe the solution you'd like"
+      placeholder: |
+        ```php
+        <?php
+
+        // Code example
+        ```
+    validations:
+      required: false
