@@ -49,7 +49,7 @@ PHP_METHOD(Stub_ArrayManipulation, arrayFillMany)
 	ZVAL_LONG(&_1, 1000000);
 	ZEPHIR_INIT_VAR(&_2);
 	ZVAL_STRING(&_2, "message");
-	ZEPHIR_CALL_FUNCTION(&_3, "array_fill", NULL, 5, &_0, &_1, &_2);
+	ZEPHIR_CALL_FUNCTION(&_3, "array_fill", NULL, 6, &_0, &_1, &_2);
 	zephir_check_call_status();
 	zephir_update_property_zval(this_ptr, ZEND_STRL("arrayFillQueue"), &_3);
 	RETURN_MM_MEMBER_TYPED(getThis(), "arrayFillQueue", IS_ARRAY);

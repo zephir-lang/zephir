@@ -42,7 +42,7 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 
 	ZEPHIR_INIT_VAR(&arr);
 	object_init_ex(&arr, stub_arrayiterator_ce);
-	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 4);
+	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 5);
 	zephir_check_call_status();
 	zephir_is_iterable(&arr, 0, "stub/arrayiteratortest.zep", 12);
 	if (Z_TYPE_P(&arr) == IS_ARRAY) {
