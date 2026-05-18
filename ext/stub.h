@@ -109,6 +109,7 @@
 #include "stub/issue2469.zep.h"
 #include "stub/issue2505extended.zep.h"
 #include "stub/issue663.zep.h"
+#include "stub/issue820.zep.h"
 #include "stub/issue887.zep.h"
 #include "stub/issue893.zep.h"
 #include "stub/issue914.zep.h"
