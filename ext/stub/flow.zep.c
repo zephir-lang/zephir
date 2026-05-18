@@ -1675,14 +1675,16 @@ PHP_METHOD(Stub_Flow, testFor33)
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	_0 = zephir_get_iterator(e);
-	_0->funcs->rewind(_0);
-	for (;_0->funcs->valid(_0) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0)) {
+	if (EXPECTED(_0 != NULL)) {
+		_0->funcs->rewind(_0);
+		for (;_0->funcs->valid(_0) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0)) {
 		{
 			ZEPHIR_ITERATOR_COPY(&v, _0);
 		}
 		zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 710);
 	}
 	zend_iterator_dtor(_0);
+	}
 	RETURN_CCTOR(&result);
 }
 
@@ -1712,14 +1714,16 @@ PHP_METHOD(Stub_Flow, testFor34)
 	array_init(&result);
 	if (Z_TYPE_P(e) == IS_OBJECT) {
 		_0$$3 = zephir_get_iterator(e);
-		_0$$3->funcs->rewind(_0$$3);
-		for (;_0$$3->funcs->valid(_0$$3) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3)) {
+		if (EXPECTED(_0$$3 != NULL)) {
+			_0$$3->funcs->rewind(_0$$3);
+			for (;_0$$3->funcs->valid(_0$$3) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3)) {
 			{
 				ZEPHIR_ITERATOR_COPY(&v, _0$$3);
 			}
 			zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 720);
 		}
 		zend_iterator_dtor(_0$$3);
+		}
 		RETURN_CCTOR(&result);
 	}
 	ZEPHIR_MM_RESTORE();

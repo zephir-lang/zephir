@@ -114,6 +114,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2469.zep.c
 	stub/issue2505extended.zep.c
 	stub/issue663.zep.c
+	stub/issue820.zep.c
 	stub/issue887.zep.c
 	stub/issue893.zep.c
 	stub/issue914.zep.c
