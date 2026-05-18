@@ -101,7 +101,7 @@ PHP_METHOD(Stub_Arithmetic, boolSumExpression)
 
 	a = 1;
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 3, &_0);
 	zephir_check_call_status();
 	RETURN_MM_LONG((a + zephir_get_numberval(&_1)));
 }
@@ -150,7 +150,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumExpression)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 3, &_0);
 	zephir_check_call_status();
 	RETURN_MM_DOUBLE((1.0 + zephir_get_numberval(&_1)));
 }
@@ -169,7 +169,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumVarExpression)
 
 	a =  (1.0);
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 2, &_0);
+	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 3, &_0);
 	zephir_check_call_status();
 	RETURN_MM_LONG((a + zephir_get_numberval(&_1)));
 }
