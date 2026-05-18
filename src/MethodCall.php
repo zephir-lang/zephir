@@ -662,6 +662,13 @@ class MethodCall extends Call
                                     $parameter['data-type']
                                 );
 
+                                /*
+                                 * `mixed` (PHP 8.0+) is defined as "any type", so anything that's
+                                 * compatible with `variable` is also compatible with `mixed`. The
+                                 * arms below list it next to `variable` instead of relying on a
+                                 * blanket fall-through, to keep the existing per-source-type shape
+                                 * obvious. See https://github.com/zephir-lang/zephir/issues/2512.
+                                 */
                                 switch ($resolvedTypes[$n]) {
                                     case 'bool':
                                     case 'boolean':
@@ -670,6 +677,7 @@ class MethodCall extends Call
                                             case 'bool':
                                             case 'boolean':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:
@@ -686,6 +694,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'array':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             case 'callable':
@@ -710,6 +719,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'callable':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:
@@ -726,6 +736,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'string':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:
