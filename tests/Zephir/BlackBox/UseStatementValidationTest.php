@@ -90,6 +90,41 @@ ZEP);
         $this->assertStringNotContainsString('does not exist at compile time', $output);
     }
 
+    public function testIntraExtensionUseDoesNotWarn(): void
+    {
+        // Regression: file alphabetical order forces the importing file
+        // (`aconsumer.zep`) to be preCompiled BEFORE the file declaring the
+        // imported class (`zlater.zep`). Validation must run after every
+        // file has been preCompiled, not per-file at parse time, otherwise
+        // legitimate intra-extension `use` statements falsely warn.
+        $this->writeZep('aconsumer.zep', <<<'ZEP'
+namespace Stub;
+
+use Stub\ZLater;
+
+class AConsumer
+{
+    public function noop(<ZLater> z)
+    {
+    }
+}
+ZEP);
+        $this->writeZep('zlater.zep', <<<'ZEP'
+namespace Stub;
+
+class ZLater
+{
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+
+        $this->assertSame(0, $result['exitCode']);
+        $output = $result['stdout'] . $result['stderr'];
+        $this->assertStringNotContainsString('Stub\\ZLater', $output);
+        $this->assertStringNotContainsString('does not exist at compile time', $output);
+    }
+
     public function testWnoFlagSuppressesTheWarning(): void
     {
         $this->writeZep('typo.zep', <<<'ZEP'
