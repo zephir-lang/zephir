@@ -309,6 +309,21 @@ class MethodDocBlock extends DocBlock
                 $type = 'mixed';
             }
 
+            /**
+             * A `= null` default surfaces in the docblock as `Type|null`
+             * (the union form `?` is not a docblock syntax token). Skip
+             * `mixed` since it already covers null.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2426.
+             */
+            if (
+                'mixed' !== $type
+                && isset($parameter['default']['type'])
+                && 'null' === $parameter['default']['type']
+            ) {
+                $type .= '|null';
+            }
+
             $this->parameters['$' . trim($parameter['name'], '$')] = [$type, ''];
         }
     }

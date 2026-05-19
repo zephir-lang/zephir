@@ -211,6 +211,132 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Regression coverage for issue #2426: a method parameter whose
+     * `default.type` is `null` must emit a nullable type hint in the stub
+     * (`?Type` in the signature, `Type|null` in the `@param` docblock).
+     * Before the fix this produced an *implicit-nullable* parameter that
+     * PHP 8.4 deprecates.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2426
+     */
+    public function testShouldBuildNullableParameters(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $methodParamsDefinition = [
+            [
+                'type'      => 'parameter',
+                'name'      => 'obj',
+                'const'     => 0,
+                'data-type' => 'variable',
+                'mandatory' => 0,
+                'cast'      => [
+                    'type'  => 'variable',
+                    'value' => 'Stub\\Stubs\\Foo',
+                ],
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'name',
+                'const'     => 0,
+                'data-type' => 'string',
+                'mandatory' => 0,
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'count',
+                'const'     => 0,
+                'data-type' => 'int',
+                'mandatory' => 0,
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'flag',
+                'const'     => 0,
+                'data-type' => 'bool',
+                'mandatory' => 0,
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'ratio',
+                'const'     => 0,
+                'data-type' => 'double',
+                'mandatory' => 0,
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+            [
+                'type'      => 'parameter',
+                'name'      => 'items',
+                'const'     => 0,
+                'data-type' => 'array',
+                'mandatory' => 0,
+                'default'   => [
+                    'type'  => 'null',
+                    'value' => null,
+                ],
+            ],
+        ];
+
+        $aliasManager = new AliasManager();
+        $this->classDefinition->setAliasManager($aliasManager);
+
+        $method = new Method(
+            $this->classDefinition,
+            ['public'],
+            'nullable',
+            new Parameters($methodParamsDefinition)
+        );
+
+        $buildMethod = $this->getMethod('buildMethod');
+        $actual      = $buildMethod->invokeArgs($this->testClass, [$method, false, '    ']);
+
+        // Signature: every typed param with default null must carry a leading `?`.
+        $this->assertStringContainsString('?Stub\\Stubs\\Foo $obj = null', $actual);
+        $this->assertStringContainsString('?string $name = null', $actual);
+        $this->assertStringContainsString('?int $count = null', $actual);
+        $this->assertStringContainsString('?bool $flag = null', $actual);
+        $this->assertStringContainsString('?float $ratio = null', $actual);
+        $this->assertStringContainsString('?array $items = null', $actual);
+
+        // Docblock: the same nullability must surface as `Type|null` in @param.
+        $this->assertStringContainsString('@param Stub\\Stubs\\Foo|null $obj', $actual);
+        $this->assertStringContainsString('@param string|null $name', $actual);
+        $this->assertStringContainsString('@param int|null $count', $actual);
+        $this->assertStringContainsString('@param bool|null $flag', $actual);
+        $this->assertStringContainsString('@param double|null $ratio', $actual);
+        $this->assertStringContainsString('@param array|null $items', $actual);
+
+        // Must NOT emit the legacy implicit-nullable form anywhere in the output.
+        $this->assertStringNotContainsString(' Stub\\Stubs\\Foo $obj = null', $actual);
+        $this->assertStringNotContainsString(' string $name = null', $actual);
+        $this->assertStringNotContainsString(' int $count = null', $actual);
+        $this->assertStringNotContainsString(' bool $flag = null', $actual);
+        $this->assertStringNotContainsString(' float $ratio = null', $actual);
+        $this->assertStringNotContainsString(' array $items = null', $actual);
+    }
+
+    /**
      * Provide test case data for buildProperty method test.
      */
     public function propertyProvider(): array
