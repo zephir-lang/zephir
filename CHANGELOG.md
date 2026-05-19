@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 - Add two templates to structure bug reports and feature requests. [#2525](https://github.com/zephir-lang/zephir/pull/2525)
-- Added `<self>` method return-type annotation being emitted as a namespaced literal class name in arginfo: `ArgInfoDefinition::richRenderStart()` passed every class-typed return through `getFullName()`, so a method declared with `-> <self>` produced `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(..., Stub\self, ...)`. `Reflection::getReturnType()->getName()` consequently reported `Stub\self` instead of the reserved keyword `self`, and PHP-side subclass return covariance against `: self` could not work. `self`, `static`, and `parent` are now passed through to the engine unprefixed and lowercased (matching PHP's reserved type-name handling). Companion grammar change in `php-zephir-parser` adds a `<static>` cast/return-type rule (the `STATIC` token is reserved and never reached the `IDENTIFIER`-based cast rule), so `-> <static>` now parses and produces a `cast.value = "static"` AST node. End-to-end this enables late-static-binding return types: a subclass calling a parent method declared `-> <static>` receives an instance of the subclass, and reflection reports the reserved `static` keyword. [#2505](https://github.com/zephir-lang/zephir/issues/2505)
+- Added `<self>` method return-type annotation being emitted as a namespaced literal class name in arginfo [#2505](https://github.com/zephir-lang/zephir/issues/2505)
 
 ### Fixed
 - Fixed false-positive `possible-wrong-parameter` warning when a `string`, `bool`, `array`, or `callable` argument was passed to a method parameter typed `mixed` [#2512](https://github.com/zephir-lang/zephir/issues/2512)

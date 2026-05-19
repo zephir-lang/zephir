@@ -90,6 +90,45 @@ ZEP);
         $this->assertStringNotContainsString('does not exist at compile time', $output);
     }
 
+    public function testChainedStaticReturnDoesNotWarn(): void
+    {
+        // Regression: a method declared `-> <static>` whose result is
+        // immediately chained used to surface a bogus warning
+        //   `Class "Foo\static" does not exist at compile time`
+        // because MethodCall.php's chained-call type tracker ran the
+        // return-class-type through getFullName() and namespace-prefixed the
+        // reserved `static` keyword. See #2505 / Phalcon report.
+        $this->writeZep('fluent.zep', <<<'ZEP'
+namespace Stub;
+
+class Fluent
+{
+    public function makeStatic() -> <static>
+    {
+        return new static();
+    }
+
+    public function noop() -> bool
+    {
+        return true;
+    }
+
+    public function caller() -> bool
+    {
+        return this->makeStatic()->noop();
+    }
+}
+ZEP);
+
+        $result = $this->runZephir('generate --no-ansi', $this->projectDir);
+
+        $this->assertSame(0, $result['exitCode']);
+        $output = $result['stdout'] . $result['stderr'];
+        $this->assertStringNotContainsString('Stub\\static', $output);
+        $this->assertStringNotContainsString('Stub\\self', $output);
+        $this->assertStringNotContainsString('does not exist at compile time', $output);
+    }
+
     public function testIntraExtensionUseDoesNotWarn(): void
     {
         // Regression: file alphabetical order forces the importing file
