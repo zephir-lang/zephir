@@ -87,4 +87,20 @@ final class Issue2505Test extends TestCase
         $sut = new Issue2505Extended();
         $this->assertSame(Issue2505::class, get_class($sut->makeSelf()));
     }
+
+    /**
+     * Compile-time regression for the chained-LSB warning: a method
+     * declared `-> <static>` (or `<self>`) whose result is immediately
+     * chained used to trigger a false-positive `nonexistent-class`
+     * warning because `MethodCall.php` namespace-prefixed the reserved
+     * type-name (`Stub\static`). The presence and parseability of
+     * `chainedStatic`/`chainedSelf` in the compiled stub asserts the fix
+     * — without it, `php zephir generate` emits a warning the build
+     * shouldn't have.
+     */
+    public function testChainedStaticMethodIsCallable(): void
+    {
+        $this->assertTrue(method_exists(Issue2505::class, 'chainedStatic'));
+        $this->assertTrue(method_exists(Issue2505::class, 'chainedSelf'));
+    }
 }

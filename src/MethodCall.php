@@ -573,7 +573,32 @@ class MethodCall extends Call
                 if (null !== $returnClassTypes) {
                     $symbolVariable->setDynamicTypes('object');
                     foreach ($returnClassTypes as &$returnClassType) {
-                        $returnClassType = $compilationContext->getFullName($returnClassType);
+                        /*
+                         * `self`, `static` and `parent` are PHP-reserved type
+                         * names; resolve them to the *lexical* class (for
+                         * `self`/`static`) or the parent class (for `parent`)
+                         * so compile-time method lookup on a chained call
+                         * `obj->returnsStatic()->method()` finds the right
+                         * class definition. Passing them through getFullName()
+                         * would produce a bogus literal like `Stub\static`
+                         * that fails class lookup and emits a false-positive
+                         * `nonexistent-class` warning. The runtime LSB binding
+                         * is unaffected — that's still handled by
+                         * `zend_get_called_scope(execute_data)` in
+                         * NewInstanceOperator. See
+                         * https://github.com/zephir-lang/zephir/issues/2505.
+                         */
+                        $lower = strtolower($returnClassType);
+                        if ($lower === 'self' || $lower === 'static') {
+                            $returnClassType = $compilationContext->classDefinition->getCompleteName();
+                        } elseif ($lower === 'parent') {
+                            $parent = $compilationContext->classDefinition->getExtendsClass();
+                            if ($parent !== null && $parent !== '') {
+                                $returnClassType = $parent;
+                            }
+                        } else {
+                            $returnClassType = $compilationContext->getFullName($returnClassType);
+                        }
                     }
                     $symbolVariable->setClassTypes($returnClassTypes);
                 }

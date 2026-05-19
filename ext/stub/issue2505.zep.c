@@ -88,3 +88,55 @@ PHP_METHOD(Stub_Issue2505, makeStaticFromStatic)
 	RETURN_MM();
 }
 
+/**
+ * Chained call on a <static> return: the COMPILE-TIME type tracker must
+ * resolve the receiver of `checkPrivate()` to the lexical class. Without
+ * the fix, this triggered:
+ *   Warning: Class "Stub\static" does not exist at compile time.
+ * Phalcon hit this once they started using `-> <static>` for fluent
+ * setters. The presence of these methods in the compiled stub is the
+ * regression assertion — if the fix were missing, generate would emit
+ * the false-positive `nonexistent-class` warning.
+ */
+PHP_METHOD(Stub_Issue2505, chainedStatic)
+{
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "makestatic", NULL, 0);
+	zephir_check_call_status();
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkprivate", NULL, 0);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Issue2505, chainedSelf)
+{
+	zval _0;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "makeself", NULL, 0);
+	zephir_check_call_status();
+	ZEPHIR_RETURN_CALL_METHOD(&_0, "checkprivate", NULL, 0);
+	zephir_check_call_status();
+	RETURN_MM();
+}
+
+PHP_METHOD(Stub_Issue2505, checkPrivate)
+{
+
+	RETURN_BOOL(1);
+}
+
