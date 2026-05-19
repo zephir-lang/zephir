@@ -155,7 +155,7 @@ PHP_METHOD(Stub_Router, setDI)
 
 	ZVAL_UNDEF(&dependencyInjector_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, stub_diinterface_ce)
+		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, zephir_get_internal_ce(SL("stub\\diinterface")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &dependencyInjector);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_dependencyInjector"), dependencyInjector);
