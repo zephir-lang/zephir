@@ -814,7 +814,7 @@ PHP_METHOD(Stub_Mcall, testObjectParamCastOoParam)
 
 	ZVAL_UNDEF(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(param, stub_oo_param_ce)
+		Z_PARAM_OBJECT_OF_CLASS(param, zephir_get_internal_ce(SL("stub\\oo\\param")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &param);
 	RETVAL_ZVAL(param, 1, 0);

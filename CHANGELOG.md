@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Added `<self>` method return-type annotation being emitted as a namespaced literal class name in arginfo [#2505](https://github.com/zephir-lang/zephir/issues/2505)
 
 ### Fixed
+- Fixed PHP-stub generator emitting *implicit-nullable* parameters (`Foo $x = null`) that PHP 8.4 deprecates [#2426](https://github.com/zephir-lang/zephir/issues/2426)
 - Fixed false-positive `possible-wrong-parameter` warning when a `string`, `bool`, `array`, or `callable` argument was passed to a method parameter typed `mixed` [#2512](https://github.com/zephir-lang/zephir/issues/2512)
 - Fixed `use` statements registering aliases for non-existent classes silently [#2435](https://github.com/zephir-lang/zephir/issues/2435)
 - Fixed `Unknown type: closure` (and other AST-type-name) errors when a `var` declaration was given [#2522](https://github.com/zephir-lang/zephir/issues/2522)

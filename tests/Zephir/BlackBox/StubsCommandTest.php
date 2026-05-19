@@ -88,6 +88,7 @@ final class StubsCommandTest extends TestCase
     public static function stubFileProvider(): array
     {
         return [
+            'Issue 2426 nullable params' => ['Issue_2426.php'],
             'Issue 1922 type hint' => ['Issue_1922.php'],
             'Issue 1778 namespace imports' => ['Issue_1778.php'],
             'Issue 1900 return types' => ['Issue_1900.php'],

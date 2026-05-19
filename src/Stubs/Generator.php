@@ -242,6 +242,19 @@ class Generator
 
         if ($methodParameters instanceof Parameters) {
             foreach ($methodParameters->getParameters() as $parameter) {
+                /**
+                 * A `= null` default on a typed parameter means we MUST
+                 * emit a nullable type hint PHP 8.4 deprecates the
+                 * implicit-nullable form `Foo $x = null`. Prepend `?` to
+                 * any concrete type hint when the default value is null.
+                 * Variable/mixed parameters emit no type hint at all so
+                 * the `?` doesn't apply there.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/2426.
+                 */
+                $nullable = isset($parameter['default']['type'])
+                    && 'null' === $parameter['default']['type'];
+
                 $paramStr = '';
                 if (isset($parameter['cast'])) {
                     if ($aliasManager->isAlias($parameter['cast']['value'])) {
@@ -250,18 +263,18 @@ class Generator
                         $cast = $parameter['cast']['value'];
                     }
 
-                    $paramStr .= $cast . ' ';
+                    $paramStr .= ($nullable ? '?' : '') . $cast . ' ';
                 } elseif (isset($parameter['data-type']) && 'array' === $parameter['data-type']) {
-                    $paramStr .= 'array ';
+                    $paramStr .= ($nullable ? '?' : '') . 'array ';
                 } elseif (isset($parameter['data-type'])) {
                     if (in_array($parameter['data-type'], ['bool', 'boolean'])) {
-                        $paramStr .= 'bool ';
+                        $paramStr .= ($nullable ? '?' : '') . 'bool ';
                     } elseif ('double' == $parameter['data-type']) {
-                        $paramStr .= 'float ';
+                        $paramStr .= ($nullable ? '?' : '') . 'float ';
                     } elseif (in_array($parameter['data-type'], ['int', 'uint', 'long', 'ulong', 'uchar'])) {
-                        $paramStr .= 'int ';
+                        $paramStr .= ($nullable ? '?' : '') . 'int ';
                     } elseif (in_array($parameter['data-type'], ['char', 'string'])) {
-                        $paramStr .= 'string ';
+                        $paramStr .= ($nullable ? '?' : '') . 'string ';
                     }
                 }
 
