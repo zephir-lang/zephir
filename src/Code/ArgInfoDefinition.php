@@ -371,14 +371,52 @@ class ArgInfoDefinition
 
             /**
              * `self`, `static`, and `parent` are PHP-reserved return-type
-             * names; they must reach the engine as-is so reflection and
-             * subclass return covariance work. Passing them through
-             * getFullName() would namespace-prefix them, producing a bogus
-             * literal class name like `Stub\self`.
+             * names and cannot be passed verbatim to
+             * ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX (PHP would treat them as
+             * literal class names and fail MINIT inheritance checks with
+             * "<keyword> must be registered before <Class>"):
+             *   - `static` is emitted as the MAY_BE_STATIC type-mask bit.
+             *   - `self` resolves to the current class name.
+             *   - `parent` resolves to the parent class name.
              * See https://github.com/zephir-lang/zephir/issues/2505.
              */
-            if (in_array(strtolower($class), ['self', 'static', 'parent'], true)) {
-                $class = strtolower($class);
+            $reserved = strtolower($class);
+            if ($reserved === 'static') {
+                $mask = 'MAY_BE_STATIC';
+                if ($this->functionLike->areReturnTypesNullCompatible()) {
+                    $mask = 'MAY_BE_NULL|' . $mask;
+                }
+
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
+                        $this->name,
+                        (int)$this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        $mask
+                    )
+                );
+
+                return;
+            }
+
+            if ($reserved === 'self' || $reserved === 'parent') {
+                $classDefinition = $this->functionLike->getClassDefinition();
+                $resolved = $reserved === 'self'
+                    ? $classDefinition?->getCompleteName()
+                    : $classDefinition?->getExtendsClass();
+
+                if (!$resolved) {
+                    throw new Exception(
+                        sprintf(
+                            'Cannot resolve "%s" return type for %s: missing class context',
+                            $reserved,
+                            $this->name
+                        )
+                    );
+                }
+
+                $class = Entry::escape($resolved);
             } else {
                 $class = Entry::escape($this->compilationContext->getFullName($class));
             }
