@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Documentation
+- Documented the workaround for `[ClassName, "protectedOrPrivateMethod"]` arrays passed as callbacks to PHP higher-order functions (`array_reduce`, `usort`, `preg_replace_callback`, etc.) [#2167](https://github.com/zephir-lang/zephir/issues/2167)
+
 ## [0.21.0] - 2026-05-20
 
 ### Added
