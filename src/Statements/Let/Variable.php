@@ -727,16 +727,19 @@ class Variable
             case 'string':
                 switch ($statement['operator']) {
                     case 'assign':
+                        /**
+                         * Always emit the assignment for a string literal RHS, including the
+                         * empty string. A truthy check here used to drop `let s = "";` entirely
+                         * (assignHelper short-circuits on null), leaving the zval IS_UNDEF and
+                         * causing the method to return null when later branches don't run —
+                         * see https://github.com/zephir-lang/zephir/issues/2393.
+                         */
                         $symbolVariable->initVariant($compilationContext);
-                        if ($resolvedExpr->getCode()) {
-                            $compilationContext->backend->assignString(
-                                $symbolVariable,
-                                $resolvedExpr->getCode(),
-                                $compilationContext
-                            );
-                        } else {
-                            $compilationContext->backend->assignString($symbolVariable, null, $compilationContext);
-                        }
+                        $compilationContext->backend->assignString(
+                            $symbolVariable,
+                            $resolvedExpr->getCode(),
+                            $compilationContext
+                        );
                         break;
                     case 'concat-assign':
                         $codePrinter->output(

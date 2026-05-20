@@ -42,7 +42,7 @@ PHP_METHOD(Stub_Globals_Env, read)
 	zephir_memory_observe(&name_zv);
 	ZVAL_STR_COPY(&name_zv, name);
 	ZEPHIR_INIT_VAR(&_0);
-	if (zephir_array_isset(&_ENV, &name_zv)) {
+	if (zephir_array_isset_value(&_ENV, &name_zv)) {
 		ZEPHIR_OBS_NVAR(&_0);
 		zephir_array_fetch(&_0, &_ENV, &name_zv, PH_NOISY, "stub/globals/env.zep", 8);
 	} else {

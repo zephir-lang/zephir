@@ -40,6 +40,6 @@ PHP_METHOD(Stub_Globals_Post, hasValue)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_get_global(&_POST, SL("_POST"));
 	ZVAL_STR(&name_zv, name);
-	RETURN_BOOL(zephir_array_isset(&_POST, &name_zv));
+	RETURN_BOOL(zephir_array_isset_value(&_POST, &name_zv));
 }
 

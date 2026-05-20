@@ -573,7 +573,32 @@ class MethodCall extends Call
                 if (null !== $returnClassTypes) {
                     $symbolVariable->setDynamicTypes('object');
                     foreach ($returnClassTypes as &$returnClassType) {
-                        $returnClassType = $compilationContext->getFullName($returnClassType);
+                        /*
+                         * `self`, `static` and `parent` are PHP-reserved type
+                         * names; resolve them to the *lexical* class (for
+                         * `self`/`static`) or the parent class (for `parent`)
+                         * so compile-time method lookup on a chained call
+                         * `obj->returnsStatic()->method()` finds the right
+                         * class definition. Passing them through getFullName()
+                         * would produce a bogus literal like `Stub\static`
+                         * that fails class lookup and emits a false-positive
+                         * `nonexistent-class` warning. The runtime LSB binding
+                         * is unaffected — that's still handled by
+                         * `zend_get_called_scope(execute_data)` in
+                         * NewInstanceOperator. See
+                         * https://github.com/zephir-lang/zephir/issues/2505.
+                         */
+                        $lower = strtolower($returnClassType);
+                        if ($lower === 'self' || $lower === 'static') {
+                            $returnClassType = $compilationContext->classDefinition->getCompleteName();
+                        } elseif ($lower === 'parent') {
+                            $parent = $compilationContext->classDefinition->getExtendsClass();
+                            if ($parent !== null && $parent !== '') {
+                                $returnClassType = $parent;
+                            }
+                        } else {
+                            $returnClassType = $compilationContext->getFullName($returnClassType);
+                        }
                     }
                     $symbolVariable->setClassTypes($returnClassTypes);
                 }
@@ -662,6 +687,13 @@ class MethodCall extends Call
                                     $parameter['data-type']
                                 );
 
+                                /*
+                                 * `mixed` (PHP 8.0+) is defined as "any type", so anything that's
+                                 * compatible with `variable` is also compatible with `mixed`. The
+                                 * arms below list it next to `variable` instead of relying on a
+                                 * blanket fall-through, to keep the existing per-source-type shape
+                                 * obvious. See https://github.com/zephir-lang/zephir/issues/2512.
+                                 */
                                 switch ($resolvedTypes[$n]) {
                                     case 'bool':
                                     case 'boolean':
@@ -670,6 +702,7 @@ class MethodCall extends Call
                                             case 'bool':
                                             case 'boolean':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:
@@ -686,6 +719,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'array':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             case 'callable':
@@ -710,6 +744,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'callable':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:
@@ -726,6 +761,7 @@ class MethodCall extends Call
                                             /* compatible types */
                                             case 'string':
                                             case 'variable':
+                                            case 'mixed':
                                                 break;
 
                                             default:

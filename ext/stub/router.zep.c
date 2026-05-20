@@ -120,7 +120,7 @@ PHP_METHOD(Stub_Router, __construct)
 		add_assoc_long_ex(&_1$$3, SL("controller"), 1);
 		ZEPHIR_INIT_VAR(&_2$$3);
 		ZVAL_STRING(&_2$$3, "#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#");
-		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", &_3, 92, &_2$$3, &_1$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_0$$3, "__construct", &_3, 93, &_2$$3, &_1$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_0$$3, PH_SEPARATE, "stub/router.zep", 89);
 		ZEPHIR_INIT_NVAR(&_2$$3);
@@ -132,7 +132,7 @@ PHP_METHOD(Stub_Router, __construct)
 		add_assoc_long_ex(&_4$$3, SL("params"), 3);
 		ZEPHIR_INIT_VAR(&_5$$3);
 		ZVAL_STRING(&_5$$3, "#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#");
-		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_3, 92, &_5$$3, &_4$$3);
+		ZEPHIR_CALL_METHOD(NULL, &_2$$3, "__construct", &_3, 93, &_5$$3, &_4$$3);
 		zephir_check_call_status();
 		zephir_array_append(&routes, &_2$$3, PH_SEPARATE, "stub/router.zep", 95);
 	}
@@ -155,7 +155,7 @@ PHP_METHOD(Stub_Router, setDI)
 
 	ZVAL_UNDEF(&dependencyInjector_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, stub_diinterface_ce)
+		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, zephir_get_internal_ce(SL("stub\\diinterface")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &dependencyInjector);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("_dependencyInjector"), dependencyInjector);
@@ -639,14 +639,14 @@ PHP_METHOD(Stub_Router, handle)
 							ZEPHIR_OBS_NVAR(&matchPosition);
 							if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 								if (Z_TYPE_P(&converters) == IS_ARRAY) {
-									if (zephir_array_isset(&converters, &part)) {
+									if (zephir_array_isset_value(&converters, &part)) {
 										continue;
 									}
 								}
 								zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 							} else {
 								if (Z_TYPE_P(&converters) == IS_ARRAY) {
-									if (zephir_array_isset(&converters, &part)) {
+									if (zephir_array_isset_value(&converters, &part)) {
 									}
 								}
 							}
@@ -667,14 +667,14 @@ PHP_METHOD(Stub_Router, handle)
 								ZEPHIR_OBS_NVAR(&matchPosition);
 								if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 											continue;
 										}
 									}
 									zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 								} else {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 										}
 									}
 								}
@@ -803,14 +803,14 @@ PHP_METHOD(Stub_Router, handle)
 								ZEPHIR_OBS_NVAR(&matchPosition);
 								if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 											continue;
 										}
 									}
 									zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 								} else {
 									if (Z_TYPE_P(&converters) == IS_ARRAY) {
-										if (zephir_array_isset(&converters, &part)) {
+										if (zephir_array_isset_value(&converters, &part)) {
 										}
 									}
 								}
@@ -831,14 +831,14 @@ PHP_METHOD(Stub_Router, handle)
 									ZEPHIR_OBS_NVAR(&matchPosition);
 									if (zephir_array_isset_fetch(&matchPosition, &matches, &position, 0)) {
 										if (Z_TYPE_P(&converters) == IS_ARRAY) {
-											if (zephir_array_isset(&converters, &part)) {
+											if (zephir_array_isset_value(&converters, &part)) {
 												continue;
 											}
 										}
 										zephir_array_update_zval(&parts, &part, &matchPosition, PH_COPY | PH_SEPARATE);
 									} else {
 										if (Z_TYPE_P(&converters) == IS_ARRAY) {
-											if (zephir_array_isset(&converters, &part)) {
+											if (zephir_array_isset_value(&converters, &part)) {
 											}
 										}
 									}
@@ -998,7 +998,7 @@ PHP_METHOD(Stub_Router, add)
 	}
 	ZEPHIR_INIT_VAR(&route);
 	object_init_ex(&route, stub_router_route_ce);
-	ZEPHIR_CALL_METHOD(NULL, &route, "__construct", NULL, 92, pattern, paths, httpMethods);
+	ZEPHIR_CALL_METHOD(NULL, &route, "__construct", NULL, 93, pattern, paths, httpMethods);
 	zephir_check_call_status();
 	zephir_update_property_array_append(this_ptr, SL("_routes"), &route);
 	RETURN_CCTOR(&route);

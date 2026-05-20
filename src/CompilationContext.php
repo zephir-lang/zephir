@@ -103,6 +103,20 @@ class CompilationContext
      */
     public int $insideTryCatch = 0;
     /**
+     * Per-method cache for `isset(obj->staticProp)` interned zend_string *
+     * slots. Maps property-name → emitted C identifier so repeated isset()
+     * of the same property within a method reuses one slot.
+     * Reset on entry to each method by Method::compile().
+     * See https://github.com/zephir-lang/zephir/issues/2385.
+     *
+     * @var array<string, string>
+     */
+    public array $issetPropertyCache = [];
+    /**
+     * Counter feeding unique identifiers for issetPropertyCache slots.
+     */
+    public int $issetPropertyCacheCounter = 0;
+    /**
      * Global logger.
      */
     public ?LoggerInterface $logger = null;

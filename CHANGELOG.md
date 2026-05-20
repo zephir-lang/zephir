@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-05-20
+
+### Added
+- Add two templates to structure bug reports and feature requests. [#2525](https://github.com/zephir-lang/zephir/pull/2525)
+- Added `<self>` method return-type annotation being emitted as a namespaced literal class name in arginfo [#2505](https://github.com/zephir-lang/zephir/issues/2505)
+
+### Fixed
+- Fixed PHP-stub generator emitting *implicit-nullable* parameters (`Foo $x = null`) that PHP 8.4 deprecates [#2426](https://github.com/zephir-lang/zephir/issues/2426)
+- Fixed false-positive `possible-wrong-parameter` warning when a `string`, `bool`, `array`, or `callable` argument was passed to a method parameter typed `mixed` [#2512](https://github.com/zephir-lang/zephir/issues/2512)
+- Fixed `use` statements registering aliases for non-existent classes silently [#2435](https://github.com/zephir-lang/zephir/issues/2435)
+- Fixed `Unknown type: closure` (and other AST-type-name) errors when a `var` declaration was given [#2522](https://github.com/zephir-lang/zephir/issues/2522)
+- Fixed segfault when `for k, v in iterator(x)` was given a non-Iterator operand (e.g. `stdClass`, plain array, scalar). [#820](https://github.com/zephir-lang/zephir/issues/820)
+- Fixed `--vernum` CLI option silently falling through to the help screen instead of printing the numeric version. [#2454](https://github.com/zephir-lang/zephir/issues/2454)
+- Fixed silent generation of uncompilable C when a local `var` was re-declared with the same name as a method parameter. [#2009](https://github.com/zephir-lang/zephir/issues/2009)
+- Fixed `string` locals that were initialized to the empty string (`string s = "";` or `let s = "";`) ending up as `null` at runtime when subsequent code paths did not reassign them. [#2393](https://github.com/zephir-lang/zephir/issues/2393)
+- Fixed `new static()` falling back to early binding. [#2324](https://github.com/zephir-lang/zephir/issues/2324)
+- Fixed `ParseException::__construct()` triggering a fatal PHP 8.4 deprecation (`Implicitly marking parameter $previous as nullable`) when a `.zep` file had a syntax error — the deprecation suppressed the actual parse-error message. Parameter is now declared as `Exception | Throwable | null`.
+- Fixed `isset()` returning `true` for object properties and array offsets whose value is `null`. Previously the `isset()` operator emitted `zephir_isset_property*` / `zephir_array_isset*` kernel helpers that only performed key/property existence checks — equivalent to `property_exists()` / `array_key_exists()` — so `isset(obj->p)` where `obj->p === null`, `isset(arr["k"])` where `arr["k"] === null`, and `isset(obj->declaredButNeverAssigned)` all returned `true` instead of PHP's `false`. The codegen now emits new `zephir_isset_property_value*` / `zephir_array_isset_value*` helpers that also reject `IS_NULL`; for objects this delegates to the `has_property` handler with `ZEND_PROPERTY_ISSET` (same path the engine uses for the `ZEND_ISSET_ISEMPTY_PROP_OBJ` opcode), so `__isset` magic and inaccessible/private property scoping behave correctly. The existing key-only helpers stay available for internal callers that genuinely want existence semantics (e.g. `array_key_exists`). [#2385](https://github.com/zephir-lang/zephir/issues/2385)
+- Forcing Exception on Failure of Compile Step
+
 ## [0.20.1] - 2026-05-15
 
 ### Changed
@@ -651,7 +671,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.1...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.21.0...HEAD
+[0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
 [0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/zephir-lang/zephir/compare/0.18.0...0.19.0

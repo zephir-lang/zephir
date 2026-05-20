@@ -146,6 +146,7 @@ PHP_METHOD(Stub_Concat, testConcat4)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &value);
 	ZEPHIR_INIT_VAR(&query);
+	ZVAL_STRING(&query, "");
 	min =  ((zephir_safe_div_zval_long(value, 100) * (double) (25)));
 	max =  ((zephir_safe_div_zval_long(value, 100) * (double) (50)));
 	ZEPHIR_INIT_VAR(&_0);

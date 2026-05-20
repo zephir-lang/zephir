@@ -596,13 +596,13 @@ PHP_METHOD(Stub_Flow, testWhileNextTest)
 	array_init(&returnValue);
 	while (1) {
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 46, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 47, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(&_0))) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 47, variable);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 48, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "stub/flow.zep", 420);
 	}
@@ -629,11 +629,11 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest)
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	do {
-		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 47, variable);
+		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 48, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "stub/flow.zep", 430);
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 46, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 47, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(&_2));
@@ -1046,6 +1046,7 @@ PHP_METHOD(Stub_Flow, testFor11)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = 'a';
 	_0 = 0;
@@ -1078,6 +1079,7 @@ PHP_METHOD(Stub_Flow, testFor12)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1110,6 +1112,7 @@ PHP_METHOD(Stub_Flow, testFor13)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = '0';
 	_0 = 0;
@@ -1142,6 +1145,7 @@ PHP_METHOD(Stub_Flow, testFor14)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = '9';
 	_1 = _2;
 	_0 = 0;
@@ -1470,6 +1474,7 @@ PHP_METHOD(Stub_Flow, testFor23)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	_2 = 'z';
 	_1 = _2;
 	_0 = 0;
@@ -1509,6 +1514,7 @@ PHP_METHOD(Stub_Flow, testFor24)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&b);
+	ZVAL_STRING(&b, "");
 	ZEPHIR_INIT_VAR(&_0);
 	zephir_create_array(&_0, 4, 0);
 	ZEPHIR_INIT_VAR(&_1);
@@ -1669,14 +1675,16 @@ PHP_METHOD(Stub_Flow, testFor33)
 	ZEPHIR_INIT_VAR(&result);
 	array_init(&result);
 	_0 = zephir_get_iterator(e);
-	_0->funcs->rewind(_0);
-	for (;_0->funcs->valid(_0) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0)) {
+	if (EXPECTED(_0 != NULL)) {
+		_0->funcs->rewind(_0);
+		for (;_0->funcs->valid(_0) == SUCCESS && !EG(exception); _0->funcs->move_forward(_0)) {
 		{
 			ZEPHIR_ITERATOR_COPY(&v, _0);
 		}
 		zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 710);
 	}
 	zend_iterator_dtor(_0);
+	}
 	RETURN_CCTOR(&result);
 }
 
@@ -1706,14 +1714,16 @@ PHP_METHOD(Stub_Flow, testFor34)
 	array_init(&result);
 	if (Z_TYPE_P(e) == IS_OBJECT) {
 		_0$$3 = zephir_get_iterator(e);
-		_0$$3->funcs->rewind(_0$$3);
-		for (;_0$$3->funcs->valid(_0$$3) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3)) {
+		if (EXPECTED(_0$$3 != NULL)) {
+			_0$$3->funcs->rewind(_0$$3);
+			for (;_0$$3->funcs->valid(_0$$3) == SUCCESS && !EG(exception); _0$$3->funcs->move_forward(_0$$3)) {
 			{
 				ZEPHIR_ITERATOR_COPY(&v, _0$$3);
 			}
 			zephir_array_append(&result, &v, PH_SEPARATE, "stub/flow.zep", 720);
 		}
 		zend_iterator_dtor(_0$$3);
+		}
 		RETURN_CCTOR(&result);
 	}
 	ZEPHIR_MM_RESTORE();

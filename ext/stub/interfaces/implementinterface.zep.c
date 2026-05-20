@@ -34,7 +34,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, get)
 
 	ZVAL_UNDEF(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(obj, stub_interfaces_interfaceint_ce)
+		Z_PARAM_OBJECT_OF_CLASS(obj, zephir_get_internal_ce(SL("stub\\interfaces\\interfaceint")))
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, getVoid)
 
 	ZVAL_UNDEF(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(obj, stub_interfaces_interfaceint_ce)
+		Z_PARAM_OBJECT_OF_CLASS(obj, zephir_get_internal_ce(SL("stub\\interfaces\\interfaceint")))
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &obj);
 	zephir_update_property_zval(this_ptr, ZEND_STRL("obj"), obj);

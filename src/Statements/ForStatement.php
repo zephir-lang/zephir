@@ -335,16 +335,25 @@ class ForStatement extends StatementAbstract
             ) . ');'
         );
 
-        $codePrinter->output($iteratorVariable->getName() . '->funcs->rewind(' . $iteratorVariable->getName() . ');');
+        /*
+         * zephir_get_iterator() returns NULL — after throwing a TypeError —
+         * when the operand isn't an Iterator/IteratorAggregate. Guard every
+         * subsequent funcs->* dereference; otherwise the segfault from
+         * https://github.com/zephir-lang/zephir/issues/820 reappears.
+         */
+        $itName = $iteratorVariable->getName();
+        $codePrinter->output('if (EXPECTED(' . $itName . ' != NULL)) {');
+        $codePrinter->output("\t" . $itName . '->funcs->rewind(' . $itName . ');');
         $codePrinter->output(
-            'for (;'
-            . $iteratorVariable->getName()
+            "\t"
+            . 'for (;'
+            . $itName
             . '->funcs->valid('
-            . $iteratorVariable->getName()
+            . $itName
             . ') == SUCCESS && !EG(exception); '
-            . $iteratorVariable->getName()
+            . $itName
             . '->funcs->move_forward('
-            . $iteratorVariable->getName()
+            . $itName
             . ')) {'
         );
 
@@ -384,6 +393,9 @@ class ForStatement extends StatementAbstract
         $this->compileStatementsForBlock($compilationContext, $codePrinter);
 
         $compilationContext->backend->destroyIterator($iteratorVariable, $compilationContext);
+
+        /* Close `if (_it != NULL) {` opened before the rewind call. */
+        $codePrinter->output('}');
     }
 
     /**

@@ -71,8 +71,10 @@ class NewInstanceOperator extends AbstractOperator
         $symbolVariable->setDynamicTypes('object');
 
         $dynamic = false;
+        $isLateStaticBinding = false;
         if ('self' == $expression['class'] || 'static' == $expression['class']) {
             $className = $compilationContext->classDefinition->getCompleteName();
+            $isLateStaticBinding = 'static' == $expression['class'];
         } else {
             $className = $expression['class'];
             $dynamic   = $expression['dynamic'];
@@ -108,9 +110,20 @@ class NewInstanceOperator extends AbstractOperator
              * Classes inside the same extension
              */
             if ($classDefinition) {
+                /**
+                 * `new static()` must resolve to the *called* class (late
+                 * static binding), not the lexical class. The lexical class
+                 * is still recorded for type inference because all LSB
+                 * classes are subclasses of it — see
+                 * https://github.com/zephir-lang/zephir/issues/2324.
+                 */
+                $classEntry = $isLateStaticBinding
+                    ? 'zend_get_called_scope(execute_data)'
+                    : $classDefinition->getClassEntry($compilationContext);
+
                 $compilationContext->backend->initObject(
                     $symbolVariable,
-                    $classDefinition->getClassEntry($compilationContext),
+                    $classEntry,
                     $compilationContext
                 );
                 $symbolVariable->setClassTypes($className);

@@ -45,7 +45,11 @@ final class IssetTest extends TestCase
     public function testIssetProperties(): void
     {
         $this->assertTrue($this->test->testIssetProperty1($this));
-        $this->assertTrue($this->test->testIssetProperty2($this, 'test2'));
+
+        // `private $test2` is null until assigned AND inaccessible from
+        // foreign scope, both of which make PHP isset() return false. The
+        // old key-only semantics returned true here — see #2385.
+        $this->assertFalse($this->test->testIssetProperty2($this, 'test2'));
         $this->assertFalse($this->test->testIssetProperty2($this, 'test3'));
         $this->assertTrue($this->test->testIssetProperty3($this));
     }

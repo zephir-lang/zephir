@@ -88,6 +88,17 @@ final class CompilerFile implements FileInterface
     private ?string $namespace = null;
 
     /**
+     * `use` statements as parsed from the IR — kept around so
+     * checkDependencies() can validate their FQCNs after every file in the
+     * extension has been preCompiled (preCompile order is alphabetical, so
+     * an in-extension class referenced by a use in an earlier-sorted file
+     * isn't yet registered when that file is being preCompiled).
+     *
+     * @var array<int, array>
+     */
+    private array $useStatements = [];
+
+    /**
      * @var mixed
      */
     private $originalNode;
@@ -145,6 +156,38 @@ final class CompilerFile implements FileInterface
     public function checkDependencies(Compiler $compiler): void
     {
         $classDefinition = $this->classDefinition;
+
+        /**
+         * Validate `use Foo\Bar` FQCNs now that every file in the extension
+         * has been preCompiled — intra-extension classes are guaranteed to
+         * be in $compiler->isClass()/isInterface() at this point.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2435.
+         */
+        foreach ($this->useStatements as $useStatement) {
+            foreach ($useStatement['aliases'] as $useAlias) {
+                $fqcn = $useAlias['name'];
+                if (
+                    $compiler->isClass($fqcn)
+                    || $compiler->isInterface($fqcn)
+                    || $compiler->isBundledClass($fqcn)
+                    || $compiler->isBundledInterface($fqcn)
+                    || class_exists($fqcn, false)
+                    || interface_exists($fqcn, false)
+                    || trait_exists($fqcn, false)
+                ) {
+                    continue;
+                }
+
+                $this->logger->warning(
+                    sprintf(
+                        'Class or interface "%s" used in `use` statement does not exist at compile time',
+                        $fqcn
+                    ),
+                    ['nonexistent-class', $useAlias]
+                );
+            }
+        }
 
         $extendedClass = $classDefinition->getExtendsClass();
         if ($extendedClass) {
@@ -715,6 +758,19 @@ final class CompilerFile implements FileInterface
                         );
                     }
                     $this->aliasManager->add($topStatement);
+
+                    /**
+                     * Defer FQCN existence validation to checkDependencies() —
+                     * preCompile() is per-file, so an in-extension class
+                     * referenced via `use` from a file that sorts earlier
+                     * than the class's own file is not yet registered with
+                     * $compiler when we'd check here. checkDependencies()
+                     * runs after every file has been preCompiled, with the
+                     * full intra-extension class table populated.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2435.
+                     */
+                    $this->useStatements[] = $topStatement;
                     break;
 
                 case 'comment':
