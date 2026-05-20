@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.21.0] - 2026-05-20
+
 ### Added
 - Add two templates to structure bug reports and feature requests. [#2525](https://github.com/zephir-lang/zephir/pull/2525)
 - Added `<self>` method return-type annotation being emitted as a namespaced literal class name in arginfo [#2505](https://github.com/zephir-lang/zephir/issues/2505)
@@ -669,7 +671,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.20.1...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.21.0...HEAD
+[0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
 [0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
 [0.19.0]: https://github.com/zephir-lang/zephir/compare/0.18.0...0.19.0
