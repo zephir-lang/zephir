@@ -25,6 +25,6 @@ ZEPHIR_INIT_CLASS(stub_27__closure)
 PHP_METHOD(stub_27__closure, __invoke)
 {
 
-	RETURN_LONG(5);
+	RETURN_LONG(42);
 }
 

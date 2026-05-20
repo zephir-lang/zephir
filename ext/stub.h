@@ -104,6 +104,7 @@
 #include "stub/issue1404.zep.h"
 #include "stub/issue1521.zep.h"
 #include "stub/issue2165/issue.zep.h"
+#include "stub/issue2167.zep.h"
 #include "stub/issue2324extended.zep.h"
 #include "stub/issue2385.zep.h"
 #include "stub/issue2469.zep.h"
@@ -257,5 +258,6 @@
 #include "stub/26__closure.zep.h"
 #include "stub/27__closure.zep.h"
 #include "stub/28__closure.zep.h"
+#include "stub/29__closure.zep.h"
 
 #endif
