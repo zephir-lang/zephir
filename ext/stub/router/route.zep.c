@@ -701,9 +701,9 @@ PHP_METHOD(Stub_Router_Route, getPaths)
  */
 PHP_METHOD(Stub_Router_Route, getReversedPaths)
 {
-	zend_string *_4;
-	zend_ulong _3;
-	zval reversed, path, position, _0, *_1, _2;
+	zend_string *_3;
+	zend_ulong _2;
+	zval reversed, path, position, _0, *_1, _4;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
@@ -712,7 +712,7 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	ZVAL_UNDEF(&path);
 	ZVAL_UNDEF(&position);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_4);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -721,13 +721,13 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_paths"), PH_NOISY_CC | PH_READONLY);
 	zephir_is_iterable(&_0, 0, "stub/router/route.zep", 478);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _2, _3, _1)
 		{
 			ZEPHIR_INIT_NVAR(&path);
-			if (_4 != NULL) { 
-				ZVAL_STR_COPY(&path, _4);
+			if (_3 != NULL) { 
+				ZVAL_STR_COPY(&path, _3);
 			} else {
-				ZVAL_LONG(&path, _3);
+				ZVAL_LONG(&path, _2);
 			}
 			ZEPHIR_INIT_NVAR(&position);
 			ZVAL_COPY(&position, _1);
@@ -737,9 +737,9 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
 		zephir_check_call_status();
 		while (1) {
-			ZEPHIR_CALL_METHOD(&_2, &_0, "valid", NULL, 0);
+			ZEPHIR_CALL_METHOD(&_4, &_0, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_2)) {
+			if (!zend_is_true(&_4)) {
 				break;
 			}
 			ZEPHIR_CALL_METHOD(&path, &_0, "key", NULL, 0);
