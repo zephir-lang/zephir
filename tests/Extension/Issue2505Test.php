@@ -16,6 +16,7 @@ namespace Extension;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Stub\Issue2505;
+use Stub\Issue2505CrossChain;
 use Stub\Issue2505Extended;
 
 /**
@@ -102,5 +103,29 @@ final class Issue2505Test extends TestCase
     {
         $this->assertTrue(method_exists(Issue2505::class, 'chainedStatic'));
         $this->assertTrue(method_exists(Issue2505::class, 'chainedSelf'));
+    }
+
+    /**
+     * Compile-time regression for cross-class chained `<static>` resolution.
+     *
+     * `Issue2505CrossChain::crossClassChain()` chains `checkPrivate()` on the
+     * `<static>` return of `Issue2505::makeStatic()`. Before the fix,
+     * `MethodCall.php` resolved `static` to the lexical class
+     * (`Issue2505CrossChain`) instead of the receiver's class (`Issue2505`),
+     * so compile-time method lookup aborted with
+     * "Class 'Stub\Issue2505CrossChain' does not implement method:
+     * 'checkPrivate'". The presence and runtime correctness of these methods
+     * in the compiled stub asserts the fix.
+     */
+    public function testCrossClassChainedStaticResolvesToReceiver(): void
+    {
+        $sut = new Issue2505CrossChain();
+        $this->assertTrue($sut->crossClassChain(new Issue2505()));
+    }
+
+    public function testCrossClassChainedSelfResolvesToReceiver(): void
+    {
+        $sut = new Issue2505CrossChain();
+        $this->assertTrue($sut->crossClassChainSelf(new Issue2505()));
     }
 }
