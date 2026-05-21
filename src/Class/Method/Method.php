@@ -22,6 +22,7 @@ use Zephir\Class\Entry as ClassEntry;
 use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\Detectors\WriteDetector;
+use Zephir\Detectors\YieldDetector;
 use Zephir\Documentation\Docblock;
 use Zephir\Documentation\DocblockParser;
 use Zephir\Exception;
@@ -129,6 +130,11 @@ class Method
      * Whether the variable is void.
      */
     protected bool $void = false;
+
+    /**
+     * Cached generator-detection result. Populated lazily by isGenerator().
+     */
+    protected ?bool $isGenerator = null;
 
     public function __construct(
         protected ?Definition $classDefinition = null,
@@ -2248,6 +2254,32 @@ class Method
     public function isFinal(): bool
     {
         return $this->isFinal;
+    }
+
+    /**
+     * Checks whether the method body contains a `yield` statement, which
+     * means the method is a PHP generator. Result is cached; the underlying
+     * AST walk runs at most once per method instance. Returns false when the
+     * method has no statements block (abstract/external methods).
+     *
+     * Code-generation of generator bodies is not yet implemented;
+     * The API is exposed now so passes and future codegen can branch on it cleanly.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1849
+     */
+    public function isGenerator(): bool
+    {
+        if ($this->isGenerator !== null) {
+            return $this->isGenerator;
+        }
+
+        if (!$this->statements instanceof StatementsBlock) {
+            return $this->isGenerator = false;
+        }
+
+        return $this->isGenerator = (new YieldDetector())->detect(
+            $this->statements->getStatements()
+        );
     }
 
     /**

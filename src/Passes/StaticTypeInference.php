@@ -544,6 +544,18 @@ class StaticTypeInference
                     }
                     break;
 
+                case 'yield':
+                    if (isset($statement['expr'])) {
+                        $this->passExpression($statement['expr']);
+                    }
+                    if (isset($statement['key'])) {
+                        $this->passExpression($statement['key']);
+                    }
+                    if (isset($statement['value'])) {
+                        $this->passExpression($statement['value']);
+                    }
+                    break;
+
                 case 'try-catch':
                 case 'loop':
                     if (isset($statement['statements'])) {

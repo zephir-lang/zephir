@@ -42,6 +42,7 @@ final class StatementFactory
         'unset' => UnsetStatement::class,
         'throw' => ThrowStatement::class,
         'try-catch' => TryCatchStatement::class,
+        'yield' => YieldStatement::class,
     ];
 
     /**

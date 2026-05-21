@@ -509,6 +509,18 @@ class LocalContextPass
                     $this->lastCallLine = $statement['line'];
                     break;
 
+                case 'yield':
+                    if (isset($statement['expr'])) {
+                        $this->passExpression($statement['expr']);
+                    }
+                    if (isset($statement['key'])) {
+                        $this->passExpression($statement['key']);
+                    }
+                    if (isset($statement['value'])) {
+                        $this->passExpression($statement['value']);
+                    }
+                    break;
+
                 case 'fetch':
                     $this->passExpression($statement['expr']);
                     break;
