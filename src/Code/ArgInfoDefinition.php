@@ -371,14 +371,42 @@ class ArgInfoDefinition
 
             /**
              * `self`, `static`, and `parent` are PHP-reserved return-type
-             * names; they must reach the engine as-is so reflection and
-             * subclass return covariance work. Passing them through
-             * getFullName() would namespace-prefix them, producing a bogus
-             * literal class name like `Stub\self`.
+             * names. They need different handling at the engine level:
+             *
+             *   - `self` / `parent` reach the engine as the literal lowercase
+             *     keyword. PHP recognizes both as reserved names during
+             *     arginfo class-name resolution and reflection reports them
+             *     verbatim, preserving covariant-return semantics.
+             *   - `static` has no class entry at all, so passing the literal
+             *     string to `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX` makes
+             *     MINIT abort with "static must be registered before <Class>".
+             *     Emit the dedicated `MAY_BE_STATIC` type-mask bit instead;
+             *     reflection still reports the type as `'static'`.
+             *
              * See https://github.com/zephir-lang/zephir/issues/2505.
              */
-            if (in_array(strtolower($class), ['self', 'static', 'parent'], true)) {
-                $class = strtolower($class);
+            $reserved = strtolower($class);
+            if ($reserved === 'static') {
+                $mask = 'MAY_BE_STATIC';
+                if ($this->functionLike->areReturnTypesNullCompatible()) {
+                    $mask = 'MAY_BE_NULL|' . $mask;
+                }
+
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
+                        $this->name,
+                        (int)$this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        $mask
+                    )
+                );
+
+                return;
+            }
+
+            if ($reserved === 'self' || $reserved === 'parent') {
+                $class = $reserved;
             } else {
                 $class = Entry::escape($this->compilationContext->getFullName($class));
             }
