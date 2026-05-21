@@ -371,13 +371,18 @@ class ArgInfoDefinition
 
             /**
              * `self`, `static`, and `parent` are PHP-reserved return-type
-             * names and cannot be passed verbatim to
-             * ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX (PHP would treat them as
-             * literal class names and fail MINIT inheritance checks with
-             * "<keyword> must be registered before <Class>"):
-             *   - `static` is emitted as the MAY_BE_STATIC type-mask bit.
-             *   - `self` resolves to the current class name.
-             *   - `parent` resolves to the parent class name.
+             * names. They need different handling at the engine level:
+             *
+             *   - `self` / `parent` reach the engine as the literal lowercase
+             *     keyword. PHP recognizes both as reserved names during
+             *     arginfo class-name resolution and reflection reports them
+             *     verbatim, preserving covariant-return semantics.
+             *   - `static` has no class entry at all, so passing the literal
+             *     string to `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX` makes
+             *     MINIT abort with "static must be registered before <Class>".
+             *     Emit the dedicated `MAY_BE_STATIC` type-mask bit instead;
+             *     reflection still reports the type as `'static'`.
+             *
              * See https://github.com/zephir-lang/zephir/issues/2505.
              */
             $reserved = strtolower($class);
@@ -401,22 +406,7 @@ class ArgInfoDefinition
             }
 
             if ($reserved === 'self' || $reserved === 'parent') {
-                $classDefinition = $this->functionLike->getClassDefinition();
-                $resolved = $reserved === 'self'
-                    ? $classDefinition?->getCompleteName()
-                    : $classDefinition?->getExtendsClass();
-
-                if (!$resolved) {
-                    throw new Exception(
-                        sprintf(
-                            'Cannot resolve "%s" return type for %s: missing class context',
-                            $reserved,
-                            $this->name
-                        )
-                    );
-                }
-
-                $class = Entry::escape($resolved);
+                $class = $reserved;
             } else {
                 $class = Entry::escape($this->compilationContext->getFullName($class));
             }
