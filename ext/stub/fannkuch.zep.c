@@ -39,11 +39,11 @@ PHP_METHOD(Stub_Fannkuch, process)
 	zval *n_param = NULL, perm, perm0, perm1, count, temp, _3$$3, _4$$6, _9$$4, _8$$7, _10$$8, _14$$9, _15$$14, _16$$15, _17$$13, _18$$13, _19$$13;
 	zend_long n, maxFlipsCount, permCount, checksum, i = 0, j = 0, flipsCount = 0, k = 0, r = 0, k2 = 0, _1, _2, _6$$4, _7$$4, _12$$8, _13$$8;
 
-	ZVAL_UNDEF(&perm);
-	ZVAL_UNDEF(&perm0);
-	ZVAL_UNDEF(&perm1);
-	ZVAL_UNDEF(&count);
-	ZVAL_UNDEF(&temp);
+	ZVAL_NULL(&perm);
+	ZVAL_NULL(&perm0);
+	ZVAL_NULL(&perm1);
+	ZVAL_NULL(&count);
+	ZVAL_NULL(&temp);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$6);
 	ZVAL_UNDEF(&_9$$4);

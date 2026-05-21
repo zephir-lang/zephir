@@ -57,7 +57,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, setSomeString)
 {
 	zval *val, val_sub;
 
-	ZVAL_UNDEF(&val_sub);
+	ZVAL_NULL(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
@@ -131,7 +131,7 @@ PHP_METHOD(Stub_Properties_StaticPublicProperties, testAddAndSub5)
 	zval v;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&v);
+	ZVAL_NULL(&v);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

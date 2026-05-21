@@ -34,7 +34,7 @@ PHP_METHOD(Stub_Issue663, is_array_assoc)
 	zephir_fcall_cache_entry *_1 = NULL;
 	zval *arr, arr_sub;
 
-	ZVAL_UNDEF(&arr_sub);
+	ZVAL_NULL(&arr_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
@@ -100,7 +100,7 @@ PHP_METHOD(Stub_Issue663, is_array_indexed)
 	zephir_fcall_cache_entry *_2 = NULL;
 	zval *arr, arr_sub, _1;
 
-	ZVAL_UNDEF(&arr_sub);
+	ZVAL_NULL(&arr_sub);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arr)

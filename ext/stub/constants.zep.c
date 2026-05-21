@@ -197,7 +197,7 @@ PHP_METHOD(Stub_Constants, testPHPVersionEnvConstantInExpValue)
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -216,7 +216,7 @@ PHP_METHOD(Stub_Constants, testStringDelimiterConstantDoubleQuoted)
 	zval delimiter;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&delimiter);
+	ZVAL_NULL(&delimiter);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -230,7 +230,7 @@ PHP_METHOD(Stub_Constants, testStringConstantWithVars)
 	zval property;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&property);
+	ZVAL_NULL(&property);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

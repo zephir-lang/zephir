@@ -40,7 +40,7 @@ PHP_METHOD(Stub_MethodArgs, setCallable)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -53,7 +53,7 @@ PHP_METHOD(Stub_MethodArgs, setObject)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -66,7 +66,7 @@ PHP_METHOD(Stub_MethodArgs, setCallableStrict)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -83,7 +83,7 @@ PHP_METHOD(Stub_MethodArgs, setObjectStrict)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -100,7 +100,7 @@ PHP_METHOD(Stub_MethodArgs, setResourceStrict)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_RESOURCE(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -120,7 +120,7 @@ PHP_METHOD(Stub_MethodArgs, methodOptionalValueWithDefaultStaticConstantAccess)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *method = NULL, method_sub;
 
-	ZVAL_UNDEF(&method_sub);
+	ZVAL_NULL(&method_sub);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL
 		Z_PARAM_ZVAL(method)

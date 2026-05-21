@@ -28,7 +28,7 @@ PHP_METHOD(stub_22__closure, __invoke)
 {
 	zval *x, x_sub;
 
-	ZVAL_UNDEF(&x_sub);
+	ZVAL_NULL(&x_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(x)
 	ZEND_PARSE_PARAMETERS_END();

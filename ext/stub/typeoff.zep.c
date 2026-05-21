@@ -88,7 +88,7 @@ PHP_METHOD(Stub_Typeoff, testNotBoolTrue)
 	zval testVar;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&testVar);
+	ZVAL_NULL(&testVar);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_Typeoff, testArrayFalse)
 	zval testVar;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&testVar);
+	ZVAL_NULL(&testVar);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -125,7 +125,7 @@ PHP_METHOD(Stub_Typeoff, testArrayTrue)
 	zval testVar;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&testVar);
+	ZVAL_NULL(&testVar);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -159,7 +159,7 @@ PHP_METHOD(Stub_Typeoff, testUnknownTypeOf)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *u, u_sub, _0;
 
-	ZVAL_UNDEF(&u_sub);
+	ZVAL_NULL(&u_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(u)
@@ -176,7 +176,7 @@ PHP_METHOD(Stub_Typeoff, testCallableTypeOf)
 {
 	zval *cb, cb_sub;
 
-	ZVAL_UNDEF(&cb_sub);
+	ZVAL_NULL(&cb_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(cb)
 	ZEND_PARSE_PARAMETERS_END();

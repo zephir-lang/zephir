@@ -1279,11 +1279,28 @@ class Backend
         if ($isComplex && !$variable->isDoublePointer()) {
             $groupVariables[] = $variable->getName();
 
+            /**
+             * PHP semantics: a user-declared local that is never explicitly
+             * assigned reads as null, not undef. Init user-declared `var`
+             * locals to ZVAL_NULL at the prologue so a read on a path that
+             * does not reach a `let` produces null rather than an undef zval
+             * (which PHP 8+ surfaces as "Undefined variable" at the receiver).
+             * Temporaries and parameter holders keep ZVAL_UNDEF: temps are
+             * always written before read, and params are overwritten by the
+             * fetch step a few lines below the declaration.
+             */
+            $isUserDeclaredVar = $type === 'variable'
+                && !$variable->isTemporal()
+                && !$variable->isExternal()
+                && !str_ends_with($variable->getName(), '_zv');
+
             return match ($variable->getRealname()) {
                 '__$null'  => "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');',
                 '__$true'  => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 1);',
                 '__$false' => "\t" . 'ZVAL_BOOL(&' . $variable->getName() . ', 0);',
-                default    => "\t" . 'ZVAL_UNDEF(&' . $variable->getName() . ');',
+                default    => $isUserDeclaredVar
+                    ? "\t" . 'ZVAL_NULL(&' . $variable->getName() . ');'
+                    : "\t" . 'ZVAL_UNDEF(&' . $variable->getName() . ');',
             };
         }
 

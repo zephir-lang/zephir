@@ -127,7 +127,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __construct)
 
 	ZVAL_UNDEF(&file_zv);
 	ZVAL_BOOL(&__$true, 1);
-	ZVAL_UNDEF(&imageinfo);
+	ZVAL_NULL(&imageinfo);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2$$4);
@@ -353,7 +353,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, __destruct)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&image);
+	ZVAL_NULL(&image);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -375,7 +375,7 @@ PHP_METHOD(Stub_Oo_OoDestruct, check)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_BOOL(&__$true, 1);
-	ZVAL_UNDEF(&version);
+	ZVAL_NULL(&version);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_5);
@@ -446,9 +446,9 @@ PHP_METHOD(Stub_Oo_OoDestruct, getVersion)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&version);
-	ZVAL_UNDEF(&info);
-	ZVAL_UNDEF(&matches);
+	ZVAL_NULL(&version);
+	ZVAL_NULL(&info);
+	ZVAL_NULL(&matches);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
 	ZVAL_UNDEF(&_0$$3);

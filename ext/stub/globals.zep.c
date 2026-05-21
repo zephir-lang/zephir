@@ -27,7 +27,7 @@ PHP_METHOD(Stub_Globals, setBoolValueUsingDotNotation)
 {
 	zval *value, value_sub;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
@@ -39,7 +39,7 @@ PHP_METHOD(Stub_Globals, setIntValueUsingDotNotation)
 {
 	zval *value, value_sub;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Globals, setCharValue)
 {
 	zval *value, value_sub;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
@@ -76,7 +76,7 @@ PHP_METHOD(Stub_Globals, setBoolValue)
 {
 	zval *value, value_sub;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();
@@ -88,7 +88,7 @@ PHP_METHOD(Stub_Globals, setDefaultGlobalsOrmCacheLevel)
 {
 	zval *value, value_sub;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();

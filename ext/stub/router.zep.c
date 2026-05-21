@@ -92,7 +92,7 @@ PHP_METHOD(Stub_Router, __construct)
 	zend_bool defaultRoutes;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&routes);
+	ZVAL_NULL(&routes);
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_2$$3);
@@ -153,7 +153,7 @@ PHP_METHOD(Stub_Router, setDI)
 	zval *dependencyInjector, dependencyInjector_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&dependencyInjector_sub);
+	ZVAL_NULL(&dependencyInjector_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(dependencyInjector, zephir_get_internal_ce(SL("stub\\diinterface")))
 	ZEND_PARSE_PARAMETERS_END();
@@ -185,9 +185,9 @@ PHP_METHOD(Stub_Router, getRewriteUri)
 
 	ZVAL_UNDEF(&_GET);
 	ZVAL_UNDEF(&_SERVER);
-	ZVAL_UNDEF(&url);
-	ZVAL_UNDEF(&urlParts);
-	ZVAL_UNDEF(&realUri);
+	ZVAL_NULL(&url);
+	ZVAL_NULL(&urlParts);
+	ZVAL_NULL(&realUri);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -231,7 +231,7 @@ PHP_METHOD(Stub_Router, setUriSource)
 	zval *uriSource, uriSource_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&uriSource_sub);
+	ZVAL_NULL(&uriSource_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(uriSource)
 	ZEND_PARSE_PARAMETERS_END();
@@ -251,7 +251,7 @@ PHP_METHOD(Stub_Router, removeExtraSlashes)
 	zval *remove, remove_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&remove_sub);
+	ZVAL_NULL(&remove_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(remove)
 	ZEND_PARSE_PARAMETERS_END();
@@ -271,7 +271,7 @@ PHP_METHOD(Stub_Router, setDefaultNamespace)
 	zval *namespaceName, namespaceName_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&namespaceName_sub);
+	ZVAL_NULL(&namespaceName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(namespaceName)
 	ZEND_PARSE_PARAMETERS_END();
@@ -291,7 +291,7 @@ PHP_METHOD(Stub_Router, setDefaultModule)
 	zval *moduleName, moduleName_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&moduleName_sub);
+	ZVAL_NULL(&moduleName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(moduleName)
 	ZEND_PARSE_PARAMETERS_END();
@@ -311,7 +311,7 @@ PHP_METHOD(Stub_Router, setDefaultController)
 	zval *controllerName, controllerName_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&controllerName_sub);
+	ZVAL_NULL(&controllerName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(controllerName)
 	ZEND_PARSE_PARAMETERS_END();
@@ -331,7 +331,7 @@ PHP_METHOD(Stub_Router, setDefaultAction)
 	zval *actionName, actionName_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&actionName_sub);
+	ZVAL_NULL(&actionName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(actionName)
 	ZEND_PARSE_PARAMETERS_END();
@@ -359,12 +359,12 @@ PHP_METHOD(Stub_Router, setDefaults)
 	zval *defaults, defaults_sub, namespaceName, module, controller, action, params;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&defaults_sub);
-	ZVAL_UNDEF(&namespaceName);
-	ZVAL_UNDEF(&module);
-	ZVAL_UNDEF(&controller);
-	ZVAL_UNDEF(&action);
-	ZVAL_UNDEF(&params);
+	ZVAL_NULL(&defaults_sub);
+	ZVAL_NULL(&namespaceName);
+	ZVAL_NULL(&module);
+	ZVAL_NULL(&controller);
+	ZVAL_NULL(&action);
+	ZVAL_NULL(&params);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(defaults)
 	ZEND_PARSE_PARAMETERS_END();
@@ -398,7 +398,7 @@ PHP_METHOD(Stub_Router, doRemoveExtraSlashes)
 {
 	zval *route, route_sub;
 
-	ZVAL_UNDEF(&route_sub);
+	ZVAL_NULL(&route_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(route)
 	ZEND_PARSE_PARAMETERS_END();
@@ -429,39 +429,39 @@ PHP_METHOD(Stub_Router, handle)
 	zval *uri = NULL, uri_sub, __$true, __$false, __$null, realUri, request, currentHostName, routeFound, parts, params, matches, notFoundPaths, vnamespace, module, controller, action, paramsStr, strParams, paramsMerge, route, methods, dependencyInjector, hostname, regexHostName, matched, pattern, handledUri, beforeMatch, paths, converters, part, position, matchPosition, _0, _1, *_2, _12, _3$$9, _4$$9, _5$$8, _6$$13, _7$$17, *_8$$28, _11$$28, _13$$43, _14$$43, _15$$42, _16$$47, _17$$51, *_18$$62, _21$$62, _22$$82, _23$$85, _24$$88, _25$$91, _26$$92, _27$$96, _28$$96, _29$$96, _30$$96, _31$$96;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&uri_sub);
+	ZVAL_NULL(&uri_sub);
 	ZVAL_BOOL(&__$true, 1);
 	ZVAL_BOOL(&__$false, 0);
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&realUri);
-	ZVAL_UNDEF(&request);
-	ZVAL_UNDEF(&currentHostName);
-	ZVAL_UNDEF(&routeFound);
-	ZVAL_UNDEF(&parts);
-	ZVAL_UNDEF(&params);
-	ZVAL_UNDEF(&matches);
-	ZVAL_UNDEF(&notFoundPaths);
-	ZVAL_UNDEF(&vnamespace);
-	ZVAL_UNDEF(&module);
-	ZVAL_UNDEF(&controller);
-	ZVAL_UNDEF(&action);
-	ZVAL_UNDEF(&paramsStr);
-	ZVAL_UNDEF(&strParams);
-	ZVAL_UNDEF(&paramsMerge);
-	ZVAL_UNDEF(&route);
-	ZVAL_UNDEF(&methods);
-	ZVAL_UNDEF(&dependencyInjector);
-	ZVAL_UNDEF(&hostname);
-	ZVAL_UNDEF(&regexHostName);
-	ZVAL_UNDEF(&matched);
-	ZVAL_UNDEF(&pattern);
-	ZVAL_UNDEF(&handledUri);
-	ZVAL_UNDEF(&beforeMatch);
-	ZVAL_UNDEF(&paths);
-	ZVAL_UNDEF(&converters);
-	ZVAL_UNDEF(&part);
-	ZVAL_UNDEF(&position);
-	ZVAL_UNDEF(&matchPosition);
+	ZVAL_NULL(&realUri);
+	ZVAL_NULL(&request);
+	ZVAL_NULL(&currentHostName);
+	ZVAL_NULL(&routeFound);
+	ZVAL_NULL(&parts);
+	ZVAL_NULL(&params);
+	ZVAL_NULL(&matches);
+	ZVAL_NULL(&notFoundPaths);
+	ZVAL_NULL(&vnamespace);
+	ZVAL_NULL(&module);
+	ZVAL_NULL(&controller);
+	ZVAL_NULL(&action);
+	ZVAL_NULL(&paramsStr);
+	ZVAL_NULL(&strParams);
+	ZVAL_NULL(&paramsMerge);
+	ZVAL_NULL(&route);
+	ZVAL_NULL(&methods);
+	ZVAL_NULL(&dependencyInjector);
+	ZVAL_NULL(&hostname);
+	ZVAL_NULL(&regexHostName);
+	ZVAL_NULL(&matched);
+	ZVAL_NULL(&pattern);
+	ZVAL_NULL(&handledUri);
+	ZVAL_NULL(&beforeMatch);
+	ZVAL_NULL(&paths);
+	ZVAL_NULL(&converters);
+	ZVAL_NULL(&part);
+	ZVAL_NULL(&position);
+	ZVAL_NULL(&matchPosition);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_12);
@@ -973,11 +973,11 @@ PHP_METHOD(Stub_Router, add)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, *httpMethods = NULL, httpMethods_sub, __$null, route;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
-	ZVAL_UNDEF(&httpMethods_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
+	ZVAL_NULL(&httpMethods_sub);
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&route);
+	ZVAL_NULL(&route);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
 		Z_PARAM_ZVAL(pattern)
@@ -1018,8 +1018,8 @@ PHP_METHOD(Stub_Router, addGet)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1056,8 +1056,8 @@ PHP_METHOD(Stub_Router, addPost)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1094,8 +1094,8 @@ PHP_METHOD(Stub_Router, addPut)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1132,8 +1132,8 @@ PHP_METHOD(Stub_Router, addPatch)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1170,8 +1170,8 @@ PHP_METHOD(Stub_Router, addDelete)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1208,8 +1208,8 @@ PHP_METHOD(Stub_Router, addOptions)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1246,8 +1246,8 @@ PHP_METHOD(Stub_Router, addHead)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -1283,12 +1283,12 @@ PHP_METHOD(Stub_Router, mount)
 	zval *group, group_sub, groupRoutes, beforeMatch, hostname, routes, route, *_0$$5, _1$$5, *_2$$8, _3$$8, _4$$11;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&group_sub);
-	ZVAL_UNDEF(&groupRoutes);
-	ZVAL_UNDEF(&beforeMatch);
-	ZVAL_UNDEF(&hostname);
-	ZVAL_UNDEF(&routes);
-	ZVAL_UNDEF(&route);
+	ZVAL_NULL(&group_sub);
+	ZVAL_NULL(&groupRoutes);
+	ZVAL_NULL(&beforeMatch);
+	ZVAL_NULL(&hostname);
+	ZVAL_NULL(&routes);
+	ZVAL_NULL(&route);
 	ZVAL_UNDEF(&_1$$5);
 	ZVAL_UNDEF(&_3$$8);
 	ZVAL_UNDEF(&_4$$11);
@@ -1393,7 +1393,7 @@ PHP_METHOD(Stub_Router, notFound)
 	zval *paths, paths_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&paths_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(paths)
 	ZEND_PARSE_PARAMETERS_END();
@@ -1539,8 +1539,8 @@ PHP_METHOD(Stub_Router, getRouteById)
 	zval *id, id_sub, route, _0, *_1, _3, _2$$3, _4$$5;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&id_sub);
-	ZVAL_UNDEF(&route);
+	ZVAL_NULL(&id_sub);
+	ZVAL_NULL(&route);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_2$$3);
@@ -1601,8 +1601,8 @@ PHP_METHOD(Stub_Router, getRouteByName)
 	zval *name, name_sub, route, _0, *_1, _3, _2$$3, _4$$5;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
-	ZVAL_UNDEF(&route);
+	ZVAL_NULL(&name_sub);
+	ZVAL_NULL(&route);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_2$$3);

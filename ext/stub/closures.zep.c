@@ -125,8 +125,8 @@ PHP_METHOD(Stub_Closures, issue642)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&obj);
-	ZVAL_UNDEF(&closure);
+	ZVAL_NULL(&obj);
+	ZVAL_NULL(&closure);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -148,7 +148,7 @@ PHP_METHOD(Stub_Closures, issue1036SetArgument)
 	zval *argument, argument_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&argument_sub);
+	ZVAL_NULL(&argument_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(argument)
 	ZEND_PARSE_PARAMETERS_END();
@@ -161,7 +161,7 @@ PHP_METHOD(Stub_Closures, issue1036SetFunction)
 	zval *func, func_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&func_sub);
+	ZVAL_NULL(&func_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(func)
 	ZEND_PARSE_PARAMETERS_END();
@@ -212,7 +212,7 @@ PHP_METHOD(Stub_Closures, issue2497ClosureThisWithUse)
 	zval *name, name_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
+	ZVAL_NULL(&name_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
@@ -315,7 +315,7 @@ PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
 	zval *prefix, prefix_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&prefix_sub);
+	ZVAL_NULL(&prefix_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(prefix)
 	ZEND_PARSE_PARAMETERS_END();

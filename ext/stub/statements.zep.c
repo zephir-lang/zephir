@@ -45,10 +45,10 @@ PHP_METHOD(Stub_Statements, testPropertyAcccessAvoidTmpReuse)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&result1);
-	ZVAL_UNDEF(&result2);
-	ZVAL_UNDEF(&result3);
-	ZVAL_UNDEF(&result4);
+	ZVAL_NULL(&result1);
+	ZVAL_NULL(&result2);
+	ZVAL_NULL(&result3);
+	ZVAL_NULL(&result4);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -123,7 +123,7 @@ PHP_METHOD(Stub_Statements, testElseIf2)
 	zval *num_param = NULL, *total, total_sub;
 	zend_long num;
 
-	ZVAL_UNDEF(&total_sub);
+	ZVAL_NULL(&total_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(num)
 		Z_PARAM_ZVAL(total)

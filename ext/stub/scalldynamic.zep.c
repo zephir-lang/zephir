@@ -50,7 +50,7 @@ PHP_METHOD(Stub_ScallDynamic, selfDynamicCall1)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *methodName, methodName_sub;
 
-	ZVAL_UNDEF(&methodName_sub);
+	ZVAL_NULL(&methodName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(methodName)
 	ZEND_PARSE_PARAMETERS_END();

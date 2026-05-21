@@ -58,7 +58,7 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeVar)
 	zval *someVar, someVar_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&someVar_sub);
+	ZVAL_NULL(&someVar_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someVar)
 	ZEND_PARSE_PARAMETERS_END();
@@ -86,7 +86,7 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, setSomeNull)
 {
 	zval *param, param_sub;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -156,7 +156,7 @@ PHP_METHOD(Stub_Properties_StaticProtectedProperties, compareStaticNull)
 	zval someNull, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&someNull);
+	ZVAL_NULL(&someNull);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

@@ -33,7 +33,7 @@ PHP_METHOD(Stub_Issue2522, inlineClosureIsCallable)
 	zval call;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&call);
+	ZVAL_NULL(&call);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -47,7 +47,7 @@ PHP_METHOD(Stub_Issue2522, inlineClosureReturnsClosureInstance)
 	zval call;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&call);
+	ZVAL_NULL(&call);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -61,7 +61,7 @@ PHP_METHOD(Stub_Issue2522, inlineFnKeywordIsCallable)
 	zval call;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&call);
+	ZVAL_NULL(&call);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -75,7 +75,7 @@ PHP_METHOD(Stub_Issue2522, twoStepClosureIsCallable)
 	zval call;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&call);
+	ZVAL_NULL(&call);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

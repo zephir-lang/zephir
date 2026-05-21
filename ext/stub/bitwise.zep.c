@@ -190,8 +190,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastAnd)
 	zval a, b, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&b);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&b);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -212,7 +212,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2And)
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -249,7 +249,7 @@ PHP_METHOD(Stub_Bitwise, complex4And)
 	zval c;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&c);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -626,8 +626,8 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCastOr)
 	zval a, b, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&b);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&b);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -648,7 +648,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -685,7 +685,7 @@ PHP_METHOD(Stub_Bitwise, complex4Or)
 	zval c;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&c);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -988,9 +988,9 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&j);
+	ZVAL_NULL(&j);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

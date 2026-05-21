@@ -33,7 +33,7 @@ PHP_METHOD(Stub_ArrayAccessObj, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&obj);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -61,9 +61,9 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetSet)
 	zval *offset, *value;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&value_sub);
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&offset_sub);
+	ZVAL_NULL(&value_sub);
+	ZVAL_NULL(&obj);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(offset)
 		Z_PARAM_ZVAL(value)
@@ -87,8 +87,8 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetExists)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&offset_sub);
+	ZVAL_NULL(&obj);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
@@ -108,8 +108,8 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetUnset)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&offset_sub);
+	ZVAL_NULL(&obj);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
@@ -134,7 +134,7 @@ PHP_METHOD(Stub_ArrayAccessObj, offsetGet)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);

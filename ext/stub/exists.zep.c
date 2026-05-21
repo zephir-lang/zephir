@@ -30,7 +30,7 @@ PHP_METHOD(Stub_Exists, testClassExists)
 	zend_bool autoload;
 	zval *className, className_sub, *autoload_param = NULL, _0;
 
-	ZVAL_UNDEF(&className_sub);
+	ZVAL_NULL(&className_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(className)
@@ -51,7 +51,7 @@ PHP_METHOD(Stub_Exists, testInterfaceExists)
 	zend_bool autoload;
 	zval *interfaceName, interfaceName_sub, *autoload_param = NULL, _0;
 
-	ZVAL_UNDEF(&interfaceName_sub);
+	ZVAL_NULL(&interfaceName_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(interfaceName)
@@ -71,8 +71,8 @@ PHP_METHOD(Stub_Exists, testMethodExists)
 {
 	zval *obj, obj_sub, *methodName, methodName_sub;
 
-	ZVAL_UNDEF(&obj_sub);
-	ZVAL_UNDEF(&methodName_sub);
+	ZVAL_NULL(&obj_sub);
+	ZVAL_NULL(&methodName_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(obj)
 		Z_PARAM_ZVAL(methodName)
@@ -85,7 +85,7 @@ PHP_METHOD(Stub_Exists, testFileExists)
 {
 	zval *fileName, fileName_sub;
 
-	ZVAL_UNDEF(&fileName_sub);
+	ZVAL_NULL(&fileName_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(fileName)
 	ZEND_PARSE_PARAMETERS_END();

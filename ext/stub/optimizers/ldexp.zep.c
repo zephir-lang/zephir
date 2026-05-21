@@ -114,8 +114,8 @@ PHP_METHOD(Stub_Optimizers_Ldexp, testVarParameter)
 {
 	zval *x, x_sub, *exponent, exponent_sub;
 
-	ZVAL_UNDEF(&x_sub);
-	ZVAL_UNDEF(&exponent_sub);
+	ZVAL_NULL(&x_sub);
+	ZVAL_NULL(&exponent_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(x)
 		Z_PARAM_ZVAL(exponent)

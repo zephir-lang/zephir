@@ -37,15 +37,15 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 	zend_string *seq = NULL;
 	zval *n, n_sub, seq_zv, len, j, k, l, block, str, lines, _0, _1, _3, _4, _9, _10, _6$$3, _7$$3, _8$$3, _11$$6, _12$$7, _13$$7, _14$$7, _15$$7;
 
-	ZVAL_UNDEF(&n_sub);
+	ZVAL_NULL(&n_sub);
 	ZVAL_UNDEF(&seq_zv);
-	ZVAL_UNDEF(&len);
-	ZVAL_UNDEF(&j);
-	ZVAL_UNDEF(&k);
-	ZVAL_UNDEF(&l);
-	ZVAL_UNDEF(&block);
-	ZVAL_UNDEF(&str);
-	ZVAL_UNDEF(&lines);
+	ZVAL_NULL(&len);
+	ZVAL_NULL(&j);
+	ZVAL_NULL(&k);
+	ZVAL_NULL(&l);
+	ZVAL_NULL(&block);
+	ZVAL_NULL(&str);
+	ZVAL_NULL(&lines);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3);
@@ -156,10 +156,10 @@ PHP_METHOD(Stub_Fasta, main)
 	zval *n, n_sub, alu, iub, homoSap, _1;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&alu);
-	ZVAL_UNDEF(&iub);
-	ZVAL_UNDEF(&homoSap);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&alu);
+	ZVAL_NULL(&iub);
+	ZVAL_NULL(&homoSap);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)

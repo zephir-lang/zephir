@@ -53,8 +53,8 @@ PHP_METHOD(Stub_Openssl, randomPseudoBytesLoop)
 	zend_long ZEPHIR_LAST_CALL_STATUS, _1, _2;
 	zephir_fcall_cache_entry *_5 = NULL;
 
-	ZVAL_UNDEF(&arr);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&arr);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

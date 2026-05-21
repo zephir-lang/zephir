@@ -36,8 +36,8 @@ PHP_METHOD(Stub_Bench_Foo, emptyForInRange)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -72,9 +72,9 @@ PHP_METHOD(Stub_Bench_Foo, readStatic)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, x, i, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&x);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&x);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -111,8 +111,8 @@ PHP_METHOD(Stub_Bench_Foo, writeStatic)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -151,8 +151,8 @@ PHP_METHOD(Stub_Bench_Foo, issetStatic)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -188,8 +188,8 @@ PHP_METHOD(Stub_Bench_Foo, emptyStatic)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, _2, _3$$3;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -229,9 +229,9 @@ PHP_METHOD(Stub_Bench_Foo, readProp)
 	zval *n, n_sub, x, i, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&x);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&x);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -268,8 +268,8 @@ PHP_METHOD(Stub_Bench_Foo, writeProp)
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -309,8 +309,8 @@ PHP_METHOD(Stub_Bench_Foo, assignAddProp)
 	zval *n, n_sub, i, _2, _3$$3, _4$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
@@ -369,8 +369,8 @@ PHP_METHOD(Stub_Bench_Foo, postIncProp)
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -407,8 +407,8 @@ PHP_METHOD(Stub_Bench_Foo, postDecProp)
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -445,8 +445,8 @@ PHP_METHOD(Stub_Bench_Foo, issetProp)
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -487,8 +487,8 @@ PHP_METHOD(Stub_Bench_Foo, emptyProp)
 	zval *n, n_sub, i, _2, _3$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -534,8 +534,8 @@ PHP_METHOD(Stub_Bench_Foo, call)
 	zval *n, n_sub, i, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -584,8 +584,8 @@ PHP_METHOD(Stub_Bench_Foo, scall)
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *n, n_sub, i, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -623,8 +623,8 @@ PHP_METHOD(Stub_Bench_Foo, scallWithReturnTrue)
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *n, n_sub, i, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)
@@ -661,9 +661,9 @@ PHP_METHOD(Stub_Bench_Foo, readConst)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *n, n_sub, i, x, _2;
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&i);
-	ZVAL_UNDEF(&x);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&i);
+	ZVAL_NULL(&x);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(n)

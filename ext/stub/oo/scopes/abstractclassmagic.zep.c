@@ -35,7 +35,7 @@ PHP_METHOD(Stub_Oo_Scopes_AbstractClassMagic, __set)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&name_zv);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)

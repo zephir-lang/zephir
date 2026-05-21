@@ -31,7 +31,7 @@ PHP_METHOD(Stub_Json, testEncodeObject)
 	zval obj;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&obj);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -49,7 +49,7 @@ PHP_METHOD(Stub_Json, testEncodeArray)
 	zval arr, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -74,7 +74,7 @@ PHP_METHOD(Stub_Json, testEncodeOptions)
 	zval arr, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -104,7 +104,7 @@ PHP_METHOD(Stub_Json, testDecodeObject)
 	zval obj;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&obj);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -120,7 +120,7 @@ PHP_METHOD(Stub_Json, testDecodeObject2)
 	zval __$true, obj;
 
 	ZVAL_BOOL(&__$true, 1);
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&obj);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -135,7 +135,7 @@ PHP_METHOD(Stub_Json, testDecodeArray)
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

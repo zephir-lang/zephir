@@ -34,7 +34,7 @@ PHP_METHOD(Stub_FetchTest, setValues)
 	zval *values, values_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&values_sub);
+	ZVAL_NULL(&values_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(values)
 	ZEND_PARSE_PARAMETERS_END();
@@ -54,9 +54,9 @@ PHP_METHOD(Stub_FetchTest, testFetchArray1)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *b, b_sub, c;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
+	ZVAL_NULL(&c);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -73,8 +73,8 @@ PHP_METHOD(Stub_FetchTest, testFetchArray2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a = NULL, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -93,8 +93,8 @@ PHP_METHOD(Stub_FetchTest, testFetchArray3)
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, c;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&c);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
@@ -112,7 +112,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray4)
 	zend_long b;
 	zval *a = NULL, a_sub, *b_param = NULL;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
@@ -131,9 +131,9 @@ PHP_METHOD(Stub_FetchTest, testFetchArray5)
 	zend_string *b = NULL;
 	zval *a, a_sub, b_zv, c;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&b_zv);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&c);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_STR(b)
@@ -153,7 +153,7 @@ PHP_METHOD(Stub_FetchTest, testFetchArray6)
 	zend_string *b = NULL;
 	zval *a = NULL, a_sub, b_zv;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&b_zv);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
@@ -174,9 +174,9 @@ PHP_METHOD(Stub_FetchTest, testFetchObject1)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, *b, b_sub, c;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
+	ZVAL_NULL(&c);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -193,8 +193,8 @@ PHP_METHOD(Stub_FetchTest, testFetchObject2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a = NULL, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -212,9 +212,9 @@ PHP_METHOD(Stub_FetchTest, testFetchPost)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *b, b_sub, _POST, c;
 
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&_POST);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&c);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(b)
 	ZEND_PARSE_PARAMETERS_END();
@@ -234,7 +234,7 @@ PHP_METHOD(Stub_FetchTest, hasValue)
 	zval *name, name_sub, _POST, _0$$4;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
+	ZVAL_NULL(&name_sub);
 	ZVAL_UNDEF(&_POST);
 	ZVAL_UNDEF(&_0$$4);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -259,9 +259,9 @@ PHP_METHOD(Stub_FetchTest, getValue)
 	zval *name, name_sub, _POST, value, _0$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
+	ZVAL_NULL(&name_sub);
 	ZVAL_UNDEF(&_POST);
-	ZVAL_UNDEF(&value);
+	ZVAL_NULL(&value);
 	ZVAL_UNDEF(&_0$$3);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)

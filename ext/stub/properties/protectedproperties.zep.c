@@ -73,7 +73,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeVar)
 	zval *someVar, someVar_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&someVar_sub);
+	ZVAL_NULL(&someVar_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someVar)
 	ZEND_PARSE_PARAMETERS_END();
@@ -138,7 +138,7 @@ PHP_METHOD(Stub_Properties_ProtectedProperties, setSomeNull)
 	zval *param, param_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();

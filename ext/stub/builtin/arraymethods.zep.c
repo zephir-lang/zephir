@@ -129,7 +129,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733BuiltInJoinSpecialChars)
 	zend_string *a = NULL;
 
 	ZVAL_UNDEF(&a_zv);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_4);
@@ -195,7 +195,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733JoinOnVar)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *input, input_sub, _0;
 
-	ZVAL_UNDEF(&input_sub);
+	ZVAL_NULL(&input_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
@@ -218,7 +218,7 @@ PHP_METHOD(Stub_BuiltIn_ArrayMethods, issue733ReversedOnVar)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *input, input_sub, _0;
 
-	ZVAL_UNDEF(&input_sub);
+	ZVAL_NULL(&input_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)

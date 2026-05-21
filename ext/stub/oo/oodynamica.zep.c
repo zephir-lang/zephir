@@ -35,8 +35,8 @@ PHP_METHOD(Stub_Oo_OoDynamicA, getNew)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&className);
-	ZVAL_UNDEF(&fullClassName);
+	ZVAL_NULL(&className);
+	ZVAL_NULL(&fullClassName);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

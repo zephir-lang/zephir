@@ -40,16 +40,16 @@ PHP_METHOD(Stub_RegexDNA, process)
 	zephir_fcall_cache_entry *_3 = NULL;
 	zval *path, path_sub, variants, vIUB, vIUBnew, stuffToRemove, contents, initialLength, regex, codeLength, discard, _0, _1, _2, *_4, _5$$3, _6$$3;
 
-	ZVAL_UNDEF(&path_sub);
-	ZVAL_UNDEF(&variants);
-	ZVAL_UNDEF(&vIUB);
-	ZVAL_UNDEF(&vIUBnew);
-	ZVAL_UNDEF(&stuffToRemove);
-	ZVAL_UNDEF(&contents);
-	ZVAL_UNDEF(&initialLength);
-	ZVAL_UNDEF(&regex);
-	ZVAL_UNDEF(&codeLength);
-	ZVAL_UNDEF(&discard);
+	ZVAL_NULL(&path_sub);
+	ZVAL_NULL(&variants);
+	ZVAL_NULL(&vIUB);
+	ZVAL_NULL(&vIUBnew);
+	ZVAL_NULL(&stuffToRemove);
+	ZVAL_NULL(&contents);
+	ZVAL_NULL(&initialLength);
+	ZVAL_NULL(&regex);
+	ZVAL_NULL(&codeLength);
+	ZVAL_NULL(&discard);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);

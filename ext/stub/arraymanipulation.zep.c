@@ -64,7 +64,7 @@ PHP_METHOD(Stub_ArrayManipulation, issue774)
 	zval obj, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&obj);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

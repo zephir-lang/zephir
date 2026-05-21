@@ -33,8 +33,8 @@ PHP_METHOD(Stub_Oo_OoConstructParams, __construct)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)

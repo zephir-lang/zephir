@@ -37,7 +37,7 @@ PHP_METHOD(Stub_Oo_ExtendPdoClass, __construct)
 	ZVAL_UNDEF(&dsn_zv);
 	ZVAL_UNDEF(&username_zv);
 	ZVAL_UNDEF(&password_zv);
-	ZVAL_UNDEF(&attrs_sub);
+	ZVAL_NULL(&attrs_sub);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;

@@ -83,9 +83,9 @@ PHP_METHOD(Stub_Fcall, testCall3)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
 
-	ZVAL_UNDEF(&handle);
-	ZVAL_UNDEF(&handle2);
-	ZVAL_UNDEF(&buffer);
+	ZVAL_NULL(&handle);
+	ZVAL_NULL(&handle2);
+	ZVAL_NULL(&buffer);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3$$4);
@@ -127,9 +127,9 @@ PHP_METHOD(Stub_Fcall, testCall4)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_2 = NULL, *_4 = NULL;
 
-	ZVAL_UNDEF(&handle);
-	ZVAL_UNDEF(&handle2);
-	ZVAL_UNDEF(&buffer);
+	ZVAL_NULL(&handle);
+	ZVAL_NULL(&handle2);
+	ZVAL_NULL(&buffer);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_3$$4);
@@ -170,8 +170,8 @@ PHP_METHOD(Stub_Fcall, testCall5)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -214,8 +214,8 @@ PHP_METHOD(Stub_Fcall, zvalFcallWith1Parameter)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *callback, callback_sub, *param1 = NULL, param1_sub, __$null;
 
-	ZVAL_UNDEF(&callback_sub);
-	ZVAL_UNDEF(&param1_sub);
+	ZVAL_NULL(&callback_sub);
+	ZVAL_NULL(&param1_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
@@ -241,9 +241,9 @@ PHP_METHOD(Stub_Fcall, testCall8)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *b, b_sub, x;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
-	ZVAL_UNDEF(&x);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
+	ZVAL_NULL(&x);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -262,7 +262,7 @@ PHP_METHOD(Stub_Fcall, testCall1FromVar)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&funcName);
+	ZVAL_NULL(&funcName);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -291,7 +291,7 @@ PHP_METHOD(Stub_Fcall, testStrtokVarBySlash)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *value, value_sub, _0;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
@@ -310,8 +310,8 @@ PHP_METHOD(Stub_Fcall, testFunctionGetArgs)
 {
 	zval *param1, param1_sub, *param2, param2_sub;
 
-	ZVAL_UNDEF(&param1_sub);
-	ZVAL_UNDEF(&param2_sub);
+	ZVAL_NULL(&param1_sub);
+	ZVAL_NULL(&param2_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(param1)
 		Z_PARAM_ZVAL(param2)
@@ -340,8 +340,8 @@ PHP_METHOD(Stub_Fcall, testFunctionGetArg)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *param1, param1_sub, *param2, param2_sub, _0, _1, _2;
 
-	ZVAL_UNDEF(&param1_sub);
-	ZVAL_UNDEF(&param2_sub);
+	ZVAL_NULL(&param1_sub);
+	ZVAL_NULL(&param2_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -417,8 +417,8 @@ PHP_METHOD(Stub_Fcall, testArrayFill)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zephir_fcall_cache_entry *_3 = NULL;
 
-	ZVAL_UNDEF(&v1);
-	ZVAL_UNDEF(&v2);
+	ZVAL_NULL(&v1);
+	ZVAL_NULL(&v2);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -447,7 +447,7 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *str, str_sub, _0;
-		ZVAL_UNDEF(&str_sub);
+		ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
@@ -469,7 +469,7 @@ PHP_FUNCTION(g_stub_zephir_global_method_test) {
 
 PHP_FUNCTION(g_stub_zephir_global_method_with_type_casting) {
 	zval *variable, variable_sub;
-		ZVAL_UNDEF(&variable_sub);
+		ZVAL_NULL(&variable_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
@@ -482,7 +482,7 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *str, str_sub, _0, _1;
-		ZVAL_UNDEF(&str_sub);
+		ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -506,7 +506,7 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_test) {
 
 PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
 	zval *a, a_sub;
-		ZVAL_UNDEF(&a_sub);
+		ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -516,7 +516,7 @@ PHP_FUNCTION(f_Stub_test_call_relative_object_hint) {
 
 PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
 	zval *variable, variable_sub;
-		ZVAL_UNDEF(&variable_sub);
+		ZVAL_NULL(&variable_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(variable)
 	ZEND_PARSE_PARAMETERS_END();
@@ -527,7 +527,7 @@ PHP_FUNCTION(f_Stub_zephir_namespaced_method_with_type_casting) {
 
 PHP_FUNCTION(f_Stub_test_call_object_hint) {
 	zval *a, a_sub;
-		ZVAL_UNDEF(&a_sub);
+		ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();

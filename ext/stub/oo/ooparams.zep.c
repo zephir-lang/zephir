@@ -350,7 +350,7 @@ PHP_METHOD(Stub_Oo_OoParams, setObject)
 {
 	zval *obj, obj_sub;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(obj)
 	ZEND_PARSE_PARAMETERS_END();
@@ -363,7 +363,7 @@ PHP_METHOD(Stub_Oo_OoParams, setCallable)
 {
 	zval *obj, obj_sub;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(obj)
 	ZEND_PARSE_PARAMETERS_END();
@@ -376,7 +376,7 @@ PHP_METHOD(Stub_Oo_OoParams, setResource)
 {
 	zval *obj, obj_sub;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_RESOURCE(obj)
 	ZEND_PARSE_PARAMETERS_END();
@@ -389,7 +389,7 @@ PHP_METHOD(Stub_Oo_OoParams, setObjectClassCast)
 {
 	zval *parameter, parameter_sub;
 
-	ZVAL_UNDEF(&parameter_sub);
+	ZVAL_NULL(&parameter_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(parameter, zephir_get_internal_ce(SL("stub\\oo\\param")))
 	ZEND_PARSE_PARAMETERS_END();

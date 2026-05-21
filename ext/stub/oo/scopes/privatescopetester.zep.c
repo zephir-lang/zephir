@@ -47,9 +47,9 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyObj)
 	zend_string *property = NULL;
 	zval *obj, obj_sub, property_zv, *value, value_sub, _0;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZVAL_UNDEF(&property_zv);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(obj)
@@ -81,8 +81,8 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, setPropertyNew)
 
 	ZVAL_UNDEF(&className_zv);
 	ZVAL_UNDEF(&property_zv);
-	ZVAL_UNDEF(&value_sub);
-	ZVAL_UNDEF(&obj);
+	ZVAL_NULL(&value_sub);
+	ZVAL_NULL(&obj);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_STR(className)
 		Z_PARAM_STR(property)
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_Oo_Scopes_PrivateScopeTester, getObjVars)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *obj, obj_sub;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(obj)
 	ZEND_PARSE_PARAMETERS_END();

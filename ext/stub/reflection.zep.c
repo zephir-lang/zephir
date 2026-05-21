@@ -32,7 +32,7 @@ PHP_METHOD(Stub_Reflection, getReflectionClass)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&r);
+	ZVAL_NULL(&r);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -49,7 +49,7 @@ PHP_METHOD(Stub_Reflection, getReflectionFunction)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&r);
+	ZVAL_NULL(&r);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -68,7 +68,7 @@ PHP_METHOD(Stub_Reflection, setReflectionParameter)
 	zval *parameter, parameter_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&parameter_sub);
+	ZVAL_NULL(&parameter_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(parameter, zephir_get_internal_ce(SL("reflectionparameter")))
 	ZEND_PARSE_PARAMETERS_END();

@@ -80,8 +80,8 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex1)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&y_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&y_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -115,8 +115,8 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *y, y_sub, _0, _1;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&y_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&y_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -149,7 +149,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex3)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
@@ -177,8 +177,8 @@ PHP_METHOD(Stub_Ternary, testTernaryWithPromotedTemporaryVariable)
 	zval var2, var3, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&var2);
-	ZVAL_UNDEF(&var3);
+	ZVAL_NULL(&var2);
+	ZVAL_NULL(&var3);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -213,7 +213,7 @@ PHP_METHOD(Stub_Ternary, testTernaryAfterLetVariable)
 	zval s;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&s);
+	ZVAL_NULL(&s);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -234,7 +234,7 @@ PHP_METHOD(Stub_Ternary, testShortTernary)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *a, a_sub, _0;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
@@ -257,8 +257,8 @@ PHP_METHOD(Stub_Ternary, testShortTernaryComplex)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *left, left_sub, *value, value_sub, _0;
 
-	ZVAL_UNDEF(&left_sub);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&left_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(left)

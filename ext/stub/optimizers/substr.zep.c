@@ -29,8 +29,8 @@ PHP_METHOD(Stub_Optimizers_Substr, testTwoArguments)
 {
 	zval *str, str_sub, *start, start_sub;
 
-	ZVAL_UNDEF(&str_sub);
-	ZVAL_UNDEF(&start_sub);
+	ZVAL_NULL(&str_sub);
+	ZVAL_NULL(&start_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)
@@ -44,9 +44,9 @@ PHP_METHOD(Stub_Optimizers_Substr, testThreeArguments)
 {
 	zval *str, str_sub, *start, start_sub, *offset, offset_sub;
 
-	ZVAL_UNDEF(&str_sub);
-	ZVAL_UNDEF(&start_sub);
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&str_sub);
+	ZVAL_NULL(&start_sub);
+	ZVAL_NULL(&offset_sub);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(start)

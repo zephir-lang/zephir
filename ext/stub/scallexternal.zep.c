@@ -47,8 +47,8 @@ PHP_METHOD(Stub_ScallExternal, testCall2)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)

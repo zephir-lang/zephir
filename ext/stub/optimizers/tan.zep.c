@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Optimizers_Tan, testVarParameter)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();

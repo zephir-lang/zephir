@@ -32,17 +32,17 @@ PHP_METHOD(Stub_Instance, __construct)
 {
 	zval *a1, a1_sub, *a2, a2_sub, *a3, a3_sub, *a4, a4_sub, *a5, a5_sub, *a6, a6_sub, *a7, a7_sub, *a8, a8_sub, *a9, a9_sub, *a10, a10_sub, *a11, a11_sub;
 
-	ZVAL_UNDEF(&a1_sub);
-	ZVAL_UNDEF(&a2_sub);
-	ZVAL_UNDEF(&a3_sub);
-	ZVAL_UNDEF(&a4_sub);
-	ZVAL_UNDEF(&a5_sub);
-	ZVAL_UNDEF(&a6_sub);
-	ZVAL_UNDEF(&a7_sub);
-	ZVAL_UNDEF(&a8_sub);
-	ZVAL_UNDEF(&a9_sub);
-	ZVAL_UNDEF(&a10_sub);
-	ZVAL_UNDEF(&a11_sub);
+	ZVAL_NULL(&a1_sub);
+	ZVAL_NULL(&a2_sub);
+	ZVAL_NULL(&a3_sub);
+	ZVAL_NULL(&a4_sub);
+	ZVAL_NULL(&a5_sub);
+	ZVAL_NULL(&a6_sub);
+	ZVAL_NULL(&a7_sub);
+	ZVAL_NULL(&a8_sub);
+	ZVAL_NULL(&a9_sub);
+	ZVAL_NULL(&a10_sub);
+	ZVAL_NULL(&a11_sub);
 	ZEND_PARSE_PARAMETERS_START(11, 11)
 		Z_PARAM_OBJECT_OF_CLASS(a1, zephir_get_internal_ce(SL("stub\\arithmetic")))
 		Z_PARAM_OBJECT_OF_CLASS(a2, zephir_get_internal_ce(SL("stub\\arrayobject")))
@@ -65,7 +65,7 @@ PHP_METHOD(Stub_Instance, testIssue1339)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&parameters);
+	ZVAL_NULL(&parameters);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

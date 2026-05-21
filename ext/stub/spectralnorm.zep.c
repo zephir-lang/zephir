@@ -37,8 +37,8 @@ PHP_METHOD(Stub_SpectralNorm, Ax)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *i, i_sub, *j, j_sub, _0, _1;
 
-	ZVAL_UNDEF(&i_sub);
-	ZVAL_UNDEF(&j_sub);
+	ZVAL_NULL(&i_sub);
+	ZVAL_NULL(&j_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -64,8 +64,8 @@ PHP_METHOD(Stub_SpectralNorm, Au)
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&u_sub);
-	ZVAL_UNDEF(&v_sub);
+	ZVAL_NULL(&u_sub);
+	ZVAL_NULL(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
 	ZVAL_UNDEF(&_14$$3);
 	ZVAL_UNDEF(&_6$$4);
@@ -140,8 +140,8 @@ PHP_METHOD(Stub_SpectralNorm, Atu)
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, t = 0, i = 0, j = 0, _1, _2, _4$$3, _5$$3;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&u_sub);
-	ZVAL_UNDEF(&v_sub);
+	ZVAL_NULL(&u_sub);
+	ZVAL_NULL(&v_sub);
 	ZVAL_UNDEF(&_13$$3);
 	ZVAL_UNDEF(&_14$$3);
 	ZVAL_UNDEF(&_6$$4);
@@ -214,10 +214,10 @@ PHP_METHOD(Stub_SpectralNorm, AtAu)
 	zval *n, n_sub, *u, u_sub, *v, v_sub, *w, w_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&n_sub);
-	ZVAL_UNDEF(&u_sub);
-	ZVAL_UNDEF(&v_sub);
-	ZVAL_UNDEF(&w_sub);
+	ZVAL_NULL(&n_sub);
+	ZVAL_NULL(&u_sub);
+	ZVAL_NULL(&v_sub);
+	ZVAL_NULL(&w_sub);
 	ZEND_PARSE_PARAMETERS_START(4, 4)
 		Z_PARAM_ZVAL(n)
 		Z_PARAM_ZVAL(u)
@@ -243,9 +243,9 @@ PHP_METHOD(Stub_SpectralNorm, process)
 	zend_long n, ZEPHIR_LAST_CALL_STATUS, i = 0, vv, vBv, _2, _3, _8, _9, _13, _14;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&u);
-	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&w);
+	ZVAL_NULL(&u);
+	ZVAL_NULL(&v);
+	ZVAL_NULL(&w);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_5$$3);

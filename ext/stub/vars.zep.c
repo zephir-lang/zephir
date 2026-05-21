@@ -40,8 +40,8 @@ PHP_METHOD(Stub_Vars, testParam)
 	zval config;
 
 	ZVAL_UNDEF(&config);
-	ZVAL_UNDEF(&k);
-	ZVAL_UNDEF(&v);
+	ZVAL_NULL(&k);
+	ZVAL_NULL(&v);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_6);
 	ZVAL_UNDEF(&_4$$3);
@@ -101,8 +101,8 @@ PHP_METHOD(Stub_Vars, testVarDump)
 	zval __$false, a, ar, _0;
 
 	ZVAL_BOOL(&__$false, 0);
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&ar);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&ar);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -128,7 +128,7 @@ PHP_METHOD(Stub_Vars, testVarDump2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *ret, ret_sub, _0;
 
-	ZVAL_UNDEF(&ret_sub);
+	ZVAL_NULL(&ret_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(ret)
@@ -149,9 +149,9 @@ PHP_METHOD(Stub_Vars, testVarExport)
 	zval __$false, a, ar, ret, _0, _1, _2;
 
 	ZVAL_BOOL(&__$false, 0);
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&ar);
-	ZVAL_UNDEF(&ret);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&ar);
+	ZVAL_NULL(&ret);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -261,8 +261,8 @@ PHP_METHOD(Stub_Vars, testVarDump2param)
 {
 	zval *p1, p1_sub, *p2, p2_sub;
 
-	ZVAL_UNDEF(&p1_sub);
-	ZVAL_UNDEF(&p2_sub);
+	ZVAL_NULL(&p1_sub);
+	ZVAL_NULL(&p2_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(p1)
 		Z_PARAM_ZVAL(p2)
@@ -276,9 +276,9 @@ PHP_METHOD(Stub_Vars, testVarDump3param)
 {
 	zval *p1, p1_sub, *p2, p2_sub, *p3, p3_sub;
 
-	ZVAL_UNDEF(&p1_sub);
-	ZVAL_UNDEF(&p2_sub);
-	ZVAL_UNDEF(&p3_sub);
+	ZVAL_NULL(&p1_sub);
+	ZVAL_NULL(&p2_sub);
+	ZVAL_NULL(&p3_sub);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(p1)
 		Z_PARAM_ZVAL(p2)
@@ -295,7 +295,7 @@ PHP_METHOD(Stub_Vars, testCountOptimizerVarDumpAndExport)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *testVar, testVar_sub, _0, _1;
 
-	ZVAL_UNDEF(&testVar_sub);
+	ZVAL_NULL(&testVar_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)

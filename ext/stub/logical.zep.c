@@ -83,7 +83,7 @@ PHP_METHOD(Stub_Logical, testAnd9)
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL, _1$$3;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&_1$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
@@ -147,8 +147,8 @@ PHP_METHOD(Stub_Logical, testMixed2)
 	zend_bool _0, _1;
 	zval *match, match_sub, *minLength, minLength_sub, _2;
 
-	ZVAL_UNDEF(&match_sub);
-	ZVAL_UNDEF(&minLength_sub);
+	ZVAL_NULL(&match_sub);
+	ZVAL_NULL(&minLength_sub);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(match)

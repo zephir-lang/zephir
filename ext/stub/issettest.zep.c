@@ -35,8 +35,8 @@ PHP_METHOD(Stub_IssetTest, testIssetArray1)
 {
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -50,7 +50,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray2)
 	zend_long b;
 	zval *a, a_sub, *b_param = NULL;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_LONG(b)
@@ -64,7 +64,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray3)
 	zend_string *b = NULL;
 	zval *a, a_sub, b_zv;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&b_zv);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
@@ -79,7 +79,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray4)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -91,7 +91,7 @@ PHP_METHOD(Stub_IssetTest, testIssetArray5)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -103,7 +103,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty1)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -119,8 +119,8 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty2)
 {
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -133,7 +133,7 @@ PHP_METHOD(Stub_IssetTest, testIssetProperty3)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -147,7 +147,7 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty1)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&g);
+	ZVAL_NULL(&g);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -164,8 +164,8 @@ PHP_METHOD(Stub_IssetTest, testIssetDynamicProperty2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *inp, inp_sub, g;
 
-	ZVAL_UNDEF(&inp_sub);
-	ZVAL_UNDEF(&g);
+	ZVAL_NULL(&inp_sub);
+	ZVAL_NULL(&g);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(inp)
 	ZEND_PARSE_PARAMETERS_END();

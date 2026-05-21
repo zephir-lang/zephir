@@ -68,10 +68,10 @@ PHP_METHOD(Stub_Fibonnaci, fibArray)
 	zval fib, a, b, c, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&fib);
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&b);
-	ZVAL_UNDEF(&c);
+	ZVAL_NULL(&fib);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&b);
+	ZVAL_NULL(&c);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -110,7 +110,7 @@ PHP_METHOD(Stub_Fibonnaci, fibArray2)
 	zval fib, _0, _1$$3, _2$$3, _3$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&fib);
+	ZVAL_NULL(&fib);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);

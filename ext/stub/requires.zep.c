@@ -31,7 +31,7 @@ PHP_METHOD(Stub_Requires, requireExternal1)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *path, path_sub, _0;
 
-	ZVAL_UNDEF(&path_sub);
+	ZVAL_NULL(&path_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
@@ -50,7 +50,7 @@ PHP_METHOD(Stub_Requires, requireExternal2)
 {
 	zval *path, path_sub;
 
-	ZVAL_UNDEF(&path_sub);
+	ZVAL_NULL(&path_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
 	ZEND_PARSE_PARAMETERS_END();
@@ -68,8 +68,8 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 	zval *path, path_sub, external3, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&path_sub);
-	ZVAL_UNDEF(&external3);
+	ZVAL_NULL(&path_sub);
+	ZVAL_NULL(&external3);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(path)
@@ -97,7 +97,7 @@ PHP_METHOD(Stub_Requires, setContent)
 	zval *content, content_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&content_sub);
+	ZVAL_NULL(&content_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(content)
 	ZEND_PARSE_PARAMETERS_END();
@@ -114,10 +114,10 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	zend_string *templatePath = NULL, *_3$$3;
 
 	ZVAL_UNDEF(&templatePath_zv);
-	ZVAL_UNDEF(&params_sub);
+	ZVAL_NULL(&params_sub);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&key);
-	ZVAL_UNDEF(&value);
+	ZVAL_NULL(&key);
+	ZVAL_NULL(&value);
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_4$$4);

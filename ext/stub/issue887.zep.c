@@ -49,8 +49,8 @@ PHP_METHOD(Stub_Issue887, add)
 	zval *key, key_sub, *value, value_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&key_sub);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&key_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(key)
 		Z_PARAM_ZVAL(value)

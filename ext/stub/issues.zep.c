@@ -30,7 +30,7 @@ PHP_METHOD(Stub_Issues, setAdapter)
 	zval *adapter, adapter_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&adapter_sub);
+	ZVAL_NULL(&adapter_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(adapter)
 	ZEND_PARSE_PARAMETERS_END();
@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Issues, someMethod)
 	zval *methodName, methodName_sub, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&methodName_sub);
+	ZVAL_NULL(&methodName_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(methodName)

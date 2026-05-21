@@ -99,7 +99,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetExists)
 {
 	zval *offset, offset_sub;
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
@@ -110,7 +110,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetGet)
 {
 	zval *offset, offset_sub;
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();
@@ -121,8 +121,8 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetSet)
 {
 	zval *offset, offset_sub, *value, value_sub;
 
-	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&offset_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(offset)
 		Z_PARAM_ZVAL(value)
@@ -134,7 +134,7 @@ PHP_METHOD(Stub_Oo_OoNativeImplements, offsetUnset)
 {
 	zval *offset, offset_sub;
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
 	ZEND_PARSE_PARAMETERS_END();

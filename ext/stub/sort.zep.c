@@ -38,8 +38,8 @@ PHP_METHOD(Stub_Sort, quick)
 
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&_9);
-	ZVAL_UNDEF(&left);
-	ZVAL_UNDEF(&right);
+	ZVAL_NULL(&left);
+	ZVAL_NULL(&right);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_7);
 	ZVAL_UNDEF(&_10);

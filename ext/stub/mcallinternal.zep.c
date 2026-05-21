@@ -45,8 +45,8 @@ void zep_Stub_McallInternal_a(int ht, zend_execute_data *execute_data, zval *ret
 void zep_Stub_McallInternal_b(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *a_ext , zval *b_ext )
 {
 	zval *a, a_sub, *b, b_sub;
-		ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+		ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)

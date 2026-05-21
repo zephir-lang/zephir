@@ -34,7 +34,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, camelize)
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;
@@ -66,7 +66,7 @@ PHP_METHOD(Stub_BuiltIn_StringMethods, uncamelize)
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0);
 	bool is_null_true = 1;

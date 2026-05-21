@@ -30,6 +30,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\Name;
 use Zephir\Passes\CallGathererPass;
+use Zephir\Passes\DefiniteAssignmentPass;
 use Zephir\Passes\LocalContextPass;
 use Zephir\Passes\StaticTypeInference;
 use Zephir\StatementsBlock;
@@ -2478,6 +2479,34 @@ class Method
             if ($compilationContext->config->get('call-gatherer-pass', 'optimizations')) {
                 $callGathererPass = new CallGathererPass($compilationContext);
                 $callGathererPass->pass($this->statements);
+            }
+
+            /**
+             * Definite-assignment pass: warns when a `var`-typed local can be
+             * read on a path with no preceding assignment. Pairs with the
+             * `Backend::generateInitCode` auto-null behavior (issue #1875).
+             * Gated on the `possibly-uninitialized-variable` warning being
+             * enabled in config.
+             */
+            if ($compilationContext->config->get('possibly-uninitialized-variable', 'warnings')) {
+                $parameterNames = [];
+                if ($this->parameters instanceof Parameters) {
+                    foreach ($this->parameters->getParameters() as $param) {
+                        if (isset($param['name'])) {
+                            $parameterNames[] = $param['name'];
+                        }
+                    }
+                }
+                $definitePass = new DefiniteAssignmentPass($parameterNames);
+                $definitePass->pass($this->statements);
+                $completeName = $this->getClassDefinition()?->getCompleteName() ?: '[unknown]';
+                foreach ($definitePass->getWarnings() as $diagnostic) {
+                    $compilationContext->logger->warning(
+                        'Variable "' . $diagnostic['name'] . '" may be read before assignment in '
+                        . $completeName . '::' . $this->getName(),
+                        ['possibly-uninitialized-variable', $diagnostic['node']]
+                    );
+                }
             }
         }
 

@@ -29,7 +29,7 @@ PHP_METHOD(Stub_ExitDie, testExit)
 {
 	zval *param = NULL, param_sub, __$null;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
@@ -51,7 +51,7 @@ PHP_METHOD(Stub_ExitDie, testDie)
 {
 	zval *param = NULL, param_sub, __$null;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)

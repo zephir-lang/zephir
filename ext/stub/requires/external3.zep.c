@@ -35,8 +35,8 @@ PHP_METHOD(Stub_Requires_External3, req)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *path, path_sub, *requires, requires_sub, _0;
 
-	ZVAL_UNDEF(&path_sub);
-	ZVAL_UNDEF(&requires_sub);
+	ZVAL_NULL(&path_sub);
+	ZVAL_NULL(&requires_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(path)

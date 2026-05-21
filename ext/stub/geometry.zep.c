@@ -81,7 +81,7 @@ PHP_METHOD(Stub_Geometry, runOptimize)
 	zval list;
 
 	ZVAL_UNDEF(&list);
-	ZVAL_UNDEF(&item);
+	ZVAL_NULL(&item);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);

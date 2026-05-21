@@ -49,7 +49,7 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChain)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *instance, instance_sub, _0;
 
-	ZVAL_UNDEF(&instance_sub);
+	ZVAL_NULL(&instance_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(instance, zephir_get_internal_ce(SL("stub\\issue2505")))
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChainSelf)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *instance, instance_sub, _0;
 
-	ZVAL_UNDEF(&instance_sub);
+	ZVAL_NULL(&instance_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(instance, zephir_get_internal_ce(SL("stub\\issue2505")))

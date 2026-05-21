@@ -196,7 +196,7 @@ PHP_METHOD(Stub_Oo_DynamicProp, setPropertyVariableString)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&property_zv);
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(property)
 	ZEND_PARSE_PARAMETERS_END();

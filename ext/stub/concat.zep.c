@@ -63,7 +63,7 @@ PHP_METHOD(Stub_Concat, testConcat1)
 	zval url, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&url);
+	ZVAL_NULL(&url);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -82,7 +82,7 @@ PHP_METHOD(Stub_Concat, testConcat2)
 	zval url, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&url);
+	ZVAL_NULL(&url);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -110,8 +110,8 @@ PHP_METHOD(Stub_Concat, testConcat3)
 	zval a, b;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&b);
+	ZVAL_NULL(&a);
+	ZVAL_NULL(&b);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -133,7 +133,7 @@ PHP_METHOD(Stub_Concat, testConcat4)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *value, value_sub, _0, _2;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&query);

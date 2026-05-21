@@ -75,7 +75,7 @@ PHP_METHOD(Stub_SPropertyAccess, testArgumentWithUnderscore)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null;
 
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
@@ -104,7 +104,7 @@ PHP_METHOD(Stub_SPropertyAccess, testArgument)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *delimiter = NULL, delimiter_sub, __$null, _0$$3;
 
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	ZVAL_UNDEF(&_0$$3);
 	bool is_null_true = 1;
@@ -137,7 +137,7 @@ PHP_METHOD(Stub_SPropertyAccess, mutateStringVarInsideCycle)
 	zval i, _5, _3$$3, _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&i);
+	ZVAL_NULL(&i);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);
@@ -249,8 +249,8 @@ PHP_METHOD(Stub_SPropertyAccess, mutateArrayVarInsideCycle)
 	zval i, j, _5, _3$$3, _4$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&i);
-	ZVAL_UNDEF(&j);
+	ZVAL_NULL(&i);
+	ZVAL_NULL(&j);
 	ZVAL_UNDEF(&_5);
 	ZVAL_UNDEF(&_3$$3);
 	ZVAL_UNDEF(&_4$$3);

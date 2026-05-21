@@ -57,9 +57,9 @@ PHP_METHOD(Stub_Router_Route, __construct)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, *httpMethods = NULL, httpMethods_sub, __$null;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
-	ZVAL_UNDEF(&httpMethods_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
+	ZVAL_NULL(&httpMethods_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 3)
@@ -96,8 +96,8 @@ PHP_METHOD(Stub_Router_Route, compilePattern)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *pattern = NULL, pattern_sub, idPattern, _0$$4, _1$$4, _2$$5, _3$$5, _4$$6, _5$$6, _6$$7, _7$$7, _8$$8, _9$$8, _10$$8, _11$$9, _12$$9, _13$$9;
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&idPattern);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&idPattern);
 	ZVAL_UNDEF(&_0$$4);
 	ZVAL_UNDEF(&_1$$4);
 	ZVAL_UNDEF(&_2$$5);
@@ -197,7 +197,7 @@ PHP_METHOD(Stub_Router_Route, via)
 	zval *httpMethods, httpMethods_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&httpMethods_sub);
+	ZVAL_NULL(&httpMethods_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
@@ -223,7 +223,7 @@ PHP_METHOD(Stub_Router_Route, extractNamedParams)
 	zend_string *pattern = NULL;
 
 	ZVAL_UNDEF(&pattern_zv);
-	ZVAL_UNDEF(&matches);
+	ZVAL_NULL(&matches);
 	ZVAL_UNDEF(&_1$$11);
 	ZVAL_UNDEF(&_2$$11);
 	ZVAL_UNDEF(&_3$$11);
@@ -453,19 +453,19 @@ PHP_METHOD(Stub_Router_Route, reConfigure)
 	zval *pattern, pattern_sub, *paths = NULL, paths_sub, __$null, moduleName, controllerName, actionName, parts, routePaths, realClassName, namespaceName, pcrePattern, compiledPattern, extracted, _1$$10, _2$$19, _3$$19;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&pattern_sub);
-	ZVAL_UNDEF(&paths_sub);
+	ZVAL_NULL(&pattern_sub);
+	ZVAL_NULL(&paths_sub);
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&moduleName);
-	ZVAL_UNDEF(&controllerName);
-	ZVAL_UNDEF(&actionName);
-	ZVAL_UNDEF(&parts);
-	ZVAL_UNDEF(&routePaths);
-	ZVAL_UNDEF(&realClassName);
-	ZVAL_UNDEF(&namespaceName);
-	ZVAL_UNDEF(&pcrePattern);
-	ZVAL_UNDEF(&compiledPattern);
-	ZVAL_UNDEF(&extracted);
+	ZVAL_NULL(&moduleName);
+	ZVAL_NULL(&controllerName);
+	ZVAL_NULL(&actionName);
+	ZVAL_NULL(&parts);
+	ZVAL_NULL(&routePaths);
+	ZVAL_NULL(&realClassName);
+	ZVAL_NULL(&namespaceName);
+	ZVAL_NULL(&pcrePattern);
+	ZVAL_NULL(&compiledPattern);
+	ZVAL_NULL(&extracted);
 	ZVAL_UNDEF(&_1$$10);
 	ZVAL_UNDEF(&_2$$19);
 	ZVAL_UNDEF(&_3$$19);
@@ -608,7 +608,7 @@ PHP_METHOD(Stub_Router_Route, setName)
 	zval *name, name_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
+	ZVAL_NULL(&name_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(name)
 	ZEND_PARSE_PARAMETERS_END();
@@ -630,7 +630,7 @@ PHP_METHOD(Stub_Router_Route, beforeMatch)
 	zval *callback, callback_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&callback_sub);
+	ZVAL_NULL(&callback_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(callback)
 	ZEND_PARSE_PARAMETERS_END();
@@ -708,9 +708,9 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&reversed);
-	ZVAL_UNDEF(&path);
-	ZVAL_UNDEF(&position);
+	ZVAL_NULL(&reversed);
+	ZVAL_NULL(&path);
+	ZVAL_NULL(&position);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_4);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -772,7 +772,7 @@ PHP_METHOD(Stub_Router_Route, setHttpMethods)
 	zval *httpMethods, httpMethods_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&httpMethods_sub);
+	ZVAL_NULL(&httpMethods_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(httpMethods)
 	ZEND_PARSE_PARAMETERS_END();
@@ -807,7 +807,7 @@ PHP_METHOD(Stub_Router_Route, setHostname)
 	zval *hostname, hostname_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&hostname_sub);
+	ZVAL_NULL(&hostname_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(hostname)
 	ZEND_PARSE_PARAMETERS_END();
@@ -839,8 +839,8 @@ PHP_METHOD(Stub_Router_Route, convert)
 	zval *name, name_sub, *converter, converter_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&name_sub);
-	ZVAL_UNDEF(&converter_sub);
+	ZVAL_NULL(&name_sub);
+	ZVAL_NULL(&converter_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(name)
 		Z_PARAM_ZVAL(converter)

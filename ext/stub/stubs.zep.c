@@ -76,7 +76,7 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlock)
 	zend_long number;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 
-	ZVAL_UNDEF(&intOrString_sub);
+	ZVAL_NULL(&intOrString_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(intOrString)
 		Z_PARAM_OPTIONAL
@@ -104,7 +104,7 @@ PHP_METHOD(Stub_Stubs, testMixedInputParamsDocBlockDeclared)
 	zend_long number;
 	zval *intOrString, intOrString_sub, *number_param = NULL;
 
-	ZVAL_UNDEF(&intOrString_sub);
+	ZVAL_NULL(&intOrString_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 2)
 		Z_PARAM_ZVAL(intOrString)
 		Z_PARAM_OPTIONAL

@@ -58,7 +58,7 @@ PHP_METHOD(Stub_Functional, map2)
 	zval a;
 
 	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		ZEPHIR_Z_PARAM_ARRAY(a, a_param)

@@ -96,7 +96,7 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyNull)
 	zval __$null, arr;
 
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -111,7 +111,7 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyValue)
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -126,7 +126,7 @@ PHP_METHOD(Stub_Issue2385, checkArrayKeyMissing)
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -142,7 +142,7 @@ PHP_METHOD(Stub_Issue2385, checkArrayLongKeyNull)
 	zval __$null, arr;
 
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -157,7 +157,7 @@ PHP_METHOD(Stub_Issue2385, checkArrayLongKeyValue)
 	zval arr;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -172,9 +172,9 @@ PHP_METHOD(Stub_Issue2385, checkArrayVarKeyNull)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *key, key_sub, __$null, arr;
 
-	ZVAL_UNDEF(&key_sub);
+	ZVAL_NULL(&key_sub);
 	ZVAL_NULL(&__$null);
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&arr);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();
@@ -192,8 +192,8 @@ PHP_METHOD(Stub_Issue2385, checkArrayVarKeyValue)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *key, key_sub, arr;
 
-	ZVAL_UNDEF(&key_sub);
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&key_sub);
+	ZVAL_NULL(&arr);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
 	ZEND_PARSE_PARAMETERS_END();

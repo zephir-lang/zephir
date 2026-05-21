@@ -53,8 +53,8 @@ PHP_METHOD(Stub_Mcall, testMethod4)
 {
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -68,8 +68,8 @@ PHP_METHOD(Stub_Mcall, testMethod5)
 {
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -83,8 +83,8 @@ PHP_METHOD(Stub_Mcall, testMethod6)
 {
 	zval *a, a_sub, *b, b_sub;
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -147,8 +147,8 @@ PHP_METHOD(Stub_Mcall, testCall4)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -168,8 +168,8 @@ PHP_METHOD(Stub_Mcall, testCall5)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -189,8 +189,8 @@ PHP_METHOD(Stub_Mcall, testCall6)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -211,8 +211,8 @@ PHP_METHOD(Stub_Mcall, testCall7)
 	zval *a, a_sub, *b, b_sub, _0, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -238,8 +238,8 @@ PHP_METHOD(Stub_Mcall, testCall8)
 	zval *a, a_sub, *b, b_sub, _0, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -264,8 +264,8 @@ PHP_METHOD(Stub_Mcall, testCall9)
 	zval *a, a_sub, *b, b_sub, _0, _1;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
@@ -329,8 +329,8 @@ PHP_METHOD(Stub_Mcall, testCall13)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -350,8 +350,8 @@ PHP_METHOD(Stub_Mcall, testCall14)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -371,8 +371,8 @@ PHP_METHOD(Stub_Mcall, testCall15)
 	zval *a, a_sub, *b, b_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&a_sub);
+	ZVAL_NULL(&b_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(a)
 		Z_PARAM_ZVAL(b)
@@ -392,8 +392,8 @@ PHP_METHOD(Stub_Mcall, testCall16)
 	zval *c, c_sub, *d, d_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&c_sub);
-	ZVAL_UNDEF(&d_sub);
+	ZVAL_NULL(&c_sub);
+	ZVAL_NULL(&d_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(c)
 		Z_PARAM_ZVAL(d)
@@ -413,8 +413,8 @@ PHP_METHOD(Stub_Mcall, testCall17)
 	zval *c, c_sub, *d, d_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&c_sub);
-	ZVAL_UNDEF(&d_sub);
+	ZVAL_NULL(&c_sub);
+	ZVAL_NULL(&d_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(c)
 		Z_PARAM_ZVAL(d)
@@ -463,7 +463,7 @@ PHP_METHOD(Stub_Mcall, testCall20)
 	long k, i = 0, j, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&p_sub);
+	ZVAL_NULL(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(k)
@@ -518,7 +518,7 @@ PHP_METHOD(Stub_Mcall, testCall22)
 	long k, i = 0, j, _2;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&p_sub);
+	ZVAL_NULL(&p_sub);
 	ZVAL_UNDEF(&_3$$3);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(k)
@@ -634,7 +634,7 @@ PHP_METHOD(Stub_Mcall, optionalParameterVar)
 {
 	zval *param = NULL, param_sub, __$null;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)
@@ -799,7 +799,7 @@ PHP_METHOD(Stub_Mcall, testObjectParamCastStdClass)
 {
 	zval *param, param_sub;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, zend_standard_class_def)
 	ZEND_PARSE_PARAMETERS_END();
@@ -812,7 +812,7 @@ PHP_METHOD(Stub_Mcall, testObjectParamCastOoParam)
 {
 	zval *param, param_sub;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(param, zephir_get_internal_ce(SL("stub\\oo\\param")))
 	ZEND_PARSE_PARAMETERS_END();
@@ -833,7 +833,7 @@ PHP_METHOD(Stub_Mcall, testCallablePass)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -861,7 +861,7 @@ PHP_METHOD(Stub_Mcall, testCallableArrayThisMethodPass)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -891,7 +891,7 @@ PHP_METHOD(Stub_Mcall, aa)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -916,7 +916,7 @@ PHP_METHOD(Stub_Mcall, issue1136)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&_finfo);
+	ZVAL_NULL(&_finfo);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
@@ -948,7 +948,7 @@ PHP_METHOD(Stub_Mcall, issue2245VarArgumentNullable)
 {
 	zval *param = NULL, param_sub, __$null;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)

@@ -36,7 +36,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod1)
 	zend_string *text = NULL;
 
 	ZVAL_UNDEF(&text_zv);
-	ZVAL_UNDEF(&ret);
+	ZVAL_NULL(&ret);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
@@ -59,7 +59,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, protectedMethod2)
 	zend_string *text = NULL;
 
 	ZVAL_UNDEF(&text_zv);
-	ZVAL_UNDEF(&ret);
+	ZVAL_NULL(&ret);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(text)
@@ -119,7 +119,7 @@ PHP_METHOD(Stub_Invokes_AbstractProtected, renderArrayElementsComplex)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&text_zv);
-	ZVAL_UNDEF(&item);
+	ZVAL_NULL(&item);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_4$$3);
 	ZVAL_UNDEF(&_6$$3);

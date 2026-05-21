@@ -35,7 +35,7 @@ PHP_METHOD(Stub_ArraySearch, simpleSearch)
 	zval haystack;
 	zval *needle, needle_sub, *haystack_param = NULL, *strict_param = NULL, _0;
 
-	ZVAL_UNDEF(&needle_sub);
+	ZVAL_NULL(&needle_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&haystack);
 	ZEND_PARSE_PARAMETERS_START(2, 3)
@@ -68,7 +68,7 @@ PHP_METHOD(Stub_ArraySearch, searchUsingArrayInsideZephir)
 
 	ZVAL_UNDEF(&itoA64);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&pos);
+	ZVAL_NULL(&pos);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 

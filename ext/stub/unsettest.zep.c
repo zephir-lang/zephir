@@ -40,7 +40,7 @@ PHP_METHOD(Stub_Unsettest, has)
 	zval *key, key_sub, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&key_sub);
+	ZVAL_NULL(&key_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
@@ -55,8 +55,8 @@ PHP_METHOD(Stub_Unsettest, addValueToProperty)
 	zval *key, key_sub, *value, value_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&key_sub);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&key_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(key)
 		Z_PARAM_ZVAL(value)
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetValueFromProperty)
 	zval *key, key_sub, _0;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&key_sub);
+	ZVAL_NULL(&key_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(key)
@@ -86,7 +86,7 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArray)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arrayParameter, arrayParameter_sub;
 
-	ZVAL_UNDEF(&arrayParameter_sub);
+	ZVAL_NULL(&arrayParameter_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arrayParameter)
 	ZEND_PARSE_PARAMETERS_END();
@@ -104,8 +104,8 @@ PHP_METHOD(Stub_Unsettest, testUnsetFromArrayByIndexVar)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *arrayParameter, arrayParameter_sub, *index, index_sub;
 
-	ZVAL_UNDEF(&arrayParameter_sub);
-	ZVAL_UNDEF(&index_sub);
+	ZVAL_NULL(&arrayParameter_sub);
+	ZVAL_NULL(&index_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(arrayParameter)
 		Z_PARAM_ZVAL(index)
@@ -131,7 +131,7 @@ PHP_METHOD(Stub_Unsettest, testStdClassUnset)
 	zval simpleObject, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&simpleObject);
+	ZVAL_NULL(&simpleObject);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

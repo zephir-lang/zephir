@@ -64,8 +64,8 @@ PHP_METHOD(Stub_Optimizers_StrReplace, issue1087)
 	zval filtered, sanitize, _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&filtered);
-	ZVAL_UNDEF(&sanitize);
+	ZVAL_NULL(&filtered);
+	ZVAL_NULL(&sanitize);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);

@@ -159,7 +159,7 @@ PHP_METHOD(Stub_Globals_ServerRequestFactory, checkNullArray)
 	zval super;
 	zval *source, source_sub, *super_param = NULL;
 
-	ZVAL_UNDEF(&source_sub);
+	ZVAL_NULL(&source_sub);
 	ZVAL_UNDEF(&super);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(source)

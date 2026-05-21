@@ -62,9 +62,9 @@ PHP_METHOD(Stub_McallDynamic, __call)
 	zval *method, method_sub, *arguments, arguments_sub, realMethod;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&method_sub);
-	ZVAL_UNDEF(&arguments_sub);
-	ZVAL_UNDEF(&realMethod);
+	ZVAL_NULL(&method_sub);
+	ZVAL_NULL(&arguments_sub);
+	ZVAL_NULL(&realMethod);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(method)
 		Z_PARAM_ZVAL(arguments)
@@ -88,7 +88,7 @@ PHP_METHOD(Stub_McallDynamic, testCallAnonymousFunctionWithContext)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&result);
+	ZVAL_NULL(&result);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

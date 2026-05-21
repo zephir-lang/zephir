@@ -34,7 +34,7 @@ PHP_METHOD(Stub_Strings, camelize)
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
@@ -60,7 +60,7 @@ PHP_METHOD(Stub_Strings, uncamelize)
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
-	ZVAL_UNDEF(&delimiter_sub);
+	ZVAL_NULL(&delimiter_sub);
 	ZVAL_NULL(&__$null);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(1, 2)
@@ -84,7 +84,7 @@ PHP_METHOD(Stub_Strings, testTrim)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -97,7 +97,7 @@ PHP_METHOD(Stub_Strings, testRtrim)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -110,7 +110,7 @@ PHP_METHOD(Stub_Strings, testLtrim)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -123,8 +123,8 @@ PHP_METHOD(Stub_Strings, testTrim2Params)
 {
 	zval *str, str_sub, *charlist, charlist_sub;
 
-	ZVAL_UNDEF(&str_sub);
-	ZVAL_UNDEF(&charlist_sub);
+	ZVAL_NULL(&str_sub);
+	ZVAL_NULL(&charlist_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
@@ -138,8 +138,8 @@ PHP_METHOD(Stub_Strings, testRtrim2Params)
 {
 	zval *str, str_sub, *charlist, charlist_sub;
 
-	ZVAL_UNDEF(&str_sub);
-	ZVAL_UNDEF(&charlist_sub);
+	ZVAL_NULL(&str_sub);
+	ZVAL_NULL(&charlist_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
@@ -153,8 +153,8 @@ PHP_METHOD(Stub_Strings, testLtrim2Params)
 {
 	zval *str, str_sub, *charlist, charlist_sub;
 
-	ZVAL_UNDEF(&str_sub);
-	ZVAL_UNDEF(&charlist_sub);
+	ZVAL_NULL(&str_sub);
+	ZVAL_NULL(&charlist_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
 		Z_PARAM_ZVAL(charlist)
@@ -168,8 +168,8 @@ PHP_METHOD(Stub_Strings, testImplode)
 {
 	zval *glue, glue_sub, *pieces, pieces_sub;
 
-	ZVAL_UNDEF(&glue_sub);
-	ZVAL_UNDEF(&pieces_sub);
+	ZVAL_NULL(&glue_sub);
+	ZVAL_NULL(&pieces_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(glue)
 		Z_PARAM_ZVAL(pieces)
@@ -183,8 +183,8 @@ PHP_METHOD(Stub_Strings, testStrpos)
 {
 	zval *haystack, haystack_sub, *needle, needle_sub;
 
-	ZVAL_UNDEF(&haystack_sub);
-	ZVAL_UNDEF(&needle_sub);
+	ZVAL_NULL(&haystack_sub);
+	ZVAL_NULL(&needle_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(haystack)
 		Z_PARAM_ZVAL(needle)
@@ -199,8 +199,8 @@ PHP_METHOD(Stub_Strings, testStrposOffset)
 	zend_long offset;
 	zval *haystack, haystack_sub, *needle, needle_sub, *offset_param = NULL, _0;
 
-	ZVAL_UNDEF(&haystack_sub);
-	ZVAL_UNDEF(&needle_sub);
+	ZVAL_NULL(&haystack_sub);
+	ZVAL_NULL(&needle_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
 		Z_PARAM_ZVAL(haystack)
@@ -217,8 +217,8 @@ PHP_METHOD(Stub_Strings, testExplode)
 {
 	zval *delimiter, delimiter_sub, *str, str_sub;
 
-	ZVAL_UNDEF(&delimiter_sub);
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&delimiter_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(delimiter)
 		Z_PARAM_ZVAL(str)
@@ -232,7 +232,7 @@ PHP_METHOD(Stub_Strings, testExplodeStr)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -246,7 +246,7 @@ PHP_METHOD(Stub_Strings, testExplodeLimit)
 	zend_long limit;
 	zval *str, str_sub, *limit_param = NULL, _0;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
@@ -263,7 +263,7 @@ PHP_METHOD(Stub_Strings, testSubstr)
 	zend_long from, len;
 	zval *str, str_sub, *from_param = NULL, *len_param = NULL, _0, _1;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(3, 3)
@@ -283,7 +283,7 @@ PHP_METHOD(Stub_Strings, testSubstr2)
 	zend_long from;
 	zval *str, str_sub, *from_param = NULL, _0;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str)
@@ -299,7 +299,7 @@ PHP_METHOD(Stub_Strings, testSubstr3)
 {
 	zval *str, str_sub, _0;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
@@ -314,7 +314,7 @@ PHP_METHOD(Stub_Strings, testSubstr4)
 {
 	zval *str, str_sub, _0, _1;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
@@ -331,7 +331,7 @@ PHP_METHOD(Stub_Strings, testAddslashes)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -344,7 +344,7 @@ PHP_METHOD(Stub_Strings, testStripslashes)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -357,7 +357,7 @@ PHP_METHOD(Stub_Strings, testStripcslashes)
 {
 	zval *str, str_sub;
 
-	ZVAL_UNDEF(&str_sub);
+	ZVAL_NULL(&str_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(str)
 	ZEND_PARSE_PARAMETERS_END();
@@ -370,8 +370,8 @@ PHP_METHOD(Stub_Strings, testHashEquals)
 {
 	zval *str1, str1_sub, *str2, str2_sub;
 
-	ZVAL_UNDEF(&str1_sub);
-	ZVAL_UNDEF(&str2_sub);
+	ZVAL_NULL(&str1_sub);
+	ZVAL_NULL(&str2_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(str1)
 		Z_PARAM_ZVAL(str2)
@@ -496,8 +496,8 @@ PHP_METHOD(Stub_Strings, issue1267)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *value = NULL, value_sub, x, _0, _2, _3, _4, _6, _7;
 
-	ZVAL_UNDEF(&value_sub);
-	ZVAL_UNDEF(&x);
+	ZVAL_NULL(&value_sub);
+	ZVAL_NULL(&x);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
@@ -657,7 +657,7 @@ PHP_METHOD(Stub_Strings, issue2186Child2)
 	zend_string *val = NULL;
 
 	ZVAL_UNDEF(&val_zv);
-	ZVAL_UNDEF(&output);
+	ZVAL_NULL(&output);
 	ZVAL_UNDEF(&_0$$3);
 	bool is_null_true = 1;
 	ZEND_PARSE_PARAMETERS_START(0, 1)

@@ -78,9 +78,9 @@ PHP_METHOD(Stub_Issue2165_Issue, __construct)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&a);
-	ZVAL_UNDEF(&i);
-	ZVAL_UNDEF(&rowA);
-	ZVAL_UNDEF(&valueA);
+	ZVAL_NULL(&i);
+	ZVAL_NULL(&rowA);
+	ZVAL_NULL(&valueA);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_27);
 	ZVAL_UNDEF(&_1$$3);
@@ -286,7 +286,7 @@ PHP_METHOD(Stub_Issue2165_Issue, fill)
 	zend_long m, n, ZEPHIR_LAST_CALL_STATUS;
 	zval *value, value_sub, *m_param = NULL, *n_param = NULL, _1, _14, _15, _16, _18, _2$$3, _3$$3, _4$$3, _5$$4, _6$$4, _7$$4, _9$$4, _10$$5, _11$$5, _12$$5, _13$$5;
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_14);
 	ZVAL_UNDEF(&_15);
@@ -400,7 +400,7 @@ PHP_METHOD(Stub_Issue2165_Issue, divideMatrix)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *b, b_sub;
 
-	ZVAL_UNDEF(&b_sub);
+	ZVAL_NULL(&b_sub);
 	ZVAL_UNDEF(&c);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(b, zephir_get_internal_ce(SL("stub\\issue2165\\issue")))

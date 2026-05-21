@@ -41,13 +41,13 @@ PHP_METHOD(Stub_Quantum, harmos)
 	zval *x_param = NULL, psr, psi, p2, v, paramater, fp, tmp, _0, _1, _2$$4, _3$$4, _4$$4, _6$$4, _7$$4, _9$$4, _18$$6, _19$$6, _20$$6, _21$$6, _22$$6, _23$$6, _24$$6, _25$$6, _26$$6, _27$$6, _28$$6, _29$$6, _30$$6, _31$$6, _32$$6, _33$$6, _37$$7, _38$$7, _39$$7, _40$$7, _41$$7, _42$$7, _43$$7, _44$$7, _45$$7, _46$$7, _47$$7, _48$$7, _49$$7, _51$$9, _52$$9, _53$$9, _54$$9, _56$$8, _57$$10, _58$$10, _59$$10;
 	double x, dt = 0, dx = 0, k0 = 0, item_psr = 0, item_psi = 0;
 
-	ZVAL_UNDEF(&psr);
-	ZVAL_UNDEF(&psi);
-	ZVAL_UNDEF(&p2);
-	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&paramater);
-	ZVAL_UNDEF(&fp);
-	ZVAL_UNDEF(&tmp);
+	ZVAL_NULL(&psr);
+	ZVAL_NULL(&psi);
+	ZVAL_NULL(&p2);
+	ZVAL_NULL(&v);
+	ZVAL_NULL(&paramater);
+	ZVAL_NULL(&fp);
+	ZVAL_NULL(&tmp);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2$$4);

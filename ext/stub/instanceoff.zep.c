@@ -32,7 +32,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf1)
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -47,7 +47,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf2)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -66,7 +66,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf3)
 	zval a;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -79,7 +79,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf4)
 {
 	zval *a, a_sub;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf5)
 	zval *a, a_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(a)
 	ZEND_PARSE_PARAMETERS_END();
@@ -112,7 +112,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf6)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -130,7 +130,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf7)
 {
 	zval *test, test_sub;
 
-	ZVAL_UNDEF(&test_sub);
+	ZVAL_NULL(&test_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT(test)
 	ZEND_PARSE_PARAMETERS_END();
@@ -146,7 +146,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf8)
 	zend_string *test = NULL;
 
 	ZVAL_UNDEF(&test_zv);
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&a);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_STR(test)
 	ZEND_PARSE_PARAMETERS_END();
@@ -169,7 +169,7 @@ PHP_METHOD(Stub_Instanceoff, testInstanceOf9)
 	zend_string *test = NULL;
 	zval *a, a_sub, test_zv;
 
-	ZVAL_UNDEF(&a_sub);
+	ZVAL_NULL(&a_sub);
 	ZVAL_UNDEF(&test_zv);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_OBJECT(a)

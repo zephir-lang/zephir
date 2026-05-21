@@ -31,10 +31,10 @@ PHP_METHOD(Stub_Issue820, testIterator)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *obj, obj_sub, k, v, arr;
 
-	ZVAL_UNDEF(&obj_sub);
-	ZVAL_UNDEF(&k);
-	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&arr);
+	ZVAL_NULL(&obj_sub);
+	ZVAL_NULL(&k);
+	ZVAL_NULL(&v);
+	ZVAL_NULL(&arr);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(obj)
 	ZEND_PARSE_PARAMETERS_END();

@@ -32,7 +32,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, get)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *obj, obj_sub;
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(obj, zephir_get_internal_ce(SL("stub\\interfaces\\interfaceint")))
 	ZEND_PARSE_PARAMETERS_END();
@@ -49,7 +49,7 @@ PHP_METHOD(Stub_Interfaces_ImplementInterface, getVoid)
 	zval *obj, obj_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&obj_sub);
+	ZVAL_NULL(&obj_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_OBJECT_OF_CLASS(obj, zephir_get_internal_ce(SL("stub\\interfaces\\interfaceint")))
 	ZEND_PARSE_PARAMETERS_END();

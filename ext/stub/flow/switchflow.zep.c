@@ -175,8 +175,8 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch12)
 	zend_bool _0, _1, _2;
 	zval *var1, var1_sub, *var2, var2_sub;
 
-	ZVAL_UNDEF(&var1_sub);
-	ZVAL_UNDEF(&var2_sub);
+	ZVAL_NULL(&var1_sub);
+	ZVAL_NULL(&var2_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(var1)
 		Z_PARAM_ZVAL(var2)
@@ -238,8 +238,8 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *result_type = NULL, result_type_sub, ret, _0;
 
-	ZVAL_UNDEF(&result_type_sub);
-	ZVAL_UNDEF(&ret);
+	ZVAL_NULL(&result_type_sub);
+	ZVAL_NULL(&ret);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(0, 1)
 		Z_PARAM_OPTIONAL

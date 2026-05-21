@@ -51,7 +51,7 @@ PHP_METHOD(Stub_BuiltIn_CharMethods, getHexForString)
 	zend_string *str = NULL;
 
 	ZVAL_UNDEF(&str_zv);
-	ZVAL_UNDEF(&o);
+	ZVAL_NULL(&o);
 	ZVAL_UNDEF(&_1$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);

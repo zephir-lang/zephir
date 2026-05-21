@@ -38,8 +38,8 @@ PHP_METHOD(Stub_FortyTwo, proof)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS, i = 0, j = 0, _4$$3, _5$$3;
 
-	ZVAL_UNDEF(&box);
-	ZVAL_UNDEF(&side);
+	ZVAL_NULL(&box);
+	ZVAL_NULL(&side);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_6$$4);
 	ZVAL_UNDEF(&_0);

@@ -82,7 +82,7 @@ PHP_METHOD(Stub_Properties_PublicProperties, setSomeGetterSetterArray)
 	zval *someGetterSetterArray, someGetterSetterArray_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&someGetterSetterArray_sub);
+	ZVAL_NULL(&someGetterSetterArray_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(someGetterSetterArray)
 	ZEND_PARSE_PARAMETERS_END();

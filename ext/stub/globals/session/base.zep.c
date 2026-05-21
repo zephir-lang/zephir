@@ -31,7 +31,7 @@ PHP_METHOD(Stub_Globals_Session_Base, set)
 	zend_string *index = NULL;
 
 	ZVAL_UNDEF(&index_zv);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_SESSION);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(index)
@@ -69,7 +69,7 @@ PHP_METHOD(Stub_Globals_Session_Base, __set)
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&index_zv);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(index)
 		Z_PARAM_ZVAL(value)
@@ -114,7 +114,7 @@ PHP_METHOD(Stub_Globals_Session_Base, removeSessionData)
 	zval _SESSION, key, _0, *_1;
 
 	ZVAL_UNDEF(&_SESSION);
-	ZVAL_UNDEF(&key);
+	ZVAL_NULL(&key);
 	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

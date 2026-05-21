@@ -34,8 +34,8 @@ PHP_METHOD(Stub_Oo_PropertyAccess, __construct)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&test);
-	ZVAL_UNDEF(&test1);
+	ZVAL_NULL(&test);
+	ZVAL_NULL(&test1);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);
 	ZVAL_UNDEF(&_3);
@@ -109,7 +109,7 @@ PHP_METHOD(Stub_Oo_PropertyAccess, setPrivatevariable)
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
 	ZEND_PARSE_PARAMETERS_END();

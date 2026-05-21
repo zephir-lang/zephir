@@ -71,7 +71,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, appendSome)
 	zval *value, value_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&value_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(value)
@@ -89,7 +89,7 @@ PHP_METHOD(Stub_Properties_PropertyArray, setOtherArray)
 	zval *arr, arr_sub;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&arr_sub);
+	ZVAL_NULL(&arr_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(arr)
 	ZEND_PARSE_PARAMETERS_END();
@@ -111,8 +111,8 @@ PHP_METHOD(Stub_Properties_PropertyArray, testIssues1831)
 	zephir_fcall_cache_entry *_1 = NULL, *_4 = NULL, *_6 = NULL;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&info);
-	ZVAL_UNDEF(&headers);
+	ZVAL_NULL(&info);
+	ZVAL_NULL(&headers);
 	ZVAL_UNDEF(&_0$$3);
 	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&_3$$3);

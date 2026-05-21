@@ -51,8 +51,8 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetSet)
 	zval *offset, *value;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
-	ZVAL_UNDEF(&value_sub);
+	ZVAL_NULL(&offset_sub);
+	ZVAL_NULL(&value_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(offset)
 		Z_PARAM_ZVAL(value)
@@ -71,7 +71,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetExists)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
@@ -87,7 +87,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetUnset)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(offset)
@@ -105,7 +105,7 @@ PHP_METHOD(Stub_ArrayAccessArr, offsetGet)
 	zval *offset;
 	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&offset_sub);
+	ZVAL_NULL(&offset_sub);
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&_1);
 	ZVAL_UNDEF(&_2);

@@ -30,7 +30,7 @@ PHP_METHOD(Stub_Mcall_Caller, start)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *f, f_sub;
 
-	ZVAL_UNDEF(&f_sub);
+	ZVAL_NULL(&f_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(f)
 	ZEND_PARSE_PARAMETERS_END();

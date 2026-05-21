@@ -30,8 +30,8 @@ PHP_METHOD(stub_23__closure, __invoke)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *carry, carry_sub, *row, row_sub;
 
-	ZVAL_UNDEF(&carry_sub);
-	ZVAL_UNDEF(&row_sub);
+	ZVAL_NULL(&carry_sub);
+	ZVAL_NULL(&row_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(carry)
 		Z_PARAM_ZVAL(row)

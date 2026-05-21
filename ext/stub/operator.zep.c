@@ -30,8 +30,8 @@ PHP_METHOD(Stub_Operator, testIdentical)
 {
 	zval *param1, param1_sub, *param2, param2_sub;
 
-	ZVAL_UNDEF(&param1_sub);
-	ZVAL_UNDEF(&param2_sub);
+	ZVAL_NULL(&param1_sub);
+	ZVAL_NULL(&param2_sub);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(param1)
 		Z_PARAM_ZVAL(param2)
@@ -46,8 +46,8 @@ PHP_METHOD(Stub_Operator, testIdenticalIfComplex)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *input, input_sub, a, _0;
 
-	ZVAL_UNDEF(&input_sub);
-	ZVAL_UNDEF(&a);
+	ZVAL_NULL(&input_sub);
+	ZVAL_NULL(&a);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(input)
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Operator, testIdenticalVarFalse)
 {
 	zval *param, param_sub;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -82,7 +82,7 @@ PHP_METHOD(Stub_Operator, testIdenticalFalseVar)
 {
 	zval *param, param_sub;
 
-	ZVAL_UNDEF(&param_sub);
+	ZVAL_NULL(&param_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -96,8 +96,8 @@ PHP_METHOD(Stub_Operator, testBoolComparison)
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *varTrue, varTrue_sub, *varFalse, varFalse_sub, _0;
 
-	ZVAL_UNDEF(&varTrue_sub);
-	ZVAL_UNDEF(&varFalse_sub);
+	ZVAL_NULL(&varTrue_sub);
+	ZVAL_NULL(&varFalse_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_ZVAL(varTrue)
@@ -143,7 +143,7 @@ PHP_METHOD(Stub_Operator, testNewInstanceOperator)
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 	zval *className, className_sub, _0;
 
-	ZVAL_UNDEF(&className_sub);
+	ZVAL_NULL(&className_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		Z_PARAM_ZVAL(className)
