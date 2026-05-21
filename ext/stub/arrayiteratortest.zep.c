@@ -27,16 +27,14 @@ ZEPHIR_INIT_CLASS(Stub_ArrayIteratorTest)
 
 PHP_METHOD(Stub_ArrayIteratorTest, test)
 {
-	zend_string *_3;
-	zend_ulong _2;
-	zval arr, k, v, *_0, _1;
+	zval arr, k, v, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&arr);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&v);
-	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_0);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -45,38 +43,22 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	ZEPHIR_CALL_METHOD(NULL, &arr, "__construct", NULL, 5);
 	zephir_check_call_status();
 	zephir_is_iterable(&arr, 0, "stub/arrayiteratortest.zep", 12);
-	if (Z_TYPE_P(&arr) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&arr), _2, _3, _0)
-		{
-			ZEPHIR_INIT_NVAR(&k);
-			if (_3 != NULL) { 
-				ZVAL_STR_COPY(&k, _3);
-			} else {
-				ZVAL_LONG(&k, _2);
-			}
-			ZEPHIR_INIT_NVAR(&v);
-			ZVAL_COPY(&v, _0);
+	ZEPHIR_CALL_METHOD(NULL, &arr, "rewind", NULL, 0);
+	zephir_check_call_status();
+	while (1) {
+		ZEPHIR_CALL_METHOD(&_0, &arr, "valid", NULL, 0);
+		zephir_check_call_status();
+		if (!zend_is_true(&_0)) {
+			break;
+		}
+		ZEPHIR_CALL_METHOD(&k, &arr, "key", NULL, 0);
+		zephir_check_call_status();
+		ZEPHIR_CALL_METHOD(&v, &arr, "current", NULL, 0);
+		zephir_check_call_status();
 			ZEPHIR_CONCAT_VV(return_value, &k, &v);
 			RETURN_MM();
-		} ZEND_HASH_FOREACH_END();
-	} else {
-		ZEPHIR_CALL_METHOD(NULL, &arr, "rewind", NULL, 0);
+		ZEPHIR_CALL_METHOD(NULL, &arr, "next", NULL, 0);
 		zephir_check_call_status();
-		while (1) {
-			ZEPHIR_CALL_METHOD(&_1, &arr, "valid", NULL, 0);
-			zephir_check_call_status();
-			if (!zend_is_true(&_1)) {
-				break;
-			}
-			ZEPHIR_CALL_METHOD(&k, &arr, "key", NULL, 0);
-			zephir_check_call_status();
-			ZEPHIR_CALL_METHOD(&v, &arr, "current", NULL, 0);
-			zephir_check_call_status();
-				ZEPHIR_CONCAT_VV(return_value, &k, &v);
-				RETURN_MM();
-			ZEPHIR_CALL_METHOD(NULL, &arr, "next", NULL, 0);
-			zephir_check_call_status();
-		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);

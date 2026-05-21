@@ -107,11 +107,11 @@ PHP_METHOD(Stub_Requires, setContent)
 
 PHP_METHOD(Stub_Requires, renderTemplate)
 {
-	zend_ulong _3$$3;
+	zend_ulong _2$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval templatePath_zv, *params, params_sub, _0, key, value, _7, *_1$$3, _2$$3, _5$$4, _6$$5;
-	zend_string *templatePath = NULL, *_4$$3;
+	zval templatePath_zv, *params, params_sub, _0, key, value, _7, *_1$$3, _5$$3, _4$$4, _6$$5;
+	zend_string *templatePath = NULL, *_3$$3;
 
 	ZVAL_UNDEF(&templatePath_zv);
 	ZVAL_UNDEF(&params_sub);
@@ -119,8 +119,8 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&value);
 	ZVAL_UNDEF(&_7);
-	ZVAL_UNDEF(&_2$$3);
-	ZVAL_UNDEF(&_5$$4);
+	ZVAL_UNDEF(&_5$$3);
+	ZVAL_UNDEF(&_4$$4);
 	ZVAL_UNDEF(&_6$$5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(templatePath)
@@ -137,18 +137,18 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	if (Z_TYPE_P(params) == IS_ARRAY) {
 		zephir_is_iterable(params, 0, "stub/requires.zep", 47);
 		if (Z_TYPE_P(params) == IS_ARRAY) {
-			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(params), _3$$3, _4$$3, _1$$3)
+			ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(params), _2$$3, _3$$3, _1$$3)
 			{
 				ZEPHIR_INIT_NVAR(&key);
-				if (_4$$3 != NULL) { 
-					ZVAL_STR_COPY(&key, _4$$3);
+				if (_3$$3 != NULL) { 
+					ZVAL_STR_COPY(&key, _3$$3);
 				} else {
-					ZVAL_LONG(&key, _3$$3);
+					ZVAL_LONG(&key, _2$$3);
 				}
 				ZEPHIR_INIT_NVAR(&value);
 				ZVAL_COPY(&value, _1$$3);
-				ZEPHIR_CPY_WRT(&_5$$4, &value);
-				if (zephir_set_symbol(&key, &_5$$4) == FAILURE) {
+				ZEPHIR_CPY_WRT(&_4$$4, &value);
+				if (zephir_set_symbol(&key, &_4$$4) == FAILURE) {
 					return;
 				}
 			} ZEND_HASH_FOREACH_END();
@@ -156,9 +156,9 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 			ZEPHIR_CALL_METHOD(NULL, params, "rewind", NULL, 0);
 			zephir_check_call_status();
 			while (1) {
-				ZEPHIR_CALL_METHOD(&_2$$3, params, "valid", NULL, 0);
+				ZEPHIR_CALL_METHOD(&_5$$3, params, "valid", NULL, 0);
 				zephir_check_call_status();
-				if (!zend_is_true(&_2$$3)) {
+				if (!zend_is_true(&_5$$3)) {
 					break;
 				}
 				ZEPHIR_CALL_METHOD(&key, params, "key", NULL, 0);

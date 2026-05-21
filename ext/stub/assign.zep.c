@@ -2042,14 +2042,13 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 {
 	zval _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zval *a_param = NULL, *b_param = NULL, op, i, result, _1, *_2, _3;
-	zend_long a, b, ZEPHIR_LAST_CALL_STATUS, _4$$4, _5$$5, _6$$6, _7$$7, _8$$8, _9$$10, _10$$11, _11$$12, _12$$13, _13$$14;
+	zval *a_param = NULL, *b_param = NULL, op, i, result, _1, *_2;
+	zend_long a, b, ZEPHIR_LAST_CALL_STATUS, _3$$4, _4$$5, _5$$6, _6$$7, _7$$8;
 
 	ZVAL_UNDEF(&op);
 	ZVAL_UNDEF(&i);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&_1);
-	ZVAL_UNDEF(&_3);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_LONG(a)
@@ -2078,99 +2077,47 @@ PHP_METHOD(Stub_Assign, testAssignBitwiseX)
 	ZVAL_STRING(&_1, "shiftright");
 	zephir_array_fast_append(&_0, &_1);
 	zephir_is_iterable(&_0, 0, "stub/assign.zep", 941);
-	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
-		{
-			ZEPHIR_INIT_NVAR(&op);
-			ZVAL_COPY(&op, _2);
-			ZEPHIR_INIT_NVAR(&i);
-			ZVAL_LONG(&i, a);
-			do {
-				if (ZEPHIR_IS_STRING(&op, "or")) {
-					_4$$4 = ((int) (zephir_get_numberval(&i)) | b);
-					ZEPHIR_INIT_NVAR(&i);
-					ZVAL_LONG(&i, _4$$4);
-					break;
-				}
-				if (ZEPHIR_IS_STRING(&op, "and")) {
-					_5$$5 = ((int) (zephir_get_numberval(&i)) & b);
-					ZEPHIR_INIT_NVAR(&i);
-					ZVAL_LONG(&i, _5$$5);
-					break;
-				}
-				if (ZEPHIR_IS_STRING(&op, "xor")) {
-					_6$$6 = ((int) (zephir_get_numberval(&i)) ^ b);
-					ZEPHIR_INIT_NVAR(&i);
-					ZVAL_LONG(&i, _6$$6);
-					break;
-				}
-				if (ZEPHIR_IS_STRING(&op, "shiftleft")) {
-					_7$$7 = ((int) (zephir_get_numberval(&i)) << b);
-					ZEPHIR_INIT_NVAR(&i);
-					ZVAL_LONG(&i, _7$$7);
-					break;
-				}
-				if (ZEPHIR_IS_STRING(&op, "shiftright")) {
-					_8$$8 = ((int) (zephir_get_numberval(&i)) >> b);
-					ZEPHIR_INIT_NVAR(&i);
-					ZVAL_LONG(&i, _8$$8);
-					break;
-				}
-			} while(0);
-
-			zephir_array_update_zval(&result, &op, &i, PH_COPY | PH_SEPARATE);
-		} ZEND_HASH_FOREACH_END();
-	} else {
-		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
-		zephir_check_call_status();
-		while (1) {
-			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
-			zephir_check_call_status();
-			if (!zend_is_true(&_3)) {
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+	{
+		ZEPHIR_INIT_NVAR(&op);
+		ZVAL_COPY(&op, _2);
+		ZEPHIR_INIT_NVAR(&i);
+		ZVAL_LONG(&i, a);
+		do {
+			if (ZEPHIR_IS_STRING(&op, "or")) {
+				_3$$4 = ((int) (zephir_get_numberval(&i)) | b);
+				ZEPHIR_INIT_NVAR(&i);
+				ZVAL_LONG(&i, _3$$4);
 				break;
 			}
-			ZEPHIR_CALL_METHOD(&op, &_0, "current", NULL, 0);
-			zephir_check_call_status();
+			if (ZEPHIR_IS_STRING(&op, "and")) {
+				_4$$5 = ((int) (zephir_get_numberval(&i)) & b);
 				ZEPHIR_INIT_NVAR(&i);
-				ZVAL_LONG(&i, a);
-				do {
-					if (ZEPHIR_IS_STRING(&op, "or")) {
-						_9$$10 = ((int) (zephir_get_numberval(&i)) | b);
-						ZEPHIR_INIT_NVAR(&i);
-						ZVAL_LONG(&i, _9$$10);
-						break;
-					}
-					if (ZEPHIR_IS_STRING(&op, "and")) {
-						_10$$11 = ((int) (zephir_get_numberval(&i)) & b);
-						ZEPHIR_INIT_NVAR(&i);
-						ZVAL_LONG(&i, _10$$11);
-						break;
-					}
-					if (ZEPHIR_IS_STRING(&op, "xor")) {
-						_11$$12 = ((int) (zephir_get_numberval(&i)) ^ b);
-						ZEPHIR_INIT_NVAR(&i);
-						ZVAL_LONG(&i, _11$$12);
-						break;
-					}
-					if (ZEPHIR_IS_STRING(&op, "shiftleft")) {
-						_12$$13 = ((int) (zephir_get_numberval(&i)) << b);
-						ZEPHIR_INIT_NVAR(&i);
-						ZVAL_LONG(&i, _12$$13);
-						break;
-					}
-					if (ZEPHIR_IS_STRING(&op, "shiftright")) {
-						_13$$14 = ((int) (zephir_get_numberval(&i)) >> b);
-						ZEPHIR_INIT_NVAR(&i);
-						ZVAL_LONG(&i, _13$$14);
-						break;
-					}
-				} while(0);
+				ZVAL_LONG(&i, _4$$5);
+				break;
+			}
+			if (ZEPHIR_IS_STRING(&op, "xor")) {
+				_5$$6 = ((int) (zephir_get_numberval(&i)) ^ b);
+				ZEPHIR_INIT_NVAR(&i);
+				ZVAL_LONG(&i, _5$$6);
+				break;
+			}
+			if (ZEPHIR_IS_STRING(&op, "shiftleft")) {
+				_6$$7 = ((int) (zephir_get_numberval(&i)) << b);
+				ZEPHIR_INIT_NVAR(&i);
+				ZVAL_LONG(&i, _6$$7);
+				break;
+			}
+			if (ZEPHIR_IS_STRING(&op, "shiftright")) {
+				_7$$8 = ((int) (zephir_get_numberval(&i)) >> b);
+				ZEPHIR_INIT_NVAR(&i);
+				ZVAL_LONG(&i, _7$$8);
+				break;
+			}
+		} while(0);
 
-				zephir_array_update_zval(&result, &op, &i, PH_COPY | PH_SEPARATE);
-			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
-			zephir_check_call_status();
-		}
-	}
+		zephir_array_update_zval(&result, &op, &i, PH_COPY | PH_SEPARATE);
+	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&op);
 	RETURN_CCTOR(&result);
 }

@@ -41,15 +41,13 @@ PHP_METHOD(Stub_FunctionExists, testWithPassedName)
 PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 {
 	zval result, functions;
-	zval func, _0, *_1, _2, _3$$3, _4$$4;
+	zval func, _0, *_1, _2$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
 
 	ZVAL_UNDEF(&func);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_3$$3);
-	ZVAL_UNDEF(&_4$$4);
+	ZVAL_UNDEF(&_2$$3);
 	ZVAL_UNDEF(&result);
 	ZVAL_UNDEF(&functions);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
@@ -84,33 +82,14 @@ PHP_METHOD(Stub_FunctionExists, testBuiltInFunctions)
 	ZVAL_STRING(&_0, "prim");
 	zephir_array_fast_append(&functions, &_0);
 	zephir_is_iterable(&functions, 0, "stub/functionexists.zep", 31);
-	if (Z_TYPE_P(&functions) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&functions), _1)
-		{
-			ZEPHIR_INIT_NVAR(&func);
-			ZVAL_COPY(&func, _1);
-			ZEPHIR_INIT_NVAR(&_3$$3);
-			ZVAL_BOOL(&_3$$3, (zephir_function_exists(&func) == SUCCESS));
-			zephir_array_update_zval(&result, &func, &_3$$3, PH_COPY | PH_SEPARATE);
-		} ZEND_HASH_FOREACH_END();
-	} else {
-		ZEPHIR_CALL_METHOD(NULL, &functions, "rewind", NULL, 0);
-		zephir_check_call_status();
-		while (1) {
-			ZEPHIR_CALL_METHOD(&_2, &functions, "valid", NULL, 0);
-			zephir_check_call_status();
-			if (!zend_is_true(&_2)) {
-				break;
-			}
-			ZEPHIR_CALL_METHOD(&func, &functions, "current", NULL, 0);
-			zephir_check_call_status();
-				ZEPHIR_INIT_NVAR(&_4$$4);
-				ZVAL_BOOL(&_4$$4, (zephir_function_exists(&func) == SUCCESS));
-				zephir_array_update_zval(&result, &func, &_4$$4, PH_COPY | PH_SEPARATE);
-			ZEPHIR_CALL_METHOD(NULL, &functions, "next", NULL, 0);
-			zephir_check_call_status();
-		}
-	}
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&functions), _1)
+	{
+		ZEPHIR_INIT_NVAR(&func);
+		ZVAL_COPY(&func, _1);
+		ZEPHIR_INIT_NVAR(&_2$$3);
+		ZVAL_BOOL(&_2$$3, (zephir_function_exists(&func) == SUCCESS));
+		zephir_array_update_zval(&result, &func, &_2$$3, PH_COPY | PH_SEPARATE);
+	} ZEND_HASH_FOREACH_END();
 	ZEPHIR_INIT_NVAR(&func);
 	RETURN_CTOR(&result);
 }
