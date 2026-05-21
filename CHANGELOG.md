@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Compiler now recognizes the parser-emitted `yield` AST node (bare `yield;`, `yield expr;`, `yield key, value;`) [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+
 ### Documentation
 - Documented the workaround for `[ClassName, "protectedOrPrivateMethod"]` arrays passed as callbacks to PHP higher-order functions (`array_reduce`, `usort`, `preg_replace_callback`, etc.) [#2167](https://github.com/zephir-lang/zephir/issues/2167)
 
