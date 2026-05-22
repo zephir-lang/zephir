@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChain)
 	ZVAL_UNDEF(&instance_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(instance, zephir_get_internal_ce(SL("stub\\issue2505")))
+		Z_PARAM_OBJECT_OF_CLASS(instance, stub_issue2505_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
@@ -73,7 +73,7 @@ PHP_METHOD(Stub_Issue2505CrossChain, crossClassChainSelf)
 	ZVAL_UNDEF(&instance_sub);
 	ZVAL_UNDEF(&_0);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_OBJECT_OF_CLASS(instance, zephir_get_internal_ce(SL("stub\\issue2505")))
+		Z_PARAM_OBJECT_OF_CLASS(instance, stub_issue2505_ce)
 	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);

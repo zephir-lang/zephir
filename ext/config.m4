@@ -46,6 +46,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/arrayobject.zep.c
 	stub/arraysearch.zep.c
 	stub/assign.zep.c
+	stub/bench.zep.c
 	stub/bench/foo.zep.c
 	stub/bitwise.zep.c
 	stub/branchprediction.zep.c

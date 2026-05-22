@@ -41,6 +41,7 @@
 #include "stub/arrayobject.zep.h"
 #include "stub/arraysearch.zep.h"
 #include "stub/assign.zep.h"
+#include "stub/bench.zep.h"
 #include "stub/bench/foo.zep.h"
 #include "stub/bitwise.zep.h"
 #include "stub/branchprediction.zep.h"
