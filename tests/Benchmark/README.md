@@ -24,14 +24,21 @@ If you build on the host and run inside the container without fullclean, the
 .libs object files from your host's PHP version will conflict. Always
 `fullclean` when crossing PHP versions.
 
-## Comparing PR vs base
+## Comparing two branches
 
-The same flow CI uses, in two steps:
+CI runs the bench job on every `push` to a non-default branch (see the
+`benchmark` job in `.github/workflows/main.yml`). If the pushed branch has an
+open PR against `development`, the report is posted as an auto-updating PR
+comment; otherwise it is uploaded as an artifact only. The default-branch
+push and tag pushes are skipped so the comparison baseline doesn't run
+against itself.
+
+Locally, the same flow in two steps:
 
 ```bash
 # 1. Capture a baseline tagged "base" on the branch you want to compare
 #    against. Build the extension first so the bench targets exist.
-git checkout develop
+git checkout development
 php zephir fullclean && php zephir build
 php -d extension=ext/modules/stub.so vendor/bin/phpbench run \
     --tag=base --progress=none
