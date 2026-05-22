@@ -8,6 +8,9 @@
     "runner.warmup": 2,
     "runner.time_unit": "microseconds",
     "runner.output_mode": "throughput",
+    "runner.php_config": {
+        "extension": "ext/modules/stub.so"
+    },
     "storage.xml_storage_path": ".phpbench/storage",
     "report.generators": {
         "summary": {

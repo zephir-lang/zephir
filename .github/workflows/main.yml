@@ -250,7 +250,12 @@ jobs:
       contents: read
       pull-requests: write
     env:
-      PHP_VERSION: '8.5'
+      # Held at 8.3 because PHPBench 1.2.x and its Symfony Console deps
+      # haven't been updated for PHP 8.4's "Implicitly marking parameter as
+      # nullable" deprecation. Running on 8.4+ floods the PR comment with
+      # ~120 lines of upstream deprecation notices. Bumping when phpbench
+      # ships a release that ports those signatures to `?Type` syntax.
+      PHP_VERSION: '8.3'
       BASE_BRANCH: development
       BENCH_PHP_FLAGS: '-d extension=ext/modules/stub.so'
 
@@ -357,10 +362,18 @@ jobs:
               --no-interaction \
               > .phpbench/report.txt 2>&1 || true
           fi
-          # PHPBench may emit a "Module already loaded" warning when the .so is
-          # auto-loaded from php.ini AND via -d extension=. Strip those lines so
-          # the comment stays readable.
-          sed -i '/Warning: Module .* is already loaded/d' .phpbench/report.txt
+          # Strip output that would clutter the PR comment:
+          #  - "Module already loaded" when the .so is in php.ini AND via -d
+          #    extension= on the command line;
+          #  - upstream PHP Deprecated/Notice/Warning lines (phpbench 1.2.x +
+          #    symfony/console haven't been ported to PHP 8.4's `?Type`
+          #    deprecation; out of scope to fix here).
+          sed -i \
+            -e '/Warning: Module .* is already loaded/d' \
+            -e '/^PHP Deprecated:/d' \
+            -e '/^PHP Notice:/d' \
+            -e '/^Deprecated:/d' \
+            .phpbench/report.txt
 
           {
             echo "## Benchmark report"
