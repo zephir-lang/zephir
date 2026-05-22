@@ -1,0 +1,20 @@
+{
+    "$schema": "vendor/phpbench/phpbench/phpbench.schema.json",
+    "runner.bootstrap": "tests/Benchmark/bootstrap.php",
+    "runner.path": "tests/Benchmark",
+    "runner.file_pattern": "*Bench.php",
+    "runner.iterations": 5,
+    "runner.revs": 1000,
+    "runner.warmup": 2,
+    "runner.time_unit": "microseconds",
+    "runner.output_mode": "throughput",
+    "storage.xml_storage_path": ".phpbench/storage",
+    "report.generators": {
+        "summary": {
+            "extends": "default"
+        },
+        "delta": {
+            "extends": "default"
+        }
+    }
+}

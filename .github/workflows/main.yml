@@ -237,3 +237,151 @@ jobs:
             !${{ github.workspace }}/ext/x64/Release/
             ${{ github.workspace }}/tests/output/
           retention-days: 7
+
+  benchmark:
+    name: "Benchmark (PR vs ${{ github.base_ref }})"
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      PHP_VERSION: '8.5'
+      BENCH_PHP_FLAGS: '-d extension=ext/modules/stub.so'
+
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v6
+        with:
+          # Need full history so we can switch to the base branch in-place.
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup PHP ${{ env.PHP_VERSION }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ env.PHP_VERSION }}'
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli, zephir_parser-${{ env.ZEPHIR_PARSER_VERSION }}
+          tools: pecl, phpize, php-config
+          coverage: none
+          ini-values: >-
+            variables_order=EGPCS,
+            enable_dl=On,
+            allow_url_fopen=On,
+            error_reporting=-1,
+            memory_limit=1G,
+            date.timezone=UTC
+
+      - name: Resolve base ref SHA
+        id: base
+        run: |
+          base_sha=$(git rev-parse origin/${{ github.base_ref }})
+          echo "sha=$base_sha" >> "$GITHUB_OUTPUT"
+          echo "Base: ${{ github.base_ref }} ($base_sha)"
+          echo "Head: ${{ github.event.pull_request.head.sha }}"
+
+      - name: Build & bench base branch (${{ github.base_ref }})
+        run: |
+          git checkout ${{ steps.base.outputs.sha }}
+          if [ ! -f tests/Benchmark/bootstrap.php ] || [ ! -f phpbench.json ]; then
+            echo "BASE_HAS_BENCH=false" >> "$GITHUB_ENV"
+            echo "Base branch does not yet include the benchmark suite; skipping baseline run."
+            exit 0
+          fi
+          echo "BASE_HAS_BENCH=true" >> "$GITHUB_ENV"
+          composer install --prefer-dist --no-interaction --no-ansi --no-progress
+          php zephir fullclean >/dev/null 2>&1 || true
+          php zephir build 2>&1 | tail -3
+          php ${{ env.BENCH_PHP_FLAGS }} vendor/bin/phpbench run --tag=base --progress=none --no-interaction 2>&1 | tail -5
+          # Preserve the phpbench storage across the upcoming branch switch.
+          if [ -d .phpbench ]; then
+            mkdir -p "$RUNNER_TEMP/phpbench"
+            mv .phpbench "$RUNNER_TEMP/phpbench/storage"
+          fi
+
+      - name: Restore PR head
+        run: |
+          git checkout ${{ github.event.pull_request.head.sha }}
+          if [ -d "$RUNNER_TEMP/phpbench/storage" ]; then
+            mv "$RUNNER_TEMP/phpbench/storage" .phpbench
+          fi
+
+      - name: Build & bench PR head
+        id: bench
+        run: |
+          composer install --prefer-dist --no-interaction --no-ansi --no-progress
+          php zephir fullclean >/dev/null 2>&1 || true
+          php zephir build 2>&1 | tail -3
+
+          mkdir -p .phpbench
+          if [ "$BASE_HAS_BENCH" = "true" ]; then
+            php ${{ env.BENCH_PHP_FLAGS }} vendor/bin/phpbench run \
+              --ref=base \
+              --report=aggregate \
+              --progress=none \
+              --no-interaction \
+              > .phpbench/report.txt 2>&1 || true
+          else
+            php ${{ env.BENCH_PHP_FLAGS }} vendor/bin/phpbench run \
+              --report=aggregate \
+              --progress=none \
+              --no-interaction \
+              > .phpbench/report.txt 2>&1 || true
+          fi
+          # PHPBench may emit a "Module already loaded" warning when the .so is
+          # auto-loaded from php.ini AND via -d extension=. Strip those lines so
+          # the PR comment stays readable.
+          sed -i '/Warning: Module .* is already loaded/d' .phpbench/report.txt
+
+          {
+            echo "## Benchmark report"
+            echo
+            if [ "$BASE_HAS_BENCH" = "true" ]; then
+              echo "Comparison against \`${{ github.base_ref }}\` (\`${{ steps.base.outputs.sha }}\`)."
+              echo "Each row's \`mode\` column shows the PR-branch absolute throughput and the percent delta vs base. Positive deltas on \`Zephir*\` subjects mean the PR is faster; positive deltas on \`Php*\` baseline subjects are noise floor signal."
+            else
+              echo "Base branch \`${{ github.base_ref }}\` does not yet contain the benchmark suite; absolute throughput only."
+            fi
+            echo
+            echo '```'
+            cat .phpbench/report.txt
+            echo '```'
+            echo
+            echo "_PHP ${{ env.PHP_VERSION }} on \`${{ runner.os }}\` (${{ runner.arch }}). Micro-benchmarks are noisy on shared runners (±5-20% per subject); treat any single-digit delta as inconclusive._"
+          } > .phpbench/comment.md
+
+      - name: Upload benchmark artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-report-${{ github.event.pull_request.number }}
+          path: |
+            .phpbench/report.txt
+            .phpbench/comment.md
+          retention-days: 14
+
+      - name: Post or update PR comment
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = fs.readFileSync('.phpbench/comment.md', 'utf8');
+            const marker = '<!-- zephir-bench-report -->';
+            const issue_number = context.payload.pull_request.number;
+            const { owner, repo } = context.repo;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner, repo, issue_number, per_page: 100,
+            });
+            const existing = comments.find(c => c.body && c.body.includes(marker));
+            const finalBody = `${marker}\n${body}`;
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo, comment_id: existing.id, body: finalBody,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number, body: finalBody,
+              });
+            }

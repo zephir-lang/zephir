@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Added
 - Compiler now recognizes the parser-emitted `yield` AST node (bare `yield;`, `yield expr;`, `yield key, value;`) [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+- Added PHPBench-based runtime benchmarks suites under `tests/Benchmark/` [#2541](https://github.com/zephir-lang/zephir/issues/2541)
 
 ### Changed
 - `for k, v in expr` now skips the unreachable branch when the iterand's dynamic type is known [#1878](https://github.com/zephir-lang/zephir/issues/1878)
