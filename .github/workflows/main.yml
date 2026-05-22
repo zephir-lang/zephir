@@ -404,7 +404,7 @@ jobs:
 
       - name: Post or update PR comment
         if: always() && steps.pr.outputs.has_pr == 'true'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         env:
           PR_NUMBER: ${{ steps.pr.outputs.number }}
         with:
