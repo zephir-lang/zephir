@@ -114,6 +114,7 @@
 #include "stub/issue2505extended.zep.h"
 #include "stub/issue2522.zep.h"
 #include "stub/issue2537child.zep.h"
+#include "stub/issue2546.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue820.zep.h"
 #include "stub/issue887.zep.h"
