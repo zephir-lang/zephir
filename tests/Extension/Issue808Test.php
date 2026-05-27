@@ -59,4 +59,26 @@ final class Issue808Test extends TestCase
     {
         $this->assertFalse($this->obj->testDynamicUnsetStringKey());
     }
+
+    /**
+     * Unsetting a property that does not exist on the object must be a
+     * silent no-op: no error, no warning, and all other properties survive.
+     * Matches PHP's own behaviour: unset($obj->nonExistent) is always silent.
+     */
+    public function testDynamicUnsetNonExistentProperty(): void
+    {
+        set_error_handler(static function (int $code, string $message): bool {
+            throw new \ErrorException($message, 0, $code);
+        });
+
+        try {
+            $result = $this->obj->testDynamicUnsetNonExistentProperty('nonExistent');
+        } finally {
+            restore_error_handler();
+        }
+
+        $this->assertObjectHasProperty('keep', $result);
+        $this->assertSame('keep_value', $result->keep);
+        $this->assertObjectNotHasProperty('nonExistent', $result);
+    }
 }

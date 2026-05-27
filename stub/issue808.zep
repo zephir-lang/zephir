@@ -52,4 +52,19 @@ class Issue808
         unset(obj->{"name"});
         return isset(obj->name);
     }
+
+    /**
+     * Unsetting a property that does not exist on the object must be a
+     * silent no-op — no error, no warning — and must leave any other
+     * properties intact. This mirrors PHP's own behaviour:
+     *   unset($obj->nonExistent); // silent
+     */
+    public function testDynamicUnsetNonExistentProperty(var propertyName) -> var
+    {
+        var obj;
+        let obj = new \stdClass();
+        let obj->keep = "keep_value";
+        unset(obj->{propertyName});
+        return obj;
+    }
 }

@@ -120,3 +120,33 @@ PHP_METHOD(Stub_Issue808, testDynamicUnsetStringKey)
 	RETURN_MM_BOOL(zephir_isset_property_value_fast(&obj, _zephir_isset_0));
 }
 
+/**
+ * Unsetting a property that does not exist on the object must be a
+ * silent no-op — no error, no warning — and must leave any other
+ * properties intact. This mirrors PHP's own behaviour:
+ *   unset($obj->nonExistent); // silent
+ */
+PHP_METHOD(Stub_Issue808, testDynamicUnsetNonExistentProperty)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *propertyName, propertyName_sub, obj, _0;
+
+	ZVAL_UNDEF(&propertyName_sub);
+	ZVAL_UNDEF(&obj);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(propertyName)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &propertyName);
+	ZEPHIR_INIT_VAR(&obj);
+	object_init(&obj);
+	ZEPHIR_INIT_VAR(&_0);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_STRING(&_0, "keep_value");
+	zephir_update_property_zval(&obj, ZEND_STRL("keep"), &_0);
+	zephir_unset_property_zval(&obj, propertyName);
+	RETURN_CCTOR(&obj);
+}
+
