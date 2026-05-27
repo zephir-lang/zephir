@@ -15,6 +15,7 @@ namespace Zephir\Statements;
 
 use ReflectionException;
 use Zephir\Branch;
+use Zephir\Code\Printer;
 use Zephir\CompilationContext;
 use Zephir\Detectors\ReadDetector;
 use Zephir\Exception;
@@ -22,7 +23,10 @@ use Zephir\Optimizers\EvalExpression;
 use Zephir\Passes\SkipVariantInit;
 use Zephir\StatementsBlock;
 
+use function explode;
 use function is_object;
+
+use const PHP_EOL;
 
 /**
  * 'If' statement, the same as in PHP/C
@@ -60,10 +64,27 @@ class IfStatement extends StatementAbstract
 
             if (isset($this->statement['elseif_statements'])) {
                 foreach ($this->statement['elseif_statements'] as $key => $statement) {
+                    /*
+                     * Compile the elseif condition into a temporary printer so
+                     * that any preamble code the expression compiler emits
+                     * (e.g. zephir_array_fetch_long for myvar[0]) is captured
+                     * and NOT written directly to the output before the outer
+                     * if-check. The captured preamble is replayed later, inside
+                     * the else-branch that guards it, so it only runs when the
+                     * preceding if/elseif branches were all false.
+                     */
+                    $originalPrinter                     = $compilationContext->codePrinter;
+                    $compilationContext->codePrinter      = new Printer();
+
                     $this->statement['elseif_statements'][$key]['condition'] = $expr->optimize(
                         $statement['expr'],
                         $compilationContext
                     );
+
+                    $this->statement['elseif_statements'][$key]['condition_preamble'] =
+                        $compilationContext->codePrinter->getOutput();
+
+                    $compilationContext->codePrinter = $originalPrinter;
 
                     ++$lastBranchId;
                     $skipVariantInit->setVariablesToSkip($lastBranchId, $expr->getUsedVariables());
@@ -111,16 +132,42 @@ class IfStatement extends StatementAbstract
         }
 
         /**
-         * Compile statements in the 'elseif' block
+         * Compile statements in the 'elseif' block.
+         *
+         * When a condition has a non-empty preamble (side-effect code captured
+         * above), it must run only when no preceding branch was taken. We wrap
+         * it in an explicit else-block: "} else { preamble; if (cond) { ... }".
+         * Without a preamble the original flat "} else if (cond) {" form is kept
+         * so the generated C is unchanged for simple conditions.
          */
+        $nestedElseCount = 0;
+
         if (isset($this->statement['elseif_statements'])) {
             foreach ($this->statement['elseif_statements'] as $statement) {
                 if (!isset($statement['statements'])) {
                     continue;
                 }
 
-                $st = new StatementsBlock($statement['statements']);
-                $compilationContext->codePrinter->output('} else if (' . $statement['condition'] . ') {');
+                $preamble      = $statement['condition_preamble'] ?? '';
+                $elseIfCond    = $statement['condition'];
+
+                if ($preamble !== '') {
+                    $compilationContext->codePrinter->output('} else {');
+                    $compilationContext->codePrinter->increaseLevel();
+                    $nestedElseCount++;
+
+                    foreach (explode(PHP_EOL, rtrim($preamble)) as $line) {
+                        if ($line !== '') {
+                            $compilationContext->codePrinter->output($line);
+                        }
+                    }
+
+                    $compilationContext->codePrinter->output('if (' . $elseIfCond . ') {');
+                } else {
+                    $compilationContext->codePrinter->output('} else if (' . $elseIfCond . ') {');
+                }
+
+                $st     = new StatementsBlock($statement['statements']);
                 $branch = $st->compile($compilationContext, $expr->isUnreachable(), Branch::TYPE_CONDITIONAL_TRUE);
                 $branch->setRelatedStatement($this);
             }
@@ -137,5 +184,14 @@ class IfStatement extends StatementAbstract
         }
 
         $compilationContext->codePrinter->output('}');
+
+        /*
+         * Each preamble-wrapped elseif opened an extra "} else {" block.
+         * Close them now, from innermost to outermost.
+         */
+        for ($i = 0; $i < $nestedElseCount; $i++) {
+            $compilationContext->codePrinter->decreaseLevel();
+            $compilationContext->codePrinter->output('}');
+        }
     }
 }

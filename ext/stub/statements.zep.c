@@ -173,7 +173,6 @@ PHP_METHOD(Stub_Statements, test544Issue)
 	}
 	step = Z_LVAL_P(step_param);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
-	zephir_read_property(&_1, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
 	if (ZEPHIR_GT_LONG(&_0, step)) {
 		zephir_read_property(&_2$$3, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
 		zephir_read_property(&_3$$3, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
@@ -191,18 +190,21 @@ PHP_METHOD(Stub_Statements, test544Issue)
 		zephir_check_call_status();
 		ZEPHIR_CONCAT_VVV(return_value, &_7$$3, &_6$$3, &_11$$3);
 		RETURN_MM();
-	} else if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
-		zephir_read_property(&_12$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_13$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 28, &_12$$4, &_13$$4);
-		zephir_check_call_status();
-		RETURN_MM();
 	} else {
-		zephir_read_property(&_14$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
-		zephir_read_property(&_15$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
-		ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 28, &_14$$5, &_15$$5);
-		zephir_check_call_status();
-		RETURN_MM();
+		zephir_read_property(&_1, this_ptr, ZEND_STRL("totalSteps"), PH_NOISY_CC | PH_READONLY);
+		if (ZEPHIR_IS_LONG_IDENTICAL(&_1, step)) {
+			zephir_read_property(&_12$$4, this_ptr, ZEND_STRL("filledChar"), PH_NOISY_CC | PH_READONLY);
+			zephir_read_property(&_13$$4, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 28, &_12$$4, &_13$$4);
+			zephir_check_call_status();
+			RETURN_MM();
+		} else {
+			zephir_read_property(&_14$$5, this_ptr, ZEND_STRL("unfilledChar"), PH_NOISY_CC | PH_READONLY);
+			zephir_read_property(&_15$$5, this_ptr, ZEND_STRL("width"), PH_NOISY_CC | PH_READONLY);
+			ZEPHIR_RETURN_CALL_FUNCTION("str_repeat", &_8, 28, &_14$$5, &_15$$5);
+			zephir_check_call_status();
+			RETURN_MM();
+		}
 	}
 }
 
