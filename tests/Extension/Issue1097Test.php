@@ -48,14 +48,14 @@ final class Issue1097Test extends TestCase
     {
         // Install a strict error handler so any unexpected notice/warning turns
         // into a test failure.
-        $prev = set_error_handler(static function (int $code, string $message): bool {
+        set_error_handler(static function (int $code, string $message): bool {
             throw new \ErrorException($message, 0, $code);
         });
 
         try {
             $result = $this->obj->testStringOrArrayOfString('hello');
         } finally {
-            set_error_handler($prev);
+            restore_error_handler();
         }
 
         $this->assertSame('string', $result);
@@ -84,14 +84,14 @@ final class Issue1097Test extends TestCase
         // Suppress the expected PHP notice for scalar[0] access so we can
         // assert the return value without PHPUnit converting it to an error.
         $result = null;
-        $prev   = set_error_handler(static function () {
+        set_error_handler(static function () {
             return true; // absorb the "Cannot use a scalar value as an array" notice
         });
 
         try {
             $result = $this->obj->testStringOrArrayOfString(42);
         } finally {
-            set_error_handler($prev);
+            restore_error_handler();
         }
 
         $this->assertSame('other', $result);
@@ -127,14 +127,14 @@ final class Issue1097Test extends TestCase
      */
     public function testMultipleElseifStringInput(): void
     {
-        $prev = set_error_handler(static function (int $code, string $message): bool {
+        set_error_handler(static function (int $code, string $message): bool {
             throw new \ErrorException($message, 0, $code);
         });
 
         try {
             $result = $this->obj->testMultipleElseif('hello');
         } finally {
-            set_error_handler($prev);
+            restore_error_handler();
         }
 
         $this->assertSame('string', $result);
@@ -172,14 +172,14 @@ final class Issue1097Test extends TestCase
     public function testMultipleElseifIntegerFallsThrough(): void
     {
         $result = null;
-        $prev   = set_error_handler(static function () {
+        set_error_handler(static function () {
             return true;
         });
 
         try {
             $result = $this->obj->testMultipleElseif(99);
         } finally {
-            set_error_handler($prev);
+            restore_error_handler();
         }
 
         $this->assertSame('other', $result);
