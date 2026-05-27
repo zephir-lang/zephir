@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - `for k, v in expr` now skips the unreachable branch when the iterand's dynamic type is known [#1878](https://github.com/zephir-lang/zephir/issues/1878)
 
 ### Fixed
+- Fixed `continue` inside `for ... in` loops over PHP `Iterator`/`Traversable` objects producing an infinite loop [#2546](https://github.com/zephir-lang/zephir/issues/2546)
 - Fixed cross-class chained `<static>` (and `<self>`/`<parent>`) return-type resolution. The same-class case landed in #2537 by substituting the lexical class for the reserved keyword. The cross-class case — `other->returnsStatic()->method()` where `other` is a local variable typed as a different class — was still resolved against the call site's lexical class, so the chained method lookup ran on the wrong definition and the build aborted with `Class '<EnclosingClass>' does not implement method: '<method>'`. `MethodCall.php` already resolves the receiver's `$classDefinition` earlier in the function (from `$variableVariable->getClassTypes()`); the substitution now uses that definition, which is identical to `$compilationContext->classDefinition` for the `this` branch and preserves existing behavior there. [#2505](https://github.com/zephir-lang/zephir/issues/2505)
 
 ### Documentation

@@ -49,6 +49,28 @@ class Bench
     }
 
     /**
+     * For-over-Iterator with `continue`, the exact path fixed in issue #2546.
+     * The first-iteration guard (zend_bool flag) introduced by the fix adds one
+     * extra conditional per iteration; this subject quantifies that overhead
+     * against the plain-iterator path and against pure-PHP foreach+continue.
+     * Skips every even element (5 of 10 trigger continue).
+     */
+    public function forOverIteratorWithContinue() -> long
+    {
+        var v, iter;
+        long sum = 0, iv = 0;
+        let iter = new \ArrayIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        for v in iter {
+            let iv = (long) v;
+            if iv % 2 == 0 {
+                continue;
+            }
+            let sum += iv;
+        }
+        return sum;
+    }
+
+    /**
      * Object property read in a hot loop. Exercises zephir_read_property.
      */
     public function propertyReadLoop(long n) -> long

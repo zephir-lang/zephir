@@ -18,6 +18,13 @@
         },
         "delta": {
             "extends": "default"
+        },
+        "aggregate": {
+            "generator": "expression",
+            "cols": ["benchmark", "subject", "set", "revs", "its", "mem_peak", "mode", "rstdev"],
+            "baseline_expressions": {
+                "mem_peak": "(coalesce(first(baseline_mem_peak), first(result_mem_peak)) as memory) ~ \" \" ~ percent_diff(coalesce(first(baseline_mem_peak), first(result_mem_peak)), first(result_mem_peak))"
+            }
         }
     }
 }

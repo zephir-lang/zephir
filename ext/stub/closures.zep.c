@@ -186,7 +186,7 @@ PHP_METHOD(Stub_Closures, issue1036Call)
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_function"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("_argument"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 33, &_0, &_1);
+	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 35, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -359,7 +359,7 @@ PHP_METHOD(Stub_Closures, issue2321CallPrivateCallback)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 34, &value_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 36, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -387,7 +387,7 @@ PHP_METHOD(Stub_Closures, issue2321filterQuery)
 	zephir_create_closure_ex(&_0, this_ptr, stub_19__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 35, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 37, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -409,7 +409,7 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
 	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 248);
-	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 36, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 38, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -444,7 +444,7 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedCallback)
 	zephir_create_closure_ex(&_0, this_ptr, stub_20__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/[a-z]/");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 35, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 37, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }

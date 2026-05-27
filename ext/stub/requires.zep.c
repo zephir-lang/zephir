@@ -87,7 +87,7 @@ PHP_METHOD(Stub_Requires, requireExternal3)
 		zephir_check_call_status();
 	}
 
-	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 93, path, this_ptr);
+	ZEPHIR_CALL_METHOD(NULL, &external3, "req", NULL, 95, path, this_ptr);
 	zephir_check_call_status();
 	RETURN_MM_MEMBER(getThis(), "content");
 }
@@ -107,10 +107,11 @@ PHP_METHOD(Stub_Requires, setContent)
 
 PHP_METHOD(Stub_Requires, renderTemplate)
 {
+	zend_bool _6$$3;
 	zend_ulong _2$$3;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval templatePath_zv, *params, params_sub, _0, key, value, _7, *_1$$3, _5$$3, _4$$4, _6$$5;
+	zval templatePath_zv, *params, params_sub, _0, key, value, _8, *_1$$3, _5$$3, _4$$4, _7$$5;
 	zend_string *templatePath = NULL, *_3$$3;
 
 	ZVAL_UNDEF(&templatePath_zv);
@@ -118,10 +119,10 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 	ZVAL_UNDEF(&_0);
 	ZVAL_UNDEF(&key);
 	ZVAL_UNDEF(&value);
-	ZVAL_UNDEF(&_7);
+	ZVAL_UNDEF(&_8);
 	ZVAL_UNDEF(&_5$$3);
 	ZVAL_UNDEF(&_4$$4);
-	ZVAL_UNDEF(&_6$$5);
+	ZVAL_UNDEF(&_7$$5);
 	ZEND_PARSE_PARAMETERS_START(2, 2)
 		Z_PARAM_STR(templatePath)
 		Z_PARAM_ZVAL(params)
@@ -155,7 +156,14 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 		} else {
 			ZEPHIR_CALL_METHOD(NULL, params, "rewind", NULL, 0);
 			zephir_check_call_status();
+			_6$$3 = 1;
 			while (1) {
+				if (_6$$3) {
+					_6$$3 = 0;
+				} else {
+					ZEPHIR_CALL_METHOD(NULL, params, "next", NULL, 0);
+					zephir_check_call_status();
+				}
 				ZEPHIR_CALL_METHOD(&_5$$3, params, "valid", NULL, 0);
 				zephir_check_call_status();
 				if (!zend_is_true(&_5$$3)) {
@@ -165,22 +173,20 @@ PHP_METHOD(Stub_Requires, renderTemplate)
 				zephir_check_call_status();
 				ZEPHIR_CALL_METHOD(&value, params, "current", NULL, 0);
 				zephir_check_call_status();
-					ZEPHIR_CPY_WRT(&_6$$5, &value);
-					if (zephir_set_symbol(&key, &_6$$5) == FAILURE) {
+					ZEPHIR_CPY_WRT(&_7$$5, &value);
+					if (zephir_set_symbol(&key, &_7$$5) == FAILURE) {
 						return;
 					}
-				ZEPHIR_CALL_METHOD(NULL, params, "next", NULL, 0);
-				zephir_check_call_status();
 			}
 		}
 		ZEPHIR_INIT_NVAR(&value);
 		ZEPHIR_INIT_NVAR(&key);
 	}
-	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_7);
-	if (zephir_require_zval_ret(&_7, &templatePath_zv) == FAILURE) {
+	ZEPHIR_OBSERVE_OR_NULLIFY_PPZV(&_8);
+	if (zephir_require_zval_ret(&_8, &templatePath_zv) == FAILURE) {
 		RETURN_MM_NULL();
 	}
-	RETURN_CCTOR(&_7);
+	RETURN_CCTOR(&_8);
 }
 
 PHP_METHOD(Stub_Requires, requireOnce)

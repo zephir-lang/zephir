@@ -1200,6 +1200,17 @@ class Backend
 
         if ($mayBeObject) {
             $tempValidVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+            /*
+             * A first-iteration flag is used to move next() to the TOP of the while(1)
+             * body so that a C `continue` in user code correctly advances the iterator.
+             *
+             * Without this, `continue` jumps to the while(1) condition, skipping the
+             * next() call that was at the bottom of the loop body, producing an infinite
+             * loop on the first element that triggered continue.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2546
+             */
+            $firstIterFlag = $compilationContext->symbolTable->addTemp('bool', $compilationContext);
 
             if ($emitTypeWrapper) {
                 $codePrinter->output('} else {');
@@ -1210,9 +1221,24 @@ class Backend
                 'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", NULL, 0);'
             );
             $codePrinter->output('zephir_check_call_status();');
+            $codePrinter->output($firstIterFlag->getName() . ' = 1;');
 
             $codePrinter->output('while (1) {');
             $codePrinter->increaseLevel();
+
+            // next() lives here so that `continue` in the user body reaches it.
+            $codePrinter->output('if (' . $firstIterFlag->getName() . ') {');
+            $codePrinter->increaseLevel();
+            $codePrinter->output($firstIterFlag->getName() . ' = 0;');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('} else {');
+            $codePrinter->increaseLevel();
+            $codePrinter->output(
+                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
+            );
+            $codePrinter->output('zephir_check_call_status();');
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
 
             $codePrinter->output(
                 'ZEPHIR_CALL_METHOD(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
@@ -1252,11 +1278,6 @@ class Backend
                 $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
                 $statementBlock->compile($compilationContext);
             }
-
-            $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
-            );
-            $codePrinter->output('zephir_check_call_status();');
 
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');

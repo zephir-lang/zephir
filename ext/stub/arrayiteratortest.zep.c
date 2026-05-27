@@ -27,6 +27,7 @@ ZEPHIR_INIT_CLASS(Stub_ArrayIteratorTest)
 
 PHP_METHOD(Stub_ArrayIteratorTest, test)
 {
+	zend_bool _1;
 	zval arr, k, v, _0;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
@@ -45,7 +46,14 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 	zephir_is_iterable(&arr, 0, "stub/arrayiteratortest.zep", 12);
 	ZEPHIR_CALL_METHOD(NULL, &arr, "rewind", NULL, 0);
 	zephir_check_call_status();
+	_1 = 1;
 	while (1) {
+		if (_1) {
+			_1 = 0;
+		} else {
+			ZEPHIR_CALL_METHOD(NULL, &arr, "next", NULL, 0);
+			zephir_check_call_status();
+		}
 		ZEPHIR_CALL_METHOD(&_0, &arr, "valid", NULL, 0);
 		zephir_check_call_status();
 		if (!zend_is_true(&_0)) {
@@ -57,8 +65,6 @@ PHP_METHOD(Stub_ArrayIteratorTest, test)
 		zephir_check_call_status();
 			ZEPHIR_CONCAT_VV(return_value, &k, &v);
 			RETURN_MM();
-		ZEPHIR_CALL_METHOD(NULL, &arr, "next", NULL, 0);
-		zephir_check_call_status();
 	}
 	ZEPHIR_INIT_NVAR(&v);
 	ZEPHIR_INIT_NVAR(&k);

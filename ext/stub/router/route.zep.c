@@ -701,6 +701,7 @@ PHP_METHOD(Stub_Router_Route, getPaths)
  */
 PHP_METHOD(Stub_Router_Route, getReversedPaths)
 {
+	zend_bool _5;
 	zend_string *_3;
 	zend_ulong _2;
 	zval reversed, path, position, _0, *_1, _4;
@@ -736,7 +737,14 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
 		zephir_check_call_status();
+		_5 = 1;
 		while (1) {
+			if (_5) {
+				_5 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
 			ZEPHIR_CALL_METHOD(&_4, &_0, "valid", NULL, 0);
 			zephir_check_call_status();
 			if (!zend_is_true(&_4)) {
@@ -747,8 +755,6 @@ PHP_METHOD(Stub_Router_Route, getReversedPaths)
 			ZEPHIR_CALL_METHOD(&position, &_0, "current", NULL, 0);
 			zephir_check_call_status();
 				zephir_array_update_zval(&reversed, &position, &path, PH_COPY | PH_SEPARATE);
-			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
-			zephir_check_call_status();
 		}
 	}
 	ZEPHIR_INIT_NVAR(&position);
