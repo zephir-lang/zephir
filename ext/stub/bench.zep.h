@@ -6,6 +6,7 @@ ZEPHIR_INIT_CLASS(Stub_Bench);
 PHP_METHOD(Stub_Bench, __construct);
 PHP_METHOD(Stub_Bench, forOverArray);
 PHP_METHOD(Stub_Bench, forOverIterator);
+PHP_METHOD(Stub_Bench, forOverIteratorWithContinue);
 PHP_METHOD(Stub_Bench, propertyReadLoop);
 PHP_METHOD(Stub_Bench, arrayFetchStringLoop);
 PHP_METHOD(Stub_Bench, methodDispatchLoop);
@@ -21,6 +22,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_foroverarray, 0, 1, I
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_foroveriterator, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_foroveriteratorwithcontinue, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_propertyreadloop, 0, 1, IS_LONG, 0)
@@ -52,6 +56,7 @@ ZEPHIR_INIT_FUNCS(stub_bench_method_entry) {
 PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_Bench, forOverArray, arginfo_stub_bench_foroverarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, forOverIterator, arginfo_stub_bench_foroveriterator, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, forOverIteratorWithContinue, arginfo_stub_bench_foroveriteratorwithcontinue, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, propertyReadLoop, arginfo_stub_bench_propertyreadloop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, arrayFetchStringLoop, arginfo_stub_bench_arrayfetchstringloop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, methodDispatchLoop, arginfo_stub_bench_methoddispatchloop, ZEND_ACC_PUBLIC)

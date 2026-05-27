@@ -46,7 +46,7 @@ final class Issue2546Test extends TestCase
 
     /**
      * `continue` on the *first* element is the canonical infinite-loop trigger
-     * from the bug report — the iterator must advance past element 1.
+     * from the bug report; the iterator must advance past element 1.
      */
     public function testContinueOnFirstElementAdvancesIterator(): void
     {
@@ -111,8 +111,8 @@ final class Issue2546Test extends TestCase
     }
 
     /**
-     * Key+value: skip the first key — exercises the continue path from the very
-     * first element of the key-value object branch.
+     * Key+value iteration, skipping the first key. Exercises the continue path
+     * from the very first element of the key-value object branch.
      */
     public function testKeyValueContinueOnFirstKey(): void
     {

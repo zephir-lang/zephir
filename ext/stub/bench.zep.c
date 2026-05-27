@@ -201,6 +201,96 @@ PHP_METHOD(Stub_Bench, forOverIterator)
 }
 
 /**
+ * For-over-Iterator with `continue`, the exact path fixed in issue #2546.
+ * The first-iteration guard (zend_bool flag) introduced by the fix adds one
+ * extra conditional per iteration; this subject quantifies that overhead
+ * against the plain-iterator path and against pure-PHP foreach+continue.
+ * Skips every even element (5 of 10 trigger continue).
+ */
+PHP_METHOD(Stub_Bench, forOverIteratorWithContinue)
+{
+	zend_bool _3;
+	zval _0;
+	long sum, iv;
+	zval v, iter, _1, _2;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&iter);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	sum = 0;
+	iv = 0;
+	ZEPHIR_INIT_VAR(&iter);
+	object_init_ex(&iter, spl_ce_ArrayIterator);
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&_0, 10, 0);
+	ZEPHIR_INIT_VAR(&_1);
+	ZVAL_LONG(&_1, 1);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 2);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 3);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 4);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 5);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 6);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 7);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 8);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 9);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_INIT_NVAR(&_1);
+	ZVAL_LONG(&_1, 10);
+	zephir_array_fast_append(&_0, &_1);
+	ZEPHIR_CALL_METHOD(NULL, &iter, "__construct", NULL, 8, &_0);
+	zephir_check_call_status();
+	zephir_is_iterable(&iter, 0, "stub/bench.zep", 70);
+	ZEPHIR_CALL_METHOD(NULL, &iter, "rewind", NULL, 0);
+	zephir_check_call_status();
+	_3 = 1;
+	while (1) {
+		if (_3) {
+			_3 = 0;
+		} else {
+			ZEPHIR_CALL_METHOD(NULL, &iter, "next", NULL, 0);
+			zephir_check_call_status();
+		}
+		ZEPHIR_CALL_METHOD(&_2, &iter, "valid", NULL, 0);
+		zephir_check_call_status();
+		if (!zend_is_true(&_2)) {
+			break;
+		}
+		ZEPHIR_CALL_METHOD(&v, &iter, "current", NULL, 0);
+		zephir_check_call_status();
+			iv = zephir_get_intval(&v);
+			if (zephir_safe_mod_long_long(iv, 2) == 0) {
+				continue;
+			}
+			sum += iv;
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	RETURN_MM_LONG(sum);
+}
+
+/**
  * Object property read in a hot loop. Exercises zephir_read_property.
  */
 PHP_METHOD(Stub_Bench, propertyReadLoop)
@@ -260,9 +350,9 @@ PHP_METHOD(Stub_Bench, arrayFetchStringLoop)
 			break;
 		}
 		ZEPHIR_OBS_NVAR(&_0$$3);
-		zephir_array_fetch_string(&_0$$3, &arr, SL("a"), PH_NOISY, "stub/bench.zep", 72);
+		zephir_array_fetch_string(&_0$$3, &arr, SL("a"), PH_NOISY, "stub/bench.zep", 94);
 		ZEPHIR_OBS_NVAR(&_1$$3);
-		zephir_array_fetch_string(&_1$$3, &arr, SL("b"), PH_NOISY, "stub/bench.zep", 72);
+		zephir_array_fetch_string(&_1$$3, &arr, SL("b"), PH_NOISY, "stub/bench.zep", 94);
 		sum += (zephir_get_intval(&_0$$3) + zephir_get_intval(&_1$$3));
 		i++;
 	}

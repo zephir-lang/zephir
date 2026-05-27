@@ -23,7 +23,7 @@
  * Regression coverage for https://github.com/zephir-lang/zephir/issues/2546
  *
  * `continue` inside a `for ... in` loop over a PHP Iterator/Traversable was
- * not calling next() on the iterator — the generated while(1) placed next()
+ * not calling next() on the iterator. The generated while(1) placed next()
  * after the user body, so C `continue` jumped past it, producing an infinite
  * loop on any element that triggered the continue.
  */

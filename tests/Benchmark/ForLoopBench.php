@@ -70,4 +70,27 @@ final class ForLoopBench
             $sum += (int) $v;
         }
     }
+
+    /**
+     * Zephir `for...in` over an Iterator with `continue` (code path repaired
+     * by issue #2546). The first-iteration guard (zend_bool flag)
+     * adds one branch per iteration; this shows its overhead versus
+     * benchZephirForOverIterator and the PHP baseline below.
+     */
+    public function benchZephirForOverIteratorWithContinue(): void
+    {
+        $this->stub->forOverIteratorWithContinue();
+    }
+
+    public function benchPhpForOverIteratorWithContinue(): void
+    {
+        $sum = 0;
+        $iter = new ArrayIterator([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        foreach ($iter as $v) {
+            if ($v % 2 === 0) {
+                continue;
+            }
+            $sum += (int) $v;
+        }
+    }
 }
