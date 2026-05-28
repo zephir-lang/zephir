@@ -65,7 +65,7 @@ class UnsetStatement extends StatementAbstract
                 break;
 
             case 'property-access':
-            case 'property-dinamic-access':
+            case 'property-string-access':
                 $expr = new Expression($expression['left']);
                 $expr->setReadOnly(true);
                 $exprVar      = $expr->compile($compilationContext);
@@ -80,6 +80,40 @@ class UnsetStatement extends StatementAbstract
                 $compilationContext->codePrinter->output(
                     'zephir_unset_property(' . $variableCode . ', "' . $expression['right']['value'] . '");'
                 );
+
+                return;
+
+            case 'property-dynamic-access':
+                $expr = new Expression($expression['left']);
+                $expr->setReadOnly(true);
+                $exprVar      = $expr->compile($compilationContext);
+                $variable     = $compilationContext->symbolTable->getVariableForWrite(
+                    $exprVar->getCode(),
+                    $compilationContext,
+                    $this->statement
+                );
+                $variableCode = $compilationContext->backend->getVariableCode($variable);
+
+                $compilationContext->headersManager->add('kernel/object');
+
+                if ('string' === $expression['right']['type']) {
+                    $compilationContext->codePrinter->output(
+                        'zephir_unset_property(' . $variableCode . ', "' . $expression['right']['value'] . '");'
+                    );
+                } else {
+                    $propExpr     = new Expression($expression['right']);
+                    $propExpr->setReadOnly(true);
+                    $propCompiled = $propExpr->compile($compilationContext);
+                    $propVariable = $compilationContext->symbolTable->getVariableForRead(
+                        $propCompiled->getCode(),
+                        $compilationContext,
+                        $this->statement
+                    );
+                    $propCode = $compilationContext->backend->getVariableCode($propVariable);
+                    $compilationContext->codePrinter->output(
+                        'zephir_unset_property_zval(' . $variableCode . ', ' . $propCode . ');'
+                    );
+                }
 
                 return;
 
