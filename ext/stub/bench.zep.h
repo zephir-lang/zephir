@@ -13,6 +13,11 @@ PHP_METHOD(Stub_Bench, methodDispatchLoop);
 PHP_METHOD(Stub_Bench, returnConst);
 PHP_METHOD(Stub_Bench, stringConcatLoop);
 PHP_METHOD(Stub_Bench, newInstanceLoop);
+PHP_METHOD(Stub_Bench, variadicSum);
+PHP_METHOD(Stub_Bench, variadicSumNarrowLoop);
+PHP_METHOD(Stub_Bench, variadicSumWideLoop);
+PHP_METHOD(Stub_Bench, funcGetArgsSum);
+PHP_METHOD(Stub_Bench, funcGetArgsSumLoop);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -52,6 +57,30 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_newinstanceloop, 0, 1
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_variadicsum, 0, 0, IS_LONG, 0)
+	ZEND_ARG_VARIADIC_INFO(0, numbers)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_variadicsumnarrowloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_variadicsumwideloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_funcgetargssum, 0, 5, IS_LONG, 0)
+	ZEND_ARG_INFO(0, a)
+	ZEND_ARG_INFO(0, b)
+	ZEND_ARG_INFO(0, c)
+	ZEND_ARG_INFO(0, d)
+	ZEND_ARG_INFO(0, e)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_funcgetargssumloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_bench_method_entry) {
 PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_Bench, forOverArray, arginfo_stub_bench_foroverarray, ZEND_ACC_PUBLIC)
@@ -63,5 +92,10 @@ PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|
 	PHP_ME(Stub_Bench, returnConst, arginfo_stub_bench_returnconst, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, stringConcatLoop, arginfo_stub_bench_stringconcatloop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, newInstanceLoop, arginfo_stub_bench_newinstanceloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, variadicSum, arginfo_stub_bench_variadicsum, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, variadicSumNarrowLoop, arginfo_stub_bench_variadicsumnarrowloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, variadicSumWideLoop, arginfo_stub_bench_variadicsumwideloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, funcGetArgsSum, arginfo_stub_bench_funcgetargssum, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, funcGetArgsSumLoop, arginfo_stub_bench_funcgetargssumloop, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

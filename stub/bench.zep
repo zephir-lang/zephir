@@ -144,4 +144,72 @@ class Bench
         }
         return sum;
     }
+
+    /**
+     * Variadic callee (issue #2025). Sums every trailing argument, exercising
+     * the zephir_get_args_from() collection emitted for `...` parameters.
+     */
+    public function variadicSum(...numbers) -> long
+    {
+        var v;
+        long sum = 0;
+        for v in numbers {
+            let sum += (long) v;
+        }
+        return sum;
+    }
+
+    /**
+     * Hot loop calling the variadic method with a 5-argument tail. Measures
+     * the per-call cost of collecting the trailing arguments into an array.
+     */
+    public function variadicSumNarrowLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += this->variadicSum(1, 2, 3, 4, 5);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * Same as variadicSumNarrowLoop but with a 15-argument tail, so the report
+     * shows how the collection cost scales with the number of variadic args.
+     */
+    public function variadicSumWideLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += this->variadicSum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+            let i++;
+        }
+        return sum;
+    }
+
+    /**
+     * The pre-variadic idiom that `...` replaces: a fixed-arity method reading
+     * its arguments through func_get_args(). Paired with variadicSum so the
+     * report contrasts the `...` operator against the old workaround.
+     */
+    public function funcGetArgsSum(a, b, c, d, e) -> long
+    {
+        var args, v;
+        long sum = 0;
+        let args = func_get_args();
+        for v in args {
+            let sum += (long) v;
+        }
+        return sum;
+    }
+
+    public function funcGetArgsSumLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += this->funcGetArgsSum(1, 2, 3, 4, 5);
+            let i++;
+        }
+        return sum;
+    }
 }
