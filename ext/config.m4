@@ -240,6 +240,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/unknownclass.zep.c
 	stub/unsettest.zep.c
 	stub/usetest.zep.c
+	stub/variadic.zep.c
 	stub/vars.zep.c
 	stub/0__closure.zep.c
 	stub/1__closure.zep.c

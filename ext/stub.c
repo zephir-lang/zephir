@@ -284,6 +284,7 @@ zend_class_entry *stub_types_obj_ce;
 zend_class_entry *stub_unknownclass_ce;
 zend_class_entry *stub_unsettest_ce;
 zend_class_entry *stub_usetest_ce;
+zend_class_entry *stub_variadic_ce;
 zend_class_entry *stub_vars_ce;
 
 ZEND_DECLARE_MODULE_GLOBALS(stub)
@@ -536,6 +537,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_UnknownClass);
 	ZEPHIR_INIT(Stub_Unsettest);
 	ZEPHIR_INIT(Stub_UseTest);
+	ZEPHIR_INIT(Stub_Variadic);
 	ZEPHIR_INIT(Stub_Vars);
 	ZEPHIR_INIT(stub_0__closure);
 	ZEPHIR_INIT(stub_10__closure);
@@ -660,7 +662,7 @@ static PHP_MINFO_FUNCTION(stub)
 		php_info_print_table_start();
 	php_info_print_table_header(2, "Test Extension support", "Value");
 	php_info_print_table_row(2, "Lifecycle hooks", "PHP provides several lifecycle events, which extensions can use to perform common initialization or shutdown tasks.");
-	php_info_print_table_row(2, "Static Analysis", "Test extensions&#039; compiler provides static analysis of the compiled code.");
+	php_info_print_table_row(2, "Static Analysis", "Test extensions' compiler provides static analysis of the compiled code.");
 	php_info_print_table_end();
 	php_info_print_table_start();
 	php_info_print_table_header(2, "Test variable", "Value");
@@ -716,6 +718,11 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_test_call_object_hint, 0,
 	ZEND_ARG_OBJ_INFO(0, a, Stub\\Oo\\PropertyAccess, 0)
 ZEND_END_ARG_INFO()
 
+PHP_FUNCTION(f_Stub_variadicSum);
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_f_stub_variadicsum, 0, 0, IS_LONG, 0)
+	ZEND_ARG_VARIADIC_INFO(0, numbers)
+ZEND_END_ARG_INFO()
+
 
 zend_function_entry php_stub_functions[] = {
 	ZEND_NAMED_FE(zephir_global_method_test, ZEND_FN(g_stub_zephir_global_method_test), arginfo_g_stub_zephir_global_method_test)
@@ -724,6 +731,7 @@ ZEND_NS_NAMED_FE("Stub", zephir_namespaced_method_test, ZEND_FN(f_Stub_zephir_na
 ZEND_NS_NAMED_FE("Stub", test_call_relative_object_hint, ZEND_FN(f_Stub_test_call_relative_object_hint), arginfo_f_stub_test_call_relative_object_hint)
 ZEND_NS_NAMED_FE("Stub", zephir_namespaced_method_with_type_casting, ZEND_FN(f_Stub_zephir_namespaced_method_with_type_casting), arginfo_f_stub_zephir_namespaced_method_with_type_casting)
 ZEND_NS_NAMED_FE("Stub", test_call_object_hint, ZEND_FN(f_Stub_test_call_object_hint), arginfo_f_stub_test_call_object_hint)
+ZEND_NS_NAMED_FE("Stub", variadicSum, ZEND_FN(f_Stub_variadicSum), arginfo_f_stub_variadicsum)
 ZEND_FE_END
 
 };
