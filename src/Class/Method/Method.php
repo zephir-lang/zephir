@@ -2109,6 +2109,16 @@ class Method
     }
 
     /**
+     * Whether the method declares a variadic parameter (e.g. `...rest`) and
+     * therefore accepts an unbounded number of trailing arguments.
+     */
+    public function isVariadic(): bool
+    {
+        return $this->parameters instanceof Parameters
+            && $this->parameters->hasVariadicParameter();
+    }
+
+    /**
      * Returns the number of required parameters the method has.
      */
     public function getNumberOfRequiredParameters(): int
