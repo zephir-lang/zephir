@@ -976,6 +976,25 @@ class Method
             foreach ($this->parameters->getParameters() as $parameter) {
                 $symbolParam = null;
 
+                /**
+                 * Variadic parameter: it is not fetched from the call frame
+                 * like a normal parameter. Instead it is a local array that we
+                 * fill with the trailing arguments. Register it as a plain zval
+                 * variable and skip the regular parameter wiring.
+                 */
+                if (!empty($parameter['variadic'])) {
+                    $symbol = $symbolTable->addVariable('variable', $parameter['name'], $compilationContext);
+                    $symbol->setMustInitNull(true);
+                    $symbol->setIsExternal(true);
+                    $symbol->setIsInitialized(true, $compilationContext);
+                    $symbol->setDynamicTypes('array');
+                    $symbol->setOriginal($parameter);
+                    $symbol->increaseUses();
+                    $symbolTable->mustGrownStack(true);
+                    $compilationContext->headersManager->add('kernel/memory');
+                    continue;
+                }
+
                 if (isset($parameter['data-type'])) {
                     switch ($parameter['data-type']) {
                         case 'object':
@@ -1235,8 +1254,12 @@ class Method
              * - No native: use zephir_fetch_params as before.
              */
             $nativeStringCount = 0;
-            $totalParamCount = count($this->parameters->getParameters());
+            $totalParamCount = 0;
             foreach ($this->parameters->getParameters() as $parameter) {
+                if (!empty($parameter['variadic'])) {
+                    continue;
+                }
+                $totalParamCount++;
                 $name = $parameter['name'];
                 $variable = $compilationContext->symbolTable->getVariable($name);
                 if ($variable && $variable->isNativeString()) {
@@ -1254,6 +1277,9 @@ class Method
                 $params = [];
                 $allParams = $this->parameters->getParameters();
                 foreach ($allParams as $index => $parameter) {
+                    if (!empty($parameter['variadic'])) {
+                        continue;
+                    }
                     $position = $index + 1; // 1-based
                     $pName = $parameter['name'];
                     $pVariable = $compilationContext->symbolTable->getVariable($pName);
@@ -1294,6 +1320,9 @@ class Method
                 }
 
                 foreach ($this->parameters->getParameters() as $parameter) {
+                    if (!empty($parameter['variadic'])) {
+                        continue;
+                    }
                     $dataType = $parameter['data-type'] ?? 'variable';
 
                     switch ($dataType) {
@@ -1324,6 +1353,9 @@ class Method
              * engine level, making the ! modifier redundant.
              */
             foreach ($this->parameters->getParameters() as $parameter) {
+                if (!empty($parameter['variadic'])) {
+                    continue;
+                }
                 $paramMandatory = $parameter['mandatory'] ?? 0;
                 $paramDataType  = $this->getParamDataType($parameter);
                 if ($paramMandatory && $paramDataType === 'string') {
@@ -1452,6 +1484,21 @@ class Method
                  */
                 if (!empty($perParamFetchCode)) {
                     $code .= $perParamFetchCode;
+                } elseif ($this->parameters->hasVariadicParameter() && !empty($params)) {
+                    /**
+                     * Fetch only the fixed (leading) parameters; the variadic
+                     * fetch tolerates calls with more arguments than declared.
+                     */
+                    $compilationContext->headersManager->add('kernel/memory');
+                    $code .= "\t"
+                        . 'zephir_fetch_params_variadic(1, '
+                        . $numberRequiredParams
+                        . ', '
+                        . $numberOptionalParams
+                        . ', '
+                        . implode(', ', $params)
+                        . ');'
+                        . PHP_EOL;
                 } elseif (!empty($params)) {
                     $compilationContext->headersManager->add('kernel/memory');
                     if ($symbolTable->getMustGrownStack()) {
@@ -1494,6 +1541,26 @@ class Method
         }
 
         $code .= $initCode . $initVarCode;
+
+        /**
+         * Populate the variadic parameter with the trailing arguments.
+         */
+        if ($this->parameters instanceof Parameters && $this->parameters->hasVariadicParameter()) {
+            $variadicParameter = $this->parameters->getVariadicParameter();
+            $variadicName      = $variadicParameter['name'];
+            $fixedCount        = 0;
+            foreach ($this->parameters->getParameters() as $parameter) {
+                if (empty($parameter['variadic'])) {
+                    $fixedCount++;
+                }
+            }
+
+            $compilationContext->headersManager->add('kernel/memory');
+            $compilationContext->headersManager->add('kernel/main');
+            $code .= "\t" . 'ZEPHIR_INIT_VAR(&' . $variadicName . ');' . PHP_EOL;
+            $code .= "\t" . 'zephir_get_args_from(&' . $variadicName . ', ' . $fixedCount . ');' . PHP_EOL;
+        }
+
         $codePrinter->preOutput($code);
 
         $compilationContext->headersManager->add('kernel/object');
@@ -1658,11 +1725,15 @@ class Method
                 $tempCodePrinter->output("\t" . 'bool is_null_true = 1;');
             }
 
+            $maxParameters = $this->parameters->hasVariadicParameter()
+                ? '-1'
+                : (string) $this->parameters->count();
+
             $tempCodePrinter->output(
                 sprintf(
-                    "\t" . 'ZEND_PARSE_PARAMETERS_START(%d, %d)',
+                    "\t" . 'ZEND_PARSE_PARAMETERS_START(%d, %s)',
                     $this->parameters->countRequiredParameters(),
-                    $this->parameters->count()
+                    $maxParameters
                 )
             );
 
@@ -2038,6 +2109,16 @@ class Method
     }
 
     /**
+     * Whether the method declares a variadic parameter (e.g. `...rest`) and
+     * therefore accepts an unbounded number of trailing arguments.
+     */
+    public function isVariadic(): bool
+    {
+        return $this->parameters instanceof Parameters
+            && $this->parameters->hasVariadicParameter();
+    }
+
+    /**
      * Returns the number of required parameters the method has.
      */
     public function getNumberOfRequiredParameters(): int
@@ -2048,6 +2129,9 @@ class Method
 
         $required = 0;
         foreach ($this->parameters->getParameters() as $parameter) {
+            if (!empty($parameter['variadic'])) {
+                continue;
+            }
             if (!isset($parameter['default'])) {
                 ++$required;
             }

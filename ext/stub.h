@@ -235,6 +235,7 @@
 #include "stub/unknownclass.zep.h"
 #include "stub/unsettest.zep.h"
 #include "stub/usetest.zep.h"
+#include "stub/variadic.zep.h"
 #include "stub/vars.zep.h"
 #include "stub/0__closure.zep.h"
 #include "stub/1__closure.zep.h"

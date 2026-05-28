@@ -197,6 +197,11 @@ class ArgInfoDefinition
         $flag = $this->richFormat ? '1' : '0';
 
         foreach ($this->parameters->getParameters() as $parameter) {
+            if (!empty($parameter['variadic'])) {
+                $this->emitVariadicArgInfo($parameter);
+                continue;
+            }
+
             switch ("$flag:" . $parameter['data-type']) {
                 case '0:array':
                 case '1:array':
@@ -277,6 +282,39 @@ class ArgInfoDefinition
                     break;
             }
         }
+    }
+
+    private function emitVariadicArgInfo(array $parameter): void
+    {
+        $zendType = match ($parameter['data-type'] ?? 'variable') {
+            'int', 'uint', 'long', 'ulong', 'char', 'uchar' => 'IS_LONG',
+            'double'        => 'IS_DOUBLE',
+            'bool', 'boolean' => '_IS_BOOL',
+            'string'        => 'IS_STRING',
+            'array'         => 'IS_ARRAY',
+            default         => null,
+        };
+
+        if ($zendType === null) {
+            $this->codePrinter->output(
+                sprintf(
+                    "\tZEND_ARG_VARIADIC_INFO(%d, %s)",
+                    $this->passByReference($parameter),
+                    $parameter['name']
+                )
+            );
+
+            return;
+        }
+
+        $this->codePrinter->output(
+            sprintf(
+                "\tZEND_ARG_VARIADIC_TYPE_INFO(%d, %s, %s, 0)",
+                $this->passByReference($parameter),
+                $parameter['name'],
+                $zendType
+            )
+        );
     }
 
     private function emitTypedArgInfo(array $parameter, string $zendType): void

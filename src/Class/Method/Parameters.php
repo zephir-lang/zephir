@@ -72,11 +72,41 @@ class Parameters implements Countable, Iterator, ArrayAccess
         return $this->parameters[$this->position];
     }
 
+    /**
+     * Whether the method declares a variadic parameter (e.g. `...rest`).
+     */
+    public function hasVariadicParameter(): bool
+    {
+        return $this->getVariadicParameter() !== null;
+    }
+
+    /**
+     * Returns the variadic parameter definition, if any.
+     */
+    public function getVariadicParameter(): ?array
+    {
+        foreach ($this->parameters as $parameter) {
+            if (!empty($parameter['variadic'])) {
+                return $parameter;
+            }
+        }
+
+        return null;
+    }
+
     public function fetchParameters(bool $isMethodInternal): array
     {
         $parameters = [];
 
         foreach ($this->parameters as $parameter) {
+            /**
+             * The variadic parameter is not fetched through zephir_fetch_params;
+             * its array is populated separately from the trailing arguments.
+             */
+            if (!empty($parameter['variadic'])) {
+                continue;
+            }
+
             $name     = $parameter['name'];
             $dataType = $parameter['data-type'] ?? 'variable';
 

@@ -21,6 +21,7 @@
 #include "ext/spl/spl_array.h"
 #include "kernel/array.h"
 #include "kernel/concat.h"
+#include "kernel/main.h"
 
 
 /**
@@ -467,6 +468,252 @@ PHP_METHOD(Stub_Bench, newInstanceLoop)
 		ZEPHIR_CALL_METHOD(&_1$$3, &obj, "returnconst", &_2, 10);
 		zephir_check_call_status();
 		sum += zephir_get_numberval(&_1$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * Variadic callee (issue #2025). Sums every trailing argument, exercising
+ * the zephir_get_args_from() collection emitted for `...` parameters.
+ */
+PHP_METHOD(Stub_Bench, variadicSum)
+{
+	long sum;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval numbers, v, *_0;
+
+	ZVAL_UNDEF(&numbers);
+	ZVAL_UNDEF(&v);
+	ZEND_PARSE_PARAMETERS_START(0, -1)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	ZEPHIR_INIT_VAR(&numbers);
+	zephir_get_args_from(&numbers, 0);
+	sum = 0;
+	zephir_is_iterable(&numbers, 0, "stub/bench.zep", 159);
+	ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&numbers), _0)
+	{
+		ZEPHIR_INIT_NVAR(&v);
+		ZVAL_COPY(&v, _0);
+		sum += zephir_get_intval(&v);
+	} ZEND_HASH_FOREACH_END();
+	ZEPHIR_INIT_NVAR(&v);
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * Hot loop calling the variadic method with a 5-argument tail. Measures
+ * the per-call cost of collecting the trailing arguments into an array.
+ */
+PHP_METHOD(Stub_Bench, variadicSumNarrowLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_6 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3;
+	long n, i, sum;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_5$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZVAL_LONG(&_1$$3, 1);
+		ZVAL_LONG(&_2$$3, 2);
+		ZVAL_LONG(&_3$$3, 3);
+		ZVAL_LONG(&_4$$3, 4);
+		ZVAL_LONG(&_5$$3, 5);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicsum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * Same as variadicSumNarrowLoop but with a 15-argument tail, so the report
+ * shows how the collection cost scales with the number of variadic args.
+ */
+PHP_METHOD(Stub_Bench, variadicSumWideLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_16 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3, _6$$3, _7$$3, _8$$3, _9$$3, _10$$3, _11$$3, _12$$3, _13$$3, _14$$3, _15$$3;
+	long n, i, sum;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_5$$3);
+	ZVAL_UNDEF(&_6$$3);
+	ZVAL_UNDEF(&_7$$3);
+	ZVAL_UNDEF(&_8$$3);
+	ZVAL_UNDEF(&_9$$3);
+	ZVAL_UNDEF(&_10$$3);
+	ZVAL_UNDEF(&_11$$3);
+	ZVAL_UNDEF(&_12$$3);
+	ZVAL_UNDEF(&_13$$3);
+	ZVAL_UNDEF(&_14$$3);
+	ZVAL_UNDEF(&_15$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZVAL_LONG(&_1$$3, 1);
+		ZVAL_LONG(&_2$$3, 2);
+		ZVAL_LONG(&_3$$3, 3);
+		ZVAL_LONG(&_4$$3, 4);
+		ZVAL_LONG(&_5$$3, 5);
+		ZVAL_LONG(&_6$$3, 6);
+		ZVAL_LONG(&_7$$3, 7);
+		ZVAL_LONG(&_8$$3, 8);
+		ZVAL_LONG(&_9$$3, 9);
+		ZVAL_LONG(&_10$$3, 10);
+		ZVAL_LONG(&_11$$3, 11);
+		ZVAL_LONG(&_12$$3, 12);
+		ZVAL_LONG(&_13$$3, 13);
+		ZVAL_LONG(&_14$$3, 14);
+		ZVAL_LONG(&_15$$3, 15);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "variadicsum", &_16, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3, &_6$$3, &_7$$3, &_8$$3, &_9$$3, &_10$$3, &_11$$3, &_12$$3, &_13$$3, &_14$$3, &_15$$3);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+/**
+ * The pre-variadic idiom that `...` replaces: a fixed-arity method reading
+ * its arguments through func_get_args(). Paired with variadicSum so the
+ * report contrasts the `...` operator against the old workaround.
+ */
+PHP_METHOD(Stub_Bench, funcGetArgsSum)
+{
+	zend_bool _2;
+	long sum;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *a, a_sub, *b, b_sub, *c, c_sub, *d, d_sub, *e, e_sub, args, v, *_0, _1;
+
+	ZVAL_UNDEF(&a_sub);
+	ZVAL_UNDEF(&b_sub);
+	ZVAL_UNDEF(&c_sub);
+	ZVAL_UNDEF(&d_sub);
+	ZVAL_UNDEF(&e_sub);
+	ZVAL_UNDEF(&args);
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_1);
+	ZEND_PARSE_PARAMETERS_START(5, 5)
+		Z_PARAM_ZVAL(a)
+		Z_PARAM_ZVAL(b)
+		Z_PARAM_ZVAL(c)
+		Z_PARAM_ZVAL(d)
+		Z_PARAM_ZVAL(e)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 5, 0, &a, &b, &c, &d, &e);
+	sum = 0;
+	ZEPHIR_INIT_VAR(&args);
+	zephir_get_args(&args);
+	zephir_is_iterable(&args, 0, "stub/bench.zep", 203);
+	if (Z_TYPE_P(&args) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&args), _0)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _0);
+			sum += zephir_get_intval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &args, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_2 = 1;
+		while (1) {
+			if (_2) {
+				_2 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, &args, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_1, &args, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_1)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, &args, "current", NULL, 0);
+			zephir_check_call_status();
+				sum += zephir_get_intval(&v);
+		}
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	RETURN_MM_LONG(sum);
+}
+
+PHP_METHOD(Stub_Bench, funcGetArgsSumLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_6 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, _0$$3, _1$$3, _2$$3, _3$$3, _4$$3, _5$$3;
+	long n, i, sum;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&_1$$3);
+	ZVAL_UNDEF(&_2$$3);
+	ZVAL_UNDEF(&_3$$3);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_5$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZVAL_LONG(&_1$$3, 1);
+		ZVAL_LONG(&_2$$3, 2);
+		ZVAL_LONG(&_3$$3, 3);
+		ZVAL_LONG(&_4$$3, 4);
+		ZVAL_LONG(&_5$$3, 5);
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "funcgetargssum", &_6, 0, &_1$$3, &_2$$3, &_3$$3, &_4$$3, &_5$$3);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_0$$3);
 		i++;
 	}
 	RETURN_MM_LONG(sum);
