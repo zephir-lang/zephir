@@ -157,6 +157,8 @@ PHP_METHOD(Stub_Operator, testNewInstanceOperator)
 		RETURN_MM_NULL();
 	}
 	object_init_ex(return_value, _1);
+	ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(return_value);
+	zephir_check_call_status();
 	if (zephir_has_constructor(return_value)) {
 		ZEPHIR_CALL_METHOD(NULL, return_value, "__construct", NULL, 0);
 		zephir_check_call_status();

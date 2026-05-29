@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - `for k, v in expr` now skips the unreachable branch when the iterand's dynamic type is known [#1878](https://github.com/zephir-lang/zephir/issues/1878)
 
 ### Fixed
+- Fixed dynamic init `new {className}()` ignoring constructor visibility, allowing classes with a `protected`/`private` constructor to be instantiated from any scope [#882](https://github.com/zephir-lang/zephir/issues/882)
 - Fixed `unset(obj->{variable})` (dynamic property name) and `unset(obj->{"literal"})` (string-literal brace syntax) throwing `CompilerException: Cannot use expression type: property-dynamic-access in "unset"`. `UnsetStatement` now handles `property-dynamic-access` and `property-string-access` nodes, emitting the new `zephir_unset_property_zval()` kernel helper for variable keys [#808](https://github.com/zephir-lang/zephir/issues/808)
 - Fixed `continue` inside `for ... in` loops over PHP `Iterator`/`Traversable` objects producing an infinite loop [#2546](https://github.com/zephir-lang/zephir/issues/2546)
 - Fixed `elseif` conditions that contain sub-expressions with side effects (such as array element access `myvar[0]`) being evaluated unconditionally before the outer `if`, causing spurious "Cannot use a scalar value as an array" notices when a preceding branch had already returned [#1097](https://github.com/zephir-lang/zephir/issues/1097)

@@ -23,6 +23,7 @@ use Zephir\Exception\CompilerException;
 use Zephir\Expression;
 use Zephir\MethodCall;
 use Zephir\Operators\AbstractOperator;
+use Zephir\Variable\Variable;
 
 use function count;
 
@@ -221,6 +222,35 @@ class NewInstanceOperator extends AbstractOperator
          */
         if ($isStdClass) {
             return new CompiledExpression('variable', $symbolVariable->getRealName(), $expression);
+        }
+
+        /**
+         * Dynamic instantiation (`new {var}()`) resolves the class at runtime,
+         * so it must honour the constructor's visibility exactly like PHP's
+         * `new` operator. Without this guard a class with a protected or
+         * private constructor could be instantiated from any scope.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/882
+         */
+        if ($dynamic) {
+            $compilationContext->headersManager->add('kernel/fcall');
+            $compilationContext->symbolTable->mustGrownStack(true);
+
+            if (!$compilationContext->symbolTable->hasVariable('ZEPHIR_LAST_CALL_STATUS')) {
+                $callStatus = new Variable(
+                    'int',
+                    'ZEPHIR_LAST_CALL_STATUS',
+                    $compilationContext->branchManager->getCurrentBranch()
+                );
+                $callStatus->setIsInitialized(true, $compilationContext);
+                $callStatus->increaseUses();
+                $callStatus->setReadOnly(true);
+                $compilationContext->symbolTable->addRawVariable($callStatus);
+            }
+
+            $symbolCode = $compilationContext->backend->getVariableCode($symbolVariable);
+            $codePrinter->output('ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(' . $symbolCode . ');');
+            $codePrinter->output('zephir_check_call_status();');
         }
 
         /**

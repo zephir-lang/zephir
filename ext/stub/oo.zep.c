@@ -299,6 +299,8 @@ PHP_METHOD(Stub_Oo, createInstancesInLoop)
 			RETURN_MM_NULL();
 		}
 		object_init_ex(&instance, _4$$3);
+		ZEPHIR_LAST_CALL_STATUS = zephir_check_constructor_access(&instance);
+		zephir_check_call_status();
 		if (zephir_has_constructor(&instance)) {
 			ZEPHIR_CALL_METHOD(NULL, &instance, "__construct", NULL, 0);
 			zephir_check_call_status();
