@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-05-29
+
+### Added
+- Added support for variadic functions/methods using the `...` operator (e.g. `function f(int first, ...rest)`) [#2025](https://github.com/zephir-lang/zephir/issues/2025)
+- Compiler now recognizes the parser-emitted `yield` AST node (bare `yield;`, `yield expr;`, `yield key, value;`) [#1849](https://github.com/zephir-lang/zephir/issues/1849)
+- Added PHPBench-based runtime benchmarks suites under `tests/Benchmark/` [#2541](https://github.com/zephir-lang/zephir/issues/2541)
+
+### Changed
+- `for k, v in expr` now skips the unreachable branch when the iterand's dynamic type is known [#1878](https://github.com/zephir-lang/zephir/issues/1878)
+
+### Fixed
+- Fixed dynamic init `new {className}()` ignoring constructor visibility, allowing classes with a `protected`/`private` constructor to be instantiated from any scope [#882](https://github.com/zephir-lang/zephir/issues/882)
+- Fixed `unset(obj->{variable})` (dynamic property name) and `unset(obj->{"literal"})` (string-literal brace syntax) throwing `CompilerException: Cannot use expression type: property-dynamic-access in "unset"`. `UnsetStatement` now handles `property-dynamic-access` and `property-string-access` nodes, emitting the new `zephir_unset_property_zval()` kernel helper for variable keys [#808](https://github.com/zephir-lang/zephir/issues/808)
+- Fixed `continue` inside `for ... in` loops over PHP `Iterator`/`Traversable` objects producing an infinite loop [#2546](https://github.com/zephir-lang/zephir/issues/2546)
+- Fixed `elseif` conditions that contain sub-expressions with side effects (such as array element access `myvar[0]`) being evaluated unconditionally before the outer `if`, causing spurious "Cannot use a scalar value as an array" notices when a preceding branch had already returned [#1097](https://github.com/zephir-lang/zephir/issues/1097)
+- Fixed cross-class chained `<static>` (and `<self>`/`<parent>`) return-type resolution. The same-class case landed in #2537 by substituting the lexical class for the reserved keyword. The cross-class case — `other->returnsStatic()->method()` where `other` is a local variable typed as a different class — was still resolved against the call site's lexical class, so the chained method lookup ran on the wrong definition and the build aborted with `Class '<EnclosingClass>' does not implement method: '<method>'`. `MethodCall.php` already resolves the receiver's `$classDefinition` earlier in the function (from `$variableVariable->getClassTypes()`); the substitution now uses that definition, which is identical to `$compilationContext->classDefinition` for the `this` branch and preserves existing behavior there. [#2505](https://github.com/zephir-lang/zephir/issues/2505)
+
+### Documentation
+- Documented the workaround for `[ClassName, "protectedOrPrivateMethod"]` arrays passed as callbacks to PHP higher-order functions (`array_reduce`, `usort`, `preg_replace_callback`, etc.) [#2167](https://github.com/zephir-lang/zephir/issues/2167)
+
 ## [0.21.0] - 2026-05-20
 
 ### Added
@@ -671,7 +691,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.21.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.22.0...HEAD
+[0.22.0]: https://github.com/zephir-lang/zephir/compare/0.21.0...0.22.0
 [0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
 [0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0

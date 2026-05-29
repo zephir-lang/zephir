@@ -70,7 +70,7 @@ final class InfoCommandsTest extends TestCase
         $this->assertSame(0, $result['exitCode']);
 
         // Format: %01d%02d%02d, zero-padded MAJOR(1) + MINOR(2) + PATCH(2).
-        // For 0.21.0 the output is "02100". Avoid hard-coding the exact
+        // For 0.22.0 the output is "02200". Avoid hard-coding the exact
         // value so the test survives version bumps; assert shape, and that
         // it round-trips to the current Zephir::VERSION major.minor.patch.
         $stdout = trim($result['stdout']);

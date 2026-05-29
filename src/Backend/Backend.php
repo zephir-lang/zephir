@@ -1071,10 +1071,30 @@ class Backend
             $callStatus->setReadOnly(true);
             $compilationContext->symbolTable->addRawVariable($callStatus);
         }
-        $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
-        $tempVariable->setIsDoublePointer(true);
-        $tempValidVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
-        $codePrinter       = $compilationContext->codePrinter;
+        $codePrinter = $compilationContext->codePrinter;
+
+        /**
+         * Use type inference to skip branches that cannot be reached at runtime.
+         * - 'array' / 'object' in dynamicTypes => that branch is reachable
+         * - 'unknown' / 'undefined' => we don't know, keep both branches
+         * Scalar-only types (null, bool, string, long, double) get both branches as a
+         * fallback: zephir_is_iterable() emits a runtime warning but execution then
+         * falls through to the object branch (current behavior).
+         */
+        $dynamicTypes = $exprVariable->getDynamicTypes();
+        $mayBeArray   = isset($dynamicTypes['unknown'])
+            || isset($dynamicTypes['undefined'])
+            || isset($dynamicTypes['array']);
+        $mayBeObject  = isset($dynamicTypes['unknown'])
+            || isset($dynamicTypes['undefined'])
+            || isset($dynamicTypes['object']);
+
+        if (!$mayBeArray && !$mayBeObject) {
+            $mayBeArray  = true;
+            $mayBeObject = true;
+        }
+
+        $emitTypeWrapper = $mayBeArray && $mayBeObject;
 
         $codePrinter->output(
             'zephir_is_iterable(' . $this->getVariableCode(
@@ -1084,150 +1104,189 @@ class Backend
             ) . '", ' . $statement['line'] . ');'
         );
 
-        $codePrinter->output('if (Z_TYPE_P(' . $this->getVariableCode($exprVariable) . ') == IS_ARRAY) {');
-        $codePrinter->increaseLevel();
+        if ($mayBeArray) {
+            $tempVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+            $tempVariable->setIsDoublePointer(true);
 
-        $reverse = $statement['reverse'] ? 'REVERSE_' : '';
-
-        if (isset($keyVariable)) {
-            $arrayNumKey = $compilationContext->symbolTable->addTemp('zend_ulong', $compilationContext);
-            $arrayStrKey = $compilationContext->symbolTable->addTemp('zend_string', $compilationContext);
-        }
-
-        if (isset($keyVariable) && isset($variable)) {
-            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY_VAL';
-            $codePrinter->output(
-                $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName(
-                ) . ', ' . $arrayStrKey->getName() . ', ' . $tempVariable->getName() . ')'
-            );
-        } elseif (isset($keyVariable)) {
-            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY';
-            $codePrinter->output(
-                $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName(
-                ) . ', ' . $arrayStrKey->getName() . ')'
-            );
-        } else {
-            $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_VAL';
-            $codePrinter->output(
-                $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $tempVariable->getName() . ')'
-            );
-        }
-
-        $codePrinter->output('{');
-
-        if (isset($keyVariable)) {
-            $codePrinter->increaseLevel();
-            if ($duplicateKey) {
-                $compilationContext->symbolTable->mustGrownStack(true);
-                $keyVariable->initVariant($compilationContext);
+            if ($emitTypeWrapper) {
+                $codePrinter->output('if (Z_TYPE_P(' . $this->getVariableCode($exprVariable) . ') == IS_ARRAY) {');
+                $codePrinter->increaseLevel();
             }
-            $codePrinter->output('if (' . $arrayStrKey->getName() . ' != NULL) { ');
-            $codePrinter->increaseLevel();
-            if ($duplicateKey) {
+
+            $reverse = $statement['reverse'] ? 'REVERSE_' : '';
+
+            if (isset($keyVariable)) {
+                $arrayNumKey = $compilationContext->symbolTable->addTemp('zend_ulong', $compilationContext);
+                $arrayStrKey = $compilationContext->symbolTable->addTemp('zend_string', $compilationContext);
+            }
+
+            if (isset($keyVariable) && isset($variable)) {
+                $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY_VAL';
                 $codePrinter->output(
-                    'ZVAL_STR_COPY(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');'
+                    $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName(
+                    ) . ', ' . $arrayStrKey->getName() . ', ' . $tempVariable->getName() . ')'
+                );
+            } elseif (isset($keyVariable)) {
+                $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_KEY';
+                $codePrinter->output(
+                    $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $arrayNumKey->getName(
+                    ) . ', ' . $arrayStrKey->getName() . ')'
                 );
             } else {
+                $macro = 'ZEND_HASH_' . $reverse . 'FOREACH_VAL';
                 $codePrinter->output(
-                    'ZVAL_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');'
+                    $macro . '(Z_ARRVAL_P(' . $this->getVariableCode($exprVariable) . '), ' . $tempVariable->getName() . ')'
                 );
             }
+
+            $codePrinter->output('{');
+
+            if (isset($keyVariable)) {
+                $codePrinter->increaseLevel();
+                if ($duplicateKey) {
+                    $compilationContext->symbolTable->mustGrownStack(true);
+                    $keyVariable->initVariant($compilationContext);
+                }
+                $codePrinter->output('if (' . $arrayStrKey->getName() . ' != NULL) { ');
+                $codePrinter->increaseLevel();
+                if ($duplicateKey) {
+                    $codePrinter->output(
+                        'ZVAL_STR_COPY(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');'
+                    );
+                } else {
+                    $codePrinter->output(
+                        'ZVAL_STR(' . $this->getVariableCode($keyVariable) . ', ' . $arrayStrKey->getName() . ');'
+                    );
+                }
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+                $codePrinter->output(
+                    'ZVAL_LONG(' . $this->getVariableCode($keyVariable) . ', ' . $arrayNumKey->getName() . ');'
+                );
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
+                $codePrinter->decreaseLevel();
+            }
+
+            if (isset($variable)) {
+                $compilationContext->symbolTable->mustGrownStack(true);
+                $codePrinter->increaseLevel();
+                $variable->initVariant($compilationContext);
+                $codePrinter->output(
+                    'ZVAL_COPY(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode($tempVariable) . ');'
+                );
+                $codePrinter->decreaseLevel();
+            }
+
+            /**
+             * Compile statements in the 'for' block
+             */
+            if (isset($statement['statements'])) {
+                $statementBlock->isLoop(true);
+                if (isset($statement['key'])) {
+                    $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+                }
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+                $statementBlock->compile($compilationContext);
+            }
+
+            $codePrinter->output('} ZEND_HASH_FOREACH_END();');
+
+            if ($emitTypeWrapper) {
+                $codePrinter->decreaseLevel();
+            }
+        }
+
+        if ($mayBeObject) {
+            $tempValidVariable = $compilationContext->symbolTable->addTemp('variable', $compilationContext);
+            /*
+             * A first-iteration flag is used to move next() to the TOP of the while(1)
+             * body so that a C `continue` in user code correctly advances the iterator.
+             *
+             * Without this, `continue` jumps to the while(1) condition, skipping the
+             * next() call that was at the bottom of the loop body, producing an infinite
+             * loop on the first element that triggered continue.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2546
+             */
+            $firstIterFlag = $compilationContext->symbolTable->addTemp('bool', $compilationContext);
+
+            if ($emitTypeWrapper) {
+                $codePrinter->output('} else {');
+                $codePrinter->increaseLevel();
+            }
+
+            $codePrinter->output(
+                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", NULL, 0);'
+            );
+            $codePrinter->output('zephir_check_call_status();');
+            $codePrinter->output($firstIterFlag->getName() . ' = 1;');
+
+            $codePrinter->output('while (1) {');
+            $codePrinter->increaseLevel();
+
+            // next() lives here so that `continue` in the user body reaches it.
+            $codePrinter->output('if (' . $firstIterFlag->getName() . ') {');
+            $codePrinter->increaseLevel();
+            $codePrinter->output($firstIterFlag->getName() . ' = 0;');
             $codePrinter->decreaseLevel();
             $codePrinter->output('} else {');
             $codePrinter->increaseLevel();
             $codePrinter->output(
-                'ZVAL_LONG(' . $this->getVariableCode($keyVariable) . ', ' . $arrayNumKey->getName() . ');'
+                'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
             );
+            $codePrinter->output('zephir_check_call_status();');
             $codePrinter->decreaseLevel();
             $codePrinter->output('}');
-            $codePrinter->decreaseLevel();
-        }
 
-        if (isset($variable)) {
-            $compilationContext->symbolTable->mustGrownStack(true);
+            $codePrinter->output(
+                'ZEPHIR_CALL_METHOD(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
+                    $exprVariable
+                ) . ', "valid", NULL, 0);'
+            );
+            $codePrinter->output('zephir_check_call_status();');
+            $codePrinter->output('if (!zend_is_true(&' . $tempValidVariable->getName() . ')) {');
             $codePrinter->increaseLevel();
-            $variable->initVariant($compilationContext);
-            $codePrinter->output(
-                'ZVAL_COPY(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode($tempVariable) . ');'
-            );
+            $codePrinter->output('break;');
             $codePrinter->decreaseLevel();
-        }
+            $codePrinter->output('}');
 
-        /**
-         * Compile statements in the 'for' block
-         */
-        if (isset($statement['statements'])) {
-            $statementBlock->isLoop(true);
-            if (isset($statement['key'])) {
-                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            if (isset($keyVariable)) {
+                $codePrinter->output(
+                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
+                        $exprVariable
+                    ) . ', "key", NULL, 0);'
+                );
+                $codePrinter->output('zephir_check_call_status();');
             }
-            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
-            $statementBlock->compile($compilationContext);
-        }
 
-        $codePrinter->output('} ZEND_HASH_FOREACH_END();');
-        $codePrinter->decreaseLevel();
-
-        $codePrinter->output('} else {');
-        $codePrinter->increaseLevel();
-
-        $codePrinter->output(
-            'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "rewind", NULL, 0);'
-        );
-        $codePrinter->output('zephir_check_call_status();');
-
-        $codePrinter->output('while (1) {');
-        $codePrinter->increaseLevel();
-
-        $codePrinter->output(
-            'ZEPHIR_CALL_METHOD(&' . $tempValidVariable->getName() . ', ' . $this->getVariableCode(
-                $exprVariable
-            ) . ', "valid", NULL, 0);'
-        );
-        $codePrinter->output('zephir_check_call_status();');
-        $codePrinter->output('if (!zend_is_true(&' . $tempValidVariable->getName() . ')) {');
-        $codePrinter->increaseLevel();
-        $codePrinter->output('break;');
-        $codePrinter->decreaseLevel();
-        $codePrinter->output('}');
-
-        if (isset($keyVariable)) {
-            $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($keyVariable) . ', ' . $this->getVariableCode(
-                    $exprVariable
-                ) . ', "key", NULL, 0);'
-            );
-            $codePrinter->output('zephir_check_call_status();');
-        }
-
-        if (isset($variable)) {
-            $codePrinter->output(
-                'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
-                    $exprVariable
-                ) . ', "current", NULL, 0);'
-            );
-            $codePrinter->output('zephir_check_call_status();');
-        }
-
-        if (isset($statement['statements'])) {
-            $statementBlock->isLoop(true);
-            if (isset($statement['key'])) {
-                $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+            if (isset($variable)) {
+                $codePrinter->output(
+                    'ZEPHIR_CALL_METHOD(' . $this->getVariableCode($variable) . ', ' . $this->getVariableCode(
+                        $exprVariable
+                    ) . ', "current", NULL, 0);'
+                );
+                $codePrinter->output('zephir_check_call_status();');
             }
-            $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
-            $statementBlock->compile($compilationContext);
+
+            if (isset($statement['statements'])) {
+                $statementBlock->isLoop(true);
+                if (isset($statement['key'])) {
+                    $statementBlock->getMutateGatherer()->increaseMutations($statement['key']);
+                }
+                $statementBlock->getMutateGatherer()->increaseMutations($statement['value']);
+                $statementBlock->compile($compilationContext);
+            }
+
+            $codePrinter->decreaseLevel();
+            $codePrinter->output('}');
+
+            if ($emitTypeWrapper) {
+                $codePrinter->decreaseLevel();
+                $codePrinter->output('}');
+            }
         }
-
-        $codePrinter->output(
-            'ZEPHIR_CALL_METHOD(NULL, ' . $this->getVariableCode($exprVariable) . ', "next", NULL, 0);'
-        );
-        $codePrinter->output('zephir_check_call_status();');
-
-        $codePrinter->decreaseLevel();
-        $codePrinter->output('}');
-
-        $codePrinter->decreaseLevel();
-        $codePrinter->output('}');
 
         /* Since we do not observe, still do cleanup */
         $variable?->initVariant($compilationContext);

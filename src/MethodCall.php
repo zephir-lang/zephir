@@ -340,7 +340,7 @@ class MethodCall extends Call
                     }
 
                     $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
-                    if (!$expectedNumberParameters && $callNumberParameters > 0) {
+                    if (!$expectedNumberParameters && $callNumberParameters > 0 && !$classMethod->isVariadic()) {
                         $numberParameters = $classMethod->getNumberOfParameters();
                         if ($callNumberParameters > $numberParameters) {
                             throw new CompilerException(
@@ -469,7 +469,7 @@ class MethodCall extends Call
                                     $classMethod              = $classDefinition->getMethod($methodName);
                                     $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
 
-                                    if (!$expectedNumberParameters && $callNumberParameters > 0) {
+                                    if (!$expectedNumberParameters && $callNumberParameters > 0 && !$classMethod->isVariadic()) {
                                         $numberParameters = $classMethod->getNumberOfParameters();
                                         if ($callNumberParameters > $numberParameters) {
                                             $className = $classDefinition->getCompleteName();
@@ -572,27 +572,33 @@ class MethodCall extends Call
 
                 if (null !== $returnClassTypes) {
                     $symbolVariable->setDynamicTypes('object');
+                    /*
+                     * `self`, `static`, and `parent` resolve relative to the
+                     * RECEIVER of the call, not the lexical class of the
+                     * call site. For `this->returnsStatic()` the two are the
+                     * same (handled at the top of this method where
+                     * `$classDefinition` was assigned from
+                     * `$compilationContext->classDefinition`). For
+                     * `other->returnsStatic()->chain()` they differ:
+                     * `$classDefinition` already carries the receiver's
+                     * class (resolved earlier from
+                     * `$variableVariable->getClassTypes()`), and that is
+                     * what `self`/`static`/`parent` must rewrite to so the
+                     * chained method lookup happens on the right class.
+                     * Using `$compilationContext->classDefinition` here
+                     * makes the chained call look up the method on the
+                     * enclosing class instead, producing a spurious
+                     * "Class '<enclosing>' does not implement method ..."
+                     * error.
+                     * See https://github.com/zephir-lang/zephir/issues/2505.
+                     */
+                    $receiverDefinition = $classDefinition ?? $compilationContext->classDefinition;
                     foreach ($returnClassTypes as &$returnClassType) {
-                        /*
-                         * `self`, `static` and `parent` are PHP-reserved type
-                         * names; resolve them to the *lexical* class (for
-                         * `self`/`static`) or the parent class (for `parent`)
-                         * so compile-time method lookup on a chained call
-                         * `obj->returnsStatic()->method()` finds the right
-                         * class definition. Passing them through getFullName()
-                         * would produce a bogus literal like `Stub\static`
-                         * that fails class lookup and emits a false-positive
-                         * `nonexistent-class` warning. The runtime LSB binding
-                         * is unaffected — that's still handled by
-                         * `zend_get_called_scope(execute_data)` in
-                         * NewInstanceOperator. See
-                         * https://github.com/zephir-lang/zephir/issues/2505.
-                         */
                         $lower = strtolower($returnClassType);
                         if ($lower === 'self' || $lower === 'static') {
-                            $returnClassType = $compilationContext->classDefinition->getCompleteName();
+                            $returnClassType = $receiverDefinition->getCompleteName();
                         } elseif ($lower === 'parent') {
-                            $parent = $compilationContext->classDefinition->getExtendsClass();
+                            $parent = $receiverDefinition->getExtendsClass();
                             if ($parent !== null && $parent !== '') {
                                 $returnClassType = $parent;
                             }

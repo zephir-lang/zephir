@@ -24,6 +24,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2165/issueinterface.zep.c
 	stub/issue2324.zep.c
 	stub/issue2505.zep.c
+	stub/issue2537.zep.c
 	stub/methodinterface.zep.c
 	stub/oo/abstractstatic.zep.c
 	stub/oo/extend/db/query/exception.zep.c
@@ -45,6 +46,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/arrayobject.zep.c
 	stub/arraysearch.zep.c
 	stub/assign.zep.c
+	stub/bench.zep.c
 	stub/bench/foo.zep.c
 	stub/bitwise.zep.c
 	stub/branchprediction.zep.c
@@ -105,17 +107,24 @@ if test "$PHP_STUB" = "yes"; then
 	stub/invokes/invokeprotected.zep.c
 	stub/invokes/invokeprotectedcomplex.zep.c
 	stub/issettest.zep.c
+	stub/issue1097.zep.c
 	stub/issue1134.zep.c
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
 	stub/issue2165/issue.zep.c
+	stub/issue2167.zep.c
 	stub/issue2324extended.zep.c
 	stub/issue2385.zep.c
 	stub/issue2469.zep.c
+	stub/issue2505crosschain.zep.c
 	stub/issue2505extended.zep.c
 	stub/issue2522.zep.c
+	stub/issue2537child.zep.c
+	stub/issue2546.zep.c
 	stub/issue663.zep.c
+	stub/issue808.zep.c
 	stub/issue820.zep.c
+	stub/issue882.zep.c
 	stub/issue887.zep.c
 	stub/issue893.zep.c
 	stub/issue914.zep.c
@@ -232,6 +241,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/unknownclass.zep.c
 	stub/unsettest.zep.c
 	stub/usetest.zep.c
+	stub/variadic.zep.c
 	stub/vars.zep.c
 	stub/0__closure.zep.c
 	stub/1__closure.zep.c
@@ -261,7 +271,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/25__closure.zep.c
 	stub/26__closure.zep.c
 	stub/27__closure.zep.c
-	stub/28__closure.zep.c "
+	stub/28__closure.zep.c
+	stub/29__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do

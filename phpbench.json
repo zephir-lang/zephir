@@ -1,0 +1,30 @@
+{
+    "$schema": "vendor/phpbench/phpbench/phpbench.schema.json",
+    "runner.bootstrap": "tests/Benchmark/bootstrap.php",
+    "runner.path": "tests/Benchmark",
+    "runner.file_pattern": "*Bench.php",
+    "runner.iterations": 5,
+    "runner.revs": 1000,
+    "runner.warmup": 2,
+    "runner.time_unit": "microseconds",
+    "runner.output_mode": "throughput",
+    "runner.php_config": {
+        "extension": "ext/modules/stub.so"
+    },
+    "storage.xml_storage_path": ".phpbench/storage",
+    "report.generators": {
+        "summary": {
+            "extends": "default"
+        },
+        "delta": {
+            "extends": "default"
+        },
+        "aggregate": {
+            "generator": "expression",
+            "cols": ["benchmark", "subject", "set", "revs", "its", "mem_peak", "mode", "rstdev"],
+            "baseline_expressions": {
+                "mem_peak": "(coalesce(first(baseline_mem_peak), first(result_mem_peak)) as memory) ~ \" \" ~ percent_diff(coalesce(first(baseline_mem_peak), first(result_mem_peak)), first(result_mem_peak))"
+            }
+        }
+    }
+}

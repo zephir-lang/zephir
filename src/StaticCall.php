@@ -202,7 +202,7 @@ class StaticCall extends Call
                         $classMethod              = $classDefinition->getMethod($methodName);
                         $expectedNumberParameters = $classMethod->getNumberOfRequiredParameters();
 
-                        if (!$expectedNumberParameters && $callNumberParameters > 0) {
+                        if (!$expectedNumberParameters && $callNumberParameters > 0 && !$classMethod->isVariadic()) {
                             $numberParameters = $classMethod->getNumberOfParameters();
                             if ($callNumberParameters > $numberParameters) {
                                 throw new CompilerException(

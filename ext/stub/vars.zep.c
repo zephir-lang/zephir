@@ -31,21 +31,22 @@ ZEPHIR_INIT_CLASS(Stub_Vars)
 
 PHP_METHOD(Stub_Vars, testParam)
 {
-	zend_string *_4;
-	zend_ulong _3;
+	zend_bool _7;
+	zend_string *_3;
+	zend_ulong _2;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
-	zephir_fcall_cache_entry *_6 = NULL;
+	zephir_fcall_cache_entry *_5 = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *config_param = NULL, k, v, _0, *_1, _2, _5$$3, _7$$4;
+	zval *config_param = NULL, k, v, _0, *_1, _6, _4$$3, _8$$4;
 	zval config;
 
 	ZVAL_UNDEF(&config);
 	ZVAL_UNDEF(&k);
 	ZVAL_UNDEF(&v);
 	ZVAL_UNDEF(&_0);
-	ZVAL_UNDEF(&_2);
-	ZVAL_UNDEF(&_5$$3);
-	ZVAL_UNDEF(&_7$$4);
+	ZVAL_UNDEF(&_6);
+	ZVAL_UNDEF(&_4$$3);
+	ZVAL_UNDEF(&_8$$4);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
 		ZEPHIR_Z_PARAM_ARRAY(config, config_param)
 	ZEND_PARSE_PARAMETERS_END();
@@ -56,38 +57,43 @@ PHP_METHOD(Stub_Vars, testParam)
 	zephir_array_fetch_string(&_0, &config, SL("dir"), PH_NOISY | PH_READONLY, "stub/vars.zep", 8);
 	zephir_is_iterable(&_0, 0, "stub/vars.zep", 11);
 	if (Z_TYPE_P(&_0) == IS_ARRAY) {
-		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _3, _4, _1)
+		ZEND_HASH_FOREACH_KEY_VAL(Z_ARRVAL_P(&_0), _2, _3, _1)
 		{
 			ZEPHIR_INIT_NVAR(&k);
-			if (_4 != NULL) { 
-				ZVAL_STR_COPY(&k, _4);
+			if (_3 != NULL) { 
+				ZVAL_STR_COPY(&k, _3);
 			} else {
-				ZVAL_LONG(&k, _3);
+				ZVAL_LONG(&k, _2);
 			}
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _1);
-			ZEPHIR_CALL_FUNCTION(&_5$$3, "realpath", &_6, 74, &v);
+			ZEPHIR_CALL_FUNCTION(&_4$$3, "realpath", &_5, 80, &v);
 			zephir_check_call_status();
-			zephir_array_update_multi(&config, &_5$$3, SL("sz"), 3, SL("dir"), &k);
+			zephir_array_update_multi(&config, &_4$$3, SL("sz"), 3, SL("dir"), &k);
 		} ZEND_HASH_FOREACH_END();
 	} else {
 		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
 		zephir_check_call_status();
+		_7 = 1;
 		while (1) {
-			ZEPHIR_CALL_METHOD(&_2, &_0, "valid", NULL, 0);
+			if (_7) {
+				_7 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_6, &_0, "valid", NULL, 0);
 			zephir_check_call_status();
-			if (!zend_is_true(&_2)) {
+			if (!zend_is_true(&_6)) {
 				break;
 			}
 			ZEPHIR_CALL_METHOD(&k, &_0, "key", NULL, 0);
 			zephir_check_call_status();
 			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_CALL_FUNCTION(&_7$$4, "realpath", &_6, 74, &v);
+				ZEPHIR_CALL_FUNCTION(&_8$$4, "realpath", &_5, 80, &v);
 				zephir_check_call_status();
-				zephir_array_update_multi(&config, &_7$$4, SL("sz"), 3, SL("dir"), &k);
-			ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
-			zephir_check_call_status();
+				zephir_array_update_multi(&config, &_8$$4, SL("sz"), 3, SL("dir"), &k);
 		}
 	}
 	ZEPHIR_INIT_NVAR(&v);
