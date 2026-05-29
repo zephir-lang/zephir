@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [0.22.0] - 2026-05-29
+
 ### Added
 - Added support for variadic functions/methods using the `...` operator (e.g. `function f(int first, ...rest)`) [#2025](https://github.com/zephir-lang/zephir/issues/2025)
 - Compiler now recognizes the parser-emitted `yield` AST node (bare `yield;`, `yield expr;`, `yield key, value;`) [#1849](https://github.com/zephir-lang/zephir/issues/1849)
@@ -689,7 +691,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.21.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.22.0...HEAD
+[0.22.0]: https://github.com/zephir-lang/zephir/compare/0.21.0...0.22.0
 [0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
 [0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1
 [0.20.0]: https://github.com/zephir-lang/zephir/compare/0.19.0...0.20.0
