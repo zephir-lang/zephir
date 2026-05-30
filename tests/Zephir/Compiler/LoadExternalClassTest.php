@@ -37,7 +37,7 @@ final class LoadExternalClassTest extends TestCase
     {
         $this->outputBase = sys_get_temp_dir() . '/zephir-ext-' . uniqid('', true);
         // HardDisk writes the parser cache under <base>/<Zephir::VERSION>/.
-        mkdir($this->outputBase . DIRECTORY_SEPARATOR . Zephir::VERSION, 0o777, true);
+        mkdir($this->outputBase . DIRECTORY_SEPARATOR . Zephir::VERSION, 0777, true);
     }
 
     protected function tearDown(): void
