@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Fixed
+- Fixed external dependency classes (`external-dependencies` in `config.json`) not being found on case-sensitive filesystems. The `.zep` path was lower-cased wholesale, so a PSR-4 class such as `Phalcon\Support\Collection` looked for `support/collection.zep` instead of `Support/Collection.zep`. The path is now resolved using the namespace casing as written, falling back to the lower-cased path for backward compatibility [#2499](https://github.com/zephir-lang/zephir/pull/2499)
 - Fixed `[ERROR] Unknown type: ...` when declaring a local with an expression default value (e.g. `var x = i + 1;`, concat, ternary, method calls). Declaration defaults now infer their type through the same path as `let` assignments [#2394](https://github.com/zephir-lang/zephir/issues/2394)
 
 ## [0.22.0] - 2026-05-29
