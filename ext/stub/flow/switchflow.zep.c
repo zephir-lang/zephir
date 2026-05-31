@@ -230,7 +230,6 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 		RETURN_MM_LONG(0);
 	} while(0);
 
-	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)
