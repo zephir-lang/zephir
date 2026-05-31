@@ -41,7 +41,7 @@ PHP_METHOD(Stub_Issue2469, peek)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &ch_param);
 	ch = zephir_get_charval(ch_param);
-	RETURN_LONG(ch);
+	RETURN_LONG((unsigned char) ch);
 }
 
 PHP_METHOD(Stub_Issue2469, callWithLiteral)

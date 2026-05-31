@@ -34,7 +34,7 @@ ZEPHIR_INIT_CLASS(Stub_Cast)
 PHP_METHOD(Stub_Cast, testCharCastFromChar)
 {
 
-	RETURN_LONG('a');
+	RETURN_LONG((unsigned char) ('a'));
 }
 
 /**
@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
 	char a, _0;
 	a = 'A';
 	_0 = a;
-	RETURN_LONG(_0);
+	RETURN_LONG((unsigned char) _0);
 }
 
 /**

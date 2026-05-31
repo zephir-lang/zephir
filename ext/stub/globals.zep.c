@@ -169,7 +169,7 @@ PHP_METHOD(Stub_Globals, getDefaultGlobals6)
 PHP_METHOD(Stub_Globals, getDefaultGlobals7)
 {
 
-	RETURN_LONG(ZEPHIR_GLOBAL(my_setting_4));
+	RETURN_LONG((unsigned char) (ZEPHIR_GLOBAL(my_setting_4)));
 }
 
 /**
