@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Full union return type support, enforced by the engine just like a hand-written PHP union return type. Any combination of classes and/or scalar types is now emitted into the compiled extension's arginfo (via `ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX` / `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX`), so `-> <Model> | <Row> | null`, `-> int | string`, `-> <Foo> | int`, etc. are reported by Reflection and enforced at runtime. Previously only `int | false` / `T | null` carried a return type and every other union silently emitted none [#2428](https://github.com/zephir-lang/zephir/issues/2428)
+
+### Changed
+- **BC**: methods declared with a multi-type union return now carry an enforced return type in the compiled extension. PHP subclasses that override such a method must declare a compatible (equal or narrower) return type, where previously the missing return type made any override valid [#2428](https://github.com/zephir-lang/zephir/issues/2428)
+
 ### Fixed
 - Fixed external dependency classes (`external-dependencies` in `config.json`) not being found on case-sensitive filesystems. The `.zep` path was lower-cased wholesale, so a PSR-4 class such as `Phalcon\Support\Collection` looked for `support/collection.zep` instead of `Support/Collection.zep`. The path is now resolved using the namespace casing as written, falling back to the lower-cased path for backward compatibility [#2499](https://github.com/zephir-lang/zephir/pull/2499)
 - Fixed `[ERROR] Unknown type: ...` when declaring a local with an expression default value (e.g. `var x = i + 1;`, concat, ternary, method calls). Declaration defaults now infer their type through the same path as `let` assignments [#2394](https://github.com/zephir-lang/zephir/issues/2394)
+- Fixed generated PHP stubs dropping all but the first class in a union return type (e.g. `-> <Model> | <Row> | null` produced `Model|null` instead of `Model|Row|null`) [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ## [0.22.0] - 2026-05-29
 

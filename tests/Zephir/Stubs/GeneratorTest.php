@@ -337,6 +337,66 @@ class GeneratorTest extends TestCase
     }
 
     /**
+     * Regression coverage for issue #2428: when a method declares more than one
+     * class in its return type union (e.g. `-> <Model> | <Row> | null`), every
+     * class must appear in the generated signature. Previously only the first
+     * class was emitted (`key()` of the class-type list), so `Row` was silently
+     * dropped from `Model|Row|null`, leaving an invalid `Model|null` hint.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2428
+     */
+    public function testShouldBuildMethodWithMultipleClassReturnTypes(): void
+    {
+        if (Os::isWindows()) {
+            $this->markTestSkipped('Warning: Strings contain different line endings!');
+        }
+
+        $returnType = [
+            'type' => 'return-type',
+            'list' => [
+                [
+                    'type'       => 'return-type-parameter',
+                    'cast'       => ['type' => 'variable', 'value' => 'Model'],
+                    'collection' => 0,
+                    'mandatory'  => 0,
+                ],
+                [
+                    'type'       => 'return-type-parameter',
+                    'cast'       => ['type' => 'variable', 'value' => 'Row'],
+                    'collection' => 0,
+                    'mandatory'  => 0,
+                ],
+                [
+                    'type'      => 'return-type-parameter',
+                    'data-type' => 'null',
+                    'mandatory' => 0,
+                ],
+            ],
+            'void' => 0,
+        ];
+
+        $this->classDefinition->setAliasManager(new AliasManager());
+
+        $method = new Method(
+            $this->classDefinition,
+            ['public'],
+            'find',
+            new Parameters([]),
+            null,
+            null,
+            $returnType
+        );
+
+        $buildMethod = $this->getMethod('buildMethod');
+        $actual      = $buildMethod->invokeArgs($this->testClass, [$method, false, '    ']);
+
+        // Both classes plus null must survive into the signature.
+        $this->assertStringContainsString('public function find(): Model|Row|null', $actual);
+        // And the docblock keeps listing the full union.
+        $this->assertStringContainsString('@return Model|Row|null', $actual);
+    }
+
+    /**
      * Provide test case data for buildProperty method test.
      */
     public function propertyProvider(): array

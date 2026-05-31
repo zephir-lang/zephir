@@ -31,13 +31,13 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_stubs_testvariablelength, 0, 0, IS_VOID, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature1, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature1, 0, 0, MAY_BE_ARRAY|MAY_BE_OBJECT)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature2, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_stubs_testmultireturntypewithbool, 0, 0, 0)
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(arginfo_stub_stubs_testmultireturntypewithbool, 0, 0, Stub\\Geometry, MAY_BE_BOOL)
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_stubs_method_entry) {
@@ -46,8 +46,8 @@ ZEPHIR_INIT_FUNCS(stub_stubs_method_entry) {
 	PHP_ME(Stub_Stubs, testMixedInputParamsDocBlock, arginfo_stub_stubs_testmixedinputparamsdocblock, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Stubs, testMixedInputParamsDocBlockDeclared, arginfo_stub_stubs_testmixedinputparamsdocblockdeclared, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Stubs, testVariableLength, arginfo_stub_stubs_testvariablelength, ZEND_ACC_PUBLIC)
-PHP_ME(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature1, arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature1, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature1, arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature1, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Stubs, testMultiReturnTypeWithMixedInDocAndEmptyInSignature2, arginfo_stub_stubs_testmultireturntypewithmixedindocandemptyinsignature2, ZEND_ACC_PUBLIC)
-PHP_ME(Stub_Stubs, testMultiReturnTypeWithBool, arginfo_stub_stubs_testmultireturntypewithbool, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Stubs, testMultiReturnTypeWithBool, arginfo_stub_stubs_testmultireturntypewithbool, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

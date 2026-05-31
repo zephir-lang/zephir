@@ -401,32 +401,64 @@ class ArgInfoDefinition
 
     private function richRenderStart(): void
     {
-        if (
-            array_key_exists('object', $this->functionLike->getReturnTypes()) &&
-            1 === count($this->functionLike->getReturnClassTypes())
-        ) {
-            $class = key($this->functionLike->getReturnClassTypes());
+        $returnTypes      = $this->functionLike->getReturnTypes();
+        $returnClassTypes = $this->functionLike->getReturnClassTypes();
+        $isNullable       = $this->functionLike->areReturnTypesNullCompatible();
 
-            /**
-             * `self`, `static`, and `parent` are PHP-reserved return-type
-             * names. They need different handling at the engine level:
-             *
-             *   - `self` / `parent` reach the engine as the literal lowercase
-             *     keyword. PHP recognizes both as reserved names during
-             *     arginfo class-name resolution and reflection reports them
-             *     verbatim, preserving covariant-return semantics.
-             *   - `static` has no class entry at all, so passing the literal
-             *     string to `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX` makes
-             *     MINIT abort with "static must be registered before <Class>".
-             *     Emit the dedicated `MAY_BE_STATIC` type-mask bit instead;
-             *     reflection still reports the type as `'static'`.
-             *
-             * See https://github.com/zephir-lang/zephir/issues/2505.
-             */
+        /**
+         * Non-null, non-object scalar members of the return type
+         * (`int`, `string`, `bool`, `array`, ...). `object` represents the
+         * class set and `null` is handled via the nullable flag/mask bit, so
+         * both are excluded here.
+         */
+        $scalarKeys = array_values(
+            array_diff(array_keys($returnTypes), ['object', 'null'])
+        );
+
+        /**
+         * The bare `object` keyword as one member of a wider union
+         * (`array | object`, `object | string`, ...). The dedicated generic
+         * `object` / `object | null` branches below only fire when `object` is
+         * the *sole* non-null member, so in a union it contributes a
+         * MAY_BE_OBJECT bit here. When `object` accompanies named classes the
+         * key instead represents those classes (handled via $returnClassTypes),
+         * so this is only "generic" when there are no class types.
+         */
+        $hasGenericObject = array_key_exists('object', $returnTypes)
+            && [] === $returnClassTypes;
+
+        /**
+         * Single class return (`<Foo>`, `<Foo> | null`, and the reserved
+         * `self` / `parent` / `static` keywords). Kept as a dedicated branch so
+         * the precise OBJ_INFO / MAY_BE_STATIC forms — and their existing test
+         * coverage — stay byte-for-byte identical.
+         *
+         * `self`, `static`, and `parent` are PHP-reserved return-type names
+         * needing different engine handling:
+         *
+         *   - `self` / `parent` reach the engine as the literal lowercase
+         *     keyword. PHP recognizes both as reserved names during arginfo
+         *     class-name resolution and reflection reports them verbatim,
+         *     preserving covariant-return semantics.
+         *   - `static` has no class entry at all, so passing the literal string
+         *     to `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX` makes MINIT abort with
+         *     "static must be registered before <Class>". Emit the dedicated
+         *     `MAY_BE_STATIC` type-mask bit instead; reflection still reports
+         *     the type as `'static'`.
+         *
+         * See https://github.com/zephir-lang/zephir/issues/2505.
+         */
+        if (
+            array_key_exists('object', $returnTypes)
+            && 1 === count($returnClassTypes)
+            && [] === $scalarKeys
+        ) {
+            $class    = key($returnClassTypes);
             $reserved = strtolower($class);
+
             if ($reserved === 'static') {
                 $mask = 'MAY_BE_STATIC';
-                if ($this->functionLike->areReturnTypesNullCompatible()) {
+                if ($isNullable) {
                     $mask = 'MAY_BE_NULL|' . $mask;
                 }
 
@@ -456,7 +488,7 @@ class ArgInfoDefinition
                     (int)$this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
                     $class,
-                    (int)$this->functionLike->areReturnTypesNullCompatible()
+                    (int)$isNullable
                 )
             );
 
@@ -471,7 +503,7 @@ class ArgInfoDefinition
                     (int)$this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
                     $this->getReturnType(),
-                    (int)$this->functionLike->areReturnTypesNullCompatible()
+                    (int)$isNullable
                 )
             );
 
@@ -491,60 +523,108 @@ class ArgInfoDefinition
                     $this->name,
                     (int)$this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
-                    (int)$this->functionLike->areReturnTypesNullCompatible()
+                    (int)$isNullable
                 )
             );
 
             return;
         }
 
-        if ($this->functionLike->isReturnTypeNullableObject()) {
+        /**
+         * Generic `object` keyword (no specific class), optionally nullable.
+         */
+        if (
+            [] === $returnClassTypes
+            && [] === $scalarKeys
+            && array_key_exists('object', $returnTypes)
+        ) {
             $this->codePrinter->output(
                 sprintf(
                     'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
                     $this->name,
                     (int)$this->returnByRef,
                     $this->functionLike->getNumberOfRequiredParameters(),
-                    'MAY_BE_NULL|MAY_BE_OBJECT',
+                    $isNullable ? 'MAY_BE_NULL|MAY_BE_OBJECT' : 'MAY_BE_OBJECT'
                 )
             );
 
             return;
         }
 
-        if ($this->functionLike->isReturnTypeObject()) {
-            $this->codePrinter->output(
-                sprintf(
-                    'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
-                    $this->name,
-                    (int)$this->returnByRef,
-                    $this->functionLike->getNumberOfRequiredParameters(),
-                    'MAY_BE_OBJECT',
-                )
-            );
+        /**
+         * True union return types: two or more non-null components mixing any
+         * number of classes and/or scalar types (`<A> | <B>`, `<A> | <B> | null`,
+         * `<A> | int`, `int | string`, `string | bool | null`, ...). Emit a PHP
+         * type mask so the engine enforces every member, exactly as a
+         * hand-written PHP union return type would — scalar-only unions use
+         * TYPE_MASK, unions containing at least one named class use
+         * OBJ_TYPE_MASK with the `Class1|Class2` list plus any scalar bits.
+         *
+         * A single non-null component plus `null` (`<A> | null`, `int | null`)
+         * is intentionally NOT handled here: it stays on the precise
+         * OBJ_INFO / `IS_*, allow_null=1` paths above/below.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2428
+         */
+        if (count($scalarKeys) + count($returnClassTypes) + (int) $hasGenericObject >= 2) {
+            $classNames = [];
+            $maskBits   = [];
+            $mayBe      = $this->functionLike->getMayBeArgTypes();
 
-            return;
-        }
-
-        if (count($this->functionLike->getReturnTypes()) > 1) {
-            $types      = [];
-            $mayBeTypes = $this->functionLike->getMayBeArgTypes();
-            foreach ($this->functionLike->getReturnTypes() as $type => $typeInfo) {
-                if (!isset($mayBeTypes[$type])) {
+            foreach ($returnClassTypes as $class) {
+                $reserved = strtolower($class);
+                if ($reserved === 'static') {
+                    $maskBits[] = 'MAY_BE_STATIC';
                     continue;
                 }
 
-                $types[] = $mayBeTypes[$type];
+                if ($reserved === 'self' || $reserved === 'parent') {
+                    $classNames[] = $reserved;
+                    continue;
+                }
+
+                $classNames[] = Entry::escape($this->compilationContext->getFullName($class));
             }
 
-            if (count($types) > 1) {
+            foreach ($scalarKeys as $type) {
+                if (isset($mayBe[$type])) {
+                    $maskBits[] = $mayBe[$type];
+                }
+            }
+
+            if ($hasGenericObject) {
+                $maskBits[] = 'MAY_BE_OBJECT';
+            }
+
+            if ($isNullable) {
+                array_unshift($maskBits, 'MAY_BE_NULL');
+            }
+
+            $maskBits = array_values(array_unique($maskBits));
+
+            if ([] !== $classNames) {
+                $this->codePrinter->output(
+                    sprintf(
+                        'ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX(%s, %d, %d, %s, %s)',
+                        $this->name,
+                        (int)$this->returnByRef,
+                        $this->functionLike->getNumberOfRequiredParameters(),
+                        implode('|', $classNames),
+                        [] === $maskBits ? '0' : implode('|', $maskBits)
+                    )
+                );
+
+                return;
+            }
+
+            if (count($maskBits) > 1) {
                 $this->codePrinter->output(
                     sprintf(
                         'ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX(%s, %d, %d, %s)',
                         $this->name,
                         (int)$this->returnByRef,
                         $this->functionLike->getNumberOfRequiredParameters(),
-                        implode('|', $types)
+                        implode('|', $maskBits)
                     )
                 );
 
@@ -559,7 +639,7 @@ class ArgInfoDefinition
                 (int)$this->returnByRef,
                 $this->functionLike->getNumberOfRequiredParameters(),
                 $this->getReturnType(),
-                (int)$this->functionLike->areReturnTypesNullCompatible()
+                (int)$isNullable
             )
         );
     }

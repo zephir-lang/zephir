@@ -96,11 +96,25 @@ class Method
     protected bool              $isStatic     = false;
     protected ?LocalContextPass $localContext = null;
     /**
-     * Zend MAY_BE_* types.
+     * Maps a Zephir return-type name to its Zend `MAY_BE_*` type-mask bit.
+     *
+     * Used both to decide whether a union return type can be expressed as an
+     * arginfo type mask (see areReturnTypesCompatible()) and to build that
+     * mask (see ArgInfoDefinition). Only non-null, non-class scalar types live
+     * here; `null` and class/object types are handled separately.
      */
     protected array $mayBeArgTypes = [
-        'int'   => 'MAY_BE_LONG',
-        'false' => 'MAY_BE_FALSE',
+        'int'    => 'MAY_BE_LONG',
+        'uint'   => 'MAY_BE_LONG',
+        'long'   => 'MAY_BE_LONG',
+        'ulong'  => 'MAY_BE_LONG',
+        'char'   => 'MAY_BE_LONG',
+        'uchar'  => 'MAY_BE_LONG',
+        'double' => 'MAY_BE_DOUBLE',
+        'bool'   => 'MAY_BE_BOOL',
+        'false'  => 'MAY_BE_FALSE',
+        'string' => 'MAY_BE_STRING',
+        'array'  => 'MAY_BE_ARRAY',
     ];
     /**
      * Whether the variable is mixed.
@@ -162,33 +176,30 @@ class Method
     }
 
     /**
-     * Checks if the method have compatible return types.
+     * Checks if the method's return type(s) can be expressed in arginfo.
+     *
+     * A return type is renderable when every declared member is something the
+     * engine can describe: `void`, `null`, `mixed`, a class/object, or a scalar
+     * that has a `MAY_BE_*` mask bit. Any other member (e.g. `variable`,
+     * `callable`, `resource`) makes the whole return type undeterminable, so we
+     * emit no return-type arginfo at all. Unions of renderable members — of any
+     * arity, scalar and/or class — are fully supported and enforced by PHP,
+     * just like a hand-written union return type.
      */
     public function areReturnTypesCompatible(): bool
     {
-        // void
         if ($this->isVoid()) {
             return true;
         }
 
-        $totalTypes = count($this->returnTypes);
-
-        // union types
-        if ($totalTypes > 1) {
-            $diff = array_diff(array_keys($this->returnTypes), array_keys($this->mayBeArgTypes));
-            if (count($diff) === 0) {
-                return true;
+        foreach (array_keys($this->returnTypes) as $type) {
+            if (in_array($type, ['object', 'null', 'mixed'], true)) {
+                continue;
             }
-        }
 
-        // T1 | T2
-        if (2 === $totalTypes && !isset($this->returnTypes['null'])) {
-            return false;
-        }
-
-        // null | T1 | T2
-        if ($totalTypes > 2) {
-            return false;
+            if (!isset($this->mayBeArgTypes[$type])) {
+                return false;
+            }
         }
 
         return true;
