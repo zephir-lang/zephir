@@ -1794,7 +1794,8 @@ class Method
             if (
                 'return' !== $lastType &&
                 'throw' !== $lastType &&
-                !$this->hasChildReturnStatementType($statement)
+                !$this->hasChildReturnStatementType($statement) &&
+                !('switch' === $lastType && $this->switchAlwaysReturns($statement))
             ) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
@@ -2272,6 +2273,80 @@ class Method
             }
 
             return $this->hasChildReturnStatementType($item);
+        }
+
+        return false;
+    }
+
+    /**
+     * Issue #1706: tells whether a `switch` statement is guaranteed to return
+     * (or throw) on every path. This holds when it has a `default` clause, its
+     * last clause always exits, and every clause either always exits or is
+     * empty (falling through to a later clause that exits).
+     */
+    private function switchAlwaysReturns(array $statement): bool
+    {
+        if (empty($statement['clauses']) || !is_array($statement['clauses'])) {
+            return false;
+        }
+
+        $clauses    = $statement['clauses'];
+        $hasDefault = false;
+        foreach ($clauses as $clause) {
+            if ('default' === ($clause['type'] ?? null)) {
+                $hasDefault = true;
+                break;
+            }
+        }
+
+        if (!$hasDefault) {
+            return false;
+        }
+
+        $lastIndex = array_key_last($clauses);
+        foreach ($clauses as $index => $clause) {
+            $statements = $clause['statements'] ?? [];
+
+            if ($this->statementsAlwaysExit($statements)) {
+                continue;
+            }
+
+            // The last clause must exit; otherwise execution falls off the end.
+            // An empty earlier clause is allowed: it falls through to the next.
+            if ($index === $lastIndex || [] !== $statements) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Tells whether a block of statements is guaranteed to exit the method on
+     * every path (its last reachable statement is a `return`/`throw`, an
+     * exhaustive `if`/`else`, or an exhaustive `switch`).
+     */
+    private function statementsAlwaysExit(array $statements): bool
+    {
+        if ([] === $statements) {
+            return false;
+        }
+
+        $last = end($statements);
+        $type = $last['type'] ?? null;
+
+        if ('return' === $type || 'throw' === $type) {
+            return true;
+        }
+
+        if ('if' === $type) {
+            return isset($last['else_statements'])
+                && $this->statementsAlwaysExit($last['statements'] ?? [])
+                && $this->statementsAlwaysExit($last['else_statements']);
+        }
+
+        if ('switch' === $type) {
+            return $this->switchAlwaysReturns($last);
         }
 
         return false;
