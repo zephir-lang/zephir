@@ -36,4 +36,40 @@ final class CharsTest extends TestCase
         $this->assertSame(\chr($this->test->diffChars1()), 'A');
         $this->assertSame(\chr($this->test->diffChars2('a')), 'A');
     }
+
+    public function testSumOverflowHex(): void
+    {
+        // 32 + 64 + 42 = 138 = 0x8A
+        $this->assertSame('8A', $this->test->sumOverflowHex());
+    }
+
+    public function testSumOverflowValue(): void
+    {
+        // 32 + 64 + 42 = 138, must not sign-extend to a negative long
+        $this->assertSame(138, $this->test->sumOverflowValue());
+    }
+
+    public function testSumCharParamOverflow(): void
+    {
+        // char parameter (150) + 100 = 250, byte value preserved
+        $this->assertSame(250, $this->test->sumCharParamOverflow(\chr(150)));
+    }
+
+    public function testCharUnderflow(): void
+    {
+        // 0 - 1 wraps around to the byte value 255 (not -1)
+        $this->assertSame(255, $this->test->charUnderflow());
+    }
+
+    public function testMaxByteValue(): void
+    {
+        // 0 + 255 = 255, the maximum byte value
+        $this->assertSame(255, $this->test->maxByteValue());
+    }
+
+    public function testSumUchar(): void
+    {
+        // uchar 'd' (100) + 100 = 200
+        $this->assertSame(200, $this->test->sumUchar());
+    }
 }
