@@ -97,6 +97,7 @@ final class StubsCommandTest extends TestCase
             'Issue 1986 aliases for use statements' => ['Issue_1986.php'],
             'Issue 2026 return type for Collections' => ['Issue_2026.php'],
             'Issue 2092 return type for type-hinted object' => ['Issue_2092.php'],
+            'Issue 2428 multi-class union return type' => ['Issue_2428.php'],
         ];
     }
 
