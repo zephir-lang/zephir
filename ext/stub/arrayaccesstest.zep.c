@@ -141,6 +141,31 @@ PHP_METHOD(Stub_ArrayAccessTest, issue645)
 }
 
 /**
+ * Declaring a variable from an array-access on a hash literal. This is the
+ * original snippet reported in the issue; the static type-inference pass
+ * used to leak debug output to stdout while compiling it.
+ *
+ * @issue https://github.com/zephir-lang/zephir/issues/1877
+ */
+PHP_METHOD(Stub_ArrayAccessTest, issue1877)
+{
+	zval config, conf;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&config);
+	ZVAL_UNDEF(&conf);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&config);
+	zephir_create_array(&config, 1, 0);
+	add_assoc_stringl_ex(&config, SL("aaa"), SL("bbb"));
+	zephir_memory_observe(&conf);
+	zephir_array_fetch_string(&conf, &config, SL("aaa"), PH_NOISY, "stub/arrayaccesstest.zep", 70);
+	RETURN_CCTOR(&conf);
+}
+
+/**
  * @issue https://github.com/zephir-lang/zephir/issues/1155
  */
 PHP_METHOD(Stub_ArrayAccessTest, issue1155)
@@ -362,9 +387,9 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetKeyFromArrayInternalVariable)
 	zephir_create_array(&unsetData, 2, 0);
 	add_assoc_stringl_ex(&unsetData, SL("key_a"), SL("marcin"));
 	add_assoc_stringl_ex(&unsetData, SL("key_b"), SL("paula"));
-	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 154);
+	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 171);
 	zephir_array_unset_string(&unsetData, SL("key_a"), PH_SEPARATE);
-	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 156);
+	zephir_array_append(&ret, &unsetData, PH_SEPARATE, "stub/arrayaccesstest.zep", 173);
 	RETURN_CTOR(&ret);
 }
 
@@ -389,14 +414,14 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetStringKeyFromArrayProperty)
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 168);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 185);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	ZVAL_STRING(&_1, "key_a");
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset_string(&_2, SL("key_a"), PH_SEPARATE);
 	zephir_read_property(&_3, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 170);
+	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 187);
 	RETURN_CTOR(&ret);
 }
 
@@ -418,14 +443,14 @@ PHP_METHOD(Stub_ArrayAccessTest, issue1259UnsetLongKeyFromArrayProperty)
 	ZEPHIR_INIT_VAR(&ret);
 	array_init(&ret);
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 179);
+	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/arrayaccesstest.zep", 196);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	ZVAL_LONG(&_1, 3);
 	zephir_unset_property_array(this_ptr, ZEND_STRL("unsetData"), &_1);
 	zephir_read_property(&_2, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
 	zephir_array_unset_long(&_2, 3, PH_SEPARATE);
 	zephir_read_property(&_3, this_ptr, ZEND_STRL("unsetData"), PH_NOISY_CC | PH_READONLY);
-	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 181);
+	zephir_array_append(&ret, &_3, PH_SEPARATE, "stub/arrayaccesstest.zep", 198);
 	RETURN_CTOR(&ret);
 }
 

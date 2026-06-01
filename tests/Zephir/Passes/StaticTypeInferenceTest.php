@@ -85,4 +85,38 @@ final class StaticTypeInferenceTest extends TestCase
         // The pass method processes statements but returns null
         $this->assertNull($result);
     }
+
+    /**
+     * Reassigning a variable whose previously inferred type is not enumerated
+     * in the merge switch (e.g. it came from a `(object)` cast or an
+     * array-access) must not leak "StaticTypeInference=..." debug noise to
+     * stdout; the variable should instead degrade to a dynamic one.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function testShouldNotEmitDebugOutputWhenMergingUnhandledType(): void
+    {
+        $this->expectOutputString('');
+
+        $this->inference->markVariable('x', 'object'); // e.g. from a (object) cast
+        $this->inference->markVariable('x', 'undefined'); // reassignment
+
+        // A conflicting reassignment downgrades to a dynamic variable.
+        $this->assertFalse($this->inference->getInferedType('x'));
+    }
+
+    /**
+     * The companion default branch in passExpression() must stay silent for
+     * expression node types it does not know about.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function testShouldNotEmitDebugOutputForUnhandledExpressionType(): void
+    {
+        $this->expectOutputString('');
+
+        $result = $this->inference->passExpression(['type' => '__unknown__']);
+
+        $this->assertNull($result);
+    }
 }

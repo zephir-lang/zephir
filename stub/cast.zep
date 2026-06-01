@@ -513,4 +513,21 @@ class Cast
 
         return ret;
     }
+
+    /**
+     * Reassigning a variable whose first inferred type comes from an
+     * `(object)` cast used to make the static type-inference pass leak
+     * `StaticTypeInference=object undefined` to stdout during compilation.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function testObjectCastThenReassign() -> string
+    {
+        var data;
+
+        let data = (object) ["key": "value"];
+        let data = "reassigned";
+
+        return data;
+    }
 }
