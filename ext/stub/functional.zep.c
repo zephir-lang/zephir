@@ -44,7 +44,7 @@ PHP_METHOD(Stub_Functional, map1)
 	zephir_get_arrval(&a, a_param);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, NULL, stub_22__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, NULL, stub_23__closure_ce, SL("__invoke"));
 	ZEPHIR_CALL_FUNCTION(&_1, "array_map", NULL, 12, &_0, &a);
 	zephir_check_call_status();
 	RETURN_CCTOR(&_1);

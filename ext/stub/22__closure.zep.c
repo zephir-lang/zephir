@@ -12,7 +12,7 @@
 #include <Zend/zend_interfaces.h>
 
 #include "kernel/main.h"
-#include "kernel/operators.h"
+#include "kernel/fcall.h"
 #include "kernel/memory.h"
 #include "kernel/object.h"
 
@@ -26,14 +26,20 @@ ZEPHIR_INIT_CLASS(stub_22__closure)
 
 PHP_METHOD(stub_22__closure, __invoke)
 {
-	zval *x, x_sub;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *val, val_sub;
+	zval *this_ptr = getThis();
 
-	ZVAL_UNDEF(&x_sub);
+	ZVAL_UNDEF(&val_sub);
 	ZEND_PARSE_PARAMETERS_START(1, 1)
-		Z_PARAM_ZVAL(x)
+		Z_PARAM_ZVAL(val)
 	ZEND_PARSE_PARAMETERS_END();
-	zephir_fetch_params_without_memory_grow(1, 0, &x);
-	mul_function(return_value, x, x);
-	return;
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &val);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321doubled", NULL, 0, val);
+	zephir_check_call_status();
+	RETURN_MM();
 }
 

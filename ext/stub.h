@@ -27,6 +27,7 @@
 #include "stub/oo/scopes/hasprivatemethod.zep.h"
 #include "stub/oo/scopes/scopetesterinterface.zep.h"
 #include "stub/ooimpl/zbeginning.zep.h"
+#include "stub/piface.zep.h"
 #include "stub/properties/publicproperties.zep.h"
 #include "stub/args/single/integer.zep.h"
 #include "stub/args/single/str.zep.h"
@@ -193,6 +194,8 @@
 #include "stub/optimizers/substr.zep.h"
 #include "stub/optimizers/tan.zep.h"
 #include "stub/pdostatement.zep.h"
+#include "stub/pimpl.zep.h"
+#include "stub/precedencecheck.zep.h"
 #include "stub/pregmatch.zep.h"
 #include "stub/properties/app.zep.h"
 #include "stub/properties/extendspublicproperties.zep.h"
@@ -272,5 +275,6 @@
 #include "stub/27__closure.zep.h"
 #include "stub/28__closure.zep.h"
 #include "stub/29__closure.zep.h"
+#include "stub/30__closure.zep.h"
 
 #endif
