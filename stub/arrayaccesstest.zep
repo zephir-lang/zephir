@@ -56,6 +56,23 @@ class ArrayAccessTest
     }
 
     /**
+     * Declaring a variable from an array-access on a hash literal. This is the
+     * original snippet reported in the issue; the static type-inference pass
+     * used to leak debug output to stdout while compiling it.
+     *
+     * @issue https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function issue1877() -> string
+    {
+        var config, conf;
+
+        let config = ["aaa": "bbb"];
+        let conf   = config["aaa"];
+
+        return conf;
+    }
+
+    /**
      * @issue https://github.com/zephir-lang/zephir/issues/1155
      */
     public function issue1155() -> bool

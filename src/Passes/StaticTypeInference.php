@@ -17,8 +17,6 @@ use Zephir\StatementsBlock;
 
 use function is_string;
 
-use const PHP_EOL;
-
 /**
  * This pass try to infer typing on dynamic variables so the compiler
  * can replace them by low level types automatically
@@ -179,8 +177,9 @@ class StaticTypeInference
                 break;
 
             default:
-                // TODO: Find the reason
-                echo 'StaticTypeInference=', $currentType, ' ', $type, PHP_EOL;
+                // The current type is not one we can merge with; degrade the
+                // variable to a dynamic one so it is not optimized away.
+                $this->variables[$variable] = 'undefined';
                 break;
         }
     }
@@ -419,8 +418,8 @@ class StaticTypeInference
                 return 'undefined';
 
             default:
-                echo 'STI=', $expression['type'], PHP_EOL;
-                break;
+                // Unknown expression node: do not infer a type for it.
+                return null;
         }
     }
 

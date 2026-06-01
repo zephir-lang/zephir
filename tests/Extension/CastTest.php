@@ -223,4 +223,12 @@ final class CastTest extends TestCase
         $this->assertSame(0.0, $return[4]);
         $this->assertSame(0, $return[5]);
     }
+
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function testObjectCastThenReassign(): void
+    {
+        $this->assertSame('reassigned', $this->test->testObjectCastThenReassign());
+    }
 }
