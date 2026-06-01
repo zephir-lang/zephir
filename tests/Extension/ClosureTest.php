@@ -160,6 +160,20 @@ final class ClosureTest extends TestCase
     }
 
     /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2562
+     *
+     * Capturing a scalar `string`-typed variable in a closure via `use()`.
+     */
+    public function testIssue2562StringUse(): void
+    {
+        $test = new Closures();
+
+        $closure = $test->issue2562StringUse('world');
+        $this->assertInstanceOf(\Closure::class, $closure);
+        $this->assertSame('hello:world', $closure());
+    }
+
+    /**
      * @issue https://github.com/zephir-lang/zephir/issues/2321
      *
      * `preg_replace_callback` with a private callback. The Zephir fixture

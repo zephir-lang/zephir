@@ -931,6 +931,9 @@ class Method
             $localVar->setDynamicTypes($localVar->getType());
             $localVar->setType('variable');
             $localVar->setIsDoublePointer(false);
+            // Captured string params are zend_string * outside, but inside the
+            // closure they live as a zval (the static property). See #2562.
+            $localVar->setIsNativeString(false);
             $symbolTable->addRawVariable($localVar);
         }
 
