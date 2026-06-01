@@ -13,33 +13,25 @@
 
 #include "kernel/main.h"
 #include "kernel/fcall.h"
-#include "kernel/memory.h"
 #include "kernel/object.h"
+#include "kernel/memory.h"
 
 
-ZEPHIR_INIT_CLASS(stub_24__closure)
+ZEPHIR_INIT_CLASS(stub_30__closure)
 {
-	ZEPHIR_REGISTER_CLASS(stub, 24__closure, stub, 24__closure, stub_24__closure_method_entry, ZEND_ACC_FINAL_CLASS);
+	ZEPHIR_REGISTER_CLASS(stub, 30__closure, stub, 30__closure, stub_30__closure_method_entry, ZEND_ACC_FINAL_CLASS);
 
 	return SUCCESS;
 }
 
-PHP_METHOD(stub_24__closure, __invoke)
+PHP_METHOD(stub_30__closure, __invoke)
 {
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zend_long ZEPHIR_LAST_CALL_STATUS;
-	zval *carry, carry_sub, *row, row_sub;
-
-	ZVAL_UNDEF(&carry_sub);
-	ZVAL_UNDEF(&row_sub);
-	ZEND_PARSE_PARAMETERS_START(2, 2)
-		Z_PARAM_ZVAL(carry)
-		Z_PARAM_ZVAL(row)
-	ZEND_PARSE_PARAMETERS_END();
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
-	zephir_fetch_params(1, 2, 0, &carry, &row);
-	ZEPHIR_RETURN_CALL_CE_STATIC(stub_issue2167_ce, "imploderow", NULL, 0, carry, row);
+
+	ZEPHIR_RETURN_CALL_CE_STATIC(stub_mcall_caller_ce, "perform", NULL, 0);
 	zephir_check_call_status();
 	RETURN_MM();
 }

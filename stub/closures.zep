@@ -196,16 +196,27 @@ class Closures
      * Variant: closure reads a property AND uses a captured local via
      * `use()`. Verifies #1873 (property) and #2497 (use) compose.
      *
-     * The captured variable is `var` (not `string`) because Zephir's
-     * native-string parameter refactor (#2462) stores string params as
-     * `zend_string *` which the `use()` plumbing in closure stubs doesn't
-     * yet wrap to a zval — that's an orthogonal limitation worth tracking
-     * separately.
+     * String-typed captures are covered separately by #2562
+     * (see issue2562StringUse).
      */
     public function issue1873PropertyAndUse(var prefix) -> <\Closure>
     {
         return function () use (prefix) {
             return prefix . ":" . this->property1873;
+        };
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2562
+     *
+     * Capturing a scalar `string`-typed variable in a closure via `use()`.
+     * String params are stored as `zend_string *` (#2462), so the capture
+     * must box them with ZVAL_STR, not ZVAL_STRING (which expects char *).
+     */
+    public function issue2562StringUse(string name) -> <\Closure>
+    {
+        return function () use (name) {
+            return this->issue2497Helper() . ":" . name;
         };
     }
 

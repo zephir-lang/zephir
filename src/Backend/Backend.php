@@ -623,8 +623,14 @@ class Backend
         CompilationContext $context,
         bool $useCodePrinter = true
     ): string {
+        // A native zend_string * value must be boxed with ZVAL_STR; ZVAL_STRING
+        // expects a const char * and fails to compile otherwise. See #2562.
+        $macro = ($value instanceof Variable && $value->isNativeString())
+            ? 'ZVAL_STR'
+            : 'ZVAL_STRING';
+
         return $this->assignHelper(
-            'ZVAL_STRING',
+            $macro,
             $this->getVariableCode($variable),
             $value,
             $context,
