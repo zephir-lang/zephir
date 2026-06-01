@@ -779,11 +779,12 @@ PHP_METHOD(Stub_Assign, testPropertyMulAssign2)
 
 PHP_METHOD(Stub_Assign, testPropertyAssignStringConcat)
 {
-	zval _0;
+	zval _0, _1;
 	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
 	zval *this_ptr = getThis();
 
 	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
@@ -791,8 +792,10 @@ PHP_METHOD(Stub_Assign, testPropertyAssignStringConcat)
 	ZEPHIR_INIT_NVAR(&_0);
 	ZVAL_STRING(&_0, "test");
 	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_0);
-	zephir_concat_self_str(&_0, " string", sizeof(" string") - 1);
-	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_0);
+	ZEPHIR_OBS_NVAR(&_1);
+	zephir_read_property(&_1, this_ptr, ZEND_STRL("testVar"), PH_NOISY_CC);
+	zephir_concat_self_str(&_1, SL(" string"));
+	zephir_update_property_zval(this_ptr, ZEND_STRL("testVar"), &_1);
 	RETURN_MM_MEMBER(getThis(), "testVar");
 }
 

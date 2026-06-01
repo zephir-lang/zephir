@@ -15,8 +15,10 @@ namespace Zephir\Statements\Let;
 
 use Zephir\CompilationContext as Context;
 use Zephir\CompiledExpression as Expression;
+use Zephir\Exception as ZephirException;
 use Zephir\Exception\CompilerException;
 use Zephir\Exception\CompilerException as Exception;
+use Zephir\Expression as ZephirExpression;
 use Zephir\Traits\VariablesTrait;
 use Zephir\Variable\Variable as ZephirVariable;
 
@@ -256,22 +258,24 @@ class ObjectProperty
                 break;
 
             case 'string':
-                $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context, false);
-
                 switch ($statement['operator']) {
                     case 'concat-assign':
-                        $codePrinter->output(
-                            'zephir_concat_self_str(&'
-                            . $tempVariable->getName()
-                            . ', "'
-                            . $expression->getCode()
-                            . '", sizeof("'
-                            . $expression->getCode()
-                            . '") - 1);'
-                        );
+                        /**
+                         * Issue #2063: read the current property value first,
+                         * then append the literal; otherwise the property is
+                         * overwritten rather than concatenated.
+                         */
+                        $context->headersManager->add('kernel/operators');
+                        $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
+                        $codePrinter->output(sprintf(
+                            'zephir_concat_self_str(%s, SL("%s"));',
+                            $context->backend->getVariableCode($tempVariable),
+                            $expression->getCode()
+                        ));
                         break;
                     case 'assign':
                         /* We only can use nonReferenced variables for not refcounted stuff in ZE3 */
+                        $tempVariable = $context->symbolTable->getTempVariableForWrite('variable', $context, false);
                         $tempVariable->initVariant($context);
                         $context->backend->assignString($tempVariable, $expression->getCode(), $context);
                         break;
@@ -348,6 +352,20 @@ class ObjectProperty
                     case 'string':
                     case 'variable':
                     case 'mixed':
+                        /**
+                         * Issue #2063: concat-assign (.=) must read the current
+                         * property value and append to it, otherwise the
+                         * property is simply overwritten.
+                         */
+                        if ('concat-assign' === $statement['operator']) {
+                            $tempVariable = $this->fetchPropertyValue($variable, $propertyName, $context);
+                            $rhsCode      = $context->backend->getVariableCode($variableVariable);
+                            $tempCode     = $context->backend->getVariableCode($tempVariable);
+                            $codePrinter->output('SEPARATE_ZVAL(' . $rhsCode . ');');
+                            $codePrinter->output(
+                                'zephir_concat_function(' . $rhsCode . ', ' . $tempCode . ', ' . $rhsCode . ');'
+                            );
+                        }
                         $context->backend->updateProperty($symbolVariable, $propertyName, $variableVariable, $context);
                         $this->checkVariableTemporal($symbolVariable);
                         break;
@@ -360,5 +378,32 @@ class ObjectProperty
             default:
                 throw new Exception("Unknown type {$expression->getType()}", $statement);
         }
+    }
+
+    /**
+     * Reads the current value of an object property into a fresh temp variable
+     * (used to support read-modify-write operators such as concat-assign).
+     */
+    private function fetchPropertyValue(
+        string $variable,
+        string $propertyName,
+        Context $context
+    ): ZephirVariable {
+        $tempVariable = $context->symbolTable->getTempVariableForObserveOrNullify('variable', $context);
+
+        $expression = new ZephirExpression([
+            'type'  => 'property-access',
+            'left'  => ['type' => 'variable', 'value' => $variable],
+            'right' => ['value' => $propertyName],
+        ]);
+        $expression->setExpectReturn(true, $tempVariable);
+
+        try {
+            $expression->compile($context);
+        } catch (ZephirException $e) {
+            throw new CompilerException($e->getMessage(), [], $e->getCode(), $e);
+        }
+
+        return $tempVariable;
     }
 }
