@@ -122,6 +122,7 @@
 #include "stub/issue2546.zep.h"
 #include "stub/issue2564.zep.h"
 #include "stub/issue2564padfactory.zep.h"
+#include "stub/issue2565.zep.h"
 #include "stub/issue663.zep.h"
 #include "stub/issue808.zep.h"
 #include "stub/issue820.zep.h"

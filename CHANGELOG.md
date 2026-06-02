@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed generated PHP stubs dropping all but the first class in a union return type (e.g. `-> <Model> | <Row> | null` produced `Model|null` instead of `Model|Row|null`) [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 - Fixed capturing a scalar `string`-typed variable in a closure via `use()` emitting `ZVAL_STRING` on a `zend_string *` and failing to compile; it now boxes with `ZVAL_STR` and the captured value is treated as a zval inside the closure body [#2562](https://github.com/zephir-lang/zephir/issues/2562)
 - Fixed default values not being readable through Reflection for parameters that have a class type, such as `<Foo> bar = null`. Before this `getDefaultValue()` threw an error and `isDefaultValueAvailable()` returned `false`. These parameters now use `ZEND_ARG_OBJ_TYPE_MASK`, which keeps the default value, instead of `ZEND_ARG_OBJ_INFO` [#2564](https://github.com/zephir-lang/zephir/issues/2564)
+- Fixed `instanceof` not narrowing the type inside the guarded block. Calling a method that exists only on the subtype, as in `if (x instanceof Sub) { x->subMethod(); }`, no longer fails generation with a "does not implement method" error. The narrowed type applies only inside the `if` block [#2565](https://github.com/zephir-lang/zephir/issues/2565)
 
 ## [0.22.0] - 2026-05-29
 

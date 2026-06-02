@@ -127,6 +127,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2546.zep.c
 	stub/issue2564.zep.c
 	stub/issue2564padfactory.zep.c
+	stub/issue2565.zep.c
 	stub/issue663.zep.c
 	stub/issue808.zep.c
 	stub/issue820.zep.c
