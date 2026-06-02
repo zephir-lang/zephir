@@ -918,6 +918,117 @@ class Backend
         }
     }
 
+    /**
+     * Declares an array class constant by building its value in the class
+     * initializer and handing it to zephir_declare_class_constant().
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2533
+     */
+    public function declareArrayConstant(string $name, array $node, CompilationContext $context): void
+    {
+        $ce      = $context->classDefinition->getClassEntry($context);
+        $printer = $context->codePrinter;
+        $counter = 0;
+        $lines   = [];
+
+        $rootVar = $this->buildConstantArray($node, $lines, $counter);
+
+        $printer->output('{');
+        $printer->increaseLevel();
+        foreach ($lines as $line) {
+            $printer->output($line);
+        }
+        $printer->output(
+            sprintf('zephir_declare_class_constant_array(%s, SL("%s"), &%s);', $ce, $name, $rootVar)
+        );
+        $printer->decreaseLevel();
+        $printer->output('}');
+    }
+
+    /**
+     * Recursively emits C that builds an array literal AST node into a fresh
+     * local zval, returning the name of that zval. Used for array class
+     * constants which must be materialized in the class initializer.
+     *
+     * @param array    $node    array/empty-array AST node
+     * @param string[] $lines   accumulator for the emitted C lines
+     * @param int      $counter unique-variable counter (by reference)
+     */
+    private function buildConstantArray(array $node, array &$lines, int &$counter): string
+    {
+        $var     = '_zc' . $counter++;
+        $items   = $node['left'] ?? [];
+        $lines[] = sprintf('zval %s;', $var);
+        $lines[] = sprintf('array_init_size(&%s, %d);', $var, count($items) + 1);
+
+        foreach ($items as $item) {
+            $value = $item['value'];
+            $key   = $item['key'] ?? null;
+
+            if (in_array($value['type'], ['array', 'empty-array'], true)) {
+                $child   = $this->buildConstantArray($value, $lines, $counter);
+                $lines[] = $this->arrayAddLine($var, $key, 'zval', '&' . $child);
+                continue;
+            }
+
+            [$func, $arg] = $this->scalarConstantValue($value);
+            $lines[]      = $this->arrayAddLine($var, $key, $func, $arg);
+        }
+
+        return $var;
+    }
+
+    /**
+     * Maps a scalar literal AST node to the add_*_index helper suffix and the
+     * already-rendered C argument(s).
+     *
+     * @return array{0: string, 1: string} [helper-suffix, argument-string]
+     */
+    private function scalarConstantValue(array $value): array
+    {
+        return match ($value['type']) {
+            'int', 'long', 'uint', 'ulong'   => ['long', (string) ($value['value'])],
+            'double', 'float'                => ['double', (string) ($value['value'])],
+            'bool'                           => ['bool', 'true' === $value['value'] ? '1' : '0'],
+            'null'                           => ['null', ''],
+            'char', 'string', 'istring'      => [
+                'stringl',
+                sprintf('"%s", %d', Name::addSlashes((string) $value['value']), strlen((string) $value['value'])),
+            ],
+            default                          => throw new CompilerException(
+                'Unsupported array constant element type: ' . $value['type']
+            ),
+        };
+    }
+
+    /**
+     * Builds a single add_(next_index|index|assoc)_<func> C call line for an
+     * array constant element, honoring an optional integer/string key.
+     */
+    private function arrayAddLine(string $var, ?array $key, string $func, string $arg): string
+    {
+        $tail = '' === $arg ? '' : ', ' . $arg;
+
+        if ($key === null) {
+            return sprintf('add_next_index_%s(&%s%s);', $func, $var, $tail);
+        }
+
+        if ('int' === $key['type'] || 'long' === $key['type']) {
+            return sprintf('add_index_%s(&%s, %d%s);', $func, $var, (int) $key['value'], $tail);
+        }
+
+        $keyValue = (string) $key['value'];
+
+        return sprintf(
+            'add_assoc_%s_ex(&%s, "%s", %d%s);',
+            $func,
+            $var,
+            Name::addSlashes($keyValue),
+            strlen($keyValue),
+            $tail
+        );
+    }
+
     public function declareVariables($method, $typeToVariables)
     {
         $varInitCode    = [];

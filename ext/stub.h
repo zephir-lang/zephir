@@ -121,6 +121,7 @@
 #include "stub/issue2505crosschain.zep.h"
 #include "stub/issue2505extended.zep.h"
 #include "stub/issue2522.zep.h"
+#include "stub/issue2533.zep.h"
 #include "stub/issue2537child.zep.h"
 #include "stub/issue2542.zep.h"
 #include "stub/issue2543.zep.h"
