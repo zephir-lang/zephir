@@ -178,14 +178,16 @@ ZEP;
 
         // Write Zephir source for Stub\Args\Single\ObjNullable
         // A parameter that has a class type and defaults to null must keep
-        // its default value readable through reflection.
+        // its default value readable through reflection. The parameter type
+        // points at the class itself so the generated class entry stays the
+        // same in any environment.
         // @see https://github.com/zephir-lang/zephir/issues/2564
         $objNullableZepCode = <<<'ZEP'
 namespace Stub\Args\Single;
 
 class ObjNullable
 {
-    public function argObjNull(<\Stub\Args\Single\Str> param = null) -> void
+    public function argObjNull(<\Stub\Args\Single\ObjNullable> param = null) -> void
     {
     }
 }
