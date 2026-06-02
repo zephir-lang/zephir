@@ -18,11 +18,13 @@ use Zephir\Class\Method\Method;
 use Zephir\Class\Method\Parameters;
 use Zephir\CompilationContext;
 use Zephir\Exception;
+use Zephir\Expression\StaticConstantAccess;
 
 use function array_key_exists;
 use function array_merge;
 use function count;
 use function implode;
+use function in_array;
 use function is_array;
 use function key;
 use function sprintf;
@@ -357,14 +359,51 @@ class ArgInfoDefinition
         ];
 
         if ($gotDefault) {
-            if (isset($parameter['default']['value']) && $zendType === 'IS_STRING') {
-                $args[] = $this->escapeString($parameter['default']['value']);
+            $default = $this->foldConstantDefault($parameter['default']);
+
+            if (isset($default['value']) && $zendType === 'IS_STRING') {
+                $args[] = $this->escapeString((string)$default['value']);
             } else {
-                $args[] = $parameter['default']['value'] ?? 'null';
+                $args[] = $default['value'] ?? 'null';
             }
         }
 
         $this->codePrinter->output(vsprintf($format, $args));
+    }
+
+    /**
+     * Resolve a class-constant parameter default (e.g. `self::FOO`,
+     * `Some\Klass::BAR`) to its folded scalar literal.
+     *
+     * Reflection reads a parameter's default from the arg_info metadata. A
+     * `static-constant-access` default carries no literal `value`, so left
+     * untouched the arg_info would store `"null"` and
+     * `ReflectionParameter::getDefaultValue()` would report `null` instead of
+     * the constant's value. The method body already folds the same constant,
+     * so this keeps the arg_info consistent with the runtime default.
+     *
+     * Non-constant (or unresolvable/non-scalar) defaults are returned unchanged.
+     * Resolution is skipped when constant folding is disabled, mirroring the
+     * runtime behaviour where the constant is then read dynamically.
+     */
+    private function foldConstantDefault(array $default): array
+    {
+        if (($default['type'] ?? null) !== 'static-constant-access') {
+            return $default;
+        }
+
+        if (!$this->compilationContext->config->get('static-constant-class-folding', 'optimizations')) {
+            return $default;
+        }
+
+        $compiled    = (new StaticConstantAccess())->compile($default, $this->compilationContext);
+        $scalarTypes = ['string', 'char', 'int', 'uint', 'long', 'ulong', 'double', 'float', 'bool'];
+
+        if (!in_array($compiled->getType(), $scalarTypes, true)) {
+            return $default;
+        }
+
+        return ['type' => $compiled->getType(), 'value' => $compiled->getCode()];
     }
 
     private function escapeString(string $value): string
