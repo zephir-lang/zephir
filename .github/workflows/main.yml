@@ -273,6 +273,8 @@ jobs:
         run: |
           branch="${GITHUB_REF#refs/heads/}"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          # Artifact names reject '/', so emit a slash-free slug for the upload step.
+          echo "branch_slug=${branch//\//-}" >> "$GITHUB_OUTPUT"
           # Look up the first open PR with this branch as head. Fork PRs are
           # surfaced as `owner:branch`, so we narrow by repo as well.
           pr_json=$(gh pr list \
@@ -399,7 +401,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: benchmark-report-${{ steps.pr.outputs.branch }}
+          name: benchmark-report-${{ steps.pr.outputs.branch_slug }}
           path: |
             .phpbench/report.txt
             .phpbench/comment.md
