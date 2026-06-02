@@ -304,11 +304,8 @@ PHP_METHOD(Stub_Closures, issue1873PropertyWriter)
  * Variant: closure reads a property AND uses a captured local via
  * `use()`. Verifies #1873 (property) and #2497 (use) compose.
  *
- * The captured variable is `var` (not `string`) because Zephir's
- * native-string parameter refactor (#2462) stores string params as
- * `zend_string *` which the `use()` plumbing in closure stubs doesn't
- * yet wrap to a zval — that's an orthogonal limitation worth tracking
- * separately.
+ * String-typed captures are covered separately by #2562
+ * (see issue2562StringUse).
  */
 PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
 {
@@ -434,7 +431,7 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 262);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 259);
 	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 38, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
@@ -490,7 +487,7 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedUpper)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 285);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 282);
 	zephir_fast_strtoupper(return_value, &_0);
 	RETURN_MM();
 }

@@ -233,15 +233,40 @@ class ArgInfoDefinition
                             throw new Exception('Unexpected exception');
                         }
 
-                        $this->codePrinter->output(
-                            sprintf(
-                                "\tZEND_ARG_OBJ_INFO(%d, %s, %s, %d)",
-                                $this->passByReference($parameter),
-                                $parameter['name'],
-                                Entry::escape($this->compilationContext->getFullName($parameter['cast']['value'])),
-                                (int)$this->allowNull($parameter)
-                            )
+                        $className = Entry::escape(
+                            $this->compilationContext->getFullName($parameter['cast']['value'])
                         );
+
+                        if (isset($parameter['default'])) {
+                            /**
+                             * Parameter that has a class type and a default value, usually null.
+                             * ZEND_ARG_OBJ_INFO does not keep a default, so reflection makes
+                             * getDefaultValue() throw and isDefaultValueAvailable() return false.
+                             * ZEND_ARG_OBJ_TYPE_MASK keeps the default value.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2564
+                             */
+                            $this->codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_OBJ_TYPE_MASK(%d, %s, %s, %s, \"%s\")",
+                                    $this->passByReference($parameter),
+                                    $parameter['name'],
+                                    $className,
+                                    $this->allowNull($parameter) ? 'MAY_BE_NULL' : '0',
+                                    $parameter['default']['value'] ?? 'null'
+                                )
+                            );
+                        } else {
+                            $this->codePrinter->output(
+                                sprintf(
+                                    "\tZEND_ARG_OBJ_INFO(%d, %s, %s, %d)",
+                                    $this->passByReference($parameter),
+                                    $parameter['name'],
+                                    $className,
+                                    (int)$this->allowNull($parameter)
+                                )
+                            );
+                        }
                     } else {
                         $this->codePrinter->output(
                             sprintf(

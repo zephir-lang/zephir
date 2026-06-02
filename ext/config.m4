@@ -32,7 +32,6 @@ if test "$PHP_STUB" = "yes"; then
 	stub/oo/scopes/hasprivatemethod.zep.c
 	stub/oo/scopes/scopetesterinterface.zep.c
 	stub/ooimpl/zbeginning.zep.c
-	stub/piface.zep.c
 	stub/properties/publicproperties.zep.c
 	stub/args/single/integer.zep.c
 	stub/args/single/str.zep.c
@@ -126,6 +125,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue2522.zep.c
 	stub/issue2537child.zep.c
 	stub/issue2546.zep.c
+	stub/issue2564.zep.c
+	stub/issue2564padfactory.zep.c
 	stub/issue663.zep.c
 	stub/issue808.zep.c
 	stub/issue820.zep.c
@@ -199,8 +200,6 @@ if test "$PHP_STUB" = "yes"; then
 	stub/optimizers/substr.zep.c
 	stub/optimizers/tan.zep.c
 	stub/pdostatement.zep.c
-	stub/pimpl.zep.c
-	stub/precedencecheck.zep.c
 	stub/pregmatch.zep.c
 	stub/properties/app.zep.c
 	stub/properties/extendspublicproperties.zep.c

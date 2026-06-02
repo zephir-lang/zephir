@@ -284,7 +284,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_testfor33, 0, 0, 1)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_testfor34, 0, 0, 0)
-	ZEND_ARG_OBJ_INFO(0, e, Iterator, 1)
+	ZEND_ARG_OBJ_TYPE_MASK(0, e, Iterator, MAY_BE_NULL, "null")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_flow_testfor35aux, 0, 0, 1)
