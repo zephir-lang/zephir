@@ -797,6 +797,20 @@ class Variable implements TypeAwareInterface
     }
 
     /**
+     * Overwrites the PHP classes related to the variable.
+     *
+     * Unlike setClassTypes() this replaces the whole list. It is used by
+     * instanceof flow narrowing to scope a narrowed type to a branch and to
+     * restore the original list afterwards.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2565
+     */
+    public function overrideClassTypes(array $classTypes): void
+    {
+        $this->classTypes = $classTypes;
+    }
+
+    /**
      * Sets the default init value.
      */
     public function setDefaultInitValue(mixed $value): void
