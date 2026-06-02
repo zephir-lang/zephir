@@ -21,6 +21,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/interfaces/interfaceintsignature.zep.c
 	stub/invokes/abstractinvoker.zep.c
 	stub/invokes/abstractinvokercomplex.zep.c
+	stub/issue1628abstract.zep.c
 	stub/issue2165/issueinterface.zep.c
 	stub/issue2324.zep.c
 	stub/issue2505.zep.c
@@ -111,6 +112,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1134.zep.c
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
+	stub/issue1628.zep.c
 	stub/issue1706.zep.c
 	stub/issue2063.zep.c
 	stub/issue2165/issue.zep.c
