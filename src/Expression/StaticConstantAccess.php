@@ -19,6 +19,7 @@ use Zephir\CompilationContext;
 use Zephir\CompiledExpression;
 use Zephir\Exception;
 use Zephir\Exception\CompilerException;
+use Zephir\Expression;
 use Zephir\Variable\Variable;
 
 use function gettype;
@@ -148,6 +149,21 @@ class StaticConstantAccess
         }
 
         $constantDefinition = $classDefinition->getConstant($constant);
+
+        /**
+         * Array constants cannot be folded to a scalar literal; compile the
+         * constant's array value as a fresh array expression at the use site.
+         */
+        if (
+            $constantDefinition instanceof Constant &&
+            in_array($constantDefinition->getValueType(), ['array', 'empty-array'], true)
+        ) {
+            $expression = new Expression($constantDefinition->getValue());
+            $expression->setExpectReturn($this->expecting, $this->expectingVariable);
+            $expression->setReadOnly($this->readOnly);
+
+            return $expression->compile($compilationContext);
+        }
 
         if ($constantDefinition instanceof Constant) {
             $constantDefinition->processValue($compilationContext);

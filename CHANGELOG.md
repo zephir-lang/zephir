@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Added
+- Support for array class constants (e.g. `const BAR = [1, 2, 3];`, including nested and keyed arrays). The value is materialized on the class entry as a persistent immutable array (readable from PHP), and `self::CONST` resolves to it in Zephir code [#2533](https://github.com/zephir-lang/zephir/issues/2533)
 - Full union return type support, enforced by the engine just like a hand-written PHP union return type. Any combination of classes and/or scalar types is now emitted into the compiled extension's arginfo (via `ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX` / `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX`), so `-> <Model> | <Row> | null`, `-> int | string`, `-> <Foo> | int`, etc. are reported by Reflection and enforced at runtime. Previously only `int | false` / `T | null` carried a return type and every other union silently emitted none [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ### Changed
