@@ -1074,7 +1074,22 @@ final class CompilerFile implements FileInterface
 
                 if ($annotations = $docBlockParsed->getAnnotationsByType('var')) {
                     $returnsType = array_map(
-                        fn($type) => 'mixed' == ($type = trim($type)) ? 'variable' : $type,
+                        static function (string $type): string {
+                            /**
+                             * A property docblock may include the variable name and
+                             * a description (`@var Type $name some text`); keep only
+                             * the leading type token so the generated accessor types
+                             * stay valid.
+                             *
+                             * @see https://github.com/zephir-lang/zephir/issues/2543
+                             */
+                            $type = trim($type);
+                            if (preg_match('/^\S+/', $type, $matches)) {
+                                $type = $matches[0];
+                            }
+
+                            return 'mixed' === $type ? 'variable' : $type;
+                        },
                         explode('|', $annotations[0]->getString())
                     );
                 }
