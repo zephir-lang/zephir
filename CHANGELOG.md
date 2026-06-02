@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Fixed `instanceof` not narrowing the type inside the guarded block. Calling a method that exists only on the subtype, as in `if (x instanceof Sub) { x->subMethod(); }`, no longer fails generation with a "does not implement method" error. The narrowed type applies only inside the `if` block [#2565](https://github.com/zephir-lang/zephir/issues/2565)
 - `zephir generate` now fails with a clear error when a concrete class does not implement an abstract method inherited from an abstract parent, instead of letting the engine raise "Cannot instantiate abstract class" only at runtime [#1628](https://github.com/zephir-lang/zephir/issues/1628)
 - Fixed `Unknown type ...` error when a property combines a `{get}`/`{set}` shortcut with a `@var` docblock that includes the variable name (e.g. `@var int $foo`). The generated accessor now uses only the type, dropping the variable name and any description [#2543](https://github.com/zephir-lang/zephir/issues/2543)
+- Fixed a fatal error when a class constant is initialized from a predefined PHP constant (e.g. `const BAR = PHP_VERSION_ID;`). Such constants are now folded to their literal value at compile time instead of crashing on the unavailable runtime resolution path [#2542](https://github.com/zephir-lang/zephir/issues/2542)
 
 ## [0.22.0] - 2026-05-29
 
