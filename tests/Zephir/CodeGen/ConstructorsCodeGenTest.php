@@ -176,6 +176,26 @@ ZEP;
             $strMixedZepCode
         );
 
+        // Write Zephir source for Stub\Args\Single\ObjNullable
+        // A parameter that has a class type and defaults to null must keep
+        // its default value readable through reflection.
+        // @see https://github.com/zephir-lang/zephir/issues/2564
+        $objNullableZepCode = <<<'ZEP'
+namespace Stub\Args\Single;
+
+class ObjNullable
+{
+    public function argObjNull(<\Stub\Args\Single\Str> param = null) -> void
+    {
+    }
+}
+
+ZEP;
+        file_put_contents(
+            $this->tempDir . '/stub/args/single/objnullable.zep',
+            $objNullableZepCode
+        );
+
         // Config::populate() reads config.json from CWD; write a minimal one
         // so the namespace is available without touching the project's own file.
         $configData = json_encode(['namespace' => 'stub'], JSON_PRETTY_PRINT);
@@ -549,6 +569,59 @@ ZEP;
             $fixture,
             $hOutput,
             'Generated str_mixed.zep.h does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * Compiles stub/args/single/objnullable.zep and returns a
+     * [cOutput, hOutput] pair with the raw generated file contents.
+     *
+     * @return array{0: string, 1: string}
+     * @throws \ReflectionException
+     * @throws Exception
+     */
+    private function compileArgsSingleObjNullable(): array
+    {
+        return $this->compileZep(
+            'Stub\Args\Single\ObjNullable',
+            'stub/args/single/objnullable.zep',
+            'stub/args/single/objnullable'
+        );
+    }
+
+    /**
+     * The generated .c file for Args\Single\ObjNullable must be 100% identical to the reference fixture.
+     */
+    public function testArgsSingleObjNullableGeneratedCFileIsIdenticalToFixture(): void
+    {
+        [$cOutput,] = $this->compileArgsSingleObjNullable();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/obj_nullable.zep.c');
+
+        $this->assertSame(
+            $fixture,
+            $cOutput,
+            'Generated obj_nullable.zep.c does not match the reference fixture.'
+        );
+    }
+
+    /**
+     * The generated .h file for Args\Single\ObjNullable must be 100% identical to the reference fixture.
+     *
+     * Checks that a parameter with a class type and a `null` default uses
+     * ZEND_ARG_OBJ_TYPE_MASK, which keeps a default value, instead of
+     * ZEND_ARG_OBJ_INFO, which does not.
+     */
+    public function testArgsSingleObjNullableGeneratedHFileIsIdenticalToFixture(): void
+    {
+        [, $hOutput] = $this->compileArgsSingleObjNullable();
+
+        $fixture = file_get_contents($this->argsSingleFixturesDir . '/obj_nullable.zep.h');
+
+        $this->assertSame(
+            $fixture,
+            $hOutput,
+            'Generated obj_nullable.zep.h does not match the reference fixture.'
         );
     }
 }
