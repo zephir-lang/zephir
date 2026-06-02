@@ -356,6 +356,53 @@ final class Definition extends AbstractDefinition
     }
 
     /**
+     * Ensures a concrete class implements every abstract method inherited from
+     * its Zephir-defined ancestors. PHP only reports this at runtime as
+     * "Cannot instantiate abstract class", so the error is surfaced at build
+     * time instead.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/1628
+     */
+    public function checkAbstractMethodsImplemented(): void
+    {
+        $concrete = [];
+        $abstract = [];
+
+        $definition = $this;
+        while ($definition instanceof self && !$definition->isBundled()) {
+            foreach ($definition->getMethods() as $name => $method) {
+                if ($method->isAbstract()) {
+                    if (!isset($abstract[$name])) {
+                        $abstract[$name] = [$definition, $method];
+                    }
+                } else {
+                    $concrete[$name] = true;
+                }
+            }
+
+            $definition = $definition->getExtendsClassDefinition();
+        }
+
+        foreach ($abstract as $name => [$declaringClass, $method]) {
+            if (isset($concrete[$name])) {
+                continue;
+            }
+
+            throw new CompilerException(
+                sprintf(
+                    'Class %s contains abstract method %s and must therefore be declared abstract ' .
+                    'or implement the remaining method (%s::%s)',
+                    $this->getCompleteName(),
+                    $method->getName(),
+                    $declaringClass->getCompleteName(),
+                    $method->getName()
+                ),
+                $this->originalNode
+            );
+        }
+    }
+
+    /**
      * Compiles a class/interface.
      *
      * @throws Exception
@@ -581,6 +628,8 @@ final class Definition extends AbstractDefinition
                     }
                 }
             }
+
+            $this->checkAbstractMethodsImplemented();
         }
 
         $codePrinter->output('return SUCCESS;');
