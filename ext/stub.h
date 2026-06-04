@@ -250,6 +250,7 @@
 #include "stub/types/obj.zep.h"
 #include "stub/unknownclass.zep.h"
 #include "stub/unsettest.zep.h"
+#include "stub/unspacedminus.zep.h"
 #include "stub/usetest.zep.h"
 #include "stub/variadic.zep.h"
 #include "stub/vars.zep.h"
