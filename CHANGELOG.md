@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **BC**: methods declared with a multi-type union return now carry an enforced return type in the compiled extension. PHP subclasses that override such a method must declare a compatible (equal or narrower) return type, where previously the missing return type made any override valid [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ### Fixed
+- Fixed `Undefined array key "variable"` when assigning to a nested object property (e.g. `let this->bar->data = value;`). The inner object is now resolved into a temporary and the assignment is handled as a regular object-property write [#2532](https://github.com/zephir-lang/zephir/issues/2532)
 - Fixed the static type-inference pass leaking debug output (`StaticTypeInference=...` / `STI=...`) to stdout during compilation when it met a variable type or expression node it did not enumerate (e.g. reassigning a var holding a `(object)` cast). Such cases now silently degrade the variable to dynamic [#1877](https://github.com/zephir-lang/zephir/issues/1877)
 - Fixed concat-assign (`let this->prop .= value`) on object properties overwriting the property instead of appending to it; the current value is now read and concatenated [#2063](https://github.com/zephir-lang/zephir/issues/2063)
 - Fixed a false `Reached end of the method without returning a valid type` error for a method ending in an exhaustive `switch` (one with a `default` clause that returns/throws on every path) [#1706](https://github.com/zephir-lang/zephir/issues/1706)

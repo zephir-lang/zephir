@@ -256,6 +256,8 @@ zend_class_entry *stub_pregmatch_ce;
 zend_class_entry *stub_properties_app_ce;
 zend_class_entry *stub_properties_extendspublicproperties_ce;
 zend_class_entry *stub_properties_getobjectvars_ce;
+zend_class_entry *stub_properties_nestedproperty_ce;
+zend_class_entry *stub_properties_nestedpropertytarget_ce;
 zend_class_entry *stub_properties_privateproperties_ce;
 zend_class_entry *stub_properties_propertyarray_ce;
 zend_class_entry *stub_properties_propertyupdate_ce;
@@ -523,6 +525,8 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Properties_App);
 	ZEPHIR_INIT(Stub_Properties_ExtendsPublicProperties);
 	ZEPHIR_INIT(Stub_Properties_GetObjectVars);
+	ZEPHIR_INIT(Stub_Properties_NestedProperty);
+	ZEPHIR_INIT(Stub_Properties_NestedPropertyTarget);
 	ZEPHIR_INIT(Stub_Properties_PrivateProperties);
 	ZEPHIR_INIT(Stub_Properties_PropertyArray);
 	ZEPHIR_INIT(Stub_Properties_PropertyUpdate);
