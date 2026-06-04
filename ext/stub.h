@@ -206,6 +206,8 @@
 #include "stub/properties/app.zep.h"
 #include "stub/properties/extendspublicproperties.zep.h"
 #include "stub/properties/getobjectvars.zep.h"
+#include "stub/properties/nestedproperty.zep.h"
+#include "stub/properties/nestedpropertytarget.zep.h"
 #include "stub/properties/privateproperties.zep.h"
 #include "stub/properties/propertyarray.zep.h"
 #include "stub/properties/propertyupdate.zep.h"
