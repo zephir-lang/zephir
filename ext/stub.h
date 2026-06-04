@@ -249,6 +249,7 @@
 #include "stub/types/mixedtype.zep.h"
 #include "stub/types/obj.zep.h"
 #include "stub/unknownclass.zep.h"
+#include "stub/unreachableloop.zep.h"
 #include "stub/unsettest.zep.h"
 #include "stub/unspacedminus.zep.h"
 #include "stub/usetest.zep.h"

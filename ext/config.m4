@@ -254,6 +254,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/types/mixedtype.zep.c
 	stub/types/obj.zep.c
 	stub/unknownclass.zep.c
+	stub/unreachableloop.zep.c
 	stub/unsettest.zep.c
 	stub/unspacedminus.zep.c
 	stub/usetest.zep.c
