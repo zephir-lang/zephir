@@ -531,6 +531,8 @@ class NativeArray
                     case Types::T_UINT:
                     case Types::T_LONG:
                     case Types::T_ULONG:
+                    case Types::T_CHAR:
+                    case Types::T_UCHAR:
                         $tempVar = $compilationContext->symbolTable->getTempVariableForWrite(
                             'variable',
                             $compilationContext
@@ -565,7 +567,10 @@ class NativeArray
 
 
                     default:
-                        throw new CompilerException('Unknown ' . $itemVariable->getType(), $itemVariable);
+                        throw new CompilerException(
+                            'Unknown ' . $itemVariable->getType(),
+                            $exprCompiled->getOriginal() ?? []
+                        );
                 }
                 break;
 
