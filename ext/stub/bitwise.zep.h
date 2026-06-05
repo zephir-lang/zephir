@@ -102,6 +102,9 @@ PHP_METHOD(Stub_Bitwise, testBitwiseNot);
 PHP_METHOD(Stub_Bitwise, testBitwiseAndNot);
 PHP_METHOD(Stub_Bitwise, getInt);
 PHP_METHOD(Stub_Bitwise, testbitwiseXor);
+PHP_METHOD(Stub_Bitwise, issue2014ShiftLeft);
+PHP_METHOD(Stub_Bitwise, issue2014HexAnd);
+PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_intand, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -404,6 +407,15 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_testbitwisexor, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_issue2014shiftleft, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_issue2014hexand, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bitwise_issue2014hexarithmetic, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_bitwise_method_entry) {
 PHP_ME(Stub_Bitwise, intAnd, arginfo_stub_bitwise_intand, ZEND_ACC_PUBLIC)
 PHP_ME(Stub_Bitwise, int2And, arginfo_stub_bitwise_int2and, ZEND_ACC_PUBLIC)
@@ -504,5 +516,8 @@ PHP_ME(Stub_Bitwise, intShiftRightSimple, arginfo_stub_bitwise_intshiftrightsimp
 	PHP_ME(Stub_Bitwise, testBitwiseAndNot, arginfo_stub_bitwise_testbitwiseandnot, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bitwise, getInt, arginfo_stub_bitwise_getint, ZEND_ACC_PROTECTED)
 PHP_ME(Stub_Bitwise, testbitwiseXor, arginfo_stub_bitwise_testbitwisexor, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Bitwise, issue2014ShiftLeft, arginfo_stub_bitwise_issue2014shiftleft, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Bitwise, issue2014HexAnd, arginfo_stub_bitwise_issue2014hexand, ZEND_ACC_PUBLIC)
+PHP_ME(Stub_Bitwise, issue2014HexArithmetic, arginfo_stub_bitwise_issue2014hexarithmetic, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

@@ -112,7 +112,7 @@ PHP_METHOD(Stub_Bitwise, doubleAndSimple)
 PHP_METHOD(Stub_Bitwise, doubleAnd2Simple)
 {
 	double c = 0;
-	c = (double) (0.0);
+	c = (double) (0);
 	RETURN_DOUBLE(c);
 }
 
@@ -548,7 +548,7 @@ PHP_METHOD(Stub_Bitwise, doubleOrSimple)
 PHP_METHOD(Stub_Bitwise, doubleOr2Simple)
 {
 	double c = 0;
-	c = (double) (3.0);
+	c = (double) (3);
 	RETURN_DOUBLE(c);
 }
 
@@ -581,7 +581,7 @@ PHP_METHOD(Stub_Bitwise, intDoubleOr)
 PHP_METHOD(Stub_Bitwise, intDoubleOrSimple)
 {
 	zend_long c = 0;
-	c = 3.0;
+	c = 3;
 	RETURN_LONG(c);
 }
 
@@ -598,7 +598,7 @@ PHP_METHOD(Stub_Bitwise, doubleIntOr)
 PHP_METHOD(Stub_Bitwise, doubleIntOrSimple)
 {
 	double c = 0;
-	c = (double) (3.0);
+	c = (double) (3);
 	RETURN_DOUBLE(c);
 }
 
@@ -662,7 +662,7 @@ PHP_METHOD(Stub_Bitwise, intVarImplicitCast2Or)
 PHP_METHOD(Stub_Bitwise, complexOr)
 {
 	double c = 0;
-	c = (double) (3.0);
+	c = (double) (3);
 	RETURN_DOUBLE(c);
 }
 
@@ -1002,5 +1002,29 @@ PHP_METHOD(Stub_Bitwise, testbitwiseXor)
 	zephir_check_call_status();
 	zephir_bitwise_xor_function(return_value, &i, &j);
 	RETURN_MM();
+}
+
+/**
+ * Hexadecimal literals in constant-folded operations.
+ *
+ * @issue https://github.com/zephir-lang/zephir/issues/2014
+ */
+PHP_METHOD(Stub_Bitwise, issue2014ShiftLeft)
+{
+	zend_long highmap = 0;
+	highmap = -4294967296;
+	RETURN_LONG(highmap);
+}
+
+PHP_METHOD(Stub_Bitwise, issue2014HexAnd)
+{
+
+	RETURN_LONG(15);
+}
+
+PHP_METHOD(Stub_Bitwise, issue2014HexArithmetic)
+{
+
+	RETURN_LONG(256);
 }
 

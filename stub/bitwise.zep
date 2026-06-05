@@ -963,4 +963,26 @@ class Bitwise
 
                 return i ^ j;
         }
+
+        /**
+         * Hexadecimal literals in constant-folded operations.
+         *
+         * @issue https://github.com/zephir-lang/zephir/issues/2014
+         */
+        public function issue2014ShiftLeft()
+        {
+                var highmap;
+                let highmap = 0xffffffff << 32;
+                return highmap;
+        }
+
+        public function issue2014HexAnd()
+        {
+                return 0xff & 0x0f;
+        }
+
+        public function issue2014HexArithmetic()
+        {
+                return 0xff + 1;
+        }
 }
