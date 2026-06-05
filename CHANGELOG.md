@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - Full union return type support, enforced by the engine just like a hand-written PHP union return type. Any combination of classes and/or scalar types is now emitted into the compiled extension's arginfo (via `ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX` / `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX`), so `-> <Model> | <Row> | null`, `-> int | string`, `-> <Foo> | int`, etc. are reported by Reflection and enforced at runtime. Previously only `int | false` / `T | null` carried a return type and every other union silently emitted none [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ### Changed
+- Cached method/static calls now reuse the resolved function handler instead of repeating the method-table lookup in `populate_fcic()`, shaving ~6–10% off per-call dispatch in hot loops (measured via `tests/Benchmark/CallDispatchBench.php`) [#1510](https://github.com/zephir-lang/zephir/issues/1510)
 - **BC**: methods declared with a multi-type union return now carry an enforced return type in the compiled extension. PHP subclasses that override such a method must declare a compatible (equal or narrower) return type, where previously the missing return type made any override valid [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ### Fixed

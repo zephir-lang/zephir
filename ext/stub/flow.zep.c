@@ -596,13 +596,13 @@ PHP_METHOD(Stub_Flow, testWhileNextTest)
 	array_init(&returnValue);
 	while (1) {
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 52, variable);
+		ZEPHIR_CALL_FUNCTION(&_0, "next", &_1, 53, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 		if (!(zephir_is_true(&_0))) {
 			break;
 		}
-		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 53, variable);
+		ZEPHIR_CALL_FUNCTION(&_2$$3, "current", &_3, 54, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_2$$3, PH_SEPARATE, "stub/flow.zep", 420);
 	}
@@ -629,11 +629,11 @@ PHP_METHOD(Stub_Flow, testWhileDoNextTest)
 	ZEPHIR_INIT_VAR(&returnValue);
 	array_init(&returnValue);
 	do {
-		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 53, variable);
+		ZEPHIR_CALL_FUNCTION(&_0$$3, "current", &_1, 54, variable);
 		zephir_check_call_status();
 		zephir_array_append(&returnValue, &_0$$3, PH_SEPARATE, "stub/flow.zep", 430);
 		ZEPHIR_MAKE_REF(variable);
-		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 52, variable);
+		ZEPHIR_CALL_FUNCTION(&_2, "next", &_3, 53, variable);
 		ZEPHIR_UNREF(variable);
 		zephir_check_call_status();
 	} while (zephir_is_true(&_2));

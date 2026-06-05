@@ -37,7 +37,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testInt)
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 20, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 21, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -54,7 +54,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testVar)
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 20, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 21, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testIntValue1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 20, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 21, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -89,7 +89,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testIntParameter)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 20, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 21, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -107,7 +107,7 @@ PHP_METHOD(Stub_Optimizers_ACos, testVarParameter)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
-	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 20, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("acos", NULL, 21, a);
 	zephir_check_call_status();
 	RETURN_MM();
 }
