@@ -923,7 +923,11 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 		if (UNEXPECTED(Z_TYPE(tmp_arr) == IS_OBJECT && zephir_instance_of_ev(&tmp_arr, (const zend_class_entry *)zend_ce_arrayaccess))) {
 			zend_long ZEPHIR_LAST_CALL_STATUS;
 			zval offset, fetched;
+			/* Class entries are persistent, so this stays valid even if the
+			 * offsetGet() call below were to drop the last instance reference. */
+			zend_class_entry *ce = Z_OBJCE(tmp_arr);
 			ZVAL_UNDEF(&fetched);
+			ZVAL_UNDEF(&offset);
 
 			va_start(ap, types_count);
 			switch (types[0]) {
@@ -949,7 +953,7 @@ int zephir_update_property_array_multi(zval *object, const char *property, uint3
 			zval_ptr_dtor(&fetched);
 			zval_ptr_dtor(&offset);
 
-			zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect", ZSTR_VAL(Z_OBJCE(tmp_arr)->name));
+			zend_error(E_NOTICE, "Indirect modification of overloaded element of %s has no effect", ZSTR_VAL(ce->name));
 
 			return SUCCESS;
 		}
