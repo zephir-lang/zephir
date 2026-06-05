@@ -1695,7 +1695,7 @@ PHP_METHOD(Stub_Arithmetic, negativeLong)
  */
 PHP_METHOD(Stub_Arithmetic, longPlusVar)
 {
-	long n = 0;
+	zend_long n = 0;
 	zval *b, b_sub;
 
 	ZVAL_UNDEF(&b_sub);

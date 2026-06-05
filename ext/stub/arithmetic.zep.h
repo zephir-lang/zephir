@@ -679,7 +679,7 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arithmetic_negativelong, 0,
 	ZEND_ARG_TYPE_INFO(0, val, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arithmetic_longplusvar, 0, 1, IS_LONG, 0)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_arithmetic_longplusvar, 0, 0, 1)
 	ZEND_ARG_INFO(0, b)
 ZEND_END_ARG_INFO()
 

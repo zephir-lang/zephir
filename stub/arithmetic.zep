@@ -1488,9 +1488,9 @@ class Arithmetic
      * Adding a dynamic operand to a long must keep int64 precision
      * (no implicit promotion to double via zephir_get_numberval).
      */
-	public function longPlusVar(var b) -> long
+	public function longPlusVar(var b)
 	{
-        long n;
+        var n;
         let n = 1000000000000000000;
         let n = n + b;
         return n;
