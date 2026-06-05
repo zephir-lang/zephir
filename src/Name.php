@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir;
 
+use function ctype_xdigit;
+use function hexdec;
 use function in_array;
 use function is_numeric;
+use function sprintf;
 use function str_replace;
 use function strlen;
 use function strpos;
@@ -73,6 +76,46 @@ final class Name
             $after = $i !== $last ? $string[$next] : null;
 
             if ($ch === $escape) {
+                /**
+                 * PHP Unicode codepoint escape "\u{XXXX}" has no C equivalent.
+                 * Encode the codepoint to UTF-8 and emit the bytes as octal
+                 * escapes so the produced C string matches PHP. See #2030.
+                 */
+                if ('u' === $after && isset($string[$i + 2]) && '{' === $string[$i + 2]) {
+                    $close = strpos($string, '}', $i + 3);
+                    if (false !== $close && $close > $i + 3) {
+                        $hex = substr($string, $i + 3, $close - $i - 3);
+                        if (ctype_xdigit($hex)) {
+                            $new .= self::encodeCodepointToOctal((int) hexdec($hex));
+                            $i    = $close;
+                            $next = $close + 1;
+                            continue;
+                        }
+                    }
+                }
+
+                /**
+                 * PHP's "\xHH" reads at most two hex digits, but C is greedy and
+                 * would absorb any following hex digits (e.g. "\x41BC"). When a
+                 * further hex digit follows, re-emit the byte as a fixed-width
+                 * octal escape so the trailing characters stay literal. See #2030.
+                 */
+                if ('x' === $after) {
+                    $hex = '';
+                    $j   = $i + 2;
+                    while (strlen($hex) < 2 && isset($string[$j]) && ctype_xdigit($string[$j])) {
+                        $hex .= $string[$j];
+                        ++$j;
+                    }
+
+                    if ('' !== $hex && isset($string[$j]) && ctype_xdigit($string[$j])) {
+                        $new .= $escape . sprintf('%03o', hexdec($hex));
+                        $i    = $j - 1;
+                        $next = $j;
+                        continue;
+                    }
+                }
+
                 if (in_array($after, $controlChar, true) || is_numeric($after)) {
                     // should not escape native C control chars
                     $new .= $ch . $after;
@@ -94,6 +137,42 @@ final class Name
         }
 
         return $new;
+    }
+
+    /**
+     * Encodes a Unicode codepoint as UTF-8 and returns the bytes as a sequence
+     * of fixed-width octal C escapes (e.g. U+1F600 => "\360\237\230\200").
+     */
+    private static function encodeCodepointToOctal(int $codepoint): string
+    {
+        if ($codepoint < 0x80) {
+            $bytes = [$codepoint];
+        } elseif ($codepoint < 0x800) {
+            $bytes = [
+                0xC0 | ($codepoint >> 6),
+                0x80 | ($codepoint & 0x3F),
+            ];
+        } elseif ($codepoint < 0x10000) {
+            $bytes = [
+                0xE0 | ($codepoint >> 12),
+                0x80 | (($codepoint >> 6) & 0x3F),
+                0x80 | ($codepoint & 0x3F),
+            ];
+        } else {
+            $bytes = [
+                0xF0 | ($codepoint >> 18),
+                0x80 | (($codepoint >> 12) & 0x3F),
+                0x80 | (($codepoint >> 6) & 0x3F),
+                0x80 | ($codepoint & 0x3F),
+            ];
+        }
+
+        $escaped = '';
+        foreach ($bytes as $byte) {
+            $escaped .= '\\' . sprintf('%03o', $byte);
+        }
+
+        return $escaped;
     }
 
     public static function camelize(string $string): string
