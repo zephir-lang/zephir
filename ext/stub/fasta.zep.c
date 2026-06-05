@@ -95,7 +95,7 @@ PHP_METHOD(Stub_Fasta, fastaRepeat)
 		}
 		SEPARATE_ZVAL(&j);
 		zephir_decrement(&j);
-		ZVAL_LONG(&_6$$3, (60 * zephir_get_numberval(&j)));
+		ZVAL_LONG(&_6$$3, (60 * (zend_long) zephir_get_numberval(&j)));
 		ZVAL_LONG(&_7$$3, 60);
 		ZEPHIR_INIT_NVAR(&_8$$3);
 		zephir_substr(&_8$$3, &str, zephir_get_intval(&_6$$3), 60 , 0);
@@ -195,7 +195,7 @@ PHP_METHOD(Stub_Fasta, main)
 	add_assoc_double_ex(&homoSap, SL("g"), 0.1975473066391);
 	add_assoc_double_ex(&homoSap, SL("t"), 0.3015094502008);
 	php_printf("%s", ">ONE Homo sapiens alu");
-	ZVAL_LONG(&_1, (2 * zephir_get_numberval(n)));
+	ZVAL_LONG(&_1, (2 * (zend_long) zephir_get_numberval(n)));
 	ZEPHIR_CALL_METHOD(NULL, this_ptr, "fastarepeat", NULL, 0, &_1, &alu);
 	zephir_check_call_status();
 	ZEPHIR_MM_RESTORE();

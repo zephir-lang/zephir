@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 - **BC**: methods declared with a multi-type union return now carry an enforced return type in the compiled extension. PHP subclasses that override such a method must declare a compatible (equal or narrower) return type, where previously the missing return type made any override valid [#2428](https://github.com/zephir-lang/zephir/issues/2428)
 
 ### Fixed
+- Fixed integer arithmetic with a dynamic operand losing int64 precision (e.g. `1000000000000000000 + var` rounded through a `double`). The result of `zephir_get_numberval()` is now cast to `(zend_long)` in integer contexts [#2010](https://github.com/zephir-lang/zephir/issues/2010)
 - Fixed `[ERROR] Unknown char` when a `char`/`uchar` variable is used as an array literal item (e.g. `return [ch1, ch2];`). Such items are now boxed as their byte (integer) value [#1988](https://github.com/zephir-lang/zephir/issues/1988)
 - Fixed a false `Unreachable code` warning on a guard reading a variable that holds a constant before a loop but is reassigned inside the loop body (e.g. `let x = false; for ... { if x { ... } let x = true; }`). The constant-folding unreachability check is now skipped inside loops [#1170](https://github.com/zephir-lang/zephir/issues/1170)
 - Subtraction with a `-` glued to a digit (e.g. `range(0, len-1)`, `arr[0]-1`) no longer raises `Syntax error`; the parser now treats `-` after a value as a binary operator instead of the sign of a negative literal [#2011](https://github.com/zephir-lang/zephir/issues/2011)

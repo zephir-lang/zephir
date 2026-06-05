@@ -87,7 +87,7 @@ PHP_METHOD(Stub_Factorial, intRecursiveFactorial)
 		ZEPHIR_CALL_METHOD(&_2, this_ptr, "intrecursivefactorial", NULL, 42, &_3);
 		zephir_check_call_status();
 		ZEPHIR_INIT_NVAR(&_0);
-		ZVAL_LONG(&_0, (num * zephir_get_numberval(&_2)));
+		ZVAL_LONG(&_0, (num * (zend_long) zephir_get_numberval(&_2)));
 	}
 	RETURN_CCTOR(&_0);
 }

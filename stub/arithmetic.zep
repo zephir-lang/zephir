@@ -1482,4 +1482,33 @@ class Arithmetic
 	{
 	    return val;
 	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2010
+     * Adding a dynamic operand to a long must keep int64 precision
+     * (no implicit promotion to double via zephir_get_numberval).
+     */
+	public function longPlusVar(var b) -> long
+	{
+        long n;
+        let n = 1000000000000000000;
+        let n = n + b;
+        return n;
+    }
+
+	public function longLiteralPlusVar(var b) -> long
+	{
+        return 1000000000000000000 + b;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/2010
+     * Shift/or precedence must match PHP (HOTP truncation).
+     */
+	public function shiftOrPrecedence(var hmac, int offset) -> int
+	{
+        int code;
+        let code = (hmac[offset + 0] & 0x7F) << 24 | (hmac[offset + 1] & 0xFF) << 16 | (hmac[offset + 2] & 0xFF) << 8 | (hmac[offset + 3] & 0xFF);
+        return code;
+    }
 }

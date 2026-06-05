@@ -141,7 +141,7 @@ PHP_METHOD(Stub_Ternary, testTernaryComplex2)
 			ZVAL_BOOL(&_0, zephir_array_isset_value(a, y));
 		}
 	}
-	RETURN_MM_LONG((5 + zephir_get_numberval(&_0)));
+	RETURN_MM_LONG((5 + (zend_long) zephir_get_numberval(&_0)));
 }
 
 PHP_METHOD(Stub_Ternary, testTernaryComplex3)

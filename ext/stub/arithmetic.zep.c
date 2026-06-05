@@ -18,6 +18,7 @@
 #include "kernel/operators.h"
 #include "ext/spl/spl_exceptions.h"
 #include "kernel/exception.h"
+#include "kernel/array.h"
 
 
 /**
@@ -103,7 +104,7 @@ PHP_METHOD(Stub_Arithmetic, boolSumExpression)
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 3, &_0);
 	zephir_check_call_status();
-	RETURN_MM_LONG((a + zephir_get_numberval(&_1)));
+	RETURN_MM_LONG((a + (zend_long) zephir_get_numberval(&_1)));
 }
 
 PHP_METHOD(Stub_Arithmetic, doubleSum)
@@ -171,7 +172,7 @@ PHP_METHOD(Stub_Arithmetic, doubleSumVarExpression)
 	ZVAL_LONG(&_0, 0);
 	ZEPHIR_CALL_FUNCTION(&_1, "exp", NULL, 3, &_0);
 	zephir_check_call_status();
-	RETURN_MM_LONG((a + zephir_get_numberval(&_1)));
+	RETURN_MM_LONG((a + (zend_long) zephir_get_numberval(&_1)));
 }
 
 PHP_METHOD(Stub_Arithmetic, varSum)
@@ -277,7 +278,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sum)
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b + zephir_get_numberval(&a));
+	c = (b + (zend_long) zephir_get_numberval(&a));
 	RETURN_MM_LONG(c);
 }
 
@@ -972,7 +973,7 @@ PHP_METHOD(Stub_Arithmetic, intVarImplicitCast2Sub)
 	ZEPHIR_INIT_VAR(&a);
 	ZVAL_STRING(&a, "1");
 	b = 2;
-	c = (b - zephir_get_numberval(&a));
+	c = (b - (zend_long) zephir_get_numberval(&a));
 	RETURN_MM_LONG(c);
 }
 
@@ -1685,5 +1686,64 @@ PHP_METHOD(Stub_Arithmetic, negativeLong)
 	ZEND_PARSE_PARAMETERS_END();
 	zephir_fetch_params_without_memory_grow(1, 0, &val_param);
 	RETURN_LONG(val);
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2010
+ * Adding a dynamic operand to a long must keep int64 precision
+ * (no implicit promotion to double via zephir_get_numberval).
+ */
+PHP_METHOD(Stub_Arithmetic, longPlusVar)
+{
+	long n = 0;
+	zval *b, b_sub;
+
+	ZVAL_UNDEF(&b_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &b);
+	n = 1000000000000000000;
+	n = (n + (zend_long) zephir_get_numberval(b));
+	RETURN_LONG(n);
+}
+
+PHP_METHOD(Stub_Arithmetic, longLiteralPlusVar)
+{
+	zval *b, b_sub;
+
+	ZVAL_UNDEF(&b_sub);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_ZVAL(b)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &b);
+	RETURN_LONG((1000000000000000000 + (zend_long) zephir_get_numberval(b)));
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2010
+ * Shift/or precedence must match PHP (HOTP truncation).
+ */
+PHP_METHOD(Stub_Arithmetic, shiftOrPrecedence)
+{
+	zend_long offset, code = 0;
+	zval *hmac, hmac_sub, *offset_param = NULL, _0, _1, _2, _3;
+
+	ZVAL_UNDEF(&hmac_sub);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_2);
+	ZVAL_UNDEF(&_3);
+	ZEND_PARSE_PARAMETERS_START(2, 2)
+		Z_PARAM_ZVAL(hmac)
+		Z_PARAM_LONG(offset)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(2, 0, &hmac, &offset_param);
+	zephir_array_fetch_long(&_0, hmac, (offset + 0), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
+	zephir_array_fetch_long(&_1, hmac, (offset + 1), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
+	zephir_array_fetch_long(&_2, hmac, (offset + 2), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
+	zephir_array_fetch_long(&_3, hmac, (offset + 3), PH_NOISY | PH_READONLY, "stub/arithmetic.zep", 1511);
+	code = (((((((int) (zephir_get_numberval(&_0)) & 0x7F)) << 24) | ((((int) (zephir_get_numberval(&_1)) & 0xFF)) << 16)) | ((((int) (zephir_get_numberval(&_2)) & 0xFF)) << 8)) | (((int) (zephir_get_numberval(&_3)) & 0xFF)));
+	RETURN_LONG(code);
 }
 
