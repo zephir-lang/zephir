@@ -2104,7 +2104,10 @@ class Backend
                     );
             }
         } else {
-            throw new CompilerException('?');
+            throw new CompilerException(
+                'updateArray: Unsupported array key. Expected a variable or a '
+                . 'compiled expression but got ' . get_debug_type($key)
+            );
         }
     }
 

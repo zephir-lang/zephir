@@ -130,18 +130,42 @@ class ObjectDynamicStringProperty
 
             case 'bool':
                 if ('1' == $resolvedExpr->getBooleanCode()) {
-                    $value = 'true';
+                    $compilationContext->backend->updateProperty(
+                        $symbolVariable,
+                        $propertyName,
+                        'true',
+                        $compilationContext
+                    );
                 } elseif ('0' == $resolvedExpr->getBooleanCode()) {
-                    $value = 'false';
+                    $compilationContext->backend->updateProperty(
+                        $symbolVariable,
+                        $propertyName,
+                        'false',
+                        $compilationContext
+                    );
                 } else {
-                    throw new Exception('?');
+                    // Non-constant boolean expression: branch at runtime.
+                    $codePrinter = $compilationContext->codePrinter;
+                    $codePrinter->output('if (' . $resolvedExpr->getBooleanCode() . ') {');
+                    $codePrinter->increaseLevel();
+                    $compilationContext->backend->updateProperty(
+                        $symbolVariable,
+                        $propertyName,
+                        'true',
+                        $compilationContext
+                    );
+                    $codePrinter->decreaseLevel();
+                    $codePrinter->output('} else {');
+                    $codePrinter->increaseLevel();
+                    $compilationContext->backend->updateProperty(
+                        $symbolVariable,
+                        $propertyName,
+                        'false',
+                        $compilationContext
+                    );
+                    $codePrinter->decreaseLevel();
+                    $codePrinter->output('}');
                 }
-                $compilationContext->backend->updateProperty(
-                    $symbolVariable,
-                    $propertyName,
-                    $value,
-                    $compilationContext
-                );
                 break;
 
             case 'empty-array':
