@@ -59,6 +59,41 @@ final class NameTest extends TestCase
             'with regexp 1' => ['/(\w+)\s*=\s*(\[[^\]]*\]|\"[^\"]*\"|[^,)]*)\s*(?:,|$)/', '/(\\\\w+)\\\\s*=\\\\s*(\\\\[[^\\\\]]*\\\\]|\"[^\"]*\"|[^,)]*)\\\\s*(?:,|$)/'],
             'with regexp 2' => ['/@(\w+)(?:\s*(?:\(\s*)?(.*?)(?:\s*\))?)??\s*(?:\n|\*\/)/', '/@(\\\\w+)(?:\\\\s*(?:\\\(\\\\s*)?(.*?)(?:\\\\s*\\\\))?)??\\\\s*(?:\n|\\\\*\\\\/)/'],
             'with regexp 3' => ['/(\w+)\s*=\s*(\[[^\]]*\]|"[^"]*"|[^,)]*)\s*(?:,|$)/', '/(\\\\w+)\\\\s*=\\\\s*(\\\\[[^\\\\]]*\\\\]|\"[^\"]*\"|[^,)]*)\\\\s*(?:,|$)/'],
+
+            /*
+             * Exotic / security-sensitive inputs. addSlashes output is embedded
+             * verbatim into generated C string literals, so it must never let a
+             * crafted value break out of the literal or emit malformed escapes.
+             * See #2030.
+             */
+            // A bare double quote must always be escaped.
+            'with bare double quote' => ['"', '\"'],
+            // Attempt to break out and inject C: quotes stay escaped.
+            'with C breakout attempt' => ['"); zend_eval_string("x"); ("', '\"); zend_eval_string(\"x\"); (\"'],
+            // A single trailing backslash must double so it can't escape the
+            // closing quote of the C literal.
+            'with trailing backslash' => ['foo\\', 'foo\\\\'],
+            'with lone backslash' => ['\\', '\\\\'],
+            'with three backslashes' => ['\\\\\\', '\\\\\\\\'],
+            // Backslash immediately followed by a quote.
+            'with backslash then quote' => ['\\"', '\\"'],
+            // Out-of-range Unicode codepoints (PHP rejects > U+10FFFF): must be
+            // emitted literally, never as malformed octal that leaks bytes.
+            'with unicode max valid' => ['\u{10FFFF}', '\364\217\277\277'],
+            'with unicode just over max' => ['\u{110000}', '\\\\u{110000}'],
+            'with unicode 8 hex digits' => ['\u{FFFFFFFF}', '\\\\u{FFFFFFFF}'],
+            'with unicode 16 hex digits' => ['\u{FFFFFFFFFFFFFFFF}', '\\\\u{FFFFFFFFFFFFFFFF}'],
+            'with unicode NUL' => ['\u{0}', '\000'],
+            'with unicode empty braces' => ['\u{}', '\\\\u{}'],
+            'with unicode unclosed' => ['\u{41', '\\\\u{41'],
+            'with unicode non-hex' => ['\u{ZZ}', '\\\\u{ZZ}'],
+            // "\x" with no following hex digit would make the C compiler choke;
+            // it must become a literal backslash-x like PHP keeps it.
+            'with x and no hex' => ['\x', '\\\\x'],
+            'with x and non-hex' => ['\xZ', '\\\\xZ'],
+            // Greedy "\x": only two hex digits are consumed, rest stays literal.
+            'with x and three hex' => ['\xAAA', '\252A'],
+            'with x lower then hex' => ['\xabc', '\253c'],
         ];
     }
 
@@ -68,5 +103,64 @@ final class NameTest extends TestCase
     public function testAddSlashes(string $testString, string $expected): void
     {
         $this->assertSame($expected, Name::addSlashes($testString));
+    }
+
+    public function dangerousStringProvider(): array
+    {
+        return [
+            'bare quote' => ['"'],
+            'quote with C payload' => ['"); system("id"); ("'],
+            'trailing backslash' => ['end\\'],
+            'lone backslash' => ['\\'],
+            'odd backslashes' => ['\\\\\\'],
+            'even backslashes' => ['\\\\\\\\'],
+            'quote then backslash' => ['"\\'],
+            'backslash then quote' => ['\\"'],
+            'mixed quotes' => ['a"b"c"'],
+            'unicode overflow' => ['\u{FFFFFFFFFFFFFFFF}'],
+            'unicode over max' => ['\u{110000}'],
+            'x no hex' => ['\x'],
+            'x bad hex' => ['\xZZ'],
+            'null byte' => ["\0"],
+            'esc and quote' => ['\e"'],
+        ];
+    }
+
+    /**
+     * Whatever the input, the escaped result must be a safe C string literal:
+     * every double quote is escaped and the value cannot terminate the literal
+     * early via a dangling backslash.
+     *
+     * @dataProvider dangerousStringProvider
+     */
+    public function testAddSlashesCannotBreakOutOfCLiteral(string $input): void
+    {
+        $output       = Name::addSlashes($input);
+        $backslashRun = 0;
+
+        for ($i = 0, $len = strlen($output); $i < $len; ++$i) {
+            $char = $output[$i];
+
+            if ('\\' === $char) {
+                ++$backslashRun;
+                continue;
+            }
+
+            if ('"' === $char) {
+                $this->assertSame(
+                    1,
+                    $backslashRun % 2,
+                    sprintf('Unescaped double quote at offset %d in: %s', $i, $output)
+                );
+            }
+
+            $backslashRun = 0;
+        }
+
+        $this->assertSame(
+            0,
+            $backslashRun % 2,
+            sprintf('Dangling backslash would escape the closing quote in: %s', $output)
+        );
     }
 }

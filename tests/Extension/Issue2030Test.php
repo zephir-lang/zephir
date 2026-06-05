@@ -36,5 +36,12 @@ final class Issue2030Test extends TestCase
         // \x41 = 'A' then literal "BC" (PHP reads at most 2 hex digits).
         $this->assertSame("\x41BC", $test->hexFollowedByHex());
         $this->assertSame('ABC', $test->hexFollowedByHex());
+
+        // Highest valid Unicode codepoint.
+        $this->assertSame("\u{10FFFF}", $test->maxCodepoint());
+
+        // Quotes, backslashes and a 4-byte codepoint together must round-trip
+        // intact without breaking out of the generated C string literal.
+        $this->assertSame("a\"b\\c\u{1F4A9}", $test->quotesAndBackslashes());
     }
 }

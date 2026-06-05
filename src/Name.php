@@ -85,7 +85,11 @@ final class Name
                     $close = strpos($string, '}', $i + 3);
                     if (false !== $close && $close > $i + 3) {
                         $hex = substr($string, $i + 3, $close - $i - 3);
-                        if (ctype_xdigit($hex)) {
+                        // Reject anything that is not a valid Unicode codepoint
+                        // (PHP rejects > U+10FFFF). Out-of-range/invalid values
+                        // fall through and are emitted literally, never as
+                        // malformed octal that could leak bytes.
+                        if (ctype_xdigit($hex) && hexdec($hex) <= 0x10FFFF) {
                             $new .= self::encodeCodepointToOctal((int) hexdec($hex));
                             $i    = $close;
                             $next = $close + 1;
@@ -108,7 +112,16 @@ final class Name
                         ++$j;
                     }
 
-                    if ('' !== $hex && isset($string[$j]) && ctype_xdigit($string[$j])) {
+                    if ('' === $hex) {
+                        // PHP keeps a literal "\x" when no hex digit follows;
+                        // emit a literal backslash so the C compiler does not
+                        // choke on a "\x" with no hex digits. The 'x' is emitted
+                        // on the next iteration.
+                        $new .= $escape . $escape;
+                        continue;
+                    }
+
+                    if (isset($string[$j]) && ctype_xdigit($string[$j])) {
                         $new .= $escape . sprintf('%03o', hexdec($hex));
                         $i    = $j - 1;
                         $next = $j;
@@ -169,7 +182,10 @@ final class Name
 
         $escaped = '';
         foreach ($bytes as $byte) {
-            $escaped .= '\\' . sprintf('%03o', $byte);
+            // Mask to a single byte so the result is always exactly three octal
+            // digits; this prevents any chance of leaking extra digits into the
+            // surrounding C string literal.
+            $escaped .= '\\' . sprintf('%03o', $byte & 0xFF);
         }
 
         return $escaped;

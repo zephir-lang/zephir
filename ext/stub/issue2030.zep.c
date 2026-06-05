@@ -63,3 +63,15 @@ PHP_METHOD(Stub_Issue2030, hexFollowedByHex)
 	RETURN_STRING("\101BC");
 }
 
+PHP_METHOD(Stub_Issue2030, maxCodepoint)
+{
+
+	RETURN_STRING("\364\217\277\277");
+}
+
+PHP_METHOD(Stub_Issue2030, quotesAndBackslashes)
+{
+
+	RETURN_STRING("a\"b\\c\360\237\222\251");
+}
+

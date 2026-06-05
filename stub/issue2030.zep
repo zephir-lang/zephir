@@ -36,4 +36,14 @@ class Issue2030
 	{
 		return "\x41BC";
 	}
+
+	public function maxCodepoint() -> string
+	{
+		return "\u{10FFFF}";
+	}
+
+	public function quotesAndBackslashes() -> string
+	{
+		return "a\"b\\c\u{1F4A9}";
+	}
 }
