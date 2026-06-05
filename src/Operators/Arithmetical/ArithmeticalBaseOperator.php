@@ -127,7 +127,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                 return new CompiledExpression(
                                     'int',
                                     '(' . $left->getCode(
-                                    ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
+                                    ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                     $expression
                                 );
 
@@ -319,7 +319,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
+                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
@@ -378,7 +378,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
+                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
@@ -456,7 +456,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
+                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
@@ -546,7 +546,7 @@ class ArithmeticalBaseOperator extends AbstractOperator
                                         return new CompiledExpression(
                                             'int',
                                             '(' . $variableLeft->getName(
-                                            ) . ' ' . $this->operator . ' zephir_get_numberval(' . $variableRight . '))',
+                                            ) . ' ' . $this->operator . ' (zend_long) zephir_get_numberval(' . $variableRight . '))',
                                             $expression
                                         );
 
