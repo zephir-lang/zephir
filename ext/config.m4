@@ -40,6 +40,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/arithmetic.zep.c
 	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
+	stub/arrayaccessproperty.zep.c
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c
 	stub/arrayiteratortest.zep.c
