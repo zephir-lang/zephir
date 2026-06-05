@@ -237,4 +237,25 @@ abstract class AbstractOperator
     {
         $this->readOnly = $readOnly;
     }
+
+    /**
+     * Resolves a numeric literal value (as stored verbatim by the parser) to an
+     * actual int/float so it can be used in constant folding.
+     *
+     * Hexadecimal literals such as `0xffffffff` are kept as their raw string by
+     * the parser; performing arithmetic on that string directly raises
+     * "A non-numeric value encountered". They are decoded explicitly here, while
+     * plain decimal/double literals keep their normal numeric semantics (e.g.
+     * a leading-zero "052" stays decimal 52, not octal). See #2014.
+     *
+     * @return int|float
+     */
+    protected function literalToNumber(string $value): int|float
+    {
+        if (preg_match('/^-?0x[0-9a-fA-F]+$/', $value)) {
+            return intval($value, 16);
+        }
+
+        return $value + 0;
+    }
 }
