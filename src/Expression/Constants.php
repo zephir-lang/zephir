@@ -129,7 +129,11 @@ class Constants
                     return new LiteralCompiledExpression('string', Name::addSlashes($constantName), $expression);
 
                 case 'object':
-                    throw new CompilerException('?');
+                    throw new CompilerException(
+                        "PHP constant '" . $expression['value'] . "' resolves to an "
+                        . 'object, which cannot be used as a compile-time constant',
+                        $expression
+                    );
                 default:
                     return new LiteralCompiledExpression($type, $constantName, $expression);
             }
