@@ -13,6 +13,7 @@ PHP_METHOD(Stub_Chars, sumCharParamOverflow);
 PHP_METHOD(Stub_Chars, charUnderflow);
 PHP_METHOD(Stub_Chars, maxByteValue);
 PHP_METHOD(Stub_Chars, sumUchar);
+PHP_METHOD(Stub_Chars, arrayOfChars);
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_chars_sumchars1, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
@@ -47,6 +48,9 @@ ZEND_END_ARG_INFO()
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_chars_sumuchar, 0, 0, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_chars_arrayofchars, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_chars_method_entry) {
 	PHP_ME(Stub_Chars, sumChars1, arginfo_stub_chars_sumchars1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Chars, sumChars2, arginfo_stub_chars_sumchars2, ZEND_ACC_PUBLIC)
@@ -58,5 +62,6 @@ ZEPHIR_INIT_FUNCS(stub_chars_method_entry) {
 	PHP_ME(Stub_Chars, charUnderflow, arginfo_stub_chars_charunderflow, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Chars, maxByteValue, arginfo_stub_chars_maxbytevalue, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Chars, sumUchar, arginfo_stub_chars_sumuchar, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Chars, arrayOfChars, arginfo_stub_chars_arrayofchars, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

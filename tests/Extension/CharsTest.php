@@ -72,4 +72,10 @@ final class CharsTest extends TestCase
         // uchar 'd' (100) + 100 = 200
         $this->assertSame(200, $this->test->sumUchar());
     }
+
+    public function testArrayOfChars(): void
+    {
+        // 'p' (112), 'e' (101), 'p' (112) — chars boxed as their byte value
+        $this->assertSame([112, 101, 112], $this->test->arrayOfChars());
+    }
 }

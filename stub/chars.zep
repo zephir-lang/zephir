@@ -83,4 +83,18 @@ class Chars
         let ch += 100;
 		return ch;
     }
+
+    /**
+     * Issue #1988: char-typed variables used as array literal items
+     * must be boxed as their byte (integer) value instead of raising
+     * "Unknown char" at compile time.
+     */
+	public function arrayOfChars() -> array
+	{
+        char ch1, ch2;
+        string name = "peter";
+        let ch1 = name[0],
+            ch2 = name[1];
+		return [ch1, ch2, ch1];
+    }
 }
