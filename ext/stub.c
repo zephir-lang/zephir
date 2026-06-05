@@ -90,6 +90,7 @@ zend_class_entry *stub_args_single_strmixed_ce;
 zend_class_entry *stub_arithmetic_ce;
 zend_class_entry *stub_arrayaccessarr_ce;
 zend_class_entry *stub_arrayaccessobj_ce;
+zend_class_entry *stub_arrayaccessproperty_ce;
 zend_class_entry *stub_arrayaccesstest_ce;
 zend_class_entry *stub_arrayiterator_ce;
 zend_class_entry *stub_arrayiteratortest_ce;
@@ -361,6 +362,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_Arithmetic);
 	ZEPHIR_INIT(Stub_ArrayAccessArr);
 	ZEPHIR_INIT(Stub_ArrayAccessObj);
+	ZEPHIR_INIT(Stub_ArrayAccessProperty);
 	ZEPHIR_INIT(Stub_ArrayAccessTest);
 	ZEPHIR_INIT(Stub_ArrayIterator);
 	ZEPHIR_INIT(Stub_ArrayIteratorTest);

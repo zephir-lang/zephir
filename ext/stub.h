@@ -35,6 +35,7 @@
 #include "stub/arithmetic.zep.h"
 #include "stub/arrayaccessarr.zep.h"
 #include "stub/arrayaccessobj.zep.h"
+#include "stub/arrayaccessproperty.zep.h"
 #include "stub/arrayaccesstest.zep.h"
 #include "stub/arrayiterator.zep.h"
 #include "stub/arrayiteratortest.zep.h"
