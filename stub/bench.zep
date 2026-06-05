@@ -212,4 +212,40 @@ class Bench
         }
         return sum;
     }
+
+    /**
+     * Call-dispatch micro-workloads for the FastCall investigation (#1510).
+     * Each loops a trivial callee so the measured cost is dominated by the
+     * call machinery (cache lookup + fcic setup + zend_call_function), not the
+     * callee body. Three dispatch flavours exercise distinct kernel paths.
+     */
+    final public function finalReturnConst() -> long
+    {
+        return 7;
+    }
+
+    public static function staticReturnConst() -> long
+    {
+        return 7;
+    }
+
+    public function finalDispatchLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += this->finalReturnConst();
+            let i++;
+        }
+        return sum;
+    }
+
+    public function staticDispatchLoop(long n) -> long
+    {
+        long i = 0, sum = 0;
+        while i < n {
+            let sum += self::staticReturnConst();
+            let i++;
+        }
+        return sum;
+    }
 }
