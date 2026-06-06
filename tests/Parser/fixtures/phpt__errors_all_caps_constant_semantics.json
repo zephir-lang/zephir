@@ -1,0 +1,69 @@
+[
+    {
+        "type": "class",
+        "name": "Foo",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "bar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "file": "phpt__errors_all_caps_constant_semantics.zep",
+                                    "line": 5,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "phpt__errors_all_caps_constant_semantics.zep",
+                            "line": 6,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "constant",
+                                        "value": "RBF",
+                                        "file": "phpt__errors_all_caps_constant_semantics.zep",
+                                        "line": 6,
+                                        "char": 14
+                                    },
+                                    "file": "phpt__errors_all_caps_constant_semantics.zep",
+                                    "line": 6,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "phpt__errors_all_caps_constant_semantics.zep",
+                            "line": 7,
+                            "char": 2
+                        }
+                    ],
+                    "file": "phpt__errors_all_caps_constant_semantics.zep",
+                    "line": 3,
+                    "last-line": 8,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__errors_all_caps_constant_semantics.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__errors_all_caps_constant_semantics.zep",
+        "line": 1,
+        "char": 6
+    }
+]

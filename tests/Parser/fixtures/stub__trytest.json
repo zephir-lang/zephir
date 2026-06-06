@@ -1,0 +1,1503 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__trytest.zep",
+        "line": 4,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Exception",
+                "file": "stub__trytest.zep",
+                "line": 4,
+                "char": 14
+            },
+            {
+                "name": "RuntimeException",
+                "file": "stub__trytest.zep",
+                "line": 4,
+                "char": 32
+            },
+            {
+                "name": "DomainException",
+                "file": "stub__trytest.zep",
+                "line": 4,
+                "char": 49
+            }
+        ],
+        "file": "stub__trytest.zep",
+        "line": 6,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "TryTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testThrow1",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "error",
+                                            "file": "stub__trytest.zep",
+                                            "line": 10,
+                                            "char": 28
+                                        },
+                                        "file": "stub__trytest.zep",
+                                        "line": 10,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__trytest.zep",
+                                "line": 10,
+                                "char": 29
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 8,
+                    "last-line": 13,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testThrow2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "message",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "error",
+                                        "file": "stub__trytest.zep",
+                                        "line": 15,
+                                        "char": 22
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 15,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 16,
+                            "char": 7
+                        },
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "message",
+                                            "file": "stub__trytest.zep",
+                                            "line": 16,
+                                            "char": 30
+                                        },
+                                        "file": "stub__trytest.zep",
+                                        "line": 16,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__trytest.zep",
+                                "line": 16,
+                                "char": 31
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 13,
+                    "last-line": 19,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry1",
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "file": "stub__trytest.zep",
+                            "line": 22,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 19,
+                    "last-line": 24,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry2",
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Exception",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "error!",
+                                                    "file": "stub__trytest.zep",
+                                                    "line": 27,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__trytest.zep",
+                                                "line": 27,
+                                                "char": 30
+                                            }
+                                        ],
+                                        "file": "stub__trytest.zep",
+                                        "line": 27,
+                                        "char": 31
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 28,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 24,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry3",
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Exception",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "error!",
+                                                    "file": "stub__trytest.zep",
+                                                    "line": 34,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__trytest.zep",
+                                                "line": 34,
+                                                "char": 30
+                                            }
+                                        ],
+                                        "file": "stub__trytest.zep",
+                                        "line": 34,
+                                        "char": 31
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 35,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 35,
+                                            "char": 21
+                                        }
+                                    ],
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 36,
+                                                "char": 16
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 37,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 39,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 39,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 39,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 40,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 31,
+                    "last-line": 42,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__trytest.zep",
+                            "line": 42,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__trytest.zep",
+                                        "line": 45,
+                                        "char": 9
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 46,
+                                                            "char": 31
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 46,
+                                                        "char": 31
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 46,
+                                                "char": 32
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 47,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "RuntimeException",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 48,
+                                                            "char": 38
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 48,
+                                                        "char": 38
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 48,
+                                                "char": 39
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 49,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 50,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 50,
+                                            "char": 28
+                                        }
+                                    ],
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "domain error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 51,
+                                                "char": 23
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 52,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 52,
+                                    "char": 9
+                                },
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 52,
+                                            "char": 21
+                                        }
+                                    ],
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 53,
+                                                "char": 16
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 54,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 56,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 56,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 56,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 57,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 42,
+                    "last-line": 59,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__trytest.zep",
+                            "line": 59,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__trytest.zep",
+                                        "line": 62,
+                                        "char": 9
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 63,
+                                                            "char": 31
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 63,
+                                                        "char": 31
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 63,
+                                                "char": 32
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 64,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "RuntimeException",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 65,
+                                                            "char": 38
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 65,
+                                                        "char": 38
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 65,
+                                                "char": 39
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 66,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 67,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 67,
+                                            "char": 27
+                                        },
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 67,
+                                            "char": 39
+                                        }
+                                    ],
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "any error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 68,
+                                                "char": 20
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 69,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 71,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 71,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 71,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 72,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 59,
+                    "last-line": 74,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__trytest.zep",
+                            "line": 74,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__trytest.zep",
+                                    "line": 76,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 78,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__trytest.zep",
+                                        "line": 79,
+                                        "char": 9
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 80,
+                                                            "char": 31
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 80,
+                                                        "char": 31
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 80,
+                                                "char": 32
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 81,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "RuntimeException",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 82,
+                                                            "char": 38
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 82,
+                                                        "char": 38
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 82,
+                                                "char": 39
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 83,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 84,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 84,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__trytest.zep",
+                                        "line": 86,
+                                        "char": 9
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "domain error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 85,
+                                                "char": 23
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 86,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 86,
+                                    "char": 9
+                                },
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 86,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__trytest.zep",
+                                        "line": 90,
+                                        "char": 8
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 87,
+                                                "char": 16
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 88,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 90,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 90,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 90,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 91,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 74,
+                    "last-line": 93,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry7",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__trytest.zep",
+                            "line": 93,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__trytest.zep",
+                                    "line": 95,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 97,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__trytest.zep",
+                                        "line": 98,
+                                        "char": 9
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 99,
+                                                            "char": 31
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 99,
+                                                        "char": 31
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 99,
+                                                "char": 32
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 100,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "RuntimeException",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "error!",
+                                                            "file": "stub__trytest.zep",
+                                                            "line": 101,
+                                                            "char": 38
+                                                        },
+                                                        "file": "stub__trytest.zep",
+                                                        "line": 101,
+                                                        "char": 38
+                                                    }
+                                                ],
+                                                "file": "stub__trytest.zep",
+                                                "line": 101,
+                                                "char": 39
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 102,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 103,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 103,
+                                            "char": 27
+                                        },
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 103,
+                                            "char": 37
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__trytest.zep",
+                                        "line": 106,
+                                        "char": 2
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "any error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 104,
+                                                "char": 20
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 105,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 106,
+                                    "char": 2
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 106,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 93,
+                    "last-line": 108,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry8",
+                    "statements": [
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Exception",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "error 1!",
+                                                    "file": "stub__trytest.zep",
+                                                    "line": 111,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__trytest.zep",
+                                                "line": 111,
+                                                "char": 32
+                                            }
+                                        ],
+                                        "file": "stub__trytest.zep",
+                                        "line": 111,
+                                        "char": 33
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 112,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 113,
+                            "char": 7
+                        },
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "error 2!",
+                                            "file": "stub__trytest.zep",
+                                            "line": 113,
+                                            "char": 31
+                                        },
+                                        "file": "stub__trytest.zep",
+                                        "line": 113,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__trytest.zep",
+                                "line": 113,
+                                "char": 32
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 114,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 108,
+                    "last-line": 116,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "someMethod1",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "RuntimeException",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "some external exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 118,
+                                            "char": 53
+                                        },
+                                        "file": "stub__trytest.zep",
+                                        "line": 118,
+                                        "char": 53
+                                    }
+                                ],
+                                "file": "stub__trytest.zep",
+                                "line": 118,
+                                "char": 54
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 119,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 116,
+                    "last-line": 121,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "someMethod2",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "DomainException",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "some external exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 123,
+                                            "char": 52
+                                        },
+                                        "file": "stub__trytest.zep",
+                                        "line": 123,
+                                        "char": 52
+                                    }
+                                ],
+                                "file": "stub__trytest.zep",
+                                "line": 123,
+                                "char": 53
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 124,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 121,
+                    "last-line": 126,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry9",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__trytest.zep",
+                                    "line": 128,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 129,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__trytest.zep",
+                                            "line": 131,
+                                            "char": 9
+                                        },
+                                        "name": "someMethod1",
+                                        "call-type": 1,
+                                        "file": "stub__trytest.zep",
+                                        "line": 131,
+                                        "char": 23
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 133,
+                                    "char": 9
+                                },
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "not catched",
+                                        "file": "stub__trytest.zep",
+                                        "line": 133,
+                                        "char": 22
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 135,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 135,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__trytest.zep",
+                                        "line": 138,
+                                        "char": 8
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "domain error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 136,
+                                                "char": 23
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 137,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 138,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 138,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 138,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 139,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 126,
+                    "last-line": 141,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry10",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__trytest.zep",
+                                    "line": 143,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 144,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__trytest.zep",
+                                            "line": 146,
+                                            "char": 9
+                                        },
+                                        "name": "someMethod2",
+                                        "call-type": 1,
+                                        "file": "stub__trytest.zep",
+                                        "line": 146,
+                                        "char": 23
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 148,
+                                    "char": 9
+                                },
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "not catched",
+                                        "file": "stub__trytest.zep",
+                                        "line": 148,
+                                        "char": 22
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 150,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "RuntimeException",
+                                            "file": "stub__trytest.zep",
+                                            "line": 150,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__trytest.zep",
+                                        "line": 153,
+                                        "char": 8
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "domain error",
+                                                "file": "stub__trytest.zep",
+                                                "line": 151,
+                                                "char": 23
+                                            },
+                                            "file": "stub__trytest.zep",
+                                            "line": 152,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__trytest.zep",
+                                    "line": 153,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 153,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__trytest.zep",
+                                "line": 153,
+                                "char": 15
+                            },
+                            "file": "stub__trytest.zep",
+                            "line": 154,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 141,
+                    "last-line": 157,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTry11",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "ex",
+                                    "file": "stub__trytest.zep",
+                                    "line": 159,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 161,
+                            "char": 11
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "test",
+                                        "file": "stub__trytest.zep",
+                                        "line": 162,
+                                        "char": 24
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 163,
+                                    "char": 9
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "\\Exception",
+                                            "file": "stub__trytest.zep",
+                                            "line": 163,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "ex",
+                                        "file": "stub__trytest.zep",
+                                        "line": 166,
+                                        "char": 5
+                                    },
+                                    "file": "stub__trytest.zep",
+                                    "line": 166,
+                                    "char": 5
+                                }
+                            ],
+                            "file": "stub__trytest.zep",
+                            "line": 166,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__trytest.zep",
+                    "line": 157,
+                    "last-line": 167,
+                    "char": 19
+                }
+            ],
+            "file": "stub__trytest.zep",
+            "line": 6,
+            "char": 5
+        },
+        "file": "stub__trytest.zep",
+        "line": 6,
+        "char": 5
+    }
+]

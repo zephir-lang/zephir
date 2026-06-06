@@ -1,0 +1,174 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_concretestatic.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ConcreteStatic",
+        "abstract": 0,
+        "final": 0,
+        "extends": "AbstractStatic",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "parentFunction",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__METHOD__",
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 7,
+                                "char": 20
+                            },
+                            "file": "stub__oo_concretestatic.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_concretestatic.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "childFunction",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "parentFunction",
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 12,
+                                "char": 32
+                            },
+                            "file": "stub__oo_concretestatic.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_concretestatic.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "callParentFunction",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "parent",
+                                "dynamic": 0,
+                                "name": "getCalledClass",
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 17,
+                                "char": 37
+                            },
+                            "file": "stub__oo_concretestatic.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 16,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_concretestatic.zep",
+                        "line": 16,
+                        "char": 2
+                    },
+                    "file": "stub__oo_concretestatic.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "simpleStaticIntReturn",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1337",
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 22,
+                                "char": 17
+                            },
+                            "file": "stub__oo_concretestatic.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__oo_concretestatic.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_concretestatic.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__oo_concretestatic.zep",
+                    "line": 20,
+                    "last-line": 24,
+                    "char": 23
+                }
+            ],
+            "file": "stub__oo_concretestatic.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__oo_concretestatic.zep",
+        "line": 3,
+        "char": 5
+    }
+]

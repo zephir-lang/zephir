@@ -1,0 +1,392 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__exists.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Exists",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testClassExists",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 6,
+                            "char": 47
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "autoload",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__exists.zep",
+                                "line": 6,
+                                "char": 67
+                            },
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 6,
+                            "char": 67
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "class_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "className",
+                                            "file": "stub__exists.zep",
+                                            "line": 8,
+                                            "char": 32
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 8,
+                                        "char": 32
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "autoload",
+                                            "file": "stub__exists.zep",
+                                            "line": 8,
+                                            "char": 42
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 8,
+                                        "char": 42
+                                    }
+                                ],
+                                "file": "stub__exists.zep",
+                                "line": 8,
+                                "char": 43
+                            },
+                            "file": "stub__exists.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__exists.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__exists.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__exists.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInterfaceExists",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "interfaceName",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 11,
+                            "char": 55
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "autoload",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__exists.zep",
+                                "line": 11,
+                                "char": 75
+                            },
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 11,
+                            "char": 75
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "interface_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "interfaceName",
+                                            "file": "stub__exists.zep",
+                                            "line": 13,
+                                            "char": 40
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 13,
+                                        "char": 40
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "autoload",
+                                            "file": "stub__exists.zep",
+                                            "line": 13,
+                                            "char": 50
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 13,
+                                        "char": 50
+                                    }
+                                ],
+                                "file": "stub__exists.zep",
+                                "line": 13,
+                                "char": 51
+                            },
+                            "file": "stub__exists.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__exists.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__exists.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__exists.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodExists",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 16,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "methodName",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 16,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "method_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__exists.zep",
+                                            "line": 18,
+                                            "char": 27
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 18,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "methodName",
+                                            "file": "stub__exists.zep",
+                                            "line": 18,
+                                            "char": 39
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 18,
+                                        "char": 39
+                                    }
+                                ],
+                                "file": "stub__exists.zep",
+                                "line": 18,
+                                "char": 40
+                            },
+                            "file": "stub__exists.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__exists.zep",
+                                "line": 17,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__exists.zep",
+                        "line": 17,
+                        "char": 2
+                    },
+                    "file": "stub__exists.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFileExists",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "fileName",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exists.zep",
+                            "line": 21,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "file_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "fileName",
+                                            "file": "stub__exists.zep",
+                                            "line": 23,
+                                            "char": 30
+                                        },
+                                        "file": "stub__exists.zep",
+                                        "line": 23,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__exists.zep",
+                                "line": 23,
+                                "char": 31
+                            },
+                            "file": "stub__exists.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__exists.zep",
+                                "line": 22,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__exists.zep",
+                        "line": 22,
+                        "char": 2
+                    },
+                    "file": "stub__exists.zep",
+                    "line": 21,
+                    "last-line": 25,
+                    "char": 16
+                }
+            ],
+            "file": "stub__exists.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__exists.zep",
+        "line": 4,
+        "char": 5
+    }
+]

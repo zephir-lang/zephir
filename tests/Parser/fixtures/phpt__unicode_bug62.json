@@ -1,0 +1,54 @@
+[
+    {
+        "type": "namespace",
+        "name": "Utils",
+        "file": "phpt__unicode_bug62.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Greeting",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "say",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "string",
+                                    "value": "\u4e2d\u6587",
+                                    "file": "phpt__unicode_bug62.zep",
+                                    "line": 8,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "phpt__unicode_bug62.zep",
+                            "line": 9,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__unicode_bug62.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 26
+                }
+            ],
+            "file": "phpt__unicode_bug62.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__unicode_bug62.zep",
+        "line": 3,
+        "char": 5
+    }
+]

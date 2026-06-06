@@ -1,0 +1,3269 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Method calls\n *",
+        "file": "stub__mcall.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__mcall.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Mcall",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello public",
+                                "file": "stub__mcall.zep",
+                                "line": 12,
+                                "char": 22
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethod2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello protected",
+                                "file": "stub__mcall.zep",
+                                "line": 17,
+                                "char": 25
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello private",
+                                "file": "stub__mcall.zep",
+                                "line": 22,
+                                "char": 23
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 25,
+                            "char": 35
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 25,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 27,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcall.zep",
+                                    "line": 27,
+                                    "char": 15
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 27,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethod5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 30,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 30,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 32,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcall.zep",
+                                    "line": 32,
+                                    "char": 15
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 32,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 35,
+                            "char": 36
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 35,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 37,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcall.zep",
+                                    "line": 37,
+                                    "char": 15
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 37,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod7",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\stdClass",
+                                "dynamic": 0,
+                                "file": "stub__mcall.zep",
+                                "line": 42,
+                                "char": 25
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\stdClass",
+                                    "file": "stub__mcall.zep",
+                                    "line": 41,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__mcall.zep",
+                                "line": 41,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcall.zep",
+                        "line": 41,
+                        "char": 2
+                    },
+                    "file": "stub__mcall.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 47,
+                                    "char": 15
+                                },
+                                "name": "testMethod1",
+                                "call-type": 1,
+                                "file": "stub__mcall.zep",
+                                "line": 47,
+                                "char": 29
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 45,
+                    "last-line": 50,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 52,
+                                    "char": 15
+                                },
+                                "name": "testMethod2",
+                                "call-type": 1,
+                                "file": "stub__mcall.zep",
+                                "line": 52,
+                                "char": 29
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 53,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 50,
+                    "last-line": 55,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 57,
+                                    "char": 15
+                                },
+                                "name": "testMethod3",
+                                "call-type": 1,
+                                "file": "stub__mcall.zep",
+                                "line": 57,
+                                "char": 29
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 58,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 55,
+                    "last-line": 60,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 60,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 60,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 62,
+                                    "char": 15
+                                },
+                                "name": "testMethod4",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 62,
+                                            "char": 29
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 62,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 62,
+                                            "char": 32
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 62,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 62,
+                                "char": 33
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 63,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 60,
+                    "last-line": 65,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 65,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 65,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 67,
+                                    "char": 15
+                                },
+                                "name": "testMethod5",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 67,
+                                            "char": 29
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 67,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 67,
+                                            "char": 32
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 67,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 67,
+                                "char": 33
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 68,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 65,
+                    "last-line": 70,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 70,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 70,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 72,
+                                    "char": 15
+                                },
+                                "name": "testMethod6",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 72,
+                                            "char": 29
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 72,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 72,
+                                            "char": 32
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 72,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 72,
+                                "char": 33
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 73,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 70,
+                    "last-line": 75,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall7",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 75,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 75,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 77,
+                                        "char": 15
+                                    },
+                                    "name": "testMethod4",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 77,
+                                                "char": 29
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 77,
+                                            "char": 29
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 77,
+                                                "char": 32
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 77,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 77,
+                                    "char": 34
+                                },
+                                "right": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 77,
+                                        "char": 41
+                                    },
+                                    "name": "testMethod4",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 77,
+                                                "char": 55
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 77,
+                                            "char": 55
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 77,
+                                                "char": 58
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 77,
+                                            "char": 58
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 77,
+                                    "char": 59
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 77,
+                                "char": 59
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 78,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 75,
+                    "last-line": 80,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall8",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 80,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 80,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 82,
+                                        "char": 15
+                                    },
+                                    "name": "testMethod5",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 82,
+                                                "char": 29
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 82,
+                                            "char": 29
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 82,
+                                                "char": 32
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 82,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 82,
+                                    "char": 34
+                                },
+                                "right": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 82,
+                                        "char": 41
+                                    },
+                                    "name": "testMethod5",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 82,
+                                                "char": 55
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 82,
+                                            "char": 55
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 82,
+                                                "char": 58
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 82,
+                                            "char": 58
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 82,
+                                    "char": 59
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 82,
+                                "char": 59
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 83,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 80,
+                    "last-line": 85,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall9",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 85,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 85,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 87,
+                                        "char": 15
+                                    },
+                                    "name": "testMethod6",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 87,
+                                                "char": 29
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 87,
+                                            "char": 29
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 87,
+                                                "char": 32
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 87,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 87,
+                                    "char": 34
+                                },
+                                "right": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__mcall.zep",
+                                        "line": 87,
+                                        "char": 41
+                                    },
+                                    "name": "testMethod5",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__mcall.zep",
+                                                "line": 87,
+                                                "char": 55
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 87,
+                                            "char": 55
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "b",
+                                                "file": "stub__mcall.zep",
+                                                "line": 87,
+                                                "char": 58
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 87,
+                                            "char": 58
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 87,
+                                    "char": 59
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 87,
+                                "char": 59
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 88,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 85,
+                    "last-line": 90,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall10",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 92,
+                                    "char": 15
+                                },
+                                "name": "testMethod1",
+                                "call-type": 3,
+                                "file": "stub__mcall.zep",
+                                "line": 92,
+                                "char": 31
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 93,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 90,
+                    "last-line": 95,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall11",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 97,
+                                    "char": 15
+                                },
+                                "name": "testMethod2",
+                                "call-type": 3,
+                                "file": "stub__mcall.zep",
+                                "line": 97,
+                                "char": 31
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 98,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 95,
+                    "last-line": 100,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall12",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 102,
+                                    "char": 15
+                                },
+                                "name": "testMethod3",
+                                "call-type": 3,
+                                "file": "stub__mcall.zep",
+                                "line": 102,
+                                "char": 31
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 103,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 100,
+                    "last-line": 105,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall13",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 105,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 105,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 107,
+                                    "char": 15
+                                },
+                                "name": "testMethod4",
+                                "call-type": 3,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 107,
+                                            "char": 31
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 107,
+                                        "char": 31
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 107,
+                                            "char": 34
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 107,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 107,
+                                "char": 35
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 108,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 105,
+                    "last-line": 110,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall14",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 110,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 110,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 112,
+                                    "char": 15
+                                },
+                                "name": "testMethod5",
+                                "call-type": 3,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 112,
+                                            "char": 31
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 112,
+                                        "char": 31
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 112,
+                                            "char": 34
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 112,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 112,
+                                "char": 35
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 113,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 110,
+                    "last-line": 115,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall15",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 115,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 115,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 117,
+                                    "char": 15
+                                },
+                                "name": "testMethod6",
+                                "call-type": 3,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__mcall.zep",
+                                            "line": 117,
+                                            "char": 31
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 117,
+                                        "char": 31
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__mcall.zep",
+                                            "line": 117,
+                                            "char": 34
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 117,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 117,
+                                "char": 35
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 118,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 115,
+                    "last-line": 120,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall16",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "c",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 120,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "d",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 120,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 122,
+                                    "char": 15
+                                },
+                                "name": "testMethod4",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "name": "a",
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "c",
+                                            "file": "stub__mcall.zep",
+                                            "line": 122,
+                                            "char": 32
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 122,
+                                        "char": 32
+                                    },
+                                    {
+                                        "name": "b",
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "d",
+                                            "file": "stub__mcall.zep",
+                                            "line": 122,
+                                            "char": 38
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 122,
+                                        "char": 38
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 122,
+                                "char": 39
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 123,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 120,
+                    "last-line": 125,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall17",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "c",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 125,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "d",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 125,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 127,
+                                    "char": 15
+                                },
+                                "name": "testMethod4",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "name": "b",
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "c",
+                                            "file": "stub__mcall.zep",
+                                            "line": 127,
+                                            "char": 32
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 127,
+                                        "char": 32
+                                    },
+                                    {
+                                        "name": "a",
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "d",
+                                            "file": "stub__mcall.zep",
+                                            "line": 127,
+                                            "char": 38
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 127,
+                                        "char": 38
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 127,
+                                "char": 39
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 128,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 125,
+                    "last-line": 130,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall18",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcall.zep",
+                                    "line": 132,
+                                    "char": 15
+                                },
+                                "name": "testMethod7",
+                                "call-type": 1,
+                                "file": "stub__mcall.zep",
+                                "line": 132,
+                                "char": 29
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 133,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 130,
+                    "last-line": 135,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod19",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 135,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 135,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 137,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcall.zep",
+                                    "line": 137,
+                                    "char": 15
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 137,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 138,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 135,
+                    "last-line": 140,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall20",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "k",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 140,
+                            "char": 35
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "p",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 140,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__mcall.zep",
+                                    "line": 142,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcall.zep",
+                                        "line": 142,
+                                        "char": 16
+                                    },
+                                    "file": "stub__mcall.zep",
+                                    "line": 142,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 143,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__mcall.zep",
+                                            "line": 143,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 143,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__mcall.zep",
+                                            "line": 143,
+                                            "char": 22
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 143,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 143,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__mcall.zep",
+                                                    "line": 144,
+                                                    "char": 17
+                                                },
+                                                "name": "testMethod19",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__mcall.zep",
+                                                            "line": 144,
+                                                            "char": 32
+                                                        },
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 144,
+                                                        "char": 32
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__mcall.zep",
+                                                            "line": 144,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 144,
+                                                        "char": 35
+                                                    }
+                                                ],
+                                                "file": "stub__mcall.zep",
+                                                "line": 144,
+                                                "char": 36
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 144,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 145,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 146,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "j",
+                                "file": "stub__mcall.zep",
+                                "line": 146,
+                                "char": 11
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 147,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 140,
+                    "last-line": 149,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod21",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 149,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 149,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 151,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcall.zep",
+                                    "line": 151,
+                                    "char": 15
+                                },
+                                "file": "stub__mcall.zep",
+                                "line": 151,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 152,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 149,
+                    "last-line": 154,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall22",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "k",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 154,
+                            "char": 35
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "p",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 154,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__mcall.zep",
+                                    "line": 156,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcall.zep",
+                                        "line": 156,
+                                        "char": 16
+                                    },
+                                    "file": "stub__mcall.zep",
+                                    "line": 156,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 157,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__mcall.zep",
+                                            "line": 157,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 157,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__mcall.zep",
+                                            "line": 157,
+                                            "char": 22
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 157,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 157,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__mcall.zep",
+                                                    "line": 158,
+                                                    "char": 17
+                                                },
+                                                "name": "testMethod21",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__mcall.zep",
+                                                            "line": 158,
+                                                            "char": 32
+                                                        },
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 158,
+                                                        "char": 32
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__mcall.zep",
+                                                            "line": 158,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 158,
+                                                        "char": 35
+                                                    }
+                                                ],
+                                                "file": "stub__mcall.zep",
+                                                "line": 158,
+                                                "char": 36
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 158,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 159,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 160,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "j",
+                                "file": "stub__mcall.zep",
+                                "line": 160,
+                                "char": 11
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 161,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 154,
+                    "last-line": 163,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalRequereString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 163,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 165,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 166,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 163,
+                    "last-line": 168,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "string",
+                                "value": "test string",
+                                "file": "stub__mcall.zep",
+                                "line": 168,
+                                "char": 68
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 168,
+                            "char": 68
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 170,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 171,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 168,
+                    "last-line": 173,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterStringNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__mcall.zep",
+                                "line": 173,
+                                "char": 65
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 173,
+                            "char": 65
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 175,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 176,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 173,
+                    "last-line": 178,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterInt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "2",
+                                "file": "stub__mcall.zep",
+                                "line": 178,
+                                "char": 52
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 178,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 180,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 181,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 178,
+                    "last-line": 183,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__mcall.zep",
+                                "line": 183,
+                                "char": 55
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 183,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 185,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 186,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 183,
+                    "last-line": 188,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterBoolTrue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__mcall.zep",
+                                "line": 188,
+                                "char": 61
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 188,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 190,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 191,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 188,
+                    "last-line": 193,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterBoolFalse",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__mcall.zep",
+                                "line": 193,
+                                "char": 63
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 193,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 195,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 196,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 193,
+                    "last-line": 198,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterBoolean",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "start",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__mcall.zep",
+                                "line": 198,
+                                "char": 64
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 198,
+                            "char": 64
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "start",
+                                "file": "stub__mcall.zep",
+                                "line": 200,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 201,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 198,
+                    "last-line": 203,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "optionalParameterBooleanNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__mcall.zep",
+                                "line": 203,
+                                "char": 65
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 203,
+                            "char": 65
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "value",
+                                "file": "stub__mcall.zep",
+                                "line": 205,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 206,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 203,
+                    "last-line": 210,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testArrayParamWithDefaultEmptyArray",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "driverOptions",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "empty-array",
+                                "file": "stub__mcall.zep",
+                                "line": 211,
+                                "char": 78
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 211,
+                            "char": 78
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "driverOptions",
+                                "file": "stub__mcall.zep",
+                                "line": 213,
+                                "char": 23
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 214,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/142\n\t *",
+                    "file": "stub__mcall.zep",
+                    "line": 211,
+                    "last-line": 216,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testArrayParamWithDefaultNullValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "driverOptions",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__mcall.zep",
+                                "line": 216,
+                                "char": 79
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 216,
+                            "char": 79
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "driverOptions",
+                                "file": "stub__mcall.zep",
+                                "line": 218,
+                                "char": 23
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 219,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 216,
+                    "last-line": 221,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testArrayParam",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "driverOptions",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 221,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "driverOptions",
+                                "file": "stub__mcall.zep",
+                                "line": 223,
+                                "char": 23
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 224,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 221,
+                    "last-line": 226,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testObjectParamCastStdClass",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\stdClass",
+                                "file": "stub__mcall.zep",
+                                "line": 226,
+                                "char": 62
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 226,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 228,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 229,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 226,
+                    "last-line": 231,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testObjectParamCastOoParam",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Oo\\Param",
+                                "file": "stub__mcall.zep",
+                                "line": 231,
+                                "char": 60
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 231,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 233,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 234,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 231,
+                    "last-line": 236,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "bb",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello",
+                                "file": "stub__mcall.zep",
+                                "line": 238,
+                                "char": 15
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 239,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 236,
+                    "last-line": 241,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCallablePass",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 243,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 244,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoParams",
+                                        "dynamic": 0,
+                                        "file": "stub__mcall.zep",
+                                        "line": 244,
+                                        "char": 28
+                                    },
+                                    "file": "stub__mcall.zep",
+                                    "line": 244,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 246,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 246,
+                                    "char": 12
+                                },
+                                "name": "setCallable",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "closure",
+                                            "right": [
+                                                {
+                                                    "type": "return",
+                                                    "expr": {
+                                                        "type": "int",
+                                                        "value": "5",
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 247,
+                                                        "char": 12
+                                                    },
+                                                    "file": "stub__mcall.zep",
+                                                    "line": 248,
+                                                    "char": 3
+                                                }
+                                            ],
+                                            "file": "stub__mcall.zep",
+                                            "line": 248,
+                                            "char": 4
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 248,
+                                        "char": 4
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 248,
+                                "char": 5
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 249,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 246,
+                    "last-line": 251,
+                    "char": 32
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCallableArrayThisMethodPass",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 253,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 254,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoParams",
+                                        "dynamic": 0,
+                                        "file": "stub__mcall.zep",
+                                        "line": 254,
+                                        "char": 28
+                                    },
+                                    "file": "stub__mcall.zep",
+                                    "line": 254,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 256,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 256,
+                                    "char": 12
+                                },
+                                "name": "setCallable",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "array",
+                                            "left": [
+                                                {
+                                                    "value": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 256,
+                                                        "char": 30
+                                                    },
+                                                    "file": "stub__mcall.zep",
+                                                    "line": 256,
+                                                    "char": 30
+                                                },
+                                                {
+                                                    "value": {
+                                                        "type": "string",
+                                                        "value": "bb",
+                                                        "file": "stub__mcall.zep",
+                                                        "line": 256,
+                                                        "char": 34
+                                                    },
+                                                    "file": "stub__mcall.zep",
+                                                    "line": 256,
+                                                    "char": 34
+                                                }
+                                            ],
+                                            "file": "stub__mcall.zep",
+                                            "line": 256,
+                                            "char": 35
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 256,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 256,
+                                "char": 36
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 257,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 251,
+                    "last-line": 259,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "aa",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 261,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 262,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "self",
+                                        "dynamic": 0,
+                                        "file": "stub__mcall.zep",
+                                        "line": 262,
+                                        "char": 19
+                                    },
+                                    "file": "stub__mcall.zep",
+                                    "line": 262,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 263,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcall.zep",
+                                    "line": 263,
+                                    "char": 12
+                                },
+                                "name": "bb",
+                                "call-type": 1,
+                                "file": "stub__mcall.zep",
+                                "line": 263,
+                                "char": 17
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 264,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 259,
+                    "last-line": 268,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1136",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "_finfo",
+                                    "file": "stub__mcall.zep",
+                                    "line": 271,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 273,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "version_compare",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "constant",
+                                            "value": "PHP_VERSION",
+                                            "file": "stub__mcall.zep",
+                                            "line": 273,
+                                            "char": 39
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 273,
+                                        "char": 39
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "8.0.0",
+                                            "file": "stub__mcall.zep",
+                                            "line": 273,
+                                            "char": 46
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 273,
+                                        "char": 46
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": ">=",
+                                            "file": "stub__mcall.zep",
+                                            "line": 273,
+                                            "char": 50
+                                        },
+                                        "file": "stub__mcall.zep",
+                                        "line": 273,
+                                        "char": 50
+                                    }
+                                ],
+                                "file": "stub__mcall.zep",
+                                "line": 273,
+                                "char": 52
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "_finfo",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "\\finfo",
+                                                "dynamic": 0,
+                                                "file": "stub__mcall.zep",
+                                                "line": 274,
+                                                "char": 38
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 274,
+                                            "char": 38
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 275,
+                                    "char": 9
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "_finfo",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "finfo_open",
+                                                "call-type": 1,
+                                                "file": "stub__mcall.zep",
+                                                "line": 276,
+                                                "char": 38
+                                            },
+                                            "file": "stub__mcall.zep",
+                                            "line": 276,
+                                            "char": 38
+                                        }
+                                    ],
+                                    "file": "stub__mcall.zep",
+                                    "line": 277,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__mcall.zep",
+                            "line": 279,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "_finfo",
+                                "file": "stub__mcall.zep",
+                                "line": 279,
+                                "char": 22
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 280,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1136\n     *",
+                    "file": "stub__mcall.zep",
+                    "line": 269,
+                    "last-line": 282,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2245VarArgumentNullable",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__mcall.zep",
+                                "line": 282,
+                                "char": 66
+                            },
+                            "reference": 0,
+                            "file": "stub__mcall.zep",
+                            "line": 282,
+                            "char": 66
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__mcall.zep",
+                                "line": 284,
+                                "char": 21
+                            },
+                            "file": "stub__mcall.zep",
+                            "line": 285,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__mcall.zep",
+                    "line": 282,
+                    "last-line": 286,
+                    "char": 19
+                }
+            ],
+            "file": "stub__mcall.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__mcall.zep",
+        "line": 8,
+        "char": 5
+    }
+]

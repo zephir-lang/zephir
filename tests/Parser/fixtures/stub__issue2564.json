@@ -1,0 +1,260 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2564.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2564",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "cipher",
+                    "file": "stub__issue2564.zep",
+                    "line": 6,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "useSigning",
+                    "file": "stub__issue2564.zep",
+                    "line": 7,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "padFactory",
+                    "file": "stub__issue2564.zep",
+                    "line": 9,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "cipher",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "string",
+                                "value": "aes-256-cfb",
+                                "file": "stub__issue2564.zep",
+                                "line": 10,
+                                "char": 36
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2564.zep",
+                            "line": 10,
+                            "char": 36
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "useSigning",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__issue2564.zep",
+                                "line": 11,
+                                "char": 31
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2564.zep",
+                            "line": 11,
+                            "char": 31
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "padFactory",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Issue2564PadFactory",
+                                "file": "stub__issue2564.zep",
+                                "line": 12,
+                                "char": 40
+                            },
+                            "default": {
+                                "type": "null",
+                                "file": "stub__issue2564.zep",
+                                "line": 13,
+                                "char": 5
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2564.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "cipher",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "cipher",
+                                        "file": "stub__issue2564.zep",
+                                        "line": 14,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue2564.zep",
+                                    "line": 14,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue2564.zep",
+                            "line": 15,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "useSigning",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "useSigning",
+                                        "file": "stub__issue2564.zep",
+                                        "line": 15,
+                                        "char": 42
+                                    },
+                                    "file": "stub__issue2564.zep",
+                                    "line": 15,
+                                    "char": 42
+                                }
+                            ],
+                            "file": "stub__issue2564.zep",
+                            "line": 16,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "padFactory",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "padFactory",
+                                        "file": "stub__issue2564.zep",
+                                        "line": 16,
+                                        "char": 42
+                                    },
+                                    "file": "stub__issue2564.zep",
+                                    "line": 16,
+                                    "char": 42
+                                }
+                            ],
+                            "file": "stub__issue2564.zep",
+                            "line": 17,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2564.zep",
+                    "line": 9,
+                    "last-line": 19,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getCipher",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue2564.zep",
+                                    "line": 21,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "cipher",
+                                    "file": "stub__issue2564.zep",
+                                    "line": 21,
+                                    "char": 28
+                                },
+                                "file": "stub__issue2564.zep",
+                                "line": 21,
+                                "char": 28
+                            },
+                            "file": "stub__issue2564.zep",
+                            "line": 22,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2564.zep",
+                                "line": 20,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2564.zep",
+                        "line": 20,
+                        "char": 5
+                    },
+                    "file": "stub__issue2564.zep",
+                    "line": 19,
+                    "last-line": 23,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2564.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2564.zep",
+        "line": 3,
+        "char": 5
+    }
+]

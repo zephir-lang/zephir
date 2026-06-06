@@ -1,0 +1,247 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "declare",
+                "data-type": "variable",
+                "variables": [
+                    {
+                        "variable": "a",
+                        "file": "phpt__cf_switch.zep",
+                        "line": 2,
+                        "char": 7
+                    }
+                ],
+                "file": "phpt__cf_switch.zep",
+                "line": 4,
+                "char": 7
+            },
+            {
+                "type": "switch",
+                "expr": {
+                    "type": "int",
+                    "value": "3",
+                    "file": "phpt__cf_switch.zep",
+                    "line": 4,
+                    "char": 11
+                },
+                "clauses": [
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "int",
+                            "value": "1",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 5,
+                            "char": 8
+                        },
+                        "file": "phpt__cf_switch.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 6,
+                            "char": 8
+                        },
+                        "statements": [
+                            {
+                                "type": "let",
+                                "assignments": [
+                                    {
+                                        "assign-type": "variable",
+                                        "operator": "assign",
+                                        "variable": "a",
+                                        "expr": {
+                                            "type": "string",
+                                            "value": "foobar",
+                                            "file": "phpt__cf_switch.zep",
+                                            "line": 7,
+                                            "char": 17
+                                        },
+                                        "file": "phpt__cf_switch.zep",
+                                        "line": 7,
+                                        "char": 17
+                                    }
+                                ],
+                                "file": "phpt__cf_switch.zep",
+                                "line": 8,
+                                "char": 7
+                            },
+                            {
+                                "type": "break",
+                                "file": "phpt__cf_switch.zep",
+                                "line": 9,
+                                "char": 5
+                            }
+                        ],
+                        "file": "phpt__cf_switch.zep",
+                        "line": 9,
+                        "char": 5
+                    },
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "int",
+                            "value": "3",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 9,
+                            "char": 8
+                        },
+                        "statements": [
+                            {
+                                "type": "let",
+                                "assignments": [
+                                    {
+                                        "assign-type": "variable",
+                                        "operator": "assign",
+                                        "variable": "a",
+                                        "expr": {
+                                            "type": "string",
+                                            "value": "baz",
+                                            "file": "phpt__cf_switch.zep",
+                                            "line": 10,
+                                            "char": 14
+                                        },
+                                        "file": "phpt__cf_switch.zep",
+                                        "line": 10,
+                                        "char": 14
+                                    }
+                                ],
+                                "file": "phpt__cf_switch.zep",
+                                "line": 11,
+                                "char": 7
+                            },
+                            {
+                                "type": "break",
+                                "file": "phpt__cf_switch.zep",
+                                "line": 12,
+                                "char": 8
+                            }
+                        ],
+                        "file": "phpt__cf_switch.zep",
+                        "line": 12,
+                        "char": 8
+                    },
+                    {
+                        "type": "default",
+                        "statements": [
+                            {
+                                "type": "let",
+                                "assignments": [
+                                    {
+                                        "assign-type": "variable",
+                                        "operator": "assign",
+                                        "variable": "a",
+                                        "expr": {
+                                            "type": "string",
+                                            "value": "biz",
+                                            "file": "phpt__cf_switch.zep",
+                                            "line": 13,
+                                            "char": 14
+                                        },
+                                        "file": "phpt__cf_switch.zep",
+                                        "line": 13,
+                                        "char": 14
+                                    }
+                                ],
+                                "file": "phpt__cf_switch.zep",
+                                "line": 14,
+                                "char": 7
+                            },
+                            {
+                                "type": "break",
+                                "file": "phpt__cf_switch.zep",
+                                "line": 15,
+                                "char": 2
+                            }
+                        ],
+                        "file": "phpt__cf_switch.zep",
+                        "line": 15,
+                        "char": 2
+                    }
+                ],
+                "file": "phpt__cf_switch.zep",
+                "line": 17,
+                "char": 7
+            },
+            {
+                "type": "switch",
+                "expr": {
+                    "type": "variable",
+                    "value": "foobar",
+                    "file": "phpt__cf_switch.zep",
+                    "line": 17,
+                    "char": 16
+                },
+                "clauses": [
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "string",
+                            "value": "hello",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 18,
+                            "char": 12
+                        },
+                        "file": "phpt__cf_switch.zep",
+                        "line": 19,
+                        "char": 5
+                    },
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "variable",
+                            "value": "hello",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 19,
+                            "char": 12
+                        },
+                        "file": "phpt__cf_switch.zep",
+                        "line": 20,
+                        "char": 5
+                    },
+                    {
+                        "type": "case",
+                        "expr": {
+                            "type": "constant",
+                            "value": "HELLO",
+                            "file": "phpt__cf_switch.zep",
+                            "line": 20,
+                            "char": 12
+                        },
+                        "file": "phpt__cf_switch.zep",
+                        "line": 21,
+                        "char": 8
+                    },
+                    {
+                        "type": "default",
+                        "statements": [
+                            {
+                                "type": "break",
+                                "file": "phpt__cf_switch.zep",
+                                "line": 23,
+                                "char": 2
+                            }
+                        ],
+                        "file": "phpt__cf_switch.zep",
+                        "line": 23,
+                        "char": 2
+                    }
+                ],
+                "file": "phpt__cf_switch.zep",
+                "line": 24,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_switch.zep",
+        "line": 1,
+        "char": 9
+    }
+]

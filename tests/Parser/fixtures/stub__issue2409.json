@@ -1,0 +1,905 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2409.zep",
+        "line": 5,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2409\n *",
+        "file": "stub__issue2409.zep",
+        "line": 6,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2409",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someVar",
+                    "file": "stub__issue2409.zep",
+                    "line": 10,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setEmpty",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 12,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 12,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setNonEmpty",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "123",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 17,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 17,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setNull",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 22,
+                                        "char": 33
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 22,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 23,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setInt",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 27,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 27,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 28,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 26,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setNegativeInt",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "-7",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 32,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 32,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 33,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 31,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setDouble",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "3.14",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 37,
+                                        "char": 33
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 37,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 38,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 36,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setBoolTrue",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 42,
+                                        "char": 33
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 42,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 43,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 41,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setBoolFalse",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 47,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 47,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 48,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 46,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 45,
+                    "last-line": 50,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setChar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "A",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 52,
+                                        "char": 21
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 52,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 53,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "ch",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 53,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 53,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 54,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 51,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 50,
+                    "last-line": 56,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setEmptyArray",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 58,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 58,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 59,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 57,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 56,
+                    "last-line": 61,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setArray",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__issue2409.zep",
+                                                    "line": 63,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__issue2409.zep",
+                                                "line": 63,
+                                                "char": 31
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__issue2409.zep",
+                                                    "line": 63,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__issue2409.zep",
+                                                "line": 63,
+                                                "char": 34
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "3",
+                                                    "file": "stub__issue2409.zep",
+                                                    "line": 63,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__issue2409.zep",
+                                                "line": 63,
+                                                "char": 37
+                                            }
+                                        ],
+                                        "file": "stub__issue2409.zep",
+                                        "line": 63,
+                                        "char": 38
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 63,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 64,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 62,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 61,
+                    "last-line": 66,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setFromStringVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "tmp",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "hello",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 68,
+                                        "char": 27
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 68,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 69,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "tmp",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 69,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 69,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 70,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 67,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 66,
+                    "last-line": 72,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setFromIntVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "tmp",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "99",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 74,
+                                        "char": 21
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 74,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 75,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "tmp",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 75,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 75,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 76,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 73,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 72,
+                    "last-line": 78,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setFromDoubleVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "tmp",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "2.5",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 80,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 80,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 81,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "tmp",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 81,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 81,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 82,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 79,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 78,
+                    "last-line": 84,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setFromBoolVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "bool",
+                            "variables": [
+                                {
+                                    "variable": "tmp",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 86,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 86,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 87,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someVar",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "tmp",
+                                        "file": "stub__issue2409.zep",
+                                        "line": 87,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2409.zep",
+                                    "line": 87,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2409.zep",
+                            "line": 88,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2409.zep",
+                        "line": 85,
+                        "char": 5
+                    },
+                    "file": "stub__issue2409.zep",
+                    "line": 84,
+                    "last-line": 90,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getVar",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2409.zep",
+                                    "line": 92,
+                                    "char": 29
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someVar",
+                                    "file": "stub__issue2409.zep",
+                                    "line": 92,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2409.zep",
+                                "line": 92,
+                                "char": 29
+                            },
+                            "file": "stub__issue2409.zep",
+                            "line": 93,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2409.zep",
+                    "line": 90,
+                    "last-line": 94,
+                    "char": 26
+                }
+            ],
+            "file": "stub__issue2409.zep",
+            "line": 6,
+            "char": 5
+        },
+        "file": "stub__issue2409.zep",
+        "line": 6,
+        "char": 5
+    }
+]

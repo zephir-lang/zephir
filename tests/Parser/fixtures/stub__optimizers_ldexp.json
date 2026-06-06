@@ -1,0 +1,620 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_ldexp.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Ldexp",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 8,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 8,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 9,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "exponent",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "3",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 9,
+                                        "char": 19
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 9,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 11,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 11,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 11,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 11,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 11,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 11,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 6,
+                    "last-line": 14,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDoubleInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "2.0",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 16,
+                                        "char": 17
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 16,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 17,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "exponent",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "3",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 17,
+                                        "char": 19
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 17,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 19,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 19,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 19,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 19,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 19,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 19,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 14,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDouble",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "2.0",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 24,
+                                        "char": 17
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 24,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 25,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "exponent",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "3.0",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 25,
+                                        "char": 24
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 25,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 27,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 27,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 27,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 27,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 27,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 27,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 22,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 32,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 32,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 33,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "exponent",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "3",
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 33,
+                                        "char": 19
+                                    },
+                                    "file": "stub__optimizers_ldexp.zep",
+                                    "line": 33,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 35,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 35,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 35,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 35,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 35,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 35,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 36,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 30,
+                    "last-line": 38,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntValue1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "2",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 40,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 40,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 40,
+                                            "char": 20
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 40,
+                                        "char": 20
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 40,
+                                "char": 21
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 41,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 38,
+                    "last-line": 43,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "x",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 43,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "exponent",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 43,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 45,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 45,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 45,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 45,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 45,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 46,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 43,
+                    "last-line": 48,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVarParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "x",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 48,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "exponent",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 48,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ldexp",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "x",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 50,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 50,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exponent",
+                                            "file": "stub__optimizers_ldexp.zep",
+                                            "line": 50,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_ldexp.zep",
+                                        "line": 50,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_ldexp.zep",
+                                "line": 50,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_ldexp.zep",
+                            "line": 51,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_ldexp.zep",
+                    "line": 48,
+                    "last-line": 52,
+                    "char": 16
+                }
+            ],
+            "file": "stub__optimizers_ldexp.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_ldexp.zep",
+        "line": 4,
+        "char": 5
+    }
+]

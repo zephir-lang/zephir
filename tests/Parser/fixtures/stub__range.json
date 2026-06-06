@@ -1,0 +1,110 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Arithmetic operations\n *",
+        "file": "stub__range.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__range.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Range",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "inclusive1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "irange",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__range.zep",
+                                    "line": 12,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "10",
+                                    "file": "stub__range.zep",
+                                    "line": 12,
+                                    "char": 15
+                                },
+                                "file": "stub__range.zep",
+                                "line": 12,
+                                "char": 15
+                            },
+                            "file": "stub__range.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__range.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "exclusive1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "erange",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__range.zep",
+                                    "line": 17,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "10",
+                                    "file": "stub__range.zep",
+                                    "line": 17,
+                                    "char": 16
+                                },
+                                "file": "stub__range.zep",
+                                "line": 17,
+                                "char": 16
+                            },
+                            "file": "stub__range.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__range.zep",
+                    "line": 15,
+                    "last-line": 19,
+                    "char": 16
+                }
+            ],
+            "file": "stub__range.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__range.zep",
+        "line": 8,
+        "char": 5
+    }
+]

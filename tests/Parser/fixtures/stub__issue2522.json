@@ -1,0 +1,422 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2522.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2522",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "inlineClosureIsCallable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "call",
+                                    "expr": {
+                                        "type": "closure",
+                                        "right": [
+                                            {
+                                                "type": "return",
+                                                "expr": {
+                                                    "type": "int",
+                                                    "value": "42",
+                                                    "file": "stub__issue2522.zep",
+                                                    "line": 12,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__issue2522.zep",
+                                                "line": 13,
+                                                "char": 9
+                                            }
+                                        ],
+                                        "file": "stub__issue2522.zep",
+                                        "line": 13,
+                                        "char": 10
+                                    },
+                                    "file": "stub__issue2522.zep",
+                                    "line": 13,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue2522.zep",
+                            "line": 15,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_callable",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "call",
+                                            "file": "stub__issue2522.zep",
+                                            "line": 15,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2522.zep",
+                                        "line": 15,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2522.zep",
+                                "line": 15,
+                                "char": 33
+                            },
+                            "file": "stub__issue2522.zep",
+                            "line": 16,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Issue #2522 ask: inline closure init must compile. Comparing against\n     * the two-step form (which has worked for years) for parity.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2522.zep",
+                                "line": 10,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2522.zep",
+                        "line": 10,
+                        "char": 5
+                    },
+                    "file": "stub__issue2522.zep",
+                    "line": 11,
+                    "last-line": 18,
+                    "char": 27
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "inlineClosureReturnsClosureInstance",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "call",
+                                    "expr": {
+                                        "type": "closure",
+                                        "right": [
+                                            {
+                                                "type": "return",
+                                                "expr": {
+                                                    "type": "int",
+                                                    "value": "42",
+                                                    "file": "stub__issue2522.zep",
+                                                    "line": 21,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__issue2522.zep",
+                                                "line": 22,
+                                                "char": 9
+                                            }
+                                        ],
+                                        "file": "stub__issue2522.zep",
+                                        "line": 22,
+                                        "char": 10
+                                    },
+                                    "file": "stub__issue2522.zep",
+                                    "line": 22,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue2522.zep",
+                            "line": 24,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "instanceof",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "call",
+                                        "file": "stub__issue2522.zep",
+                                        "line": 24,
+                                        "char": 31
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "\\Closure",
+                                        "file": "stub__issue2522.zep",
+                                        "line": 24,
+                                        "char": 41
+                                    },
+                                    "file": "stub__issue2522.zep",
+                                    "line": 24,
+                                    "char": 41
+                                },
+                                "file": "stub__issue2522.zep",
+                                "line": 24,
+                                "char": 42
+                            },
+                            "file": "stub__issue2522.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2522.zep",
+                                "line": 19,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2522.zep",
+                        "line": 19,
+                        "char": 5
+                    },
+                    "file": "stub__issue2522.zep",
+                    "line": 20,
+                    "last-line": 27,
+                    "char": 27
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "inlineFnKeywordIsCallable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "call",
+                                    "expr": {
+                                        "type": "closure",
+                                        "right": [
+                                            {
+                                                "type": "return",
+                                                "expr": {
+                                                    "type": "int",
+                                                    "value": "42",
+                                                    "file": "stub__issue2522.zep",
+                                                    "line": 30,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__issue2522.zep",
+                                                "line": 31,
+                                                "char": 9
+                                            }
+                                        ],
+                                        "file": "stub__issue2522.zep",
+                                        "line": 31,
+                                        "char": 10
+                                    },
+                                    "file": "stub__issue2522.zep",
+                                    "line": 31,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue2522.zep",
+                            "line": 33,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_callable",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "call",
+                                            "file": "stub__issue2522.zep",
+                                            "line": 33,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2522.zep",
+                                        "line": 33,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2522.zep",
+                                "line": 33,
+                                "char": 33
+                            },
+                            "file": "stub__issue2522.zep",
+                            "line": 34,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2522.zep",
+                                "line": 28,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2522.zep",
+                        "line": 28,
+                        "char": 5
+                    },
+                    "file": "stub__issue2522.zep",
+                    "line": 29,
+                    "last-line": 36,
+                    "char": 21
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "twoStepClosureIsCallable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "call",
+                                    "file": "stub__issue2522.zep",
+                                    "line": 38,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__issue2522.zep",
+                            "line": 39,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "call",
+                                    "expr": {
+                                        "type": "closure",
+                                        "right": [
+                                            {
+                                                "type": "return",
+                                                "expr": {
+                                                    "type": "int",
+                                                    "value": "42",
+                                                    "file": "stub__issue2522.zep",
+                                                    "line": 40,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__issue2522.zep",
+                                                "line": 41,
+                                                "char": 9
+                                            }
+                                        ],
+                                        "file": "stub__issue2522.zep",
+                                        "line": 41,
+                                        "char": 10
+                                    },
+                                    "file": "stub__issue2522.zep",
+                                    "line": 41,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__issue2522.zep",
+                            "line": 43,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_callable",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "call",
+                                            "file": "stub__issue2522.zep",
+                                            "line": 43,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2522.zep",
+                                        "line": 43,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2522.zep",
+                                "line": 43,
+                                "char": 33
+                            },
+                            "file": "stub__issue2522.zep",
+                            "line": 44,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2522.zep",
+                                "line": 37,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2522.zep",
+                        "line": 37,
+                        "char": 5
+                    },
+                    "file": "stub__issue2522.zep",
+                    "line": 39,
+                    "last-line": 45,
+                    "char": 27
+                }
+            ],
+            "file": "stub__issue2522.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2522.zep",
+        "line": 3,
+        "char": 5
+    }
+]

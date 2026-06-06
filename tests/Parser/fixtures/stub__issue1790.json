@@ -1,0 +1,181 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1790.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Assigning a non-constant boolean expression to a dynamic property used to\n * fail to compile with a cryptic \"?\" error.\n *\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1790\n *",
+        "file": "stub__issue1790.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue1790",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "flag",
+                    "file": "stub__issue1790.zep",
+                    "line": 13,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStringProp",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1790.zep",
+                            "line": 13,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "string-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "flag",
+                                    "expr": {
+                                        "type": "greater",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__issue1790.zep",
+                                            "line": 15,
+                                            "char": 28
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "5",
+                                            "file": "stub__issue1790.zep",
+                                            "line": 15,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1790.zep",
+                                        "line": 15,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue1790.zep",
+                                    "line": 15,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue1790.zep",
+                            "line": 16,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issue1790.zep",
+                    "line": 13,
+                    "last-line": 18,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setVariableProp",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "key",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1790.zep",
+                            "line": 18,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1790.zep",
+                            "line": 18,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "key",
+                                    "expr": {
+                                        "type": "greater",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__issue1790.zep",
+                                            "line": 20,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "5",
+                                            "file": "stub__issue1790.zep",
+                                            "line": 20,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1790.zep",
+                                        "line": 20,
+                                        "char": 30
+                                    },
+                                    "file": "stub__issue1790.zep",
+                                    "line": 20,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__issue1790.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issue1790.zep",
+                    "line": 18,
+                    "last-line": 22,
+                    "char": 16
+                }
+            ],
+            "file": "stub__issue1790.zep",
+            "line": 9,
+            "char": 5
+        },
+        "file": "stub__issue1790.zep",
+        "line": 9,
+        "char": 5
+    }
+]

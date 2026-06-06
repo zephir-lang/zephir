@@ -1,0 +1,26 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "double",
+                    "mandatory": 0,
+                    "file": "phpt__functions_return_types_float.zep",
+                    "line": 1,
+                    "char": 27
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_return_types_float.zep",
+            "line": 1,
+            "char": 27
+        },
+        "file": "phpt__functions_return_types_float.zep",
+        "line": 1,
+        "char": 9
+    }
+]

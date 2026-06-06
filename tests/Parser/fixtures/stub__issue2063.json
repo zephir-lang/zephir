@@ -1,0 +1,315 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2063.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Issue #2063: concat-assign (.=) must work with object properties.\n *",
+        "file": "stub__issue2063.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2063",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "store",
+                    "default": {
+                        "type": "string",
+                        "value": "",
+                        "file": "stub__issue2063.zep",
+                        "line": 9,
+                        "char": 21
+                    },
+                    "file": "stub__issue2063.zep",
+                    "line": 11,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "add",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2063.zep",
+                            "line": 11,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "concat-assign",
+                                    "variable": "this",
+                                    "property": "store",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__issue2063.zep",
+                                        "line": 13,
+                                        "char": 32
+                                    },
+                                    "file": "stub__issue2063.zep",
+                                    "line": 13,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__issue2063.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2063.zep",
+                        "line": 12,
+                        "char": 5
+                    },
+                    "file": "stub__issue2063.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "add2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2063.zep",
+                            "line": 16,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "store",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "property-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "this",
+                                                "file": "stub__issue2063.zep",
+                                                "line": 18,
+                                                "char": 32
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "store",
+                                                "file": "stub__issue2063.zep",
+                                                "line": 18,
+                                                "char": 39
+                                            },
+                                            "file": "stub__issue2063.zep",
+                                            "line": 18,
+                                            "char": 39
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__issue2063.zep",
+                                            "line": 18,
+                                            "char": 46
+                                        },
+                                        "file": "stub__issue2063.zep",
+                                        "line": 18,
+                                        "char": 46
+                                    },
+                                    "file": "stub__issue2063.zep",
+                                    "line": 18,
+                                    "char": 46
+                                }
+                            ],
+                            "file": "stub__issue2063.zep",
+                            "line": 19,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2063.zep",
+                        "line": 17,
+                        "char": 5
+                    },
+                    "file": "stub__issue2063.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "addLiteral",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "concat-assign",
+                                    "variable": "this",
+                                    "property": "store",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "ab",
+                                        "file": "stub__issue2063.zep",
+                                        "line": 23,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue2063.zep",
+                                    "line": 23,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue2063.zep",
+                            "line": 24,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "concat-assign",
+                                    "variable": "this",
+                                    "property": "store",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "cd",
+                                        "file": "stub__issue2063.zep",
+                                        "line": 24,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue2063.zep",
+                                    "line": 24,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue2063.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__issue2063.zep",
+                        "line": 22,
+                        "char": 5
+                    },
+                    "file": "stub__issue2063.zep",
+                    "line": 21,
+                    "last-line": 27,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "get",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue2063.zep",
+                                    "line": 29,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "store",
+                                    "file": "stub__issue2063.zep",
+                                    "line": 29,
+                                    "char": 27
+                                },
+                                "file": "stub__issue2063.zep",
+                                "line": 29,
+                                "char": 27
+                            },
+                            "file": "stub__issue2063.zep",
+                            "line": 30,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2063.zep",
+                                "line": 28,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2063.zep",
+                        "line": 28,
+                        "char": 5
+                    },
+                    "file": "stub__issue2063.zep",
+                    "line": 27,
+                    "last-line": 31,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2063.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__issue2063.zep",
+        "line": 7,
+        "char": 5
+    }
+]

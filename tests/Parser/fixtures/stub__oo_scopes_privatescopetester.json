@@ -1,0 +1,524 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Scopes",
+        "file": "stub__oo_scopes_privatescopetester.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "PrivateScopeTester",
+        "abstract": 0,
+        "final": 0,
+        "extends": "HasPrivateMethod",
+        "implements": [
+            {
+                "type": "variable",
+                "value": "ScopeTesterInterface",
+                "file": "stub__oo_scopes_privatescopetester.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "run",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 7,
+                                    "char": 21
+                                },
+                                "name": "callPrivateMethod",
+                                "call-type": 1,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 7,
+                                "char": 41
+                            },
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 6,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_privatescopetester.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_privatescopetester.zep",
+                    "line": 5,
+                    "last-line": 12,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyObj",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 13,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 13,
+                            "char": 60
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 13,
+                            "char": 71
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                        "line": 15,
+                                        "char": 36
+                                    },
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 15,
+                                    "char": 36
+                                }
+                            ],
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 17,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-dynamic-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "obj",
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 17,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "property",
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 17,
+                                    "char": 31
+                                },
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 17,
+                                "char": 31
+                            },
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2057\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 14,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_privatescopetester.zep",
+                        "line": 14,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_privatescopetester.zep",
+                    "line": 13,
+                    "last-line": 22,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyNew",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 23,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 23,
+                            "char": 69
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 23,
+                            "char": 80
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 25,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 27,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "create_instance",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "className",
+                                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                                    "line": 27,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                                "line": 27,
+                                                "char": 44
+                                            }
+                                        ],
+                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                        "line": 27,
+                                        "char": 45
+                                    },
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 27,
+                                    "char": 45
+                                }
+                            ],
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 28,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                        "line": 28,
+                                        "char": 36
+                                    },
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 28,
+                                    "char": 36
+                                }
+                            ],
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 30,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 30,
+                                "char": 19
+                            },
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 31,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2057\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 24,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_privatescopetester.zep",
+                        "line": 24,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_privatescopetester.zep",
+                    "line": 23,
+                    "last-line": 35,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getObjVars",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 36,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_object_vars",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__oo_scopes_privatescopetester.zep",
+                                            "line": 38,
+                                            "char": 35
+                                        },
+                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                        "line": 38,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 38,
+                                "char": 36
+                            },
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 39,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2057\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 37,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_privatescopetester.zep",
+                        "line": 37,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_privatescopetester.zep",
+                    "line": 36,
+                    "last-line": 43,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getNewVars",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 44,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                    "line": 46,
+                                    "char": 21
+                                },
+                                "name": "getObjVars",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "fcall",
+                                            "name": "create_instance",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "className",
+                                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                                        "line": 46,
+                                                        "char": 58
+                                                    },
+                                                    "file": "stub__oo_scopes_privatescopetester.zep",
+                                                    "line": 46,
+                                                    "char": 58
+                                                }
+                                            ],
+                                            "file": "stub__oo_scopes_privatescopetester.zep",
+                                            "line": 46,
+                                            "char": 59
+                                        },
+                                        "file": "stub__oo_scopes_privatescopetester.zep",
+                                        "line": 46,
+                                        "char": 59
+                                    }
+                                ],
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 46,
+                                "char": 60
+                            },
+                            "file": "stub__oo_scopes_privatescopetester.zep",
+                            "line": 47,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2057\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_privatescopetester.zep",
+                                "line": 45,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_privatescopetester.zep",
+                        "line": 45,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_privatescopetester.zep",
+                    "line": 44,
+                    "last-line": 48,
+                    "char": 19
+                }
+            ],
+            "file": "stub__oo_scopes_privatescopetester.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__oo_scopes_privatescopetester.zep",
+        "line": 3,
+        "char": 5
+    }
+]

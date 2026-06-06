@@ -1,0 +1,113 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__testinterface.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Sample exception class\n *",
+        "file": "stub__testinterface.zep",
+        "line": 7,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "TestInterface",
+        "definition": {
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "C1",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__testinterface.zep",
+                        "line": 10,
+                        "char": 17
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 12,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C2",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__testinterface.zep",
+                        "line": 12,
+                        "char": 18
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 14,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C3",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__testinterface.zep",
+                        "line": 14,
+                        "char": 17
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 16,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C4",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__testinterface.zep",
+                        "line": 16,
+                        "char": 15
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 18,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C5",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__testinterface.zep",
+                        "line": 18,
+                        "char": 18
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 20,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C6",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__testinterface.zep",
+                        "line": 20,
+                        "char": 17
+                    },
+                    "file": "stub__testinterface.zep",
+                    "line": 21,
+                    "char": 1
+                }
+            ],
+            "file": "stub__testinterface.zep",
+            "line": 21,
+            "char": 1
+        },
+        "file": "stub__testinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

@@ -1,0 +1,526 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2167.zep",
+        "line": 17,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Regression coverage for issue #2167: a `[ClassName, \"method\"]` array\n * passed as a PHP callback (e.g. to array_reduce) fails PHP's callable\n * validation when the method is `protected` or `private`, because Zephir\n * methods are ZEND_INTERNAL_FUNCTION and PHP's scope-walker\n * (`zend_get_executed_scope()`) skips them when looking for the calling\n * class. Same root cause as #2321.\n *\n * The supported workaround is to wrap the callback in a Zephir closure\n * that delegates via a fully-qualified static-call expression. Closures\n * auto-bind to the enclosing class scope, so the delegating call passes\n * PHP's visibility check.\n *\n * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/2167\n *",
+        "file": "stub__issue2167.zep",
+        "line": 18,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2167",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "file": "stub__issue2167.zep",
+                    "line": 22,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "data",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2167.zep",
+                            "line": 22,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "data",
+                                        "file": "stub__issue2167.zep",
+                                        "line": 24,
+                                        "char": 27
+                                    },
+                                    "file": "stub__issue2167.zep",
+                                    "line": 24,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__issue2167.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2167.zep",
+                    "line": 22,
+                    "last-line": 32,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "reduceWithArrayCallable",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "string",
+                                "right": {
+                                    "type": "fcall",
+                                    "name": "array_reduce",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 36,
+                                                    "char": 18
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 36,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__issue2167.zep",
+                                                "line": 36,
+                                                "char": 20
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 36,
+                                            "char": 20
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "array",
+                                                "left": [
+                                                    {
+                                                        "value": {
+                                                            "type": "string",
+                                                            "value": "Stub\\\\Issue2167",
+                                                            "file": "stub__issue2167.zep",
+                                                            "line": 37,
+                                                            "char": 29
+                                                        },
+                                                        "file": "stub__issue2167.zep",
+                                                        "line": 37,
+                                                        "char": 29
+                                                    },
+                                                    {
+                                                        "value": {
+                                                            "type": "string",
+                                                            "value": "implodeRow",
+                                                            "file": "stub__issue2167.zep",
+                                                            "line": 37,
+                                                            "char": 41
+                                                        },
+                                                        "file": "stub__issue2167.zep",
+                                                        "line": 37,
+                                                        "char": 41
+                                                    }
+                                                ],
+                                                "file": "stub__issue2167.zep",
+                                                "line": 37,
+                                                "char": 42
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 37,
+                                            "char": 42
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "string",
+                                                "value": "",
+                                                "file": "stub__issue2167.zep",
+                                                "line": 39,
+                                                "char": 9
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 39,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue2167.zep",
+                                    "line": 39,
+                                    "char": 10
+                                },
+                                "file": "stub__issue2167.zep",
+                                "line": 39,
+                                "char": 10
+                            },
+                            "file": "stub__issue2167.zep",
+                            "line": 40,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * The broken pattern from the issue: a [class, \"method\"] array passed\n     * directly as a callback. PHP rejects this at the callable-validation\n     * step before the callback ever runs. Kept here so the regression\n     * test can lock down the documented failure mode.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2167.zep",
+                                "line": 34,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2167.zep",
+                        "line": 34,
+                        "char": 5
+                    },
+                    "file": "stub__issue2167.zep",
+                    "line": 33,
+                    "last-line": 47,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "reduceWithClosureWrapper",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "string",
+                                "right": {
+                                    "type": "fcall",
+                                    "name": "array_reduce",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 51,
+                                                    "char": 18
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 51,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__issue2167.zep",
+                                                "line": 51,
+                                                "char": 20
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 51,
+                                            "char": 20
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "closure",
+                                                "left": [
+                                                    {
+                                                        "type": "parameter",
+                                                        "name": "carry",
+                                                        "const": 0,
+                                                        "data-type": "variable",
+                                                        "mandatory": 0,
+                                                        "reference": 0,
+                                                        "file": "stub__issue2167.zep",
+                                                        "line": 52,
+                                                        "char": 28
+                                                    },
+                                                    {
+                                                        "type": "parameter",
+                                                        "name": "row",
+                                                        "const": 0,
+                                                        "data-type": "variable",
+                                                        "mandatory": 0,
+                                                        "reference": 0,
+                                                        "file": "stub__issue2167.zep",
+                                                        "line": 52,
+                                                        "char": 33
+                                                    }
+                                                ],
+                                                "right": [
+                                                    {
+                                                        "type": "return",
+                                                        "expr": {
+                                                            "type": "scall",
+                                                            "dynamic-class": 0,
+                                                            "class": "\\Stub\\Issue2167",
+                                                            "dynamic": 0,
+                                                            "name": "implodeRow",
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "carry",
+                                                                        "file": "stub__issue2167.zep",
+                                                                        "line": 53,
+                                                                        "char": 57
+                                                                    },
+                                                                    "file": "stub__issue2167.zep",
+                                                                    "line": 53,
+                                                                    "char": 57
+                                                                },
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "row",
+                                                                        "file": "stub__issue2167.zep",
+                                                                        "line": 53,
+                                                                        "char": 62
+                                                                    },
+                                                                    "file": "stub__issue2167.zep",
+                                                                    "line": 53,
+                                                                    "char": 62
+                                                                }
+                                                            ],
+                                                            "file": "stub__issue2167.zep",
+                                                            "line": 53,
+                                                            "char": 63
+                                                        },
+                                                        "file": "stub__issue2167.zep",
+                                                        "line": 54,
+                                                        "char": 13
+                                                    }
+                                                ],
+                                                "file": "stub__issue2167.zep",
+                                                "line": 54,
+                                                "char": 14
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 54,
+                                            "char": 14
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "string",
+                                                "value": "",
+                                                "file": "stub__issue2167.zep",
+                                                "line": 56,
+                                                "char": 9
+                                            },
+                                            "file": "stub__issue2167.zep",
+                                            "line": 56,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue2167.zep",
+                                    "line": 56,
+                                    "char": 10
+                                },
+                                "file": "stub__issue2167.zep",
+                                "line": 56,
+                                "char": 10
+                            },
+                            "file": "stub__issue2167.zep",
+                            "line": 57,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * The supported workaround: a closure that calls the protected\n     * static method via its fully-qualified absolute class name. The\n     * closure is implicitly bound to the enclosing class, so visibility\n     * checks see `Stub\\Issue2167` as the caller.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2167.zep",
+                                "line": 49,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2167.zep",
+                        "line": 49,
+                        "char": 5
+                    },
+                    "file": "stub__issue2167.zep",
+                    "line": 52,
+                    "last-line": 59,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "implodeRow",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "carry",
+                            "const": 1,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2167.zep",
+                            "line": 59,
+                            "char": 60
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "row",
+                            "const": 1,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2167.zep",
+                            "line": 59,
+                            "char": 77
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "concat",
+                                    "left": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "carry",
+                                            "file": "stub__issue2167.zep",
+                                            "line": 61,
+                                            "char": 22
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "[ ",
+                                            "file": "stub__issue2167.zep",
+                                            "line": 61,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2167.zep",
+                                        "line": 61,
+                                        "char": 27
+                                    },
+                                    "right": {
+                                        "type": "fcall",
+                                        "name": "implode",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": " ",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 61,
+                                                    "char": 38
+                                                },
+                                                "file": "stub__issue2167.zep",
+                                                "line": 61,
+                                                "char": 38
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "row",
+                                                    "file": "stub__issue2167.zep",
+                                                    "line": 61,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__issue2167.zep",
+                                                "line": 61,
+                                                "char": 43
+                                            }
+                                        ],
+                                        "file": "stub__issue2167.zep",
+                                        "line": 61,
+                                        "char": 45
+                                    },
+                                    "file": "stub__issue2167.zep",
+                                    "line": 61,
+                                    "char": 45
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": " ]",
+                                    "file": "stub__issue2167.zep",
+                                    "line": 61,
+                                    "char": 49
+                                },
+                                "file": "stub__issue2167.zep",
+                                "line": 61,
+                                "char": 49
+                            },
+                            "file": "stub__issue2167.zep",
+                            "line": 62,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2167.zep",
+                                "line": 60,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2167.zep",
+                        "line": 60,
+                        "char": 5
+                    },
+                    "file": "stub__issue2167.zep",
+                    "line": 59,
+                    "last-line": 63,
+                    "char": 29
+                }
+            ],
+            "file": "stub__issue2167.zep",
+            "line": 18,
+            "char": 5
+        },
+        "file": "stub__issue2167.zep",
+        "line": 18,
+        "char": 5
+    }
+]

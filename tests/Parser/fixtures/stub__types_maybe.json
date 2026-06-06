@@ -1,0 +1,140 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Types",
+        "file": "stub__types_maybe.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "MayBe",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gc",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "maxlifetime",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_maybe.zep",
+                            "line": 6,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__types_maybe.zep",
+                                "line": 8,
+                                "char": 17
+                            },
+                            "file": "stub__types_maybe.zep",
+                            "line": 9,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__types_maybe.zep",
+                                "line": 6,
+                                "char": 48
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "false",
+                                "mandatory": 0,
+                                "file": "stub__types_maybe.zep",
+                                "line": 7,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_maybe.zep",
+                        "line": 7,
+                        "char": 5
+                    },
+                    "file": "stub__types_maybe.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gcFalse",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__types_maybe.zep",
+                                "line": 13,
+                                "char": 21
+                            },
+                            "file": "stub__types_maybe.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__types_maybe.zep",
+                                "line": 11,
+                                "char": 38
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "false",
+                                "mandatory": 0,
+                                "file": "stub__types_maybe.zep",
+                                "line": 12,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_maybe.zep",
+                        "line": 12,
+                        "char": 5
+                    },
+                    "file": "stub__types_maybe.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 19
+                }
+            ],
+            "file": "stub__types_maybe.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__types_maybe.zep",
+        "line": 4,
+        "char": 5
+    }
+]

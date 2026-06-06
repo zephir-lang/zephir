@@ -1,0 +1,1477 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__fannkuch.zep",
+        "line": 10,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Stub\\Fannkuch\n *\n * Fannkuch Redux in Zephir\n *\n * @see http:\/\/disciple-devel.blogspot.mx\/2010\/11\/shootout-fannkuch-redux.html\n *",
+        "file": "stub__fannkuch.zep",
+        "line": 11,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Fannkuch",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "process",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fannkuch.zep",
+                            "line": 14,
+                            "char": 31
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "perm",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 16,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "perm0",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 16,
+                                    "char": 18
+                                },
+                                {
+                                    "variable": "perm1",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 16,
+                                    "char": 25
+                                },
+                                {
+                                    "variable": "count",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 16,
+                                    "char": 32
+                                },
+                                {
+                                    "variable": "temp",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 16,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 17,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "maxFlipsCount",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 17,
+                                        "char": 24
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 17,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 18,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "permCount",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 18,
+                                        "char": 20
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 18,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 19,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "checksum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 19,
+                                        "char": 19
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 19,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 20,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "flipsCount",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 23
+                                },
+                                {
+                                    "variable": "k",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 26
+                                },
+                                {
+                                    "variable": "r",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 29
+                                },
+                                {
+                                    "variable": "k2",
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 20,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 22,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "perm",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 22,
+                                        "char": 16
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 22,
+                                    "char": 16
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "perm1",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 23,
+                                        "char": 14
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 23,
+                                    "char": 14
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "count",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 24,
+                                        "char": 14
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 24,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 26,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 26,
+                                            "char": 19
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 26,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 26,
+                                            "char": 22
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 26,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__fannkuch.zep",
+                                "line": 26,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "perm1",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 27,
+                                                    "char": 15
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 27,
+                                                "char": 20
+                                            },
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 27,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 28,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 30,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "r",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "n",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 30,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 30,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 31,
+                            "char": 6
+                        },
+                        {
+                            "type": "loop",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 34,
+                                        "char": 13
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "break",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 36,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 38,
+                                    "char": 8
+                                },
+                                {
+                                    "type": "while",
+                                    "expr": {
+                                        "type": "not-equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "r",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 38,
+                                            "char": 13
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 38,
+                                            "char": 17
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 38,
+                                        "char": 17
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "array-index",
+                                                    "operator": "assign",
+                                                    "variable": "count",
+                                                    "index-expr": [
+                                                        {
+                                                            "type": "sub",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "r",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 39,
+                                                                "char": 17
+                                                            },
+                                                            "right": {
+                                                                "type": "int",
+                                                                "value": "1",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 39,
+                                                                "char": 20
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 39,
+                                                            "char": 20
+                                                        }
+                                                    ],
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "r",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 39,
+                                                        "char": 25
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 39,
+                                                    "char": 25
+                                                },
+                                                {
+                                                    "assign-type": "decr",
+                                                    "variable": "r",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 39,
+                                                    "char": 30
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 40,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 42,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "for",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "range",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 42,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 42,
+                                                "char": 20
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 42,
+                                                    "char": 23
+                                                },
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 42,
+                                                "char": 23
+                                            }
+                                        ],
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 42,
+                                        "char": 25
+                                    },
+                                    "value": "i",
+                                    "reverse": 0,
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "array-index",
+                                                    "operator": "assign",
+                                                    "variable": "perm",
+                                                    "index-expr": [
+                                                        {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 43,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "expr": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "perm1",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 43,
+                                                            "char": 24
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 43,
+                                                            "char": 26
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 43,
+                                                        "char": 27
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 43,
+                                                    "char": 27
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 44,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 46,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "flipsCount",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 46,
+                                                "char": 22
+                                            },
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 46,
+                                            "char": 22
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "k",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 46,
+                                                "char": 29
+                                            },
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 46,
+                                            "char": 29
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 48,
+                                    "char": 8
+                                },
+                                {
+                                    "type": "while",
+                                    "expr": {
+                                        "type": "not-equals",
+                                        "left": {
+                                            "type": "array-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "perm",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 48,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 48,
+                                                "char": 16
+                                            },
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 48,
+                                            "char": 19
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 48,
+                                            "char": 23
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 48,
+                                        "char": 23
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "k",
+                                                    "expr": {
+                                                        "type": "cast",
+                                                        "left": "int",
+                                                        "right": {
+                                                            "type": "array-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "perm",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 49,
+                                                                "char": 23
+                                                            },
+                                                            "right": {
+                                                                "type": "int",
+                                                                "value": "0",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 49,
+                                                                "char": 25
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 49,
+                                                            "char": 26
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 49,
+                                                        "char": 26
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 49,
+                                                    "char": 26
+                                                },
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "k2",
+                                                    "expr": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "list",
+                                                            "left": {
+                                                                "type": "div",
+                                                                "left": {
+                                                                    "type": "list",
+                                                                    "left": {
+                                                                        "type": "add",
+                                                                        "left": {
+                                                                            "type": "variable",
+                                                                            "value": "k",
+                                                                            "file": "stub__fannkuch.zep",
+                                                                            "line": 49,
+                                                                            "char": 37
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "int",
+                                                                            "value": "1",
+                                                                            "file": "stub__fannkuch.zep",
+                                                                            "line": 49,
+                                                                            "char": 40
+                                                                        },
+                                                                        "file": "stub__fannkuch.zep",
+                                                                        "line": 49,
+                                                                        "char": 40
+                                                                    },
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 49,
+                                                                    "char": 42
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "2",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 49,
+                                                                    "char": 45
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 49,
+                                                                "char": 45
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 49,
+                                                            "char": 47
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 49,
+                                                            "char": 50
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 49,
+                                                        "char": 50
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 49,
+                                                    "char": 50
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 50,
+                                            "char": 7
+                                        },
+                                        {
+                                            "type": "for",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "range",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "0",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 50,
+                                                            "char": 21
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 50,
+                                                        "char": 21
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "k2",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 50,
+                                                            "char": 25
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 50,
+                                                        "char": 25
+                                                    }
+                                                ],
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 50,
+                                                "char": 27
+                                            },
+                                            "value": "i",
+                                            "reverse": 0,
+                                            "statements": [
+                                                {
+                                                    "type": "let",
+                                                    "assignments": [
+                                                        {
+                                                            "assign-type": "variable",
+                                                            "operator": "assign",
+                                                            "variable": "temp",
+                                                            "expr": {
+                                                                "type": "array-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "perm",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 21
+                                                                },
+                                                                "right": {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 23
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 51,
+                                                                "char": 24
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 51,
+                                                            "char": 24
+                                                        },
+                                                        {
+                                                            "assign-type": "array-index",
+                                                            "operator": "assign",
+                                                            "variable": "perm",
+                                                            "index-expr": [
+                                                                {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 32
+                                                                }
+                                                            ],
+                                                            "expr": {
+                                                                "type": "array-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "perm",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 40
+                                                                },
+                                                                "right": {
+                                                                    "type": "sub",
+                                                                    "left": {
+                                                                        "type": "variable",
+                                                                        "value": "k",
+                                                                        "file": "stub__fannkuch.zep",
+                                                                        "line": 51,
+                                                                        "char": 43
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "variable",
+                                                                        "value": "i",
+                                                                        "file": "stub__fannkuch.zep",
+                                                                        "line": 51,
+                                                                        "char": 46
+                                                                    },
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 46
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 51,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 51,
+                                                            "char": 47
+                                                        },
+                                                        {
+                                                            "assign-type": "array-index",
+                                                            "operator": "assign",
+                                                            "variable": "perm",
+                                                            "index-expr": [
+                                                                {
+                                                                    "type": "sub",
+                                                                    "left": {
+                                                                        "type": "variable",
+                                                                        "value": "k",
+                                                                        "file": "stub__fannkuch.zep",
+                                                                        "line": 51,
+                                                                        "char": 56
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "variable",
+                                                                        "value": "i",
+                                                                        "file": "stub__fannkuch.zep",
+                                                                        "line": 51,
+                                                                        "char": 59
+                                                                    },
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 51,
+                                                                    "char": 59
+                                                                }
+                                                            ],
+                                                            "expr": {
+                                                                "type": "variable",
+                                                                "value": "temp",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 51,
+                                                                "char": 67
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 51,
+                                                            "char": 67
+                                                        }
+                                                    ],
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 52,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 53,
+                                            "char": 7
+                                        },
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "incr",
+                                                    "variable": "flipsCount",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 53,
+                                                    "char": 21
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 54,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 56,
+                                    "char": 5
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "less",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "maxFlipsCount",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 56,
+                                            "char": 21
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "flipsCount",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 56,
+                                            "char": 34
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 56,
+                                        "char": 34
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "maxFlipsCount",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "flipsCount",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 57,
+                                                        "char": 35
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 57,
+                                                    "char": 35
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 58,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 60,
+                                    "char": 5
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "mod",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "permCount",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 60,
+                                                "char": 17
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 60,
+                                                "char": 22
+                                            },
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 60,
+                                            "char": 22
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 60,
+                                            "char": 26
+                                        },
+                                        "file": "stub__fannkuch.zep",
+                                        "line": 60,
+                                        "char": 26
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "add-assign",
+                                                    "variable": "checksum",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "flipsCount",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 61,
+                                                        "char": 30
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 61,
+                                                    "char": 30
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 62,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "sub-assign",
+                                                    "variable": "checksum",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "flipsCount",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 63,
+                                                        "char": 30
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 63,
+                                                    "char": 30
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 64,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 67,
+                                    "char": 7
+                                },
+                                {
+                                    "type": "loop",
+                                    "statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "equals",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "r",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 69,
+                                                    "char": 11
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 69,
+                                                    "char": 15
+                                                },
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 69,
+                                                "char": 15
+                                            },
+                                            "statements": [
+                                                {
+                                                    "type": "return",
+                                                    "expr": {
+                                                        "type": "array",
+                                                        "left": [
+                                                            {
+                                                                "value": {
+                                                                    "type": "variable",
+                                                                    "value": "checksum",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 72,
+                                                                    "char": 22
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 72,
+                                                                "char": 22
+                                                            },
+                                                            {
+                                                                "value": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 72,
+                                                                    "char": 25
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 72,
+                                                                "char": 25
+                                                            },
+                                                            {
+                                                                "value": {
+                                                                    "type": "variable",
+                                                                    "value": "maxFlipsCount",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 72,
+                                                                    "char": 40
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 72,
+                                                                "char": 40
+                                                            }
+                                                        ],
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 72,
+                                                        "char": 41
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 73,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 75,
+                                            "char": 7
+                                        },
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "perm0",
+                                                    "expr": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "perm1",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 75,
+                                                            "char": 22
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "0",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 75,
+                                                            "char": 24
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 75,
+                                                        "char": 25
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 75,
+                                                    "char": 25
+                                                },
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "i",
+                                                    "expr": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 75,
+                                                        "char": 32
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 75,
+                                                    "char": 32
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 76,
+                                            "char": 9
+                                        },
+                                        {
+                                            "type": "while",
+                                            "expr": {
+                                                "type": "less",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 76,
+                                                    "char": 13
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "r",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 76,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 76,
+                                                "char": 17
+                                            },
+                                            "statements": [
+                                                {
+                                                    "type": "let",
+                                                    "assignments": [
+                                                        {
+                                                            "assign-type": "variable",
+                                                            "operator": "assign",
+                                                            "variable": "j",
+                                                            "expr": {
+                                                                "type": "add",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 77,
+                                                                    "char": 16
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 77,
+                                                                    "char": 19
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 77,
+                                                                "char": 19
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 77,
+                                                            "char": 19
+                                                        },
+                                                        {
+                                                            "assign-type": "array-index",
+                                                            "operator": "assign",
+                                                            "variable": "perm1",
+                                                            "index-expr": [
+                                                                {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 78,
+                                                                    "char": 14
+                                                                }
+                                                            ],
+                                                            "expr": {
+                                                                "type": "array-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "perm1",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 78,
+                                                                    "char": 23
+                                                                },
+                                                                "right": {
+                                                                    "type": "variable",
+                                                                    "value": "j",
+                                                                    "file": "stub__fannkuch.zep",
+                                                                    "line": 78,
+                                                                    "char": 25
+                                                                },
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 78,
+                                                                "char": 26
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 78,
+                                                            "char": 26
+                                                        },
+                                                        {
+                                                            "assign-type": "variable",
+                                                            "operator": "assign",
+                                                            "variable": "i",
+                                                            "expr": {
+                                                                "type": "variable",
+                                                                "value": "j",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 79,
+                                                                "char": 12
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 79,
+                                                            "char": 12
+                                                        }
+                                                    ],
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 80,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 82,
+                                            "char": 7
+                                        },
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "array-index",
+                                                    "operator": "assign",
+                                                    "variable": "perm1",
+                                                    "index-expr": [
+                                                        {
+                                                            "type": "variable",
+                                                            "value": "r",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 82,
+                                                            "char": 16
+                                                        }
+                                                    ],
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "perm0",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 82,
+                                                        "char": 25
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 82,
+                                                    "char": 25
+                                                },
+                                                {
+                                                    "assign-type": "array-index",
+                                                    "operator": "assign",
+                                                    "variable": "count",
+                                                    "index-expr": [
+                                                        {
+                                                            "type": "variable",
+                                                            "value": "r",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 82,
+                                                            "char": 34
+                                                        }
+                                                    ],
+                                                    "expr": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "array-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "count",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 82,
+                                                                "char": 43
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "r",
+                                                                "file": "stub__fannkuch.zep",
+                                                                "line": 82,
+                                                                "char": 45
+                                                            },
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 82,
+                                                            "char": 47
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__fannkuch.zep",
+                                                            "line": 82,
+                                                            "char": 50
+                                                        },
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 82,
+                                                        "char": 50
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 82,
+                                                    "char": 50
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 83,
+                                            "char": 6
+                                        },
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "greater",
+                                                "left": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "count",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 83,
+                                                        "char": 13
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "r",
+                                                        "file": "stub__fannkuch.zep",
+                                                        "line": 83,
+                                                        "char": 15
+                                                    },
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 83,
+                                                    "char": 17
+                                                },
+                                                "right": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 83,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__fannkuch.zep",
+                                                "line": 83,
+                                                "char": 21
+                                            },
+                                            "statements": [
+                                                {
+                                                    "type": "break",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 85,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 87,
+                                            "char": 7
+                                        },
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "incr",
+                                                    "variable": "r",
+                                                    "file": "stub__fannkuch.zep",
+                                                    "line": 87,
+                                                    "char": 12
+                                                }
+                                            ],
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 88,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 89,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "permCount",
+                                            "file": "stub__fannkuch.zep",
+                                            "line": 89,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "file": "stub__fannkuch.zep",
+                                    "line": 90,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fannkuch.zep",
+                            "line": 91,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fannkuch.zep",
+                    "line": 14,
+                    "last-line": 92,
+                    "char": 16
+                }
+            ],
+            "file": "stub__fannkuch.zep",
+            "line": 11,
+            "char": 5
+        },
+        "file": "stub__fannkuch.zep",
+        "line": 11,
+        "char": 5
+    }
+]

@@ -1,0 +1,1307 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2385.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2385",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "declaredOnly",
+                    "file": "stub__issue2385.zep",
+                    "line": 6,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "assignedNull",
+                    "file": "stub__issue2385.zep",
+                    "line": 7,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "assignedValue",
+                    "file": "stub__issue2385.zep",
+                    "line": 9,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "assignedNull",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__issue2385.zep",
+                                        "line": 11,
+                                        "char": 38
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 11,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 12,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "assignedValue",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "set",
+                                        "file": "stub__issue2385.zep",
+                                        "line": 12,
+                                        "char": 38
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 12,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2385.zep",
+                    "line": 9,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkDeclaredOnly",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 17,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "declaredOnly",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 17,
+                                            "char": 40
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 17,
+                                        "char": 40
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 17,
+                                    "char": 41
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 17,
+                                "char": 41
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 16,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkAssignedNull",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 22,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "assignedNull",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 22,
+                                            "char": 40
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 22,
+                                        "char": 40
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 22,
+                                    "char": 41
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 22,
+                                "char": 41
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 23,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 21,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkAssignedValue",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 27,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "assignedValue",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 27,
+                                            "char": 41
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 27,
+                                        "char": 41
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 27,
+                                    "char": 42
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 27,
+                                "char": 42
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 28,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 26,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 26,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkDynamicKeyNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "key",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2385.zep",
+                            "line": 30,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-dynamic-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 32,
+                                            "char": 27
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "key",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 32,
+                                            "char": 33
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 32,
+                                        "char": 33
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 32,
+                                    "char": 34
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 32,
+                                "char": 34
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 33,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 31,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 31,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayKeyNull",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 37,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 38,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 38,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "null",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 38,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 38,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 38,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 38,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 39,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 39,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "a",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 39,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 39,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 39,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 39,
+                                "char": 29
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 40,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 36,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 36,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 35,
+                    "last-line": 42,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayKeyValue",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 44,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 45,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 45,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "v",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 45,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 45,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 45,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 45,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 46,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 46,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "a",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 46,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 46,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 46,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 46,
+                                "char": 29
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 47,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 43,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 43,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 42,
+                    "last-line": 49,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayKeyMissing",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 51,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 52,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "b",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 52,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "v",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 52,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 52,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 52,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 52,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 53,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 53,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "a",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 53,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 53,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 53,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 53,
+                                "char": 29
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 54,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 50,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 50,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 49,
+                    "last-line": 56,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayLongKeyNull",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 58,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 59,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 59,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "null",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 59,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 59,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 59,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 59,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 60,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 60,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 60,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 60,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 60,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 60,
+                                "char": 29
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 61,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 57,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 57,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 56,
+                    "last-line": 63,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayLongKeyValue",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 65,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 66,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 66,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "v",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 66,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 66,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 66,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 66,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 67,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 67,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 67,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 67,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 67,
+                                    "char": 29
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 67,
+                                "char": 29
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 68,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 64,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 64,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 63,
+                    "last-line": 70,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayVarKeyNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "key",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2385.zep",
+                            "line": 70,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 72,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 73,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 73,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "null",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 73,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 73,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 73,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 73,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 74,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 74,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "key",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 74,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 74,
+                                        "char": 30
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 74,
+                                    "char": 31
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 74,
+                                "char": 31
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 75,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 71,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 71,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 70,
+                    "last-line": 77,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkArrayVarKeyValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "key",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2385.zep",
+                            "line": 77,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__issue2385.zep",
+                                    "line": 79,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 80,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 80,
+                                                    "char": 21
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "v",
+                                                    "file": "stub__issue2385.zep",
+                                                    "line": 80,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__issue2385.zep",
+                                                "line": 80,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "stub__issue2385.zep",
+                                        "line": 80,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 80,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2385.zep",
+                            "line": 81,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 81,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "key",
+                                            "file": "stub__issue2385.zep",
+                                            "line": 81,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2385.zep",
+                                        "line": 81,
+                                        "char": 30
+                                    },
+                                    "file": "stub__issue2385.zep",
+                                    "line": 81,
+                                    "char": 31
+                                },
+                                "file": "stub__issue2385.zep",
+                                "line": 81,
+                                "char": 31
+                            },
+                            "file": "stub__issue2385.zep",
+                            "line": 82,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2385.zep",
+                                "line": 78,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2385.zep",
+                        "line": 78,
+                        "char": 5
+                    },
+                    "file": "stub__issue2385.zep",
+                    "line": 77,
+                    "last-line": 83,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2385.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2385.zep",
+        "line": 3,
+        "char": 5
+    }
+]

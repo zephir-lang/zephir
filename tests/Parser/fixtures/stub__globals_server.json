@@ -1,0 +1,228 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Globals",
+        "file": "stub__globals_server.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Server",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "f1",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_SERVER",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 10,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "PHP_SELF",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 10,
+                                        "char": 30
+                                    },
+                                    "file": "stub__globals_server.zep",
+                                    "line": 10,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__globals_server.zep",
+                            "line": 11,
+                            "char": 12
+                        },
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__globals_server.zep",
+                                    "line": 11,
+                                    "char": 14
+                                },
+                                "name": "f2",
+                                "call-type": 1,
+                                "file": "stub__globals_server.zep",
+                                "line": 11,
+                                "char": 19
+                            },
+                            "file": "stub__globals_server.zep",
+                            "line": 12,
+                            "char": 12
+                        },
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_SERVER",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 12,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "PHP_SELF",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 12,
+                                        "char": 30
+                                    },
+                                    "file": "stub__globals_server.zep",
+                                    "line": 12,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__globals_server.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n    * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/1961\n    *",
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals_server.zep",
+                        "line": 9,
+                        "char": 5
+                    },
+                    "file": "stub__globals_server.zep",
+                    "line": 8,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "f2",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_SERVER",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 17,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "SCRIPT_NAME",
+                                        "file": "stub__globals_server.zep",
+                                        "line": 17,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_server.zep",
+                                    "line": 17,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__globals_server.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals_server.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__globals_server.zep",
+                    "line": 15,
+                    "last-line": 22,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "check",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "_SERVER",
+                                    "file": "stub__globals_server.zep",
+                                    "line": 25,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": "HTTP_USER_AGENT",
+                                    "file": "stub__globals_server.zep",
+                                    "line": 25,
+                                    "char": 39
+                                },
+                                "file": "stub__globals_server.zep",
+                                "line": 25,
+                                "char": 40
+                            },
+                            "file": "stub__globals_server.zep",
+                            "line": 26,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n    * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/1970\n    *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__globals_server.zep",
+                                "line": 24,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__globals_server.zep",
+                        "line": 24,
+                        "char": 5
+                    },
+                    "file": "stub__globals_server.zep",
+                    "line": 23,
+                    "last-line": 27,
+                    "char": 19
+                }
+            ],
+            "file": "stub__globals_server.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__globals_server.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,1518 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__exceptions.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Exceptions",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "internalExceptionCallable",
+                    "file": "stub__exceptions.zep",
+                    "line": 7,
+                    "char": 7
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "exceptionCallable",
+                    "file": "stub__exceptions.zep",
+                    "line": 9,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testException1",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "hello1",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 11,
+                                            "char": 29
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 11,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 11,
+                                "char": 30
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 9,
+                    "last-line": 14,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExceptionStringEscape",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "hello \\\"simple code\\\" test",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 16,
+                                            "char": 49
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 16,
+                                        "char": 49
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 16,
+                                "char": 50
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 14,
+                    "last-line": 19,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testException2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "msg",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 21,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 22,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "msg",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "hello2",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 22,
+                                        "char": 19
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 22,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 23,
+                            "char": 7
+                        },
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "msg",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 23,
+                                            "char": 26
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 23,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 23,
+                                "char": 27
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 19,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testException3",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "ex",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 28,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "msg",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 28,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 29,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "msg",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "hello3",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 29,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 30,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ex",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Exception",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "msg",
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 30,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__exceptions.zep",
+                                                "line": 30,
+                                                "char": 29
+                                            }
+                                        ],
+                                        "file": "stub__exceptions.zep",
+                                        "line": 30,
+                                        "char": 30
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 30,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 31,
+                            "char": 7
+                        },
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "variable",
+                                "value": "ex",
+                                "file": "stub__exceptions.zep",
+                                "line": 31,
+                                "char": 11
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 26,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "getException",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "hello4",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 36,
+                                            "char": 30
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 36,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 36,
+                                "char": 31
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 34,
+                    "last-line": 39,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testException4",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 41,
+                                    "char": 14
+                                },
+                                "name": "getException",
+                                "call-type": 1,
+                                "file": "stub__exceptions.zep",
+                                "line": 41,
+                                "char": 29
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 42,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 39,
+                    "last-line": 44,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testException5",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "exception",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 46,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 48,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "exception",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Exception",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "hello5",
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 48,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__exceptions.zep",
+                                                "line": 48,
+                                                "char": 39
+                                            }
+                                        ],
+                                        "file": "stub__exceptions.zep",
+                                        "line": 48,
+                                        "char": 40
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 48,
+                                    "char": 40
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 49,
+                            "char": 7
+                        },
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "variable",
+                                "value": "exception",
+                                "file": "stub__exceptions.zep",
+                                "line": 49,
+                                "char": 18
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 44,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExceptionLiteral",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "type",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 52,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "switch",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "type",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 54,
+                                    "char": 14
+                                },
+                                "file": "stub__exceptions.zep",
+                                "line": 54,
+                                "char": 16
+                            },
+                            "clauses": [
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 55,
+                                        "char": 15
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "Test",
+                                                "file": "stub__exceptions.zep",
+                                                "line": 56,
+                                                "char": 15
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 57,
+                                            "char": 7
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 57,
+                                    "char": 7
+                                },
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "char",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 57,
+                                        "char": 13
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "char",
+                                                "value": "t",
+                                                "file": "stub__exceptions.zep",
+                                                "line": 58,
+                                                "char": 13
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 59,
+                                            "char": 7
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 59,
+                                    "char": 7
+                                },
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "int",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 59,
+                                        "char": 12
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "123",
+                                                "file": "stub__exceptions.zep",
+                                                "line": 60,
+                                                "char": 14
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 61,
+                                            "char": 7
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 61,
+                                    "char": 7
+                                },
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "double",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 61,
+                                        "char": 15
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "double",
+                                                "value": "123.123",
+                                                "file": "stub__exceptions.zep",
+                                                "line": 62,
+                                                "char": 18
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 63,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 63,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 52,
+                    "last-line": 66,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExceptionSprintf",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 66,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sprintf",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "Hello, %s",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 68,
+                                            "char": 26
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 68,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "name",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 68,
+                                            "char": 32
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 68,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 68,
+                                "char": 33
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 66,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExceptionConcat",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "framework",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 71,
+                            "char": 54
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "language",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 71,
+                            "char": 71
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "concat",
+                                    "left": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "string",
+                                            "value": "Framework ",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 73,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "framework",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 73,
+                                            "char": 32
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 73,
+                                        "char": 32
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": " written using ",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 73,
+                                        "char": 50
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 73,
+                                    "char": 50
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "language",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 73,
+                                    "char": 60
+                                },
+                                "file": "stub__exceptions.zep",
+                                "line": 73,
+                                "char": 60
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 71,
+                    "last-line": 76,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExceptionRethrow",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 78,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 79,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 80,
+                                            "char": 9
+                                        },
+                                        "name": "testException1",
+                                        "call-type": 1,
+                                        "file": "stub__exceptions.zep",
+                                        "line": 80,
+                                        "char": 26
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 81,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "\\Exception",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 82,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 85,
+                                        "char": 2
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "e",
+                                                "file": "stub__exceptions.zep",
+                                                "line": 83,
+                                                "char": 11
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 84,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 85,
+                                    "char": 2
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 85,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 76,
+                    "last-line": 87,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMultiException",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "returnValue",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 87,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "exception",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__exceptions.zep",
+                            "line": 87,
+                            "char": 67
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 89,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "f",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 89,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "iexc",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 89,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "exc",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 89,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 91,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "iexc",
+                                    "expr": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 91,
+                                            "char": 19
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "internalExceptionCallable",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 91,
+                                            "char": 45
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 91,
+                                        "char": 45
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 91,
+                                    "char": 45
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 92,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "exc",
+                                    "expr": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 92,
+                                            "char": 18
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "exceptionCallable",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 92,
+                                            "char": 36
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 92,
+                                        "char": 36
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 92,
+                                    "char": 36
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 94,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "exception",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 95,
+                                        "char": 19
+                                    },
+                                    "file": "stub__exceptions.zep",
+                                    "line": 96,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "Exception",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 97,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 104,
+                                        "char": 7
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "and",
+                                                "left": {
+                                                    "type": "fcall",
+                                                    "name": "is_callable",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "iexc",
+                                                                "file": "stub__exceptions.zep",
+                                                                "line": 98,
+                                                                "char": 23
+                                                            },
+                                                            "file": "stub__exceptions.zep",
+                                                            "line": 98,
+                                                            "char": 23
+                                                        }
+                                                    ],
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 98,
+                                                    "char": 26
+                                                },
+                                                "right": {
+                                                    "type": "identical",
+                                                    "left": {
+                                                        "type": "fcall",
+                                                        "name": "iexc",
+                                                        "call-type": 2,
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 98,
+                                                        "char": 39
+                                                    },
+                                                    "right": {
+                                                        "type": "bool",
+                                                        "value": "false",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 98,
+                                                        "char": 47
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 98,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__exceptions.zep",
+                                                "line": 98,
+                                                "char": 47
+                                            },
+                                            "else_statements": [
+                                                {
+                                                    "type": "throw",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "e",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 101,
+                                                        "char": 12
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 102,
+                                                    "char": 4
+                                                }
+                                            ],
+                                            "file": "stub__exceptions.zep",
+                                            "line": 103,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 104,
+                                    "char": 7
+                                },
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "\\Exception",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 104,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 111,
+                                        "char": 7
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "and",
+                                                "left": {
+                                                    "type": "fcall",
+                                                    "name": "is_callable",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "exc",
+                                                                "file": "stub__exceptions.zep",
+                                                                "line": 105,
+                                                                "char": 22
+                                                            },
+                                                            "file": "stub__exceptions.zep",
+                                                            "line": 105,
+                                                            "char": 22
+                                                        }
+                                                    ],
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 105,
+                                                    "char": 25
+                                                },
+                                                "right": {
+                                                    "type": "identical",
+                                                    "left": {
+                                                        "type": "fcall",
+                                                        "name": "exc",
+                                                        "call-type": 2,
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 105,
+                                                        "char": 37
+                                                    },
+                                                    "right": {
+                                                        "type": "bool",
+                                                        "value": "false",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 105,
+                                                        "char": 45
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 105,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__exceptions.zep",
+                                                "line": 105,
+                                                "char": 45
+                                            },
+                                            "else_statements": [
+                                                {
+                                                    "type": "throw",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "e",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 108,
+                                                        "char": 12
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 109,
+                                                    "char": 4
+                                                }
+                                            ],
+                                            "file": "stub__exceptions.zep",
+                                            "line": 110,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 111,
+                                    "char": 7
+                                },
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "\\RuntimeError",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 111,
+                                            "char": 23
+                                        },
+                                        {
+                                            "type": "variable",
+                                            "value": "\\LogicError",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 111,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "f",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 119,
+                                        "char": 8
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "and",
+                                                "left": {
+                                                    "type": "fcall",
+                                                    "name": "is_callable",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "exc",
+                                                                "file": "stub__exceptions.zep",
+                                                                "line": 112,
+                                                                "char": 22
+                                                            },
+                                                            "file": "stub__exceptions.zep",
+                                                            "line": 112,
+                                                            "char": 22
+                                                        }
+                                                    ],
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 112,
+                                                    "char": 25
+                                                },
+                                                "right": {
+                                                    "type": "identical",
+                                                    "left": {
+                                                        "type": "fcall",
+                                                        "name": "exc",
+                                                        "call-type": 2,
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 112,
+                                                        "char": 37
+                                                    },
+                                                    "right": {
+                                                        "type": "bool",
+                                                        "value": "false",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 112,
+                                                        "char": 45
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 112,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__exceptions.zep",
+                                                "line": 112,
+                                                "char": 45
+                                            },
+                                            "else_statements": [
+                                                {
+                                                    "type": "throw",
+                                                    "expr": {
+                                                        "type": "variable",
+                                                        "value": "f",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 115,
+                                                        "char": 12
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 116,
+                                                    "char": 4
+                                                }
+                                            ],
+                                            "file": "stub__exceptions.zep",
+                                            "line": 117,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 119,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 119,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "returnValue",
+                                "file": "stub__exceptions.zep",
+                                "line": 119,
+                                "char": 21
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 120,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 87,
+                    "last-line": 122,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1325",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "e",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 124,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "status",
+                                    "file": "stub__exceptions.zep",
+                                    "line": 124,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 126,
+                            "char": 5
+                        },
+                        {
+                            "type": "try-catch",
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "status",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 127,
+                                                    "char": 22
+                                                },
+                                                "name": "doNoopException",
+                                                "call-type": 1,
+                                                "file": "stub__exceptions.zep",
+                                                "line": 127,
+                                                "char": 40
+                                            },
+                                            "file": "stub__exceptions.zep",
+                                            "line": 127,
+                                            "char": 40
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 128,
+                                    "char": 3
+                                }
+                            ],
+                            "catches": [
+                                {
+                                    "classes": [
+                                        {
+                                            "type": "variable",
+                                            "value": "\\Exception",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 129,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "e",
+                                        "file": "stub__exceptions.zep",
+                                        "line": 135,
+                                        "char": 8
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "status",
+                                                    "expr": {
+                                                        "type": "string",
+                                                        "value": "woop",
+                                                        "file": "stub__exceptions.zep",
+                                                        "line": 132,
+                                                        "char": 21
+                                                    },
+                                                    "file": "stub__exceptions.zep",
+                                                    "line": 132,
+                                                    "char": 21
+                                                }
+                                            ],
+                                            "file": "stub__exceptions.zep",
+                                            "line": 133,
+                                            "char": 3
+                                        }
+                                    ],
+                                    "file": "stub__exceptions.zep",
+                                    "line": 135,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__exceptions.zep",
+                            "line": 135,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__exceptions.zep",
+                                "line": 135,
+                                "char": 11
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 136,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 122,
+                    "last-line": 138,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "doNoopException",
+                    "statements": [
+                        {
+                            "type": "throw",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\Exception",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "I am exception",
+                                            "file": "stub__exceptions.zep",
+                                            "line": 140,
+                                            "char": 38
+                                        },
+                                        "file": "stub__exceptions.zep",
+                                        "line": 140,
+                                        "char": 38
+                                    }
+                                ],
+                                "file": "stub__exceptions.zep",
+                                "line": 140,
+                                "char": 39
+                            },
+                            "file": "stub__exceptions.zep",
+                            "line": 141,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__exceptions.zep",
+                    "line": 138,
+                    "last-line": 142,
+                    "char": 17
+                }
+            ],
+            "file": "stub__exceptions.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__exceptions.zep",
+        "line": 4,
+        "char": 5
+    }
+]

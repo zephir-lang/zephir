@@ -1,0 +1,209 @@
+[
+    {
+        "type": "function",
+        "name": "generate",
+        "statements": [
+            {
+                "type": "declare",
+                "data-type": "variable",
+                "variables": [
+                    {
+                        "variable": "k",
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 2,
+                        "char": 10
+                    },
+                    {
+                        "variable": "v",
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 2,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                "line": 4,
+                "char": 7
+            },
+            {
+                "type": "for",
+                "expr": {
+                    "type": "array",
+                    "left": [
+                        {
+                            "value": {
+                                "type": "string",
+                                "value": "a",
+                                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                "line": 4,
+                                "char": 19
+                            },
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 4,
+                            "char": 19
+                        },
+                        {
+                            "value": {
+                                "type": "string",
+                                "value": "b",
+                                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                "line": 4,
+                                "char": 22
+                            },
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 4,
+                            "char": 22
+                        },
+                        {
+                            "value": {
+                                "type": "string",
+                                "value": "c",
+                                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                "line": 4,
+                                "char": 25
+                            },
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 4,
+                            "char": 25
+                        },
+                        {
+                            "value": {
+                                "type": "string",
+                                "value": "d",
+                                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                "line": 4,
+                                "char": 28
+                            },
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 4,
+                            "char": 28
+                        }
+                    ],
+                    "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                    "line": 4,
+                    "char": 30
+                },
+                "key": "k",
+                "value": "v",
+                "reverse": 0,
+                "statements": [
+                    {
+                        "type": "yield",
+                        "key": {
+                            "type": "variable",
+                            "value": "k",
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 5,
+                            "char": 16
+                        },
+                        "value": {
+                            "type": "variable",
+                            "value": "v",
+                            "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                            "line": 5,
+                            "char": 19
+                        },
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 6,
+                        "char": 5
+                    }
+                ],
+                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                "line": 7,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+        "line": 9,
+        "char": 8
+    },
+    {
+        "type": "function",
+        "name": "loop_generator",
+        "statements": [
+            {
+                "type": "declare",
+                "data-type": "variable",
+                "variables": [
+                    {
+                        "variable": "key",
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 10,
+                        "char": 12
+                    },
+                    {
+                        "variable": "value",
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 10,
+                        "char": 19
+                    }
+                ],
+                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                "line": 12,
+                "char": 7
+            },
+            {
+                "type": "for",
+                "expr": {
+                    "type": "fcall",
+                    "name": "generate",
+                    "call-type": 1,
+                    "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                    "line": 12,
+                    "char": 34
+                },
+                "key": "key",
+                "value": "value",
+                "reverse": 0,
+                "statements": [
+                    {
+                        "type": "echo",
+                        "expressions": [
+                            {
+                                "type": "concat",
+                                "left": {
+                                    "type": "concat",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "key",
+                                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                        "line": 13,
+                                        "char": 18
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "-",
+                                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                        "line": 13,
+                                        "char": 22
+                                    },
+                                    "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                    "line": 13,
+                                    "char": 22
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                    "line": 13,
+                                    "char": 27
+                                },
+                                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                                "line": 13,
+                                "char": 27
+                            }
+                        ],
+                        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                        "line": 14,
+                        "char": 5
+                    }
+                ],
+                "file": "phpt__statements_yield_yield_key_value_variables.zep",
+                "line": 15,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_yield_yield_key_value_variables.zep",
+        "line": 9,
+        "char": 8
+    }
+]

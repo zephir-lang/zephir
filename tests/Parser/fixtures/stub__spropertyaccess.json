@@ -1,0 +1,1286 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Class with constructor + params\n *",
+        "file": "stub__spropertyaccess.zep",
+        "line": 5,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__spropertyaccess.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "SPropertyAccess",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 10,
+                    "char": 8
+                },
+                {
+                    "visibility": [
+                        "private",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "b",
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 11,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "delimiter",
+                    "default": {
+                        "type": "string",
+                        "value": ".",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 11,
+                        "char": 32
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 12,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "_delimiterWithUnderscore",
+                    "default": {
+                        "type": "string",
+                        "value": ".",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 12,
+                        "char": 47
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 13,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "stringVar",
+                    "default": {
+                        "type": "string",
+                        "value": "",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 13,
+                        "char": 31
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 14,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "intVar",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 14,
+                        "char": 29
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 15,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "doubleVar",
+                    "default": {
+                        "type": "double",
+                        "value": "0.0",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 15,
+                        "char": 34
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 16,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "arrayVar",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 16,
+                        "char": 32
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 18,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "abc",
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 20,
+                                        "char": 20
+                                    },
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 20,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 21,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "b",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "substr",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "static-property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "self",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 21,
+                                                        "char": 31
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "a",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 21,
+                                                        "char": 31
+                                                    },
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 21,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 21,
+                                                "char": 31
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 21,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 21,
+                                                "char": 34
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 21,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 21,
+                                                "char": 37
+                                            }
+                                        ],
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 21,
+                                        "char": 38
+                                    },
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 21,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 22,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "ScallExternal",
+                                    "property": "sproperty",
+                                    "expr": {
+                                        "type": "static-property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "self",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 22,
+                                            "char": 41
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 22,
+                                            "char": 41
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 22,
+                                        "char": 41
+                                    },
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 22,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 23,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "b",
+                                    "expr": {
+                                        "type": "static-property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "ScallExternal",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 23,
+                                            "char": 41
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "sproperty",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 23,
+                                            "char": 41
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 23,
+                                        "char": 41
+                                    },
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 23,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 18,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testArgumentWithUnderscore",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 26,
+                                "char": 65
+                            },
+                            "reference": 0,
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 26,
+                            "char": 65
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "delimiter",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 28,
+                                    "char": 22
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 28,
+                                "char": 22
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "delimiter",
+                                            "expr": {
+                                                "type": "static-property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "self",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 29,
+                                                    "char": 50
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "_delimiterWithUnderscore",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 29,
+                                                    "char": 50
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 29,
+                                                "char": 50
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 29,
+                                            "char": 50
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 30,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 32,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "delimiter",
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 32,
+                                "char": 19
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 26,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testArgument",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 35,
+                                "char": 51
+                            },
+                            "reference": 0,
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 35,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "delimiter",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 37,
+                                    "char": 22
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 37,
+                                "char": 22
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "delimiter",
+                                            "expr": {
+                                                "type": "static-property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "self",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 38,
+                                                    "char": 35
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "delimiter",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 38,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 38,
+                                                "char": 35
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 38,
+                                            "char": 35
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 39,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 41,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "delimiter",
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 41,
+                                "char": 19
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 42,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 35,
+                    "last-line": 44,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "mutateStringVarInsideCycle",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 46,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 48,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 48,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 48,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 48,
+                                            "char": 22
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 48,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 48,
+                                "char": 24
+                            },
+                            "value": "_",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "i",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": " + ",
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 49,
+                                                "char": 15
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 49,
+                                            "char": 15
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 50,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "static-property",
+                                            "operator": "assign",
+                                            "variable": "self",
+                                            "property": "stringVar",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "static-property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "self",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 50,
+                                                        "char": 42
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "stringVar",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 50,
+                                                        "char": 42
+                                                    },
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 50,
+                                                    "char": 42
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 50,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 50,
+                                                "char": 45
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 50,
+                                            "char": 45
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 51,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 53,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 53,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "stringVar",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 53,
+                                    "char": 25
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 53,
+                                "char": 25
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 45,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 45,
+                        "char": 2
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 44,
+                    "last-line": 58,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "mutateIntVarInsideCycle",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 61,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 63,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 63,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 63,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 63,
+                                            "char": 22
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 63,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 63,
+                                "char": 24
+                            },
+                            "value": "_",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "i",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "42",
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 64,
+                                                "char": 14
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 64,
+                                            "char": 14
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 65,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "static-property",
+                                            "operator": "assign",
+                                            "variable": "self",
+                                            "property": "intVar",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 65,
+                                                "char": 24
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 65,
+                                            "char": 24
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 66,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 68,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 68,
+                                    "char": 22
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "intVar",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 68,
+                                    "char": 22
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 68,
+                                "char": 22
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/1494\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 60,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 60,
+                        "char": 2
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 59,
+                    "last-line": 73,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "mutateDoubleVarInsideCycle",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 76,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 78,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 78,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 78,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 78,
+                                            "char": 22
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 78,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 78,
+                                "char": 24
+                            },
+                            "value": "_",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "i",
+                                            "expr": {
+                                                "type": "double",
+                                                "value": "3.14",
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 79,
+                                                "char": 16
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 79,
+                                            "char": 16
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 80,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "static-property",
+                                            "operator": "assign",
+                                            "variable": "self",
+                                            "property": "doubleVar",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 80,
+                                                "char": 27
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 80,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 81,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 83,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 83,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "doubleVar",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 83,
+                                    "char": 25
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 83,
+                                "char": 25
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 84,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/1494\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 75,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 75,
+                        "char": 2
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 74,
+                    "last-line": 86,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "mutateArrayVarInsideCycle",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 88,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 88,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 90,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 90,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 90,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 90,
+                                            "char": 22
+                                        },
+                                        "file": "stub__spropertyaccess.zep",
+                                        "line": 90,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 90,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "array",
+                                                "left": [
+                                                    {
+                                                        "key": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__spropertyaccess.zep",
+                                                            "line": 91,
+                                                            "char": 14
+                                                        },
+                                                        "value": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__spropertyaccess.zep",
+                                                            "line": 91,
+                                                            "char": 17
+                                                        },
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 91,
+                                                        "char": 17
+                                                    }
+                                                ],
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 91,
+                                                "char": 18
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 91,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 92,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "static-property",
+                                            "operator": "assign",
+                                            "variable": "self",
+                                            "property": "arrayVar",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "static-property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "self",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 92,
+                                                        "char": 40
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "arrayVar",
+                                                        "file": "stub__spropertyaccess.zep",
+                                                        "line": 92,
+                                                        "char": 40
+                                                    },
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 92,
+                                                    "char": 40
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "j",
+                                                    "file": "stub__spropertyaccess.zep",
+                                                    "line": 92,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__spropertyaccess.zep",
+                                                "line": 92,
+                                                "char": 43
+                                            },
+                                            "file": "stub__spropertyaccess.zep",
+                                            "line": 92,
+                                            "char": 43
+                                        }
+                                    ],
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 93,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 95,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 95,
+                                    "char": 24
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "arrayVar",
+                                    "file": "stub__spropertyaccess.zep",
+                                    "line": 95,
+                                    "char": 24
+                                },
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 95,
+                                "char": 24
+                            },
+                            "file": "stub__spropertyaccess.zep",
+                            "line": 96,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__spropertyaccess.zep",
+                                "line": 87,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__spropertyaccess.zep",
+                        "line": 87,
+                        "char": 2
+                    },
+                    "file": "stub__spropertyaccess.zep",
+                    "line": 86,
+                    "last-line": 97,
+                    "char": 23
+                }
+            ],
+            "file": "stub__spropertyaccess.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__spropertyaccess.zep",
+        "line": 7,
+        "char": 5
+    }
+]

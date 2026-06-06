@@ -1,0 +1,938 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Globals",
+        "file": "stub__globals_serverrequestfactory.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ServerRequestFactory",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "load",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "server",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 9,
+                                "char": 28
+                            },
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 9,
+                            "char": 28
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "get",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 10,
+                                "char": 25
+                            },
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 10,
+                            "char": 25
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "post",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 11,
+                                "char": 26
+                            },
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 11,
+                            "char": 26
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "cookies",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 12,
+                                "char": 29
+                            },
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 12,
+                            "char": 29
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "files",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 14,
+                                "char": 5
+                            },
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "globalCookies",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 15,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 15,
+                                    "char": 33
+                                },
+                                {
+                                    "variable": "globalFiles",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 16,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 16,
+                                    "char": 33
+                                },
+                                {
+                                    "variable": "globalGet",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 17,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 17,
+                                    "char": 33
+                                },
+                                {
+                                    "variable": "globalPost",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 18,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 18,
+                                    "char": 33
+                                },
+                                {
+                                    "variable": "globalServer",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 19,
+                                        "char": 33
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 19,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 24,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "empty",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_COOKIE",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 24,
+                                        "char": 27
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 24,
+                                    "char": 27
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 24,
+                                "char": 27
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "globalCookies",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "_COOKIE",
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 25,
+                                                "char": 40
+                                            },
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 25,
+                                            "char": 40
+                                        }
+                                    ],
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 26,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 28,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "empty",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_FILES",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 28,
+                                        "char": 27
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 28,
+                                    "char": 27
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 28,
+                                "char": 27
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "globalFiles",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "_FILES",
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 29,
+                                                "char": 37
+                                            },
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 29,
+                                            "char": 37
+                                        }
+                                    ],
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 30,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 32,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "empty",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_GET",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 32,
+                                        "char": 25
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 32,
+                                    "char": 25
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 32,
+                                "char": 25
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "globalGet",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "_GET",
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 33,
+                                                "char": 33
+                                            },
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 33,
+                                            "char": 33
+                                        }
+                                    ],
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 34,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 36,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "empty",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_POST",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 36,
+                                        "char": 26
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 36,
+                                    "char": 26
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 36,
+                                "char": 26
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "globalPost",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "_POST",
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 37,
+                                                "char": 35
+                                            },
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 37,
+                                            "char": 35
+                                        }
+                                    ],
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 38,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 40,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "empty",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_SERVER",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 40,
+                                        "char": 28
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 40,
+                                    "char": 28
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 40,
+                                "char": 28
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "globalServer",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "_SERVER",
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 41,
+                                                "char": 39
+                                            },
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 41,
+                                            "char": 39
+                                        }
+                                    ],
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 42,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 44,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "server",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 44,
+                                            "char": 28
+                                        },
+                                        "name": "checkNullArray",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "server",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 44,
+                                                    "char": 50
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 44,
+                                                "char": 50
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "globalServer",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 44,
+                                                    "char": 64
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 44,
+                                                "char": 64
+                                            }
+                                        ],
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 44,
+                                        "char": 65
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 44,
+                                    "char": 65
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "files",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 45,
+                                            "char": 28
+                                        },
+                                        "name": "checkNullArray",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "files",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 45,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 45,
+                                                "char": 49
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "globalFiles",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 45,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 45,
+                                                "char": 62
+                                            }
+                                        ],
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 45,
+                                        "char": 63
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 45,
+                                    "char": 63
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "cookies",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 46,
+                                            "char": 28
+                                        },
+                                        "name": "checkNullArray",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "cookies",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 46,
+                                                    "char": 51
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 46,
+                                                "char": 51
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "globalCookies",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 46,
+                                                    "char": 66
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 46,
+                                                "char": 66
+                                            }
+                                        ],
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 46,
+                                        "char": 67
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 46,
+                                    "char": 67
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "get",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 47,
+                                            "char": 28
+                                        },
+                                        "name": "checkNullArray",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "get",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 47,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 47,
+                                                "char": 47
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "globalGet",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 47,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 47,
+                                                "char": 58
+                                            }
+                                        ],
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 47,
+                                        "char": 59
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 47,
+                                    "char": 59
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "post",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 48,
+                                            "char": 28
+                                        },
+                                        "name": "checkNullArray",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "post",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 48,
+                                                    "char": 48
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 48,
+                                                "char": 48
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "globalPost",
+                                                    "file": "stub__globals_serverrequestfactory.zep",
+                                                    "line": 48,
+                                                    "char": 60
+                                                },
+                                                "file": "stub__globals_serverrequestfactory.zep",
+                                                "line": 48,
+                                                "char": 60
+                                            }
+                                        ],
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 48,
+                                        "char": 61
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 48,
+                                    "char": 61
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 50,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "server",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 51,
+                                            "char": 19
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "server",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 51,
+                                            "char": 28
+                                        },
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 51,
+                                        "char": 28
+                                    },
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "files",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 52,
+                                            "char": 18
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "files",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 52,
+                                            "char": 27
+                                        },
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 52,
+                                        "char": 27
+                                    },
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "cookies",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 53,
+                                            "char": 20
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "cookies",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 53,
+                                            "char": 29
+                                        },
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 53,
+                                        "char": 29
+                                    },
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "get",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 54,
+                                            "char": 16
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "get",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 54,
+                                            "char": 25
+                                        },
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 54,
+                                        "char": 25
+                                    },
+                                    {
+                                        "key": {
+                                            "type": "string",
+                                            "value": "post",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 55,
+                                            "char": 17
+                                        },
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "post",
+                                            "file": "stub__globals_serverrequestfactory.zep",
+                                            "line": 56,
+                                            "char": 9
+                                        },
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 56,
+                                        "char": 9
+                                    }
+                                ],
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 56,
+                                "char": 10
+                            },
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 57,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/1934\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 14,
+                                "char": 16
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__globals_serverrequestfactory.zep",
+                        "line": 14,
+                        "char": 16
+                    },
+                    "file": "stub__globals_serverrequestfactory.zep",
+                    "line": 8,
+                    "last-line": 62,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "checkNullArray",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "source",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 63,
+                            "char": 47
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "super",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 63,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "identical",
+                                    "left": {
+                                        "type": "null",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 65,
+                                        "char": 28
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "source",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 65,
+                                        "char": 37
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 65,
+                                    "char": 37
+                                },
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 65,
+                                "char": 37
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "super",
+                                        "file": "stub__globals_serverrequestfactory.zep",
+                                        "line": 66,
+                                        "char": 25
+                                    },
+                                    "file": "stub__globals_serverrequestfactory.zep",
+                                    "line": 67,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 69,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "source",
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 69,
+                                "char": 22
+                            },
+                            "file": "stub__globals_serverrequestfactory.zep",
+                            "line": 70,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Checks the source if it null and returns the super, otherwise the source\n     * array\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__globals_serverrequestfactory.zep",
+                                "line": 64,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__globals_serverrequestfactory.zep",
+                        "line": 64,
+                        "char": 5
+                    },
+                    "file": "stub__globals_serverrequestfactory.zep",
+                    "line": 63,
+                    "last-line": 71,
+                    "char": 20
+                }
+            ],
+            "file": "stub__globals_serverrequestfactory.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__globals_serverrequestfactory.zep",
+        "line": 3,
+        "char": 5
+    }
+]

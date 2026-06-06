@@ -1,0 +1,543 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_protectedproperties.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Stub\\Properties\\ProtectedProperties\n *",
+        "file": "stub__properties_protectedproperties.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ProtectedProperties",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someNull",
+                    "docblock": "**\n\t * This is a protected property with no initial value\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 16,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someNullInitial",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 17,
+                        "char": 34
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial null value\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 21,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someFalse",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 22,
+                        "char": 29
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial boolean false\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 26,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someTrue",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 27,
+                        "char": 27
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial boolean true\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 31,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someInteger",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 32,
+                        "char": 28
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial integer value\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 36,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someDouble",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 37,
+                        "char": 30
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial double value\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 41,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someString",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 42,
+                        "char": 29
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial string value\n\t *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 46,
+                    "char": 6
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someVar",
+                    "docblock": "**\n     * @var null|mixed\n     *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 47,
+                            "char": 24
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 47,
+                            "char": 29
+                        }
+                    ],
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 52,
+                    "char": 6
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someArrayVar",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__properties_protectedproperties.zep",
+                        "line": 53,
+                        "char": 33
+                    },
+                    "docblock": "**\n     * This is a property to test default value on extends\n     * @var array\n     *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 53,
+                            "char": 38
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 53,
+                            "char": 44
+                        }
+                    ],
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 57,
+                    "char": 6
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNull",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 60,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNull",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 60,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 60,
+                                "char": 24
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return null|mixed\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 58,
+                    "last-line": 65,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setSomeNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 66,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "someNull",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "param",
+                                        "file": "stub__properties_protectedproperties.zep",
+                                        "line": 68,
+                                        "char": 29
+                                    },
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 68,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return void\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 66,
+                    "last-line": 73,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNullInitial",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 76,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNullInitial",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 76,
+                                    "char": 31
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 76,
+                                "char": 31
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 77,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return null\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 74,
+                    "last-line": 81,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeFalse",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 84,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someFalse",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 84,
+                                    "char": 25
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 84,
+                                "char": 25
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 85,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return bool\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 82,
+                    "last-line": 89,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeTrue",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 92,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someTrue",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 92,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 92,
+                                "char": 24
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 93,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return bool\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 90,
+                    "last-line": 97,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeInteger",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 100,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someInteger",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 100,
+                                    "char": 27
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 100,
+                                "char": 27
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 101,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return int\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 98,
+                    "last-line": 105,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeDouble",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 108,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someDouble",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 108,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 108,
+                                "char": 26
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 109,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return float\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 106,
+                    "last-line": 113,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 116,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someString",
+                                    "file": "stub__properties_protectedproperties.zep",
+                                    "line": 116,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_protectedproperties.zep",
+                                "line": 116,
+                                "char": 26
+                            },
+                            "file": "stub__properties_protectedproperties.zep",
+                            "line": 117,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @return string\n     *",
+                    "file": "stub__properties_protectedproperties.zep",
+                    "line": 114,
+                    "last-line": 118,
+                    "char": 16
+                }
+            ],
+            "file": "stub__properties_protectedproperties.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__properties_protectedproperties.zep",
+        "line": 7,
+        "char": 5
+    }
+]

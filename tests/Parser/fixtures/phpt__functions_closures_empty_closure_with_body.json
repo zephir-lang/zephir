@@ -1,0 +1,160 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Closure",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callback",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "abc",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 7,
+                                        "char": 21
+                                    },
+                                    "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                    "line": 7,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                            "line": 9,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "closure",
+                                "right": [
+                                    {
+                                        "type": "declare",
+                                        "data-type": "variable",
+                                        "variables": [
+                                            {
+                                                "variable": "r",
+                                                "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                                "line": 10,
+                                                "char": 18
+                                            }
+                                        ],
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 12,
+                                        "char": 15
+                                    },
+                                    {
+                                        "type": "let",
+                                        "assignments": [
+                                            {
+                                                "assign-type": "variable",
+                                                "operator": "assign",
+                                                "variable": "r",
+                                                "expr": {
+                                                    "type": "variable",
+                                                    "value": "abc",
+                                                    "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                                    "line": 12,
+                                                    "char": 24
+                                                },
+                                                "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                                "line": 12,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 13,
+                                        "char": 15
+                                    },
+                                    {
+                                        "type": "let",
+                                        "assignments": [
+                                            {
+                                                "assign-type": "variable",
+                                                "operator": "assign",
+                                                "variable": "abc",
+                                                "expr": {
+                                                    "type": "null",
+                                                    "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                                    "line": 13,
+                                                    "char": 27
+                                                },
+                                                "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                                "line": 13,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 15,
+                                        "char": 18
+                                    },
+                                    {
+                                        "type": "return",
+                                        "expr": {
+                                            "type": "variable",
+                                            "value": "r",
+                                            "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                            "line": 15,
+                                            "char": 21
+                                        },
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 16,
+                                        "char": 9
+                                    }
+                                ],
+                                "use": [
+                                    {
+                                        "type": "parameter",
+                                        "name": "abc",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "reference": 1,
+                                        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                        "line": 9,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                                "line": 16,
+                                "char": 10
+                            },
+                            "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                            "line": 17,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__functions_closures_empty_closure_with_body.zep",
+                    "line": 9,
+                    "last-line": 18,
+                    "char": 23
+                }
+            ],
+            "file": "phpt__functions_closures_empty_closure_with_body.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__functions_closures_empty_closure_with_body.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,73 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Dynamic instantiation must respect constructor visibility.\n *\n * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/882\n *",
+        "file": "stub__issue882.zep",
+        "line": 7,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue882.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue882",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "initClass",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue882.zep",
+                            "line": 11,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "className",
+                                "dynamic": 1,
+                                "file": "stub__issue882.zep",
+                                "line": 13,
+                                "char": 33
+                            },
+                            "file": "stub__issue882.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue882.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 26
+                }
+            ],
+            "file": "stub__issue882.zep",
+            "line": 9,
+            "char": 5
+        },
+        "file": "stub__issue882.zep",
+        "line": 9,
+        "char": 5
+    }
+]

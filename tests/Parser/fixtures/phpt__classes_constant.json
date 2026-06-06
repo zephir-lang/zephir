@@ -1,0 +1,32 @@
+[
+    {
+        "type": "class",
+        "name": "MyClass",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "MYCONSTANT1",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "phpt__classes_constant.zep",
+                        "line": 3,
+                        "char": 27
+                    },
+                    "file": "phpt__classes_constant.zep",
+                    "line": 4,
+                    "char": 1
+                }
+            ],
+            "file": "phpt__classes_constant.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__classes_constant.zep",
+        "line": 1,
+        "char": 6
+    }
+]

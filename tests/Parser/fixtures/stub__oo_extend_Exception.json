@@ -1,0 +1,34 @@
+[
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "\\Exception",
+                "alias": "PHPException",
+                "file": "stub__oo_extend_Exception.zep",
+                "line": 1,
+                "char": 32
+            }
+        ],
+        "file": "stub__oo_extend_Exception.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Extend",
+        "file": "stub__oo_extend_Exception.zep",
+        "line": 5,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Exception",
+        "abstract": 0,
+        "final": 0,
+        "extends": "PHPException",
+        "file": "stub__oo_extend_Exception.zep",
+        "line": 5,
+        "char": 5
+    }
+]

@@ -1,0 +1,163 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue820.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue820",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testIterator",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue820.zep",
+                            "line": 5,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "k",
+                                    "file": "stub__issue820.zep",
+                                    "line": 7,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__issue820.zep",
+                                    "line": 7,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue820.zep",
+                                        "line": 7,
+                                        "char": 27
+                                    },
+                                    "file": "stub__issue820.zep",
+                                    "line": 7,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__issue820.zep",
+                            "line": 9,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "iterator",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue820.zep",
+                                            "line": 9,
+                                            "char": 33
+                                        },
+                                        "file": "stub__issue820.zep",
+                                        "line": 9,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__issue820.zep",
+                                "line": 9,
+                                "char": 35
+                            },
+                            "key": "k",
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "arr",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "k",
+                                                    "file": "stub__issue820.zep",
+                                                    "line": 10,
+                                                    "char": 22
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "v",
+                                                "file": "stub__issue820.zep",
+                                                "line": 10,
+                                                "char": 27
+                                            },
+                                            "file": "stub__issue820.zep",
+                                            "line": 10,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "file": "stub__issue820.zep",
+                                    "line": 11,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue820.zep",
+                            "line": 13,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "arr",
+                                "file": "stub__issue820.zep",
+                                "line": 13,
+                                "char": 19
+                            },
+                            "file": "stub__issue820.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue820.zep",
+                    "line": 5,
+                    "last-line": 15,
+                    "char": 26
+                }
+            ],
+            "file": "stub__issue820.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue820.zep",
+        "line": 3,
+        "char": 5
+    }
+]

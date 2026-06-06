@@ -1,0 +1,52 @@
+[
+    {
+        "type": "namespace",
+        "name": "Phpdoc",
+        "file": "phpt__comments_dockblocks_bug13.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Test",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "_foo",
+                    "docblock": "**\n     * @var \\stdClass\n     *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "phpt__comments_dockblocks_bug13.zep",
+                            "line": 8,
+                            "char": 25
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "phpt__comments_dockblocks_bug13.zep",
+                            "line": 8,
+                            "char": 31
+                        }
+                    ],
+                    "file": "phpt__comments_dockblocks_bug13.zep",
+                    "line": 9,
+                    "char": 1
+                }
+            ],
+            "file": "phpt__comments_dockblocks_bug13.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__comments_dockblocks_bug13.zep",
+        "line": 3,
+        "char": 5
+    }
+]

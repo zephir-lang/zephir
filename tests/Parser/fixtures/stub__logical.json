@@ -1,0 +1,1030 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Arithmetic operations\n *",
+        "file": "stub__logical.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__logical.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Logical",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAnd1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__logical.zep",
+                                    "line": 14,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__logical.zep",
+                                    "line": 14,
+                                    "char": 16
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 14,
+                                "char": 16
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 15,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 12,
+                    "last-line": 17,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAnd2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__logical.zep",
+                                    "line": 19,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "double",
+                                    "value": "1.5",
+                                    "file": "stub__logical.zep",
+                                    "line": 19,
+                                    "char": 18
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 19,
+                                "char": 18
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 17,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAnd3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__logical.zep",
+                                        "line": 24,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "double",
+                                        "value": "1.5",
+                                        "file": "stub__logical.zep",
+                                        "line": 24,
+                                        "char": 20
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 24,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "char",
+                                    "value": "A",
+                                    "file": "stub__logical.zep",
+                                    "line": 24,
+                                    "char": 24
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 24,
+                                "char": 24
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 22,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAnd4",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__logical.zep",
+                                        "line": 29,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__logical.zep",
+                                        "line": 29,
+                                        "char": 18
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 29,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "null",
+                                    "file": "stub__logical.zep",
+                                    "line": 29,
+                                    "char": 24
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 29,
+                                "char": 24
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 27,
+                    "last-line": 32,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAnd9",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 32,
+                            "char": 32
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 32,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "equals",
+                                    "left": {
+                                        "type": "typeof",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__logical.zep",
+                                            "line": 34,
+                                            "char": 16
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 34,
+                                        "char": 16
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "array",
+                                        "file": "stub__logical.zep",
+                                        "line": 34,
+                                        "char": 25
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 34,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "isset",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__logical.zep",
+                                            "line": 34,
+                                            "char": 34
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__logical.zep",
+                                            "line": 34,
+                                            "char": 36
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 34,
+                                        "char": 38
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 34,
+                                    "char": 38
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 34,
+                                "char": 38
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__logical.zep",
+                                            "line": 35,
+                                            "char": 12
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__logical.zep",
+                                            "line": 35,
+                                            "char": 14
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 35,
+                                        "char": 15
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 36,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 37,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "null",
+                                "file": "stub__logical.zep",
+                                "line": 37,
+                                "char": 14
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 32,
+                    "last-line": 40,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testOr1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__logical.zep",
+                                    "line": 42,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__logical.zep",
+                                    "line": 42,
+                                    "char": 16
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 42,
+                                "char": 16
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testOr2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__logical.zep",
+                                    "line": 47,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "bool",
+                                    "value": "true",
+                                    "file": "stub__logical.zep",
+                                    "line": 47,
+                                    "char": 19
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 47,
+                                "char": 19
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 45,
+                    "last-line": 50,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixed1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "first",
+                                    "file": "stub__logical.zep",
+                                    "line": 52,
+                                    "char": 12
+                                },
+                                {
+                                    "variable": "second",
+                                    "file": "stub__logical.zep",
+                                    "line": 52,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 54,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "first",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__logical.zep",
+                                        "line": 54,
+                                        "char": 16
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 54,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 55,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "second",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__logical.zep",
+                                        "line": 55,
+                                        "char": 17
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 55,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 56,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "first",
+                                        "file": "stub__logical.zep",
+                                        "line": 56,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "second",
+                                        "file": "stub__logical.zep",
+                                        "line": 56,
+                                        "char": 23
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 56,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "second",
+                                    "file": "stub__logical.zep",
+                                    "line": 56,
+                                    "char": 32
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 56,
+                                "char": 32
+                            },
+                            "statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "string",
+                                            "value": "ok",
+                                            "file": "stub__logical.zep",
+                                            "line": 57,
+                                            "char": 11
+                                        }
+                                    ],
+                                    "file": "stub__logical.zep",
+                                    "line": 58,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "string",
+                                            "value": "wrong",
+                                            "file": "stub__logical.zep",
+                                            "line": 59,
+                                            "char": 14
+                                        }
+                                    ],
+                                    "file": "stub__logical.zep",
+                                    "line": 60,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 50,
+                    "last-line": 63,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixed2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "match",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 63,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "minLength",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 63,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "and",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "fcall",
+                                        "name": "is_array",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "match",
+                                                    "file": "stub__logical.zep",
+                                                    "line": 65,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__logical.zep",
+                                                "line": 65,
+                                                "char": 20
+                                            }
+                                        ],
+                                        "file": "stub__logical.zep",
+                                        "line": 65,
+                                        "char": 23
+                                    },
+                                    "right": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "fcall",
+                                            "name": "count",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "match",
+                                                        "file": "stub__logical.zep",
+                                                        "line": 65,
+                                                        "char": 36
+                                                    },
+                                                    "file": "stub__logical.zep",
+                                                    "line": 65,
+                                                    "char": 36
+                                                }
+                                            ],
+                                            "file": "stub__logical.zep",
+                                            "line": 65,
+                                            "char": 39
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "2",
+                                            "file": "stub__logical.zep",
+                                            "line": 65,
+                                            "char": 44
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 65,
+                                        "char": 44
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 65,
+                                    "char": 44
+                                },
+                                "right": {
+                                    "type": "greater-equal",
+                                    "left": {
+                                        "type": "fcall",
+                                        "name": "strlen",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "match",
+                                                        "file": "stub__logical.zep",
+                                                        "line": 65,
+                                                        "char": 58
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__logical.zep",
+                                                        "line": 65,
+                                                        "char": 60
+                                                    },
+                                                    "file": "stub__logical.zep",
+                                                    "line": 65,
+                                                    "char": 61
+                                                },
+                                                "file": "stub__logical.zep",
+                                                "line": 65,
+                                                "char": 61
+                                            }
+                                        ],
+                                        "file": "stub__logical.zep",
+                                        "line": 65,
+                                        "char": 63
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "minLength",
+                                        "file": "stub__logical.zep",
+                                        "line": 65,
+                                        "char": 75
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 65,
+                                    "char": 75
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 65,
+                                "char": 75
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__logical.zep",
+                                        "line": 66,
+                                        "char": 15
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 67,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 68,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__logical.zep",
+                                "line": 68,
+                                "char": 15
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 63,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixed3",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "bool",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__logical.zep",
+                                    "line": 73,
+                                    "char": 12
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "stub__logical.zep",
+                                    "line": 73,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 74,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "or",
+                                        "left": {
+                                            "type": "and",
+                                            "left": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__logical.zep",
+                                                "line": 74,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__logical.zep",
+                                                "line": 74,
+                                                "char": 19
+                                            },
+                                            "file": "stub__logical.zep",
+                                            "line": 74,
+                                            "char": 19
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__logical.zep",
+                                            "line": 74,
+                                            "char": 22
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 74,
+                                        "char": 22
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 74,
+                                    "char": 22
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "or",
+                                        "left": {
+                                            "type": "list",
+                                            "left": {
+                                                "type": "and",
+                                                "left": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__logical.zep",
+                                                    "line": 74,
+                                                    "char": 32
+                                                },
+                                                "right": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__logical.zep",
+                                                    "line": 74,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__logical.zep",
+                                                "line": 74,
+                                                "char": 35
+                                            },
+                                            "file": "stub__logical.zep",
+                                            "line": 74,
+                                            "char": 38
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__logical.zep",
+                                            "line": 74,
+                                            "char": 41
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 74,
+                                        "char": 41
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 74,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__logical.zep",
+                            "line": 75,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "equals",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__logical.zep",
+                                    "line": 75,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__logical.zep",
+                                    "line": 75,
+                                    "char": 16
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 75,
+                                "char": 16
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 76,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 71,
+                    "last-line": 78,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixed4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 78,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__logical.zep",
+                            "line": 78,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__logical.zep",
+                                            "line": 80,
+                                            "char": 14
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 80,
+                                        "char": 14
+                                    },
+                                    "right": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__logical.zep",
+                                            "line": 80,
+                                            "char": 20
+                                        },
+                                        "file": "stub__logical.zep",
+                                        "line": 80,
+                                        "char": 20
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 80,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__logical.zep",
+                                        "line": 80,
+                                        "char": 25
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__logical.zep",
+                                        "line": 80,
+                                        "char": 28
+                                    },
+                                    "file": "stub__logical.zep",
+                                    "line": 80,
+                                    "char": 28
+                                },
+                                "file": "stub__logical.zep",
+                                "line": 80,
+                                "char": 28
+                            },
+                            "file": "stub__logical.zep",
+                            "line": 81,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__logical.zep",
+                    "line": 78,
+                    "last-line": 82,
+                    "char": 16
+                }
+            ],
+            "file": "stub__logical.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__logical.zep",
+        "line": 8,
+        "char": 5
+    }
+]

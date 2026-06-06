@@ -1,0 +1,163 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * CBLOCK tests\n *",
+        "file": "stub__cblock.zep",
+        "line": 8,
+        "char": 22
+    },
+    {
+        "type": "cblock",
+        "value": "\n\/\/ top statement before namespace, add to after headers\n#define MAX_FACTOR 10\n",
+        "file": "stub__cblock.zep",
+        "line": 10,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__cblock.zep",
+        "line": 15,
+        "char": 28
+    },
+    {
+        "type": "cblock",
+        "value": "\n\/\/ top statement before class, add to after headers\n\/\/ test include .h\n#include \"kernel\/require.h\"\n",
+        "file": "stub__cblock.zep",
+        "line": 24,
+        "char": 1
+    },
+    {
+        "type": "cblock",
+        "value": "\n\n\/\/ c implementation of fibonacci\nstatic long fibonacci(long n) {\n\tif (n < 2) return n;\n\telse return fibonacci(n - 2) + fibonacci(n - 1);\n}\n\n",
+        "file": "stub__cblock.zep",
+        "line": 26,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Cblock",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCblock1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__cblock.zep",
+                                        "line": 30,
+                                        "char": 12
+                                    },
+                                    "file": "stub__cblock.zep",
+                                    "line": 30,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__cblock.zep",
+                            "line": 34,
+                            "char": 2
+                        },
+                        {
+                            "type": "cblock",
+                            "value": "\n\t\t\ta = MAX_FACTOR;\n\t\t",
+                            "file": "stub__cblock.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__cblock.zep",
+                                "line": 36,
+                                "char": 11
+                            },
+                            "file": "stub__cblock.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__cblock.zep",
+                    "line": 28,
+                    "last-line": 39,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCblock2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__cblock.zep",
+                                        "line": 41,
+                                        "char": 13
+                                    },
+                                    "file": "stub__cblock.zep",
+                                    "line": 41,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__cblock.zep",
+                            "line": 45,
+                            "char": 2
+                        },
+                        {
+                            "type": "cblock",
+                            "value": "\n\t\t\ta = fibonacci(MAX_FACTOR);\n\t\t",
+                            "file": "stub__cblock.zep",
+                            "line": 47,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__cblock.zep",
+                                "line": 47,
+                                "char": 11
+                            },
+                            "file": "stub__cblock.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__cblock.zep",
+                    "line": 39,
+                    "last-line": 50,
+                    "char": 16
+                }
+            ],
+            "file": "stub__cblock.zep",
+            "line": 26,
+            "char": 5
+        },
+        "file": "stub__cblock.zep",
+        "line": 26,
+        "char": 5
+    }
+]

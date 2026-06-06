@@ -1,0 +1,389 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2505.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2505",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeSelf",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "self",
+                                "dynamic": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 7,
+                                "char": 26
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2505.zep",
+                                    "line": 6,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 6,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "makeSelfStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "self",
+                                "dynamic": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 12,
+                                "char": 26
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2505.zep",
+                                    "line": 11,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 11,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "static",
+                                "dynamic": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 17,
+                                "char": 28
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "static",
+                                    "file": "stub__issue2505.zep",
+                                    "line": 16,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 16,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "makeStaticFromStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "static",
+                                "dynamic": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 22,
+                                "char": 28
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 23,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "static",
+                                    "file": "stub__issue2505.zep",
+                                    "line": 21,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 21,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 20,
+                    "last-line": 34,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "chainedStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__issue2505.zep",
+                                        "line": 37,
+                                        "char": 21
+                                    },
+                                    "name": "makeStatic",
+                                    "call-type": 1,
+                                    "file": "stub__issue2505.zep",
+                                    "line": 37,
+                                    "char": 35
+                                },
+                                "name": "checkPrivate",
+                                "call-type": 1,
+                                "file": "stub__issue2505.zep",
+                                "line": 37,
+                                "char": 50
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 38,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Chained call on a <static> return: the COMPILE-TIME type tracker must\n     * resolve the receiver of `checkPrivate()` to the lexical class. Without\n     * the fix, this triggered:\n     *   Warning: Class \"Stub\\static\" does not exist at compile time.\n     * Phalcon hit this once they started using `-> <static>` for fluent\n     * setters. The presence of these methods in the compiled stub is the\n     * regression assertion \u2014 if the fix were missing, generate would emit\n     * the false-positive `nonexistent-class` warning.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 36,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 36,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "chainedSelf",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__issue2505.zep",
+                                        "line": 42,
+                                        "char": 21
+                                    },
+                                    "name": "makeSelf",
+                                    "call-type": 1,
+                                    "file": "stub__issue2505.zep",
+                                    "line": 42,
+                                    "char": 33
+                                },
+                                "name": "checkPrivate",
+                                "call-type": 1,
+                                "file": "stub__issue2505.zep",
+                                "line": 42,
+                                "char": 48
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 43,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 41,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 41,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "checkPrivate",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__issue2505.zep",
+                                "line": 47,
+                                "char": 20
+                            },
+                            "file": "stub__issue2505.zep",
+                            "line": 48,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2505.zep",
+                                "line": 46,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505.zep",
+                        "line": 46,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505.zep",
+                    "line": 45,
+                    "last-line": 49,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2505.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2505.zep",
+        "line": 3,
+        "char": 5
+    }
+]

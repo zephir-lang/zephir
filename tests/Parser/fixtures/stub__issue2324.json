@@ -1,0 +1,278 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2324.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2324",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "file": "stub__issue2324.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "makeStatic",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue2324.zep",
+                                    "line": 11,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 12,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "static",
+                                        "dynamic": 0,
+                                        "file": "stub__issue2324.zep",
+                                        "line": 12,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2324.zep",
+                                    "line": 12,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 13,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_class",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue2324.zep",
+                                            "line": 13,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2324.zep",
+                                        "line": 13,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2324.zep",
+                                "line": 13,
+                                "char": 30
+                            },
+                            "file": "stub__issue2324.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2324.zep",
+                    "line": 9,
+                    "last-line": 16,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "makeSelf",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue2324.zep",
+                                    "line": 18,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 19,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "self",
+                                        "dynamic": 0,
+                                        "file": "stub__issue2324.zep",
+                                        "line": 19,
+                                        "char": 29
+                                    },
+                                    "file": "stub__issue2324.zep",
+                                    "line": 19,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 20,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_class",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue2324.zep",
+                                            "line": 20,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2324.zep",
+                                        "line": 20,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2324.zep",
+                                "line": 20,
+                                "char": 30
+                            },
+                            "file": "stub__issue2324.zep",
+                            "line": 21,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2324.zep",
+                    "line": 16,
+                    "last-line": 23,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeStaticInstance",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue2324.zep",
+                                    "line": 25,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 26,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "static",
+                                        "dynamic": 0,
+                                        "file": "stub__issue2324.zep",
+                                        "line": 26,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue2324.zep",
+                                    "line": 26,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__issue2324.zep",
+                            "line": 27,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_class",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue2324.zep",
+                                            "line": 27,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2324.zep",
+                                        "line": 27,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2324.zep",
+                                "line": 27,
+                                "char": 30
+                            },
+                            "file": "stub__issue2324.zep",
+                            "line": 28,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2324.zep",
+                    "line": 23,
+                    "last-line": 29,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2324.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2324.zep",
+        "line": 3,
+        "char": 5
+    }
+]

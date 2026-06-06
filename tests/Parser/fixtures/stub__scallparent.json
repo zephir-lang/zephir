@@ -1,0 +1,211 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Static Function calls\n *",
+        "file": "stub__scallparent.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__scallparent.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ScallParent",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello parent public",
+                                "file": "stub__scallparent.zep",
+                                "line": 12,
+                                "char": 29
+                            },
+                            "file": "stub__scallparent.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scallparent.zep",
+                                "line": 11,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scallparent.zep",
+                        "line": 11,
+                        "char": 2
+                    },
+                    "file": "stub__scallparent.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethod2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello parent protected",
+                                "file": "stub__scallparent.zep",
+                                "line": 17,
+                                "char": 32
+                            },
+                            "file": "stub__scallparent.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scallparent.zep",
+                                "line": 16,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scallparent.zep",
+                        "line": 16,
+                        "char": 2
+                    },
+                    "file": "stub__scallparent.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCallStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "static",
+                                "dynamic": 0,
+                                "name": "testMethodStatic",
+                                "file": "stub__scallparent.zep",
+                                "line": 22,
+                                "char": 36
+                            },
+                            "file": "stub__scallparent.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scallparent.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scallparent.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__scallparent.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethodStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello ScallParent",
+                                "file": "stub__scallparent.zep",
+                                "line": 27,
+                                "char": 27
+                            },
+                            "file": "stub__scallparent.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scallparent.zep",
+                                "line": 26,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scallparent.zep",
+                        "line": 26,
+                        "char": 2
+                    },
+                    "file": "stub__scallparent.zep",
+                    "line": 25,
+                    "last-line": 29,
+                    "char": 26
+                }
+            ],
+            "file": "stub__scallparent.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__scallparent.zep",
+        "line": 8,
+        "char": 5
+    }
+]

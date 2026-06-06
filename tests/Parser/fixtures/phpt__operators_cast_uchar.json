@@ -1,0 +1,31 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "return",
+                "expr": {
+                    "type": "cast",
+                    "left": "uchar",
+                    "right": {
+                        "type": "variable",
+                        "value": "foo",
+                        "file": "phpt__operators_cast_uchar.zep",
+                        "line": 2,
+                        "char": 20
+                    },
+                    "file": "phpt__operators_cast_uchar.zep",
+                    "line": 2,
+                    "char": 20
+                },
+                "file": "phpt__operators_cast_uchar.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_cast_uchar.zep",
+        "line": 1,
+        "char": 9
+    }
+]

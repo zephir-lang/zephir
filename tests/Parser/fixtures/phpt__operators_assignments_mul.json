@@ -1,0 +1,81 @@
+[
+    {
+        "type": "function",
+        "name": "mul",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "a",
+                "const": 0,
+                "data-type": "int",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__operators_assignments_mul.zep",
+                "line": 1,
+                "char": 20
+            },
+            {
+                "type": "parameter",
+                "name": "b",
+                "const": 0,
+                "data-type": "int",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__operators_assignments_mul.zep",
+                "line": 1,
+                "char": 27
+            }
+        ],
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "mul-assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "variable",
+                            "value": "b",
+                            "file": "phpt__operators_assignments_mul.zep",
+                            "line": 2,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_assignments_mul.zep",
+                        "line": 2,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_assignments_mul.zep",
+                "line": 3,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "mul-assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "int",
+                            "value": "2",
+                            "file": "phpt__operators_assignments_mul.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_assignments_mul.zep",
+                        "line": 3,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_assignments_mul.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_assignments_mul.zep",
+        "line": 1,
+        "char": 9
+    }
+]

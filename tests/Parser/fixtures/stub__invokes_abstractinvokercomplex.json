@@ -1,0 +1,136 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Invokes",
+        "file": "stub__invokes_abstractinvokercomplex.zep",
+        "line": 4,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "AbstractInvokerComplex",
+        "abstract": 1,
+        "final": 0,
+        "extends": "AbstractProtected",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__toString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__invokes_abstractinvokercomplex.zep",
+                                    "line": 8,
+                                    "char": 21
+                                },
+                                "name": "renderArrayElementsComplex",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "property-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "this",
+                                                "file": "stub__invokes_abstractinvokercomplex.zep",
+                                                "line": 8,
+                                                "char": 54
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "text",
+                                                "file": "stub__invokes_abstractinvokercomplex.zep",
+                                                "line": 8,
+                                                "char": 59
+                                            },
+                                            "file": "stub__invokes_abstractinvokercomplex.zep",
+                                            "line": 8,
+                                            "char": 59
+                                        },
+                                        "file": "stub__invokes_abstractinvokercomplex.zep",
+                                        "line": 8,
+                                        "char": 59
+                                    }
+                                ],
+                                "file": "stub__invokes_abstractinvokercomplex.zep",
+                                "line": 8,
+                                "char": 60
+                            },
+                            "file": "stub__invokes_abstractinvokercomplex.zep",
+                            "line": 9,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__invokes_abstractinvokercomplex.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__invoke",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__invokes_abstractinvokercomplex.zep",
+                                "line": 13,
+                                "char": 20
+                            },
+                            "file": "stub__invokes_abstractinvokercomplex.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "AbstractInvoker",
+                                    "file": "stub__invokes_abstractinvokercomplex.zep",
+                                    "line": 12,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__invokes_abstractinvokercomplex.zep",
+                                "line": 12,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__invokes_abstractinvokercomplex.zep",
+                        "line": 12,
+                        "char": 5
+                    },
+                    "file": "stub__invokes_abstractinvokercomplex.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 19
+                }
+            ],
+            "file": "stub__invokes_abstractinvokercomplex.zep",
+            "line": 4,
+            "char": 14
+        },
+        "file": "stub__invokes_abstractinvokercomplex.zep",
+        "line": 4,
+        "char": 14
+    }
+]

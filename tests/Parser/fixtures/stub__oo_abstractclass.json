@@ -1,0 +1,241 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_abstractclass.zep",
+        "line": 4,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "AbstractClass",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodDeclaration",
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 6,
+                    "last-line": 7,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodDeclarationWithReturnType",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_abstractclass.zep",
+                                "line": 7,
+                                "char": 74
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_abstractclass.zep",
+                        "line": 7,
+                        "char": 74
+                    },
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 7,
+                    "last-line": 8,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodDeclarationWithParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_abstractclass.zep",
+                            "line": 8,
+                            "char": 67
+                        }
+                    ],
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 8,
+                    "last-line": 9,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodDeclarationWithParameterAndReturnType",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_abstractclass.zep",
+                            "line": 9,
+                            "char": 80
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_abstractclass.zep",
+                                "line": 9,
+                                "char": 91
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_abstractclass.zep",
+                        "line": 9,
+                        "char": 91
+                    },
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 9,
+                    "last-line": 10,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAbstractMethodDeclaration",
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 10,
+                    "last-line": 11,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAbstractMethodDeclarationWithReturnType",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_abstractclass.zep",
+                                "line": 11,
+                                "char": 82
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_abstractclass.zep",
+                        "line": 11,
+                        "char": 82
+                    },
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 11,
+                    "last-line": 12,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAbstractMethodDeclarationWithParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_abstractclass.zep",
+                            "line": 12,
+                            "char": 75
+                        }
+                    ],
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 12,
+                    "last-line": 13,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAbstractMethodDeclarationWithParameterAndReturnType",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_abstractclass.zep",
+                            "line": 13,
+                            "char": 88
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_abstractclass.zep",
+                                "line": 13,
+                                "char": 99
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_abstractclass.zep",
+                        "line": 13,
+                        "char": 99
+                    },
+                    "file": "stub__oo_abstractclass.zep",
+                    "line": 13,
+                    "last-line": 14,
+                    "char": 25
+                }
+            ],
+            "file": "stub__oo_abstractclass.zep",
+            "line": 4,
+            "char": 14
+        },
+        "file": "stub__oo_abstractclass.zep",
+        "line": 4,
+        "char": 14
+    }
+]

@@ -1,0 +1,956 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__globals.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Globals",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setBoolValueUsingDotNotation",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 8,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "db.my_setting_1",
+                                            "file": "stub__globals.zep",
+                                            "line": 10,
+                                            "char": 30
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 10,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 10,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 10,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 10,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 9,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 8,
+                    "last-line": 13,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setIntValueUsingDotNotation",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 13,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "db.my_setting_2",
+                                            "file": "stub__globals.zep",
+                                            "line": 15,
+                                            "char": 30
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 15,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 15,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 15,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 15,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 16,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 14,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 13,
+                    "last-line": 18,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setCharValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 18,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_4",
+                                            "file": "stub__globals.zep",
+                                            "line": 20,
+                                            "char": 27
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 20,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 20,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 20,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 20,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 19,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 18,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStringValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 23,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_5",
+                                            "file": "stub__globals.zep",
+                                            "line": 25,
+                                            "char": 30
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 25,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 25,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 25,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 25,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 26,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 24,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 23,
+                    "last-line": 28,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setBoolValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 28,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_1",
+                                            "file": "stub__globals.zep",
+                                            "line": 30,
+                                            "char": 27
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 30,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 30,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 30,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 30,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 31,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 29,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 28,
+                    "last-line": 33,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setDefaultGlobalsOrmCacheLevel",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 33,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "orm.cache_level",
+                                            "file": "stub__globals.zep",
+                                            "line": 35,
+                                            "char": 30
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 35,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 35,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 35,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 35,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 36,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 34,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 33,
+                    "last-line": 38,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setDefaultGlobalsOrmCachePrefix",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals.zep",
+                            "line": 38,
+                            "char": 62
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "orm.cache_prefix",
+                                            "file": "stub__globals.zep",
+                                            "line": 40,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 40,
+                                        "char": 34
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals.zep",
+                                            "line": 40,
+                                            "char": 41
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 40,
+                                        "char": 41
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 40,
+                                "char": 42
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 41,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__globals.zep",
+                        "line": 39,
+                        "char": 2
+                    },
+                    "file": "stub__globals.zep",
+                    "line": 38,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "db.my_setting_1",
+                                            "file": "stub__globals.zep",
+                                            "line": 50,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 50,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 50,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 51,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 48,
+                    "last-line": 55,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "db.my_setting_2",
+                                            "file": "stub__globals.zep",
+                                            "line": 58,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 58,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 58,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 56,
+                    "last-line": 63,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "db.my_setting_3",
+                                            "file": "stub__globals.zep",
+                                            "line": 66,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 66,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 66,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 67,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 64,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals4",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_1",
+                                            "file": "stub__globals.zep",
+                                            "line": 74,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 74,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 74,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 75,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 72,
+                    "last-line": 79,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals5",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_2",
+                                            "file": "stub__globals.zep",
+                                            "line": 82,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 82,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 82,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 83,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 80,
+                    "last-line": 87,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals6",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_3",
+                                            "file": "stub__globals.zep",
+                                            "line": 90,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 90,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 90,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 91,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 88,
+                    "last-line": 95,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals7",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_4",
+                                            "file": "stub__globals.zep",
+                                            "line": 98,
+                                            "char": 34
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 98,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 98,
+                                "char": 35
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 99,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 96,
+                    "last-line": 103,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobals8",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "my_setting_5",
+                                            "file": "stub__globals.zep",
+                                            "line": 106,
+                                            "char": 40
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 106,
+                                        "char": 40
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 106,
+                                "char": 41
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 107,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @return mixed\n     *",
+                    "file": "stub__globals.zep",
+                    "line": 104,
+                    "last-line": 111,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobalsOrmCacheLevel",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "orm.cache_level",
+                                            "file": "stub__globals.zep",
+                                            "line": 114,
+                                            "char": 37
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 114,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 114,
+                                "char": 38
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 115,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @return mixed\n\t *",
+                    "file": "stub__globals.zep",
+                    "line": 112,
+                    "last-line": 119,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultGlobalsOrmCachePrefix",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "globals_get",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "orm.cache_prefix",
+                                            "file": "stub__globals.zep",
+                                            "line": 122,
+                                            "char": 44
+                                        },
+                                        "file": "stub__globals.zep",
+                                        "line": 122,
+                                        "char": 44
+                                    }
+                                ],
+                                "file": "stub__globals.zep",
+                                "line": 122,
+                                "char": 45
+                            },
+                            "file": "stub__globals.zep",
+                            "line": 123,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @return mixed\n     *",
+                    "file": "stub__globals.zep",
+                    "line": 120,
+                    "last-line": 124,
+                    "char": 19
+                }
+            ],
+            "file": "stub__globals.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__globals.zep",
+        "line": 4,
+        "char": 5
+    }
+]

@@ -1,0 +1,46 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Issue2165",
+        "file": "stub__issue2165_issueinterface.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "IssueInterface",
+        "extends": [
+            {
+                "type": "variable",
+                "value": "IssueExtendInterface",
+                "file": "stub__issue2165_issueinterface.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "EPSILON",
+                    "default": {
+                        "type": "double",
+                        "value": "0.00000001",
+                        "file": "stub__issue2165_issueinterface.zep",
+                        "line": 5,
+                        "char": 31
+                    },
+                    "file": "stub__issue2165_issueinterface.zep",
+                    "line": 6,
+                    "char": 1
+                }
+            ],
+            "file": "stub__issue2165_issueinterface.zep",
+            "line": 6,
+            "char": 1
+        },
+        "file": "stub__issue2165_issueinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

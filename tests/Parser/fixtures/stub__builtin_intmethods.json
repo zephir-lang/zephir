@@ -1,0 +1,823 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\BuiltIn",
+        "file": "stub__builtin_intmethods.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "IntMethods",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getAbs",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 6,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 8,
+                                    "char": 14
+                                },
+                                "name": "abs",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 8,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getAbs1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "int",
+                                    "value": "-5",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 13,
+                                    "char": 13
+                                },
+                                "name": "abs",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 13,
+                                "char": 19
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getBinary",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 16,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 18,
+                                    "char": 14
+                                },
+                                "name": "toBinary",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 18,
+                                "char": 25
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getHex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 21,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 23,
+                                    "char": 14
+                                },
+                                "name": "toHex",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 23,
+                                "char": 22
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getOctal",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 26,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 28,
+                                    "char": 14
+                                },
+                                "name": "toOctal",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 28,
+                                "char": 24
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 26,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getPow",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 31,
+                            "char": 32
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "exp",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 31,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 33,
+                                    "char": 14
+                                },
+                                "name": "pow",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "exp",
+                                            "file": "stub__builtin_intmethods.zep",
+                                            "line": 33,
+                                            "char": 22
+                                        },
+                                        "file": "stub__builtin_intmethods.zep",
+                                        "line": 33,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 33,
+                                "char": 23
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 34,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 31,
+                    "last-line": 36,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSqrt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 36,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 38,
+                                    "char": 14
+                                },
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 38,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 36,
+                    "last-line": 41,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getExp",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 41,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 43,
+                                    "char": 14
+                                },
+                                "name": "exp",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 43,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 41,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSin",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 46,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 48,
+                                    "char": 14
+                                },
+                                "name": "sin",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 48,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 49,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 46,
+                    "last-line": 51,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getCos",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 51,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 53,
+                                    "char": 14
+                                },
+                                "name": "cos",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 53,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 51,
+                    "last-line": 56,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getTan",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 56,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 58,
+                                    "char": 14
+                                },
+                                "name": "tan",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 58,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 56,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getAsin",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 61,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 63,
+                                    "char": 14
+                                },
+                                "name": "asin",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 63,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 61,
+                    "last-line": 66,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getAcos",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 66,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 68,
+                                    "char": 14
+                                },
+                                "name": "acos",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 68,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 66,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getAtan",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 71,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 73,
+                                    "char": 14
+                                },
+                                "name": "atan",
+                                "call-type": 1,
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 73,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 71,
+                    "last-line": 76,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLog",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 76,
+                            "char": 32
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "base",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "-1",
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 76,
+                                "char": 47
+                            },
+                            "reference": 0,
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 76,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "base",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 78,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "-1",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 78,
+                                    "char": 18
+                                },
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 78,
+                                "char": 18
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__builtin_intmethods.zep",
+                                            "line": 79,
+                                            "char": 15
+                                        },
+                                        "name": "log",
+                                        "call-type": 1,
+                                        "file": "stub__builtin_intmethods.zep",
+                                        "line": 79,
+                                        "char": 21
+                                    },
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 80,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 81,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__builtin_intmethods.zep",
+                                    "line": 81,
+                                    "char": 14
+                                },
+                                "name": "log",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "base",
+                                            "file": "stub__builtin_intmethods.zep",
+                                            "line": 81,
+                                            "char": 23
+                                        },
+                                        "file": "stub__builtin_intmethods.zep",
+                                        "line": 81,
+                                        "char": 23
+                                    }
+                                ],
+                                "file": "stub__builtin_intmethods.zep",
+                                "line": 81,
+                                "char": 24
+                            },
+                            "file": "stub__builtin_intmethods.zep",
+                            "line": 82,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_intmethods.zep",
+                    "line": 76,
+                    "last-line": 83,
+                    "char": 16
+                }
+            ],
+            "file": "stub__builtin_intmethods.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__builtin_intmethods.zep",
+        "line": 4,
+        "char": 5
+    }
+]

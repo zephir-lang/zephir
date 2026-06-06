@@ -1,0 +1,625 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_staticpublicproperties.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StaticPublicProperties",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someNull",
+                    "docblock": "**\n\t * This is a public property with no initial value\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 14,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someNullInitial",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 15,
+                        "char": 38
+                    },
+                    "docblock": "**\n\t * This is a public property with initial null value\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 19,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someFalse",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 20,
+                        "char": 33
+                    },
+                    "docblock": "**\n\t * This is a public property with initial boolean false\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 24,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someTrue",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 25,
+                        "char": 31
+                    },
+                    "docblock": "**\n\t * This is a public property with initial boolean true\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 29,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someInteger",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 30,
+                        "char": 32
+                    },
+                    "docblock": "**\n\t * This is a public property with an initial integer value\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 34,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someDouble",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 35,
+                        "char": 34
+                    },
+                    "docblock": "**\n\t * This is a public property with an initial double value\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 39,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someString",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 40,
+                        "char": 33
+                    },
+                    "docblock": "**\n\t * This is a public property with an initial string value\n\t *",
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 42,
+                    "char": 7
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someAdd",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 42,
+                        "char": 27
+                    },
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 43,
+                    "char": 7
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someSub",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "stub__properties_staticpublicproperties.zep",
+                        "line": 43,
+                        "char": 27
+                    },
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 45,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setSomeString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 45,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someString",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "val",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 47,
+                                        "char": 29
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 47,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 45,
+                    "last-line": 50,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testAddAndSub",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "add-assign",
+                                    "variable": "self",
+                                    "property": "someAdd",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 52,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 52,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 53,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "sub-assign",
+                                    "variable": "self",
+                                    "property": "someSub",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 53,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 53,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 50,
+                    "last-line": 56,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testAddAndSub2",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "add-assign",
+                                    "variable": "self",
+                                    "property": "someAdd",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "2string",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 58,
+                                        "char": 30
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 58,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 59,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "sub-assign",
+                                    "variable": "self",
+                                    "property": "someSub",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "2string",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 59,
+                                        "char": 30
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 59,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 60,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 56,
+                    "last-line": 62,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testAddAndSub3",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "add-assign",
+                                    "variable": "self",
+                                    "property": "someAdd",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "1.0",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 64,
+                                        "char": 26
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 64,
+                                    "char": 26
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 65,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "sub-assign",
+                                    "variable": "self",
+                                    "property": "someSub",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "1.0",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 65,
+                                        "char": 26
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 65,
+                                    "char": 26
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 66,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 62,
+                    "last-line": 68,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testAddAndSub4",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 70,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 71,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "v",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 71,
+                                        "char": 12
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 71,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 72,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "add-assign",
+                                    "variable": "self",
+                                    "property": "someAdd",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "v",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 72,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 72,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 73,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "sub-assign",
+                                    "variable": "self",
+                                    "property": "someSub",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "v",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 73,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 73,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 68,
+                    "last-line": 76,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testAddAndSub5",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 78,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 79,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "v",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "1",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 79,
+                                        "char": 12
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 79,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 80,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "add-assign",
+                                    "variable": "self",
+                                    "property": "someAdd",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "v",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 80,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 80,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 81,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "sub-assign",
+                                    "variable": "self",
+                                    "property": "someSub",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "v",
+                                        "file": "stub__properties_staticpublicproperties.zep",
+                                        "line": 81,
+                                        "char": 24
+                                    },
+                                    "file": "stub__properties_staticpublicproperties.zep",
+                                    "line": 81,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__properties_staticpublicproperties.zep",
+                            "line": 82,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticpublicproperties.zep",
+                    "line": 76,
+                    "last-line": 83,
+                    "char": 23
+                }
+            ],
+            "file": "stub__properties_staticpublicproperties.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__properties_staticpublicproperties.zep",
+        "line": 4,
+        "char": 5
+    }
+]

@@ -1,0 +1,152 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Cast tests\n *",
+        "file": "stub__typeinstances.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__typeinstances.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "TypeInstances",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstanceOfString1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new-type",
+                                "internal-type": "string",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "24",
+                                            "file": "stub__typeinstances.zep",
+                                            "line": 12,
+                                            "char": 23
+                                        },
+                                        "file": "stub__typeinstances.zep",
+                                        "line": 12,
+                                        "char": 23
+                                    }
+                                ],
+                                "file": "stub__typeinstances.zep",
+                                "line": 12,
+                                "char": 24
+                            },
+                            "file": "stub__typeinstances.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__typeinstances.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstanceOfString2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new-type",
+                                "internal-type": "string",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "-24",
+                                            "file": "stub__typeinstances.zep",
+                                            "line": 17,
+                                            "char": 24
+                                        },
+                                        "file": "stub__typeinstances.zep",
+                                        "line": 17,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__typeinstances.zep",
+                                "line": 17,
+                                "char": 25
+                            },
+                            "file": "stub__typeinstances.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__typeinstances.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstanceOfString3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new-type",
+                                "internal-type": "string",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__typeinstances.zep",
+                                            "line": 22,
+                                            "char": 22
+                                        },
+                                        "file": "stub__typeinstances.zep",
+                                        "line": 22,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__typeinstances.zep",
+                                "line": 22,
+                                "char": 23
+                            },
+                            "file": "stub__typeinstances.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__typeinstances.zep",
+                    "line": 20,
+                    "last-line": 24,
+                    "char": 19
+                }
+            ],
+            "file": "stub__typeinstances.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__typeinstances.zep",
+        "line": 8,
+        "char": 5
+    }
+]

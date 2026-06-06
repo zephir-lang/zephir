@@ -1,0 +1,1100 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__regexdna.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * RegexDNA\n *\n * @see https:\/\/www.haskell.org\/haskellwiki\/Shootout\/Regex_DNA\n *",
+        "file": "stub__regexdna.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "RegexDNA",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "process",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "path",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__regexdna.zep",
+                            "line": 11,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "variants",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 15
+                                },
+                                {
+                                    "variable": "vIUB",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 21
+                                },
+                                {
+                                    "variable": "vIUBnew",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 30
+                                },
+                                {
+                                    "variable": "stuffToRemove",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 45
+                                },
+                                {
+                                    "variable": "contents",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 55
+                                },
+                                {
+                                    "variable": "initialLength",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 13,
+                                    "char": 70
+                                },
+                                {
+                                    "variable": "regex",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 14,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "codeLength",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 14,
+                                    "char": 21
+                                },
+                                {
+                                    "variable": "discard",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 14,
+                                        "char": 37
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 14,
+                                    "char": 37
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 16,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "variants",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "agggtaaa|tttaccct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 17,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 17,
+                                                "char": 21
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "[cgt]gggtaaa|tttaccc[acg]",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 18,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 18,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "a[act]ggtaaa|tttacc[agt]t",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 19,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 19,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "ag[act]gtaaa|tttac[agt]ct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 20,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 20,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "agg[act]taaa|ttta[agt]cct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 21,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 21,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "aggg[acg]aaa|ttt[cgt]ccct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 22,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 22,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "agggt[cgt]aa|tt[acg]accct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 23,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 23,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "agggta[cgt]a|t[acg]taccct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 24,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 24,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "agggtaa[cgt]|[acg]ttaccct",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 26,
+                                                    "char": 3
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 26,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 26,
+                                        "char": 4
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 26,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 28,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 28,
+                                        "char": 16
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 28,
+                                    "char": 16
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 28,
+                                        "char": 33
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 28,
+                                    "char": 33
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/B\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 29,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 29,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(c|g|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 29,
+                                        "char": 41
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 29,
+                                    "char": 41
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/D\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 30,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 30,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|g|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 30,
+                                        "char": 41
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 30,
+                                    "char": 41
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/H\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 31,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 31,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|c|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 31,
+                                        "char": 41
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 31,
+                                    "char": 41
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/K\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 32,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 32,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(g|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 32,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 32,
+                                    "char": 39
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/M\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 33,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 33,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|c)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 33,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 33,
+                                    "char": 39
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/N\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 34,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 34,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|c|g|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 34,
+                                        "char": 43
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 34,
+                                    "char": 43
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/R\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 35,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 35,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|g)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 35,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 35,
+                                    "char": 39
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/S\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 36,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 36,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(c|g)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 36,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 36,
+                                    "char": 39
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/V\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 37,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 37,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|c|g)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 37,
+                                        "char": 41
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 37,
+                                    "char": 41
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/W\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 38,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 38,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(a|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 38,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 38,
+                                    "char": 39
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/Y\/S",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 39,
+                                        "char": 17
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 39,
+                                    "char": 17
+                                },
+                                {
+                                    "assign-type": "variable-append",
+                                    "operator": "assign",
+                                    "variable": "vIUBnew",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "(c|t)",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 39,
+                                        "char": 39
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 39,
+                                    "char": 39
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 41,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "stuffToRemove",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "^>.*$|\\n",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 41,
+                                        "char": 31
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 41,
+                                    "char": 31
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "discard",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__regexdna.zep",
+                                        "line": 42,
+                                        "char": 18
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 42,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 45,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "contents",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "file_get_contents",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "path",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 45,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 45,
+                                                "char": 40
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 45,
+                                        "char": 41
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 45,
+                                    "char": 41
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "initialLength",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strlen",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "contents",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 46,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 46,
+                                                "char": 35
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 46,
+                                        "char": 36
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 46,
+                                    "char": 36
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 49,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "contents",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "preg_replace",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "string",
+                                                            "value": "\/",
+                                                            "file": "stub__regexdna.zep",
+                                                            "line": 49,
+                                                            "char": 33
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "stuffToRemove",
+                                                            "file": "stub__regexdna.zep",
+                                                            "line": 49,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__regexdna.zep",
+                                                        "line": 49,
+                                                        "char": 49
+                                                    },
+                                                    "right": {
+                                                        "type": "string",
+                                                        "value": "\/mS",
+                                                        "file": "stub__regexdna.zep",
+                                                        "line": 49,
+                                                        "char": 54
+                                                    },
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 49,
+                                                    "char": 54
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 49,
+                                                "char": 54
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 49,
+                                                    "char": 56
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 49,
+                                                "char": 56
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "contents",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 49,
+                                                    "char": 66
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 49,
+                                                "char": 66
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 49,
+                                        "char": 67
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 49,
+                                    "char": 67
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "codeLength",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strlen",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "contents",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 50,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 50,
+                                                "char": 32
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 50,
+                                        "char": 33
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 50,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 53,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "variants",
+                                "file": "stub__regexdna.zep",
+                                "line": 53,
+                                "char": 25
+                            },
+                            "value": "regex",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "variable",
+                                            "value": "regex",
+                                            "file": "stub__regexdna.zep",
+                                            "line": 54,
+                                            "char": 15
+                                        },
+                                        {
+                                            "type": "string",
+                                            "value": " ",
+                                            "file": "stub__regexdna.zep",
+                                            "line": 54,
+                                            "char": 19
+                                        },
+                                        {
+                                            "type": "fcall",
+                                            "name": "preg_match_all",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "\/",
+                                                                "file": "stub__regexdna.zep",
+                                                                "line": 54,
+                                                                "char": 38
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "regex",
+                                                                "file": "stub__regexdna.zep",
+                                                                "line": 54,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__regexdna.zep",
+                                                            "line": 54,
+                                                            "char": 46
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "\/iS",
+                                                            "file": "stub__regexdna.zep",
+                                                            "line": 54,
+                                                            "char": 51
+                                                        },
+                                                        "file": "stub__regexdna.zep",
+                                                        "line": 54,
+                                                        "char": 51
+                                                    },
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 54,
+                                                    "char": 51
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "contents",
+                                                        "file": "stub__regexdna.zep",
+                                                        "line": 54,
+                                                        "char": 61
+                                                    },
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 54,
+                                                    "char": 61
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "discard",
+                                                        "file": "stub__regexdna.zep",
+                                                        "line": 54,
+                                                        "char": 70
+                                                    },
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 54,
+                                                    "char": 70
+                                                }
+                                            ],
+                                            "file": "stub__regexdna.zep",
+                                            "line": 54,
+                                            "char": 71
+                                        },
+                                        {
+                                            "type": "char",
+                                            "value": "\\n",
+                                            "file": "stub__regexdna.zep",
+                                            "line": 54,
+                                            "char": 76
+                                        }
+                                    ],
+                                    "file": "stub__regexdna.zep",
+                                    "line": 55,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 58,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "contents",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "preg_replace",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "vIUB",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 58,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 58,
+                                                "char": 35
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "vIUBnew",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 58,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 58,
+                                                "char": 44
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "contents",
+                                                    "file": "stub__regexdna.zep",
+                                                    "line": 58,
+                                                    "char": 54
+                                                },
+                                                "file": "stub__regexdna.zep",
+                                                "line": 58,
+                                                "char": 54
+                                            }
+                                        ],
+                                        "file": "stub__regexdna.zep",
+                                        "line": 58,
+                                        "char": 55
+                                    },
+                                    "file": "stub__regexdna.zep",
+                                    "line": 58,
+                                    "char": 55
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 60,
+                            "char": 6
+                        },
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "char",
+                                    "value": "\\n",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 11
+                                },
+                                {
+                                    "type": "variable",
+                                    "value": "initialLength",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 26
+                                },
+                                {
+                                    "type": "char",
+                                    "value": "\\n",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 31
+                                },
+                                {
+                                    "type": "variable",
+                                    "value": "codeLength",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 43
+                                },
+                                {
+                                    "type": "char",
+                                    "value": "\\n",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 48
+                                },
+                                {
+                                    "type": "fcall",
+                                    "name": "strlen",
+                                    "call-type": 1,
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "variable",
+                                                "value": "contents",
+                                                "file": "stub__regexdna.zep",
+                                                "line": 60,
+                                                "char": 65
+                                            },
+                                            "file": "stub__regexdna.zep",
+                                            "line": 60,
+                                            "char": 65
+                                        }
+                                    ],
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 66
+                                },
+                                {
+                                    "type": "char",
+                                    "value": "\\n",
+                                    "file": "stub__regexdna.zep",
+                                    "line": 60,
+                                    "char": 71
+                                }
+                            ],
+                            "file": "stub__regexdna.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__regexdna.zep",
+                    "line": 11,
+                    "last-line": 62,
+                    "char": 16
+                }
+            ],
+            "file": "stub__regexdna.zep",
+            "line": 9,
+            "char": 5
+        },
+        "file": "stub__regexdna.zep",
+        "line": 9,
+        "char": 5
+    }
+]

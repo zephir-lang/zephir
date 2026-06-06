@@ -1,0 +1,36 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__comments_sl_comment.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Comment",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "test_me",
+                    "file": "phpt__comments_sl_comment.zep",
+                    "line": 6,
+                    "last-line": 9,
+                    "char": 19
+                }
+            ],
+            "file": "phpt__comments_sl_comment.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "phpt__comments_sl_comment.zep",
+        "line": 4,
+        "char": 5
+    }
+]

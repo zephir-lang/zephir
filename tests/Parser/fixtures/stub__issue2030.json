@@ -1,0 +1,376 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2030.zep",
+        "line": 7,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Double-quoted string escape sequences must match PHP byte-for-byte.\n *\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2030\n *",
+        "file": "stub__issue2030.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2030",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "escapeChar",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\e[0;31m",
+                                "file": "stub__issue2030.zep",
+                                "line": 12,
+                                "char": 18
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 11,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 11,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unicodeAscii",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\u{41}",
+                                "file": "stub__issue2030.zep",
+                                "line": 17,
+                                "char": 16
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 16,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 16,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unicode2Byte",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\u{E9}",
+                                "file": "stub__issue2030.zep",
+                                "line": 22,
+                                "char": 16
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unicode3Byte",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\u{20AC}",
+                                "file": "stub__issue2030.zep",
+                                "line": 27,
+                                "char": 18
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 26,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 26,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unicode4Byte",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\u{1F600}",
+                                "file": "stub__issue2030.zep",
+                                "line": 32,
+                                "char": 19
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 31,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 31,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "hexFollowedByHex",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\x41BC",
+                                "file": "stub__issue2030.zep",
+                                "line": 37,
+                                "char": 16
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 36,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 36,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "maxCodepoint",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\\u{10FFFF}",
+                                "file": "stub__issue2030.zep",
+                                "line": 42,
+                                "char": 20
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 41,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 41,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "quotesAndBackslashes",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "a\\\"b\\\\c\\u{1F4A9}",
+                                "file": "stub__issue2030.zep",
+                                "line": 47,
+                                "char": 26
+                            },
+                            "file": "stub__issue2030.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue2030.zep",
+                                "line": 46,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2030.zep",
+                        "line": 46,
+                        "char": 2
+                    },
+                    "file": "stub__issue2030.zep",
+                    "line": 45,
+                    "last-line": 49,
+                    "char": 16
+                }
+            ],
+            "file": "stub__issue2030.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__issue2030.zep",
+        "line": 8,
+        "char": 5
+    }
+]

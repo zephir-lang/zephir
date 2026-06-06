@@ -1,0 +1,19 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Extend\\Db\\Query\\Placeholder",
+        "file": "stub__oo_extend_db_query_placeholder_Exception.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Exception",
+        "abstract": 0,
+        "final": 0,
+        "extends": "\\Stub\\Oo\\Extend\\Db\\Query\\Exception",
+        "file": "stub__oo_extend_db_query_placeholder_Exception.zep",
+        "line": 3,
+        "char": 5
+    }
+]

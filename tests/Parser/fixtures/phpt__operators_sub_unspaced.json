@@ -1,0 +1,227 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 2,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 2,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 2,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 2,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 3,
+                                "char": 12
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 3,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 3,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 4,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 4,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 4,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 4,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 4,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 5,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "int",
+                                "value": "5",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 5,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 5,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 5,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 5,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 6,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "array-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "arr",
+                                    "file": "phpt__operators_sub_unspaced.zep",
+                                    "line": 6,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "phpt__operators_sub_unspaced.zep",
+                                    "line": 6,
+                                    "char": 15
+                                },
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 6,
+                                "char": 16
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_sub_unspaced.zep",
+                                "line": 6,
+                                "char": 18
+                            },
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 6,
+                            "char": 18
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 6,
+                        "char": 18
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 7,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "int",
+                            "value": "-1",
+                            "file": "phpt__operators_sub_unspaced.zep",
+                            "line": 7,
+                            "char": 12
+                        },
+                        "file": "phpt__operators_sub_unspaced.zep",
+                        "line": 7,
+                        "char": 12
+                    }
+                ],
+                "file": "phpt__operators_sub_unspaced.zep",
+                "line": 8,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_sub_unspaced.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,202 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_substr.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Substr",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTwoArguments",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 6,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "start",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 6,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__optimizers_substr.zep",
+                                            "line": 8,
+                                            "char": 20
+                                        },
+                                        "file": "stub__optimizers_substr.zep",
+                                        "line": 8,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "start",
+                                            "file": "stub__optimizers_substr.zep",
+                                            "line": 8,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_substr.zep",
+                                        "line": 8,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__optimizers_substr.zep",
+                                "line": 8,
+                                "char": 28
+                            },
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_substr.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testThreeArguments",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 11,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "start",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 11,
+                            "char": 55
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 11,
+                            "char": 67
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__optimizers_substr.zep",
+                                            "line": 13,
+                                            "char": 20
+                                        },
+                                        "file": "stub__optimizers_substr.zep",
+                                        "line": 13,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "start",
+                                            "file": "stub__optimizers_substr.zep",
+                                            "line": 13,
+                                            "char": 27
+                                        },
+                                        "file": "stub__optimizers_substr.zep",
+                                        "line": 13,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "offset",
+                                            "file": "stub__optimizers_substr.zep",
+                                            "line": 13,
+                                            "char": 35
+                                        },
+                                        "file": "stub__optimizers_substr.zep",
+                                        "line": 13,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__optimizers_substr.zep",
+                                "line": 13,
+                                "char": 36
+                            },
+                            "file": "stub__optimizers_substr.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_substr.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 16
+                }
+            ],
+            "file": "stub__optimizers_substr.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_substr.zep",
+        "line": 4,
+        "char": 5
+    }
+]

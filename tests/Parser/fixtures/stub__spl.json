@@ -1,0 +1,81 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__spl.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Spl",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "issue1212",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "file",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spl.zep",
+                            "line": 8,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\SplFileObject",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "file",
+                                            "file": "stub__spl.zep",
+                                            "line": 10,
+                                            "char": 39
+                                        },
+                                        "file": "stub__spl.zep",
+                                        "line": 10,
+                                        "char": 39
+                                    }
+                                ],
+                                "file": "stub__spl.zep",
+                                "line": 10,
+                                "char": 40
+                            },
+                            "file": "stub__spl.zep",
+                            "line": 11,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1212\n     *",
+                    "file": "stub__spl.zep",
+                    "line": 8,
+                    "last-line": 12,
+                    "char": 26
+                }
+            ],
+            "file": "stub__spl.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__spl.zep",
+        "line": 3,
+        "char": 5
+    }
+]

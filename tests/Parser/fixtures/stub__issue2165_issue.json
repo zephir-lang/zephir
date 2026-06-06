@@ -1,0 +1,1924 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Issue2165",
+        "file": "stub__issue2165_issue.zep",
+        "line": 3,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "InvalidArgumentException",
+                "file": "stub__issue2165_issue.zep",
+                "line": 3,
+                "char": 29
+            }
+        ],
+        "file": "stub__issue2165_issue.zep",
+        "line": 7,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2165\n *",
+        "file": "stub__issue2165_issue.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue",
+        "abstract": 0,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "IssueInterface",
+                "file": "stub__issue2165_issue.zep",
+                "line": 9,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 11,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "m",
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 12,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "n",
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 14,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "build",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "empty-array",
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 14,
+                                "char": 46
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 14,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "self",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 16,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 16,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "bool",
+                                            "value": "true",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 16,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 16,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 16,
+                                "char": 33
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 17,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 15,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 15,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 15,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 14,
+                    "last-line": 19,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 19,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "validate",
+                            "const": 1,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 19,
+                                "char": 68
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 19,
+                            "char": 68
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 21,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "rowA",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 21,
+                                    "char": 20
+                                },
+                                {
+                                    "variable": "valueA",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 21,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 23,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "m",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "count",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 23,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 23,
+                                                "char": 24
+                                            }
+                                        ],
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 23,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 23,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 24,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "count",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "fcall",
+                                                    "name": "current",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "a",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 24,
+                                                                "char": 32
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 24,
+                                                            "char": 32
+                                                        }
+                                                    ],
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 24,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 24,
+                                                "char": 33
+                                            }
+                                        ],
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 24,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 24,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 26,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "variable",
+                                "value": "validate",
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 26,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "array_values",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "a",
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 27,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 27,
+                                                        "char": 35
+                                                    }
+                                                ],
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 27,
+                                                "char": 36
+                                            },
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 27,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 29,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "for",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 29,
+                                        "char": 30
+                                    },
+                                    "key": "i",
+                                    "value": "rowA",
+                                    "reverse": 0,
+                                    "statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "unlikely",
+                                                "left": {
+                                                    "type": "not-identical",
+                                                    "left": {
+                                                        "type": "fcall",
+                                                        "name": "count",
+                                                        "call-type": 1,
+                                                        "parameters": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "variable",
+                                                                    "value": "rowA",
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 30,
+                                                                    "char": 39
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 30,
+                                                                "char": 39
+                                                            }
+                                                        ],
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 30,
+                                                        "char": 43
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "n",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 30,
+                                                        "char": 47
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 30,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 30,
+                                                "char": 47
+                                            },
+                                            "statements": [
+                                                {
+                                                    "type": "throw",
+                                                    "expr": {
+                                                        "type": "new",
+                                                        "class": "InvalidArgumentException",
+                                                        "dynamic": 0,
+                                                        "parameters": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "concat",
+                                                                    "left": {
+                                                                        "type": "concat",
+                                                                        "left": {
+                                                                            "type": "concat",
+                                                                            "left": {
+                                                                                "type": "concat",
+                                                                                "left": {
+                                                                                    "type": "concat",
+                                                                                    "left": {
+                                                                                        "type": "concat",
+                                                                                        "left": {
+                                                                                            "type": "concat",
+                                                                                            "left": {
+                                                                                                "type": "concat",
+                                                                                                "left": {
+                                                                                                    "type": "string",
+                                                                                                    "value": "The number of columns",
+                                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                                    "line": 32,
+                                                                                                    "char": 25
+                                                                                                },
+                                                                                                "right": {
+                                                                                                    "type": "string",
+                                                                                                    "value": " must be equal for all rows, ",
+                                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                                    "line": 32,
+                                                                                                    "char": 57
+                                                                                                },
+                                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                                "line": 32,
+                                                                                                "char": 57
+                                                                                            },
+                                                                                            "right": {
+                                                                                                "type": "fcall",
+                                                                                                "name": "strval",
+                                                                                                "call-type": 1,
+                                                                                                "parameters": [
+                                                                                                    {
+                                                                                                        "parameter": {
+                                                                                                            "type": "variable",
+                                                                                                            "value": "n",
+                                                                                                            "file": "stub__issue2165_issue.zep",
+                                                                                                            "line": 32,
+                                                                                                            "char": 67
+                                                                                                        },
+                                                                                                        "file": "stub__issue2165_issue.zep",
+                                                                                                        "line": 32,
+                                                                                                        "char": 67
+                                                                                                    }
+                                                                                                ],
+                                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                                "line": 33,
+                                                                                                "char": 25
+                                                                                            },
+                                                                                            "file": "stub__issue2165_issue.zep",
+                                                                                            "line": 33,
+                                                                                            "char": 25
+                                                                                        },
+                                                                                        "right": {
+                                                                                            "type": "string",
+                                                                                            "value": " needed but ",
+                                                                                            "file": "stub__issue2165_issue.zep",
+                                                                                            "line": 33,
+                                                                                            "char": 40
+                                                                                        },
+                                                                                        "file": "stub__issue2165_issue.zep",
+                                                                                        "line": 33,
+                                                                                        "char": 40
+                                                                                    },
+                                                                                    "right": {
+                                                                                        "type": "fcall",
+                                                                                        "name": "count",
+                                                                                        "call-type": 1,
+                                                                                        "parameters": [
+                                                                                            {
+                                                                                                "parameter": {
+                                                                                                    "type": "variable",
+                                                                                                    "value": "rowA",
+                                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                                    "line": 33,
+                                                                                                    "char": 52
+                                                                                                },
+                                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                                "line": 33,
+                                                                                                "char": 52
+                                                                                            }
+                                                                                        ],
+                                                                                        "file": "stub__issue2165_issue.zep",
+                                                                                        "line": 33,
+                                                                                        "char": 54
+                                                                                    },
+                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                    "line": 33,
+                                                                                    "char": 54
+                                                                                },
+                                                                                "right": {
+                                                                                    "type": "string",
+                                                                                    "value": " given",
+                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                    "line": 34,
+                                                                                    "char": 25
+                                                                                },
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 34,
+                                                                                "char": 25
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "string",
+                                                                                "value": " at row offset ",
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 34,
+                                                                                "char": 43
+                                                                            },
+                                                                            "file": "stub__issue2165_issue.zep",
+                                                                            "line": 34,
+                                                                            "char": 43
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "variable",
+                                                                            "value": "i",
+                                                                            "file": "stub__issue2165_issue.zep",
+                                                                            "line": 34,
+                                                                            "char": 47
+                                                                        },
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 34,
+                                                                        "char": 47
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "string",
+                                                                        "value": ".",
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 34,
+                                                                        "char": 50
+                                                                    },
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 34,
+                                                                    "char": 50
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 34,
+                                                                "char": 50
+                                                            }
+                                                        ],
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 34,
+                                                        "char": 51
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 35,
+                                                    "char": 17
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 37,
+                                            "char": 19
+                                        },
+                                        {
+                                            "type": "for",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "rowA",
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 37,
+                                                "char": 36
+                                            },
+                                            "value": "valueA",
+                                            "reverse": 0,
+                                            "statements": [
+                                                {
+                                                    "type": "if",
+                                                    "expr": {
+                                                        "type": "unlikely",
+                                                        "left": {
+                                                            "type": "and",
+                                                            "left": {
+                                                                "type": "not",
+                                                                "left": {
+                                                                    "type": "fcall",
+                                                                    "name": "is_int",
+                                                                    "call-type": 1,
+                                                                    "parameters": [
+                                                                        {
+                                                                            "parameter": {
+                                                                                "type": "variable",
+                                                                                "value": "valueA",
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 38,
+                                                                                "char": 47
+                                                                            },
+                                                                            "file": "stub__issue2165_issue.zep",
+                                                                            "line": 38,
+                                                                            "char": 47
+                                                                        }
+                                                                    ],
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 38,
+                                                                    "char": 50
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 38,
+                                                                "char": 50
+                                                            },
+                                                            "right": {
+                                                                "type": "not",
+                                                                "left": {
+                                                                    "type": "fcall",
+                                                                    "name": "is_float",
+                                                                    "call-type": 1,
+                                                                    "parameters": [
+                                                                        {
+                                                                            "parameter": {
+                                                                                "type": "variable",
+                                                                                "value": "valueA",
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 38,
+                                                                                "char": 68
+                                                                            },
+                                                                            "file": "stub__issue2165_issue.zep",
+                                                                            "line": 38,
+                                                                            "char": 68
+                                                                        }
+                                                                    ],
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 38,
+                                                                    "char": 70
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 38,
+                                                                "char": 70
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 38,
+                                                            "char": 70
+                                                        },
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 38,
+                                                        "char": 70
+                                                    },
+                                                    "statements": [
+                                                        {
+                                                            "type": "throw",
+                                                            "expr": {
+                                                                "type": "new",
+                                                                "class": "InvalidArgumentException",
+                                                                "dynamic": 0,
+                                                                "parameters": [
+                                                                    {
+                                                                        "parameter": {
+                                                                            "type": "concat",
+                                                                            "left": {
+                                                                                "type": "concat",
+                                                                                "left": {
+                                                                                    "type": "concat",
+                                                                                    "left": {
+                                                                                        "type": "string",
+                                                                                        "value": "Matrix element must",
+                                                                                        "file": "stub__issue2165_issue.zep",
+                                                                                        "line": 40,
+                                                                                        "char": 29
+                                                                                    },
+                                                                                    "right": {
+                                                                                        "type": "string",
+                                                                                        "value": " be an integer or floating point number, ",
+                                                                                        "file": "stub__issue2165_issue.zep",
+                                                                                        "line": 41,
+                                                                                        "char": 29
+                                                                                    },
+                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                    "line": 41,
+                                                                                    "char": 29
+                                                                                },
+                                                                                "right": {
+                                                                                    "type": "fcall",
+                                                                                    "name": "gettype",
+                                                                                    "call-type": 1,
+                                                                                    "parameters": [
+                                                                                        {
+                                                                                            "parameter": {
+                                                                                                "type": "variable",
+                                                                                                "value": "valueA",
+                                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                                "line": 41,
+                                                                                                "char": 45
+                                                                                            },
+                                                                                            "file": "stub__issue2165_issue.zep",
+                                                                                            "line": 41,
+                                                                                            "char": 45
+                                                                                        }
+                                                                                    ],
+                                                                                    "file": "stub__issue2165_issue.zep",
+                                                                                    "line": 41,
+                                                                                    "char": 47
+                                                                                },
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 41,
+                                                                                "char": 47
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "string",
+                                                                                "value": " given.",
+                                                                                "file": "stub__issue2165_issue.zep",
+                                                                                "line": 41,
+                                                                                "char": 56
+                                                                            },
+                                                                            "file": "stub__issue2165_issue.zep",
+                                                                            "line": 41,
+                                                                            "char": 56
+                                                                        },
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 41,
+                                                                        "char": 56
+                                                                    }
+                                                                ],
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 41,
+                                                                "char": 57
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 42,
+                                                            "char": 21
+                                                        }
+                                                    ],
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 43,
+                                                    "char": 17
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 45,
+                                            "char": 19
+                                        },
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable-append",
+                                                    "operator": "assign",
+                                                    "variable": "rowA",
+                                                    "expr": {
+                                                        "type": "fcall",
+                                                        "name": "array_values",
+                                                        "call-type": 1,
+                                                        "parameters": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "variable",
+                                                                    "value": "rowA",
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 45,
+                                                                    "char": 47
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 45,
+                                                                "char": 47
+                                                            }
+                                                        ],
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 45,
+                                                        "char": 48
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 45,
+                                                    "char": 48
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 46,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 47,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 49,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 49,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 49,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 50,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "m",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "m",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 50,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 50,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 51,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "n",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "n",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 51,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 51,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 52,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 19,
+                    "last-line": 54,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "quick",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 1,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "empty-array",
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 54,
+                                "char": 52
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 54,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "self",
+                                "dynamic": 0,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 56,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 56,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "bool",
+                                            "value": "false",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 56,
+                                            "char": 33
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 56,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 56,
+                                "char": 34
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 57,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 55,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 55,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 55,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 54,
+                    "last-line": 59,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "ones",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "m",
+                            "const": 1,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 59,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 1,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 59,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "fill",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 61,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 61,
+                                        "char": 28
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "m",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 61,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 61,
+                                        "char": 31
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 61,
+                                            "char": 34
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 61,
+                                        "char": 34
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 61,
+                                "char": 35
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 62,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 60,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 60,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 60,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 59,
+                    "last-line": 64,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "fill",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 1,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 64,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "m",
+                            "const": 1,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 64,
+                            "char": 57
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 1,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 64,
+                            "char": 70
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "and",
+                                    "left": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "fcall",
+                                            "name": "is_int",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "value",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 66,
+                                                        "char": 34
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 66,
+                                                    "char": 34
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 66,
+                                            "char": 37
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 66,
+                                        "char": 37
+                                    },
+                                    "right": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "fcall",
+                                            "name": "is_float",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "value",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 66,
+                                                        "char": 54
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 66,
+                                                    "char": 54
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 66,
+                                            "char": 56
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 66,
+                                        "char": 56
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 66,
+                                    "char": 56
+                                },
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 66,
+                                "char": 56
+                            },
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "InvalidArgumentException",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "Value must be an",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 68,
+                                                                "char": 17
+                                                            },
+                                                            "right": {
+                                                                "type": "string",
+                                                                "value": " integer or floating point number, ",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 69,
+                                                                "char": 17
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 69,
+                                                            "char": 17
+                                                        },
+                                                        "right": {
+                                                            "type": "fcall",
+                                                            "name": "gettype",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "value",
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 69,
+                                                                        "char": 32
+                                                                    },
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 69,
+                                                                    "char": 32
+                                                                }
+                                                            ],
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 69,
+                                                            "char": 34
+                                                        },
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 69,
+                                                        "char": 34
+                                                    },
+                                                    "right": {
+                                                        "type": "string",
+                                                        "value": " given.",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 69,
+                                                        "char": 43
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 69,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 69,
+                                                "char": 43
+                                            }
+                                        ],
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 69,
+                                        "char": 44
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 70,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 72,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "less",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "m",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 72,
+                                        "char": 23
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 72,
+                                        "char": 27
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 72,
+                                    "char": 27
+                                },
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 72,
+                                "char": 27
+                            },
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "InvalidArgumentException",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "M must be",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 74,
+                                                                "char": 17
+                                                            },
+                                                            "right": {
+                                                                "type": "string",
+                                                                "value": " greater than 0, ",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 74,
+                                                                "char": 37
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 74,
+                                                            "char": 37
+                                                        },
+                                                        "right": {
+                                                            "type": "fcall",
+                                                            "name": "strval",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "m",
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 74,
+                                                                        "char": 47
+                                                                    },
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 74,
+                                                                    "char": 47
+                                                                }
+                                                            ],
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 74,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 74,
+                                                        "char": 49
+                                                    },
+                                                    "right": {
+                                                        "type": "string",
+                                                        "value": " given.",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 74,
+                                                        "char": 58
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 74,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 74,
+                                                "char": 58
+                                            }
+                                        ],
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 74,
+                                        "char": 59
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 75,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 77,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "less",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "n",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 77,
+                                        "char": 23
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 77,
+                                        "char": 27
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 77,
+                                    "char": 27
+                                },
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 77,
+                                "char": 27
+                            },
+                            "statements": [
+                                {
+                                    "type": "throw",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "InvalidArgumentException",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "N must be",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 79,
+                                                                "char": 17
+                                                            },
+                                                            "right": {
+                                                                "type": "string",
+                                                                "value": " greater than 0, ",
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 79,
+                                                                "char": 37
+                                                            },
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 79,
+                                                            "char": 37
+                                                        },
+                                                        "right": {
+                                                            "type": "fcall",
+                                                            "name": "strval",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "n",
+                                                                        "file": "stub__issue2165_issue.zep",
+                                                                        "line": 79,
+                                                                        "char": 47
+                                                                    },
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 79,
+                                                                    "char": 47
+                                                                }
+                                                            ],
+                                                            "file": "stub__issue2165_issue.zep",
+                                                            "line": 79,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 79,
+                                                        "char": 49
+                                                    },
+                                                    "right": {
+                                                        "type": "string",
+                                                        "value": " given.",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 79,
+                                                        "char": 58
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 79,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 79,
+                                                "char": 58
+                                            }
+                                        ],
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 79,
+                                        "char": 59
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 80,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 82,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "quick",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "fcall",
+                                            "name": "array_fill",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 82,
+                                                        "char": 40
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 82,
+                                                    "char": 40
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "m",
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 82,
+                                                        "char": 43
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 82,
+                                                    "char": 43
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "fcall",
+                                                        "name": "array_fill",
+                                                        "call-type": 1,
+                                                        "parameters": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "int",
+                                                                    "value": "0",
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 82,
+                                                                    "char": 57
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 82,
+                                                                "char": 57
+                                                            },
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 82,
+                                                                    "char": 60
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 82,
+                                                                "char": 60
+                                                            },
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "variable",
+                                                                    "value": "value",
+                                                                    "file": "stub__issue2165_issue.zep",
+                                                                    "line": 82,
+                                                                    "char": 67
+                                                                },
+                                                                "file": "stub__issue2165_issue.zep",
+                                                                "line": 82,
+                                                                "char": 67
+                                                            }
+                                                        ],
+                                                        "file": "stub__issue2165_issue.zep",
+                                                        "line": 82,
+                                                        "char": 68
+                                                    },
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 82,
+                                                    "char": 68
+                                                }
+                                            ],
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 82,
+                                            "char": 69
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 82,
+                                        "char": 69
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 82,
+                                "char": 70
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 83,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 65,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 65,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 65,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 64,
+                    "last-line": 85,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "reciprocal",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "scall",
+                                    "dynamic-class": 0,
+                                    "class": "self",
+                                    "dynamic": 0,
+                                    "name": "ones",
+                                    "parameters": [
+                                        {
+                                            "parameter": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 87,
+                                                    "char": 32
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "m",
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 87,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 87,
+                                                "char": 34
+                                            },
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 87,
+                                            "char": 34
+                                        },
+                                        {
+                                            "parameter": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 87,
+                                                    "char": 41
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__issue2165_issue.zep",
+                                                    "line": 87,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__issue2165_issue.zep",
+                                                "line": 87,
+                                                "char": 43
+                                            },
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 87,
+                                            "char": 43
+                                        }
+                                    ],
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 88,
+                                    "char": 14
+                                },
+                                "name": "divideMatrix",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 88,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 88,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 88,
+                                "char": 33
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 89,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 86,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 86,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 86,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 85,
+                    "last-line": 91,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "divideMatrix",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 1,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Issue",
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 91,
+                                "char": 48
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 91,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 93,
+                                        "char": 21
+                                    },
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 93,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 95,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "quick",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "c",
+                                            "file": "stub__issue2165_issue.zep",
+                                            "line": 95,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2165_issue.zep",
+                                        "line": 95,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 95,
+                                "char": 30
+                            },
+                            "file": "stub__issue2165_issue.zep",
+                            "line": 96,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Issue",
+                                    "file": "stub__issue2165_issue.zep",
+                                    "line": 92,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2165_issue.zep",
+                                "line": 92,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2165_issue.zep",
+                        "line": 92,
+                        "char": 5
+                    },
+                    "file": "stub__issue2165_issue.zep",
+                    "line": 91,
+                    "last-line": 97,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2165_issue.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__issue2165_issue.zep",
+        "line": 8,
+        "char": 5
+    }
+]

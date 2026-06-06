@@ -1,0 +1,16 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "return-type": {
+            "type": "return-type",
+            "void": 1,
+            "file": "phpt__functions_definition03.zep",
+            "line": 1,
+            "char": 26
+        },
+        "file": "phpt__functions_definition03.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,442 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Control Flow\n *",
+        "file": "stub__emptytest.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__emptytest.zep",
+        "line": 10,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @link https:\/\/ru2.php.net\/empty\n *",
+        "file": "stub__emptytest.zep",
+        "line": 11,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "EmptyTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicVarArrayEmpty",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__emptytest.zep",
+                                    "line": 15,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 16,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 16,
+                                        "char": 13
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 16,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 18,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 18,
+                                        "char": 17
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 18,
+                                    "char": 18
+                                },
+                                "file": "stub__emptytest.zep",
+                                "line": 18,
+                                "char": 18
+                            },
+                            "file": "stub__emptytest.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__emptytest.zep",
+                    "line": 13,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicVarArrayNotEmpty",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__emptytest.zep",
+                                    "line": 23,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 24,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__emptytest.zep",
+                                                    "line": 24,
+                                                    "char": 13
+                                                },
+                                                "file": "stub__emptytest.zep",
+                                                "line": 24,
+                                                "char": 13
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__emptytest.zep",
+                                                    "line": 24,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__emptytest.zep",
+                                                "line": 24,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "3",
+                                                    "file": "stub__emptytest.zep",
+                                                    "line": 24,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__emptytest.zep",
+                                                "line": 24,
+                                                "char": 19
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "4",
+                                                    "file": "stub__emptytest.zep",
+                                                    "line": 24,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__emptytest.zep",
+                                                "line": 24,
+                                                "char": 22
+                                            }
+                                        ],
+                                        "file": "stub__emptytest.zep",
+                                        "line": 24,
+                                        "char": 23
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 24,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 26,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 26,
+                                        "char": 17
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 26,
+                                    "char": 18
+                                },
+                                "file": "stub__emptytest.zep",
+                                "line": 26,
+                                "char": 18
+                            },
+                            "file": "stub__emptytest.zep",
+                            "line": 27,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__emptytest.zep",
+                    "line": 21,
+                    "last-line": 29,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEmptyString",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__emptytest.zep",
+                                    "line": 31,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 32,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 32,
+                                        "char": 11
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 32,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 34,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 34,
+                                        "char": 17
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 34,
+                                    "char": 18
+                                },
+                                "file": "stub__emptytest.zep",
+                                "line": 34,
+                                "char": 18
+                            },
+                            "file": "stub__emptytest.zep",
+                            "line": 35,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__emptytest.zep",
+                    "line": 29,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNotEmptyString",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__emptytest.zep",
+                                    "line": 39,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 40,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "test string",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 40,
+                                        "char": 22
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 40,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__emptytest.zep",
+                            "line": 42,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 42,
+                                        "char": 17
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 42,
+                                    "char": 18
+                                },
+                                "file": "stub__emptytest.zep",
+                                "line": 42,
+                                "char": 18
+                            },
+                            "file": "stub__emptytest.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__emptytest.zep",
+                    "line": 37,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__emptytest.zep",
+                            "line": 45,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__emptytest.zep",
+                                        "line": 47,
+                                        "char": 17
+                                    },
+                                    "file": "stub__emptytest.zep",
+                                    "line": 47,
+                                    "char": 18
+                                },
+                                "file": "stub__emptytest.zep",
+                                "line": 47,
+                                "char": 18
+                            },
+                            "file": "stub__emptytest.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__emptytest.zep",
+                    "line": 45,
+                    "last-line": 49,
+                    "char": 16
+                }
+            ],
+            "file": "stub__emptytest.zep",
+            "line": 11,
+            "char": 5
+        },
+        "file": "stub__emptytest.zep",
+        "line": 11,
+        "char": 5
+    }
+]

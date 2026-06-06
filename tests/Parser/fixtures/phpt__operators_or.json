@@ -1,0 +1,83 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "or",
+                            "left": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "phpt__operators_or.zep",
+                                "line": 2,
+                                "char": 16
+                            },
+                            "right": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "phpt__operators_or.zep",
+                                "line": 2,
+                                "char": 23
+                            },
+                            "file": "phpt__operators_or.zep",
+                            "line": 2,
+                            "char": 23
+                        },
+                        "file": "phpt__operators_or.zep",
+                        "line": 2,
+                        "char": 23
+                    }
+                ],
+                "file": "phpt__operators_or.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "or",
+                            "left": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "phpt__operators_or.zep",
+                                "line": 3,
+                                "char": 13
+                            },
+                            "right": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_or.zep",
+                                "line": 3,
+                                "char": 16
+                            },
+                            "file": "phpt__operators_or.zep",
+                            "line": 3,
+                            "char": 16
+                        },
+                        "file": "phpt__operators_or.zep",
+                        "line": 3,
+                        "char": 16
+                    }
+                ],
+                "file": "phpt__operators_or.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_or.zep",
+        "line": 1,
+        "char": 9
+    }
+]

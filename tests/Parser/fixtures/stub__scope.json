@@ -1,0 +1,693 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__scope.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Scope",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "private",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getStr",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "internal_string",
+                                "file": "stub__scope.zep",
+                                "line": 8,
+                                "char": 31
+                            },
+                            "file": "stub__scope.zep",
+                            "line": 9,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__scope.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 27
+                },
+                {
+                    "visibility": [
+                        "private",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getDyStr",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "g",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scope.zep",
+                            "line": 11,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "string",
+                                    "value": "internal_",
+                                    "file": "stub__scope.zep",
+                                    "line": 12,
+                                    "char": 26
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "g",
+                                    "file": "stub__scope.zep",
+                                    "line": 12,
+                                    "char": 29
+                                },
+                                "file": "stub__scope.zep",
+                                "line": 12,
+                                "char": 29
+                            },
+                            "file": "stub__scope.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__scope.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 27
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "test1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "ret",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__scope.zep",
+                                        "line": 17,
+                                        "char": 19
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 17,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 18,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "k",
+                                    "expr": {
+                                        "type": "scall",
+                                        "dynamic-class": 0,
+                                        "class": "self",
+                                        "dynamic": 0,
+                                        "name": "getStr",
+                                        "file": "stub__scope.zep",
+                                        "line": 18,
+                                        "char": 31
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 18,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 19,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "r",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__scope.zep",
+                                        "line": 19,
+                                        "char": 18
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 19,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 20,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "equals",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "r",
+                                    "file": "stub__scope.zep",
+                                    "line": 20,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__scope.zep",
+                                    "line": 20,
+                                    "char": 19
+                                },
+                                "file": "stub__scope.zep",
+                                "line": 20,
+                                "char": 19
+                            },
+                            "statements": [
+                                {
+                                    "type": "declare",
+                                    "data-type": "variable",
+                                    "variables": [
+                                        {
+                                            "variable": "k",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "test",
+                                                "file": "stub__scope.zep",
+                                                "line": 21,
+                                                "char": 25
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 21,
+                                            "char": 25
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 22,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "concat-assign",
+                                            "variable": "ret",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "k",
+                                                "file": "stub__scope.zep",
+                                                "line": 22,
+                                                "char": 24
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 22,
+                                            "char": 24
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 23,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 24,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "ret",
+                                    "file": "stub__scope.zep",
+                                    "line": 24,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "k",
+                                    "file": "stub__scope.zep",
+                                    "line": 24,
+                                    "char": 23
+                                },
+                                "file": "stub__scope.zep",
+                                "line": 24,
+                                "char": 23
+                            },
+                            "file": "stub__scope.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__scope.zep",
+                    "line": 15,
+                    "last-line": 27,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "test2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "p",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "15",
+                                        "file": "stub__scope.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 29,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 30,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "k",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__scope.zep",
+                                        "line": 30,
+                                        "char": 17
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 30,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 31,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__scope.zep",
+                                    "line": 31,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 32,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__scope.zep",
+                                            "line": 32,
+                                            "char": 25
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 32,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__scope.zep",
+                                            "line": 32,
+                                            "char": 28
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 32,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__scope.zep",
+                                "line": 32,
+                                "char": 30
+                            },
+                            "value": "c",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "declare",
+                                    "data-type": "int",
+                                    "variables": [
+                                        {
+                                            "variable": "p",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "66",
+                                                "file": "stub__scope.zep",
+                                                "line": 33,
+                                                "char": 23
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 33,
+                                            "char": 23
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 34,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "k",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "k",
+                                                        "file": "stub__scope.zep",
+                                                        "line": 34,
+                                                        "char": 23
+                                                    },
+                                                    "right": {
+                                                        "type": "list",
+                                                        "left": {
+                                                            "type": "mul",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "c",
+                                                                "file": "stub__scope.zep",
+                                                                "line": 34,
+                                                                "char": 28
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "p",
+                                                                "file": "stub__scope.zep",
+                                                                "line": 34,
+                                                                "char": 31
+                                                            },
+                                                            "file": "stub__scope.zep",
+                                                            "line": 34,
+                                                            "char": 31
+                                                        },
+                                                        "file": "stub__scope.zep",
+                                                        "line": 34,
+                                                        "char": 32
+                                                    },
+                                                    "file": "stub__scope.zep",
+                                                    "line": 34,
+                                                    "char": 32
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": "_",
+                                                    "file": "stub__scope.zep",
+                                                    "line": 34,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__scope.zep",
+                                                "line": 34,
+                                                "char": 34
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 34,
+                                            "char": 34
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 35,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 36,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "p",
+                                            "file": "stub__scope.zep",
+                                            "line": 36,
+                                            "char": 18
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 36,
+                                        "char": 18
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__scope.zep",
+                                            "line": 36,
+                                            "char": 21
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 36,
+                                        "char": 21
+                                    }
+                                ],
+                                "file": "stub__scope.zep",
+                                "line": 36,
+                                "char": 22
+                            },
+                            "file": "stub__scope.zep",
+                            "line": 37,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__scope.zep",
+                    "line": 27,
+                    "last-line": 39,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "test3",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "k",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__scope.zep",
+                                        "line": 41,
+                                        "char": 17
+                                    },
+                                    "file": "stub__scope.zep",
+                                    "line": 41,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "c",
+                                    "file": "stub__scope.zep",
+                                    "line": 41,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 42,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__scope.zep",
+                                            "line": 42,
+                                            "char": 25
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 42,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__scope.zep",
+                                            "line": 42,
+                                            "char": 28
+                                        },
+                                        "file": "stub__scope.zep",
+                                        "line": 42,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__scope.zep",
+                                "line": 42,
+                                "char": 30
+                            },
+                            "value": "c",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "declare",
+                                    "data-type": "variable",
+                                    "variables": [
+                                        {
+                                            "variable": "str",
+                                            "expr": {
+                                                "type": "scall",
+                                                "dynamic-class": 0,
+                                                "class": "self",
+                                                "dynamic": 0,
+                                                "name": "getDyStr",
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "c",
+                                                            "file": "stub__scope.zep",
+                                                            "line": 43,
+                                                            "char": 39
+                                                        },
+                                                        "file": "stub__scope.zep",
+                                                        "line": 43,
+                                                        "char": 39
+                                                    }
+                                                ],
+                                                "file": "stub__scope.zep",
+                                                "line": 43,
+                                                "char": 40
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 43,
+                                            "char": 40
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 44,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "concat-assign",
+                                            "variable": "k",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "str",
+                                                "file": "stub__scope.zep",
+                                                "line": 44,
+                                                "char": 24
+                                            },
+                                            "file": "stub__scope.zep",
+                                            "line": 44,
+                                            "char": 24
+                                        }
+                                    ],
+                                    "file": "stub__scope.zep",
+                                    "line": 45,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__scope.zep",
+                            "line": 46,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "k",
+                                "file": "stub__scope.zep",
+                                "line": 46,
+                                "char": 17
+                            },
+                            "file": "stub__scope.zep",
+                            "line": 47,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__scope.zep",
+                    "line": 39,
+                    "last-line": 48,
+                    "char": 26
+                }
+            ],
+            "file": "stub__scope.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__scope.zep",
+        "line": 4,
+        "char": 5
+    }
+]

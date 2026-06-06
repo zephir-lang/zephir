@@ -1,0 +1,1754 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\BuiltIn",
+        "file": "stub__builtin_stringmethods.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StringMethods",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "camelize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 6,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 6,
+                                "char": 59
+                            },
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 6,
+                            "char": 59
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 8,
+                                    "char": 14
+                                },
+                                "name": "camelize",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "delimiter",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 8,
+                                            "char": 33
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 8,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 8,
+                                "char": 34
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_stringmethods.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "uncamelize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 11,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 11,
+                                "char": 61
+                            },
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 11,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 13,
+                                    "char": 14
+                                },
+                                "name": "uncamelize",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "delimiter",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 13,
+                                            "char": 35
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 13,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 13,
+                                "char": 36
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_stringmethods.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLength1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "string",
+                                    "value": "hello",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 18,
+                                    "char": 16
+                                },
+                                "name": "length",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 18,
+                                "char": 25
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLength2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "string",
+                                        "value": "hello",
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 23,
+                                        "char": 16
+                                    },
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 23,
+                                    "char": 18
+                                },
+                                "name": "length",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 23,
+                                "char": 27
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLength3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "string",
+                                            "value": "hello",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 28,
+                                            "char": 17
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "hello",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 28,
+                                            "char": 24
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 28,
+                                        "char": 24
+                                    },
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 28,
+                                    "char": 26
+                                },
+                                "name": "length",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 28,
+                                "char": 35
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 26,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLength4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 31,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 33,
+                                    "char": 12
+                                },
+                                "name": "length",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 33,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 34,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 31,
+                    "last-line": 36,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLength5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 36,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "string",
+                                            "value": "hello",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 38,
+                                            "char": 17
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 38,
+                                            "char": 20
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 38,
+                                        "char": 20
+                                    },
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 38,
+                                    "char": 22
+                                },
+                                "name": "length",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 38,
+                                "char": 31
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 36,
+                    "last-line": 41,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getIndex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 41,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "needle",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 41,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 43,
+                                    "char": 14
+                                },
+                                "name": "index",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "needle",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 43,
+                                            "char": 27
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 43,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 43,
+                                "char": 28
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 41,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getIndexWithPosition",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 46,
+                            "char": 49
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "needle",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 46,
+                            "char": 64
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "position",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 46,
+                            "char": 78
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 48,
+                                    "char": 14
+                                },
+                                "name": "index",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "needle",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 48,
+                                            "char": 27
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 48,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "position",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 48,
+                                            "char": 37
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 48,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 48,
+                                "char": 38
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 49,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 46,
+                    "last-line": 51,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getTrimmed",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "string",
+                                    "value": " hello \\t\\n",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 53,
+                                    "char": 22
+                                },
+                                "name": "trim",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 53,
+                                "char": 29
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 51,
+                    "last-line": 56,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getTrimmed1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 56,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 58,
+                                    "char": 14
+                                },
+                                "name": "trim",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 58,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 56,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLeftTrimmed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 61,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 63,
+                                    "char": 14
+                                },
+                                "name": "trimLeft",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 63,
+                                "char": 25
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 61,
+                    "last-line": 66,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getRightTrimmed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 66,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 68,
+                                    "char": 14
+                                },
+                                "name": "trimRight",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 68,
+                                "char": 26
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 66,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLower",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 71,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 73,
+                                    "char": 14
+                                },
+                                "name": "lower",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 73,
+                                "char": 22
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 71,
+                    "last-line": 76,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getUpper",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 76,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 78,
+                                    "char": 14
+                                },
+                                "name": "upper",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 78,
+                                "char": 22
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 79,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 76,
+                    "last-line": 81,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getLowerFirst",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 81,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 83,
+                                    "char": 14
+                                },
+                                "name": "lowerFirst",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 83,
+                                "char": 27
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 84,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 81,
+                    "last-line": 86,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getUpperFirst",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 86,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 88,
+                                    "char": 14
+                                },
+                                "name": "upperFirst",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 88,
+                                "char": 27
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 89,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 86,
+                    "last-line": 91,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getFormatted",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 91,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "string",
+                                    "value": "hello %s!",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 93,
+                                    "char": 20
+                                },
+                                "name": "format",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 93,
+                                            "char": 31
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 93,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 93,
+                                "char": 32
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 94,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 91,
+                    "last-line": 96,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getMd5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 96,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 98,
+                                    "char": 14
+                                },
+                                "name": "md5",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 98,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 99,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 96,
+                    "last-line": 101,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSha1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 101,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 103,
+                                    "char": 14
+                                },
+                                "name": "sha1",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 103,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 104,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 101,
+                    "last-line": 106,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getNl2br",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 106,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 108,
+                                    "char": 14
+                                },
+                                "name": "nl2br",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 108,
+                                "char": 22
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 109,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 106,
+                    "last-line": 111,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getParsedCsv",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 111,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 113,
+                                    "char": 14
+                                },
+                                "name": "parseCsv",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 113,
+                                "char": 25
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 114,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 111,
+                    "last-line": 116,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getParsedJson",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 116,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "assoc",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 116,
+                                "char": 64
+                            },
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 116,
+                            "char": 64
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 118,
+                                    "char": 14
+                                },
+                                "name": "parseJson",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 118,
+                                            "char": 28
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 118,
+                                        "char": 28
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "assoc",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 118,
+                                            "char": 35
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 118,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 118,
+                                "char": 36
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 119,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 116,
+                    "last-line": 121,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getRepeatted",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 121,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "count",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 121,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 123,
+                                    "char": 14
+                                },
+                                "name": "repeat",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "count",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 123,
+                                            "char": 27
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 123,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 123,
+                                "char": 28
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 124,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 121,
+                    "last-line": 126,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getShuffled",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 126,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 128,
+                                    "char": 14
+                                },
+                                "name": "shuffle",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 128,
+                                "char": 24
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 129,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 126,
+                    "last-line": 131,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSplited",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 131,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "del",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 131,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 133,
+                                    "char": 14
+                                },
+                                "name": "split",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "del",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 133,
+                                            "char": 24
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 133,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 133,
+                                "char": 25
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 134,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 131,
+                    "last-line": 136,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getCompare",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "left",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 136,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "right",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 136,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "left",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 138,
+                                    "char": 15
+                                },
+                                "name": "compare",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "right",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 138,
+                                            "char": 29
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 138,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 138,
+                                "char": 30
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 139,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 136,
+                    "last-line": 141,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getCompareLocale",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "left",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 141,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "right",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 141,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "left",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 143,
+                                    "char": 15
+                                },
+                                "name": "compareLocale",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "right",
+                                            "file": "stub__builtin_stringmethods.zep",
+                                            "line": 143,
+                                            "char": 35
+                                        },
+                                        "file": "stub__builtin_stringmethods.zep",
+                                        "line": 143,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 143,
+                                "char": 36
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 144,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 141,
+                    "last-line": 146,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getReversed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 146,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 148,
+                                    "char": 14
+                                },
+                                "name": "rev",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 148,
+                                "char": 20
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 149,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 146,
+                    "last-line": 151,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getHtmlSpecialChars",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 151,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__builtin_stringmethods.zep",
+                                    "line": 153,
+                                    "char": 14
+                                },
+                                "name": "htmlSpecialChars",
+                                "call-type": 1,
+                                "file": "stub__builtin_stringmethods.zep",
+                                "line": 153,
+                                "char": 33
+                            },
+                            "file": "stub__builtin_stringmethods.zep",
+                            "line": 154,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_stringmethods.zep",
+                    "line": 151,
+                    "last-line": 155,
+                    "char": 16
+                }
+            ],
+            "file": "stub__builtin_stringmethods.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__builtin_stringmethods.zep",
+        "line": 4,
+        "char": 5
+    }
+]

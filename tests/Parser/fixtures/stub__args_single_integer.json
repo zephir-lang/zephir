@@ -1,0 +1,81 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Args\\Single",
+        "file": "stub__args_single_integer.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Integer",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "argInt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "i",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__args_single_integer.zep",
+                            "line": 5,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "i",
+                                "file": "stub__args_single_integer.zep",
+                                "line": 7,
+                                "char": 17
+                            },
+                            "file": "stub__args_single_integer.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__args_single_integer.zep",
+                                "line": 6,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__args_single_integer.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    "file": "stub__args_single_integer.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 19
+                }
+            ],
+            "file": "stub__args_single_integer.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__args_single_integer.zep",
+        "line": 3,
+        "char": 5
+    }
+]

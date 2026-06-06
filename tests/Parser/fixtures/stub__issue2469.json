@@ -1,0 +1,321 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2469.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2469\n *\n * Reproducer for \"Cannot pass literal char into a function expecting char\".\n * Crashes Zephir compilation prior to the fix.\n *",
+        "file": "stub__issue2469.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2469",
+        "abstract": 0,
+        "final": 1,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "peek",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "ch",
+                            "const": 0,
+                            "data-type": "char",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2469.zep",
+                            "line": 11,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "ch",
+                                "file": "stub__issue2469.zep",
+                                "line": 13,
+                                "char": 18
+                            },
+                            "file": "stub__issue2469.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue2469.zep",
+                                "line": 12,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2469.zep",
+                        "line": 12,
+                        "char": 5
+                    },
+                    "file": "stub__issue2469.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callWithLiteral",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue2469.zep",
+                                    "line": 18,
+                                    "char": 21
+                                },
+                                "name": "peek",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "char",
+                                            "value": "a",
+                                            "file": "stub__issue2469.zep",
+                                            "line": 18,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2469.zep",
+                                        "line": 18,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2469.zep",
+                                "line": 18,
+                                "char": 30
+                            },
+                            "file": "stub__issue2469.zep",
+                            "line": 19,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue2469.zep",
+                                "line": 17,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2469.zep",
+                        "line": 17,
+                        "char": 5
+                    },
+                    "file": "stub__issue2469.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callWithVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "chTmp",
+                                    "file": "stub__issue2469.zep",
+                                    "line": 23,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__issue2469.zep",
+                            "line": 24,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "chTmp",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": ">",
+                                        "file": "stub__issue2469.zep",
+                                        "line": 24,
+                                        "char": 23
+                                    },
+                                    "file": "stub__issue2469.zep",
+                                    "line": 24,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__issue2469.zep",
+                            "line": 25,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue2469.zep",
+                                    "line": 25,
+                                    "char": 21
+                                },
+                                "name": "peek",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "chTmp",
+                                            "file": "stub__issue2469.zep",
+                                            "line": 25,
+                                            "char": 32
+                                        },
+                                        "file": "stub__issue2469.zep",
+                                        "line": 25,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__issue2469.zep",
+                                "line": 25,
+                                "char": 33
+                            },
+                            "file": "stub__issue2469.zep",
+                            "line": 26,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue2469.zep",
+                                "line": 22,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2469.zep",
+                        "line": 22,
+                        "char": 5
+                    },
+                    "file": "stub__issue2469.zep",
+                    "line": 21,
+                    "last-line": 28,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callWithLiteralUchar",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__issue2469.zep",
+                                    "line": 30,
+                                    "char": 21
+                                },
+                                "name": "peek",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "char",
+                                            "value": "Z",
+                                            "file": "stub__issue2469.zep",
+                                            "line": 30,
+                                            "char": 29
+                                        },
+                                        "file": "stub__issue2469.zep",
+                                        "line": 30,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__issue2469.zep",
+                                "line": 30,
+                                "char": 30
+                            },
+                            "file": "stub__issue2469.zep",
+                            "line": 31,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__issue2469.zep",
+                                "line": 29,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2469.zep",
+                        "line": 29,
+                        "char": 5
+                    },
+                    "file": "stub__issue2469.zep",
+                    "line": 28,
+                    "last-line": 32,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2469.zep",
+            "line": 9,
+            "char": 11
+        },
+        "file": "stub__issue2469.zep",
+        "line": 9,
+        "char": 11
+    }
+]

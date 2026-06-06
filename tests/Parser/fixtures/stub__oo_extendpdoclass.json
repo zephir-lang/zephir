@@ -1,0 +1,227 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_extendpdoclass.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ExtendPdoClass",
+        "abstract": 0,
+        "final": 0,
+        "extends": "\\PDO",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "dsn",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 6,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "username",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__oo_extendpdoclass.zep",
+                                "line": 6,
+                                "char": 64
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 6,
+                            "char": 64
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "password",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__oo_extendpdoclass.zep",
+                                "line": 6,
+                                "char": 88
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 6,
+                            "char": 88
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "attrs",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "empty-array",
+                                "file": "stub__oo_extendpdoclass.zep",
+                                "line": 6,
+                                "char": 100
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 6,
+                            "char": 100
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "array-index",
+                                    "operator": "assign",
+                                    "variable": "attrs",
+                                    "index-expr": [
+                                        {
+                                            "type": "static-constant-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "\\PDO",
+                                                "file": "stub__oo_extendpdoclass.zep",
+                                                "line": 8,
+                                                "char": 39
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "ATTR_STATEMENT_CLASS",
+                                                "file": "stub__oo_extendpdoclass.zep",
+                                                "line": 8,
+                                                "char": 39
+                                            },
+                                            "file": "stub__oo_extendpdoclass.zep",
+                                            "line": 8,
+                                            "char": 39
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "Stub\\\\PdoStatement",
+                                                    "file": "stub__oo_extendpdoclass.zep",
+                                                    "line": 8,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__oo_extendpdoclass.zep",
+                                                "line": 8,
+                                                "char": 62
+                                            }
+                                        ],
+                                        "file": "stub__oo_extendpdoclass.zep",
+                                        "line": 8,
+                                        "char": 63
+                                    },
+                                    "file": "stub__oo_extendpdoclass.zep",
+                                    "line": 8,
+                                    "char": 63
+                                }
+                            ],
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 9,
+                            "char": 8
+                        },
+                        {
+                            "type": "scall",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "parent",
+                                "dynamic": 0,
+                                "name": "__construct",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "dsn",
+                                            "file": "stub__oo_extendpdoclass.zep",
+                                            "line": 9,
+                                            "char": 26
+                                        },
+                                        "file": "stub__oo_extendpdoclass.zep",
+                                        "line": 9,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "username",
+                                            "file": "stub__oo_extendpdoclass.zep",
+                                            "line": 9,
+                                            "char": 36
+                                        },
+                                        "file": "stub__oo_extendpdoclass.zep",
+                                        "line": 9,
+                                        "char": 36
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "password",
+                                            "file": "stub__oo_extendpdoclass.zep",
+                                            "line": 9,
+                                            "char": 46
+                                        },
+                                        "file": "stub__oo_extendpdoclass.zep",
+                                        "line": 9,
+                                        "char": 46
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "attrs",
+                                            "file": "stub__oo_extendpdoclass.zep",
+                                            "line": 9,
+                                            "char": 53
+                                        },
+                                        "file": "stub__oo_extendpdoclass.zep",
+                                        "line": 9,
+                                        "char": 53
+                                    }
+                                ],
+                                "file": "stub__oo_extendpdoclass.zep",
+                                "line": 9,
+                                "char": 54
+                            },
+                            "file": "stub__oo_extendpdoclass.zep",
+                            "line": 10,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_extendpdoclass.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_extendpdoclass.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__oo_extendpdoclass.zep",
+        "line": 4,
+        "char": 5
+    }
+]

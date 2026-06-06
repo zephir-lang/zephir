@@ -1,0 +1,17 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "yield",
+                "file": "phpt__statements_yield_empty_yield.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_yield_empty_yield.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,453 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__unreachableloop.zep",
+        "line": 5,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1170\n *",
+        "file": "stub__unreachableloop.zep",
+        "line": 6,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "UnreachableLoop",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "toPropertyString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "properties",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unreachableloop.zep",
+                            "line": 8,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 10,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "ret",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 10,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "k",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 10,
+                                    "char": 22
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 10,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__unreachableloop.zep",
+                            "line": 12,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__unreachableloop.zep",
+                                        "line": 12,
+                                        "char": 22
+                                    },
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 12,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__unreachableloop.zep",
+                            "line": 13,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "ret",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "{",
+                                        "file": "stub__unreachableloop.zep",
+                                        "line": 13,
+                                        "char": 20
+                                    },
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 13,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__unreachableloop.zep",
+                            "line": 14,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "properties",
+                                "file": "stub__unreachableloop.zep",
+                                "line": 14,
+                                "char": 32
+                            },
+                            "key": "k",
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "x",
+                                        "file": "stub__unreachableloop.zep",
+                                        "line": 15,
+                                        "char": 18
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "concat-assign",
+                                                    "variable": "ret",
+                                                    "expr": {
+                                                        "type": "string",
+                                                        "value": ", ",
+                                                        "file": "stub__unreachableloop.zep",
+                                                        "line": 16,
+                                                        "char": 29
+                                                    },
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 16,
+                                                    "char": 29
+                                                }
+                                            ],
+                                            "file": "stub__unreachableloop.zep",
+                                            "line": 17,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 18,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "x",
+                                            "expr": {
+                                                "type": "bool",
+                                                "value": "true",
+                                                "file": "stub__unreachableloop.zep",
+                                                "line": 18,
+                                                "char": 25
+                                            },
+                                            "file": "stub__unreachableloop.zep",
+                                            "line": 18,
+                                            "char": 25
+                                        }
+                                    ],
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 19,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "concat-assign",
+                                            "variable": "ret",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "k",
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 19,
+                                                    "char": 25
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": ": ",
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 19,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__unreachableloop.zep",
+                                                "line": 19,
+                                                "char": 29
+                                            },
+                                            "file": "stub__unreachableloop.zep",
+                                            "line": 19,
+                                            "char": 29
+                                        }
+                                    ],
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 20,
+                                    "char": 14
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "is_array",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 20,
+                                                    "char": 26
+                                                },
+                                                "file": "stub__unreachableloop.zep",
+                                                "line": 20,
+                                                "char": 26
+                                            }
+                                        ],
+                                        "file": "stub__unreachableloop.zep",
+                                        "line": 20,
+                                        "char": 28
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "concat-assign",
+                                                    "variable": "ret",
+                                                    "expr": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "[\\\"",
+                                                                "file": "stub__unreachableloop.zep",
+                                                                "line": 21,
+                                                                "char": 31
+                                                            },
+                                                            "right": {
+                                                                "type": "fcall",
+                                                                "name": "implode",
+                                                                "call-type": 1,
+                                                                "parameters": [
+                                                                    {
+                                                                        "parameter": {
+                                                                            "type": "string",
+                                                                            "value": "\\\", \\\"",
+                                                                            "file": "stub__unreachableloop.zep",
+                                                                            "line": 21,
+                                                                            "char": 47
+                                                                        },
+                                                                        "file": "stub__unreachableloop.zep",
+                                                                        "line": 21,
+                                                                        "char": 47
+                                                                    },
+                                                                    {
+                                                                        "parameter": {
+                                                                            "type": "variable",
+                                                                            "value": "v",
+                                                                            "file": "stub__unreachableloop.zep",
+                                                                            "line": 21,
+                                                                            "char": 50
+                                                                        },
+                                                                        "file": "stub__unreachableloop.zep",
+                                                                        "line": 21,
+                                                                        "char": 50
+                                                                    }
+                                                                ],
+                                                                "file": "stub__unreachableloop.zep",
+                                                                "line": 21,
+                                                                "char": 52
+                                                            },
+                                                            "file": "stub__unreachableloop.zep",
+                                                            "line": 21,
+                                                            "char": 52
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "\\\"]",
+                                                            "file": "stub__unreachableloop.zep",
+                                                            "line": 21,
+                                                            "char": 57
+                                                        },
+                                                        "file": "stub__unreachableloop.zep",
+                                                        "line": 21,
+                                                        "char": 57
+                                                    },
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 21,
+                                                    "char": 57
+                                                }
+                                            ],
+                                            "file": "stub__unreachableloop.zep",
+                                            "line": 22,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "concat-assign",
+                                                    "variable": "ret",
+                                                    "expr": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "\\\"",
+                                                                "file": "stub__unreachableloop.zep",
+                                                                "line": 23,
+                                                                "char": 30
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "v",
+                                                                "file": "stub__unreachableloop.zep",
+                                                                "line": 23,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__unreachableloop.zep",
+                                                            "line": 23,
+                                                            "char": 34
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "\\\"",
+                                                            "file": "stub__unreachableloop.zep",
+                                                            "line": 23,
+                                                            "char": 38
+                                                        },
+                                                        "file": "stub__unreachableloop.zep",
+                                                        "line": 23,
+                                                        "char": 38
+                                                    },
+                                                    "file": "stub__unreachableloop.zep",
+                                                    "line": 23,
+                                                    "char": 38
+                                                }
+                                            ],
+                                            "file": "stub__unreachableloop.zep",
+                                            "line": 24,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 25,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__unreachableloop.zep",
+                            "line": 26,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "concat",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "ret",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 26,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": "}",
+                                    "file": "stub__unreachableloop.zep",
+                                    "line": 26,
+                                    "char": 23
+                                },
+                                "file": "stub__unreachableloop.zep",
+                                "line": 26,
+                                "char": 23
+                            },
+                            "file": "stub__unreachableloop.zep",
+                            "line": 27,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__unreachableloop.zep",
+                                "line": 9,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unreachableloop.zep",
+                        "line": 9,
+                        "char": 5
+                    },
+                    "file": "stub__unreachableloop.zep",
+                    "line": 8,
+                    "last-line": 28,
+                    "char": 26
+                }
+            ],
+            "file": "stub__unreachableloop.zep",
+            "line": 6,
+            "char": 5
+        },
+        "file": "stub__unreachableloop.zep",
+        "line": 6,
+        "char": 5
+    }
+]
