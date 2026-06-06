@@ -155,11 +155,26 @@ jobs:
         env:
           XDEBUG_MODE: coverage
 
+      - name: Parser Golden Parity
+        if: always()
+        # Byte-identical IR parity of the pure-PHP parser vs the C extension
+        # over the full golden corpus. Run without coverage (it is skipped under
+        # ZEPHIR_FORCE_PHP_PARSER, which the coverage step below sets) and is
+        # fast on its own (~hundreds of fixtures, no Xdebug instrumentation).
+        run: php vendor/bin/phpunit --no-coverage tests/Zephir/Parser
+
       - name: Unit Tests (Zephir)
         if: always()
+        # Force the pure-PHP parser so the compiler suites cover src/Parser/Php
+        # through real use; the standalone golden-corpus parity test skips under
+        # this env (it is prohibitively slow under Xdebug path coverage and is
+        # already run by the step above). The C-extension parse path is covered
+        # by the build + Extension + Black-box steps, and fully by the
+        # build-and-test-php-parser job differentially.
         run: php vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/clover.xml
         env:
           XDEBUG_MODE: coverage
+          ZEPHIR_FORCE_PHP_PARSER: '1'
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v7"

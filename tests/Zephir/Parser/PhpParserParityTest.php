@@ -14,12 +14,14 @@ declare(strict_types=1);
 namespace Zephir\Test\Parser;
 
 use PHPUnit\Framework\TestCase;
+use Zephir\Parser\Parser;
 use Zephir\Parser\Php\PhpParser;
 
 use function array_flip;
 use function basename;
 use function explode;
 use function file_get_contents;
+use function getenv;
 use function glob;
 use function json_encode;
 use function trim;
@@ -42,6 +44,18 @@ final class PhpParserParityTest extends TestCase
 {
     private const FIXTURES  = __DIR__ . '/../../Parser/fixtures';
     private const ALLOWLIST = __DIR__ . '/../../Parser/slice-allowlist.txt';
+
+    protected function setUp(): void
+    {
+        // This golden corpus drives the pure-PHP parser over hundreds of
+        // fixtures, which is very slow under Xdebug path coverage. When the
+        // PHP backend is force-selected (ZEPHIR_FORCE_PHP_PARSER), the parser
+        // is already exercised end-to-end through the compiler suites, so the
+        // standalone differential corpus is redundant and is skipped here.
+        if (getenv(Parser::FORCE_PHP_ENV) !== false) {
+            $this->markTestSkipped('Skipped under ' . Parser::FORCE_PHP_ENV . ' (parser covered via the compiler suites).');
+        }
+    }
 
     /**
      * @dataProvider fixtureProvider
