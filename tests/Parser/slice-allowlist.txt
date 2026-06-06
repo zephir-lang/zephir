@@ -1,3 +1,6 @@
+destructure_basic
+destructure_nested_in_class
+destructure_skip
 phpt__base_cblocks
 phpt__base_declare
 phpt__base_literals

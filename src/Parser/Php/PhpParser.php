@@ -1624,8 +1624,13 @@ final class PhpParser
             return $this->parseLetDynamicVariable();
         }
 
+        // [a, b, ...] = expr  (destructuring assignment)
+        if ($this->check(TokenType::T_SBRACKET_OPEN)) {
+            return $this->parseLetDestructure();
+        }
+
         if (!$this->check(TokenType::T_IDENTIFIER) && !$this->check(TokenType::T_CONSTANT)) {
-            $this->unsupported(); // [destructure] — out of slice
+            $this->unsupported();
         }
 
         $variable = $this->advance();
@@ -1701,6 +1706,44 @@ final class PhpParser
         $expr     = $this->parseExpr(0);
 
         return $this->letAssignment($assignType, $operator, $variable, null, null, $expr);
+    }
+
+    /**
+     * Destructuring target: `[a, b, , c] = expr`. Each slot is an identifier
+     * literal (type "variable") or null for a skipped slot. operator is the
+     * hardcoded string "assign" (only `=` is grammatical here).
+     */
+    private function parseLetDestructure(): array
+    {
+        $this->expect(TokenType::T_SBRACKET_OPEN);
+
+        $variables = [$this->parseDestructureVar()];
+        while ($this->accept(TokenType::T_COMMA)) {
+            $variables[] = $this->parseDestructureVar();
+        }
+        $this->expect(TokenType::T_SBRACKET_CLOSE);
+        $this->expect(TokenType::T_ASSIGN);
+        $expr = $this->parseExpr(0);
+
+        return [
+            'assign-type' => 'destructure',
+            'operator'    => 'assign',
+            'variables'   => $variables,
+            'expr'        => $expr,
+            'file'        => $this->file,
+            'line'        => $this->line(),
+            'char'        => $this->char(),
+        ];
+    }
+
+    /** A destructure slot: identifier/constant literal, or null for an empty slot. */
+    private function parseDestructureVar(): ?array
+    {
+        if ($this->check(TokenType::T_IDENTIFIER) || $this->check(TokenType::T_CONSTANT)) {
+            return $this->literalFromToken(TokenType::T_IDENTIFIER, $this->advance());
+        }
+
+        return null;
     }
 
     private function parseLetObjectProperty(Token $variable): array
