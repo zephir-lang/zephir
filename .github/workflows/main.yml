@@ -171,6 +171,91 @@ jobs:
         if: always()
         run: php vendor/bin/phpunit --testsuite BlackBox --no-coverage
 
+  build-and-test-php-parser:
+    name: "PHP-Parser (no ext)-PHP-${{ matrix.php }}"
+
+    # Dual-backend coverage: build the test extension and run the full suites
+    # with the built-in pure-PHP parser instead of the ext-zephir_parser C
+    # extension. The C extension is intentionally NOT installed here, and
+    # ZEPHIR_FORCE_PHP_PARSER is set as a belt-and-suspenders guard, so the
+    # parsing path used by users without the PECL extension is exercised
+    # end-to-end (generate -> compile -> test). Kept to Linux + the min/max
+    # supported PHP to bound CI cost; the parser only affects IR generation,
+    # which the golden parity suite proves identical across the matrix.
+    # See https://github.com/zephir-lang/zephir/issues/2495
+    runs-on: ubuntu-24.04
+
+    env:
+      ZEPHIR_FORCE_PHP_PARSER: '1'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.0', '8.5' ]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 5
+
+      - name: Install PHP ${{ matrix.php }} (without zephir_parser)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli
+          tools: pecl, phpize, php-config
+          coverage: none
+          ini-values: >-
+            variables_order=EGPCS,
+            enable_dl=On,
+            allow_url_fopen=On,
+            error_reporting=-1,
+            memory_limit=1G,
+            date.timezone=UTC,
+            xdebug.max_nesting_level=256
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Project Dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
+
+      - name: Assert the C parser extension is absent
+        run: |
+          if php -r 'exit(function_exists("zephir_parse_file") ? 1 : 0);'; then
+            echo "ext-zephir_parser not loaded; the built-in PHP parser is active"
+          else
+            echo "::error::zephir_parser is unexpectedly present in the ext-off job"
+            exit 1
+          fi
+
+      - name: Fast Commands Test
+        run: php zephir --help
+
+      - name: Build Test Extension (PHP parser)
+        uses: ./.github/workflows/build-linux-ext
+        with:
+          compiler: gcc
+          cflags: '-O2 -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
+
+      - name: Stub Extension Info
+        run: |
+          php --ini
+          php --ri stub
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Unit Tests (Stub Extension)
+        run: php vendor/bin/phpunit -c phpunit.ext.xml --no-coverage
+
+      - name: Unit Tests (Zephir)
+        if: always()
+        run: php vendor/bin/phpunit --testsuite Zephir --no-coverage
+
+      - name: Black-box Testing
+        if: always()
+        run: php vendor/bin/phpunit --testsuite BlackBox --no-coverage
+
   upload-coverage:
     permissions:
       contents: read
