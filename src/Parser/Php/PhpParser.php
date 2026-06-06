@@ -41,7 +41,9 @@ final class PhpParser
         TokenType::T_AND                 => [80,  'and',               false],
         TokenType::T_BITWISE_OR          => [90,  'bitwise_or',        false],
         TokenType::T_BITWISE_XOR         => [100, 'bitwise_xor',       false],
-        TokenType::T_BITWISE_AND         => [110, 'bitwise_and',       false],
+        // `expr & expr` carries a `%prec BITWISE_OR` hint in the grammar, which
+        // makes same-operator chains right-associative (`a & b & c` => a & (b & c)).
+        TokenType::T_BITWISE_AND         => [110, 'bitwise_and',       true],
         TokenType::T_EQUALS              => [120, 'equals',            false],
         TokenType::T_IDENTICAL           => [120, 'identical',         false],
         TokenType::T_NOTIDENTICAL        => [120, 'not-identical',     false],
@@ -214,6 +216,28 @@ final class PhpParser
         return $this->tokens[$this->pos]->char;
     }
 
+    /** Saved class_* snapshot of the current lookahead — used to stamp class/interface nodes. */
+    private function classLine(): int
+    {
+        return $this->tokens[$this->pos]->classLine;
+    }
+
+    private function classChar(): int
+    {
+        return $this->tokens[$this->pos]->classChar;
+    }
+
+    /** Saved method_* snapshot of the current lookahead — used to stamp function/method nodes. */
+    private function methodLine(): int
+    {
+        return $this->tokens[$this->pos]->methodLine;
+    }
+
+    private function methodChar(): int
+    {
+        return $this->tokens[$this->pos]->methodChar;
+    }
+
     private function syntaxError(): void
     {
         throw new SyntaxError();
@@ -295,7 +319,7 @@ final class PhpParser
             case TokenType::T_FUNCTION:
                 return $this->parseFunction();
             case TokenType::T_INTERFACE:
-                $this->unsupported();
+                return $this->parseInterface();
         }
 
         $this->syntaxError();
@@ -393,8 +417,8 @@ final class PhpParser
             $final = 1;
         }
 
-        $classTok = $this->expect(TokenType::T_CLASS);
-        $name     = $this->expectNameToken();
+        $this->expect(TokenType::T_CLASS);
+        $name = $this->expectNameToken();
 
         $extends = null;
         if ($this->accept(TokenType::T_EXTENDS)) {
@@ -409,7 +433,7 @@ final class PhpParser
             }
         }
 
-        $definition = $this->parseClassBody($classTok);
+        $definition = $this->parseClassBody();
 
         $node = [
             'type'     => 'class',
@@ -427,18 +451,18 @@ final class PhpParser
             $node['definition'] = $definition;
         }
         $node['file'] = $this->file;
-        $node['line'] = $classTok->line;
-        $node['char'] = $classTok->char;
+        $node['line'] = $this->classLine();
+        $node['char'] = $this->classChar();
 
         return $node;
     }
 
     /**
      * Parse `{ members }` and bucket members into properties/methods/constants
-     * (xx_ret_class_definition_from_list). The definition node and the empty
-     * body both use the class keyword's saved position.
+     * (xx_ret_class_definition_from_list). The definition node uses the saved
+     * class_* state at its reduce (lookahead = the closing `}`).
      */
-    private function parseClassBody(Token $classTok): ?array
+    private function parseClassBody(): ?array
     {
         $this->expect(TokenType::T_BRACKET_OPEN);
         if ($this->accept(TokenType::T_BRACKET_CLOSE)) {
@@ -449,6 +473,10 @@ final class PhpParser
         while (!$this->check(TokenType::T_BRACKET_CLOSE)) {
             $members[] = $this->parseClassMember();
         }
+
+        // The class_definition reduces with the closing `}` as lookahead.
+        $defLine = $this->classLine();
+        $defChar = $this->classChar();
         $this->expect(TokenType::T_BRACKET_CLOSE);
 
         $properties = [];
@@ -479,8 +507,8 @@ final class PhpParser
             $def['constants'] = $constants;
         }
         $def['file'] = $this->file;
-        $def['line'] = $classTok->line;
-        $def['char'] = $classTok->char;
+        $def['line'] = $defLine;
+        $def['char'] = $defChar;
 
         return $def;
     }
@@ -503,6 +531,125 @@ final class PhpParser
         }
 
         return $this->parseProperty($visibility, $docblock);
+    }
+
+    /**
+     * Parse an interface definition. The node is stamped from the saved
+     * `class_*` scanner state (0 unless a class preceded it), carried on the
+     * INTERFACE token, matching xx_ret_interface which reads `class_line`.
+     */
+    private function parseInterface(): array
+    {
+        $this->expect(TokenType::T_INTERFACE);
+        $name = $this->expectNameToken();
+
+        $extends = null;
+        if ($this->accept(TokenType::T_EXTENDS)) {
+            $extends = [$this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken())];
+            while ($this->accept(TokenType::T_COMMA)) {
+                $extends[] = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken());
+            }
+        }
+
+        $definition = $this->parseInterfaceBody();
+
+        $node = [
+            'type' => 'interface',
+            'name' => $this->remap((string) $name->value),
+        ];
+        if ($extends !== null) {
+            $node['extends'] = $extends;
+        }
+        if ($definition !== null) {
+            $node['definition'] = $definition;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->classLine();
+        $node['char'] = $this->classChar();
+
+        return $node;
+    }
+
+    /**
+     * Parse an interface body: constants then method signatures (bucketed into
+     * methods/constants like xx_ret_interface_definition, which emits methods
+     * before constants). The definition node uses the active lookahead position.
+     */
+    private function parseInterfaceBody(): ?array
+    {
+        $this->expect(TokenType::T_BRACKET_OPEN);
+        if ($this->accept(TokenType::T_BRACKET_CLOSE)) {
+            return null;
+        }
+
+        $methods   = [];
+        $constants = [];
+        while (!$this->check(TokenType::T_BRACKET_CLOSE)) {
+            $docblock = null;
+            if ($this->check(TokenType::T_COMMENT)) {
+                $docblock = $this->advance();
+            }
+            if ($this->check(TokenType::T_CONST)) {
+                $constants[] = $this->parseClassConst($docblock);
+                continue;
+            }
+            $visibility = $this->parseVisibilityList();
+            $methods[]  = $this->parseInterfaceMethod($visibility, $docblock);
+        }
+
+        // The interface_definition non-terminal reduces with the closing `}` as
+        // lookahead, so it is stamped at the `}` position (before consuming it).
+        $defLine = $this->line();
+        $defChar = $this->char();
+        $this->expect(TokenType::T_BRACKET_CLOSE);
+
+        $def = [];
+        if ($methods !== []) {
+            $def['methods'] = $methods;
+        }
+        if ($constants !== []) {
+            $def['constants'] = $constants;
+        }
+        $def['file'] = $this->file;
+        $def['line'] = $defLine;
+        $def['char'] = $defChar;
+
+        return $def;
+    }
+
+    /** Interface method signature: visibility FUNCTION name(params) [-> rettype] ; */
+    private function parseInterfaceMethod(array $visibility, ?Token $docblock): array
+    {
+        $this->expect(TokenType::T_FUNCTION);
+        $name = $this->expectNameToken();
+
+        $parameters = $this->parseParameterParens();
+        $returnType = null;
+        if ($this->accept(TokenType::T_ARROW)) {
+            $returnType = $this->parseReturnType();
+        }
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        $node = [
+            'visibility' => $visibility,
+            'type'       => 'method',
+            'name'       => $this->remap((string) $name->value),
+        ];
+        if ($parameters !== null) {
+            $node['parameters'] = $parameters;
+        }
+        if ($docblock !== null) {
+            $node['docblock'] = $this->remap((string) $docblock->value);
+        }
+        if ($returnType !== null) {
+            $node['return-type'] = $returnType;
+        }
+        $node['file']      = $this->file;
+        $node['line']      = $this->methodLine();
+        $node['last-line'] = $this->line();
+        $node['char']      = $this->methodChar();
+
+        return $node;
     }
 
     /** @return list<string> */
@@ -615,8 +762,8 @@ final class PhpParser
 
     private function parseMethod(array $visibility, ?Token $docblock): array
     {
-        $fnTok = $this->expect(TokenType::T_FUNCTION);
-        $name  = $this->expectNameToken();
+        $this->expect(TokenType::T_FUNCTION);
+        $name = $this->expectNameToken();
 
         $parameters = $this->parseParameterParens();
         $returnType = null;
@@ -643,17 +790,17 @@ final class PhpParser
             $node['return-type'] = $returnType;
         }
         $node['file']      = $this->file;
-        $node['line']      = $fnTok->line;
+        $node['line']      = $this->methodLine();
         $node['last-line'] = $this->line();
-        $node['char']      = $fnTok->char;
+        $node['char']      = $this->methodChar();
 
         return $node;
     }
 
     private function parseFunction(): array
     {
-        $fnTok = $this->expect(TokenType::T_FUNCTION);
-        $name  = $this->expectNameToken();
+        $this->expect(TokenType::T_FUNCTION);
+        $name = $this->expectNameToken();
 
         $parameters = $this->parseParameterParens();
         $returnType = null;
@@ -676,8 +823,8 @@ final class PhpParser
             $node['return-type'] = $returnType;
         }
         $node['file'] = $this->file;
-        $node['line'] = $fnTok->line;
-        $node['char'] = $fnTok->char;
+        $node['line'] = $this->methodLine();
+        $node['char'] = $this->methodChar();
 
         return $node;
     }
@@ -918,7 +1065,13 @@ final class PhpParser
 
     private function parseStatement(): array
     {
-        switch ($this->peekType()) {
+        $type = $this->peekType();
+
+        if (isset(self::TYPE_NAMES[$type])) {
+            return $this->parseDeclare();
+        }
+
+        switch ($type) {
             case TokenType::T_COMMENT:
                 return $this->parseComment();
             case TokenType::T_CBLOCK:
@@ -929,15 +1082,46 @@ final class PhpParser
                 return $this->parseReturn();
             case TokenType::T_ECHO:
                 return $this->parseEcho();
+            case TokenType::T_IF:
+                return $this->parseIf();
+            case TokenType::T_LOOP:
+                return $this->parseLoop();
+            case TokenType::T_WHILE:
+                return $this->parseWhile();
+            case TokenType::T_DO:
+                return $this->parseDoWhile();
+            case TokenType::T_FOR:
+                return $this->parseFor();
+            case TokenType::T_SWITCH:
+                return $this->parseSwitch();
+            case TokenType::T_TRY:
+                return $this->parseTryCatch();
+            case TokenType::T_BREAK:
+                $this->advance();
+                $this->expect(TokenType::T_DOTCOMMA);
+
+                return $this->simpleStatement('break');
+            case TokenType::T_CONTINUE:
+                $this->advance();
+                $this->expect(TokenType::T_DOTCOMMA);
+
+                return $this->simpleStatement('continue');
+            case TokenType::T_THROW:
+                return $this->parseExprStatement('throw');
+            case TokenType::T_UNSET:
+                return $this->parseExprStatement('unset');
+            case TokenType::T_REQUIRE:
+                return $this->parseExprStatement('require');
+            case TokenType::T_REQUIRE_ONCE:
+                return $this->parseExprStatement('require_once');
+            case TokenType::T_FETCH:
+                return $this->parseFetchStatement();
+            case TokenType::T_YIELD:
+                return $this->parseYield();
             case TokenType::T_DOTCOMMA:
                 $this->advance();
 
-                return [
-                    'type' => 'empty',
-                    'file' => $this->file,
-                    'line' => $this->line(),
-                    'char' => $this->char(),
-                ];
+                return $this->simpleStatement('empty');
         }
 
         // Expression statement: must be a function/method/static call.
@@ -985,12 +1169,16 @@ final class PhpParser
     private function parseCallStatement(): array
     {
         $expr = $this->parseExpr(0);
-        $this->expect(TokenType::T_DOTCOMMA);
 
+        // Only call expressions are valid statements. The C parser rejects a
+        // bare expression at the terminating `;` lookahead (before consuming
+        // it), so raise the error here for matching error-node positions.
         $type = $expr['type'] ?? '';
         if ($type !== 'fcall' && $type !== 'mcall' && $type !== 'scall') {
             $this->syntaxError();
         }
+
+        $this->expect(TokenType::T_DOTCOMMA);
 
         return [
             'type' => $type,
@@ -999,6 +1187,414 @@ final class PhpParser
             'line' => $this->line(),
             'char' => $this->char(),
         ];
+    }
+
+    private function simpleStatement(string $type): array
+    {
+        return [
+            'type' => $type,
+            'file' => $this->file,
+            'line' => $this->line(),
+            'char' => $this->char(),
+        ];
+    }
+
+    /** throw/unset/require/require_once: KEYWORD common_expr `;` => {type, expr, ...}. */
+    private function parseExprStatement(string $type): array
+    {
+        $this->advance();
+        $expr = $this->parseExpr(0);
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        return [
+            'type' => $type,
+            'expr' => $expr,
+            'file' => $this->file,
+            'line' => $this->line(),
+            'char' => $this->char(),
+        ];
+    }
+
+    private function parseFetchStatement(): array
+    {
+        $expr = $this->parseFetch();
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        return [
+            'type' => 'fetch',
+            'expr' => $expr,
+            'file' => $this->file,
+            'line' => $this->line(),
+            'char' => $this->char(),
+        ];
+    }
+
+    private function parseYield(): array
+    {
+        $this->expect(TokenType::T_YIELD);
+
+        $node = ['type' => 'yield'];
+        if (!$this->check(TokenType::T_DOTCOMMA)) {
+            $first = $this->parseExpr(0);
+            if ($this->accept(TokenType::T_COMMA)) {
+                $value         = $this->parseExpr(0);
+                $node['key']   = $first;
+                $node['value'] = $value;
+            } else {
+                $node['expr'] = $first;
+            }
+        }
+        $this->expect(TokenType::T_DOTCOMMA);
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    /* ----- control flow ------------------------------------------------- */
+
+    /** Parse `{ [statements] }`, returning null for an empty block. */
+    private function parseBlock(): ?array
+    {
+        $this->expect(TokenType::T_BRACKET_OPEN);
+        if ($this->accept(TokenType::T_BRACKET_CLOSE)) {
+            return null;
+        }
+        $statements = $this->parseStatementList();
+        $this->expect(TokenType::T_BRACKET_CLOSE);
+
+        return $statements;
+    }
+
+    private function parseIf(): array
+    {
+        $this->expect(TokenType::T_IF);
+        $expr = $this->parseExpr(0);
+        $body = $this->parseBlock();
+
+        $elseifs = null;
+        if ($this->check(TokenType::T_ELSEIF)) {
+            $elseifs = [];
+            while ($this->check(TokenType::T_ELSEIF)) {
+                $elseifs[] = $this->parseElseif();
+            }
+        }
+
+        $hasElse   = false;
+        $elseBody  = null;
+        if ($this->accept(TokenType::T_ELSE)) {
+            $hasElse  = true;
+            $elseBody = $this->parseBlock();
+        }
+
+        // Mirror the C builder's argument routing, including its quirk: an
+        // empty if-body with elseif clauses and no else stores the elseif list
+        // in the else_statements slot.
+        if ($elseifs !== null && $body === null && !$hasElse) {
+            $statements        = null;
+            $elseifStatements  = null;
+            $elseStatements    = $elseifs;
+        } else {
+            $statements       = $body;
+            $elseifStatements = $elseifs;
+            $elseStatements   = $hasElse ? $elseBody : null;
+        }
+
+        $node = ['type' => 'if', 'expr' => $expr];
+        if ($statements !== null) {
+            $node['statements'] = $statements;
+        }
+        if ($elseifStatements !== null) {
+            $node['elseif_statements'] = $elseifStatements;
+        }
+        if ($elseStatements !== null) {
+            $node['else_statements'] = $elseStatements;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseElseif(): array
+    {
+        $this->expect(TokenType::T_ELSEIF);
+        $expr = $this->parseExpr(0);
+        $body = $this->parseBlock();
+
+        $node = ['type' => 'if', 'expr' => $expr];
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseLoop(): array
+    {
+        $this->expect(TokenType::T_LOOP);
+        $body = $this->parseBlock();
+
+        $node = ['type' => 'loop'];
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseWhile(): array
+    {
+        $this->expect(TokenType::T_WHILE);
+        $expr = $this->parseExpr(0);
+        $body = $this->parseBlock();
+
+        $node = ['type' => 'while', 'expr' => $expr];
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseDoWhile(): array
+    {
+        $this->expect(TokenType::T_DO);
+        $body = $this->parseBlock();
+        $this->expect(TokenType::T_WHILE);
+        $expr = $this->parseExpr(0);
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        $node = ['type' => 'do-while', 'expr' => $expr];
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseFor(): array
+    {
+        $this->expect(TokenType::T_FOR);
+        $paren = $this->accept(TokenType::T_PARENTHESES_OPEN);
+
+        $key   = null;
+        $value = $this->expect(TokenType::T_IDENTIFIER);
+        if ($this->accept(TokenType::T_COMMA)) {
+            $key   = $value;
+            $value = $this->expect(TokenType::T_IDENTIFIER);
+        }
+
+        $this->expect(TokenType::T_IN);
+        $reverse = $this->accept(TokenType::T_REVERSE) ? 1 : 0;
+        $expr    = $this->parseExpr(0);
+
+        if ($paren) {
+            $this->expect(TokenType::T_PARENTHESES_CLOSE);
+        }
+        $body = $this->parseBlock();
+
+        $node = ['type' => 'for', 'expr' => $expr];
+        if ($key !== null) {
+            $node['key'] = $this->remap((string) $key->value);
+        }
+        $node['value']   = $this->remap((string) $value->value);
+        $node['reverse'] = $reverse;
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseSwitch(): array
+    {
+        $this->expect(TokenType::T_SWITCH);
+        $expr = $this->parseExpr(0);
+        $this->expect(TokenType::T_BRACKET_OPEN);
+
+        $clauses = null;
+        if (!$this->check(TokenType::T_BRACKET_CLOSE)) {
+            $clauses = [];
+            while ($this->check(TokenType::T_CASE) || $this->check(TokenType::T_DEFAULT)) {
+                $clauses[] = $this->parseCaseClause();
+            }
+        }
+        $this->expect(TokenType::T_BRACKET_CLOSE);
+
+        $node = ['type' => 'switch', 'expr' => $expr];
+        if ($clauses !== null) {
+            $node['clauses'] = $clauses;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseCaseClause(): array
+    {
+        if ($this->accept(TokenType::T_DEFAULT)) {
+            $this->expect(TokenType::T_COLON);
+            $statements = $this->parseCaseBody();
+
+            $node = ['type' => 'default'];
+            if ($statements !== null) {
+                $node['statements'] = $statements;
+            }
+            $node['file'] = $this->file;
+            $node['line'] = $this->line();
+            $node['char'] = $this->char();
+
+            return $node;
+        }
+
+        $this->expect(TokenType::T_CASE);
+        $expr = $this->parseExpr(0);
+        $this->expect(TokenType::T_COLON);
+        $statements = $this->parseCaseBody();
+
+        $node = ['type' => 'case', 'expr' => $expr];
+        if ($statements !== null) {
+            $node['statements'] = $statements;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    /** Statements within a case/default clause, up to the next clause or `}`. */
+    private function parseCaseBody(): ?array
+    {
+        $list = [];
+        while (
+            !$this->check(TokenType::T_CASE)
+            && !$this->check(TokenType::T_DEFAULT)
+            && !$this->check(TokenType::T_BRACKET_CLOSE)
+            && $this->peekType() !== 0
+        ) {
+            $list[] = $this->parseStatement();
+        }
+
+        return $list === [] ? null : $list;
+    }
+
+    private function parseTryCatch(): array
+    {
+        $this->expect(TokenType::T_TRY);
+        $body = $this->parseBlock();
+
+        $catches = null;
+        if ($this->check(TokenType::T_CATCH)) {
+            $catches = [];
+            while ($this->check(TokenType::T_CATCH)) {
+                $catches[] = $this->parseCatch();
+            }
+        }
+
+        $node = ['type' => 'try-catch'];
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        if ($catches !== null) {
+            $node['catches'] = $catches;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseCatch(): array
+    {
+        $this->expect(TokenType::T_CATCH);
+
+        $classes = [$this->literalFromToken(TokenType::T_IDENTIFIER, $this->expect(TokenType::T_IDENTIFIER))];
+        while ($this->accept(TokenType::T_BITWISE_OR)) {
+            $classes[] = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->expect(TokenType::T_IDENTIFIER));
+        }
+
+        $variableTok = null;
+        if ($this->accept(TokenType::T_COMMA)) {
+            $variableTok = $this->expect(TokenType::T_IDENTIFIER);
+        }
+
+        $body = $this->parseBlock();
+
+        $node = ['classes' => $classes];
+        if ($variableTok !== null) {
+            // The C builder constructs this literal in the catch reduce action,
+            // so it is stamped at the post-block lookahead, not where consumed.
+            $node['variable'] = $this->literalFromToken(TokenType::T_IDENTIFIER, $variableTok);
+        }
+        if ($body !== null) {
+            $node['statements'] = $body;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    private function parseDeclare(): array
+    {
+        $dataType = self::TYPE_NAMES[$this->advance()->opcode];
+
+        $variables = [$this->parseDeclareVariable()];
+        while ($this->accept(TokenType::T_COMMA)) {
+            $variables[] = $this->parseDeclareVariable();
+        }
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        return [
+            'type'      => 'declare',
+            'data-type' => $dataType,
+            'variables' => $variables,
+            'file'      => $this->file,
+            'line'      => $this->line(),
+            'char'      => $this->char(),
+        ];
+    }
+
+    private function parseDeclareVariable(): array
+    {
+        $name = $this->expectNameToken();
+        $expr = null;
+        if ($this->accept(TokenType::T_ASSIGN)) {
+            $expr = $this->parseExpr(0);
+        }
+
+        $node = ['variable' => $this->remap((string) $name->value)];
+        if ($expr !== null) {
+            $node['expr'] = $expr;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
     }
 
     /* ----- let statement & assignment targets --------------------------- */
@@ -1023,8 +1619,13 @@ final class PhpParser
 
     private function parseLetAssignment(): array
     {
+        // {y} = expr  /  {"y"} = expr  (dynamic variable target)
+        if ($this->check(TokenType::T_BRACKET_OPEN)) {
+            return $this->parseLetDynamicVariable();
+        }
+
         if (!$this->check(TokenType::T_IDENTIFIER) && !$this->check(TokenType::T_CONSTANT)) {
-            $this->unsupported(); // {dyn}, [destructure] — out of slice
+            $this->unsupported(); // [destructure] — out of slice
         }
 
         $variable = $this->advance();
@@ -1081,6 +1682,25 @@ final class PhpParser
         $expr     = $this->parseExpr(0);
 
         return $this->letAssignment('variable', $operator, $variable, null, null, $expr);
+    }
+
+    private function parseLetDynamicVariable(): array
+    {
+        $this->expect(TokenType::T_BRACKET_OPEN);
+        if ($this->check(TokenType::T_IDENTIFIER)) {
+            $variable   = $this->advance();
+            $assignType = 'dynamic-variable';
+        } elseif ($this->check(TokenType::T_STRING)) {
+            $variable   = $this->advance();
+            $assignType = 'dynamic-variable-string';
+        } else {
+            $this->syntaxError();
+        }
+        $this->expect(TokenType::T_BRACKET_CLOSE);
+        $operator = $this->parseAssignmentOperator();
+        $expr     = $this->parseExpr(0);
+
+        return $this->letAssignment($assignType, $operator, $variable, null, null, $expr);
     }
 
     private function parseLetObjectProperty(Token $variable): array
@@ -1337,19 +1957,29 @@ final class PhpParser
                 }
                 $this->advance();
                 $right = $this->parseExpr(39);
-                $left  = $this->expr('closure-arrow', $left, $right, null);
+                // The grammar's `IDENTIFIER DOUBLEARROW expr` builds a fresh
+                // identifier literal in the reduce action, so the left literal
+                // is stamped at the post-RHS lookahead — rebuild it here.
+                $leftLit = [
+                    'type'  => 'variable',
+                    'value' => $left['value'] ?? '',
+                    'file'  => $this->file,
+                    'line'  => $this->line(),
+                    'char'  => $this->char(),
+                ];
+                $left = $this->expr('closure-arrow', $leftLit, $right, null);
                 continue;
             }
 
             if (!isset(self::INFIX[$type])) {
                 break;
             }
-            [$bp, $name] = self::INFIX[$type];
+            [$bp, $name, $rightAssoc] = self::INFIX[$type];
             if ($bp <= $minBp) {
                 break;
             }
             $this->advance();
-            $right = $this->parseExpr($bp);
+            $right = $this->parseExpr($rightAssoc ? $bp - 1 : $bp);
             $left  = $this->expr($name, $left, $right, null);
         }
 
@@ -1483,6 +2113,86 @@ final class PhpParser
                 return $this->parseTypeHint();
             case TokenType::T_SBRACKET_OPEN:
                 return $this->parseArray();
+            case TokenType::T_BRACKET_OPEN:
+                return $this->parseDynamicBraceLed();
+            case TokenType::T_FUNCTION:
+                return $this->parseClosure();
+        }
+
+        $this->unsupported();
+    }
+
+    /**
+     * Closure expression: function([params]) [use (captures)] { [statements] }.
+     * (`fn` is lexed as the same FUNCTION token.) Builds {type:closure,
+     * left:params?, right:statements?, use:captures?, ...}.
+     */
+    private function parseClosure(): array
+    {
+        $this->expect(TokenType::T_FUNCTION);
+        $params = $this->parseParameterParens();
+
+        $use = null;
+        if ($this->accept(TokenType::T_USE)) {
+            $this->expect(TokenType::T_PARENTHESES_OPEN);
+            $use = [$this->parseUseParameter()];
+            while ($this->accept(TokenType::T_COMMA)) {
+                $use[] = $this->parseUseParameter();
+            }
+            $this->expect(TokenType::T_PARENTHESES_CLOSE);
+        }
+
+        $statements = $this->parseBlock();
+
+        $node = ['type' => 'closure'];
+        if ($params !== null) {
+            $node['left'] = $params;
+        }
+        if ($statements !== null) {
+            $node['right'] = $statements;
+        }
+        if ($use !== null) {
+            $node['use'] = $use;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
+    }
+
+    /** A closure `use (...)` capture: [const] [&] IDENTIFIER => parameter node. */
+    private function parseUseParameter(): array
+    {
+        $const = $this->accept(TokenType::T_CONST) ? 1 : 0;
+        $reference = $this->accept(TokenType::T_BITWISE_AND) ? 1 : 0;
+        $name      = $this->expect(TokenType::T_IDENTIFIER);
+
+        return [
+            'type'      => 'parameter',
+            'name'      => $this->remap((string) $name->value),
+            'const'     => $const,
+            'data-type' => 'variable',
+            'mandatory' => 0,
+            'reference' => $reference,
+            'file'      => $this->file,
+            'line'      => $this->line(),
+            'char'      => $this->char(),
+        ];
+    }
+
+    /** `{ident}(...)` dynamic function call, or `{ident}::...` dynamic-class static call. */
+    private function parseDynamicBraceLed(): array
+    {
+        $this->expect(TokenType::T_BRACKET_OPEN);
+        $ident = $this->expect(TokenType::T_IDENTIFIER);
+        $this->expect(TokenType::T_BRACKET_CLOSE);
+
+        if ($this->check(TokenType::T_PARENTHESES_OPEN)) {
+            return $this->finishFcall($ident, 2);
+        }
+        if ($this->check(TokenType::T_DOUBLECOLON)) {
+            return $this->parseDoubleColon((string) $ident->value, 1);
         }
 
         $this->unsupported();
@@ -1505,14 +2215,14 @@ final class PhpParser
         return $this->literalFromToken($isConstant ? TokenType::T_CONSTANT : TokenType::T_IDENTIFIER, $tok);
     }
 
-    private function finishFcall(Token $name): array
+    private function finishFcall(Token $name, int $callType = 1): array
     {
         $parameters = $this->parseCallArguments();
 
         $node = [
             'type'      => 'fcall',
             'name'      => $this->remap((string) $name->value),
-            'call-type' => 1,
+            'call-type' => $callType,
         ];
         if ($parameters !== null) {
             $node['parameters'] = $parameters;
@@ -1603,7 +2313,10 @@ final class PhpParser
             $this->advance(); // (
             $typeName = self::TYPE_NAMES[$this->advance()->opcode];
             $this->expect(TokenType::T_PARENTHESES_CLOSE);
-            $operand = $this->parseExpr(0);
+            // The cast rule has PARENTHESES_CLOSE precedence (very high), so its
+            // operand binds tighter than any binary operator: `(long) v + w`
+            // parses as `add(cast(long, v), w)`.
+            $operand = $this->parseExpr(235);
 
             return $this->expr('cast', $typeName, $operand, null);
         }

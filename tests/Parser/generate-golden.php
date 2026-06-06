@@ -104,19 +104,31 @@ if (is_dir($phptDir)) {
 
 ksort($inputs);
 
-$count = 0;
+$count    = 0;
+$unusable = [];
 foreach ($inputs as $slug => $src) {
     $path = $slug . '.zep';
     $ir   = zephir_parse_file($src, $path);
+    $json = json_encode($ir, JSON_PRETTY_PRINT);
+
+    // Some pathological inputs (e.g. invalid UTF-8 bytes) make the C extension
+    // emit an error message that is itself not JSON-encodable; there is then no
+    // valid golden to assert against, so skip them.
+    if ($json === false) {
+        $unusable[] = $slug;
+        continue;
+    }
+
     file_put_contents($fixturesDir . '/' . $slug . '.zep', $src);
-    file_put_contents(
-        $fixturesDir . '/' . $slug . '.json',
-        json_encode($ir, JSON_PRETTY_PRINT)
-    );
+    file_put_contents($fixturesDir . '/' . $slug . '.json', $json);
     $count++;
 }
 
 printf("Wrote %d golden fixtures to %s\n", $count, $fixturesDir);
+if ($unusable !== []) {
+    printf("Skipped %d input(s) with non-JSON-encodable C-extension output:\n  %s\n",
+        count($unusable), implode("\n  ", $unusable));
+}
 if ($skipped !== []) {
     printf("Skipped %d .phpt files with no extractable heredoc:\n  %s\n",
         count($skipped), implode("\n  ", $skipped));

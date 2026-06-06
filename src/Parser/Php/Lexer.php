@@ -194,25 +194,49 @@ final class Lexer
                     break;
                 case TokenType::T_BRACKET_OPEN:
                     $numberBrackets++;
-                    $tokens[] = new Token($this->tOpcode, $this->tValue, $this->activeLine, $this->activeChar);
+                    $tokens[] = $this->makeToken();
                     break;
                 case TokenType::T_BRACKET_CLOSE:
                     $numberBrackets--;
-                    $tokens[] = new Token($this->tOpcode, $this->tValue, $this->activeLine, $this->activeChar);
+                    $tokens[] = $this->makeToken();
                     break;
                 case TokenType::T_COMMENT:
                     if ($numberBrackets <= 1) {
-                        $tokens[] = new Token($this->tOpcode, $this->tValue, $this->activeLine, $this->activeChar);
+                        $tokens[] = $this->makeToken();
                     }
                     break;
                 default:
-                    $tokens[] = new Token($this->tOpcode, $this->tValue, $this->activeLine, $this->activeChar);
+                    $tokens[] = $this->makeToken();
             }
         }
 
-        $tokens[] = new Token(0, null, $this->activeLine, $this->activeChar); // EOF sentinel
+        // EOF sentinel carrying the final scanner position and class/method snapshots.
+        $tokens[] = new Token(
+            0,
+            null,
+            $this->activeLine,
+            $this->activeChar,
+            $this->classLine,
+            $this->classChar,
+            $this->methodLine,
+            $this->methodChar
+        );
 
         return $tokens;
+    }
+
+    private function makeToken(): Token
+    {
+        return new Token(
+            $this->tOpcode,
+            $this->tValue,
+            $this->activeLine,
+            $this->activeChar,
+            $this->classLine,
+            $this->classChar,
+            $this->methodLine,
+            $this->methodChar
+        );
     }
 
     public function hasScannerError(): bool
