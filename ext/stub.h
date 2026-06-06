@@ -119,6 +119,7 @@
 #include "stub/issue2324extended.zep.h"
 #include "stub/issue2385.zep.h"
 #include "stub/issue2394.zep.h"
+#include "stub/issue2409.zep.h"
 #include "stub/issue2428.zep.h"
 #include "stub/issue2469.zep.h"
 #include "stub/issue2505crosschain.zep.h"
