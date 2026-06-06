@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace Zephir\Parser;
+namespace Zephir\Test\Parser;
 
 use PHPUnit\Framework\TestCase;
 use Zephir\Parser\Php\PhpParser;
