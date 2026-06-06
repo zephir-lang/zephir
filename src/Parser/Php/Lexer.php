@@ -354,9 +354,9 @@ final class Lexer
         // Longest-match: hex, then double, then decimal integer (mirrors re2c).
         if (preg_match('/\G-?0x[0-9A-Fa-f]+/A', $code, $m, 0, $start)) {
             $opcode = TokenType::T_INTEGER;
-        } elseif (preg_match('/\G-?[0-9]+\.[0-9]+/A', $code, $m, 0, $start)) {
+        } elseif (preg_match('/\G-?\d+\.\d+/A', $code, $m, 0, $start)) {
             $opcode = TokenType::T_DOUBLE;
-        } elseif (preg_match('/\G-?[0-9]+/A', $code, $m, 0, $start)) {
+        } elseif (preg_match('/\G-?\d+/A', $code, $m, 0, $start)) {
             $opcode = TokenType::T_INTEGER;
         } else {
             return null;

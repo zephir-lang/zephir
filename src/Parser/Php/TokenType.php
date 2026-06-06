@@ -118,31 +118,42 @@ final class TokenType
     public const T_ELSEIF       = 452;
     public const T_INTERNAL     = 453;
 
-    /* Single-character operators (ASCII code == id) */
-    public const T_AT                = 64;  /* @ */
-    public const T_DOT               = 46;  /* . */
-    public const T_COMMA             = 44;  /* , */
-    public const T_ASSIGN            = 61;  /* = */
-    public const T_LESS              = 60;  /* < */
-    public const T_GREATER           = 62;  /* > */
-    public const T_COLON             = 58;  /* : */
-    public const T_DOTCOMMA          = 59;  /* ; */
-    public const T_QUESTION          = 63;  /* ? */
-    public const T_BRACKET_OPEN      = 123; /* { */
-    public const T_BRACKET_CLOSE     = 125; /* } */
-    public const T_SBRACKET_OPEN     = 91;  /* [ */
-    public const T_SBRACKET_CLOSE    = 93;  /* ] */
-    public const T_PARENTHESES_OPEN  = 40;  /* ( */
-    public const T_PARENTHESES_CLOSE = 41;  /* ) */
-    public const T_BITWISE_OR        = 124; /* | */
-    public const T_BITWISE_AND       = 38;  /* & */
-    public const T_BITWISE_XOR       = 94;  /* ^ */
-    public const T_ADD               = 43;  /* + */
-    public const T_SUB               = 45;  /* - */
-    public const T_MUL               = 42;  /* * */
-    public const T_DIV               = 47;  /* / */
-    public const T_MOD               = 37;  /* % */
-    public const T_BITWISE_NOT       = 126; /* ~ */
+    /*
+     * Single-character operators. The id IS the ASCII code of the character,
+     * so the lexer/parser can branch on it directly (mirroring scanner.h):
+     *   T_AT at-sign 64, T_DOT period 46, T_COMMA comma 44, T_ASSIGN equals 61,
+     *   T_LESS less-than 60, T_GREATER greater-than 62, T_COLON colon 58,
+     *   T_DOTCOMMA semicolon 59, T_QUESTION question 63, T_BRACKET_OPEN brace 123,
+     *   T_BRACKET_CLOSE brace 125, T_SBRACKET_OPEN bracket 91,
+     *   T_SBRACKET_CLOSE bracket 93, T_PARENTHESES_OPEN paren 40,
+     *   T_PARENTHESES_CLOSE paren 41, T_BITWISE_OR pipe 124, T_BITWISE_AND amp 38,
+     *   T_BITWISE_XOR caret 94, T_ADD plus 43, T_SUB minus 45, T_MUL star 42,
+     *   T_DIV slash 47, T_MOD percent 37, T_BITWISE_NOT tilde 126.
+     */
+    public const T_AT                = 64;
+    public const T_DOT               = 46;
+    public const T_COMMA             = 44;
+    public const T_ASSIGN            = 61;
+    public const T_LESS              = 60;
+    public const T_GREATER           = 62;
+    public const T_COLON             = 58;
+    public const T_DOTCOMMA          = 59;
+    public const T_QUESTION          = 63;
+    public const T_BRACKET_OPEN      = 123;
+    public const T_BRACKET_CLOSE     = 125;
+    public const T_SBRACKET_OPEN     = 91;
+    public const T_SBRACKET_CLOSE    = 93;
+    public const T_PARENTHESES_OPEN  = 40;
+    public const T_PARENTHESES_CLOSE = 41;
+    public const T_BITWISE_OR        = 124;
+    public const T_BITWISE_AND       = 38;
+    public const T_BITWISE_XOR       = 94;
+    public const T_ADD               = 43;
+    public const T_SUB               = 45;
+    public const T_MUL               = 42;
+    public const T_DIV               = 47;
+    public const T_MOD               = 37;
+    public const T_BITWISE_NOT       = 126;
 
     /* Multi-character operators */
     public const T_ARROW                       = 400;
@@ -178,5 +189,6 @@ final class TokenType
 
     private function __construct()
     {
+        // Constants-only holder; not instantiable.
     }
 }

@@ -320,6 +320,8 @@ final class PhpParser
                 return $this->parseFunction();
             case TokenType::T_INTERFACE:
                 return $this->parseInterface();
+            default:
+                break;
         }
 
         $this->syntaxError();
@@ -492,6 +494,8 @@ final class PhpParser
                     break;
                 case 'const':
                     $constants[] = $m;
+                    break;
+                default:
                     break;
             }
         }
@@ -1122,6 +1126,8 @@ final class PhpParser
                 $this->advance();
 
                 return $this->simpleStatement('empty');
+            default:
+                break;
         }
 
         // Expression statement: must be a function/method/static call.
@@ -1863,7 +1869,7 @@ final class PhpParser
         $operator = $this->parseAssignmentOperator();
         $expr     = $this->parseExpr(0);
 
-        $node = [
+        return [
             'assign-type' => 'property-access',
             'operator'    => $operator,
             'left'        => $recv,
@@ -1873,8 +1879,6 @@ final class PhpParser
             'line'        => $this->line(),
             'char'        => $this->char(),
         ];
-
-        return $node;
     }
 
     private function parseLetStaticProperty(Token $variable): array
@@ -2103,6 +2107,8 @@ final class PhpParser
                 return $this->parseFetch();
             case TokenType::T_NEW:
                 return $this->parsePostfix($this->parseNew());
+            default:
+                break;
         }
 
         return $this->parsePostfix($this->parsePrimary());
@@ -2160,6 +2166,8 @@ final class PhpParser
                 return $this->parseDynamicBraceLed();
             case TokenType::T_FUNCTION:
                 return $this->parseClosure();
+            default:
+                break;
         }
 
         $this->unsupported();
@@ -2432,10 +2440,8 @@ final class PhpParser
         if ($this->check(TokenType::T_STATIC)) {
             $this->advance();
             $parameters = null;
-            if ($this->accept(TokenType::T_PARENTHESES_OPEN)) {
-                if (!$this->accept(TokenType::T_PARENTHESES_CLOSE)) {
-                    $parameters = $this->parseCallArgumentsAfterOpen();
-                }
+            if ($this->accept(TokenType::T_PARENTHESES_OPEN) && !$this->accept(TokenType::T_PARENTHESES_CLOSE)) {
+                $parameters = $this->parseCallArgumentsAfterOpen();
             }
 
             $node = [
@@ -2682,6 +2688,10 @@ final class PhpParser
                     return $this->literalFromToken(TokenType::T_CONSTANT, $tok);
                 }
                 $this->syntaxError();
+
+                // no break (syntaxError throws)
+            default:
+                break;
         }
 
         $this->syntaxError();

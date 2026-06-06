@@ -152,26 +152,25 @@ function slugify(string $s): string
 function extractHeredocs(string $fileSection): array
 {
     // Match: $name = <<<LABEL  or  $name =<<<'LABEL'  ... newline ... LABEL;
-    $re = '/\$(\w+)\s*=\s*<<<(["\']?)(\w+)\2\R(.*?)\R[ \t]*\3;/s';
+    $re = '/\$\w+\s*=\s*<<<(["\']?)(\w+)\1\R(.*?)\R[ \t]*\2;/s';
     if (!preg_match_all($re, $fileSection, $matches, PREG_SET_ORDER)) {
         return [];
     }
 
     $out = [];
     foreach ($matches as $m) {
-        $assignment = $m[0];
-        $var        = $m[1];
-        $resolved   = null;
+        [$full, $quote, $label, $body] = $m;
+
+        // Re-evaluate the heredoc/nowdoc into a fixed variable so PHP applies
+        // the same escape semantics the test fed the extension (avoids a
+        // variable-variable while preserving heredoc vs nowdoc behavior).
+        $resolved = null;
         try {
-            // Evaluate just the assignment; PHP resolves heredoc/nowdoc escapes.
-            eval($assignment);
-            if (isset($$var) && is_string($$var)) {
-                $resolved = $$var;
-            }
+            eval("\$resolved = <<<{$quote}{$label}{$quote}\n{$body}\n{$label};");
         } catch (\Throwable $e) {
             $resolved = null;
         }
-        if ($resolved !== null) {
+        if (is_string($resolved)) {
             $out[] = $resolved;
         }
     }
