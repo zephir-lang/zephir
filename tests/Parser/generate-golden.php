@@ -126,12 +126,18 @@ foreach ($inputs as $slug => $src) {
 
 printf("Wrote %d golden fixtures to %s\n", $count, $fixturesDir);
 if ($unusable !== []) {
-    printf("Skipped %d input(s) with non-JSON-encodable C-extension output:\n  %s\n",
-        count($unusable), implode("\n  ", $unusable));
+    printf(
+        "Skipped %d input(s) with non-JSON-encodable C-extension output:\n  %s\n",
+        count($unusable),
+        implode("\n  ", $unusable)
+    );
 }
 if ($skipped !== []) {
-    printf("Skipped %d .phpt files with no extractable heredoc:\n  %s\n",
-        count($skipped), implode("\n  ", $skipped));
+    printf(
+        "Skipped %d .phpt files with no extractable heredoc:\n  %s\n",
+        count($skipped),
+        implode("\n  ", $skipped)
+    );
 }
 
 /**

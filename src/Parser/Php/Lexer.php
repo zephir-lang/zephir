@@ -32,8 +32,8 @@ use function substr;
  *    *immediately after* that token is consumed — i.e. the value the parser
  *    stamps when the token is the current lookahead.
  *  - IGNORE tokens (whitespace, newlines, line comments, C comments) advance
- *    position but are not surfaced. `/** ... *​/` docblocks surface as COMMENT,
- *    dropped when nested deeper than one `{` level (`number_brackets > 1`).
+ *    position but are not surfaced. Slash-double-star docblocks surface as
+ *    COMMENT, dropped when nested deeper than one `{` level (number_brackets > 1).
  */
 final class Lexer
 {
@@ -126,6 +126,72 @@ final class Lexer
         '_ENV'     => true,
     ];
 
+    /**
+     * Operator/punctuator lexemes => [opcode, activeChar increment]. Probed
+     * longest-first (3 → 2 → 1 chars) for re2c longest-match. The increments
+     * intentionally reproduce scanner.re verbatim, including its non-uniform
+     * (sometimes off-by-one) bumps on multi-character operators.
+     */
+    private const OPERATORS = [
+        // 3-character
+        '!==' => [TokenType::T_NOTIDENTICAL, 3],
+        '<<=' => [TokenType::T_ASSIGN_BITWISE_SHIFTLEFT, 1],
+        '>>=' => [TokenType::T_ASSIGN_BITWISE_SHIFTRIGHT, 1],
+        '===' => [TokenType::T_IDENTICAL, 3],
+        '...' => [TokenType::T_EXCLUSIVE_RANGE, 3],
+        // 2-character
+        '!='  => [TokenType::T_NOTEQUALS, 2],
+        '&&'  => [TokenType::T_AND, 2],
+        '&='  => [TokenType::T_ASSIGN_BITWISE_AND, 1],
+        '||'  => [TokenType::T_OR, 2],
+        '|='  => [TokenType::T_ASSIGN_BITWISE_OR, 1],
+        '^='  => [TokenType::T_ASSIGN_BITWISE_XOR, 1],
+        '<<'  => [TokenType::T_BITWISE_SHIFTLEFT, 2],
+        '<='  => [TokenType::T_LESSEQUAL, 1],
+        '<>'  => [TokenType::T_NOTEQUALS, 2],
+        '>>'  => [TokenType::T_BITWISE_SHIFTRIGHT, 2],
+        '>='  => [TokenType::T_GREATEREQUAL, 1],
+        '=='  => [TokenType::T_EQUALS, 2],
+        '=>'  => [TokenType::T_DOUBLEARROW, 2],
+        '+='  => [TokenType::T_ASSIGN_ADD, 1],
+        '++'  => [TokenType::T_INCR, 2],
+        '->'  => [TokenType::T_ARROW, 2],
+        '-='  => [TokenType::T_ASSIGN_SUB, 1],
+        '--'  => [TokenType::T_DECR, 2],
+        '*='  => [TokenType::T_ASSIGN_MUL, 1],
+        '/='  => [TokenType::T_ASSIGN_DIV, 1],
+        '%='  => [TokenType::T_ASSIGN_MOD, 1],
+        '..'  => [TokenType::T_INCLUSIVE_RANGE, 2],
+        '.='  => [TokenType::T_ASSIGN_CONCAT, 1],
+        '::'  => [TokenType::T_DOUBLECOLON, 2],
+        // 1-character
+        '('   => [TokenType::T_PARENTHESES_OPEN, 1],
+        ')'   => [TokenType::T_PARENTHESES_CLOSE, 1],
+        '{'   => [TokenType::T_BRACKET_OPEN, 1],
+        '}'   => [TokenType::T_BRACKET_CLOSE, 1],
+        '['   => [TokenType::T_SBRACKET_OPEN, 1],
+        ']'   => [TokenType::T_SBRACKET_CLOSE, 1],
+        '@'   => [TokenType::T_AT, 1],
+        '~'   => [TokenType::T_BITWISE_NOT, 1],
+        ';'   => [TokenType::T_DOTCOMMA, 1],
+        ','   => [TokenType::T_COMMA, 1],
+        '?'   => [TokenType::T_QUESTION, 1],
+        '!'   => [TokenType::T_NOT, 1],
+        '&'   => [TokenType::T_BITWISE_AND, 1],
+        '|'   => [TokenType::T_BITWISE_OR, 1],
+        '^'   => [TokenType::T_BITWISE_XOR, 1],
+        '<'   => [TokenType::T_LESS, 1],
+        '>'   => [TokenType::T_GREATER, 1],
+        '='   => [TokenType::T_ASSIGN, 1],
+        '+'   => [TokenType::T_ADD, 1],
+        '-'   => [TokenType::T_SUB, 1],
+        '*'   => [TokenType::T_MUL, 1],
+        '/'   => [TokenType::T_DIV, 1],
+        '%'   => [TokenType::T_MOD, 1],
+        '.'   => [TokenType::T_DOT, 1],
+        ':'   => [TokenType::T_COLON, 1],
+    ];
+
     private string $code;
     private int $len;
     private int $cursor = 0;
@@ -174,13 +240,7 @@ final class Lexer
         while (true) {
             $status = $this->getToken();
             if ($status < 0) {
-                if ($status === TokenType::RETCODE_ERR || $status === TokenType::RETCODE_IMPOSSIBLE) {
-                    $this->scannerError = true;
-                    $rest               = substr($this->code, $this->cursor);
-                    $this->scannerErrorMessage = $rest !== ''
-                        ? 'Scanner error: ' . $status . ' ' . $rest
-                        : 'Scanner error: ' . $status;
-                }
+                $this->recordScannerError($status);
                 break; // EOF or error
             }
 
@@ -189,24 +249,14 @@ final class Lexer
                 $this->activeToken = $this->tOpcode;
             }
 
-            switch ($this->tOpcode) {
-                case TokenType::T_IGNORE:
-                    break;
-                case TokenType::T_BRACKET_OPEN:
-                    $numberBrackets++;
-                    $tokens[] = $this->makeToken();
-                    break;
-                case TokenType::T_BRACKET_CLOSE:
-                    $numberBrackets--;
-                    $tokens[] = $this->makeToken();
-                    break;
-                case TokenType::T_COMMENT:
-                    if ($numberBrackets <= 1) {
-                        $tokens[] = $this->makeToken();
-                    }
-                    break;
-                default:
-                    $tokens[] = $this->makeToken();
+            if ($this->tOpcode === TokenType::T_BRACKET_OPEN) {
+                $numberBrackets++;
+            } elseif ($this->tOpcode === TokenType::T_BRACKET_CLOSE) {
+                $numberBrackets--;
+            }
+
+            if ($this->isEmitted($numberBrackets)) {
+                $tokens[] = $this->makeToken();
             }
         }
 
@@ -223,6 +273,37 @@ final class Lexer
         );
 
         return $tokens;
+    }
+
+    /**
+     * Whether the just-scanned token is surfaced to the parser: IGNORE tokens
+     * never are, and COMMENT docblocks nested deeper than one `{` level are
+     * dropped (base.c's `number_brackets <= 1` rule).
+     */
+    private function isEmitted(int $numberBrackets): bool
+    {
+        if ($this->tOpcode === TokenType::T_IGNORE) {
+            return false;
+        }
+        if ($this->tOpcode === TokenType::T_COMMENT && $numberBrackets > 1) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /** Record a scanner error message for ERR/IMPOSSIBLE statuses (EOF is silent). */
+    private function recordScannerError(int $status): void
+    {
+        if ($status !== TokenType::RETCODE_ERR && $status !== TokenType::RETCODE_IMPOSSIBLE) {
+            return;
+        }
+
+        $rest                      = substr($this->code, $this->cursor);
+        $this->scannerError        = true;
+        $this->scannerErrorMessage = $rest !== ''
+            ? 'Scanner error: ' . $status . ' ' . $rest
+            : 'Scanner error: ' . $status;
     }
 
     private function makeToken(): Token
@@ -275,7 +356,44 @@ final class Lexer
 
         $c = $this->code[$start];
 
-        // Newline.
+        $status = $this->scanTrivia($c, $start);
+        if ($status !== null) {
+            return $status;
+        }
+
+        // Numeric literals (possibly leading '-'); a '-' that does not begin a
+        // number falls through to operator handling.
+        if (($c >= '0' && $c <= '9') || $c === '-') {
+            $status = $this->tryNumber($start);
+            if ($status !== null) {
+                return $status;
+            }
+        }
+
+        // Identifiers / keywords / constants.
+        if ($this->isIdentifierStart($c)) {
+            $status = $this->tryIdentifier($start);
+            if ($status !== null) {
+                return $status;
+            }
+        }
+
+        $status = $this->scanStringLiteral($c, $start);
+        if ($status !== null) {
+            return $status;
+        }
+
+        $status = $this->scanCommentOrCblock($c, $start);
+        if ($status !== null) {
+            return $status;
+        }
+
+        return $this->scanOperator($start, $c);
+    }
+
+    /** Newline or a `[ \t\r]+` whitespace run (both IGNORE); null if neither. */
+    private function scanTrivia(string $c, int $start): ?int
+    {
         if ($c === "\n") {
             $this->cursor++;
             $this->activeLine++;
@@ -285,7 +403,6 @@ final class Lexer
             return 0;
         }
 
-        // Whitespace run [ \t\r]+.
         if ($c === ' ' || $c === "\t" || $c === "\r") {
             $n = strspn($this->code, " \t\r", $start);
             $this->cursor += $n;
@@ -295,35 +412,34 @@ final class Lexer
             return 0;
         }
 
-        // Numeric literals (possibly leading '-').
-        if (($c >= '0' && $c <= '9') || $c === '-') {
-            $status = $this->tryNumber($start);
-            if ($status !== null) {
-                return $status;
-            }
-            // '-' that does not begin a number falls through to operator handling.
-        }
+        return null;
+    }
 
-        // Identifiers / keywords / constants.
-        if ($c === '\\' || $c === '_' || $c === '$' || ($c >= 'a' && $c <= 'z') || ($c >= 'A' && $c <= 'Z')) {
-            $status = $this->tryIdentifier($start);
-            if ($status !== null) {
-                return $status;
-            }
-        }
+    private function isIdentifierStart(string $c): bool
+    {
+        return $c === '\\' || $c === '_' || $c === '$'
+            || ($c >= 'a' && $c <= 'z') || ($c >= 'A' && $c <= 'Z');
+    }
 
-        // String / char / interned-string literals.
+    /** String `"..."`, char `'...'`, or interned `~"..."`; null if $c starts none. */
+    private function scanStringLiteral(string $c, int $start): ?int
+    {
         if ($c === '"') {
             return $this->scanQuoted($start, '"', TokenType::T_STRING);
         }
         if ($c === "'") {
             return $this->scanQuoted($start, "'", TokenType::T_CHAR);
         }
-        if ($c === '~' && $start + 1 < $this->len && $this->code[$start + 1] === '"') {
+        if ($c === '~' && ($this->code[$start + 1] ?? '') === '"') {
             return $this->scanQuoted($start, '"', TokenType::T_ISTRING);
         }
 
-        // Comments and c-blocks (need 2-char lookahead).
+        return null;
+    }
+
+    /** Block/line comments and `%{ ... }%` c-blocks; null if $c starts none. */
+    private function scanCommentOrCblock(string $c, int $start): ?int
+    {
         if ($c === '/') {
             $n = $this->code[$start + 1] ?? '';
             if ($n === '*') {
@@ -339,7 +455,7 @@ final class Lexer
             return $this->scanCblock($start);
         }
 
-        return $this->scanOperator($start, $c);
+        return null;
     }
 
     /**
@@ -395,22 +511,10 @@ final class Lexer
         $lexeme = $m[0];
         $kw     = self::KEYWORDS[strtolower($lexeme)] ?? null;
         if ($kw !== null) {
-            $this->cursor = $start + strlen($lexeme);
-            $this->activeChar += strlen($lexeme);
-            $this->tOpcode = $kw;
-
-            if ($kw === TokenType::T_CLASS) {
-                $this->classLine = $this->activeLine;
-                $this->classChar = $this->activeChar;
-            } elseif ($kw === TokenType::T_FUNCTION) {
-                $this->methodLine = $this->activeLine;
-                $this->methodChar = $this->activeChar;
-            }
-
-            return 0;
+            return $this->emitKeyword($kw, $lexeme, $start);
         }
 
-        // Not a keyword: classify as identifier or constant.
+        // Not a keyword: strip a leading '$' from the value, then classify.
         if ($lexeme[0] === '$') {
             $value = substr($lexeme, 1);
             $this->activeChar += strlen($lexeme) - 1;
@@ -418,33 +522,55 @@ final class Lexer
             $value = $lexeme;
             $this->activeChar += strlen($lexeme);
         }
+        $this->cursor  = $start + strlen($lexeme);
+        $this->tValue  = $value;
+        $this->tOpcode = $this->classifyIdentifier($value);
+
+        return 0;
+    }
+
+    /** Emit a keyword token, saving the class/method position for `class`/`function`. */
+    private function emitKeyword(int $kw, string $lexeme, int $start): int
+    {
         $this->cursor = $start + strlen($lexeme);
-        $this->tValue = $value;
+        $this->activeChar += strlen($lexeme);
+        $this->tOpcode = $kw;
 
+        if ($kw === TokenType::T_CLASS) {
+            $this->classLine = $this->activeLine;
+            $this->classChar = $this->activeChar;
+        } elseif ($kw === TokenType::T_FUNCTION) {
+            $this->methodLine = $this->activeLine;
+            $this->methodChar = $this->activeChar;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Classify a non-keyword identifier value: an all-`[A-Z0-9_]` name is a
+     * CONSTANT, except superglobals and all-underscore names which are forced
+     * to IDENTIFIER (mirroring scanner.re).
+     */
+    private function classifyIdentifier(string $value): int
+    {
         $vlen = strlen($value);
+
         if ($vlen > 3 && $value[0] === '_' && isset(self::SUPERGLOBALS[$value])) {
-            $this->tOpcode = TokenType::T_IDENTIFIER;
-
-            return 0;
+            return TokenType::T_IDENTIFIER;
         }
-
         if (strspn($value, '_') === $vlen) {
-            $this->tOpcode = TokenType::T_IDENTIFIER;
-
-            return 0;
+            return TokenType::T_IDENTIFIER;
         }
 
-        $isConstant = true;
         for ($j = 0; $j < $vlen; $j++) {
             $ch = $value[$j];
             if (!(($ch >= 'A' && $ch <= 'Z') || ($ch >= '0' && $ch <= '9') || $ch === '_')) {
-                $isConstant = false;
-                break;
+                return TokenType::T_IDENTIFIER;
             }
         }
-        $this->tOpcode = $isConstant ? TokenType::T_CONSTANT : TokenType::T_IDENTIFIER;
 
-        return 0;
+        return TokenType::T_CONSTANT;
     }
 
     /**
@@ -492,80 +618,94 @@ final class Lexer
     }
 
     /**
-     * Scan a `/* ... *​/` block comment. Docblocks become COMMENT (value kept),
+     * Scan a slash-star block comment. Docblocks become COMMENT (value kept),
      * plain C comments become IGNORE. Multi-line comments advance line/char
      * character-by-character exactly as scanner.re does.
      */
     private function scanBlockComment(int $start): int
     {
-        // Find the closing "*/".
-        $i      = $start + 2;
-        $closed = false;
-        while ($i < $this->len) {
-            if ($this->code[$i] === '*' && ($this->code[$i + 1] ?? '') === '/') {
-                $i += 2;
-                $closed = true;
-                break;
-            }
-            $i++;
-        }
-        if (!$closed) {
+        $end = $this->findClosing($start + 2, '*', '/');
+        if ($end < 0) {
             return TokenType::RETCODE_ERR;
         }
 
-        $this->cursor = $i;
-        $l            = $i - $start; // total length incl. /* and */
+        $this->cursor = $end;
+        $l            = $end - $start; // total length incl. /* and */
+        $opcode       = $this->classifyBlockComment($start, $l);
 
-        // Decide docblock (COMMENT) vs C comment (IGNORE).
-        if ($l === 5) {
-            $opcode = TokenType::T_COMMENT;          // /***/
-        } elseif ($l === 4) {
-            $opcode = TokenType::T_IGNORE;           // /**/
-        } elseif ($this->code[$start + 2] === '*' && $this->code[$start + $l - 2] === '*') {
-            $opcode = TokenType::T_COMMENT;          // /** ... **/
-        } else {
-            $opcode = TokenType::T_IGNORE;           // /* ... */
-        }
-
-        $hasData    = false;
-        $valueStart = $start;
-        if ($opcode === TokenType::T_COMMENT && $l > 5) {
-            $hasData    = true;
-            $valueStart = $start + 1;
-        }
-        if ($opcode === TokenType::T_IGNORE && $l > 4) {
-            $hasData = true;
-        }
+        // Docblocks (COMMENT) keep their inner text and advance position
+        // character-by-character; C comments (IGNORE) carry no value.
+        $hasData = ($opcode === TokenType::T_COMMENT && $l > 5)
+            || ($opcode === TokenType::T_IGNORE && $l > 4);
 
         if ($hasData) {
-            $valLen       = ($i - $valueStart) - 1;
-            $value        = substr($this->code, $valueStart, $valLen);
+            $valueStart   = $opcode === TokenType::T_COMMENT ? $start + 1 : $start;
+            $value        = substr($this->code, $valueStart, ($end - $valueStart) - 1);
             $this->tValue = $value;
-
-            // Walk value[0 .. valLen-2] updating line/char (scanner.re's loop).
-            $ch = $this->activeChar;
-            for ($k = 0; $k < $valLen - 1; $k++) {
-                if ($value[$k] === "\n") {
-                    $ch = 1;
-                    $this->activeLine++;
-                } else {
-                    $ch++;
-                }
-            }
-            $this->activeChar = $ch;
+            $this->advanceThroughMultiline($value);
         } elseif ($opcode === TokenType::T_COMMENT) {
             $valueStart   = $start + 1;
-            $valLen       = ($i - $valueStart) - 1;
-            $this->tValue = substr($this->code, $valueStart, $valLen);
+            $this->tValue = substr($this->code, $valueStart, ($end - $valueStart) - 1);
         }
 
         if ($opcode === TokenType::T_IGNORE) {
-            $this->tValue = null; // C comments carry no value
+            $this->tValue = null;
         }
 
         $this->tOpcode = $opcode;
 
         return 0;
+    }
+
+    /** Classify a block comment by length/markers: docblock (COMMENT) vs C comment (IGNORE). */
+    private function classifyBlockComment(int $start, int $l): int
+    {
+        if ($l === 5) {
+            return TokenType::T_COMMENT; // /***/
+        }
+        if ($l === 4) {
+            return TokenType::T_IGNORE;  // /**/
+        }
+        if ($this->code[$start + 2] === '*' && $this->code[$start + $l - 2] === '*') {
+            return TokenType::T_COMMENT; // /** ... **/
+        }
+
+        return TokenType::T_IGNORE;      // /* ... */
+    }
+
+    /**
+     * Index just past the next two-character delimiter $a$b at or after $from,
+     * or -1 if it is not found before end of input.
+     */
+    private function findClosing(int $from, string $a, string $b): int
+    {
+        for ($i = $from; $i < $this->len; $i++) {
+            if ($this->code[$i] === $a && ($this->code[$i + 1] ?? '') === $b) {
+                return $i + 2;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Advance active_line/active_char through $value[0 .. len-2], resetting the
+     * column to 1 on each newline — the multi-line loop from scanner.re shared
+     * by block comments and c-blocks.
+     */
+    private function advanceThroughMultiline(string $value): void
+    {
+        $ch  = $this->activeChar;
+        $len = strlen($value);
+        for ($k = 0; $k < $len - 1; $k++) {
+            if ($value[$k] === "\n") {
+                $ch = 1;
+                $this->activeLine++;
+            } else {
+                $ch++;
+            }
+        }
+        $this->activeChar = $ch;
     }
 
     /**
@@ -587,217 +727,55 @@ final class Lexer
      */
     private function scanCblock(int $start): int
     {
-        $i      = $start + 2;
-        $closed = false;
-        while ($i < $this->len) {
-            if ($this->code[$i] === '}' && ($this->code[$i + 1] ?? '') === '%') {
-                $i += 2;
-                $closed = true;
-                break;
-            }
-            $i++;
-        }
-        if (!$closed) {
+        $end = $this->findClosing($start + 2, '}', '%');
+        if ($end < 0) {
             return TokenType::RETCODE_ERR;
         }
 
-        $this->cursor = $i;
+        $this->cursor = $end;
         $valueStart   = $start + 2;
-        $valLen       = ($i - $valueStart) - 2; // drop trailing }%
-        $value        = substr($this->code, $valueStart, $valLen);
+        $value        = substr($this->code, $valueStart, ($end - $valueStart) - 2); // drop trailing }%
         $this->tValue = $value;
-
-        $ch = $this->activeChar;
-        for ($k = 0; $k < $valLen - 1; $k++) {
-            if ($value[$k] === "\n") {
-                $ch = 1;
-                $this->activeLine++;
-            } else {
-                $ch++;
-            }
-        }
-        $this->activeChar = $ch;
-        $this->tOpcode    = TokenType::T_CBLOCK;
+        $this->advanceThroughMultiline($value);
+        $this->tOpcode = TokenType::T_CBLOCK;
 
         return 0;
     }
 
     /**
-     * Scan an operator/punctuator at $start. The increments here intentionally
-     * reproduce scanner.re verbatim, including its non-uniform (sometimes
-     * off-by-one) `active_char` bumps on multi-character operators.
+     * Scan an operator/punctuator at $start using the {@see OPERATORS} table,
+     * probed longest-match first (3 → 2 → 1 chars).
      */
     private function scanOperator(int $start, string $c): int
     {
-        $n1 = $this->code[$start + 1] ?? '';
-        $n2 = $this->code[$start + 2] ?? '';
+        $three = substr($this->code, $start, 3);
+        if (strlen($three) === 3 && isset(self::OPERATORS[$three])) {
+            return $this->op(3, self::OPERATORS[$three]);
+        }
 
-        switch ($c) {
-            case '(':
-                return $this->op(1, TokenType::T_PARENTHESES_OPEN);
-            case ')':
-                return $this->op(1, TokenType::T_PARENTHESES_CLOSE);
-            case '{':
-                return $this->op(1, TokenType::T_BRACKET_OPEN);
-            case '}':
-                return $this->op(1, TokenType::T_BRACKET_CLOSE);
-            case '[':
-                return $this->op(1, TokenType::T_SBRACKET_OPEN);
-            case ']':
-                return $this->op(1, TokenType::T_SBRACKET_CLOSE);
-            case '@':
-                return $this->op(1, TokenType::T_AT);
-            case '~':
-                return $this->op(1, TokenType::T_BITWISE_NOT);
-            case ';':
-                return $this->op(1, TokenType::T_DOTCOMMA);
-            case ',':
-                return $this->op(1, TokenType::T_COMMA);
-            case '?':
-                return $this->op(1, TokenType::T_QUESTION);
+        $two = substr($this->code, $start, 2);
+        if (strlen($two) === 2 && isset(self::OPERATORS[$two])) {
+            return $this->op(2, self::OPERATORS[$two]);
+        }
 
-            case '!':
-                if ($n1 === '=' && $n2 === '=') {
-                    return $this->op(3, TokenType::T_NOTIDENTICAL, 3);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_NOTEQUALS, 2);
-                }
-                return $this->op(1, TokenType::T_NOT);
-
-            case '&':
-                if ($n1 === '&') {
-                    return $this->op(2, TokenType::T_AND, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_BITWISE_AND, 1);
-                }
-                return $this->op(1, TokenType::T_BITWISE_AND);
-
-            case '|':
-                if ($n1 === '|') {
-                    return $this->op(2, TokenType::T_OR, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_BITWISE_OR, 1);
-                }
-                return $this->op(1, TokenType::T_BITWISE_OR);
-
-            case '^':
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_BITWISE_XOR, 1);
-                }
-                return $this->op(1, TokenType::T_BITWISE_XOR);
-
-            case '<':
-                if ($n1 === '<' && $n2 === '=') {
-                    return $this->op(3, TokenType::T_ASSIGN_BITWISE_SHIFTLEFT, 1);
-                }
-                if ($n1 === '<') {
-                    return $this->op(2, TokenType::T_BITWISE_SHIFTLEFT, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_LESSEQUAL, 1);
-                }
-                if ($n1 === '>') {
-                    return $this->op(2, TokenType::T_NOTEQUALS, 2);
-                }
-                return $this->op(1, TokenType::T_LESS);
-
-            case '>':
-                if ($n1 === '>' && $n2 === '=') {
-                    return $this->op(3, TokenType::T_ASSIGN_BITWISE_SHIFTRIGHT, 1);
-                }
-                if ($n1 === '>') {
-                    return $this->op(2, TokenType::T_BITWISE_SHIFTRIGHT, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_GREATEREQUAL, 1);
-                }
-                return $this->op(1, TokenType::T_GREATER);
-
-            case '=':
-                if ($n1 === '=' && $n2 === '=') {
-                    return $this->op(3, TokenType::T_IDENTICAL, 3);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_EQUALS, 2);
-                }
-                if ($n1 === '>') {
-                    return $this->op(2, TokenType::T_DOUBLEARROW, 2);
-                }
-                return $this->op(1, TokenType::T_ASSIGN);
-
-            case '+':
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_ADD, 1);
-                }
-                if ($n1 === '+') {
-                    return $this->op(2, TokenType::T_INCR, 2);
-                }
-                return $this->op(1, TokenType::T_ADD);
-
-            case '-':
-                if ($n1 === '>') {
-                    return $this->op(2, TokenType::T_ARROW, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_SUB, 1);
-                }
-                if ($n1 === '-') {
-                    return $this->op(2, TokenType::T_DECR, 2);
-                }
-                return $this->op(1, TokenType::T_SUB);
-
-            case '*':
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_MUL, 1);
-                }
-                return $this->op(1, TokenType::T_MUL);
-
-            case '/':
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_DIV, 1);
-                }
-                return $this->op(1, TokenType::T_DIV);
-
-            case '%':
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_MOD, 1);
-                }
-                return $this->op(1, TokenType::T_MOD);
-
-            case '.':
-                if ($n1 === '.' && $n2 === '.') {
-                    return $this->op(3, TokenType::T_EXCLUSIVE_RANGE, 3);
-                }
-                if ($n1 === '.') {
-                    return $this->op(2, TokenType::T_INCLUSIVE_RANGE, 2);
-                }
-                if ($n1 === '=') {
-                    return $this->op(2, TokenType::T_ASSIGN_CONCAT, 1);
-                }
-                return $this->op(1, TokenType::T_DOT);
-
-            case ':':
-                if ($n1 === ':') {
-                    return $this->op(2, TokenType::T_DOUBLECOLON, 2);
-                }
-                return $this->op(1, TokenType::T_COLON);
+        if (isset(self::OPERATORS[$c])) {
+            return $this->op(1, self::OPERATORS[$c]);
         }
 
         return TokenType::RETCODE_ERR;
     }
 
     /**
-     * Emit an operator token consuming $consume bytes and bumping active_char
-     * by $charInc (defaults to 1, matching the single-character rules).
+     * Emit the operator described by an {@see OPERATORS} entry, consuming
+     * $consume bytes and bumping active_char by the entry's increment.
+     *
+     * @param array{0: int, 1: int} $entry [opcode, activeChar increment]
      */
-    private function op(int $consume, int $opcode, int $charInc = 1): int
+    private function op(int $consume, array $entry): int
     {
         $this->cursor += $consume;
-        $this->activeChar += $charInc;
-        $this->tOpcode = $opcode;
+        $this->activeChar += $entry[1];
+        $this->tOpcode = $entry[0];
 
         return 0;
     }

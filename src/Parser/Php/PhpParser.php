@@ -1651,35 +1651,9 @@ final class PhpParser
             return $this->parseLetStaticProperty($variable);
         }
 
-        // y[ ... ] forms
+        // y[] / y[x] / y[x][] forms
         if ($this->check(TokenType::T_SBRACKET_OPEN)) {
-            if ($this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance(); // [
-                $this->advance(); // ]
-                $operator = $this->parseAssignmentOperator();
-                $expr     = $this->parseExpr(0);
-
-                return $this->letAssignment('variable-append', $operator, $variable, null, null, $expr);
-            }
-
-            $offsets = $this->parseArrayOffsetList();
-            $append  = false;
-            if ($this->check(TokenType::T_SBRACKET_OPEN) && $this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance();
-                $this->advance();
-                $append = true;
-            }
-            $operator = $this->parseAssignmentOperator();
-            $expr     = $this->parseExpr(0);
-
-            return $this->letAssignment(
-                $append ? 'array-index-append' : 'array-index',
-                $operator,
-                $variable,
-                null,
-                $offsets,
-                $expr
-            );
+            return $this->parseIndexedAssignment('variable-append', 'array-index', 'array-index-append', $variable, null);
         }
 
         if ($this->accept(TokenType::T_INCR)) {
@@ -1793,32 +1767,12 @@ final class PhpParser
         }
 
         if ($this->check(TokenType::T_SBRACKET_OPEN)) {
-            if ($this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance();
-                $this->advance();
-                $operator = $this->parseAssignmentOperator();
-                $expr     = $this->parseExpr(0);
-
-                return $this->letAssignment('object-property-append', $operator, $variable, $prop, null, $expr);
-            }
-
-            $offsets = $this->parseArrayOffsetList();
-            $append  = false;
-            if ($this->check(TokenType::T_SBRACKET_OPEN) && $this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance();
-                $this->advance();
-                $append = true;
-            }
-            $operator = $this->parseAssignmentOperator();
-            $expr     = $this->parseExpr(0);
-
-            return $this->letAssignment(
-                $append ? 'object-property-array-index-append' : 'object-property-array-index',
-                $operator,
+            return $this->parseIndexedAssignment(
+                'object-property-append',
+                'object-property-array-index',
+                'object-property-array-index-append',
                 $variable,
-                $prop,
-                $offsets,
-                $expr
+                $prop
             );
         }
 
@@ -1887,32 +1841,12 @@ final class PhpParser
         $prop = $this->expectNameToken();
 
         if ($this->check(TokenType::T_SBRACKET_OPEN)) {
-            if ($this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance();
-                $this->advance();
-                $operator = $this->parseAssignmentOperator();
-                $expr     = $this->parseExpr(0);
-
-                return $this->letAssignment('static-property-append', $operator, $variable, $prop, null, $expr);
-            }
-
-            $offsets = $this->parseArrayOffsetList();
-            $append  = false;
-            if ($this->check(TokenType::T_SBRACKET_OPEN) && $this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
-                $this->advance();
-                $this->advance();
-                $append = true;
-            }
-            $operator = $this->parseAssignmentOperator();
-            $expr     = $this->parseExpr(0);
-
-            return $this->letAssignment(
-                $append ? 'static-property-array-index-append' : 'static-property-array-index',
-                $operator,
+            return $this->parseIndexedAssignment(
+                'static-property-append',
+                'static-property-array-index',
+                'static-property-array-index-append',
                 $variable,
-                $prop,
-                $offsets,
-                $expr
+                $prop
             );
         }
 
@@ -1933,6 +1867,53 @@ final class PhpParser
         }
 
         return $offsets;
+    }
+
+    /** Consume an empty `[]` pair at the cursor, returning whether it was present. */
+    private function acceptEmptyBrackets(): bool
+    {
+        if ($this->check(TokenType::T_SBRACKET_OPEN) && $this->laType(1) === TokenType::T_SBRACKET_CLOSE) {
+            $this->advance();
+            $this->advance();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Parse the index suffix of a let target (`[]`, `[x]`, `[x][]`) followed by
+     * `op expr`, shared by the variable, object-property and static-property
+     * forms. The three assign-type strings select the variant.
+     */
+    private function parseIndexedAssignment(
+        string $appendType,
+        string $indexType,
+        string $indexAppendType,
+        Token $variable,
+        ?Token $property
+    ): array {
+        if ($this->acceptEmptyBrackets()) {
+            $operator = $this->parseAssignmentOperator();
+            $expr     = $this->parseExpr(0);
+
+            return $this->letAssignment($appendType, $operator, $variable, $property, null, $expr);
+        }
+
+        $offsets  = $this->parseArrayOffsetList();
+        $append   = $this->acceptEmptyBrackets();
+        $operator = $this->parseAssignmentOperator();
+        $expr     = $this->parseExpr(0);
+
+        return $this->letAssignment(
+            $append ? $indexAppendType : $indexType,
+            $operator,
+            $variable,
+            $property,
+            $offsets,
+            $expr
+        );
     }
 
     private function parseAssignmentOperator(): string
@@ -1990,31 +1971,15 @@ final class PhpParser
         while (true) {
             $type = $this->peekType();
 
-            if ($type === TokenType::T_QUESTION) {
-                if (50 <= $minBp) {
-                    break;
-                }
+            // ternary (`?:`) and closure-arrow (`=>`) bind looser than the
+            // tabled infix operators; fold their precedence guards into the
+            // conditions so an out-of-range operator falls through to `break`.
+            if ($type === TokenType::T_QUESTION && $minBp < 50) {
                 $left = $this->parseTernary($left);
                 continue;
             }
-
-            if ($type === TokenType::T_DOUBLEARROW) {
-                if (40 <= $minBp) {
-                    break;
-                }
-                $this->advance();
-                $right = $this->parseExpr(39);
-                // The grammar's `IDENTIFIER DOUBLEARROW expr` builds a fresh
-                // identifier literal in the reduce action, so the left literal
-                // is stamped at the post-RHS lookahead — rebuild it here.
-                $leftLit = [
-                    'type'  => 'variable',
-                    'value' => $left['value'] ?? '',
-                    'file'  => $this->file,
-                    'line'  => $this->line(),
-                    'char'  => $this->char(),
-                ];
-                $left = $this->expr('closure-arrow', $leftLit, $right, null);
+            if ($type === TokenType::T_DOUBLEARROW && $minBp < 40) {
+                $left = $this->parseClosureArrow($left);
                 continue;
             }
 
@@ -2031,6 +1996,25 @@ final class PhpParser
         }
 
         return $left;
+    }
+
+    private function parseClosureArrow(array $left): array
+    {
+        $this->expect(TokenType::T_DOUBLEARROW);
+        $right = $this->parseExpr(39);
+
+        // The grammar's `IDENTIFIER DOUBLEARROW expr` builds a fresh identifier
+        // literal in the reduce action, so the left literal is stamped at the
+        // post-RHS lookahead — rebuild it here.
+        $leftLit = [
+            'type'  => 'variable',
+            'value' => $left['value'] ?? '',
+            'file'  => $this->file,
+            'line'  => $this->line(),
+            'char'  => $this->char(),
+        ];
+
+        return $this->expr('closure-arrow', $leftLit, $right, null);
     }
 
     private function parseTernary(array $left): array
