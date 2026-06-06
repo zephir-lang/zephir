@@ -55,7 +55,6 @@ final class Name
         $controlChar = [
             'a',
             'b',
-            'e',
             'f',
             'n',
             'r',
@@ -127,6 +126,19 @@ final class Name
                         $next = $j;
                         continue;
                     }
+                }
+
+                /**
+                 * PHP's "\e" is the ESC byte (0x1B). C only recognises "\e" as
+                 * a GCC/Clang extension; MSVC rejects it and degrades to a
+                 * literal "e". Emit the portable octal escape "\033" so the
+                 * produced C string matches PHP on every compiler. See #2030.
+                 */
+                if ('e' === $after) {
+                    $new .= $escape . '033';
+                    ++$i;
+                    ++$next;
+                    continue;
                 }
 
                 if (in_array($after, $controlChar, true) || is_numeric($after)) {

@@ -30,7 +30,7 @@ ZEPHIR_INIT_CLASS(Stub_Issue2030)
 PHP_METHOD(Stub_Issue2030, escapeChar)
 {
 
-	RETURN_STRING("\e[0;31m");
+	RETURN_STRING("\033[0;31m");
 }
 
 PHP_METHOD(Stub_Issue2030, unicodeAscii)
