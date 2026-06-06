@@ -35,7 +35,9 @@ final class NameTest extends TestCase
             'with questions mark' => ['\?', '\?'],
             'with alert char' => ['\a', '\a'],
             'with backspace char' => ['\b', '\b'],
-            'with escape char' => ['\e', '\e'],
+            // PHP's \e is ESC (0x1B); C's \e is a GCC/Clang-only extension that
+            // MSVC rejects, so emit the portable octal escape \033. See #2030.
+            'with escape char' => ['\e', '\033'],
             'with form feed page brake char' => ['\f', '\f'],
             'with line feed char' => ['\n', '\n'],
             'with carriage return char' => ['\r', '\r'],
