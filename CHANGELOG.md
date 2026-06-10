@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- `RedisCluster` prototype (in `prototypes/redis.php`), so Zephir code can resolve its methods and constants when ext-redis is not installed
+
 ## [0.23.0] - 2026-06-06
 
 ### Added
