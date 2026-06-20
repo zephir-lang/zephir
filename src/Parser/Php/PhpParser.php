@@ -112,10 +112,23 @@ final class PhpParser
         TokenType::T_FINAL      => 'final',
     ];
 
+    /**
+     * Max depth for nested expressions. The C extension turns very deep nesting
+     * into an error node, because its parser stack only grows up to the process
+     * memory limit. This does the same, so wild input returns an error node
+     * instead of using up the PHP call stack and causing a fatal that cannot be
+     * caught. The limit is far above any real expression nesting, so normal code
+     * never reaches it.
+     */
+    private const MAX_EXPR_DEPTH = 1000;
+
     /** @var list<Token> */
     private array $tokens = [];
     private int $pos = 0;
     private string $file = '';
+
+    /** Current depth of nested expressions, capped by {@see MAX_EXPR_DEPTH}. */
+    private int $exprDepth = 0;
 
     /**
      * Parse Zephir source into the IR array. Never throws on malformed input —
@@ -146,7 +159,11 @@ final class PhpParser
 
             // base.c: a program of only IGNORE tokens yields [].
             return $statements ?? [];
-        } catch (SyntaxError $e) {
+        } catch (\Throwable $e) {
+            // The C extension never throws to the caller. It returns an error
+            // node instead. Keep that contract for every failure: the internal
+            // SyntaxError signal and any other unexpected runtime error (this
+            // includes the depth guard in parseExpr()).
             return $this->syntaxErrorNode();
         }
     }
@@ -1966,36 +1983,49 @@ final class PhpParser
 
     private function parseExpr(int $minBp): array
     {
-        $left = $this->parseUnary();
-
-        while (true) {
-            $type = $this->peekType();
-
-            // ternary (`?:`) and closure-arrow (`=>`) bind looser than the
-            // tabled infix operators; fold their precedence guards into the
-            // conditions so an out-of-range operator falls through to `break`.
-            if ($type === TokenType::T_QUESTION && $minBp < 50) {
-                $left = $this->parseTernary($left);
-                continue;
-            }
-            if ($type === TokenType::T_DOUBLEARROW && $minBp < 40) {
-                $left = $this->parseClosureArrow($left);
-                continue;
-            }
-
-            if (!isset(self::INFIX[$type])) {
-                break;
-            }
-            [$bp, $name, $rightAssoc] = self::INFIX[$type];
-            if ($bp <= $minBp) {
-                break;
-            }
-            $this->advance();
-            $right = $this->parseExpr($rightAssoc ? $bp - 1 : $bp);
-            $left  = $this->expr($name, $left, $right, null);
+        // Depth guard, see MAX_EXPR_DEPTH. Very deep nesting becomes an error
+        // node (through SyntaxError, caught by parse()) instead of a fatal that
+        // runs out of stack. Undo the counter before throwing so the guard does
+        // not leak depth.
+        if (++$this->exprDepth > self::MAX_EXPR_DEPTH) {
+            --$this->exprDepth;
+            $this->syntaxError();
         }
 
-        return $left;
+        try {
+            $left = $this->parseUnary();
+
+            while (true) {
+                $type = $this->peekType();
+
+                // ternary (`?:`) and closure-arrow (`=>`) bind looser than the
+                // tabled infix operators; fold their precedence guards into the
+                // conditions so an out-of-range operator falls through to `break`.
+                if ($type === TokenType::T_QUESTION && $minBp < 50) {
+                    $left = $this->parseTernary($left);
+                    continue;
+                }
+                if ($type === TokenType::T_DOUBLEARROW && $minBp < 40) {
+                    $left = $this->parseClosureArrow($left);
+                    continue;
+                }
+
+                if (!isset(self::INFIX[$type])) {
+                    break;
+                }
+                [$bp, $name, $rightAssoc] = self::INFIX[$type];
+                if ($bp <= $minBp) {
+                    break;
+                }
+                $this->advance();
+                $right = $this->parseExpr($rightAssoc ? $bp - 1 : $bp);
+                $left  = $this->expr($name, $left, $right, null);
+            }
+
+            return $left;
+        } finally {
+            --$this->exprDepth;
+        }
     }
 
     private function parseClosureArrow(array $left): array
@@ -2055,6 +2085,12 @@ final class PhpParser
                 $this->advance();
 
                 return $this->expr('minus', $this->parseExpr(220), null, null);
+            // No case for unary plus. zephir.lemon has a `PLUS xx_common_expr`
+            // rule, but the compiled LALR parser hides it (the `[NOT]` precedence
+            // resolves the conflict against a leading `+`), so the C extension
+            // returns a "Syntax error" for `+expr`. Sending it to unsupported()
+            // keeps the pure PHP parser identical to the ext. Checked against
+            // ext 2.0.4 by comparing output directly.
             case TokenType::T_ISSET:
                 $this->advance();
 
