@@ -1,0 +1,300 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_asin.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ASin",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 8,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_asin.zep",
+                                    "line": 8,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 10,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "asin",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_asin.zep",
+                                            "line": 10,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 10,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_asin.zep",
+                                "line": 10,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_asin.zep",
+                    "line": 6,
+                    "last-line": 13,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 15,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_asin.zep",
+                                    "line": 15,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 17,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "asin",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_asin.zep",
+                                            "line": 17,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 17,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_asin.zep",
+                                "line": 17,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_asin.zep",
+                    "line": 13,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntValue1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "asin",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__optimizers_asin.zep",
+                                            "line": 22,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 22,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_asin.zep",
+                                "line": 22,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_asin.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 25,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "asin",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_asin.zep",
+                                            "line": 27,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 27,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_asin.zep",
+                                "line": 27,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_asin.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVarParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 30,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "asin",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_asin.zep",
+                                            "line": 32,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_asin.zep",
+                                        "line": 32,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_asin.zep",
+                                "line": 32,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_asin.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_asin.zep",
+                    "line": 30,
+                    "last-line": 34,
+                    "char": 16
+                }
+            ],
+            "file": "stub__optimizers_asin.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_asin.zep",
+        "line": 4,
+        "char": 5
+    }
+]

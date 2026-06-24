@@ -1,0 +1,172 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Printing output\n *",
+        "file": "stub__echoes.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__echoes.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Echoes",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEcho1",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__echoes.zep",
+                                    "line": 12,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__echoes.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__echoes.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEcho2",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "double",
+                                    "value": "1.0",
+                                    "file": "stub__echoes.zep",
+                                    "line": 17,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__echoes.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__echoes.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEcho3",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "bool",
+                                    "value": "true",
+                                    "file": "stub__echoes.zep",
+                                    "line": 22,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__echoes.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__echoes.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEcho4",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__echoes.zep",
+                                    "line": 27,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__echoes.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__echoes.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEcho5",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "string",
+                                    "value": "hello",
+                                    "file": "stub__echoes.zep",
+                                    "line": 32,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__echoes.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__echoes.zep",
+                    "line": 30,
+                    "last-line": 34,
+                    "char": 16
+                }
+            ],
+            "file": "stub__echoes.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__echoes.zep",
+        "line": 8,
+        "char": 5
+    }
+]

@@ -1,0 +1,37 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "instanceof",
+                    "left": {
+                        "type": "variable",
+                        "value": "a",
+                        "file": "phpt__operators_instanceof.zep",
+                        "line": 2,
+                        "char": 16
+                    },
+                    "right": {
+                        "type": "variable",
+                        "value": "b",
+                        "file": "phpt__operators_instanceof.zep",
+                        "line": 2,
+                        "char": 20
+                    },
+                    "file": "phpt__operators_instanceof.zep",
+                    "line": 2,
+                    "char": 20
+                },
+                "file": "phpt__operators_instanceof.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_instanceof.zep",
+        "line": 1,
+        "char": 9
+    }
+]

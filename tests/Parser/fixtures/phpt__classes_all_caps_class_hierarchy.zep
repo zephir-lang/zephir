@@ -1,0 +1,1 @@
+class RBF extends BASE {}

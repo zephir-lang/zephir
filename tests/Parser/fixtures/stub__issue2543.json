@@ -1,0 +1,99 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2543.zep",
+        "line": 5,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2543\n *",
+        "file": "stub__issue2543.zep",
+        "line": 6,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2543",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "varIntPositive",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__issue2543.zep",
+                        "line": 9,
+                        "char": 32
+                    },
+                    "docblock": "** @var int $varIntPositive *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2543.zep",
+                            "line": 9,
+                            "char": 37
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__issue2543.zep",
+                            "line": 9,
+                            "char": 43
+                        }
+                    ],
+                    "file": "stub__issue2543.zep",
+                    "line": 11,
+                    "char": 31
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "label",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__issue2543.zep",
+                        "line": 12,
+                        "char": 25
+                    },
+                    "docblock": "** @var string|null $label *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__issue2543.zep",
+                            "line": 12,
+                            "char": 30
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__issue2543.zep",
+                            "line": 12,
+                            "char": 36
+                        }
+                    ],
+                    "file": "stub__issue2543.zep",
+                    "line": 13,
+                    "char": 1
+                }
+            ],
+            "file": "stub__issue2543.zep",
+            "line": 6,
+            "char": 5
+        },
+        "file": "stub__issue2543.zep",
+        "line": 6,
+        "char": 5
+    }
+]

@@ -1,0 +1,3534 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__bench.zep",
+        "line": 10,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Workloads for the PHPBench suite under tests\/Benchmark\/.\n *\n * Each method runs a tight internal loop so PHPBench's per-iteration cost\n * (revs\/iterations setup) stays small relative to the work being measured.\n * Pairs one-to-one with a pure-PHP equivalent in the benchmark class so the\n * reported metric is the Zephir-over-PHP speedup margin.\n *",
+        "file": "stub__bench.zep",
+        "line": 11,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Bench",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "propA",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "stub__bench.zep",
+                        "line": 13,
+                        "char": 21
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 14,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "propB",
+                    "default": {
+                        "type": "string",
+                        "value": "hello",
+                        "file": "stub__bench.zep",
+                        "line": 14,
+                        "char": 25
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 16,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "propA",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "stub__bench.zep",
+                                        "line": 18,
+                                        "char": 29
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 18,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 19,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "propB",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "hello",
+                                        "file": "stub__bench.zep",
+                                        "line": 19,
+                                        "char": 32
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 19,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 20,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__bench.zep",
+                    "line": 16,
+                    "last-line": 25,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "forOverArray",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "arr",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 26,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__bench.zep",
+                                    "line": 28,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 29,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 29,
+                                        "char": 21
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 29,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 30,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "arr",
+                                "file": "stub__bench.zep",
+                                "line": 30,
+                                "char": 22
+                            },
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 31,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 31,
+                                                "char": 31
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 31,
+                                            "char": 31
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 32,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 33,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 33,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 34,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * For-over-array baseline. The compiler skips the IS_ARRAY branch wrapper\n     * since `arr` is known to be array (see issue #1878).\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 27,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 27,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 26,
+                    "last-line": 39,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "forOverIterator",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__bench.zep",
+                                    "line": 42,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "iter",
+                                    "file": "stub__bench.zep",
+                                    "line": 42,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 43,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 43,
+                                        "char": 21
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 43,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 44,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "iter",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\ArrayIterator",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "1",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 41
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 41
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "2",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 44
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 44
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "3",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 47
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "4",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 50
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 50
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "5",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 53
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 53
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "6",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 56
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 56
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "7",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 59
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 59
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "8",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 62
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 62
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "9",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 65
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 65
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "10",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 44,
+                                                                "char": 69
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 44,
+                                                            "char": 69
+                                                        }
+                                                    ],
+                                                    "file": "stub__bench.zep",
+                                                    "line": 44,
+                                                    "char": 70
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 44,
+                                                "char": 70
+                                            }
+                                        ],
+                                        "file": "stub__bench.zep",
+                                        "line": 44,
+                                        "char": 71
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 44,
+                                    "char": 71
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 45,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "iter",
+                                "file": "stub__bench.zep",
+                                "line": 45,
+                                "char": 23
+                            },
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 46,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 46,
+                                                "char": 31
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 46,
+                                            "char": 31
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 47,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 48,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 48,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 49,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * For-over-Iterator. The compiler skips the IS_ARRAY branch wrapper\n     * since the iterand is known to be an object (issue #1878).\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 41,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 41,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 40,
+                    "last-line": 57,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "forOverIteratorWithContinue",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__bench.zep",
+                                    "line": 60,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "iter",
+                                    "file": "stub__bench.zep",
+                                    "line": 60,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 61,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 61,
+                                        "char": 21
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 61,
+                                    "char": 21
+                                },
+                                {
+                                    "variable": "iv",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 61,
+                                        "char": 29
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 61,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 62,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "iter",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\ArrayIterator",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "1",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 41
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 41
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "2",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 44
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 44
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "3",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 47
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "4",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 50
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 50
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "5",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 53
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 53
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "6",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 56
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 56
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "7",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 59
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 59
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "8",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 62
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 62
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "9",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 65
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 65
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "10",
+                                                                "file": "stub__bench.zep",
+                                                                "line": 62,
+                                                                "char": 69
+                                                            },
+                                                            "file": "stub__bench.zep",
+                                                            "line": 62,
+                                                            "char": 69
+                                                        }
+                                                    ],
+                                                    "file": "stub__bench.zep",
+                                                    "line": 62,
+                                                    "char": 70
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 62,
+                                                "char": 70
+                                            }
+                                        ],
+                                        "file": "stub__bench.zep",
+                                        "line": 62,
+                                        "char": 71
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 62,
+                                    "char": 71
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 63,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "iter",
+                                "file": "stub__bench.zep",
+                                "line": 63,
+                                "char": 23
+                            },
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "iv",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 64,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 64,
+                                                "char": 30
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 64,
+                                            "char": 30
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 65,
+                                    "char": 14
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "mod",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "iv",
+                                                "file": "stub__bench.zep",
+                                                "line": 65,
+                                                "char": 19
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__bench.zep",
+                                                "line": 65,
+                                                "char": 24
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 65,
+                                            "char": 24
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__bench.zep",
+                                            "line": 65,
+                                            "char": 28
+                                        },
+                                        "file": "stub__bench.zep",
+                                        "line": 65,
+                                        "char": 28
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "continue",
+                                            "file": "stub__bench.zep",
+                                            "line": 67,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 68,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "iv",
+                                                "file": "stub__bench.zep",
+                                                "line": 68,
+                                                "char": 25
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 68,
+                                            "char": 25
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 69,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 70,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 70,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 71,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * For-over-Iterator with `continue`, the exact path fixed in issue #2546.\n     * The first-iteration guard (zend_bool flag) introduced by the fix adds one\n     * extra conditional per iteration; this subject quantifies that overhead\n     * against the plain-iterator path and against pure-PHP foreach+continue.\n     * Skips every even element (5 of 10 trigger continue).\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 59,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 59,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 58,
+                    "last-line": 75,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "propertyReadLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 76,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 78,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 78,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 78,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 78,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 79,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 79,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 79,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 79,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__bench.zep",
+                                                        "line": 80,
+                                                        "char": 35
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "propA",
+                                                        "file": "stub__bench.zep",
+                                                        "line": 80,
+                                                        "char": 41
+                                                    },
+                                                    "file": "stub__bench.zep",
+                                                    "line": 80,
+                                                    "char": 41
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 80,
+                                                "char": 41
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 80,
+                                            "char": 41
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 81,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 81,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 82,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 83,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 83,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 84,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Object property read in a hot loop. Exercises zephir_read_property.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 77,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 77,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 76,
+                    "last-line": 89,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "arrayFetchStringLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "arr",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 90,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 90,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 92,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 92,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 92,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 92,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 93,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 93,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 93,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 93,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "cast",
+                                                    "left": "long",
+                                                    "right": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "arr",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 94,
+                                                            "char": 33
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "a",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 94,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 94,
+                                                        "char": 37
+                                                    },
+                                                    "file": "stub__bench.zep",
+                                                    "line": 94,
+                                                    "char": 37
+                                                },
+                                                "right": {
+                                                    "type": "cast",
+                                                    "left": "long",
+                                                    "right": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "arr",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 94,
+                                                            "char": 49
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "b",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 94,
+                                                            "char": 51
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 94,
+                                                        "char": 52
+                                                    },
+                                                    "file": "stub__bench.zep",
+                                                    "line": 94,
+                                                    "char": 52
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 94,
+                                                "char": 52
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 94,
+                                            "char": 52
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 95,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 95,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 96,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 97,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 97,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 98,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Array fetch by string key in a hot loop. Exercises\n     * zephir_array_fetch_string against precomputed-length char* keys.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 91,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 91,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 90,
+                    "last-line": 102,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "methodDispatchLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 103,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 105,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 105,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 105,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 105,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 106,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 106,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 106,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 106,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 107,
+                                                    "char": 28
+                                                },
+                                                "name": "returnConst",
+                                                "call-type": 1,
+                                                "file": "stub__bench.zep",
+                                                "line": 107,
+                                                "char": 42
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 107,
+                                            "char": 42
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 108,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 108,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 109,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 110,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 110,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 111,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Method dispatch in a hot loop. Exercises zephir_call_method on `this`.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 104,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 104,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 103,
+                    "last-line": 113,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnConst",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "7",
+                                "file": "stub__bench.zep",
+                                "line": 115,
+                                "char": 17
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 116,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 114,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 114,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 113,
+                    "last-line": 120,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "stringConcatLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "base",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 121,
+                            "char": 50
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 121,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "out",
+                                    "file": "stub__bench.zep",
+                                    "line": 123,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 124,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 124,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 124,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 125,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__bench.zep",
+                                        "line": 125,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 125,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 126,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 126,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 126,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 126,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "out",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "out",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 127,
+                                                    "char": 27
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "base",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 127,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 127,
+                                                "char": 33
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 127,
+                                            "char": 33
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 128,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 128,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 129,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 130,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__bench.zep",
+                                "line": 130,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 131,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * String concatenation in a hot loop. Exercises ZEPHIR_CONCAT_*.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 122,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 122,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 121,
+                    "last-line": 135,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "newInstanceLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 136,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__bench.zep",
+                                    "line": 138,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 139,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 139,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 139,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 139,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 139,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 140,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 140,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 140,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 140,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "obj",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Bench",
+                                                "dynamic": 0,
+                                                "file": "stub__bench.zep",
+                                                "line": 141,
+                                                "char": 34
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 141,
+                                            "char": 34
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 142,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "obj",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 142,
+                                                    "char": 27
+                                                },
+                                                "name": "returnConst",
+                                                "call-type": 1,
+                                                "file": "stub__bench.zep",
+                                                "line": 142,
+                                                "char": 41
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 142,
+                                            "char": 41
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 143,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 143,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 144,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 145,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 145,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 146,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Object instantiation + immediate method call.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 137,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 137,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 136,
+                    "last-line": 151,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "variadicSum",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "numbers",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 152,
+                            "char": 43,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "v",
+                                    "file": "stub__bench.zep",
+                                    "line": 154,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 155,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 155,
+                                        "char": 21
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 155,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 156,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "numbers",
+                                "file": "stub__bench.zep",
+                                "line": 156,
+                                "char": 26
+                            },
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 157,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 157,
+                                                "char": 31
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 157,
+                                            "char": 31
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 158,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 159,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 159,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 160,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Variadic callee (issue #2025). Sums every trailing argument, exercising\n     * the zephir_get_args_from() collection emitted for `...` parameters.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 153,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 153,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 152,
+                    "last-line": 165,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "variadicSumNarrowLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 166,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 168,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 168,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 168,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 168,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 169,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 169,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 169,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 169,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 170,
+                                                    "char": 28
+                                                },
+                                                "name": "variadicSum",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 170,
+                                                            "char": 42
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 170,
+                                                        "char": 42
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "2",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 170,
+                                                            "char": 45
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 170,
+                                                        "char": 45
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "3",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 170,
+                                                            "char": 48
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 170,
+                                                        "char": 48
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "4",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 170,
+                                                            "char": 51
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 170,
+                                                        "char": 51
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "5",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 170,
+                                                            "char": 54
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 170,
+                                                        "char": 54
+                                                    }
+                                                ],
+                                                "file": "stub__bench.zep",
+                                                "line": 170,
+                                                "char": 55
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 170,
+                                            "char": 55
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 171,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 171,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 172,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 173,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 173,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 174,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Hot loop calling the variadic method with a 5-argument tail. Measures\n     * the per-call cost of collecting the trailing arguments into an array.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 167,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 167,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 166,
+                    "last-line": 179,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "variadicSumWideLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 180,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 182,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 182,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 182,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 182,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 183,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 183,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 183,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 183,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 184,
+                                                    "char": 28
+                                                },
+                                                "name": "variadicSum",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 42
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 42
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "2",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 45
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 45
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "3",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 48
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 48
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "4",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 51
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 51
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "5",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 54
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 54
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "6",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 57
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 57
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "7",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 60
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 60
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "8",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 63
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 63
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "9",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 66
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 66
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "10",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 70
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 70
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "11",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 74
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 74
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "12",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 78
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 78
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "13",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 82
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 82
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "14",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 86
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 86
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "15",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 184,
+                                                            "char": 90
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 184,
+                                                        "char": 90
+                                                    }
+                                                ],
+                                                "file": "stub__bench.zep",
+                                                "line": 184,
+                                                "char": 91
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 184,
+                                            "char": 91
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 185,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 185,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 186,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 187,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 187,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 188,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Same as variadicSumNarrowLoop but with a 15-argument tail, so the report\n     * shows how the collection cost scales with the number of variadic args.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 181,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 181,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 180,
+                    "last-line": 194,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "funcGetArgsSum",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 195,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 195,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "c",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 195,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "d",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 195,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "e",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 195,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "args",
+                                    "file": "stub__bench.zep",
+                                    "line": 197,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__bench.zep",
+                                    "line": 197,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 198,
+                            "char": 12
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 198,
+                                        "char": 21
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 198,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 199,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "args",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "func_get_args",
+                                        "call-type": 1,
+                                        "file": "stub__bench.zep",
+                                        "line": 199,
+                                        "char": 35
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 199,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 200,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "args",
+                                "file": "stub__bench.zep",
+                                "line": 200,
+                                "char": 23
+                            },
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 201,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__bench.zep",
+                                                "line": 201,
+                                                "char": 31
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 201,
+                                            "char": 31
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 202,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 203,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 203,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 204,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * The pre-variadic idiom that `...` replaces: a fixed-arity method reading\n     * its arguments through func_get_args(). Paired with variadicSum so the\n     * report contrasts the `...` operator against the old workaround.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 196,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 196,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 195,
+                    "last-line": 206,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "funcGetArgsSumLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 206,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 208,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 208,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 208,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 208,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 209,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 209,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 209,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 209,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 210,
+                                                    "char": 28
+                                                },
+                                                "name": "funcGetArgsSum",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 210,
+                                                            "char": 45
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 210,
+                                                        "char": 45
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "2",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 210,
+                                                            "char": 48
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 210,
+                                                        "char": 48
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "3",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 210,
+                                                            "char": 51
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 210,
+                                                        "char": 51
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "4",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 210,
+                                                            "char": 54
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 210,
+                                                        "char": 54
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "5",
+                                                            "file": "stub__bench.zep",
+                                                            "line": 210,
+                                                            "char": 57
+                                                        },
+                                                        "file": "stub__bench.zep",
+                                                        "line": 210,
+                                                        "char": 57
+                                                    }
+                                                ],
+                                                "file": "stub__bench.zep",
+                                                "line": 210,
+                                                "char": 58
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 210,
+                                            "char": 58
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 211,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 211,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 212,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 213,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 213,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 214,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 207,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 207,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 206,
+                    "last-line": 221,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "final",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "finalReturnConst",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "7",
+                                "file": "stub__bench.zep",
+                                "line": 224,
+                                "char": 17
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 225,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Call-dispatch micro-workloads for the FastCall investigation (#1510).\n     * Each loops a trivial callee so the measured cost is dominated by the\n     * call machinery (cache lookup + fcic setup + zend_call_function), not the\n     * callee body. Three dispatch flavours exercise distinct kernel paths.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 223,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 223,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 222,
+                    "last-line": 227,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "staticReturnConst",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "7",
+                                "file": "stub__bench.zep",
+                                "line": 229,
+                                "char": 17
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 230,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 228,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 228,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 227,
+                    "last-line": 232,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "finalDispatchLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 232,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 234,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 234,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 234,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 234,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 235,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 235,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 235,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 235,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__bench.zep",
+                                                    "line": 236,
+                                                    "char": 28
+                                                },
+                                                "name": "finalReturnConst",
+                                                "call-type": 1,
+                                                "file": "stub__bench.zep",
+                                                "line": 236,
+                                                "char": 47
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 236,
+                                            "char": 47
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 237,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 237,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 238,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 239,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 239,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 240,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 233,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 233,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 232,
+                    "last-line": 242,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "staticDispatchLoop",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__bench.zep",
+                            "line": 242,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 244,
+                                        "char": 19
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 244,
+                                    "char": 19
+                                },
+                                {
+                                    "variable": "sum",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__bench.zep",
+                                        "line": 244,
+                                        "char": 28
+                                    },
+                                    "file": "stub__bench.zep",
+                                    "line": 244,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 245,
+                            "char": 13
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__bench.zep",
+                                    "line": 245,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__bench.zep",
+                                    "line": 245,
+                                    "char": 21
+                                },
+                                "file": "stub__bench.zep",
+                                "line": 245,
+                                "char": 21
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "sum",
+                                            "expr": {
+                                                "type": "scall",
+                                                "dynamic-class": 0,
+                                                "class": "self",
+                                                "dynamic": 0,
+                                                "name": "staticReturnConst",
+                                                "file": "stub__bench.zep",
+                                                "line": 246,
+                                                "char": 48
+                                            },
+                                            "file": "stub__bench.zep",
+                                            "line": 246,
+                                            "char": 48
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 247,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__bench.zep",
+                                            "line": 247,
+                                            "char": 20
+                                        }
+                                    ],
+                                    "file": "stub__bench.zep",
+                                    "line": 248,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__bench.zep",
+                            "line": 249,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "sum",
+                                "file": "stub__bench.zep",
+                                "line": 249,
+                                "char": 19
+                            },
+                            "file": "stub__bench.zep",
+                            "line": 250,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__bench.zep",
+                                "line": 243,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__bench.zep",
+                        "line": 243,
+                        "char": 5
+                    },
+                    "file": "stub__bench.zep",
+                    "line": 242,
+                    "last-line": 251,
+                    "char": 19
+                }
+            ],
+            "file": "stub__bench.zep",
+            "line": 11,
+            "char": 5
+        },
+        "file": "stub__bench.zep",
+        "line": 11,
+        "char": 5
+    }
+]

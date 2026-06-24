@@ -1,0 +1,88 @@
+[
+    {
+        "type": "function",
+        "name": "singleReturn",
+        "statements": [
+            {
+                "type": "return",
+                "expr": {
+                    "type": "bool",
+                    "value": "false",
+                    "file": "phpt__functions_return_types_false.zep",
+                    "line": 1,
+                    "char": 49
+                },
+                "file": "phpt__functions_return_types_false.zep",
+                "line": 1,
+                "char": 51
+            }
+        ],
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "false",
+                    "mandatory": 0,
+                    "file": "phpt__functions_return_types_false.zep",
+                    "line": 1,
+                    "char": 35
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_return_types_false.zep",
+            "line": 1,
+            "char": 35
+        },
+        "file": "phpt__functions_return_types_false.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "function",
+        "name": "unionReturn",
+        "statements": [
+            {
+                "type": "return",
+                "expr": {
+                    "type": "int",
+                    "value": "1",
+                    "file": "phpt__functions_return_types_false.zep",
+                    "line": 3,
+                    "char": 49
+                },
+                "file": "phpt__functions_return_types_false.zep",
+                "line": 3,
+                "char": 51
+            }
+        ],
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "int",
+                    "mandatory": 0,
+                    "file": "phpt__functions_return_types_false.zep",
+                    "line": 3,
+                    "char": 31
+                },
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "false",
+                    "mandatory": 0,
+                    "file": "phpt__functions_return_types_false.zep",
+                    "line": 3,
+                    "char": 39
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_return_types_false.zep",
+            "line": 3,
+            "char": 39
+        },
+        "file": "phpt__functions_return_types_false.zep",
+        "line": 3,
+        "char": 8
+    }
+]

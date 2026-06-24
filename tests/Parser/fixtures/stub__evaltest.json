@@ -1,0 +1,79 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__evaltest.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "EvalTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "evalCode",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "code",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__evaltest.zep",
+                            "line": 5,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "eval",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "code",
+                                            "file": "stub__evaltest.zep",
+                                            "line": 7,
+                                            "char": 25
+                                        },
+                                        "file": "stub__evaltest.zep",
+                                        "line": 7,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__evaltest.zep",
+                                "line": 7,
+                                "char": 26
+                            },
+                            "file": "stub__evaltest.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__evaltest.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 19
+                }
+            ],
+            "file": "stub__evaltest.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__evaltest.zep",
+        "line": 3,
+        "char": 5
+    }
+]

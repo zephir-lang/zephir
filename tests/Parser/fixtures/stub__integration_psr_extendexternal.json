@@ -1,0 +1,33 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Integration\\Psr",
+        "file": "stub__integration_psr_extendexternal.zep",
+        "line": 3,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Psr\\Log\\AbstractLogger",
+                "file": "stub__integration_psr_extendexternal.zep",
+                "line": 3,
+                "char": 27
+            }
+        ],
+        "file": "stub__integration_psr_extendexternal.zep",
+        "line": 5,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ExtendExternal",
+        "abstract": 0,
+        "final": 0,
+        "extends": "AbstractLogger",
+        "file": "stub__integration_psr_extendexternal.zep",
+        "line": 5,
+        "char": 5
+    }
+]

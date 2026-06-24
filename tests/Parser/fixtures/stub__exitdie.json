@@ -1,0 +1,241 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__exitdie.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ExitDie",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExit",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__exitdie.zep",
+                                "line": 5,
+                                "char": 43
+                            },
+                            "reference": 0,
+                            "file": "stub__exitdie.zep",
+                            "line": 5,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "param",
+                                        "file": "stub__exitdie.zep",
+                                        "line": 7,
+                                        "char": 17
+                                    },
+                                    "file": "stub__exitdie.zep",
+                                    "line": 7,
+                                    "char": 19
+                                },
+                                "file": "stub__exitdie.zep",
+                                "line": 7,
+                                "char": 19
+                            },
+                            "statements": [
+                                {
+                                    "type": "fcall",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "exit",
+                                        "call-type": 1,
+                                        "file": "stub__exitdie.zep",
+                                        "line": 8,
+                                        "char": 10
+                                    },
+                                    "file": "stub__exitdie.zep",
+                                    "line": 9,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__exitdie.zep",
+                            "line": 11,
+                            "char": 6
+                        },
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "exit",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "param",
+                                            "file": "stub__exitdie.zep",
+                                            "line": 11,
+                                            "char": 13
+                                        },
+                                        "file": "stub__exitdie.zep",
+                                        "line": 11,
+                                        "char": 13
+                                    }
+                                ],
+                                "file": "stub__exitdie.zep",
+                                "line": 11,
+                                "char": 14
+                            },
+                            "file": "stub__exitdie.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__exitdie.zep",
+                        "line": 6,
+                        "char": 2
+                    },
+                    "file": "stub__exitdie.zep",
+                    "line": 5,
+                    "last-line": 14,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDie",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__exitdie.zep",
+                                "line": 14,
+                                "char": 42
+                            },
+                            "reference": 0,
+                            "file": "stub__exitdie.zep",
+                            "line": 14,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "empty",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "param",
+                                        "file": "stub__exitdie.zep",
+                                        "line": 16,
+                                        "char": 17
+                                    },
+                                    "file": "stub__exitdie.zep",
+                                    "line": 16,
+                                    "char": 19
+                                },
+                                "file": "stub__exitdie.zep",
+                                "line": 16,
+                                "char": 19
+                            },
+                            "statements": [
+                                {
+                                    "type": "fcall",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "die",
+                                        "call-type": 1,
+                                        "file": "stub__exitdie.zep",
+                                        "line": 17,
+                                        "char": 9
+                                    },
+                                    "file": "stub__exitdie.zep",
+                                    "line": 18,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__exitdie.zep",
+                            "line": 20,
+                            "char": 5
+                        },
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "die",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "param",
+                                            "file": "stub__exitdie.zep",
+                                            "line": 20,
+                                            "char": 12
+                                        },
+                                        "file": "stub__exitdie.zep",
+                                        "line": 20,
+                                        "char": 12
+                                    }
+                                ],
+                                "file": "stub__exitdie.zep",
+                                "line": 20,
+                                "char": 13
+                            },
+                            "file": "stub__exitdie.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__exitdie.zep",
+                        "line": 15,
+                        "char": 2
+                    },
+                    "file": "stub__exitdie.zep",
+                    "line": 14,
+                    "last-line": 22,
+                    "char": 16
+                }
+            ],
+            "file": "stub__exitdie.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__exitdie.zep",
+        "line": 3,
+        "char": 5
+    }
+]

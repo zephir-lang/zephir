@@ -1,0 +1,2091 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__statements.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Statements",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "tmp1",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__statements.zep",
+                        "line": 5,
+                        "char": 23
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 6,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "tmp2",
+                    "default": {
+                        "type": "string",
+                        "value": "test string",
+                        "file": "stub__statements.zep",
+                        "line": 6,
+                        "char": 30
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 10,
+                    "char": 6
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "totalSteps",
+                    "default": {
+                        "type": "int",
+                        "value": "100",
+                        "file": "stub__statements.zep",
+                        "line": 11,
+                        "char": 29
+                    },
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/544\n     *",
+                    "file": "stub__statements.zep",
+                    "line": 13,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "width",
+                    "default": {
+                        "type": "int",
+                        "value": "100",
+                        "file": "stub__statements.zep",
+                        "line": 13,
+                        "char": 24
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 15,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "filledChar",
+                    "default": {
+                        "type": "string",
+                        "value": "=",
+                        "file": "stub__statements.zep",
+                        "line": 15,
+                        "char": 27
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 17,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "unfilledChar",
+                    "default": {
+                        "type": "string",
+                        "value": ".",
+                        "file": "stub__statements.zep",
+                        "line": 17,
+                        "char": 29
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 19,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "arrow",
+                    "default": {
+                        "type": "string",
+                        "value": ">",
+                        "file": "stub__statements.zep",
+                        "line": 19,
+                        "char": 22
+                    },
+                    "file": "stub__statements.zep",
+                    "line": 21,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testPropertyAcccessAvoidTmpReuse",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "result1",
+                                    "file": "stub__statements.zep",
+                                    "line": 23,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "result2",
+                                    "file": "stub__statements.zep",
+                                    "line": 23,
+                                    "char": 23
+                                },
+                                {
+                                    "variable": "result3",
+                                    "file": "stub__statements.zep",
+                                    "line": 23,
+                                    "char": 32
+                                },
+                                {
+                                    "variable": "result4",
+                                    "file": "stub__statements.zep",
+                                    "line": 23,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 25,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "result1",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strpos",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 25,
+                                                        "char": 29
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp2",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 25,
+                                                        "char": 34
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 25,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 25,
+                                                "char": 34
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 25,
+                                                        "char": 41
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp1",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 25,
+                                                        "char": 46
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 25,
+                                                    "char": 46
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 25,
+                                                "char": 46
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 25,
+                                        "char": 47
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 25,
+                                    "char": 47
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 27,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "result2",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strpos",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 27,
+                                                        "char": 29
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp2",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 27,
+                                                        "char": 34
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 27,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 27,
+                                                "char": 34
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 27,
+                                                        "char": 41
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp1",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 27,
+                                                        "char": 46
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 27,
+                                                    "char": 46
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 27,
+                                                "char": 46
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 27,
+                                        "char": 47
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 27,
+                                    "char": 47
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 29,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "result3",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strpos",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 29,
+                                                        "char": 29
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp2",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 29,
+                                                        "char": 34
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 29,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 29,
+                                                "char": 34
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 29,
+                                                        "char": 41
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp1",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 29,
+                                                        "char": 46
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 29,
+                                                    "char": 46
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 29,
+                                                "char": 46
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 29,
+                                        "char": 47
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 29,
+                                    "char": 47
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 31,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "result4",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "strpos",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 31,
+                                                        "char": 35
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp2",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 31,
+                                                        "char": 40
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 31,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 31,
+                                                "char": 40
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 31,
+                                                        "char": 47
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "tmp1",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 31,
+                                                        "char": 52
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 31,
+                                                    "char": 52
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 31,
+                                                "char": 52
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 31,
+                                        "char": 53
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 31,
+                                    "char": 53
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 32,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 21,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testElseIf",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 34,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "greater",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__statements.zep",
+                                    "line": 36,
+                                    "char": 16
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__statements.zep",
+                                    "line": 36,
+                                    "char": 20
+                                },
+                                "file": "stub__statements.zep",
+                                "line": 36,
+                                "char": 20
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "more",
+                                        "file": "stub__statements.zep",
+                                        "line": 37,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 38,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__statements.zep",
+                                            "line": 38,
+                                            "char": 23
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__statements.zep",
+                                            "line": 38,
+                                            "char": 27
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 38,
+                                        "char": 27
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "equal",
+                                                "file": "stub__statements.zep",
+                                                "line": 39,
+                                                "char": 25
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 40,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 40,
+                                    "char": 16
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__statements.zep",
+                                            "line": 40,
+                                            "char": 23
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "-1",
+                                            "file": "stub__statements.zep",
+                                            "line": 40,
+                                            "char": 28
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 40,
+                                        "char": 28
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "-1",
+                                                "file": "stub__statements.zep",
+                                                "line": 41,
+                                                "char": 22
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 42,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 42,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "less",
+                                        "file": "stub__statements.zep",
+                                        "line": 43,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 44,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 45,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 34,
+                    "last-line": 47,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testElseIf1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 47,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "total",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__statements.zep",
+                                        "line": 49,
+                                        "char": 23
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 49,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 51,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "less",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "num",
+                                        "file": "stub__statements.zep",
+                                        "line": 51,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "total",
+                                        "file": "stub__statements.zep",
+                                        "line": 51,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 51,
+                                    "char": 24
+                                },
+                                "file": "stub__statements.zep",
+                                "line": 51,
+                                "char": 26
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "less",
+                                        "file": "stub__statements.zep",
+                                        "line": 52,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 53,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "list",
+                                        "left": {
+                                            "type": "equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "num",
+                                                "file": "stub__statements.zep",
+                                                "line": 53,
+                                                "char": 24
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "total",
+                                                "file": "stub__statements.zep",
+                                                "line": 53,
+                                                "char": 31
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 53,
+                                            "char": 31
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 53,
+                                        "char": 33
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "equal",
+                                                "file": "stub__statements.zep",
+                                                "line": 54,
+                                                "char": 25
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 55,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 55,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "else",
+                                        "file": "stub__statements.zep",
+                                        "line": 56,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 57,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 58,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 47,
+                    "last-line": 60,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testElseIf2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 60,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "total",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 60,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "less",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "num",
+                                        "file": "stub__statements.zep",
+                                        "line": 62,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "total",
+                                        "file": "stub__statements.zep",
+                                        "line": 62,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 62,
+                                    "char": 24
+                                },
+                                "file": "stub__statements.zep",
+                                "line": 62,
+                                "char": 26
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "less",
+                                        "file": "stub__statements.zep",
+                                        "line": 63,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 64,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "list",
+                                        "left": {
+                                            "type": "equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "num",
+                                                "file": "stub__statements.zep",
+                                                "line": 64,
+                                                "char": 24
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "total",
+                                                "file": "stub__statements.zep",
+                                                "line": 64,
+                                                "char": 31
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 64,
+                                            "char": 31
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 64,
+                                        "char": 33
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "equal",
+                                                "file": "stub__statements.zep",
+                                                "line": 65,
+                                                "char": 25
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 66,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 66,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "else",
+                                        "file": "stub__statements.zep",
+                                        "line": 67,
+                                        "char": 24
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 68,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 69,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 60,
+                    "last-line": 71,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "test544Issue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "step",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 71,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "filledWidth",
+                                    "file": "stub__statements.zep",
+                                    "line": 73,
+                                    "char": 24
+                                },
+                                {
+                                    "variable": "unfilledWidth",
+                                    "file": "stub__statements.zep",
+                                    "line": 73,
+                                    "char": 39
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 75,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "step",
+                                    "file": "stub__statements.zep",
+                                    "line": 75,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "property-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "stub__statements.zep",
+                                        "line": 75,
+                                        "char": 24
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "totalSteps",
+                                        "file": "stub__statements.zep",
+                                        "line": 75,
+                                        "char": 36
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 75,
+                                    "char": 36
+                                },
+                                "file": "stub__statements.zep",
+                                "line": 75,
+                                "char": 36
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "filledWidth",
+                                            "expr": {
+                                                "type": "mul",
+                                                "left": {
+                                                    "type": "div",
+                                                    "left": {
+                                                        "type": "list",
+                                                        "left": {
+                                                            "type": "sub",
+                                                            "left": {
+                                                                "type": "property-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "this",
+                                                                    "file": "stub__statements.zep",
+                                                                    "line": 76,
+                                                                    "char": 37
+                                                                },
+                                                                "right": {
+                                                                    "type": "variable",
+                                                                    "value": "width",
+                                                                    "file": "stub__statements.zep",
+                                                                    "line": 76,
+                                                                    "char": 44
+                                                                },
+                                                                "file": "stub__statements.zep",
+                                                                "line": 76,
+                                                                "char": 44
+                                                            },
+                                                            "right": {
+                                                                "type": "int",
+                                                                "value": "1",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 76,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 76,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 76,
+                                                        "char": 49
+                                                    },
+                                                    "right": {
+                                                        "type": "property-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "this",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 76,
+                                                            "char": 56
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "totalSteps",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 76,
+                                                            "char": 68
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 76,
+                                                        "char": 68
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 76,
+                                                    "char": 68
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "step",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 76,
+                                                    "char": 74
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 76,
+                                                "char": 74
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 76,
+                                            "char": 74
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 77,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "unfilledWidth",
+                                            "expr": {
+                                                "type": "sub",
+                                                "left": {
+                                                    "type": "list",
+                                                    "left": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 77,
+                                                                "char": 39
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "width",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 77,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 77,
+                                                            "char": 46
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 77,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 77,
+                                                        "char": 49
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 77,
+                                                    "char": 51
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "filledWidth",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 77,
+                                                    "char": 64
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 77,
+                                                "char": 64
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 77,
+                                            "char": 64
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 78,
+                                    "char": 18
+                                },
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "concat",
+                                            "left": {
+                                                "type": "fcall",
+                                                "name": "str_repeat",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 78,
+                                                                "char": 36
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "filledChar",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 78,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 78,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 78,
+                                                        "char": 47
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "filledWidth",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 78,
+                                                            "char": 60
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 78,
+                                                        "char": 60
+                                                    }
+                                                ],
+                                                "file": "stub__statements.zep",
+                                                "line": 78,
+                                                "char": 61
+                                            },
+                                            "right": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 78,
+                                                    "char": 67
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "arrow",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 78,
+                                                    "char": 73
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 78,
+                                                "char": 73
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 78,
+                                            "char": 73
+                                        },
+                                        "right": {
+                                            "type": "fcall",
+                                            "name": "str_repeat",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "property-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "this",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 78,
+                                                            "char": 90
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "unfilledChar",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 78,
+                                                            "char": 103
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 78,
+                                                        "char": 103
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 78,
+                                                    "char": 103
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "unfilledWidth",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 78,
+                                                        "char": 118
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 78,
+                                                    "char": 118
+                                                }
+                                            ],
+                                            "file": "stub__statements.zep",
+                                            "line": 78,
+                                            "char": 119
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 78,
+                                        "char": 119
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 79,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "step",
+                                            "file": "stub__statements.zep",
+                                            "line": 79,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "property-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "this",
+                                                "file": "stub__statements.zep",
+                                                "line": 79,
+                                                "char": 32
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "totalSteps",
+                                                "file": "stub__statements.zep",
+                                                "line": 79,
+                                                "char": 44
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 79,
+                                            "char": 44
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 79,
+                                        "char": 44
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "str_repeat",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 80,
+                                                                "char": 36
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "filledChar",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 80,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 80,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 80,
+                                                        "char": 47
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 80,
+                                                                "char": 54
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "width",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 80,
+                                                                "char": 60
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 80,
+                                                            "char": 60
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 80,
+                                                        "char": 60
+                                                    }
+                                                ],
+                                                "file": "stub__statements.zep",
+                                                "line": 80,
+                                                "char": 61
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 81,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 81,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "str_repeat",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 82,
+                                                        "char": 36
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "unfilledChar",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 82,
+                                                        "char": 49
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 82,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 82,
+                                                "char": 49
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 82,
+                                                        "char": 56
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "width",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 82,
+                                                        "char": 62
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 82,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 82,
+                                                "char": 62
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 82,
+                                        "char": 63
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 83,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 84,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 71,
+                    "last-line": 86,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "test544IssueWithVariable",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "step",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__statements.zep",
+                            "line": 86,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "filledWidth",
+                                    "file": "stub__statements.zep",
+                                    "line": 88,
+                                    "char": 24
+                                },
+                                {
+                                    "variable": "unfilledWidth",
+                                    "file": "stub__statements.zep",
+                                    "line": 88,
+                                    "char": 39
+                                },
+                                {
+                                    "variable": "totalSteps",
+                                    "file": "stub__statements.zep",
+                                    "line": 88,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 90,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "totalSteps",
+                                    "expr": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__statements.zep",
+                                            "line": 90,
+                                            "char": 31
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "totalSteps",
+                                            "file": "stub__statements.zep",
+                                            "line": 90,
+                                            "char": 42
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 90,
+                                        "char": 42
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 90,
+                                    "char": 42
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 92,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "step",
+                                    "file": "stub__statements.zep",
+                                    "line": 92,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "totalSteps",
+                                    "file": "stub__statements.zep",
+                                    "line": 92,
+                                    "char": 30
+                                },
+                                "file": "stub__statements.zep",
+                                "line": 92,
+                                "char": 30
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "filledWidth",
+                                            "expr": {
+                                                "type": "mul",
+                                                "left": {
+                                                    "type": "div",
+                                                    "left": {
+                                                        "type": "list",
+                                                        "left": {
+                                                            "type": "sub",
+                                                            "left": {
+                                                                "type": "property-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "this",
+                                                                    "file": "stub__statements.zep",
+                                                                    "line": 93,
+                                                                    "char": 37
+                                                                },
+                                                                "right": {
+                                                                    "type": "variable",
+                                                                    "value": "width",
+                                                                    "file": "stub__statements.zep",
+                                                                    "line": 93,
+                                                                    "char": 44
+                                                                },
+                                                                "file": "stub__statements.zep",
+                                                                "line": 93,
+                                                                "char": 44
+                                                            },
+                                                            "right": {
+                                                                "type": "int",
+                                                                "value": "1",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 93,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 93,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 93,
+                                                        "char": 49
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "totalSteps",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 93,
+                                                        "char": 62
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 93,
+                                                    "char": 62
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "step",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 93,
+                                                    "char": 68
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 93,
+                                                "char": 68
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 93,
+                                            "char": 68
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 94,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "unfilledWidth",
+                                            "expr": {
+                                                "type": "sub",
+                                                "left": {
+                                                    "type": "list",
+                                                    "left": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 94,
+                                                                "char": 39
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "width",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 94,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 94,
+                                                            "char": 46
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 94,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 94,
+                                                        "char": 49
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 94,
+                                                    "char": 51
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "filledWidth",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 94,
+                                                    "char": 64
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 94,
+                                                "char": 64
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 94,
+                                            "char": 64
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 95,
+                                    "char": 18
+                                },
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "concat",
+                                            "left": {
+                                                "type": "fcall",
+                                                "name": "str_repeat",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 95,
+                                                                "char": 36
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "filledChar",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 95,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 95,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 95,
+                                                        "char": 47
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "filledWidth",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 95,
+                                                            "char": 60
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 95,
+                                                        "char": 60
+                                                    }
+                                                ],
+                                                "file": "stub__statements.zep",
+                                                "line": 95,
+                                                "char": 61
+                                            },
+                                            "right": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 95,
+                                                    "char": 67
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "arrow",
+                                                    "file": "stub__statements.zep",
+                                                    "line": 95,
+                                                    "char": 73
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 95,
+                                                "char": 73
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 95,
+                                            "char": 73
+                                        },
+                                        "right": {
+                                            "type": "fcall",
+                                            "name": "str_repeat",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "property-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "this",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 95,
+                                                            "char": 90
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "unfilledChar",
+                                                            "file": "stub__statements.zep",
+                                                            "line": 95,
+                                                            "char": 103
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 95,
+                                                        "char": 103
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 95,
+                                                    "char": 103
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "unfilledWidth",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 95,
+                                                        "char": 118
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 95,
+                                                    "char": 118
+                                                }
+                                            ],
+                                            "file": "stub__statements.zep",
+                                            "line": 95,
+                                            "char": 119
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 95,
+                                        "char": 119
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 96,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "step",
+                                            "file": "stub__statements.zep",
+                                            "line": 96,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "totalSteps",
+                                            "file": "stub__statements.zep",
+                                            "line": 96,
+                                            "char": 38
+                                        },
+                                        "file": "stub__statements.zep",
+                                        "line": 96,
+                                        "char": 38
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "str_repeat",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 97,
+                                                                "char": 36
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "filledChar",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 97,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 97,
+                                                            "char": 47
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 97,
+                                                        "char": 47
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "property-access",
+                                                            "left": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 97,
+                                                                "char": 54
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "width",
+                                                                "file": "stub__statements.zep",
+                                                                "line": 97,
+                                                                "char": 60
+                                                            },
+                                                            "file": "stub__statements.zep",
+                                                            "line": 97,
+                                                            "char": 60
+                                                        },
+                                                        "file": "stub__statements.zep",
+                                                        "line": 97,
+                                                        "char": 60
+                                                    }
+                                                ],
+                                                "file": "stub__statements.zep",
+                                                "line": 97,
+                                                "char": 61
+                                            },
+                                            "file": "stub__statements.zep",
+                                            "line": 98,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__statements.zep",
+                                    "line": 98,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "str_repeat",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 99,
+                                                        "char": 36
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "unfilledChar",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 99,
+                                                        "char": 49
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 99,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 99,
+                                                "char": 49
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 99,
+                                                        "char": 56
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "width",
+                                                        "file": "stub__statements.zep",
+                                                        "line": 99,
+                                                        "char": 62
+                                                    },
+                                                    "file": "stub__statements.zep",
+                                                    "line": 99,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__statements.zep",
+                                                "line": 99,
+                                                "char": 62
+                                            }
+                                        ],
+                                        "file": "stub__statements.zep",
+                                        "line": 99,
+                                        "char": 63
+                                    },
+                                    "file": "stub__statements.zep",
+                                    "line": 100,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__statements.zep",
+                            "line": 101,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__statements.zep",
+                    "line": 86,
+                    "last-line": 102,
+                    "char": 19
+                }
+            ],
+            "file": "stub__statements.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__statements.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "scall",
+                "expr": {
+                    "type": "scall",
+                    "dynamic-class": 1,
+                    "class": "obj",
+                    "dynamic": 2,
+                    "name": "method",
+                    "file": "phpt__statements_scall_string_method_dynamic_class.zep",
+                    "line": 2,
+                    "char": 19
+                },
+                "file": "phpt__statements_scall_string_method_dynamic_class.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_scall_string_method_dynamic_class.zep",
+        "line": 1,
+        "char": 9
+    }
+]

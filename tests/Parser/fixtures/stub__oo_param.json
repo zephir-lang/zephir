@@ -1,0 +1,42 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Arithmetic operations\n *",
+        "file": "stub__oo_param.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_param.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Param",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "value",
+                    "file": "stub__oo_param.zep",
+                    "line": 11,
+                    "char": 1
+                }
+            ],
+            "file": "stub__oo_param.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__oo_param.zep",
+        "line": 8,
+        "char": 5
+    }
+]

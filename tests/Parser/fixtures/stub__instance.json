@@ -1,0 +1,580 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Instance operations\n *",
+        "file": "stub__instance.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__instance.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Instance",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a1",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Arithmetic",
+                                "file": "stub__instance.zep",
+                                "line": 11,
+                                "char": 17
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 11,
+                            "char": 18
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a2",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "ArrayObject",
+                                "file": "stub__instance.zep",
+                                "line": 12,
+                                "char": 18
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 12,
+                            "char": 19
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a3",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Assign",
+                                "file": "stub__instance.zep",
+                                "line": 13,
+                                "char": 13
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 13,
+                            "char": 14
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a4",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Bitwise",
+                                "file": "stub__instance.zep",
+                                "line": 14,
+                                "char": 14
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 14,
+                            "char": 15
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a5",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "BranchPrediction",
+                                "file": "stub__instance.zep",
+                                "line": 15,
+                                "char": 23
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 15,
+                            "char": 24
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a6",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Cast",
+                                "file": "stub__instance.zep",
+                                "line": 16,
+                                "char": 11
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 16,
+                            "char": 12
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a7",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Cblock",
+                                "file": "stub__instance.zep",
+                                "line": 17,
+                                "char": 13
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 17,
+                            "char": 14
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a8",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Chars",
+                                "file": "stub__instance.zep",
+                                "line": 18,
+                                "char": 12
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 18,
+                            "char": 13
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a9",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Closures",
+                                "file": "stub__instance.zep",
+                                "line": 19,
+                                "char": 15
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 19,
+                            "char": 16
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a10",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Compare",
+                                "file": "stub__instance.zep",
+                                "line": 20,
+                                "char": 15
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 20,
+                            "char": 16
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "a11",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Concat",
+                                "file": "stub__instance.zep",
+                                "line": 21,
+                                "char": 14
+                            },
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 22,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__instance.zep",
+                    "line": 10,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testIssue1339",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "parameters",
+                                    "file": "stub__instance.zep",
+                                    "line": 29,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__instance.zep",
+                            "line": 31,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "parameters",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Arithmetic",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 32,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 32,
+                                                "char": 20
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "ArrayObject",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 33,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 33,
+                                                "char": 21
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Assign",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 34,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 34,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Bitwise",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 35,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 35,
+                                                "char": 17
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "BranchPrediction",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 36,
+                                                    "char": 26
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 36,
+                                                "char": 26
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Cast",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 37,
+                                                    "char": 14
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 37,
+                                                "char": 14
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Cblock",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 38,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 38,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Chars",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 39,
+                                                    "char": 15
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 39,
+                                                "char": 15
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Closures",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 40,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 40,
+                                                "char": 18
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Compare",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 41,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 41,
+                                                "char": 17
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "new",
+                                                    "class": "Concat",
+                                                    "dynamic": 0,
+                                                    "file": "stub__instance.zep",
+                                                    "line": 43,
+                                                    "char": 3
+                                                },
+                                                "file": "stub__instance.zep",
+                                                "line": 43,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "stub__instance.zep",
+                                        "line": 43,
+                                        "char": 4
+                                    },
+                                    "file": "stub__instance.zep",
+                                    "line": 43,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "stub__instance.zep",
+                            "line": 45,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "create_instance_params",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "Stub\\\\Instance",
+                                            "file": "stub__instance.zep",
+                                            "line": 45,
+                                            "char": 47
+                                        },
+                                        "file": "stub__instance.zep",
+                                        "line": 45,
+                                        "char": 47
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "parameters",
+                                            "file": "stub__instance.zep",
+                                            "line": 45,
+                                            "char": 59
+                                        },
+                                        "file": "stub__instance.zep",
+                                        "line": 45,
+                                        "char": 59
+                                    }
+                                ],
+                                "file": "stub__instance.zep",
+                                "line": 45,
+                                "char": 60
+                            },
+                            "file": "stub__instance.zep",
+                            "line": 46,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Instance",
+                                    "file": "stub__instance.zep",
+                                    "line": 28,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__instance.zep",
+                                "line": 28,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__instance.zep",
+                        "line": 28,
+                        "char": 2
+                    },
+                    "file": "stub__instance.zep",
+                    "line": 27,
+                    "last-line": 48,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testInstanceCreate",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__instance.zep",
+                            "line": 48,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "create_instance",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "className",
+                                            "file": "stub__instance.zep",
+                                            "line": 50,
+                                            "char": 35
+                                        },
+                                        "file": "stub__instance.zep",
+                                        "line": 50,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__instance.zep",
+                                "line": 50,
+                                "char": 36
+                            },
+                            "file": "stub__instance.zep",
+                            "line": 51,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Instance",
+                                    "file": "stub__instance.zep",
+                                    "line": 49,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__instance.zep",
+                                "line": 49,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__instance.zep",
+                        "line": 49,
+                        "char": 2
+                    },
+                    "file": "stub__instance.zep",
+                    "line": 48,
+                    "last-line": 52,
+                    "char": 23
+                }
+            ],
+            "file": "stub__instance.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__instance.zep",
+        "line": 8,
+        "char": 5
+    }
+]

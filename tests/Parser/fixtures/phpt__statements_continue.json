@@ -1,0 +1,17 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "continue",
+                "file": "phpt__statements_continue.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_continue.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,893 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\BuiltIn",
+        "file": "stub__builtin_arraymethods.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ArrayMethods",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getJoin1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 8,
+                                                "char": 12
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 8,
+                                            "char": 12
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 8,
+                                                "char": 15
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 8,
+                                            "char": 15
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "3",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 8,
+                                                "char": 18
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 8,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 8,
+                                    "char": 20
+                                },
+                                "name": "join",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "-",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 8,
+                                            "char": 27
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 8,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 8,
+                                "char": 28
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getReversed1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 13,
+                                                "char": 12
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 13,
+                                            "char": 12
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 13,
+                                                "char": 15
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 13,
+                                            "char": 15
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "3",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 13,
+                                                "char": 18
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 13,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 13,
+                                    "char": 20
+                                },
+                                "name": "reversed",
+                                "call-type": 1,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 13,
+                                "char": 31
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getMap1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 18,
+                                                "char": 12
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 18,
+                                            "char": 12
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 18,
+                                                "char": 15
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 18,
+                                            "char": 15
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "3",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 18,
+                                                "char": 18
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 18,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 18,
+                                    "char": 20
+                                },
+                                "name": "map",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "closure-arrow",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "x",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 18,
+                                                "char": 37
+                                            },
+                                            "right": {
+                                                "type": "mul",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "x",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 18,
+                                                    "char": 32
+                                                },
+                                                "right": {
+                                                    "type": "int",
+                                                    "value": "100",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 18,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 18,
+                                                "char": 37
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 18,
+                                            "char": 37
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 18,
+                                        "char": 37
+                                    }
+                                ],
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 18,
+                                "char": 38
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 16,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue733BuiltInJoinSpecialChars",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 24,
+                            "char": 59
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 24,
+                                "char": 73
+                            },
+                            "reference": 0,
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 24,
+                            "char": 73
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "or",
+                                "left": {
+                                    "type": "identical",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 26,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "null",
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 26,
+                                        "char": 21
+                                    },
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 26,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "identical",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 26,
+                                        "char": 27
+                                    },
+                                    "right": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 26,
+                                        "char": 35
+                                    },
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 26,
+                                    "char": 35
+                                },
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 26,
+                                "char": 35
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 27,
+                                            "char": 22
+                                        },
+                                        "name": "trimleft",
+                                        "call-type": 1,
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 27,
+                                        "char": 33
+                                    },
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 28,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 30,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "equals",
+                                "left": {
+                                    "type": "typeof",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 30,
+                                        "char": 22
+                                    },
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 30,
+                                    "char": 22
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": "array",
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 30,
+                                    "char": 30
+                                },
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 30,
+                                "char": 30
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "b",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "b",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 31,
+                                                    "char": 23
+                                                },
+                                                "name": "join",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "",
+                                                            "file": "stub__builtin_arraymethods.zep",
+                                                            "line": 31,
+                                                            "char": 29
+                                                        },
+                                                        "file": "stub__builtin_arraymethods.zep",
+                                                        "line": 31,
+                                                        "char": 29
+                                                    }
+                                                ],
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 31,
+                                                "char": 30
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 31,
+                                            "char": 30
+                                        }
+                                    ],
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 32,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 34,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "preg_replace",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "#[-\\[\\]:\\\\\\\\^\/]#",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 34,
+                                                    "char": 46
+                                                },
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 34,
+                                                "char": 46
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "\\\\\\\\$0",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 34,
+                                                    "char": 54
+                                                },
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 34,
+                                                "char": 54
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "b",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 34,
+                                                    "char": 57
+                                                },
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 34,
+                                                "char": 57
+                                            }
+                                        ],
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 34,
+                                        "char": 58
+                                    },
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 34,
+                                    "char": 58
+                                }
+                            ],
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 36,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "preg_replace",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "concat",
+                                            "left": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "string",
+                                                    "value": "\/^[",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 36,
+                                                    "char": 33
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "b",
+                                                    "file": "stub__builtin_arraymethods.zep",
+                                                    "line": 36,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 36,
+                                                "char": 37
+                                            },
+                                            "right": {
+                                                "type": "string",
+                                                "value": "]+\/u",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 36,
+                                                "char": 43
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 36,
+                                            "char": 43
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 36,
+                                        "char": 43
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 36,
+                                            "char": 45
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 36,
+                                        "char": 45
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 36,
+                                            "char": 48
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 36,
+                                        "char": 48
+                                    }
+                                ],
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 36,
+                                "char": 49
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/733\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 25,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_arraymethods.zep",
+                        "line": 25,
+                        "char": 2
+                    },
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 24,
+                    "last-line": 42,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue733JoinOnVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "input",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 43,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "input",
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 45,
+                                    "char": 22
+                                },
+                                "name": "join",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": ",",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 45,
+                                            "char": 29
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 45,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 45,
+                                "char": 30
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 46,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/733\n     * Exercises the bare-minimum case: a `var` holding an array, joined directly.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 44,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_arraymethods.zep",
+                        "line": 44,
+                        "char": 5
+                    },
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 43,
+                    "last-line": 51,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue733ReversedOnVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "input",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 52,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "input",
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 54,
+                                    "char": 22
+                                },
+                                "name": "reversed",
+                                "call-type": 1,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 54,
+                                "char": 33
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 55,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/733\n     * `reversed()` is also in the whitelist \u2014 verifies the fix isn't `join`-only.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 53,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_arraymethods.zep",
+                        "line": 53,
+                        "char": 5
+                    },
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 52,
+                    "last-line": 61,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue733JoinOnLiteralArray",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "value": {
+                                                "type": "string",
+                                                "value": "a",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 64,
+                                                "char": 18
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 64,
+                                            "char": 18
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "string",
+                                                "value": "b",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 64,
+                                                "char": 21
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 64,
+                                            "char": 21
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "string",
+                                                "value": "c",
+                                                "file": "stub__builtin_arraymethods.zep",
+                                                "line": 64,
+                                                "char": 24
+                                            },
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 64,
+                                            "char": 24
+                                        }
+                                    ],
+                                    "file": "stub__builtin_arraymethods.zep",
+                                    "line": 64,
+                                    "char": 26
+                                },
+                                "name": "join",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "|",
+                                            "file": "stub__builtin_arraymethods.zep",
+                                            "line": 64,
+                                            "char": 33
+                                        },
+                                        "file": "stub__builtin_arraymethods.zep",
+                                        "line": 64,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 64,
+                                "char": 34
+                            },
+                            "file": "stub__builtin_arraymethods.zep",
+                            "line": 65,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/733\n     * Ensures the standard happy path (typed array literal) still works after\n     * the dispatch change.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__builtin_arraymethods.zep",
+                                "line": 63,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__builtin_arraymethods.zep",
+                        "line": 63,
+                        "char": 5
+                    },
+                    "file": "stub__builtin_arraymethods.zep",
+                    "line": 62,
+                    "last-line": 66,
+                    "char": 19
+                }
+            ],
+            "file": "stub__builtin_arraymethods.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__builtin_arraymethods.zep",
+        "line": 4,
+        "char": 5
+    }
+]

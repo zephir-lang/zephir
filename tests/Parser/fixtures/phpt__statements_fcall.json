@@ -1,0 +1,25 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "fcall",
+                "expr": {
+                    "type": "fcall",
+                    "name": "f",
+                    "call-type": 1,
+                    "file": "phpt__statements_fcall.zep",
+                    "line": 2,
+                    "char": 5
+                },
+                "file": "phpt__statements_fcall.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_fcall.zep",
+        "line": 1,
+        "char": 9
+    }
+]

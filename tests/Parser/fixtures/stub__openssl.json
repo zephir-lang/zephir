@@ -1,0 +1,373 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__openssl.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Openssl",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "randomPseudoBytes",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "length",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__openssl.zep",
+                            "line": 6,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "openssl_random_pseudo_bytes",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "length",
+                                            "file": "stub__openssl.zep",
+                                            "line": 8,
+                                            "char": 50
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 8,
+                                        "char": 50
+                                    }
+                                ],
+                                "file": "stub__openssl.zep",
+                                "line": 8,
+                                "char": 51
+                            },
+                            "file": "stub__openssl.zep",
+                            "line": 9,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__openssl.zep",
+                                "line": 7,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__openssl.zep",
+                        "line": 7,
+                        "char": 5
+                    },
+                    "file": "stub__openssl.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "randomPseudoBytesLoop",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__openssl.zep",
+                                    "line": 13,
+                                    "char": 13
+                                },
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__openssl.zep",
+                                        "line": 13,
+                                        "char": 20
+                                    },
+                                    "file": "stub__openssl.zep",
+                                    "line": 13,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__openssl.zep",
+                            "line": 14,
+                            "char": 8
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__openssl.zep",
+                                        "line": 14,
+                                        "char": 18
+                                    },
+                                    "file": "stub__openssl.zep",
+                                    "line": 14,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__openssl.zep",
+                            "line": 15,
+                            "char": 8
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__openssl.zep",
+                                            "line": 15,
+                                            "char": 22
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 15,
+                                        "char": 22
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "10",
+                                            "file": "stub__openssl.zep",
+                                            "line": 15,
+                                            "char": 26
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 15,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__openssl.zep",
+                                "line": 15,
+                                "char": 28
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "arr",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "openssl_random_pseudo_bytes",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "10",
+                                                            "file": "stub__openssl.zep",
+                                                            "line": 16,
+                                                            "char": 52
+                                                        },
+                                                        "file": "stub__openssl.zep",
+                                                        "line": 16,
+                                                        "char": 52
+                                                    }
+                                                ],
+                                                "file": "stub__openssl.zep",
+                                                "line": 16,
+                                                "char": 53
+                                            },
+                                            "file": "stub__openssl.zep",
+                                            "line": 16,
+                                            "char": 53
+                                        }
+                                    ],
+                                    "file": "stub__openssl.zep",
+                                    "line": 17,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__openssl.zep",
+                            "line": 19,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "arr",
+                                "file": "stub__openssl.zep",
+                                "line": 19,
+                                "char": 19
+                            },
+                            "file": "stub__openssl.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__openssl.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__openssl.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__openssl.zep",
+                    "line": 11,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "opensslEncrypt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "data",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__openssl.zep",
+                            "line": 22,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "openssl_encrypt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "data",
+                                            "file": "stub__openssl.zep",
+                                            "line": 24,
+                                            "char": 33
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 24,
+                                        "char": 33
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "AES-256-CBC",
+                                            "file": "stub__openssl.zep",
+                                            "line": 24,
+                                            "char": 46
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 24,
+                                        "char": 46
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "passphrase",
+                                            "file": "stub__openssl.zep",
+                                            "line": 24,
+                                            "char": 58
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 24,
+                                        "char": 58
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "constant",
+                                            "value": "OPENSSL_RAW_DATA",
+                                            "file": "stub__openssl.zep",
+                                            "line": 24,
+                                            "char": 76
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 24,
+                                        "char": 76
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "1234567890123456",
+                                            "file": "stub__openssl.zep",
+                                            "line": 24,
+                                            "char": 94
+                                        },
+                                        "file": "stub__openssl.zep",
+                                        "line": 24,
+                                        "char": 94
+                                    }
+                                ],
+                                "file": "stub__openssl.zep",
+                                "line": 24,
+                                "char": 95
+                            },
+                            "file": "stub__openssl.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__openssl.zep",
+                    "line": 22,
+                    "last-line": 26,
+                    "char": 16
+                }
+            ],
+            "file": "stub__openssl.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__openssl.zep",
+        "line": 4,
+        "char": 5
+    }
+]

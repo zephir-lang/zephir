@@ -1,0 +1,668 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_staticprotectedproperties.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StaticProtectedProperties",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someNull",
+                    "docblock": "**\n\t * This is a protected property with no initial value\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 13,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someNullInitial",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 14,
+                        "char": 41
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial null value\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 18,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someFalse",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 19,
+                        "char": 36
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial boolean false\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 23,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someTrue",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 24,
+                        "char": 34
+                    },
+                    "docblock": "**\n\t * This is a protected property with initial boolean true\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 28,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someInteger",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 29,
+                        "char": 35
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial integer value\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 33,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someDouble",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 34,
+                        "char": 37
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial double value\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 38,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someString",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 39,
+                        "char": 36
+                    },
+                    "docblock": "**\n\t * This is a protected property with an initial string value\n\t *",
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 41,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someVar",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 41,
+                            "char": 31
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 41,
+                            "char": 36
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 43,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNull",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 45,
+                                    "char": 24
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNull",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 45,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 45,
+                                "char": 24
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 46,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 43,
+                    "last-line": 48,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "setSomeNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 48,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "static-property",
+                                    "operator": "assign",
+                                    "variable": "self",
+                                    "property": "someNull",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "param",
+                                        "file": "stub__properties_staticprotectedproperties.zep",
+                                        "line": 50,
+                                        "char": 29
+                                    },
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 50,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 51,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 48,
+                    "last-line": 53,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNullInitial",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 55,
+                                    "char": 31
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNullInitial",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 55,
+                                    "char": 31
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 55,
+                                "char": 31
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 56,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 53,
+                    "last-line": 58,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeFalse",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 60,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someFalse",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 60,
+                                    "char": 25
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 60,
+                                "char": 25
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 58,
+                    "last-line": 63,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeTrue",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 65,
+                                    "char": 24
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someTrue",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 65,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 65,
+                                "char": 24
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 66,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 63,
+                    "last-line": 68,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeInteger",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 70,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someInteger",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 70,
+                                    "char": 27
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 70,
+                                "char": 27
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 71,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 68,
+                    "last-line": 73,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeDouble",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 75,
+                                    "char": 26
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someDouble",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 75,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 75,
+                                "char": 26
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 76,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 73,
+                    "last-line": 78,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getSomeString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 80,
+                                    "char": 26
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someString",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 80,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 80,
+                                "char": 26
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 81,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 78,
+                    "last-line": 85,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "compareStaticNull",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "someNull",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 88,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 90,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "someNull",
+                                    "expr": {
+                                        "type": "static-property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "self",
+                                            "file": "stub__properties_staticprotectedproperties.zep",
+                                            "line": 90,
+                                            "char": 38
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "someNull",
+                                            "file": "stub__properties_staticprotectedproperties.zep",
+                                            "line": 90,
+                                            "char": 38
+                                        },
+                                        "file": "stub__properties_staticprotectedproperties.zep",
+                                        "line": 90,
+                                        "char": 38
+                                    },
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 90,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 92,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "someNull",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 92,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "null",
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 92,
+                                    "char": 30
+                                },
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 92,
+                                "char": 30
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "someNull",
+                                            "expr": {
+                                                "type": "bool",
+                                                "value": "true",
+                                                "file": "stub__properties_staticprotectedproperties.zep",
+                                                "line": 93,
+                                                "char": 32
+                                            },
+                                            "file": "stub__properties_staticprotectedproperties.zep",
+                                            "line": 93,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 94,
+                                    "char": 18
+                                },
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "someNull",
+                                        "file": "stub__properties_staticprotectedproperties.zep",
+                                        "line": 94,
+                                        "char": 28
+                                    },
+                                    "file": "stub__properties_staticprotectedproperties.zep",
+                                    "line": 95,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 97,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "someNull",
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 97,
+                                "char": 24
+                            },
+                            "file": "stub__properties_staticprotectedproperties.zep",
+                            "line": 98,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1536\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__properties_staticprotectedproperties.zep",
+                                "line": 87,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__properties_staticprotectedproperties.zep",
+                        "line": 87,
+                        "char": 5
+                    },
+                    "file": "stub__properties_staticprotectedproperties.zep",
+                    "line": 86,
+                    "last-line": 99,
+                    "char": 19
+                }
+            ],
+            "file": "stub__properties_staticprotectedproperties.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__properties_staticprotectedproperties.zep",
+        "line": 4,
+        "char": 5
+    }
+]

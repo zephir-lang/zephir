@@ -1,0 +1,19 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2324extended.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2324Extended",
+        "abstract": 0,
+        "final": 0,
+        "extends": "Issue2324",
+        "file": "stub__issue2324extended.zep",
+        "line": 3,
+        "char": 5
+    }
+]

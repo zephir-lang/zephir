@@ -1,0 +1,694 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1097.zep",
+        "line": 15,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Regression coverage for https:\/\/github.com\/zephir-lang\/zephir\/issues\/1097\n *\n * elseif conditions that contain sub-expressions with side effects (such as\n * array element access myvar[0]) were compiled by hoisting the side-effect code\n * before the entire if\/elseif chain. This caused a PHP Notice when a scalar was\n * passed, because zephir_array_fetch_long() ran unconditionally even when the\n * first if-branch had already returned.\n *\n * Fix: preamble code emitted during elseif-condition compilation must be placed\n * inside the else branch, not before the outer if, so it only executes when\n * needed.\n *",
+        "file": "stub__issue1097.zep",
+        "line": 16,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue1097",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringOrArrayOfString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "myvar",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1097.zep",
+                            "line": 22,
+                            "char": 56
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_string",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "myvar",
+                                            "file": "stub__issue1097.zep",
+                                            "line": 24,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue1097.zep",
+                                        "line": 24,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__issue1097.zep",
+                                "line": 24,
+                                "char": 29
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 25,
+                                        "char": 26
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 26,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "is_string",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "myvar",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 26,
+                                                        "char": 33
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 26,
+                                                        "char": 35
+                                                    },
+                                                    "file": "stub__issue1097.zep",
+                                                    "line": 26,
+                                                    "char": 36
+                                                },
+                                                "file": "stub__issue1097.zep",
+                                                "line": 26,
+                                                "char": 36
+                                            }
+                                        ],
+                                        "file": "stub__issue1097.zep",
+                                        "line": 26,
+                                        "char": 38
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "array-of-string",
+                                                "file": "stub__issue1097.zep",
+                                                "line": 27,
+                                                "char": 35
+                                            },
+                                            "file": "stub__issue1097.zep",
+                                            "line": 28,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1097.zep",
+                                    "line": 30,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__issue1097.zep",
+                            "line": 30,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "other",
+                                "file": "stub__issue1097.zep",
+                                "line": 30,
+                                "char": 21
+                            },
+                            "file": "stub__issue1097.zep",
+                            "line": 31,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * The canonical case from the bug report: if the first branch is taken\n     * (is_string(myvar) is true), the elseif must NOT attempt myvar[0].\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1097.zep",
+                                "line": 23,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1097.zep",
+                        "line": 23,
+                        "char": 5
+                    },
+                    "file": "stub__issue1097.zep",
+                    "line": 22,
+                    "last-line": 35,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testWithElse",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "myvar",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1097.zep",
+                            "line": 36,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_string",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "myvar",
+                                            "file": "stub__issue1097.zep",
+                                            "line": 38,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue1097.zep",
+                                        "line": 38,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__issue1097.zep",
+                                "line": 38,
+                                "char": 29
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 39,
+                                        "char": 26
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 40,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "is_array",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "myvar",
+                                                    "file": "stub__issue1097.zep",
+                                                    "line": 40,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__issue1097.zep",
+                                                "line": 40,
+                                                "char": 32
+                                            }
+                                        ],
+                                        "file": "stub__issue1097.zep",
+                                        "line": 40,
+                                        "char": 34
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "array",
+                                                "file": "stub__issue1097.zep",
+                                                "line": 41,
+                                                "char": 25
+                                            },
+                                            "file": "stub__issue1097.zep",
+                                            "line": 42,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1097.zep",
+                                    "line": 42,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "other",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 43,
+                                        "char": 25
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 44,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1097.zep",
+                            "line": 45,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Variant with an else branch to ensure the else path is unaffected.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1097.zep",
+                                "line": 37,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1097.zep",
+                        "line": 37,
+                        "char": 5
+                    },
+                    "file": "stub__issue1097.zep",
+                    "line": 36,
+                    "last-line": 50,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMultipleElseif",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "myvar",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1097.zep",
+                            "line": 51,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_string",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "myvar",
+                                            "file": "stub__issue1097.zep",
+                                            "line": 53,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue1097.zep",
+                                        "line": 53,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__issue1097.zep",
+                                "line": 53,
+                                "char": 29
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 54,
+                                        "char": 26
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 55,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "is_string",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "myvar",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 55,
+                                                        "char": 33
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 55,
+                                                        "char": 35
+                                                    },
+                                                    "file": "stub__issue1097.zep",
+                                                    "line": 55,
+                                                    "char": 36
+                                                },
+                                                "file": "stub__issue1097.zep",
+                                                "line": 55,
+                                                "char": 36
+                                            }
+                                        ],
+                                        "file": "stub__issue1097.zep",
+                                        "line": 55,
+                                        "char": 38
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "array-of-string",
+                                                "file": "stub__issue1097.zep",
+                                                "line": 56,
+                                                "char": 35
+                                            },
+                                            "file": "stub__issue1097.zep",
+                                            "line": 57,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1097.zep",
+                                    "line": 57,
+                                    "char": 16
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "is_int",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "myvar",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 57,
+                                                        "char": 30
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__issue1097.zep",
+                                                        "line": 57,
+                                                        "char": 32
+                                                    },
+                                                    "file": "stub__issue1097.zep",
+                                                    "line": 57,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__issue1097.zep",
+                                                "line": 57,
+                                                "char": 33
+                                            }
+                                        ],
+                                        "file": "stub__issue1097.zep",
+                                        "line": 57,
+                                        "char": 35
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "array-of-int",
+                                                "file": "stub__issue1097.zep",
+                                                "line": 58,
+                                                "char": 32
+                                            },
+                                            "file": "stub__issue1097.zep",
+                                            "line": 59,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1097.zep",
+                                    "line": 61,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__issue1097.zep",
+                            "line": 61,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "other",
+                                "file": "stub__issue1097.zep",
+                                "line": 61,
+                                "char": 21
+                            },
+                            "file": "stub__issue1097.zep",
+                            "line": 62,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Two elseif branches, each with a sub-expression that generates preamble\n     * code. Only the first matching branch must evaluate.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1097.zep",
+                                "line": 52,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1097.zep",
+                        "line": 52,
+                        "char": 5
+                    },
+                    "file": "stub__issue1097.zep",
+                    "line": 51,
+                    "last-line": 66,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSimpleElseif",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1097.zep",
+                            "line": 67,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "greater",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "num",
+                                    "file": "stub__issue1097.zep",
+                                    "line": 69,
+                                    "char": 16
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__issue1097.zep",
+                                    "line": 69,
+                                    "char": 20
+                                },
+                                "file": "stub__issue1097.zep",
+                                "line": 69,
+                                "char": 20
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "positive",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 70,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 71,
+                                    "char": 9
+                                }
+                            ],
+                            "elseif_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__issue1097.zep",
+                                            "line": 71,
+                                            "char": 23
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue1097.zep",
+                                            "line": 71,
+                                            "char": 27
+                                        },
+                                        "file": "stub__issue1097.zep",
+                                        "line": 71,
+                                        "char": 27
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "zero",
+                                                "file": "stub__issue1097.zep",
+                                                "line": 72,
+                                                "char": 24
+                                            },
+                                            "file": "stub__issue1097.zep",
+                                            "line": 73,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1097.zep",
+                                    "line": 73,
+                                    "char": 14
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "negative",
+                                        "file": "stub__issue1097.zep",
+                                        "line": 74,
+                                        "char": 28
+                                    },
+                                    "file": "stub__issue1097.zep",
+                                    "line": 75,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1097.zep",
+                            "line": 76,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * elseif with a simple condition (no preamble) must continue to work.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1097.zep",
+                                "line": 68,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1097.zep",
+                        "line": 68,
+                        "char": 5
+                    },
+                    "file": "stub__issue1097.zep",
+                    "line": 67,
+                    "last-line": 77,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue1097.zep",
+            "line": 16,
+            "char": 5
+        },
+        "file": "stub__issue1097.zep",
+        "line": 16,
+        "char": 5
+    }
+]

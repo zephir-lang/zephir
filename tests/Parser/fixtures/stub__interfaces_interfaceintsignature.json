@@ -1,0 +1,71 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Interfaces",
+        "file": "stub__interfaces_interfaceintsignature.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "InterfaceIntSignature",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "get",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "InterfaceInt",
+                                "file": "stub__interfaces_interfaceintsignature.zep",
+                                "line": 5,
+                                "char": 42
+                            },
+                            "reference": 0,
+                            "file": "stub__interfaces_interfaceintsignature.zep",
+                            "line": 5,
+                            "char": 43
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__interfaces_interfaceintsignature.zep",
+                                "line": 5,
+                                "char": 51
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__interfaces_interfaceintsignature.zep",
+                        "line": 5,
+                        "char": 51
+                    },
+                    "file": "stub__interfaces_interfaceintsignature.zep",
+                    "line": 5,
+                    "last-line": 6,
+                    "char": 19
+                }
+            ],
+            "file": "stub__interfaces_interfaceintsignature.zep",
+            "line": 6,
+            "char": 1
+        },
+        "file": "stub__interfaces_interfaceintsignature.zep",
+        "line": 0,
+        "char": 0
+    }
+]

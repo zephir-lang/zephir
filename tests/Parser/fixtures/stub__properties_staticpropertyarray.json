@@ -1,0 +1,118 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_staticpropertyarray.zep",
+        "line": 7,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/367\n * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/188\n *",
+        "file": "stub__properties_staticpropertyarray.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StaticPropertyArray",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someEmptyArray",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__properties_staticpropertyarray.zep",
+                        "line": 13,
+                        "char": 35
+                    },
+                    "docblock": "**\n\t * This is a public property with an initial empty-array value\n\t *",
+                    "file": "stub__properties_staticpropertyarray.zep",
+                    "line": 17,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "someArray",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__properties_staticpropertyarray.zep",
+                                    "line": 18,
+                                    "char": 30
+                                },
+                                "file": "stub__properties_staticpropertyarray.zep",
+                                "line": 18,
+                                "char": 30
+                            },
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "stub__properties_staticpropertyarray.zep",
+                                    "line": 18,
+                                    "char": 33
+                                },
+                                "file": "stub__properties_staticpropertyarray.zep",
+                                "line": 18,
+                                "char": 33
+                            },
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "3",
+                                    "file": "stub__properties_staticpropertyarray.zep",
+                                    "line": 18,
+                                    "char": 36
+                                },
+                                "file": "stub__properties_staticpropertyarray.zep",
+                                "line": 18,
+                                "char": 36
+                            },
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "4",
+                                    "file": "stub__properties_staticpropertyarray.zep",
+                                    "line": 18,
+                                    "char": 39
+                                },
+                                "file": "stub__properties_staticpropertyarray.zep",
+                                "line": 18,
+                                "char": 39
+                            }
+                        ],
+                        "file": "stub__properties_staticpropertyarray.zep",
+                        "line": 18,
+                        "char": 40
+                    },
+                    "docblock": "**\n\t * This is a public property with an initial array value\n\t *",
+                    "file": "stub__properties_staticpropertyarray.zep",
+                    "line": 19,
+                    "char": 1
+                }
+            ],
+            "file": "stub__properties_staticpropertyarray.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__properties_staticpropertyarray.zep",
+        "line": 8,
+        "char": 5
+    }
+]

@@ -1,0 +1,1257 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__constants.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Constants",
+        "abstract": 0,
+        "final": 0,
+        "extends": "ConstantsParent",
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propWsVarsAssigned",
+                    "default": {
+                        "type": "string",
+                        "value": "$SOME\/CSRF\/KEY$",
+                        "file": "stub__constants.zep",
+                        "line": 35,
+                        "char": 48
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 36,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propWsVarsGet",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 36,
+                            "char": 53
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "PROPERTY_WITH_VARS",
+                            "file": "stub__constants.zep",
+                            "line": 36,
+                            "char": 53
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 36,
+                        "char": 53
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 36,
+                            "char": 57
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 38,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC1",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 38,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C1",
+                            "file": "stub__constants.zep",
+                            "line": 38,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 38,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 38,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 39,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC2",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 39,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C2",
+                            "file": "stub__constants.zep",
+                            "line": 39,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 39,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 39,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 40,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC3",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 40,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C3",
+                            "file": "stub__constants.zep",
+                            "line": 40,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 40,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 40,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 41,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC4",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 41,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C4",
+                            "file": "stub__constants.zep",
+                            "line": 41,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 41,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 41,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 42,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC5",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 42,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C5",
+                            "file": "stub__constants.zep",
+                            "line": 42,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 42,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 42,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 43,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC6",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 43,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C6",
+                            "file": "stub__constants.zep",
+                            "line": 43,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 43,
+                        "char": 34
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 43,
+                            "char": 38
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 45,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC7",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 45,
+                            "char": 48
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "ANNOTATION_REGEX",
+                            "file": "stub__constants.zep",
+                            "line": 45,
+                            "char": 48
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 45,
+                        "char": 48
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 45,
+                            "char": 52
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 46,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC8",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 46,
+                            "char": 47
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "PARAMETER_REGEX",
+                            "file": "stub__constants.zep",
+                            "line": 46,
+                            "char": 47
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 46,
+                        "char": 47
+                    },
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 46,
+                            "char": 51
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 55,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propertyC9",
+                    "default": {
+                        "type": "string",
+                        "value": "some-value",
+                        "file": "stub__constants.zep",
+                        "line": 56,
+                        "char": 36
+                    },
+                    "docblock": "**\n\t * @var \\Phalcon\\Cache\\FrontendInterface\n\t *",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__constants.zep",
+                            "line": 56,
+                            "char": 40
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 58,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "ENT_QUOTES",
+                                "file": "stub__constants.zep",
+                                "line": 60,
+                                "char": 20
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 58,
+                    "last-line": 63,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadClassConstant1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "Constants",
+                                    "file": "stub__constants.zep",
+                                    "line": 65,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C4",
+                                    "file": "stub__constants.zep",
+                                    "line": 65,
+                                    "char": 23
+                                },
+                                "file": "stub__constants.zep",
+                                "line": 65,
+                                "char": 23
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 66,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 63,
+                    "last-line": 68,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadClassConstant2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constants.zep",
+                                    "line": 70,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C4",
+                                    "file": "stub__constants.zep",
+                                    "line": 70,
+                                    "char": 18
+                                },
+                                "file": "stub__constants.zep",
+                                "line": 70,
+                                "char": 18
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 71,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 68,
+                    "last-line": 73,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadClassConstant3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "parent",
+                                    "file": "stub__constants.zep",
+                                    "line": 75,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "P4",
+                                    "file": "stub__constants.zep",
+                                    "line": 75,
+                                    "char": 20
+                                },
+                                "file": "stub__constants.zep",
+                                "line": 75,
+                                "char": 20
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 76,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 73,
+                    "last-line": 78,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testPHPVersionEnvConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "PHP_VERSION",
+                                "file": "stub__constants.zep",
+                                "line": 80,
+                                "char": 21
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 81,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 78,
+                    "last-line": 83,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testClassMagicConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__CLASS__",
+                                "file": "stub__constants.zep",
+                                "line": 85,
+                                "char": 19
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 86,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 83,
+                    "last-line": 88,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethodMagicConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__METHOD__",
+                                "file": "stub__constants.zep",
+                                "line": 90,
+                                "char": 20
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 91,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 88,
+                    "last-line": 93,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFunctionMagicConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__FUNCTION__",
+                                "file": "stub__constants.zep",
+                                "line": 95,
+                                "char": 22
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 96,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 93,
+                    "last-line": 98,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNamespaceMagicConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__NAMESPACE__",
+                                "file": "stub__constants.zep",
+                                "line": 100,
+                                "char": 23
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 101,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 98,
+                    "last-line": 103,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDirConstant",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__DIR__",
+                                "file": "stub__constants.zep",
+                                "line": 105,
+                                "char": 17
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 106,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 103,
+                    "last-line": 108,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testPHPVersionEnvConstantInExpValue",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__constants.zep",
+                                    "line": 110,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 111,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "constant",
+                                        "value": "PHP_VERSION",
+                                        "file": "stub__constants.zep",
+                                        "line": 111,
+                                        "char": 22
+                                    },
+                                    "file": "stub__constants.zep",
+                                    "line": 111,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 112,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__constants.zep",
+                                "line": 112,
+                                "char": 11
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 113,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 108,
+                    "last-line": 119,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringDelimiterConstantDoubleQuoted",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "delimiter",
+                                    "file": "stub__constants.zep",
+                                    "line": 122,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 123,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "delimiter",
+                                    "expr": {
+                                        "type": "static-constant-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "Constants",
+                                            "file": "stub__constants.zep",
+                                            "line": 123,
+                                            "char": 52
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "DEFAULT_PATH_DELIMITER",
+                                            "file": "stub__constants.zep",
+                                            "line": 123,
+                                            "char": 52
+                                        },
+                                        "file": "stub__constants.zep",
+                                        "line": 123,
+                                        "char": 52
+                                    },
+                                    "file": "stub__constants.zep",
+                                    "line": 123,
+                                    "char": 52
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 125,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "delimiter",
+                                "file": "stub__constants.zep",
+                                "line": 125,
+                                "char": 19
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 126,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Test Delimiters as String Constants\n\t *\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/1571\n\t *",
+                    "file": "stub__constants.zep",
+                    "line": 120,
+                    "last-line": 128,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringConstantWithVars",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "property",
+                                    "file": "stub__constants.zep",
+                                    "line": 130,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 131,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "property",
+                                    "expr": {
+                                        "type": "static-constant-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "Constants",
+                                            "file": "stub__constants.zep",
+                                            "line": 131,
+                                            "char": 47
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "PROPERTY_WITH_VARS",
+                                            "file": "stub__constants.zep",
+                                            "line": 131,
+                                            "char": 47
+                                        },
+                                        "file": "stub__constants.zep",
+                                        "line": 131,
+                                        "char": 47
+                                    },
+                                    "file": "stub__constants.zep",
+                                    "line": 131,
+                                    "char": 47
+                                }
+                            ],
+                            "file": "stub__constants.zep",
+                            "line": 133,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "property",
+                                "file": "stub__constants.zep",
+                                "line": 133,
+                                "char": 18
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 134,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 128,
+                    "last-line": 136,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringPropertyWithVarsAssigned",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__constants.zep",
+                                    "line": 138,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "propWsVarsAssigned",
+                                    "file": "stub__constants.zep",
+                                    "line": 138,
+                                    "char": 34
+                                },
+                                "file": "stub__constants.zep",
+                                "line": 138,
+                                "char": 34
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 139,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 136,
+                    "last-line": 141,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringPropertyWithVarsGet",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__constants.zep",
+                                    "line": 143,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "propWsVarsGet",
+                                    "file": "stub__constants.zep",
+                                    "line": 143,
+                                    "char": 29
+                                },
+                                "file": "stub__constants.zep",
+                                "line": 143,
+                                "char": 29
+                            },
+                            "file": "stub__constants.zep",
+                            "line": 144,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constants.zep",
+                    "line": 141,
+                    "last-line": 145,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "C1",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__constants.zep",
+                        "line": 5,
+                        "char": 17
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 7,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C2",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__constants.zep",
+                        "line": 7,
+                        "char": 18
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 9,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C3",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__constants.zep",
+                        "line": 9,
+                        "char": 17
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 11,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C4",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__constants.zep",
+                        "line": 11,
+                        "char": 15
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 13,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C5",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__constants.zep",
+                        "line": 13,
+                        "char": 18
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 15,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C5_SELF",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "self",
+                            "file": "stub__constants.zep",
+                            "line": 15,
+                            "char": 26
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C5",
+                            "file": "stub__constants.zep",
+                            "line": 15,
+                            "char": 26
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 15,
+                        "char": 26
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 17,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C5_BY_NAME",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "Constants",
+                            "file": "stub__constants.zep",
+                            "line": 17,
+                            "char": 34
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "C5",
+                            "file": "stub__constants.zep",
+                            "line": 17,
+                            "char": 34
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 17,
+                        "char": 34
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 19,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "C6",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__constants.zep",
+                        "line": 19,
+                        "char": 17
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 21,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "className",
+                    "default": {
+                        "type": "constant",
+                        "value": "__CLASS__",
+                        "file": "stub__constants.zep",
+                        "line": 21,
+                        "char": 29
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 23,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "STD_PROP_LIST",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "\\ArrayObject",
+                            "file": "stub__constants.zep",
+                            "line": 23,
+                            "char": 51
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "STD_PROP_LIST",
+                            "file": "stub__constants.zep",
+                            "line": 23,
+                            "char": 51
+                        },
+                        "file": "stub__constants.zep",
+                        "line": 23,
+                        "char": 51
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 25,
+                    "char": 20
+                },
+                {
+                    "type": "const",
+                    "name": "DEFAULT_PATH_DELIMITER",
+                    "default": {
+                        "type": "string",
+                        "value": ".",
+                        "file": "stub__constants.zep",
+                        "line": 26,
+                        "char": 35
+                    },
+                    "docblock": "** Test Issue 1571 *",
+                    "file": "stub__constants.zep",
+                    "line": 27,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "PROPERTY_WITH_VARS",
+                    "default": {
+                        "type": "string",
+                        "value": "$SOME\/CSRF\/KEY$",
+                        "file": "stub__constants.zep",
+                        "line": 27,
+                        "char": 44
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 31,
+                    "char": 2
+                },
+                {
+                    "type": "const",
+                    "name": "ANNOTATION_REGEX",
+                    "default": {
+                        "type": "char",
+                        "value": "\/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\\/)\/",
+                        "file": "stub__constants.zep",
+                        "line": 32,
+                        "char": 84
+                    },
+                    "docblock": "**\n\t* Test property addSlashes for constants\n\t*",
+                    "file": "stub__constants.zep",
+                    "line": 33,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "PARAMETER_REGEX",
+                    "default": {
+                        "type": "char",
+                        "value": "\/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\"[^\"]*\"|[^,)]*)\\s*(?:,|$)\/",
+                        "file": "stub__constants.zep",
+                        "line": 33,
+                        "char": 78
+                    },
+                    "file": "stub__constants.zep",
+                    "line": 35,
+                    "char": 10
+                }
+            ],
+            "file": "stub__constants.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__constants.zep",
+        "line": 3,
+        "char": 5
+    }
+]

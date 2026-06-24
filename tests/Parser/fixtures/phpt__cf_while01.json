@@ -1,0 +1,31 @@
+[
+    {
+        "type": "namespace",
+        "name": "Acme",
+        "file": "phpt__cf_while01.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "while",
+                "expr": {
+                    "type": "variable",
+                    "value": "result",
+                    "file": "phpt__cf_while01.zep",
+                    "line": 4,
+                    "char": 16
+                },
+                "file": "phpt__cf_while01.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_while01.zep",
+        "line": 3,
+        "char": 8
+    }
+]

@@ -1,0 +1,70 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_abstractstatic.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "AbstractStatic",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getCalledClass",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_called_class",
+                                "call-type": 1,
+                                "file": "stub__oo_abstractstatic.zep",
+                                "line": 7,
+                                "char": 28
+                            },
+                            "file": "stub__oo_abstractstatic.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_abstractstatic.zep",
+                                "line": 6,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_abstractstatic.zep",
+                        "line": 6,
+                        "char": 2
+                    },
+                    "file": "stub__oo_abstractstatic.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 23
+                }
+            ],
+            "file": "stub__oo_abstractstatic.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__oo_abstractstatic.zep",
+        "line": 3,
+        "char": 14
+    }
+]

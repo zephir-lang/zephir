@@ -1,0 +1,47 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "irange",
+                            "left": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_irange.zep",
+                                "line": 2,
+                                "char": 13
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "10",
+                                "file": "phpt__operators_irange.zep",
+                                "line": 2,
+                                "char": 17
+                            },
+                            "file": "phpt__operators_irange.zep",
+                            "line": 2,
+                            "char": 17
+                        },
+                        "file": "phpt__operators_irange.zep",
+                        "line": 2,
+                        "char": 17
+                    }
+                ],
+                "file": "phpt__operators_irange.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_irange.zep",
+        "line": 1,
+        "char": 9
+    }
+]

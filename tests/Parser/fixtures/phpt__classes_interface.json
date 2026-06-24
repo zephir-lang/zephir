@@ -1,0 +1,52 @@
+[
+    {
+        "type": "interface",
+        "name": "MiddlewareInterfaceEx",
+        "extends": [
+            {
+                "type": "variable",
+                "value": "MiddlewareInterface",
+                "file": "phpt__classes_interface.zep",
+                "line": 2,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "handle",
+                    "file": "phpt__classes_interface.zep",
+                    "line": 4,
+                    "last-line": 5,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "HELLO",
+                    "default": {
+                        "type": "string",
+                        "value": "world",
+                        "file": "phpt__classes_interface.zep",
+                        "line": 3,
+                        "char": 21
+                    },
+                    "file": "phpt__classes_interface.zep",
+                    "line": 4,
+                    "char": 7
+                }
+            ],
+            "file": "phpt__classes_interface.zep",
+            "line": 5,
+            "char": 1
+        },
+        "file": "phpt__classes_interface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

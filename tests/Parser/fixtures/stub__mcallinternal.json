@@ -1,0 +1,1067 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Method calls\n *",
+        "file": "stub__mcallinternal.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__mcallinternal.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "McallInternal",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "internal"
+                    ],
+                    "type": "method",
+                    "name": "a",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "strlen",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "hello",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 12,
+                                            "char": 22
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 12,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 12,
+                                "char": 23
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 18
+                },
+                {
+                    "visibility": [
+                        "internal"
+                    ],
+                    "type": "method",
+                    "name": "b",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 15,
+                            "char": 23
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 15,
+                            "char": 26
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 18
+                },
+                {
+                    "visibility": [
+                        "internal"
+                    ],
+                    "type": "method",
+                    "name": "c",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 20,
+                            "char": 28
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 20,
+                            "char": 36
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 22,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 22,
+                                    "char": 15
+                                },
+                                "file": "stub__mcallinternal.zep",
+                                "line": 22,
+                                "char": 15
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 18
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "e",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "strlen",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "hello",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 27,
+                                            "char": 22
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 27,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 27,
+                                "char": 23
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "d",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 32,
+                                        "char": 12
+                                    },
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 32,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 32,
+                            "char": 16
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 32,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 33,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 33,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 33,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1000000",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 33,
+                                            "char": 28
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 33,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 33,
+                                "char": 30
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "int",
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__mcallinternal.zep",
+                                                        "line": 34,
+                                                        "char": 23
+                                                    },
+                                                    "name": "a",
+                                                    "call-type": 1,
+                                                    "file": "stub__mcallinternal.zep",
+                                                    "line": 34,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__mcallinternal.zep",
+                                                "line": 34,
+                                                "char": 27
+                                            },
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 34,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 35,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__mcallinternal.zep",
+                                "line": 36,
+                                "char": 11
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 30,
+                    "last-line": 39,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "f",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 41,
+                                        "char": 12
+                                    },
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 41,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 41,
+                            "char": 16
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 41,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 42,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 42,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 42,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1000000",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 42,
+                                            "char": 28
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 42,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 42,
+                                "char": 30
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "int",
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__mcallinternal.zep",
+                                                        "line": 43,
+                                                        "char": 23
+                                                    },
+                                                    "name": "e",
+                                                    "call-type": 1,
+                                                    "file": "stub__mcallinternal.zep",
+                                                    "line": 43,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__mcallinternal.zep",
+                                                "line": 43,
+                                                "char": 27
+                                            },
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 43,
+                                            "char": 27
+                                        }
+                                    ],
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 44,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 45,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__mcallinternal.zep",
+                                "line": 45,
+                                "char": 11
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 46,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 39,
+                    "last-line": 48,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "g",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 50,
+                                        "char": 12
+                                    },
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 50,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 50,
+                            "char": 17
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 50,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 51,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 51,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 51,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1000",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 51,
+                                            "char": 25
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 51,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 51,
+                                "char": 27
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "long",
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__mcallinternal.zep",
+                                                        "line": 52,
+                                                        "char": 24
+                                                    },
+                                                    "name": "c",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__mcallinternal.zep",
+                                                                "line": 52,
+                                                                "char": 28
+                                                            },
+                                                            "file": "stub__mcallinternal.zep",
+                                                            "line": 52,
+                                                            "char": 28
+                                                        },
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__mcallinternal.zep",
+                                                                "line": 52,
+                                                                "char": 31
+                                                            },
+                                                            "file": "stub__mcallinternal.zep",
+                                                            "line": 52,
+                                                            "char": 31
+                                                        }
+                                                    ],
+                                                    "file": "stub__mcallinternal.zep",
+                                                    "line": 52,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__mcallinternal.zep",
+                                                "line": 52,
+                                                "char": 32
+                                            },
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 52,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 53,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 54,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__mcallinternal.zep",
+                                "line": 54,
+                                "char": 11
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 55,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__mcallinternal.zep",
+                    "line": 48,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "internal"
+                    ],
+                    "type": "method",
+                    "name": "other",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 57,
+                            "char": 32
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcallinternal.zep",
+                            "line": 57,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "div",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 59,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 59,
+                                    "char": 15
+                                },
+                                "file": "stub__mcallinternal.zep",
+                                "line": 59,
+                                "char": 15
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 60,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__mcallinternal.zep",
+                                "line": 58,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcallinternal.zep",
+                        "line": 58,
+                        "char": 2
+                    },
+                    "file": "stub__mcallinternal.zep",
+                    "line": 57,
+                    "last-line": 62,
+                    "char": 18
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callFibonacci",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "p",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 64,
+                                        "char": 15
+                                    },
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 64,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 64,
+                            "char": 20
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 64,
+                                        "char": 27
+                                    },
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 64,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 65,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 65,
+                                            "char": 19
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 65,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "10000000",
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 65,
+                                            "char": 29
+                                        },
+                                        "file": "stub__mcallinternal.zep",
+                                        "line": 65,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__mcallinternal.zep",
+                                "line": 65,
+                                "char": 31
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "p",
+                                            "expr": {
+                                                "type": "cast",
+                                                "left": "double",
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__mcallinternal.zep",
+                                                        "line": 66,
+                                                        "char": 26
+                                                    },
+                                                    "name": "other",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__mcallinternal.zep",
+                                                                "line": 66,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__mcallinternal.zep",
+                                                            "line": 66,
+                                                            "char": 34
+                                                        },
+                                                        {
+                                                            "parameter": {
+                                                                "type": "add",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__mcallinternal.zep",
+                                                                    "line": 66,
+                                                                    "char": 38
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__mcallinternal.zep",
+                                                                    "line": 66,
+                                                                    "char": 41
+                                                                },
+                                                                "file": "stub__mcallinternal.zep",
+                                                                "line": 66,
+                                                                "char": 41
+                                                            },
+                                                            "file": "stub__mcallinternal.zep",
+                                                            "line": 66,
+                                                            "char": 41
+                                                        }
+                                                    ],
+                                                    "file": "stub__mcallinternal.zep",
+                                                    "line": 66,
+                                                    "char": 42
+                                                },
+                                                "file": "stub__mcallinternal.zep",
+                                                "line": 66,
+                                                "char": 42
+                                            },
+                                            "file": "stub__mcallinternal.zep",
+                                            "line": 66,
+                                            "char": 42
+                                        }
+                                    ],
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 67,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__mcallinternal.zep",
+                            "line": 68,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "p",
+                                "file": "stub__mcallinternal.zep",
+                                "line": 68,
+                                "char": 11
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__mcallinternal.zep",
+                                "line": 63,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcallinternal.zep",
+                        "line": 63,
+                        "char": 2
+                    },
+                    "file": "stub__mcallinternal.zep",
+                    "line": 62,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "internal"
+                    ],
+                    "type": "method",
+                    "name": "test1956",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__mcallinternal.zep",
+                                "line": 73,
+                                "char": 14
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "McallInternal",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 72,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__mcallinternal.zep",
+                                "line": 72,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcallinternal.zep",
+                        "line": 72,
+                        "char": 2
+                    },
+                    "file": "stub__mcallinternal.zep",
+                    "line": 71,
+                    "last-line": 76,
+                    "char": 18
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1956",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 78,
+                                    "char": 15
+                                },
+                                "name": "test1956",
+                                "call-type": 1,
+                                "file": "stub__mcallinternal.zep",
+                                "line": 78,
+                                "char": 26
+                            },
+                            "file": "stub__mcallinternal.zep",
+                            "line": 79,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "McallInternal",
+                                    "file": "stub__mcallinternal.zep",
+                                    "line": 77,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__mcallinternal.zep",
+                                "line": 77,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcallinternal.zep",
+                        "line": 77,
+                        "char": 2
+                    },
+                    "file": "stub__mcallinternal.zep",
+                    "line": 76,
+                    "last-line": 80,
+                    "char": 16
+                }
+            ],
+            "file": "stub__mcallinternal.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__mcallinternal.zep",
+        "line": 8,
+        "char": 5
+    }
+]

@@ -1,0 +1,339 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__factorial.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Factorial",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "intIterativeFactorial",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__factorial.zep",
+                            "line": 7,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__factorial.zep",
+                                        "line": 9,
+                                        "char": 18
+                                    },
+                                    "file": "stub__factorial.zep",
+                                    "line": 9,
+                                    "char": 18
+                                },
+                                {
+                                    "variable": "i",
+                                    "file": "stub__factorial.zep",
+                                    "line": 9,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__factorial.zep",
+                            "line": 10,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "2",
+                                            "file": "stub__factorial.zep",
+                                            "line": 10,
+                                            "char": 19
+                                        },
+                                        "file": "stub__factorial.zep",
+                                        "line": 10,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__factorial.zep",
+                                            "line": 10,
+                                            "char": 22
+                                        },
+                                        "file": "stub__factorial.zep",
+                                        "line": 10,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__factorial.zep",
+                                "line": 10,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "mul-assign",
+                                            "variable": "result",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__factorial.zep",
+                                                "line": 11,
+                                                "char": 18
+                                            },
+                                            "file": "stub__factorial.zep",
+                                            "line": 11,
+                                            "char": 18
+                                        }
+                                    ],
+                                    "file": "stub__factorial.zep",
+                                    "line": 12,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__factorial.zep",
+                            "line": 13,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__factorial.zep",
+                                "line": 13,
+                                "char": 16
+                            },
+                            "file": "stub__factorial.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__factorial.zep",
+                                "line": 8,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__factorial.zep",
+                        "line": 8,
+                        "char": 2
+                    },
+                    "file": "stub__factorial.zep",
+                    "line": 7,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "intRecursiveFactorial",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "num",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__factorial.zep",
+                            "line": 16,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "ternary",
+                                "left": {
+                                    "type": "or",
+                                    "left": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__factorial.zep",
+                                            "line": 18,
+                                            "char": 16
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__factorial.zep",
+                                            "line": 18,
+                                            "char": 21
+                                        },
+                                        "file": "stub__factorial.zep",
+                                        "line": 18,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "num",
+                                            "file": "stub__factorial.zep",
+                                            "line": 18,
+                                            "char": 29
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__factorial.zep",
+                                            "line": 18,
+                                            "char": 33
+                                        },
+                                        "file": "stub__factorial.zep",
+                                        "line": 18,
+                                        "char": 33
+                                    },
+                                    "file": "stub__factorial.zep",
+                                    "line": 18,
+                                    "char": 33
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__factorial.zep",
+                                    "line": 18,
+                                    "char": 37
+                                },
+                                "extra": {
+                                    "type": "mul",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "num",
+                                        "file": "stub__factorial.zep",
+                                        "line": 18,
+                                        "char": 43
+                                    },
+                                    "right": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__factorial.zep",
+                                            "line": 18,
+                                            "char": 50
+                                        },
+                                        "name": "intRecursiveFactorial",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "sub",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "num",
+                                                        "file": "stub__factorial.zep",
+                                                        "line": 18,
+                                                        "char": 77
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "1",
+                                                        "file": "stub__factorial.zep",
+                                                        "line": 18,
+                                                        "char": 80
+                                                    },
+                                                    "file": "stub__factorial.zep",
+                                                    "line": 18,
+                                                    "char": 80
+                                                },
+                                                "file": "stub__factorial.zep",
+                                                "line": 18,
+                                                "char": 80
+                                            }
+                                        ],
+                                        "file": "stub__factorial.zep",
+                                        "line": 18,
+                                        "char": 81
+                                    },
+                                    "file": "stub__factorial.zep",
+                                    "line": 18,
+                                    "char": 81
+                                },
+                                "file": "stub__factorial.zep",
+                                "line": 18,
+                                "char": 81
+                            },
+                            "file": "stub__factorial.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__factorial.zep",
+                                "line": 17,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__factorial.zep",
+                        "line": 17,
+                        "char": 2
+                    },
+                    "file": "stub__factorial.zep",
+                    "line": 16,
+                    "last-line": 20,
+                    "char": 16
+                }
+            ],
+            "file": "stub__factorial.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__factorial.zep",
+        "line": 4,
+        "char": 5
+    }
+]

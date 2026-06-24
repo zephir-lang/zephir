@@ -1,0 +1,1004 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Arithmetic operations\n *",
+        "file": "stub__ternary.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__ternary.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Ternary",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernary1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "ternary",
+                                "left": {
+                                    "type": "int",
+                                    "value": "100",
+                                    "file": "stub__ternary.zep",
+                                    "line": 12,
+                                    "char": 14
+                                },
+                                "right": {
+                                    "type": "add",
+                                    "left": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__ternary.zep",
+                                        "line": 12,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "100",
+                                        "file": "stub__ternary.zep",
+                                        "line": 12,
+                                        "char": 27
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 12,
+                                    "char": 27
+                                },
+                                "extra": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__ternary.zep",
+                                    "line": 12,
+                                    "char": 34
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 12,
+                                "char": 34
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__ternary.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernary2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 15,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "ternary",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__ternary.zep",
+                                    "line": 17,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": "foo",
+                                    "file": "stub__ternary.zep",
+                                    "line": 17,
+                                    "char": 18
+                                },
+                                "extra": {
+                                    "type": "string",
+                                    "value": "bar",
+                                    "file": "stub__ternary.zep",
+                                    "line": 17,
+                                    "char": 23
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 17,
+                                "char": 23
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__ternary.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernaryComplex1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 20,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "y",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 20,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "ternary",
+                                "left": {
+                                    "type": "int",
+                                    "value": "100",
+                                    "file": "stub__ternary.zep",
+                                    "line": 22,
+                                    "char": 14
+                                },
+                                "right": {
+                                    "type": "add",
+                                    "left": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__ternary.zep",
+                                        "line": 22,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "100",
+                                        "file": "stub__ternary.zep",
+                                        "line": 22,
+                                        "char": 27
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 22,
+                                    "char": 27
+                                },
+                                "extra": {
+                                    "type": "ternary",
+                                    "left": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__ternary.zep",
+                                            "line": 22,
+                                            "char": 31
+                                        },
+                                        "name": "y",
+                                        "call-type": 1,
+                                        "file": "stub__ternary.zep",
+                                        "line": 22,
+                                        "char": 36
+                                    },
+                                    "right": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__ternary.zep",
+                                            "line": 22,
+                                            "char": 40
+                                        },
+                                        "name": "x",
+                                        "call-type": 1,
+                                        "file": "stub__ternary.zep",
+                                        "line": 22,
+                                        "char": 45
+                                    },
+                                    "extra": {
+                                        "type": "isset",
+                                        "left": {
+                                            "type": "array-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "a",
+                                                "file": "stub__ternary.zep",
+                                                "line": 22,
+                                                "char": 54
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "y",
+                                                "file": "stub__ternary.zep",
+                                                "line": 22,
+                                                "char": 56
+                                            },
+                                            "file": "stub__ternary.zep",
+                                            "line": 22,
+                                            "char": 57
+                                        },
+                                        "file": "stub__ternary.zep",
+                                        "line": 22,
+                                        "char": 57
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 22,
+                                    "char": 57
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 22,
+                                "char": 57
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__ternary.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernaryComplex2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 25,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "y",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 25,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "int",
+                                    "value": "5",
+                                    "file": "stub__ternary.zep",
+                                    "line": 27,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "ternary",
+                                        "left": {
+                                            "type": "int",
+                                            "value": "100",
+                                            "file": "stub__ternary.zep",
+                                            "line": 27,
+                                            "char": 19
+                                        },
+                                        "right": {
+                                            "type": "add",
+                                            "left": {
+                                                "type": "bool",
+                                                "value": "true",
+                                                "file": "stub__ternary.zep",
+                                                "line": 27,
+                                                "char": 26
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "100",
+                                                "file": "stub__ternary.zep",
+                                                "line": 27,
+                                                "char": 32
+                                            },
+                                            "file": "stub__ternary.zep",
+                                            "line": 27,
+                                            "char": 32
+                                        },
+                                        "extra": {
+                                            "type": "ternary",
+                                            "left": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 27,
+                                                    "char": 36
+                                                },
+                                                "name": "y",
+                                                "call-type": 1,
+                                                "file": "stub__ternary.zep",
+                                                "line": 27,
+                                                "char": 41
+                                            },
+                                            "right": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 27,
+                                                    "char": 45
+                                                },
+                                                "name": "x",
+                                                "call-type": 1,
+                                                "file": "stub__ternary.zep",
+                                                "line": 27,
+                                                "char": 50
+                                            },
+                                            "extra": {
+                                                "type": "isset",
+                                                "left": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "a",
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 27,
+                                                        "char": 59
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "y",
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 27,
+                                                        "char": 61
+                                                    },
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 27,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 27,
+                                                "char": 62
+                                            },
+                                            "file": "stub__ternary.zep",
+                                            "line": 27,
+                                            "char": 62
+                                        },
+                                        "file": "stub__ternary.zep",
+                                        "line": 27,
+                                        "char": 62
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 27,
+                                    "char": 63
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 27,
+                                "char": 63
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__ternary.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernaryComplex3",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 30,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "gettype",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "ternary",
+                                            "left": {
+                                                "type": "equals",
+                                                "left": {
+                                                    "type": "typeof",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "a",
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 32,
+                                                        "char": 28
+                                                    },
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 32,
+                                                    "char": 28
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": "resource",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 32,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 32,
+                                                "char": 39
+                                            },
+                                            "right": {
+                                                "type": "string",
+                                                "value": "unknown",
+                                                "file": "stub__ternary.zep",
+                                                "line": 32,
+                                                "char": 48
+                                            },
+                                            "extra": {
+                                                "type": "bool",
+                                                "value": "false",
+                                                "file": "stub__ternary.zep",
+                                                "line": 32,
+                                                "char": 55
+                                            },
+                                            "file": "stub__ternary.zep",
+                                            "line": 32,
+                                            "char": 55
+                                        },
+                                        "file": "stub__ternary.zep",
+                                        "line": 32,
+                                        "char": 55
+                                    }
+                                ],
+                                "file": "stub__ternary.zep",
+                                "line": 32,
+                                "char": 56
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__ternary.zep",
+                    "line": 30,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernaryWithPromotedTemporaryVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "var2",
+                                    "file": "stub__ternary.zep",
+                                    "line": 40,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "var3",
+                                    "file": "stub__ternary.zep",
+                                    "line": 40,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__ternary.zep",
+                            "line": 42,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "var2",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "_b_",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 42,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 42,
+                                                "char": 18
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "_c_",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 42,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 42,
+                                                "char": 22
+                                            }
+                                        ],
+                                        "file": "stub__ternary.zep",
+                                        "line": 42,
+                                        "char": 23
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 42,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "stub__ternary.zep",
+                            "line": 44,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "var3",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "explode",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "_",
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 44,
+                                                    "char": 23
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 44,
+                                                "char": 23
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "ternary",
+                                                    "left": {
+                                                        "type": "isset",
+                                                        "left": {
+                                                            "type": "list",
+                                                            "left": {
+                                                                "type": "array-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "var2",
+                                                                    "file": "stub__ternary.zep",
+                                                                    "line": 44,
+                                                                    "char": 35
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__ternary.zep",
+                                                                    "line": 44,
+                                                                    "char": 37
+                                                                },
+                                                                "file": "stub__ternary.zep",
+                                                                "line": 44,
+                                                                "char": 38
+                                                            },
+                                                            "file": "stub__ternary.zep",
+                                                            "line": 44,
+                                                            "char": 40
+                                                        },
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 44,
+                                                        "char": 40
+                                                    },
+                                                    "right": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "var2",
+                                                            "file": "stub__ternary.zep",
+                                                            "line": 44,
+                                                            "char": 46
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__ternary.zep",
+                                                            "line": 44,
+                                                            "char": 48
+                                                        },
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 44,
+                                                        "char": 50
+                                                    },
+                                                    "extra": {
+                                                        "type": "string",
+                                                        "value": "",
+                                                        "file": "stub__ternary.zep",
+                                                        "line": 44,
+                                                        "char": 52
+                                                    },
+                                                    "file": "stub__ternary.zep",
+                                                    "line": 44,
+                                                    "char": 52
+                                                },
+                                                "file": "stub__ternary.zep",
+                                                "line": 44,
+                                                "char": 52
+                                            }
+                                        ],
+                                        "file": "stub__ternary.zep",
+                                        "line": 44,
+                                        "char": 53
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 44,
+                                    "char": 53
+                                }
+                            ],
+                            "file": "stub__ternary.zep",
+                            "line": 46,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "var3",
+                                "file": "stub__ternary.zep",
+                                "line": 46,
+                                "char": 14
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 47,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/665\n\t *",
+                    "file": "stub__ternary.zep",
+                    "line": 38,
+                    "last-line": 51,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTernaryAfterLetVariable",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "s",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "23",
+                                        "file": "stub__ternary.zep",
+                                        "line": 54,
+                                        "char": 13
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 54,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__ternary.zep",
+                            "line": 55,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "s",
+                                    "expr": {
+                                        "type": "ternary",
+                                        "left": {
+                                            "type": "identical",
+                                            "left": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__ternary.zep",
+                                                "line": 55,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__ternary.zep",
+                                                "line": 55,
+                                                "char": 17
+                                            },
+                                            "file": "stub__ternary.zep",
+                                            "line": 55,
+                                            "char": 17
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__ternary.zep",
+                                            "line": 55,
+                                            "char": 21
+                                        },
+                                        "extra": {
+                                            "type": "int",
+                                            "value": "10",
+                                            "file": "stub__ternary.zep",
+                                            "line": 55,
+                                            "char": 25
+                                        },
+                                        "file": "stub__ternary.zep",
+                                        "line": 55,
+                                        "char": 25
+                                    },
+                                    "file": "stub__ternary.zep",
+                                    "line": 55,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__ternary.zep",
+                            "line": 56,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "s",
+                                "file": "stub__ternary.zep",
+                                "line": 56,
+                                "char": 11
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 57,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/297\n\t *",
+                    "file": "stub__ternary.zep",
+                    "line": 52,
+                    "last-line": 59,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testShortTernary",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 59,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "short-ternary",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__ternary.zep",
+                                    "line": 61,
+                                    "char": 12
+                                },
+                                "extra": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__ternary.zep",
+                                    "line": 61,
+                                    "char": 20
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 61,
+                                "char": 20
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 62,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__ternary.zep",
+                                "line": 60,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__ternary.zep",
+                        "line": 60,
+                        "char": 5
+                    },
+                    "file": "stub__ternary.zep",
+                    "line": 59,
+                    "last-line": 64,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testShortTernaryComplex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "left",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 64,
+                            "char": 53
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__ternary.zep",
+                            "line": 64,
+                            "char": 64
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "short-ternary",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "left",
+                                    "file": "stub__ternary.zep",
+                                    "line": 66,
+                                    "char": 15
+                                },
+                                "extra": {
+                                    "type": "variable",
+                                    "value": "value",
+                                    "file": "stub__ternary.zep",
+                                    "line": 66,
+                                    "char": 23
+                                },
+                                "file": "stub__ternary.zep",
+                                "line": 66,
+                                "char": 23
+                            },
+                            "file": "stub__ternary.zep",
+                            "line": 67,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__ternary.zep",
+                                "line": 64,
+                                "char": 72
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__ternary.zep",
+                                "line": 65,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__ternary.zep",
+                        "line": 65,
+                        "char": 5
+                    },
+                    "file": "stub__ternary.zep",
+                    "line": 64,
+                    "last-line": 68,
+                    "char": 19
+                }
+            ],
+            "file": "stub__ternary.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__ternary.zep",
+        "line": 8,
+        "char": 5
+    }
+]

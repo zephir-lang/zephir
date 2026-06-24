@@ -1,0 +1,51 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Scopes",
+        "file": "stub__oo_scopes_scopetesterinterface.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "ScopeTesterInterface",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "run",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_scopetesterinterface.zep",
+                                "line": 5,
+                                "char": 33
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_scopetesterinterface.zep",
+                        "line": 5,
+                        "char": 33
+                    },
+                    "file": "stub__oo_scopes_scopetesterinterface.zep",
+                    "line": 5,
+                    "last-line": 6,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_scopes_scopetesterinterface.zep",
+            "line": 6,
+            "char": 1
+        },
+        "file": "stub__oo_scopes_scopetesterinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

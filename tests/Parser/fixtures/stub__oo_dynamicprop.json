@@ -1,0 +1,849 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n *\n *",
+        "file": "stub__oo_dynamicprop.zep",
+        "line": 5,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_dynamicprop.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "DynamicProp",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "test",
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 11,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyInt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 11,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 13,
+                                        "char": 28
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 13,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyBoolTrue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 16,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 18,
+                                        "char": 30
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 18,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyBoolFalse",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 21,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 23,
+                                        "char": 31
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 23,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 26,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 28,
+                                        "char": 32
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 28,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 26,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyChar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 31,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "A",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 33,
+                                        "char": 14
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 33,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 34,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 34,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 34,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 35,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 31,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyUChar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 37,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "uchar",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "A",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 39,
+                                        "char": 15
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 39,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 40,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 40,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 40,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 41,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 37,
+                    "last-line": 43,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 43,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 45,
+                                        "char": 30
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 45,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 46,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 43,
+                    "last-line": 48,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyVariableInt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 48,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 50,
+                                        "char": 13
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 50,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 51,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 51,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 51,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 52,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 48,
+                    "last-line": 54,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyVariableString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 54,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "test",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 56,
+                                        "char": 15
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 56,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 57,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 57,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 57,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 58,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 54,
+                    "last-line": 60,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyVariableBoolTrue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 60,
+                            "char": 62
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 62,
+                                        "char": 15
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 62,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 63,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 63,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 63,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 60,
+                    "last-line": 66,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setPropertyVariableBoolFalse",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "property",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 66,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 68,
+                                        "char": 16
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 68,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 69,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 69,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 69,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 70,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 66,
+                    "last-line": 72,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setExistingStringProperty",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "string-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "test",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "works",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 74,
+                                        "char": 27
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 74,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 75,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 72,
+                    "last-line": 77,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setExistingStringPropertyString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 77,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "string-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "eproperty",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 79,
+                                        "char": 32
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 79,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 80,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 77,
+                    "last-line": 82,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setNonExistingStringProperty",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "string-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "property",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "works",
+                                        "file": "stub__oo_dynamicprop.zep",
+                                        "line": 84,
+                                        "char": 31
+                                    },
+                                    "file": "stub__oo_dynamicprop.zep",
+                                    "line": 84,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__oo_dynamicprop.zep",
+                            "line": 85,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_dynamicprop.zep",
+                    "line": 82,
+                    "last-line": 86,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_dynamicprop.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__oo_dynamicprop.zep",
+        "line": 7,
+        "char": 5
+    }
+]

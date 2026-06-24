@@ -1,0 +1,53 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "scall",
+                "expr": {
+                    "type": "scall",
+                    "dynamic-class": 0,
+                    "class": "self",
+                    "dynamic": 2,
+                    "name": "name",
+                    "parameters": [
+                        {
+                            "parameter": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__statements_scall_string_method_params.zep",
+                                "line": 2,
+                                "char": 16
+                            },
+                            "file": "phpt__statements_scall_string_method_params.zep",
+                            "line": 2,
+                            "char": 16
+                        },
+                        {
+                            "parameter": {
+                                "type": "int",
+                                "value": "2",
+                                "file": "phpt__statements_scall_string_method_params.zep",
+                                "line": 2,
+                                "char": 19
+                            },
+                            "file": "phpt__statements_scall_string_method_params.zep",
+                            "line": 2,
+                            "char": 19
+                        }
+                    ],
+                    "file": "phpt__statements_scall_string_method_params.zep",
+                    "line": 2,
+                    "char": 20
+                },
+                "file": "phpt__statements_scall_string_method_params.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_scall_string_method_params.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,137 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_getobjectvars.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "GetObjectVars",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "default": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "stub__properties_getobjectvars.zep",
+                        "line": 6,
+                        "char": 20
+                    },
+                    "file": "stub__properties_getobjectvars.zep",
+                    "line": 7,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "b",
+                    "default": {
+                        "type": "int",
+                        "value": "2",
+                        "file": "stub__properties_getobjectvars.zep",
+                        "line": 7,
+                        "char": 20
+                    },
+                    "file": "stub__properties_getobjectvars.zep",
+                    "line": 8,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "c",
+                    "default": {
+                        "type": "int",
+                        "value": "3",
+                        "file": "stub__properties_getobjectvars.zep",
+                        "line": 8,
+                        "char": 20
+                    },
+                    "file": "stub__properties_getobjectvars.zep",
+                    "line": 12,
+                    "char": 6
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1245",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "get_object_vars",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__properties_getobjectvars.zep",
+                                            "line": 15,
+                                            "char": 36
+                                        },
+                                        "file": "stub__properties_getobjectvars.zep",
+                                        "line": 15,
+                                        "char": 36
+                                    }
+                                ],
+                                "file": "stub__properties_getobjectvars.zep",
+                                "line": 15,
+                                "char": 37
+                            },
+                            "file": "stub__properties_getobjectvars.zep",
+                            "line": 16,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1245\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__properties_getobjectvars.zep",
+                                "line": 14,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__properties_getobjectvars.zep",
+                        "line": 14,
+                        "char": 5
+                    },
+                    "file": "stub__properties_getobjectvars.zep",
+                    "line": 13,
+                    "last-line": 17,
+                    "char": 19
+                }
+            ],
+            "file": "stub__properties_getobjectvars.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__properties_getobjectvars.zep",
+        "line": 4,
+        "char": 5
+    }
+]

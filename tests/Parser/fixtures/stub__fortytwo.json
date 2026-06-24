@@ -1,0 +1,1029 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * FortyTwo\n *",
+        "file": "stub__fortytwo.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__fortytwo.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "FortyTwo",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "proof",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "box",
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 13,
+                                    "char": 10
+                                },
+                                {
+                                    "variable": "side",
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 13,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__fortytwo.zep",
+                            "line": 14,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 14,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 14,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__fortytwo.zep",
+                            "line": 16,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "box",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "10",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 7
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 7
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "24",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 11
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 11
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "8",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 15
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 17,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 17,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "8",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 21
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 21
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "15",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 25
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 25
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "19",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 29
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 29
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 17,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 17,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "19",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 35
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 35
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "17",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 39
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 39
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "6",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 17,
+                                                                "char": 43
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 17,
+                                                            "char": 43
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 17,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 17,
+                                                "char": 44
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "6",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 7
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 7
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "16",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 11
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 11
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "20",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 15
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 18,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 18,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "20",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 21
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 21
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "13",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 25
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 25
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "9",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 29
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 29
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 18,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 18,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "9",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 34
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "11",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 39
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 39
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "22",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 18,
+                                                                "char": 43
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 18,
+                                                            "char": 43
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 18,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 18,
+                                                "char": 44
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "22",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 7
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 7
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "2",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 11
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 11
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "18",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 15
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 19,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 19,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "18",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 21
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 21
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "4",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 25
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 25
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "20",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 29
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 29
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 19,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 19,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "5",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 34
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "21",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 39
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 39
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "16",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 19,
+                                                                "char": 43
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 19,
+                                                            "char": 43
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 19,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 19,
+                                                "char": 44
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "16",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 7
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 7
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "3",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 11
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 11
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "23",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 15
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 20,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 20,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "23",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 21
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 21
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "7",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 25
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 25
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "12",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 29
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 29
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 20,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 20,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "12",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 35
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 35
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "25",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 39
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 39
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "5",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 20,
+                                                                "char": 43
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 20,
+                                                            "char": 43
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 20,
+                                                    "char": 44
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 20,
+                                                "char": 44
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "24",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 7
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 7
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "7",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 11
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 11
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "11",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 15
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 15
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 21,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 21,
+                                                "char": 16
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "11",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 21
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 21
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "27",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 26
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 26
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "4",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 29
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 29
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 21,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 21,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "11",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 35
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 35
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "27",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 39
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 39
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "int",
+                                                                "value": "4",
+                                                                "file": "stub__fortytwo.zep",
+                                                                "line": 21,
+                                                                "char": 43
+                                                            },
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 21,
+                                                            "char": 43
+                                                        }
+                                                    ],
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 22,
+                                                    "char": 3
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 22,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "stub__fortytwo.zep",
+                                        "line": 22,
+                                        "char": 4
+                                    },
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 22,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "stub__fortytwo.zep",
+                            "line": 23,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "box",
+                                "file": "stub__fortytwo.zep",
+                                "line": 23,
+                                "char": 19
+                            },
+                            "value": "side",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 24,
+                                                "char": 13
+                                            },
+                                            "file": "stub__fortytwo.zep",
+                                            "line": 24,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 25,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "for",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "range",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 25,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 25,
+                                                "char": 20
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 25,
+                                                    "char": 23
+                                                },
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 25,
+                                                "char": 23
+                                            }
+                                        ],
+                                        "file": "stub__fortytwo.zep",
+                                        "line": 25,
+                                        "char": 25
+                                    },
+                                    "value": "i",
+                                    "reverse": 0,
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "add-assign",
+                                                    "variable": "j",
+                                                    "expr": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "side",
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 26,
+                                                            "char": 17
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 26,
+                                                            "char": 19
+                                                        },
+                                                        "file": "stub__fortytwo.zep",
+                                                        "line": 26,
+                                                        "char": 20
+                                                    },
+                                                    "file": "stub__fortytwo.zep",
+                                                    "line": 26,
+                                                    "char": 20
+                                                }
+                                            ],
+                                            "file": "stub__fortytwo.zep",
+                                            "line": 27,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 28,
+                                    "char": 5
+                                },
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "not-equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "j",
+                                            "file": "stub__fortytwo.zep",
+                                            "line": 28,
+                                            "char": 10
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "42",
+                                            "file": "stub__fortytwo.zep",
+                                            "line": 28,
+                                            "char": 15
+                                        },
+                                        "file": "stub__fortytwo.zep",
+                                        "line": 28,
+                                        "char": 15
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "not true",
+                                                            "file": "stub__fortytwo.zep",
+                                                            "line": 29,
+                                                            "char": 33
+                                                        },
+                                                        "file": "stub__fortytwo.zep",
+                                                        "line": 29,
+                                                        "char": 33
+                                                    }
+                                                ],
+                                                "file": "stub__fortytwo.zep",
+                                                "line": 29,
+                                                "char": 34
+                                            },
+                                            "file": "stub__fortytwo.zep",
+                                            "line": 30,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fortytwo.zep",
+                                    "line": 31,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fortytwo.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__fortytwo.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__fortytwo.zep",
+                    "line": 11,
+                    "last-line": 33,
+                    "char": 16
+                }
+            ],
+            "file": "stub__fortytwo.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__fortytwo.zep",
+        "line": 8,
+        "char": 5
+    }
+]

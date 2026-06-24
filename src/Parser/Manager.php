@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Zephir\Parser;
 
 use function sprintf;
-use function version_compare;
 
 class Manager
 {
@@ -31,14 +30,17 @@ class Manager
     }
 
     /**
-     * Check if Zephir Parser available.
+     * Check if a parser backend is available.
+     *
+     * Always true: Zephir now ships with a built-in pure-PHP parser, so the
+     * optional `ext-zephir_parser` C extension is no longer required. The
+     * extension remains supported as an optional accelerator.
      *
      * @return bool
      */
     public function isAvailable(): bool
     {
-        return $this->parser->isAvailable()
-            && version_compare(self::MINIMUM_PARSER_VERSION, $this->parser->getVersion(), '<=');
+        return true;
     }
 
     public function requirements(): string

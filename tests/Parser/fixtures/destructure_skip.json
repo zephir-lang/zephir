@@ -1,0 +1,82 @@
+[
+    {
+        "type": "function",
+        "name": "t",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "destructure",
+                        "operator": "assign",
+                        "variables": [
+                            {
+                                "type": "variable",
+                                "value": "d",
+                                "file": "destructure_skip.zep",
+                                "line": 2,
+                                "char": 8
+                            },
+                            null,
+                            {
+                                "type": "variable",
+                                "value": "e",
+                                "file": "destructure_skip.zep",
+                                "line": 2,
+                                "char": 13
+                            }
+                        ],
+                        "expr": {
+                            "type": "variable",
+                            "value": "f",
+                            "file": "destructure_skip.zep",
+                            "line": 2,
+                            "char": 18
+                        },
+                        "file": "destructure_skip.zep",
+                        "line": 2,
+                        "char": 18
+                    }
+                ],
+                "file": "destructure_skip.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "destructure",
+                        "operator": "assign",
+                        "variables": [
+                            null,
+                            {
+                                "type": "variable",
+                                "value": "only",
+                                "file": "destructure_skip.zep",
+                                "line": 3,
+                                "char": 13
+                            }
+                        ],
+                        "expr": {
+                            "type": "variable",
+                            "value": "g",
+                            "file": "destructure_skip.zep",
+                            "line": 3,
+                            "char": 18
+                        },
+                        "file": "destructure_skip.zep",
+                        "line": 3,
+                        "char": 18
+                    }
+                ],
+                "file": "destructure_skip.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "destructure_skip.zep",
+        "line": 1,
+        "char": 9
+    }
+]

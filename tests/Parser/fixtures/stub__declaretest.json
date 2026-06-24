@@ -1,0 +1,903 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Variable declaration\n *",
+        "file": "stub__declaretest.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__declaretest.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "DeclareTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringDeclare1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/@(\\w+)(?:\\s*(?:\\(\\s*)?(.*?)(?:\\s*\\))?)??\\s*(?:\\n|\\*\\\/)\/",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 12,
+                                        "char": 73
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 12,
+                                    "char": 73
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 13,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 13,
+                                "char": 17
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 10,
+                    "last-line": 16,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStringDeclare2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "\/(\\w+)\\s*=\\s*(\\[[^\\]]*\\]|\\\"[^\\\"]*\\\"|[^,)]*)\\s*(?:,|$)\/",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 18,
+                                        "char": 71
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 18,
+                                    "char": 71
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 19,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 19,
+                                "char": 17
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 20,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 16,
+                    "last-line": 22,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 24,
+                                        "char": 12
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 24,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 25,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 25,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 26,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 22,
+                    "last-line": 28,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "uint",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 30,
+                                        "char": 13
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 30,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 31,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 31,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 28,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare3",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "1.0",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 36,
+                                        "char": 17
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 36,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 37,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 37,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 34,
+                    "last-line": 40,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare4",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "1.0",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 42,
+                                        "char": 16
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 42,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 43,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 43,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 40,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare5",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "A",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 48,
+                                        "char": 14
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 48,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 49,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 49,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 46,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare6",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "uchar",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "char",
+                                        "value": "A",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 54,
+                                        "char": 15
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 54,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 55,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 55,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 56,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 52,
+                    "last-line": 58,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare7",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 60,
+                                        "char": 13
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 60,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 61,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 61,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 62,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 58,
+                    "last-line": 64,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare8",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "bool",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 66,
+                                        "char": 19
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 66,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 67,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 67,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 68,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 64,
+                    "last-line": 70,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare9",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "bool",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 72,
+                                        "char": 20
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 72,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 73,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 73,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 70,
+                    "last-line": 76,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare10",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 78,
+                                        "char": 13
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 78,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 79,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 79,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 80,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 76,
+                    "last-line": 82,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare11",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "10.5",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 84,
+                                        "char": 15
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 84,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 85,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 85,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 86,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 82,
+                    "last-line": 88,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare12",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 90,
+                                        "char": 16
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 90,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 91,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 91,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 92,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 88,
+                    "last-line": 94,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare13",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 96,
+                                        "char": 15
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 96,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 97,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 97,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 98,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 94,
+                    "last-line": 100,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare14",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "hello",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 102,
+                                        "char": 16
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 102,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 103,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 103,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 104,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 100,
+                    "last-line": 106,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclare15",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "null",
+                                        "file": "stub__declaretest.zep",
+                                        "line": 108,
+                                        "char": 15
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 108,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 109,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 109,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 110,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 106,
+                    "last-line": 112,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDeclareMcallExpression",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__declaretest.zep",
+                                            "line": 114,
+                                            "char": 16
+                                        },
+                                        "name": "testDeclare14",
+                                        "call-type": 1,
+                                        "file": "stub__declaretest.zep",
+                                        "line": 114,
+                                        "char": 32
+                                    },
+                                    "file": "stub__declaretest.zep",
+                                    "line": 114,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__declaretest.zep",
+                            "line": 115,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__declaretest.zep",
+                                "line": 115,
+                                "char": 11
+                            },
+                            "file": "stub__declaretest.zep",
+                            "line": 116,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__declaretest.zep",
+                    "line": 112,
+                    "last-line": 117,
+                    "char": 16
+                }
+            ],
+            "file": "stub__declaretest.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__declaretest.zep",
+        "line": 8,
+        "char": 5
+    }
+]

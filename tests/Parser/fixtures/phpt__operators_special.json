@@ -1,0 +1,177 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "empty",
+                    "left": {
+                        "type": "variable",
+                        "value": "arr",
+                        "file": "phpt__operators_special.zep",
+                        "line": 2,
+                        "char": 15
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 2,
+                    "char": 15
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 3,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "isset",
+                    "left": {
+                        "type": "array-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "arr",
+                            "file": "phpt__operators_special.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "item",
+                            "file": "phpt__operators_special.zep",
+                            "line": 3,
+                            "char": 19
+                        },
+                        "file": "phpt__operators_special.zep",
+                        "line": 3,
+                        "char": 21
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 3,
+                    "char": 21
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 4,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "typeof",
+                    "left": {
+                        "type": "variable",
+                        "value": "obj",
+                        "file": "phpt__operators_special.zep",
+                        "line": 4,
+                        "char": 16
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 4,
+                    "char": 16
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 5,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "clone",
+                    "left": {
+                        "type": "variable",
+                        "value": "obj",
+                        "file": "phpt__operators_special.zep",
+                        "line": 5,
+                        "char": 15
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 5,
+                    "char": 15
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 6,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "fetch",
+                    "left": {
+                        "type": "variable",
+                        "value": "dest",
+                        "file": "phpt__operators_special.zep",
+                        "line": 6,
+                        "char": 27
+                    },
+                    "right": {
+                        "type": "array-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "arr",
+                            "file": "phpt__operators_special.zep",
+                            "line": 6,
+                            "char": 20
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "item",
+                            "file": "phpt__operators_special.zep",
+                            "line": 6,
+                            "char": 25
+                        },
+                        "file": "phpt__operators_special.zep",
+                        "line": 6,
+                        "char": 27
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 6,
+                    "char": 27
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 7,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "unlikely",
+                    "left": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "phpt__operators_special.zep",
+                        "line": 7,
+                        "char": 20
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 7,
+                    "char": 20
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 8,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "likely",
+                    "left": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "phpt__operators_special.zep",
+                        "line": 8,
+                        "char": 17
+                    },
+                    "file": "phpt__operators_special.zep",
+                    "line": 8,
+                    "char": 17
+                },
+                "file": "phpt__operators_special.zep",
+                "line": 9,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_special.zep",
+        "line": 1,
+        "char": 9
+    }
+]

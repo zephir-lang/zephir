@@ -1,0 +1,434 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1706.zep",
+        "line": 7,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Issue #1706: a switch that has a `default` clause and returns on every\n * path is exhaustive and must satisfy the return-type hint.\n *",
+        "file": "stub__issue1706.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue1706",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSwitch",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__issue1706.zep",
+                                    "line": 12,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__issue1706.zep",
+                            "line": 13,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 13,
+                                        "char": 18
+                                    },
+                                    "file": "stub__issue1706.zep",
+                                    "line": 13,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__issue1706.zep",
+                            "line": 15,
+                            "char": 14
+                        },
+                        {
+                            "type": "switch",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__issue1706.zep",
+                                "line": 15,
+                                "char": 18
+                            },
+                            "clauses": [
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 16,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issue1706.zep",
+                                    "line": 17,
+                                    "char": 19
+                                },
+                                {
+                                    "type": "default",
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 18,
+                                                "char": 25
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 19,
+                                            "char": 16
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 19,
+                                    "char": 16
+                                },
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 19,
+                                        "char": 19
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 20,
+                                                "char": 25
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 21,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 21,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1706.zep",
+                            "line": 22,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__issue1706.zep",
+                                "line": 11,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1706.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__issue1706.zep",
+                    "line": 10,
+                    "last-line": 24,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "switchDefaultLast",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1706.zep",
+                            "line": 24,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "switch",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__issue1706.zep",
+                                "line": 26,
+                                "char": 18
+                            },
+                            "clauses": [
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 27,
+                                        "char": 19
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "10",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 28,
+                                                "char": 26
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 29,
+                                            "char": 16
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 29,
+                                    "char": 16
+                                },
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "20",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 30,
+                                                "char": 26
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 31,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 31,
+                                    "char": 19
+                                },
+                                {
+                                    "type": "default",
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 32,
+                                                "char": 25
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 33,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 33,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1706.zep",
+                            "line": 34,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__issue1706.zep",
+                                "line": 25,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1706.zep",
+                        "line": 25,
+                        "char": 5
+                    },
+                    "file": "stub__issue1706.zep",
+                    "line": 24,
+                    "last-line": 36,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "switchWithThrow",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue1706.zep",
+                            "line": 36,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "switch",
+                            "expr": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "stub__issue1706.zep",
+                                "line": 38,
+                                "char": 18
+                            },
+                            "clauses": [
+                                {
+                                    "type": "case",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__issue1706.zep",
+                                        "line": 39,
+                                        "char": 19
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "one",
+                                                "file": "stub__issue1706.zep",
+                                                "line": 40,
+                                                "char": 27
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 41,
+                                            "char": 19
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 41,
+                                    "char": 19
+                                },
+                                {
+                                    "type": "default",
+                                    "statements": [
+                                        {
+                                            "type": "throw",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "\\Exception",
+                                                "dynamic": 0,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "string",
+                                                            "value": "bad",
+                                                            "file": "stub__issue1706.zep",
+                                                            "line": 42,
+                                                            "char": 41
+                                                        },
+                                                        "file": "stub__issue1706.zep",
+                                                        "line": 42,
+                                                        "char": 41
+                                                    }
+                                                ],
+                                                "file": "stub__issue1706.zep",
+                                                "line": 42,
+                                                "char": 42
+                                            },
+                                            "file": "stub__issue1706.zep",
+                                            "line": 43,
+                                            "char": 9
+                                        }
+                                    ],
+                                    "file": "stub__issue1706.zep",
+                                    "line": 43,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue1706.zep",
+                            "line": 44,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1706.zep",
+                                "line": 37,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1706.zep",
+                        "line": 37,
+                        "char": 5
+                    },
+                    "file": "stub__issue1706.zep",
+                    "line": 36,
+                    "last-line": 45,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue1706.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__issue1706.zep",
+        "line": 8,
+        "char": 5
+    }
+]

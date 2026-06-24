@@ -1,0 +1,177 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Namespaces",
+        "file": "stub__namespaces_classentry.zep",
+        "line": 3,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Stub\\Namespaces\\A\\B\\Sub",
+                "file": "stub__namespaces_classentry.zep",
+                "line": 3,
+                "char": 28
+            }
+        ],
+        "file": "stub__namespaces_classentry.zep",
+        "line": 5,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ClassEntry",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setParam",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\Stub\\Namespaces\\A\\B\\Sub",
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 7,
+                                "char": 61
+                            },
+                            "reference": 0,
+                            "file": "stub__namespaces_classentry.zep",
+                            "line": 7,
+                            "char": 62
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 9,
+                                "char": 21
+                            },
+                            "file": "stub__namespaces_classentry.zep",
+                            "line": 10,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\Stub\\Namespaces\\A\\B\\Sub",
+                                    "file": "stub__namespaces_classentry.zep",
+                                    "line": 8,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 8,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__namespaces_classentry.zep",
+                        "line": 8,
+                        "char": 5
+                    },
+                    "file": "stub__namespaces_classentry.zep",
+                    "line": 7,
+                    "last-line": 12,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setParamImported",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Sub",
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 12,
+                                "char": 48
+                            },
+                            "reference": 0,
+                            "file": "stub__namespaces_classentry.zep",
+                            "line": 12,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "param",
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 14,
+                                "char": 21
+                            },
+                            "file": "stub__namespaces_classentry.zep",
+                            "line": 15,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Sub",
+                                    "file": "stub__namespaces_classentry.zep",
+                                    "line": 13,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__namespaces_classentry.zep",
+                                "line": 13,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__namespaces_classentry.zep",
+                        "line": 13,
+                        "char": 5
+                    },
+                    "file": "stub__namespaces_classentry.zep",
+                    "line": 12,
+                    "last-line": 16,
+                    "char": 19
+                }
+            ],
+            "file": "stub__namespaces_classentry.zep",
+            "line": 5,
+            "char": 5
+        },
+        "file": "stub__namespaces_classentry.zep",
+        "line": 5,
+        "char": 5
+    }
+]

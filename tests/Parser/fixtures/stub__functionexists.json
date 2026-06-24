@@ -1,0 +1,416 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__functionexists.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "FunctionExists",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testWithPassedName",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "func",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__functionexists.zep",
+                            "line": 6,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "function_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "func",
+                                            "file": "stub__functionexists.zep",
+                                            "line": 8,
+                                            "char": 30
+                                        },
+                                        "file": "stub__functionexists.zep",
+                                        "line": 8,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__functionexists.zep",
+                                "line": 8,
+                                "char": 31
+                            },
+                            "file": "stub__functionexists.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__functionexists.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__functionexists.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__functionexists.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testBuiltInFunctions",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "func",
+                                    "file": "stub__functionexists.zep",
+                                    "line": 13,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__functionexists.zep",
+                            "line": 14,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__functionexists.zep",
+                                        "line": 14,
+                                        "char": 20
+                                    },
+                                    "file": "stub__functionexists.zep",
+                                    "line": 14,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__functionexists.zep",
+                            "line": 16,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "functions",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "substr",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 17,
+                                                    "char": 10
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 17,
+                                                "char": 10
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "cubstr",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 18,
+                                                    "char": 10
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 18,
+                                                "char": 10
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "ucfirst",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 19,
+                                                    "char": 11
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 19,
+                                                "char": 11
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "bcfirst",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 20,
+                                                    "char": 11
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 20,
+                                                "char": 11
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "stripos",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 21,
+                                                    "char": 11
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 21,
+                                                "char": 11
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "ktripos",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 22,
+                                                    "char": 11
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 22,
+                                                "char": 11
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "trim",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 23,
+                                                    "char": 8
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 23,
+                                                "char": 8
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "prim",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 25,
+                                                    "char": 3
+                                                },
+                                                "file": "stub__functionexists.zep",
+                                                "line": 25,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "stub__functionexists.zep",
+                                        "line": 25,
+                                        "char": 4
+                                    },
+                                    "file": "stub__functionexists.zep",
+                                    "line": 25,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "stub__functionexists.zep",
+                            "line": 27,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "functions",
+                                "file": "stub__functionexists.zep",
+                                "line": 27,
+                                "char": 25
+                            },
+                            "value": "func",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "func",
+                                                    "file": "stub__functionexists.zep",
+                                                    "line": 28,
+                                                    "char": 19
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "function_exists",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "func",
+                                                            "file": "stub__functionexists.zep",
+                                                            "line": 28,
+                                                            "char": 43
+                                                        },
+                                                        "file": "stub__functionexists.zep",
+                                                        "line": 28,
+                                                        "char": 43
+                                                    }
+                                                ],
+                                                "file": "stub__functionexists.zep",
+                                                "line": 28,
+                                                "char": 44
+                                            },
+                                            "file": "stub__functionexists.zep",
+                                            "line": 28,
+                                            "char": 44
+                                        }
+                                    ],
+                                    "file": "stub__functionexists.zep",
+                                    "line": 29,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__functionexists.zep",
+                            "line": 31,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__functionexists.zep",
+                                "line": 31,
+                                "char": 16
+                            },
+                            "file": "stub__functionexists.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__functionexists.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__functionexists.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__functionexists.zep",
+                    "line": 11,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testWithString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "function_exists",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "substr",
+                                            "file": "stub__functionexists.zep",
+                                            "line": 36,
+                                            "char": 32
+                                        },
+                                        "file": "stub__functionexists.zep",
+                                        "line": 36,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__functionexists.zep",
+                                "line": 36,
+                                "char": 33
+                            },
+                            "file": "stub__functionexists.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__functionexists.zep",
+                                "line": 35,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__functionexists.zep",
+                        "line": 35,
+                        "char": 2
+                    },
+                    "file": "stub__functionexists.zep",
+                    "line": 34,
+                    "last-line": 38,
+                    "char": 16
+                }
+            ],
+            "file": "stub__functionexists.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__functionexists.zep",
+        "line": 4,
+        "char": 5
+    }
+]

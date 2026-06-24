@@ -1,0 +1,16 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Issue2165",
+        "file": "stub__issue2165_issueextendinterface.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "IssueExtendInterface",
+        "file": "stub__issue2165_issueextendinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

@@ -1,0 +1,84 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__exception.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Sample exception class\n *",
+        "file": "stub__exception.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Exception",
+        "abstract": 0,
+        "final": 0,
+        "extends": "\\Exception",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testRuntimePropertyFetch",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "message",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__exception.zep",
+                            "line": 12,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "message",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "message",
+                                        "file": "stub__exception.zep",
+                                        "line": 14,
+                                        "char": 30
+                                    },
+                                    "file": "stub__exception.zep",
+                                    "line": 14,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__exception.zep",
+                            "line": 15,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/915\n\t *",
+                    "file": "stub__exception.zep",
+                    "line": 12,
+                    "last-line": 16,
+                    "char": 16
+                }
+            ],
+            "file": "stub__exception.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__exception.zep",
+        "line": 7,
+        "char": 5
+    }
+]
