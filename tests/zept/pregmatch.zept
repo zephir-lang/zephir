@@ -1,0 +1,155 @@
+--TEST--
+preg_match / preg_match_all: return value, captured matches, flag ordering (port of tests/Extension/PregmatchTest.php)
+--SKIPIF--
+<?php if (!extension_loaded('pcre')) echo "skip ext-pcre not loaded";
+--FILE--
+namespace Stub;
+
+class Pregmatch
+{
+	public function testWithoutReturnAndMatches()
+	{
+		var pattern, subject;
+
+		let pattern = "/def$/",
+			subject = "abcdef";
+
+		// without return auto created temp variable
+		preg_match(pattern, subject);
+
+		// compiler optimized, using return_value variable
+		return preg_match(pattern, subject);
+	}
+
+	public function testWithoutReturns()
+	{
+		var pattern, subject, matches = null;
+
+		let pattern = "/def$/",
+			subject = "abcdef";
+
+		preg_match(pattern, subject, matches);
+
+		return matches;
+	}
+
+	public function testWithoutMatches()
+	{
+		var pattern, subject, matched;
+
+		let pattern = "/def$/",
+			subject = "abcdef";
+
+		let matched = preg_match(pattern, subject);
+
+		return matched;
+	}
+
+    public function testPregMatchAll()
+    {
+        var pattern, subject;
+
+        let pattern = "/def$/",
+        	subject = "abcdef";
+
+        var results = [];
+        return preg_match_all(pattern, subject, results);
+    }
+
+	public function testPregMatchFallback()
+	{
+		var pattern, subject, matches = null;
+		let matches = [];
+
+		let pattern = "/def$/",
+			subject = "abcdef";
+
+		return preg_match(pattern, subject, matches, 0, 0);
+	}
+
+	public function testPregMatch2Params(var pattern, var subject)
+	{
+		return preg_match(pattern, subject);
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/287
+	 */
+	public function testPregMatchSaveMatches(string str, string pattern)
+	{
+		var matches = null;
+		preg_match(pattern, str, matches);
+
+		return matches;
+	}
+
+	public function testMatchAll(var flags)
+	{
+		var text, matches = [];
+		let text = "test1,test2";
+		preg_match_all("/(test[0-9]+)/", text, matches, flags);
+		return matches;
+	}
+
+	public function testMatchAllInZep()
+	{
+		var m1, m2;
+		let m1 = this->testMatchAll(PREG_PATTERN_ORDER);
+		let m2 = this->testMatchAll(PREG_SET_ORDER);
+
+		return [m1, m2];
+	}
+}
+--USAGE--
+$test = new \Stub\Pregmatch();
+
+echo var_export($test->testWithoutReturnAndMatches(), true), "\n";
+echo var_export($test->testWithoutReturns(), true), "\n";
+echo var_export($test->testWithoutMatches(), true), "\n";
+echo var_export($test->testPregMatchAll(), true), "\n";
+echo var_export($test->testPregMatchFallback(), true), "\n";
+echo var_export($test->testPregMatch2Params('#asd#', 'asd'), true), "\n";
+
+// issue #287: collected matches
+echo var_export($test->testPregMatchSaveMatches('asd', '#asd#'), true), "\n";
+
+// issue #144: PREG_PATTERN_ORDER vs PREG_SET_ORDER
+$arr = $test->testMatchAllInZep();
+echo var_export($arr[0], true), "\n";
+echo var_export($arr[1], true), "\n";
+--EXPECT--
+1
+array (
+  0 => 'def',
+)
+1
+1
+1
+1
+array (
+  0 => 'asd',
+)
+array (
+  0 => 
+  array (
+    0 => 'test1',
+    1 => 'test2',
+  ),
+  1 => 
+  array (
+    0 => 'test1',
+    1 => 'test2',
+  ),
+)
+array (
+  0 => 
+  array (
+    0 => 'test1',
+    1 => 'test1',
+  ),
+  1 => 
+  array (
+    0 => 'test2',
+    1 => 'test2',
+  ),
+)

@@ -1,0 +1,34 @@
+--TEST--
+Issue #2111: static call (self::) from a method invoked in the constructor (port of tests/Extension/ScallLateConstructTest.php)
+--FILE--
+namespace Stub;
+
+class ScallLateConstruct
+{
+    protected protectedVar;
+
+    public function __construct()
+    {
+        this->testPublicInit();
+    }
+
+	static public function testStaticInit() -> string
+	{
+		return "hello public";
+	}
+
+    public function testPublicInit()
+    {
+        let this->protectedVar = self::testStaticInit();
+    }
+
+    public function varValue() -> string
+    {
+        return this->protectedVar;
+    }
+}
+--USAGE--
+$test = new \Stub\ScallLateConstruct();
+echo var_export($test->varValue(), true), "\n";
+--EXPECT--
+'hello public'

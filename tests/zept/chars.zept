@@ -1,0 +1,118 @@
+--TEST--
+Chars: char +/- arithmetic, byte overflow/underflow (#1291), uchar, toHex, char array boxing (#1988) (port of tests/Extension/CharsTest.php)
+--FILE--
+namespace Stub;
+
+class Chars
+{
+    public function sumChars1() -> char
+    {
+        char ch = 'A';
+        char chlower;
+        let chlower = ch + 32;
+        return chlower;
+    }
+
+    public function sumChars2(char ch) -> char
+    {
+        char chlower;
+        let chlower = ch + 32;
+        return chlower;
+    }
+
+    public function diffChars1() -> char
+    {
+        char ch = 'a';
+        char chlower;
+        let chlower = ch - 32;
+        return chlower;
+    }
+
+    public function diffChars2(char ch) -> char
+    {
+        char chlower;
+        let chlower = ch - 32;
+        return chlower;
+    }
+
+    public function sumOverflowHex() -> string
+    {
+        char ch = ' '; // space character ASCII 32
+        let ch += 64;
+        let ch += 42;
+        return ch->toHex();
+    }
+
+    public function sumOverflowValue() -> char
+    {
+        char ch = ' '; // space character ASCII 32
+        let ch += 64;
+        let ch += 42;
+        return ch;
+    }
+
+    public function sumCharParamOverflow(char ch) -> char
+    {
+        let ch += 100;
+        return ch;
+    }
+
+    public function charUnderflow() -> char
+    {
+        char ch = 0;
+        let ch -= 1;
+        return ch;
+    }
+
+    public function maxByteValue() -> char
+    {
+        char ch = 0;
+        let ch += 255;
+        return ch;
+    }
+
+    public function sumUchar() -> uchar
+    {
+        uchar ch = 'd'; // 100
+        let ch += 100;
+        return ch;
+    }
+
+    public function arrayOfChars() -> array
+    {
+        char ch1, ch2;
+        string name = "peter";
+        let ch1 = name[0],
+            ch2 = name[1];
+        return [ch1, ch2, ch1];
+    }
+}
+--USAGE--
+$test = new \Stub\Chars();
+echo var_export(\chr($test->sumChars1()), true), "\n";
+echo var_export(\chr($test->sumChars2(ord('A'))), true), "\n";
+echo var_export(\chr($test->diffChars1()), true), "\n";
+echo var_export(\chr($test->diffChars2(ord('a'))), true), "\n";
+echo var_export($test->sumOverflowHex(), true), "\n";
+echo var_export($test->sumOverflowValue(), true), "\n";
+echo var_export($test->sumCharParamOverflow(ord(\chr(150))), true), "\n";
+echo var_export($test->charUnderflow(), true), "\n";
+echo var_export($test->maxByteValue(), true), "\n";
+echo var_export($test->sumUchar(), true), "\n";
+echo var_export($test->arrayOfChars(), true), "\n";
+--EXPECT--
+'a'
+'a'
+'A'
+'A'
+'8A'
+138
+250
+255
+255
+200
+array (
+  0 => 112,
+  1 => 101,
+  2 => 112,
+)

@@ -1,0 +1,466 @@
+--TEST--
+Strings: hash_equals, camelize/uncamelize, trim family, strpos, implode/explode, substr, slashes, hex, nullable returns (port of tests/Extension/StringTest.php)
+--FILE--
+namespace Stub;
+
+class Strings
+{
+	public function camelize(string str, var delimiter = null)
+	{
+		return camelize(str, delimiter);
+	}
+
+	public function uncamelize(string str, var delimiter = null)
+	{
+		return uncamelize(str, delimiter);
+	}
+
+	public function testTrim(var str)
+	{
+		return trim(str);
+	}
+
+	public function testRtrim(var str)
+	{
+		return rtrim(str);
+	}
+
+	public function testLtrim(var str)
+	{
+		return ltrim(str);
+	}
+
+	public function testTrim2Params(var str, var charlist)
+	{
+		return trim(str, charlist);
+	}
+
+	public function testRtrim2Params(var str, var charlist)
+	{
+		return rtrim(str, charlist);
+	}
+
+	public function testLtrim2Params(var str, var charlist)
+	{
+		return ltrim(str, charlist);
+	}
+
+	public function testImplode(var glue, var pieces)
+	{
+		return implode(glue, pieces);
+	}
+
+	public function testStrpos(var haystack, var needle)
+	{
+		return strpos(haystack, needle);
+	}
+
+	public function testStrposOffset(var haystack, var needle, int offset)
+	{
+		return strpos(haystack, needle, offset);
+	}
+
+	public function testExplode(var delimiter, var str)
+	{
+		return explode(delimiter, str);
+	}
+
+	public function testExplodeStr(var str)
+	{
+		return explode(",", str);
+	}
+
+	public function testExplodeLimit(var str, int limit)
+	{
+		return explode(",", str, limit);
+	}
+
+	public function testSubstr(var str, int from, int len)
+	{
+		return substr(str, from, len);
+	}
+
+	public function testSubstr2(var str, int from)
+	{
+		return substr(str, from);
+	}
+
+	public function testSubstr3(var str)
+	{
+		return substr(str, -1);
+	}
+
+	public function testSubstr4(var str)
+	{
+		return substr(str, 0, -1);
+	}
+
+	public function testAddslashes(var str)
+	{
+		return addslashes(str);
+	}
+
+	public function testStripslashes(var str)
+	{
+		return stripslashes(str);
+	}
+
+	public function testStripcslashes(var str) -> string
+	{
+		return stripcslashes(str);
+	}
+
+	public function testHashEquals(var str1, var str2) -> bool
+	{
+		return hash_equals(str1, str2);
+	}
+
+	public function testHardcodedMultilineString()
+	{
+		return "
+            Hello world
+        ";
+	}
+
+	public function testTrimMultilineString()
+	{
+		return trim("
+            Hello world
+        ");
+	}
+
+	public function testWellEscapedMultilineString()
+	{
+		return trim("
+            \\\"\}\$hello\$\\\"\'
+        ");
+	}
+
+	public function strToHex(string value) -> string
+	{
+		int i = 0;
+		string ret = "";
+		while (i < value->length()) {
+			let ret .= dechex(ord(value[i]));
+			let i++;
+		}
+		return ret;
+	}
+
+	public function issue2186(string val = null) -> bool
+	{
+	    return val === null;
+	}
+
+	public function issue2186SegFault(string val = null) -> bool
+	{
+	    if val {
+	        return true;
+	    }
+
+	    return false;
+	}
+
+	public function issue2186SegFaultCall(string val = null) -> string
+	{
+	    return this->issue2186Child1(val);
+	}
+
+	protected function issue2186Child1(string val = null) -> string
+	{
+	    return this->issue2186Child2(val);
+	}
+
+    protected function issue2186Child2(string val = null) -> string
+    {
+        var output = "";
+
+        if val {
+            let output = val . " all ok";
+        }
+
+        return output;
+    }
+
+    public function issue2234Strict(string! val = null) -> bool
+    {
+        return val === null;
+    }
+
+    public function nullableStringReturnType(string! val = null) -> string | null
+    {
+        if (val !== null) {
+            return val;
+        }
+
+        return null;
+    }
+
+    public function issue2299NullableStringCondition(string roleName = null) -> string | null
+    {
+        if null !== roleName {
+            return roleName;
+        }
+
+        return null;
+    }
+}
+--USAGE--
+$t = new \Stub\Strings();
+
+// hash_equals over crypt() output (deterministic given a fixed salt).
+$salt = '$2a$07$usesomesillystringforsalt$';
+$hashEquals = [
+    ['Phalcon',    'Phalcony',    false],
+    ['Phalcony',   'Phalcon',     false],
+    ['Phalcon',    'Phalcon',     true],
+    ['kristoffer', 'ingemansson', false],
+    ['kris',       'ingemansson', false],
+    ['Phalcon',    'phalcon',     false],
+    [' phalcon',   'phalcon',     false],
+    ['phalcon',    'phalcon',     true],
+    ['1234567890', '1234567890',  true],
+    ['',           'phalcon',     false],
+    ['phalcon',    '',            false],
+];
+foreach ($hashEquals as [$known, $user, $expected]) {
+    $k = crypt($known, $salt);
+    $u = crypt($user, $salt);
+    echo var_export($t->testHashEquals($k, $u) === $expected, true), "\n";
+}
+
+// hash_equals with non-string args is always false.
+$nonString = [[null, 123], [123, null], [123, 123], [123456, 123], [null, 'phalcon'], ['phalcon', null], [[], false], [true, []]];
+foreach ($nonString as [$k, $u]) {
+    echo var_export($t->testHashEquals($k, $u), true), "\n";
+}
+
+// camelize
+echo var_export($t->camelize('=_camelize', '_'), true), "\n";
+echo var_export($t->camelize('camelize', '_'), true), "\n";
+echo var_export($t->camelize('came_li_ze', '_'), true), "\n";
+echo var_export($t->camelize('came_li_ze', null), true), "\n";
+echo var_export($t->camelize('came#li#ze', '#'), true), "\n";
+echo var_export($t->camelize('came li ze', ' '), true), "\n";
+echo var_export($t->camelize('came.li^ze', '.^'), true), "\n";
+echo var_export($t->camelize('c_a-m_e-l_i-z_e', '-_'), true), "\n";
+echo var_export($t->camelize('c_a-m_e-l_i-z_e', null), true), "\n";
+echo var_export($t->camelize('came.li.ze', '.'), true), "\n";
+echo var_export($t->camelize('came-li-ze', '-'), true), "\n";
+echo var_export($t->camelize('c+a+m+e+l+i+z+e', '+'), true), "\n";
+
+// uncamelize
+echo var_export($t->uncamelize('=Camelize', '_'), true), "\n";
+echo var_export($t->uncamelize('Camelize', '_'), true), "\n";
+echo var_export($t->uncamelize('Camelize', null), true), "\n";
+echo var_export($t->uncamelize('CameLiZe', '_'), true), "\n";
+echo var_export($t->uncamelize('CameLiZe', '#'), true), "\n";
+echo var_export($t->uncamelize('CameLiZe', ' '), true), "\n";
+echo var_export($t->uncamelize('CameLiZe', '.'), true), "\n";
+echo var_export($t->uncamelize('CameLiZe', '-'), true), "\n";
+echo var_export($t->uncamelize('CAMELIZE', '/'), true), "\n";
+
+// trim family
+echo var_export($t->testTrim(' hello '), true), "\n";
+echo var_export($t->testTrim('hello '), true), "\n";
+echo var_export($t->testTrim(' hello'), true), "\n";
+echo var_export($t->testTrim2Params('Hello World', 'Hdle'), true), "\n";
+echo var_export($t->testLtrim(' hello '), true), "\n";
+echo var_export($t->testLtrim('hello '), true), "\n";
+echo var_export($t->testLtrim(' hello'), true), "\n";
+echo var_export($t->testLtrim2Params('Hello World', 'Hdle'), true), "\n";
+echo var_export($t->testRtrim(' hello '), true), "\n";
+echo var_export($t->testRtrim('hello '), true), "\n";
+echo var_export($t->testRtrim(' hello'), true), "\n";
+echo var_export($t->testRtrim2Params('Hello World', 'Hdle'), true), "\n";
+
+// strpos
+echo var_export($t->testStrpos('abcdef abcdef', 'a'), true), "\n";
+echo var_export($t->testStrposOffset('abcdef abcdef', 'a', 1), true), "\n";
+
+// implode / explode
+echo var_export($t->testImplode(',', ['a', 'b', 'c']), true), "\n";
+$pizza = 'piece1,piece2,piece3,piece4,piece5,piece6';
+$ar1 = $t->testExplode(',', $pizza);
+echo var_export($ar1[0], true), "\n";
+echo var_export($ar1[2], true), "\n";
+$ar2 = $t->testExplodeStr($pizza);
+echo var_export($ar2[0], true), "\n";
+echo var_export($ar2[2], true), "\n";
+$ar3 = $t->testExplodeLimit($pizza, 3);
+echo var_export(count($ar3), true), "\n";
+echo var_export($ar3[2], true), "\n";
+
+// substr provider
+echo var_export($t->testSubstr('abcdef', 1, 3), true), "\n";
+echo var_export($t->testSubstr('abcdef', 0, 4), true), "\n";
+echo var_export($t->testSubstr('abcdef', 0, 8), true), "\n";
+echo var_export($t->testSubstr('abcdef', -1, 1), true), "\n";
+echo var_export($t->testSubstr('abcdef', -3, -1), true), "\n";
+echo var_export($t->testSubstr('abcdef', 2, -1), true), "\n";
+echo var_export($t->testSubstr2('abcdef', -1), true), "\n";
+echo var_export($t->testSubstr2('abcdef', -2), true), "\n";
+echo var_export($t->testSubstr2('abcdef', 2), true), "\n";
+echo var_export($t->testSubstr3('abcdef'), true), "\n";
+echo var_export($t->testSubstr4('abcdef'), true), "\n";
+
+// addslashes / stripslashes round-trip against PHP's own
+$slashSamples = ["How's everybody", 'Are you "JOHN"?', "hello\0world"];
+foreach ($slashSamples as $s) {
+    echo var_export($t->testAddslashes($s) === addslashes($s), true), "\n";
+    echo var_export($t->testStripslashes(addslashes($s)) === $s, true), "\n";
+}
+
+// stripcslashes against PHP's own
+echo var_export($t->testStripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z') === stripcslashes('\abcd\e\f\g\h\i\j\k\l\m\n\o\pqrstuvwxy\z'), true), "\n";
+echo var_export($t->testStripcslashes('\065\x64') === stripcslashes('\065\x64'), true), "\n";
+echo var_export($t->testStripcslashes('') === stripcslashes(''), true), "\n";
+
+// multiline strings (containers are Linux: LF line endings)
+$hardcodedString = '
+            Hello world
+        ';
+echo var_export($t->testHardcodedMultilineString() === $hardcodedString, true), "\n";
+echo var_export($t->testTrimMultilineString() === trim($hardcodedString), true), "\n";
+echo var_export($t->testWellEscapedMultilineString(), true), "\n";
+
+// strToHex
+echo var_export($t->strToHex('test sentense...'), true), "\n";
+
+// issue 2186 / 2234 nullability
+echo var_export($t->issue2186(), true), "\n";
+echo var_export($t->issue2186(null), true), "\n";
+echo var_export($t->issue2186(''), true), "\n";
+echo var_export($t->issue2186('string'), true), "\n";
+echo var_export($t->issue2186('0'), true), "\n";
+echo var_export($t->issue2186('1'), true), "\n";
+echo var_export($t->issue2234Strict(), true), "\n";
+echo var_export($t->issue2234Strict(null), true), "\n";
+echo var_export($t->issue2234Strict(''), true), "\n";
+echo var_export($t->issue2234Strict('string'), true), "\n";
+echo var_export($t->issue2186SegFault(), true), "\n";
+echo var_export($t->issue2186SegFault(null), true), "\n";
+echo var_export($t->issue2186SegFault(''), true), "\n";
+echo var_export($t->issue2186SegFault('0'), true), "\n";
+echo var_export($t->issue2186SegFault('string'), true), "\n";
+echo var_export($t->issue2186SegFaultCall(), true), "\n";
+echo var_export($t->issue2186SegFaultCall('ok'), true), "\n";
+
+// nullable return type (issue 1932)
+echo var_export($t->nullableStringReturnType(), true), "\n";
+echo var_export($t->nullableStringReturnType(null), true), "\n";
+echo var_export($t->nullableStringReturnType('string'), true), "\n";
+
+// issue 2299 nullable string condition
+echo var_export($t->issue2299NullableStringCondition(), true), "\n";
+echo var_export($t->issue2299NullableStringCondition('not-null'), true), "\n";
+echo var_export($t->issue2299NullableStringCondition('test'), true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+false
+false
+false
+false
+false
+false
+false
+false
+'=Camelize'
+'Camelize'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CAMELIZE'
+'CAMELIZE'
+'CameLiZe'
+'CameLiZe'
+'CAMELIZE'
+'=_camelize'
+'camelize'
+'camelize'
+'came_li_ze'
+'came#li#ze'
+'came li ze'
+'came.li.ze'
+'came-li-ze'
+'c/a/m/e/l/i/z/e'
+'hello'
+'hello'
+'hello'
+'o Wor'
+'hello '
+'hello '
+'hello'
+'o World'
+' hello'
+'hello'
+' hello'
+'Hello Wor'
+0
+7
+'a,b,c'
+'piece1'
+'piece3'
+'piece1'
+'piece3'
+3
+'piece3,piece4,piece5,piece6'
+'bcd'
+'abcd'
+'abcdef'
+'f'
+'de'
+'cde'
+'f'
+'ef'
+'cdef'
+'f'
+'abcde'
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+true
+'\\"\\}\\$hello\\$\\"\''
+'746573742073656e74656e73652e2e2e'
+true
+true
+false
+false
+false
+false
+true
+true
+false
+false
+false
+false
+false
+false
+true
+''
+'ok all ok'
+NULL
+NULL
+'string'
+NULL
+'not-null'
+'test'

@@ -1,0 +1,49 @@
+--TEST--
+Integral quicksort: recursive quick() returns the sorted range (port of tests/Extension/Integral/SortTest.php)
+--FILE--
+namespace Stub;
+
+class Sort
+{
+	public fn quick(array arr)
+	{
+		int i, length, pivot, item;
+		var left, right;
+
+		let length = count(arr);
+
+		if length <= 1 {
+			return arr;
+		}
+
+		let pivot = (int) arr[0],
+			left = [],
+			right = [];
+
+		for i in range(1, length - 1) {
+			let item = (int) arr[i];
+			if item < pivot {
+				let left[] = item;
+			} else {
+				let right[] = item;
+			}
+		}
+
+		// use recursion to now sort the left and right lists
+		return array_merge(
+			this->quick(left),
+			[pivot],
+			this->quick(right)
+		);
+	}
+}
+--USAGE--
+$test = new \Stub\Sort();
+
+// A fixed shuffle of range(1, 50); quick() must return the sorted range.
+$data = [37, 4, 22, 50, 11, 8, 1, 45, 19, 33, 27, 6, 41, 14, 2, 48, 30, 9, 25, 17,
+         43, 5, 38, 12, 49, 7, 21, 35, 3, 47, 28, 10, 40, 15, 24, 46, 18, 31, 13, 44,
+         20, 34, 26, 39, 16, 42, 23, 36, 29, 32];
+echo var_export($test->quick($data) === range(1, 50), true), "\n";
+--EXPECT--
+true

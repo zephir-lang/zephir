@@ -1,0 +1,91 @@
+--TEST--
+Concat: static-property concat, string append/prepend, integer-like strings (#1573), float/double concat (#1893) (port of tests/Extension/ConcatTest.php)
+--FILE--
+namespace Stub;
+
+class Concat
+{
+    protected static testProperty = null;
+
+    static public function getTestProperty() -> string | null
+    {
+        return self::testProperty;
+    }
+
+    static public function testConcatBySelfProperty(string title) -> void
+    {
+        let self::testProperty .= title;
+    }
+
+    public function testConcat1() -> string
+    {
+        var url;
+        let url = "test";
+        let url = "append" . url;
+        return url;
+    }
+
+    public function testConcat2() -> string
+    {
+        var url;
+        let url = "test";
+        let url = "append" . url . "other";
+        let url = "append" . "other";
+        let url = "append" . "other" . url;
+        return url;
+    }
+
+    public function testConcat3() -> string
+    {
+        var a, b;
+        let a = "1";
+        let b = "2";
+        let b .= a;
+        return b;
+    }
+
+    public function testConcat4(var value) -> string
+    {
+        var min, max;
+        string query = "";
+
+        let min = value / 100 * 25,
+            max = value / 100 * 50;
+
+        let query .= "SELECT * FROM TEST WHERE value <= " . max,
+            query .= " AND value >= " . min;
+
+        return query;
+    }
+
+    public function testConcat5(double number) -> string
+    {
+        string retval;
+        string left = "Concatenated string with number ";
+
+        let retval = left . number;
+
+        return retval;
+    }
+}
+--USAGE--
+$test = new \Stub\Concat();
+echo var_export($test->getTestProperty(), true), "\n";
+$test->testConcatBySelfProperty('test');
+echo var_export($test->getTestProperty(), true), "\n";
+$test->testConcatBySelfProperty(' string');
+echo var_export($test->getTestProperty(), true), "\n";
+echo var_export($test->testConcat1(), true), "\n";
+echo var_export($test->testConcat2(), true), "\n";
+echo var_export($test->testConcat3(), true), "\n";
+echo var_export($test->testConcat4(1893), true), "\n";
+echo var_export($test->testConcat5(18.93000001), true), "\n";
+--EXPECT--
+NULL
+'test'
+'test string'
+'appendtest'
+'appendotherappendother'
+'21'
+'SELECT * FROM TEST WHERE value <= 946.5 AND value >= 473.25'
+'Concatenated string with number 18.93000001'

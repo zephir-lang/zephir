@@ -1,0 +1,31 @@
+--TEST--
+array_search: external haystack + internal-array search return first matching key (port of tests/Extension/ArraySearchTest.php, issue #1609)
+--FILE--
+namespace Stub;
+
+class ArraySearch
+{
+	/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
+	public function simpleSearch(var needle, array haystack, bool strict = false) -> var
+	{
+		return array_search(needle, haystack, strict);
+	}
+
+	/** @issue https://github.com/zephir-lang/zephir/issues/1609 */
+	public function searchUsingArrayInsideZephir() -> var
+	{
+		array itoA64 = [".", "/", "0", "1", "2", "3", "4", "value", "OtherValue"];
+		var pos = array_search("value", itoA64);
+
+		return pos;
+	}
+}
+--USAGE--
+$test = new \Stub\ArraySearch();
+$needle = 'value';
+$haystack = ['.', '/', '0', '1', '2', '3', '4', 'value', 'OtherValue'];
+echo var_export($test->simpleSearch($needle, $haystack), true), "\n";
+echo var_export($test->searchUsingArrayInsideZephir(), true), "\n";
+--EXPECT--
+7
+7

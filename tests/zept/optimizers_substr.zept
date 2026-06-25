@@ -1,0 +1,56 @@
+--TEST--
+Optimizers substr: two- and three-argument forms over strings/ints/edge values (port of tests/Extension/Optimizers/SubstrTest.php)
+--FILE--
+namespace Stub\Optimizers;
+
+class Substr
+{
+	public function testTwoArguments(var str, var start)
+	{
+		return substr(str, start);
+	}
+
+	public function testThreeArguments(var str, var start, var offset)
+	{
+		return substr(str, start, offset);
+	}
+}
+--USAGE--
+$test = new \Stub\Optimizers\Substr();
+
+$strings_array = [null, '', 12345, 'abcdef', '123abc', '_123abc'];
+foreach ($strings_array as $str) {
+    echo var_export($test->testTwoArguments($str, 1), true), "\n";
+    echo var_export($test->testTwoArguments($str, 0), true), "\n";
+    echo var_export($test->testTwoArguments($str, -2), true), "\n";
+}
+
+echo var_export($test->testThreeArguments('abcdef', 0, -3), true), "\n";
+echo var_export($test->testThreeArguments('123abc', 0, 3), true), "\n";
+echo var_export($test->testThreeArguments('abcdef', 1, -3), true), "\n";
+echo var_export($test->testThreeArguments('abcdef', -2, 0), true), "\n";
+echo var_export($test->testThreeArguments(12345, 1, -1), true), "\n";
+--EXPECT--
+false
+false
+false
+false
+false
+false
+'2345'
+'12345'
+'45'
+'bcdef'
+'abcdef'
+'ef'
+'23abc'
+'123abc'
+'bc'
+'123abc'
+'_123abc'
+'bc'
+'abc'
+'123'
+'bc'
+''
+'234'

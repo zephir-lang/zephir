@@ -1,0 +1,54 @@
+--TEST--
+Strict-typed params (int!/double!/string!): success values plus throw-on-wrong-type as an Error/Throwable instanceof check (port of tests/Extension/Oo/OoParamsStrictTest.php; exact PHP-version-specific exception messages are not asserted)
+--FILE--
+namespace Stub\Oo;
+
+class OoParams
+{
+    public function setStrictAge(int! age)
+    {
+        return age;
+    }
+
+    public function setStrictAverage(double! average)
+    {
+        return average;
+    }
+
+    public function setStrictName(string! name) -> string
+    {
+        return name;
+    }
+}
+--USAGE--
+$test = new \Stub\Oo\OoParams();
+echo var_export($test->setStrictAge(17), true), "\n";
+echo var_export($test->setStrictAverage(17.1), true), "\n";
+echo var_export($test->setStrictName('peter'), true), "\n";
+
+// Wrong types throw (instanceof check; message text varies by PHP version).
+try {
+    $test->setStrictAge(17.0);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Error, true), "\n";
+}
+try {
+    $test->setStrictAge('17');
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Error, true), "\n";
+}
+try {
+    $test->setStrictName(1234);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Error, true), "\n";
+}
+--EXPECT--
+17
+17.1
+'peter'
+true
+true
+true

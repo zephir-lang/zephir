@@ -1,0 +1,46 @@
+--TEST--
+Calling another class's static method (port of tests/Extension/ScallExternalTest.php)
+--FILE--
+namespace Stub;
+
+class Scall
+{
+	static public function testMethod1() -> string
+	{
+		return "hello public";
+	}
+
+	static public function testMethod4(var a, var b)
+	{
+		return a + b;
+	}
+}
+--FILE--
+namespace Stub;
+
+class ScallExternal
+{
+	public static sproperty;
+
+	public function testCall1()
+	{
+		return Scall::testMethod1();
+	}
+
+	public function testCall2(var a, var b)
+	{
+		return Scall::testMethod4(a, b);
+	}
+
+	public static function testMethod3(long a, long b)
+	{
+		return a + b;
+	}
+}
+--USAGE--
+$test = new \Stub\ScallExternal();
+echo var_export($test->testCall1(), true), "\n";
+echo var_export($test->testCall2(2, 3), true), "\n";
+--EXPECT--
+'hello public'
+5

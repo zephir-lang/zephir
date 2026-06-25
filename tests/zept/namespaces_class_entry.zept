@@ -1,0 +1,34 @@
+--TEST--
+Class-entry from a typed param resolved both fully-qualified and imported, across a nested namespace (port of tests/Extension/Namespaces/ClassEntryTest.php)
+--FILE--
+namespace Stub\Namespaces\A\B;
+
+class Sub
+{
+    public value;
+}
+--FILE--
+namespace Stub\Namespaces;
+
+use Stub\Namespaces\A\B\Sub;
+
+class ClassEntry
+{
+    public function setParam(<\Stub\Namespaces\A\B\Sub> param) -> <\Stub\Namespaces\A\B\Sub>
+    {
+        return param;
+    }
+
+    public function setParamImported(<Sub> param) -> <Sub>
+    {
+        return param;
+    }
+}
+--USAGE--
+$subClass = new \Stub\Namespaces\A\B\Sub();
+$class = new \Stub\Namespaces\ClassEntry();
+echo var_export($class->setParam($subClass) instanceof \Stub\Namespaces\A\B\Sub, true), "\n";
+echo var_export($class->setParamImported($subClass) instanceof \Stub\Namespaces\A\B\Sub, true), "\n";
+--EXPECT--
+true
+true

@@ -1,0 +1,26 @@
+--TEST--
+new {className}() dynamic-instantiation operator builds an instance of the named class (testNewInstance subset of tests/Extension/NewInstanceOperatorTest.php; the PHP<8.1 throw-on-autoload case is version-gated out and dropped)
+--FILE--
+namespace Stub;
+
+class Operator
+{
+    public function testNewInstanceOperator(className)
+    {
+        return new {className}();
+    }
+}
+--USAGE--
+namespace Fixture {
+    class EmptyClass
+    {
+    }
+}
+
+namespace {
+    $test = new \Stub\Operator();
+    $object = $test->testNewInstanceOperator('Fixture\EmptyClass');
+    echo var_export($object instanceof \Fixture\EmptyClass, true), "\n";
+}
+--EXPECT--
+true

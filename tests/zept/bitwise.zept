@@ -1,0 +1,908 @@
+--TEST--
+Bitwise: and/or/shift/not/xor across int/double/bool/var, plus hex-literal constant folding (#2014) (port of tests/Extension/BitwiseTest.php)
+--FILE--
+namespace Stub;
+
+class Bitwise
+{
+    /* ---------- And ----------------*/
+
+    public function intAnd()
+    {
+        int a, b, c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function int2And()
+    {
+        int a, c;
+        let a = 1, c = a & 2;
+        return c;
+    }
+
+    public function intAndSimple()
+    {
+        int c;
+        let c = 1 & 2;
+        return c;
+    }
+
+    public function boolAnd()
+    {
+        boolean a, b, c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function bool2And()
+    {
+        boolean a, c;
+        let a = 1, c = a & 2;
+        return c;
+    }
+
+    public function bool3And()
+    {
+        boolean a, c;
+        let a = true, c = a & false;
+        return c;
+    }
+
+    public function boolAndSimple()
+    {
+        boolean c;
+        let c = 1 & 2;
+        return c;
+    }
+
+    public function doubleAnd()
+    {
+        double a, b, c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function double2And()
+    {
+        double a, b, c;
+        let a = 1.0, b = 2.0, c = a & b;
+        return c;
+    }
+
+    public function doubleAndSimple()
+    {
+        double c;
+        let c = 1 & 2;
+        return c;
+    }
+
+    public function doubleAnd2Simple()
+    {
+        double c;
+        let c = 1.0 & 2.0;
+        return c;
+    }
+
+    public function varAnd()
+    {
+        var a, b, c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function varAndSimple()
+    {
+        var c;
+        let c = 1 & 2;
+        return c;
+    }
+
+    public function intDoubleAnd()
+    {
+        int b, c;
+        double a;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function intDoubleAndSimple()
+    {
+        int c;
+        let c = 1 & 2.0;
+        return c;
+    }
+
+    public function doubleIntAnd()
+    {
+        int b;
+        double a, c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function doubleIntAndSimple()
+    {
+        double c;
+        let c = 1 & 2.0;
+        return c;
+    }
+
+    public function varIntAnd()
+    {
+        var b, c;
+        int a;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function intVarAnd()
+    {
+        var b;
+        int c, a;
+        let a = 1, b = 2, c = b & a;
+        return c;
+    }
+
+    public function intVarImplicitCastAnd()
+    {
+        var a, b;
+        int c;
+        let a = "1", b = "2", c = b & a;
+        return c;
+    }
+
+    public function intVarImplicitCast2And()
+    {
+        var a, b;
+        int c;
+        let a = "1", b = 2, c = b & a;
+        return c;
+    }
+
+    public function complexAnd()
+    {
+        var c;
+        let c = 2 & 1.0;
+        return c;
+    }
+
+    public function complex2And()
+    {
+        var c;
+        let c = true & true;
+        return c;
+    }
+
+    public function complex3And()
+    {
+        var c;
+        let c = true & 1.0;
+        return c;
+    }
+
+    public function complex4And()
+    {
+        var c;
+        let c = 1.0 & true;
+        return c;
+    }
+
+    public function complex5And()
+    {
+        var c;
+        let c = 1 & true;
+        return c;
+    }
+
+    public function complex6And()
+    {
+        var c;
+        let c = true & 1;
+        return c;
+    }
+
+    public function complex7And()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2, c = a & b;
+        return c;
+    }
+
+    public function complex9And()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2, c = b & a;
+        return c;
+    }
+
+    public function complex10And()
+    {
+        boolean a; int b; var c;
+        let a = 1.0, b = 2, c = b & a;
+        return c;
+    }
+
+    public function complex11And()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2.0, c = b & a;
+        return c;
+    }
+
+    public function complex12And()
+    {
+        boolean a; int b; int c;
+        let a = 1, b = 2.0, c = b & a;
+        return c;
+    }
+
+    public function complex13And()
+    {
+        boolean a; boolean b; int c;
+        let a = 1, b = 2.0, c = b & a;
+        return c;
+    }
+
+    public function complex14And()
+    {
+        var a; boolean b; int c;
+        let a = 1, b = 2.0, c = b & a;
+        return c;
+    }
+
+    public function complex15And()
+    {
+        var a; var b; boolean c;
+        let a = 1, b = 2.0, c = b & a;
+        return c;
+    }
+
+    public function complex17And()
+    {
+        var a; boolean b; double c;
+        let a = 1, b = 2.0, c = a & b;
+        return c;
+    }
+
+    public function complex18And()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a & b, c = a & b & d;
+        return c;
+    }
+
+    public function complex19And()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a & b, c = a & d & b;
+        return c;
+    }
+
+    public function complex20And()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a & b, c = d & d & d & d;
+        return c;
+    }
+
+    public function complex21And()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a & b, c = b & d & b & d & d & b & d & b;
+        return c;
+    }
+
+    public function complex22And()
+    {
+        var a, d; int b; double c;
+        let a = 1, b = 2.0, d = a & b, c = b & d & d & d & d & b & d & b;
+        return c;
+    }
+
+    public function complex23And()
+    {
+        var a; boolean b; double d;
+        let a = 1, b = 2.0, d = a & b;
+        return d;
+    }
+
+    public function complex24And()
+    {
+        var a; var d; boolean b;
+        let a = 1, b = 2.0, d = 1 & a & false & b;
+        return d;
+    }
+
+    /* --------------- OR ----------------*/
+
+    public function intOr()
+    {
+        int a, b, c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function int2Or()
+    {
+        int a, c;
+        let a = 1, c = a | 2;
+        return c;
+    }
+
+    public function intOrSimple()
+    {
+        int c;
+        let c = 1 | 2;
+        return c;
+    }
+
+    public function boolOr()
+    {
+        boolean a, b, c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function bool2Or()
+    {
+        boolean a, c;
+        let a = 1, c = a | 2;
+        return c;
+    }
+
+    public function bool3Or()
+    {
+        boolean a, c;
+        let a = true, c = a | false;
+        return c;
+    }
+
+    public function boolOrSimple()
+    {
+        boolean c;
+        let c = 1 | 2;
+        return c;
+    }
+
+    public function doubleOr()
+    {
+        double a, b, c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function double2Or()
+    {
+        double a, b, c;
+        let a = 1.0, b = 2.0, c = a | b;
+        return c;
+    }
+
+    public function doubleOrSimple()
+    {
+        double c;
+        let c = 1 | 2;
+        return c;
+    }
+
+    public function doubleOr2Simple()
+    {
+        double c;
+        let c = 1.0 | 2.0;
+        return c;
+    }
+
+    public function varOr()
+    {
+        var a, b, c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function varOrSimple()
+    {
+        var c;
+        let c = 1 | 2;
+        return c;
+    }
+
+    public function intDoubleOr()
+    {
+        int b, c;
+        double a;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function intDoubleOrSimple()
+    {
+        int c;
+        let c = 1 | 2.0;
+        return c;
+    }
+
+    public function doubleIntOr()
+    {
+        int b;
+        double a, c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function doubleIntOrSimple()
+    {
+        double c;
+        let c = 1 | 2.0;
+        return c;
+    }
+
+    public function varIntOr()
+    {
+        var b, c;
+        int a;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function intVarOr()
+    {
+        var b;
+        int c, a;
+        let a = 1, b = 2, c = b | a;
+        return c;
+    }
+
+    public function intVarImplicitCastOr()
+    {
+        var a, b;
+        int c;
+        let a = "1", b = "2", c = b | a;
+        return c;
+    }
+
+    public function intVarImplicitCast2Or()
+    {
+        var a, b;
+        int c;
+        let a = "1", b = 2, c = b | a;
+        return c;
+    }
+
+    public function complexOr()
+    {
+        var c;
+        let c = 2 | 1.0;
+        return c;
+    }
+
+    public function complex2Or()
+    {
+        var c;
+        let c = true | true;
+        return c;
+    }
+
+    public function complex3Or()
+    {
+        var c;
+        let c = true | 1.0;
+        return c;
+    }
+
+    public function complex4Or()
+    {
+        var c;
+        let c = 1.0 | true;
+        return c;
+    }
+
+    public function complex5Or()
+    {
+        var c;
+        let c = 1 | true;
+        return c;
+    }
+
+    public function complex6Or()
+    {
+        var c;
+        let c = true | 1;
+        return c;
+    }
+
+    public function complex7Or()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2, c = a | b;
+        return c;
+    }
+
+    public function complex9Or()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2, c = b | a;
+        return c;
+    }
+
+    public function complex10Or()
+    {
+        boolean a; int b; var c;
+        let a = 1.0, b = 2, c = b | a;
+        return c;
+    }
+
+    public function complex11Or()
+    {
+        boolean a; int b; var c;
+        let a = 1, b = 2.0, c = b | a;
+        return c;
+    }
+
+    public function complex12Or()
+    {
+        boolean a; int b; int c;
+        let a = 1, b = 2.0, c = b | a;
+        return c;
+    }
+
+    public function complex13Or()
+    {
+        boolean a; boolean b; int c;
+        let a = 1, b = 2.0, c = b | a;
+        return c;
+    }
+
+    public function complex14Or()
+    {
+        var a; boolean b; int c;
+        let a = 1, b = 2.0, c = b | a;
+        return c;
+    }
+
+    public function complex15Or()
+    {
+        var a; var b; boolean c;
+        let a = 1, b = 2.0, c = b | a;
+        return c;
+    }
+
+    public function complex17Or()
+    {
+        var a; boolean b; double c;
+        let a = 1, b = 2.0, c = a | b;
+        return c;
+    }
+
+    public function complex18Or()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a | b, c = a | b | d;
+        return c;
+    }
+
+    public function complex19Or()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a | b, c = a | d | b;
+        return c;
+    }
+
+    public function complex20Or()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a | b, c = d | d | d | d;
+        return c;
+    }
+
+    public function complex21Or()
+    {
+        var a, d; boolean b; double c;
+        let a = 1, b = 2.0, d = a | b, c = b | d | b | d | d | b | d | b;
+        return c;
+    }
+
+    public function complex22Or()
+    {
+        var a, d; int b; double c;
+        let a = 1, b = 2.0, d = a | b, c = b | d | d | d | d | b | d | b;
+        return c;
+    }
+
+    public function complex23Or()
+    {
+        var a; boolean b; double d;
+        let a = 1, b = 2.0, d = a | b;
+        return d;
+    }
+
+    public function complex24Or()
+    {
+        var a; var d; boolean b;
+        let a = 1, b = 2.0, d = 1 | a | false | b;
+        return d;
+    }
+
+    /* ------- shift left -------- */
+    public function intShiftLeft()
+    {
+        int a, b, c;
+        let a = 1, b = 2, c = a << b;
+        return c;
+    }
+
+    public function int2ShiftLeft()
+    {
+        int a, c;
+        let a = 1, c = a << 2;
+        return c;
+    }
+
+    public function intShiftLeftSimple()
+    {
+        int c;
+        let c = 1 << 2;
+        return c;
+    }
+
+    /* ------- shift right -------- */
+    public function intShiftRight()
+    {
+        int a, b, c;
+        let a = 1, b = 2, c = a >> b;
+        return c;
+    }
+
+    public function int2ShiftRight()
+    {
+        int a, c;
+        let a = 1, c = a >> 2;
+        return c;
+    }
+
+    public function intShiftRightSimple()
+    {
+        int c;
+        let c = 1 >> 2;
+        return c;
+    }
+
+    /* bitwise not */
+    public function testBitwiseNot(int a)
+    {
+        return ~a;
+    }
+
+    public function testBitwiseAndNot(int a, int b)
+    {
+        return a & ~b;
+    }
+
+    protected function getInt(int num) -> int
+    {
+        return num;
+    }
+
+    public function testbitwiseXor()
+    {
+        var i = this->getInt(123),
+            j = this->getInt(321);
+        return i ^ j;
+    }
+
+    public function issue2014ShiftLeft()
+    {
+        var highmap;
+        let highmap = 0xffffffff << 32;
+        return highmap;
+    }
+
+    public function issue2014HexAnd()
+    {
+        return 0xff & 0x0f;
+    }
+
+    public function issue2014HexArithmetic()
+    {
+        return 0xff + 1;
+    }
+}
+--USAGE--
+$test = new \Stub\Bitwise();
+echo var_export($test->intAnd(), true), "\n";
+echo var_export($test->int2And(), true), "\n";
+echo var_export($test->intAndSimple(), true), "\n";
+echo var_export($test->doubleAnd(), true), "\n";
+echo var_export($test->double2And(), true), "\n";
+echo var_export($test->doubleAndSimple(), true), "\n";
+echo var_export($test->doubleAnd2Simple(), true), "\n";
+echo var_export($test->boolAnd(), true), "\n";
+echo var_export($test->bool2And(), true), "\n";
+echo var_export($test->bool3And(), true), "\n";
+echo var_export($test->boolAndSimple(), true), "\n";
+echo var_export($test->varAnd(), true), "\n";
+echo var_export($test->varAndSimple(), true), "\n";
+echo var_export($test->intDoubleAnd(), true), "\n";
+echo var_export($test->intDoubleAndSimple(), true), "\n";
+echo var_export($test->doubleIntAnd(), true), "\n";
+echo var_export($test->doubleIntAndSimple(), true), "\n";
+echo var_export($test->varIntAnd(), true), "\n";
+echo var_export($test->intVarAnd(), true), "\n";
+echo var_export($test->intVarImplicitCastAnd(), true), "\n";
+echo var_export($test->intVarImplicitCast2And(), true), "\n";
+echo var_export($test->complexAnd(), true), "\n";
+echo var_export($test->complex2And(), true), "\n";
+echo var_export($test->complex3And(), true), "\n";
+echo var_export($test->complex4And(), true), "\n";
+echo var_export($test->complex5And(), true), "\n";
+echo var_export($test->complex6And(), true), "\n";
+echo var_export($test->complex7And(), true), "\n";
+echo var_export($test->complex9And(), true), "\n";
+echo var_export($test->complex10And(), true), "\n";
+echo var_export($test->complex11And(), true), "\n";
+echo var_export($test->complex12And(), true), "\n";
+echo var_export($test->complex13And(), true), "\n";
+echo var_export($test->complex14And(), true), "\n";
+echo var_export($test->complex15And(), true), "\n";
+echo var_export($test->complex17And(), true), "\n";
+echo var_export($test->complex18And(), true), "\n";
+echo var_export($test->complex19And(), true), "\n";
+echo var_export($test->complex20And(), true), "\n";
+echo var_export($test->complex21And(), true), "\n";
+echo var_export($test->complex22And(), true), "\n";
+echo var_export($test->complex23And(), true), "\n";
+echo var_export($test->complex24And(), true), "\n";
+echo var_export($test->intOr(), true), "\n";
+echo var_export($test->int2Or(), true), "\n";
+echo var_export($test->intOrSimple(), true), "\n";
+echo var_export($test->doubleOr(), true), "\n";
+echo var_export($test->double2Or(), true), "\n";
+echo var_export($test->doubleOrSimple(), true), "\n";
+echo var_export($test->doubleOr2Simple(), true), "\n";
+echo var_export($test->boolOr(), true), "\n";
+echo var_export($test->bool2Or(), true), "\n";
+echo var_export($test->bool3Or(), true), "\n";
+echo var_export($test->boolOrSimple(), true), "\n";
+echo var_export($test->varOr(), true), "\n";
+echo var_export($test->varOrSimple(), true), "\n";
+echo var_export($test->intDoubleOr(), true), "\n";
+echo var_export($test->intDoubleOrSimple(), true), "\n";
+echo var_export($test->doubleIntOr(), true), "\n";
+echo var_export($test->doubleIntOrSimple(), true), "\n";
+echo var_export($test->varIntOr(), true), "\n";
+echo var_export($test->intVarOr(), true), "\n";
+echo var_export($test->intVarImplicitCastOr(), true), "\n";
+echo var_export($test->intVarImplicitCast2Or(), true), "\n";
+echo var_export($test->complexOr(), true), "\n";
+echo var_export($test->complex2Or(), true), "\n";
+echo var_export($test->complex3Or(), true), "\n";
+echo var_export($test->complex4Or(), true), "\n";
+echo var_export($test->complex5Or(), true), "\n";
+echo var_export($test->complex6Or(), true), "\n";
+echo var_export($test->complex7Or(), true), "\n";
+echo var_export($test->complex9Or(), true), "\n";
+echo var_export($test->complex10Or(), true), "\n";
+echo var_export($test->complex11Or(), true), "\n";
+echo var_export($test->complex12Or(), true), "\n";
+echo var_export($test->complex13Or(), true), "\n";
+echo var_export($test->complex14Or(), true), "\n";
+echo var_export($test->complex15Or(), true), "\n";
+echo var_export($test->complex17Or(), true), "\n";
+echo var_export($test->complex18Or(), true), "\n";
+echo var_export($test->complex19Or(), true), "\n";
+echo var_export($test->complex20Or(), true), "\n";
+echo var_export($test->complex21Or(), true), "\n";
+echo var_export($test->complex22Or(), true), "\n";
+echo var_export($test->complex23Or(), true), "\n";
+echo var_export($test->complex24Or(), true), "\n";
+echo var_export($test->intShiftLeft(), true), "\n";
+echo var_export($test->int2ShiftLeft(), true), "\n";
+echo var_export($test->intShiftLeftSimple(), true), "\n";
+echo var_export($test->intShiftRight(), true), "\n";
+echo var_export($test->int2ShiftRight(), true), "\n";
+echo var_export($test->intShiftRightSimple(), true), "\n";
+echo var_export($test->testBitwiseNot(666), true), "\n";
+echo var_export($test->testBitwiseAndNot(5, 4), true), "\n";
+echo var_export($test->testbitwiseXor(), true), "\n";
+echo var_export($test->issue2014ShiftLeft(), true), "\n";
+echo var_export($test->issue2014HexAnd(), true), "\n";
+echo var_export($test->issue2014HexArithmetic(), true), "\n";
+--EXPECT--
+0
+0
+0
+0.0
+0.0
+0.0
+0.0
+true
+false
+false
+false
+0
+0
+0
+0
+0.0
+0.0
+0
+0
+0
+0
+0.0
+true
+true
+1
+1
+true
+0
+0
+0.0
+0.0
+0
+1
+1
+false
+1.0
+1.0
+1.0
+1.0
+1.0
+0.0
+1.0
+0
+3
+3
+3
+3.0
+3.0
+3.0
+3.0
+true
+true
+true
+true
+3
+3
+3
+3
+3.0
+3.0
+3
+3
+3
+3
+3.0
+true
+true
+1
+1
+true
+3
+3
+3.0
+3.0
+3
+1
+1
+true
+1.0
+1.0
+1.0
+1.0
+1.0
+3.0
+1.0
+1.0
+4
+4
+4
+0
+0
+0
+-667
+1
+314
+-4294967296
+15
+256

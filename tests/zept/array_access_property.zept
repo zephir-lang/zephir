@@ -1,0 +1,122 @@
+--TEST--
+ArrayAccess property (issue #2465): writing this->data[k]=v calls offsetSet and does not convert the object to an array; chained write matches native PHP (port of tests/Extension/ArrayAccessPropertyTest.php)
+--FILE--
+namespace Stub;
+
+class ArrayAccessObj implements \ArrayAccess
+{
+	protected test;
+
+	public function __construct()
+	{
+	    var obj;
+
+	    let obj = new \stdClass();
+        let obj->key1 = "val1";
+        let obj->key2 = "val2";
+        let obj->key3 = "val3";
+
+        let this->test = obj;
+	}
+
+	public function offsetSet(mixed offset, mixed value) -> void
+	{
+	    var obj = this->test;
+
+	    if !is_null(offset) {
+	        let obj->{offset} = value;
+	    }
+
+	    let this->test = obj;
+	}
+
+	public function offsetExists(mixed offset) -> bool
+	{
+	    var obj = this->test;
+
+		return isset obj->{offset};
+	}
+
+	public function offsetUnset(mixed offset) -> void
+	{
+	    var obj = this->test;
+
+	    let obj = (array)obj;
+
+        unset obj[offset];
+
+        let this->test = (object)obj;
+	}
+
+	public function offsetGet(mixed offset) -> mixed
+	{
+		return isset this->test->{offset} ? this->test->{offset} : null;
+	}
+}
+--FILE--
+namespace Stub;
+
+class ArrayAccessProperty
+{
+	public data;
+
+	public function __construct(<\ArrayAccess> data)
+	{
+		let this->data = data;
+	}
+
+	public function set(k, v)
+	{
+		let this->data[k] = v;
+	}
+
+	public function setNested(a, b, v)
+	{
+		let this->data[a][b] = v;
+	}
+}
+--USAGE--
+// testOffsetSetIsTriggeredOnObjectProperty
+$collection = new \Stub\ArrayAccessObj();
+$holder     = new \Stub\ArrayAccessProperty($collection);
+$holder->set('k', 'v');
+echo var_export($collection->offsetExists('k'), true), "\n";
+echo var_export($collection->offsetGet('k'), true), "\n";
+
+// testObjectPropertyIsNotConvertedToArray
+$collection = new \Stub\ArrayAccessObj();
+$holder     = new \Stub\ArrayAccessProperty($collection);
+$holder->set('k', 'v');
+echo var_export($holder->data instanceof \Stub\ArrayAccessObj, true), "\n";
+echo var_export($holder->data === $collection, true), "\n";
+
+// testNestedWriteMatchesNativePhpBehaviour
+$collection = new \Stub\ArrayAccessObj();
+$holder     = new \Stub\ArrayAccessProperty($collection);
+$message = null;
+set_error_handler(static function (int $code, string $msg) use (&$message): bool {
+    $message = $msg;
+    return true;
+});
+try {
+    $holder->setNested('a', 'b', 'v');
+} finally {
+    restore_error_handler();
+}
+echo var_export($message !== null, true), "\n";
+echo var_export(strpos((string) $message, 'Indirect modification of overloaded element') !== false, true), "\n";
+echo var_export(strpos((string) $message, 'Stub\ArrayAccessObj') !== false, true), "\n";
+echo var_export($holder->data instanceof \Stub\ArrayAccessObj, true), "\n";
+echo var_export($holder->data === $collection, true), "\n";
+echo var_export($collection->offsetExists('a'), true), "\n";
+--EXPECT--
+true
+'v'
+true
+true
+true
+true
+true
+true
+true
+false

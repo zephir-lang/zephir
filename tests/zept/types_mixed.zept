@@ -1,0 +1,288 @@
+--TEST--
+Types mixed: mixed return, mixed param, mixed param+return, and (internal) cast-to-mixed (port of tests/Extension/Types/MixedTypeTest.php)
+--FILE--
+namespace Stub\Types;
+
+class MixedType
+{
+    public function returnMixedObject() -> mixed
+	{
+	    return new \stdClass();
+	}
+
+	public function returnMixedArray() -> mixed
+	{
+	    return [];
+	}
+
+	public function returnMixedString() -> mixed
+	{
+	    return "mixed string";
+	}
+
+	public function returnMixedInt() -> mixed
+	{
+	    return 1;
+	}
+
+	public function returnMixedFloat() -> mixed
+	{
+	    return 3.14;
+	}
+
+	public function returnMixedBool() -> mixed
+	{
+	    return true;
+	}
+
+	public function returnMixedNull() -> mixed
+	{
+	    return null;
+	}
+
+	public function returnMixed74(bool diff = false) -> mixed
+	{
+	    if (diff) {
+	        return "string";
+	    }
+
+	    return new \stdClass();
+	}
+
+     public function paramMixed(mixed val)
+     {
+        return val;
+     }
+
+     public function paramMixedTwo(mixed val1, mixed val2)
+     {
+        return [val1, val2];
+     }
+
+     public function paramMixedWithMulti(int intVal, string stringVal, mixed mixedVal)
+     {
+        return [intVal, stringVal, mixedVal];
+     }
+
+     public function paramAndReturnMixed(mixed val) -> mixed
+     {
+        return val;
+     }
+
+     public function castToStringMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (string)val;
+     }
+
+     public function castToStringInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (string)val;
+
+        return val;
+     }
+
+     public function castToIntMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (int)val;
+     }
+
+     public function castToIntInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (int)val;
+
+        return val;
+     }
+
+     public function castToBoolMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (bool)val;
+     }
+
+     public function castToBoolInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (bool)val;
+
+        return val;
+     }
+
+     public function castToFloatMixedAndReturnMixed(mixed val) -> mixed
+     {
+        return (float)val;
+     }
+
+     public function castToFloatInternallyMixedAndReturnMixed(mixed val) -> mixed
+     {
+        let val = (float)val;
+
+        return val;
+     }
+}
+--USAGE--
+$r = new \Stub\Types\MixedType();
+
+// returns of mixed type
+echo var_export($r->returnMixedObject() instanceof \stdClass, true), "\n";
+echo var_export($r->returnMixedArray(), true), "\n";
+echo var_export($r->returnMixedString(), true), "\n";
+echo var_export($r->returnMixedInt(), true), "\n";
+echo var_export($r->returnMixedFloat(), true), "\n";
+echo var_export($r->returnMixedBool(), true), "\n";
+echo var_export($r->returnMixedNull(), true), "\n";
+echo var_export($r->returnMixed74() instanceof \stdClass, true), "\n";
+echo var_export($r->returnMixed74(true), true), "\n";
+echo var_export($r->returnMixed74(false) instanceof \stdClass, true), "\n";
+
+// params of mixed type
+echo var_export($r->paramMixed(new \stdClass()) instanceof \stdClass, true), "\n";
+echo var_export($r->paramMixed([]), true), "\n";
+echo var_export($r->paramMixed('mixed string'), true), "\n";
+echo var_export($r->paramMixed(1), true), "\n";
+echo var_export($r->paramMixed(3.14), true), "\n";
+echo var_export($r->paramMixed(true), true), "\n";
+echo var_export($r->paramMixed(null), true), "\n";
+
+echo var_export($r->paramMixedTwo([], 'mixed string'), true), "\n";
+echo var_export($r->paramMixedTwo(1, 3.14), true), "\n";
+echo var_export($r->paramMixedTwo(3.14, true), true), "\n";
+echo var_export($r->paramMixedTwo(true, null), true), "\n";
+echo var_export($r->paramMixedTwo(null, null), true), "\n";
+
+echo var_export($r->paramMixedWithMulti(1337, 'array', []), true), "\n";
+echo var_export($r->paramMixedWithMulti(1337, 'string', 'mixed string'), true), "\n";
+echo var_export($r->paramMixedWithMulti(1337, 'int', 123), true), "\n";
+echo var_export($r->paramMixedWithMulti(1337, 'float', 2.44), true), "\n";
+echo var_export($r->paramMixedWithMulti(1337, 'bool', false), true), "\n";
+echo var_export($r->paramMixedWithMulti(1337, 'null', null), true), "\n";
+
+// param and return of mixed type
+echo var_export($r->paramAndReturnMixed([]), true), "\n";
+echo var_export($r->paramAndReturnMixed('mixed string'), true), "\n";
+echo var_export($r->paramAndReturnMixed(1), true), "\n";
+echo var_export($r->paramAndReturnMixed(3.14), true), "\n";
+echo var_export($r->paramAndReturnMixed(true), true), "\n";
+echo var_export($r->paramAndReturnMixed(null), true), "\n";
+
+// casts (return-time)
+echo var_export($r->castToStringMixedAndReturnMixed(123), true), "\n";
+echo var_export($r->castToStringMixedAndReturnMixed('string'), true), "\n";
+echo var_export($r->castToStringMixedAndReturnMixed(false), true), "\n";
+echo var_export($r->castToStringMixedAndReturnMixed(true), true), "\n";
+echo var_export($r->castToIntMixedAndReturnMixed('123'), true), "\n";
+echo var_export($r->castToIntMixedAndReturnMixed(1.5), true), "\n";
+echo var_export($r->castToBoolMixedAndReturnMixed(1), true), "\n";
+echo var_export($r->castToBoolMixedAndReturnMixed(0), true), "\n";
+echo var_export($r->castToFloatMixedAndReturnMixed(1), true), "\n";
+echo var_export($r->castToFloatMixedAndReturnMixed(1.5), true), "\n";
+
+// casts (internal let-time)
+echo var_export($r->castToStringInternallyMixedAndReturnMixed(123), true), "\n";
+echo var_export($r->castToStringInternallyMixedAndReturnMixed('string'), true), "\n";
+echo var_export($r->castToStringInternallyMixedAndReturnMixed(false), true), "\n";
+echo var_export($r->castToStringInternallyMixedAndReturnMixed(true), true), "\n";
+echo var_export($r->castToIntInternallyMixedAndReturnMixed('123'), true), "\n";
+echo var_export($r->castToIntInternallyMixedAndReturnMixed(1.5), true), "\n";
+echo var_export($r->castToBoolInternallyMixedAndReturnMixed(1), true), "\n";
+echo var_export($r->castToBoolInternallyMixedAndReturnMixed(0), true), "\n";
+echo var_export($r->castToFloatInternallyMixedAndReturnMixed(1), true), "\n";
+echo var_export($r->castToFloatInternallyMixedAndReturnMixed(1.5), true), "\n";
+--EXPECT--
+true
+array (
+)
+'mixed string'
+1
+3.14
+true
+NULL
+true
+'string'
+true
+true
+array (
+)
+'mixed string'
+1
+3.14
+true
+NULL
+array (
+  0 =>
+  array (
+  ),
+  1 => 'mixed string',
+)
+array (
+  0 => 1,
+  1 => 3.14,
+)
+array (
+  0 => 3.14,
+  1 => true,
+)
+array (
+  0 => true,
+  1 => NULL,
+)
+array (
+  0 => NULL,
+  1 => NULL,
+)
+array (
+  0 => 1337,
+  1 => 'array',
+  2 =>
+  array (
+  ),
+)
+array (
+  0 => 1337,
+  1 => 'string',
+  2 => 'mixed string',
+)
+array (
+  0 => 1337,
+  1 => 'int',
+  2 => 123,
+)
+array (
+  0 => 1337,
+  1 => 'float',
+  2 => 2.44,
+)
+array (
+  0 => 1337,
+  1 => 'bool',
+  2 => false,
+)
+array (
+  0 => 1337,
+  1 => 'null',
+  2 => NULL,
+)
+array (
+)
+'mixed string'
+1
+3.14
+true
+NULL
+'123'
+'string'
+''
+'1'
+123
+1
+true
+false
+1.0
+1.5
+'123'
+'string'
+''
+'1'
+123
+1
+true
+false
+1.0
+1.5

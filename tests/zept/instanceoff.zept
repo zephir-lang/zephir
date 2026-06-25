@@ -1,0 +1,115 @@
+--TEST--
+instanceof against literal class, self, unknown class, \Traversable, this, new static, object/string operands (#776 #822 #1828) (port of tests/Extension/InstanceOffTest.php)
+--FILE--
+namespace Stub;
+
+class Instanceoff
+{
+    public function testInstanceOf1() -> bool
+    {
+        var a;
+        let a = new \stdClass();
+        return a instanceof \stdClass;
+    }
+
+    public function testInstanceOf2() -> bool
+    {
+        var a;
+        let a = new self();
+        return a instanceof Instanceoff;
+    }
+
+    public function testInstanceOf3() -> bool
+    {
+        var a;
+        let a = new \stdClass();
+        return a instanceof UnknownClass;
+    }
+
+    public function testInstanceOf4(var a) -> bool
+    {
+        if a instanceof \Traversable {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function testInstanceOf5(var a) -> bool
+    {
+        if a instanceof this {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function testInstanceOf6() -> bool
+    {
+        var a;
+        let a = new static();
+        return a instanceof Instanceoff;
+    }
+
+    public function testInstanceOf7(object test) -> bool
+    {
+        return test instanceof Instanceoff;
+    }
+
+    public function testInstanceOf8(string test) -> bool
+    {
+        var a;
+        let a = new static();
+        return a instanceof test;
+    }
+
+    public function testInstanceOf9(object a, string test) -> bool
+    {
+        return a instanceof test;
+    }
+}
+--USAGE--
+$test = new \Stub\Instanceoff();
+echo var_export($test->testInstanceOf1(), true), "\n";
+echo var_export($test->testInstanceOf2(), true), "\n";
+echo var_export($test->testInstanceOf3(), true), "\n";
+echo var_export($test->testInstanceOf4(new \ArrayIterator([])), true), "\n";
+echo var_export($test->testInstanceOf4(new \ArrayObject()), true), "\n";
+echo var_export($test->testInstanceOf4(1), true), "\n";
+echo var_export($test->testInstanceOf4(1.25), true), "\n";
+echo var_export($test->testInstanceOf4(true), true), "\n";
+echo var_export($test->testInstanceOf4(false), true), "\n";
+echo var_export($test->testInstanceOf4('test'), true), "\n";
+echo var_export($test->testInstanceOf4([]), true), "\n";
+echo var_export($test->testInstanceOf4(new \stdClass()), true), "\n";
+echo var_export($test->testInstanceOf5($test), true), "\n";
+echo var_export($test->testInstanceOf5(new \stdClass()), true), "\n";
+echo var_export($test->testInstanceOf6(), true), "\n";
+echo var_export($test->testInstanceOf7($test), true), "\n";
+echo var_export($test->testInstanceOf7(new \stdClass()), true), "\n";
+echo var_export($test->testInstanceOf8('\\Stub\\Instanceoff'), true), "\n";
+echo var_export($test->testInstanceOf8('\\stdClass'), true), "\n";
+echo var_export($test->testInstanceOf9($test, '\\Stub\\Instanceoff'), true), "\n";
+echo var_export($test->testInstanceOf9($test, '\\stdClass'), true), "\n";
+--EXPECT--
+true
+true
+false
+true
+true
+false
+false
+false
+false
+false
+false
+false
+true
+false
+true
+true
+false
+true
+false
+true
+false

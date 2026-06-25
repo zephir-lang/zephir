@@ -1,0 +1,156 @@
+--TEST--
+__invoke: zval-call on an invokable, and protected-method routing via __toString/call_user_func_array (port of tests/Extension/InvokeTest.php)
+--FILE--
+namespace Stub;
+
+class Invoke
+{
+	private a;
+
+	public function __construct()
+	{
+		let this->a = "aaa";
+	}
+
+	public function __invoke() -> string
+	{
+		return gettype(this->a);
+	}
+
+	public static function test() -> string
+	{
+		var func;
+		let func = new Invoke();
+		return {func}();
+	}
+}
+--FILE--
+namespace Stub\Invokes;
+
+abstract class AbstractProtected
+{
+    protected text;
+
+    protected function protectedMethod1(string text) -> string
+    {
+        var ret;
+        let ret = text . "1";
+
+        return ret;
+    }
+
+    protected function protectedMethod2(string text) -> string
+    {
+        var ret;
+        let ret = text . "2";
+
+        return ret;
+    }
+
+    protected function renderArrayElements(string text)
+    {
+        return call_user_func_array([this, "protectedMethod2"], [text]);
+    }
+
+    protected function renderArrayElementsComplex(string text)
+    {
+        var item;
+        string result = "";
+
+        array elements = [
+            [
+                "protectedMethod1",
+                [text]
+            ],
+            [
+                "protectedMethod2",
+                [text]
+            ]
+        ];
+
+        for item in elements {
+            let result .= call_user_func_array([this, item[0]], item[1]);
+        }
+
+        return result;
+    }
+}
+--FILE--
+namespace Stub\Invokes;
+
+abstract class AbstractInvoker extends AbstractProtected
+{
+    public function __toString()
+    {
+        return this->renderArrayElements(this->text);
+    }
+
+    public function __invoke() -> <AbstractInvoker>
+    {
+        return this;
+    }
+}
+--FILE--
+namespace Stub\Invokes;
+
+abstract class AbstractInvokerComplex extends AbstractProtected
+{
+    public function __toString()
+    {
+        return this->renderArrayElementsComplex(this->text);
+    }
+
+    public function __invoke() -> <AbstractInvoker>
+    {
+        return this;
+    }
+}
+--FILE--
+namespace Stub\Invokes;
+
+class InvokeProtected extends AbstractInvoker
+{
+    public function __construct(string text)
+    {
+        let this->text = text;
+    }
+}
+--FILE--
+namespace Stub\Invokes;
+
+class InvokeProtectedComplex extends AbstractInvokerComplex
+{
+    public function __construct(string text)
+    {
+        let this->text = text;
+    }
+}
+--USAGE--
+use Stub\Invoke;
+use Stub\Invokes\InvokeProtected;
+use Stub\Invokes\InvokeProtectedComplex;
+
+// issue 1522: invoking a fresh Invoke via {func}() returns gettype of "aaa"
+echo var_export(Invoke::test(), true), "\n";
+echo var_export(Invoke::test(), true), "\n";
+
+// protected method routing
+$fromProtected = new InvokeProtected('random');
+echo var_export($fromProtected() instanceof InvokeProtected, true), "\n";
+echo var_export((string) $fromProtected(), true), "\n";
+echo var_export($fromProtected()->__toString(), true), "\n";
+
+// complex (two protected methods concatenated)
+$complex = new InvokeProtectedComplex('random');
+echo var_export($complex() instanceof InvokeProtectedComplex, true), "\n";
+echo var_export((string) $complex(), true), "\n";
+echo var_export($complex()->__toString(), true), "\n";
+--EXPECT--
+'string'
+'string'
+true
+'random2'
+'random2'
+true
+'random1random2'
+'random1random2'

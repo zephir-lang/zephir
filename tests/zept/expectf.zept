@@ -1,0 +1,22 @@
+--TEST--
+--EXPECTF-- placeholders match a compiled extension's runtime output
+--FILE--
+namespace Zept;
+
+class Counter
+{
+    public function tick() -> int
+    {
+        return 7;
+    }
+
+    public function label() -> string
+    {
+        return "items";
+    }
+}
+--USAGE--
+$c = new Zept\Counter();
+printf("count=%d label=%s\n", $c->tick(), $c->label());
+--EXPECTF--
+count=%d label=%s

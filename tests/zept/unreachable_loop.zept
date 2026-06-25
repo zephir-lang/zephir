@@ -1,0 +1,39 @@
+--TEST--
+Issue #1170: a loop-body guard reassigned inside the loop runs on later iterations (port of tests/Extension/UnreachableLoopTest.php)
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1170
+ */
+class UnreachableLoop
+{
+    public static function toPropertyString(array properties) -> string
+    {
+        var x, ret, k, v;
+
+        let x = false;
+        let ret = "{";
+        for k, v in properties {
+            if x {
+                let ret .= ", ";
+            }
+            let x = true;
+            let ret .= k . ": ";
+            if is_array(v) {
+                let ret .= "[\"" . implode("\", \"", v) . "\"]";
+            } else {
+                let ret .= "\"" . v . "\"";
+            }
+        }
+        return ret . "}";
+    }
+}
+--USAGE--
+echo var_export(\Stub\UnreachableLoop::toPropertyString(['a' => '1', 'b' => '2']), true), "\n";
+echo var_export(\Stub\UnreachableLoop::toPropertyString(['a' => '1']), true), "\n";
+echo var_export(\Stub\UnreachableLoop::toPropertyString([]), true), "\n";
+--EXPECT--
+'{a: "1", b: "2"}'
+'{a: "1"}'
+'{}'

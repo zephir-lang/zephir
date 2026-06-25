@@ -1,0 +1,220 @@
+--TEST--
+Variadic functions/methods (#2025): collect, typed, static, array/object, unpacking, free function and Reflection (port of tests/Extension/VariadicTest.php)
+--FILE--
+namespace Stub;
+
+/**
+ * Free (non-method) variadic function — the exact form from issue #2025:
+ * `function f(...params)`. Exercises the PHP_FUNCTION code path.
+ */
+function variadicSum(...numbers) -> int
+{
+    int total = 0;
+    var n;
+
+    for n in numbers {
+        let total += n;
+    }
+
+    return total;
+}
+
+class Variadic
+{
+    public function collect(...args) -> array
+    {
+        return args;
+    }
+
+    public function sum(int first, ...rest) -> int
+    {
+        int total = first;
+        var n;
+
+        for n in rest {
+            let total += n;
+        }
+
+        return total;
+    }
+
+    public function countExtra(var required, ...rest) -> int
+    {
+        return count(rest);
+    }
+
+    public function joinStrings(string glue, string ...parts) -> string
+    {
+        return implode(glue, parts);
+    }
+
+    public function describe(int req, int opt = 0, ...params) -> array
+    {
+        return [req, opt, count(params)];
+    }
+
+    public static function staticCollect(...args) -> array
+    {
+        return args;
+    }
+
+    public function totalLength(array ...rows) -> int
+    {
+        int total = 0;
+        var row;
+
+        for row in rows {
+            let total += count(row);
+        }
+
+        return total;
+    }
+
+    public function classNames(...objects) -> array
+    {
+        array names = [];
+        var obj;
+
+        for obj in objects {
+            let names[] = get_class(obj);
+        }
+
+        return names;
+    }
+}
+--USAGE--
+use Stub\Variadic;
+use function Stub\variadicSum;
+
+$test = new Variadic();
+
+// collect
+var_export($test->collect()); echo "\n";
+var_export($test->collect(1, 2, 3)); echo "\n";
+var_export($test->collect('a', 'b')); echo "\n";
+
+// sum
+echo var_export($test->sum(1), true), "\n";
+echo var_export($test->sum(1, 2, 3), true), "\n";
+echo var_export($test->sum(1, 2, 3, 4, 5), true), "\n";
+
+// countExtra
+echo var_export($test->countExtra('x'), true), "\n";
+echo var_export($test->countExtra('x', 'a', 'b'), true), "\n";
+
+// joinStrings (typed variadic)
+echo var_export($test->joinStrings('-'), true), "\n";
+echo var_export($test->joinStrings('-', 'a', 'b', 'c'), true), "\n";
+
+// describe (optional fixed param then variadic)
+var_export($test->describe(1)); echo "\n";
+var_export($test->describe(1, 2)); echo "\n";
+var_export($test->describe(1, 2, 10, 20, 30)); echo "\n";
+
+// free function
+echo var_export(variadicSum(), true), "\n";
+echo var_export(variadicSum(1, 2, 3), true), "\n";
+echo var_export(variadicSum(1, 2, 3, 4, 5), true), "\n";
+
+// static
+var_export(Variadic::staticCollect()); echo "\n";
+var_export(Variadic::staticCollect(1, 2, 3)); echo "\n";
+
+// array-typed variadic
+echo var_export($test->totalLength(), true), "\n";
+echo var_export($test->totalLength([1, 2]), true), "\n";
+echo var_export($test->totalLength([1, 2], [3], ['a', 'b']), true), "\n";
+
+// object variadic
+var_export($test->classNames()); echo "\n";
+var_export($test->classNames(new \stdClass(), new Variadic())); echo "\n";
+
+// argument unpacking
+$args = [1, 2, 3, 4];
+var_export($test->collect(...$args)); echo "\n";
+echo var_export($test->sum(...$args), true), "\n";
+
+// Reflection (variadic arginfo reproduces on the compiled ext - the point of #2025)
+$method = new \ReflectionMethod(Variadic::class, 'sum');
+echo var_export($method->isVariadic(), true), "\n";
+echo var_export($method->getNumberOfRequiredParameters(), true), "\n";
+$params = $method->getParameters();
+echo var_export($params[1]->isVariadic(), true), "\n";
+echo var_export($params[0]->isVariadic(), true), "\n";
+
+$jm = new \ReflectionMethod(Variadic::class, 'joinStrings');
+$jp = $jm->getParameters();
+echo var_export($jp[1]->isVariadic(), true), "\n";
+echo var_export((string) $jp[1]->getType(), true), "\n";
+
+$fn = new \ReflectionFunction('Stub\variadicSum');
+echo var_export($fn->isVariadic(), true), "\n";
+echo var_export($fn->getNumberOfRequiredParameters(), true), "\n";
+--EXPECT--
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 'a',
+  1 => 'b',
+)
+1
+6
+15
+0
+2
+''
+'a-b-c'
+array (
+  0 => 1,
+  1 => 0,
+  2 => 0,
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 0,
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+0
+6
+15
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+0
+2
+5
+array (
+)
+array (
+  0 => 'stdClass',
+  1 => 'Stub\\Variadic',
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+)
+10
+true
+1
+true
+false
+true
+'string'
+true
+0

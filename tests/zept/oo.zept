@@ -1,0 +1,225 @@
+--TEST--
+Object instantiation: stdClass, ctor/no-ctor, ctor params (string/int/bool/float), static factory, dynamic new {fqcn} in loop (#1673) (port of tests/Extension/OoTest.php; testInstance12 is PHP<8.2-only and dropped)
+--FILE--
+namespace Stub\Oo;
+
+class OoConstruct
+{
+    public function __construct()
+    {
+
+    }
+}
+--FILE--
+namespace Stub\Oo;
+
+class OoNoConstruct
+{
+
+}
+--FILE--
+namespace Stub\Oo;
+
+class OoConstructParams
+{
+    protected a;
+
+    protected b;
+
+    public function __construct(a, b)
+    {
+        let this->a = a,
+            this->b = b;
+    }
+
+    public function getA()
+    {
+        return this->a;
+    }
+
+    public function getB()
+    {
+        return this->b;
+    }
+}
+--FILE--
+namespace Stub\Oo;
+
+class OoDynamicA
+{
+    public static function getNew()
+    {
+        var className, fullClassName;
+        let className = get_called_class();
+        let fullClassName = "\\" . className;
+        return new {fullClassName}();
+    }
+
+    public static function call2() {
+        return \Stub\Oo\OoDynamicA::getNew();
+    }
+
+    public static function call1() {
+        return \Stub\Oo\OoDynamicA::call2();
+    }
+
+    public function execute() {
+        return "A";
+    }
+
+    public function execute2() {
+        return "AA";
+    }
+}
+--FILE--
+namespace Stub\Oo;
+
+class OoDynamicB extends OoDynamicA
+{
+    public function execute() {
+        return "B";
+    }
+
+    public function execute2() {
+        return "BB";
+    }
+}
+--FILE--
+namespace Stub;
+
+class Oo
+{
+    public function testInstance1()
+    {
+        var o;
+        let o = new \stdClass;
+        return o;
+    }
+
+    public function testInstance2()
+    {
+        var o;
+        let o = new Oo\OoConstruct;
+        return o;
+    }
+
+    public function testInstance3()
+    {
+        var o;
+        let o = new Oo\OoNoConstruct;
+        return o;
+    }
+
+    public function testInstance4()
+    {
+        var o, a, b;
+
+        let a = "a",
+            b = "b",
+            o = new Oo\OoConstructParams(a, b);
+
+        return o;
+    }
+
+    public function testInstance5()
+    {
+        var o;
+        let o = new Oo\OoConstructParams("a", "b");
+        return o;
+    }
+
+    public function testInstance6()
+    {
+        var o;
+        let o = new Oo\OoConstructParams(1, 2);
+        return o;
+    }
+
+    public function testInstance7()
+    {
+        var o;
+        let o = new Oo\OoConstructParams(false, true);
+        return o;
+    }
+
+    public function testInstance8()
+    {
+        var o;
+        let o = new Oo\OoConstructParams(1.2, 7.30);
+        return o;
+    }
+
+    public function testInstance9()
+    {
+        var o;
+        let o = Oo\OoDynamicA::getNew();
+        return o;
+    }
+
+    public function testInstance10()
+    {
+        var o;
+        let o = Oo\OoDynamicB::getNew();
+        return o;
+    }
+
+    public function testInstance11()
+    {
+        var o;
+        let o = new Oo\OoConstructParams(1, 2);
+        return o;
+    }
+
+    public function createInstancesInLoop() -> array
+    {
+        var className, instance, fqcn;
+        array result = [];
+
+        for className in ["OoDynamicA", "OoDynamicB"] {
+            let fqcn = "Stub\\Oo\\" . className;
+            let instance = new {fqcn}();
+
+            let result[] = instance->execute();
+            let result[] = instance->execute2();
+        }
+
+        return result;
+    }
+}
+--USAGE--
+$test = new \Stub\Oo();
+echo var_export($test->testInstance1() instanceof \stdClass, true), "\n";
+echo var_export($test->testInstance2() instanceof \Stub\Oo\OoConstruct, true), "\n";
+echo var_export($test->testInstance3() instanceof \Stub\Oo\OoNoConstruct, true), "\n";
+$obj4 = $test->testInstance4();
+echo var_export($obj4->getA(), true), ' ', var_export($obj4->getB(), true), "\n";
+$obj5 = $test->testInstance5();
+echo var_export($obj5->getA(), true), ' ', var_export($obj5->getB(), true), "\n";
+$obj6 = $test->testInstance6();
+echo var_export($obj6->getA(), true), ' ', var_export($obj6->getB(), true), "\n";
+$obj7 = $test->testInstance7();
+echo var_export($obj7->getA(), true), ' ', var_export($obj7->getB(), true), "\n";
+$obj8 = $test->testInstance8();
+echo var_export($obj8->getA(), true), ' ', var_export($obj8->getB(), true), "\n";
+echo var_export($test->testInstance9() instanceof \Stub\Oo\OoDynamicA, true), "\n";
+echo var_export($test->testInstance10() instanceof \Stub\Oo\OoDynamicB, true), "\n";
+echo var_export($test->testInstance11() instanceof \Stub\Oo\OoConstructParams, true), "\n";
+echo var_export($test->createInstancesInLoop(), true), "\n";
+--EXPECT--
+true
+true
+true
+'a' 'b'
+'a' 'b'
+1 2
+false true
+1.2 7.3
+true
+true
+true
+array (
+  0 => 'A',
+  1 => 'AA',
+  2 => 'B',
+  3 => 'BB',
+)
