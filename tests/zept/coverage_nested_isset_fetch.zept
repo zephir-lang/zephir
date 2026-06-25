@@ -1,0 +1,91 @@
+--TEST--
+Nested isset/fetch: multi-level array keys, fetch from a nested array property, combined isset guard before fetch
+--FILE--
+namespace Stub;
+
+class NestedIssetFetch
+{
+    protected config;
+
+    public function setConfig(var c) -> void
+    {
+        let this->config = c;
+    }
+
+    public function hasDeep(var data, var k1, var k2) -> boolean
+    {
+        return isset data[k1][k2];
+    }
+
+    public function fetchDeep(var data, var k1, var k2)
+    {
+        var v;
+        if fetch v, data[k1][k2] {
+            return v;
+        }
+        return "missing";
+    }
+
+    public function fetchFromProperty(var key)
+    {
+        var v;
+        if fetch v, this->config[key] {
+            return v;
+        }
+        return null;
+    }
+
+    public function fetchNestedFromProperty(var k1, var k2)
+    {
+        var v;
+        if fetch v, this->config[k1][k2] {
+            return v;
+        }
+        return false;
+    }
+
+    public function guardThenFetch(var data, var key)
+    {
+        var v;
+        if isset data[key] {
+            if fetch v, data[key]["value"] {
+                return v;
+            }
+        }
+        return -1;
+    }
+}
+--USAGE--
+$t = new \Stub\NestedIssetFetch();
+
+$data = [
+    "a" => ["b" => 42, "c" => ["d" => "deep"]],
+    "x" => ["value" => 7],
+];
+
+echo var_export($t->hasDeep($data, "a", "b"), true), "\n";        // true
+echo var_export($t->hasDeep($data, "a", "missing"), true), "\n";  // false
+echo var_export($t->hasDeep($data, "nope", "b"), true), "\n";     // false
+echo var_export($t->fetchDeep($data, "a", "b"), true), "\n";      // 42
+echo var_export($t->fetchDeep($data, "a", "missing"), true), "\n";// 'missing'
+
+$t->setConfig(["host" => "localhost", "db" => ["name" => "test", "port" => 5432]]);
+echo var_export($t->fetchFromProperty("host"), true), "\n";           // 'localhost'
+echo var_export($t->fetchFromProperty("absent"), true), "\n";         // NULL
+echo var_export($t->fetchNestedFromProperty("db", "name"), true), "\n"; // 'test'
+echo var_export($t->fetchNestedFromProperty("db", "absent"), true), "\n"; // false
+
+echo var_export($t->guardThenFetch($data, "x"), true), "\n";      // 7
+echo var_export($t->guardThenFetch($data, "a"), true), "\n";      // -1 (no "value" key)
+--EXPECT--
+true
+false
+false
+42
+'missing'
+'localhost'
+NULL
+'test'
+false
+7
+-1

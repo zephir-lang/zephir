@@ -1,0 +1,72 @@
+--TEST--
+Numeric operators into typed targets: modulo, integer vs float division, mixed int/double coercion, unary minus, compound modulo
+--FILE--
+namespace Stub;
+
+class NumericOps
+{
+    public function modInt(int a, int b) -> int
+    {
+        int r;
+        let r = a % b;
+        return r;
+    }
+
+    public function modCompound(int a, int b) -> int
+    {
+        let a %= b;
+        return a;
+    }
+
+    public function intDivFloors(int a, int b) -> int
+    {
+        int r;
+        let r = a / b;
+        return r;
+    }
+
+    public function floatDiv(double a, double b) -> double
+    {
+        double r;
+        let r = a / b;
+        return r;
+    }
+
+    public function mixedIntDoubleSum(int a, double b) -> double
+    {
+        double r;
+        let r = a + b;
+        return r;
+    }
+
+    public function unaryMinusTyped(int a) -> int
+    {
+        int r;
+        let r = -a;
+        return r;
+    }
+
+    public function negativeMod(int a, int b) -> int
+    {
+        int r;
+        let r = a % b;
+        return r;
+    }
+}
+--USAGE--
+$t = new \Stub\NumericOps();
+echo var_export($t->modInt(17, 5), true), "\n";          // 2
+echo var_export($t->modCompound(20, 6), true), "\n";     // 2
+echo var_export($t->intDivFloors(7, 2), true), "\n";     // 3 (int target truncates)
+echo var_export($t->floatDiv(7.0, 2.0), true), "\n";     // 3.5
+echo var_export($t->mixedIntDoubleSum(3, 0.5), true), "\n"; // 3.5
+echo var_export($t->unaryMinusTyped(9), true), "\n";     // -9
+echo var_export($t->negativeMod(-17, 5), true), "\n";    // -2 (PHP modulo keeps sign of dividend)
+--EXPECT--
+2
+2
+3
+3.5
+3.5
+-9
+-2

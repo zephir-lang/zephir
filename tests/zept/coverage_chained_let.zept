@@ -1,0 +1,67 @@
+--TEST--
+Chained let: multiple comma-separated assignments in one let, with forward references and mixed int/double/string/bool targets
+--FILE--
+namespace Stub;
+
+class ChainedLet
+{
+    public function arithmeticChain() -> int
+    {
+        int a, b, c;
+        let a = 1, b = a + 1, c = b * 2;
+        return a * 100 + b * 10 + c;
+    }
+
+    public function mixedTypeChain() -> array
+    {
+        int i;
+        double d;
+        boolean flag;
+        string label;
+        let i = 5, d = i / 2, flag = i > 3, label = "n=";
+        return [i, d, flag, label];
+    }
+
+    public function compoundChain() -> int
+    {
+        int x = 10;
+        let x += 5, x -= 2, x *= 2;
+        return x;
+    }
+
+    public function forwardRefChain() -> string
+    {
+        string a, b, c;
+        let a = "x", b = a . "y", c = b . "z";
+        return c;
+    }
+
+    public function swapViaChain() -> array
+    {
+        var a, b, t;
+        let a = 1, b = 2;
+        let t = a, a = b, b = t;
+        return [a, b];
+    }
+}
+--USAGE--
+$t = new \Stub\ChainedLet();
+echo var_export($t->arithmeticChain(), true), "\n";       // a=1 b=2 c=4 -> 124
+echo var_export($t->mixedTypeChain(), true), "\n";
+echo var_export($t->compoundChain(), true), "\n";         // ((10+5)-2)*2 = 26
+echo var_export($t->forwardRefChain(), true), "\n";       // 'xyz'
+echo var_export($t->swapViaChain(), true), "\n";          // [2, 1]
+--EXPECT--
+124
+array (
+  0 => 5,
+  1 => 2.5,
+  2 => true,
+  3 => 'n=',
+)
+26
+'xyz'
+array (
+  0 => 2,
+  1 => 1,
+)

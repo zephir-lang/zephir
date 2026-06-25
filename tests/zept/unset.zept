@@ -1,0 +1,65 @@
+--TEST--
+Unset: unset(arr[literal]), unset(arr[var]) and unset(typedArr[stringKey]) reindex/preserve correctly (port of tests/Extension/UnsetTest.php)
+--FILE--
+namespace Stub;
+
+class Unsettest
+{
+	protected property {get};
+
+	public function has(var key)
+	{
+		return isset this->property[key];
+	}
+
+	public function addValueToProperty(var key, var value)
+	{
+		let this->property[key] = value;
+	}
+
+	public function testUnsetValueFromProperty(var key)
+	{
+		unset(this->property[key]);
+	}
+
+	public function testUnsetFromArray(var arrayParameter)
+	{
+		unset(arrayParameter[0]);
+		return arrayParameter;
+	}
+
+	public function testUnsetFromArrayByIndexVar(var arrayParameter, var index)
+	{
+		unset(arrayParameter[index]);
+		return arrayParameter;
+	}
+
+	public function testUnsetTypedArray(array arr, string key)
+	{
+        unset(arr[key]);
+        return arr;
+	}
+}
+--USAGE--
+$t = new \Stub\Unsettest();
+echo var_export($t->testUnsetFromArray([1, 2, 3, 4, 5, 6]), true), "\n";
+echo var_export($t->testUnsetFromArrayByIndexVar([1, 2, 3, 4, 5, 6], 0), true), "\n";
+echo var_export($t->testUnsetTypedArray(['foo' => 'bar', 'bar' => 'foo'], 'bar'), true), "\n";
+--EXPECT--
+array (
+  1 => 2,
+  2 => 3,
+  3 => 4,
+  4 => 5,
+  5 => 6,
+)
+array (
+  1 => 2,
+  2 => 3,
+  3 => 4,
+  4 => 5,
+  5 => 6,
+)
+array (
+  'foo' => 'bar',
+)
