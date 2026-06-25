@@ -1,0 +1,91 @@
+--TEST--
+Array property: constructor reset, append, and array_shift/unshift loop (port of tests/Extension/Properties/PropertyArrayTest.php, issues #520/#1831)
+--FILE--
+namespace Stub\Properties;
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/520
+ */
+class PropertyArray
+{
+	public someEmptyArray = [];
+
+	public someArray = [1, 2, 3, 4];
+
+	protected otherArray = [];
+
+	public function __construct()
+	{
+		let this->someArray = [1];
+	}
+
+	public function appendSome(var value)
+	{
+		let this->someArray[] = (string) value;
+	}
+
+	public function setOtherArray(arr){
+		let this->otherArray = arr;
+	}
+
+	public function getOtherArray(){
+		return this->otherArray;
+	}
+
+	public function testIssues1831(){
+		var info;
+		var headers;
+
+		let headers = [];
+		while( true ){
+			let info = array_shift(this->otherArray);
+
+			if( stripos(info, "header") !== false ){
+				let headers[] = info;
+				continue;
+			} else {
+				array_unshift(this->otherArray, info);
+				break;
+			}
+		}
+
+		return headers;
+	}
+}
+--USAGE--
+// testAssertations
+$test = new \Stub\Properties\PropertyArray();
+echo var_export($test->someArray, true), "\n";
+$test->appendSome('one');
+echo var_export($test->someArray, true), "\n";
+
+// testIssues1831
+$data = [
+    'header 1',
+    'header 2',
+    'header 3',
+    'data 1',
+    'data 2',
+    'data 3',
+    'data 4',
+    'data 5',
+    'data 6',
+    'data 7',
+    'data 8',
+];
+$test = new \Stub\Properties\PropertyArray();
+$test->setOtherArray($data);
+echo var_export($test->testIssues1831(), true), "\n";
+--EXPECT--
+array (
+  0 => 1,
+)
+array (
+  0 => 1,
+  1 => 'one',
+)
+array (
+  0 => 'header 1',
+  1 => 'header 2',
+  2 => 'header 3',
+)

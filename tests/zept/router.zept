@@ -1,0 +1,1003 @@
+--TEST--
+Router: regex/placeholder route matching resolves controller + action across many URIs (port of tests/Extension/RouterTest.php)
+--FILE--
+namespace Stub;
+
+interface DiInterface
+{
+    public function getShared(value);
+}
+--FILE--
+
+namespace Stub\Router;
+
+class Exception extends \Exception
+{
+
+}
+--FILE--
+
+namespace Stub\Router;
+
+class Route
+{
+	protected _pattern;
+
+	protected _compiledPattern;
+
+	protected _paths;
+
+	protected _methods;
+
+	protected _hostname;
+
+	protected _converters;
+
+	protected _id;
+
+	protected _name;
+
+	protected _beforeMatch;
+
+	public function __construct(pattern, paths=null, httpMethods=null)
+	{
+		// Configure the route (extract parameters, paths, etc)
+		this->reConfigure(pattern, paths);
+
+		// Update the HTTP method constraints
+		let this->_methods = httpMethods;
+	}
+
+	public function compilePattern(pattern)
+	{
+		var idPattern;
+
+		// If a pattern contains ':', maybe there are placeholders to replace
+		if memstr(pattern, ":") {
+
+			// This is a pattern for valid identifiers
+			let idPattern = "/([a-zA-Z0-9\\_\\-]+)";
+
+			// Replace the module part
+			if memstr(pattern, "/:module") {
+				let pattern = str_replace("/:module", idPattern, pattern);
+			}
+
+			// Replace the controller placeholder
+			if memstr(pattern, "/:controller") {
+				let pattern = str_replace("/:controller", idPattern, pattern);
+			}
+
+			// Replace the namespace placeholder
+			if memstr(pattern, "/:namespace") {
+				let pattern = str_replace("/:namespace", idPattern, pattern);
+			}
+
+			// Replace the action placeholder
+			if memstr(pattern, "/:action") {
+				let pattern = str_replace("/:action", idPattern, pattern);
+			}
+
+			// Replace the params placeholder
+			if memstr(pattern, "/:params") {
+				let pattern = str_replace("/:params", "(/.*)*", pattern);
+			}
+
+			// Replace the int placeholder
+			if memstr(pattern, "/:int") {
+				let pattern = str_replace("/:int", "/([0-9]+)", pattern);
+			}
+		}
+
+		// Check if the pattern has parantheses in order to add the regex delimiters
+		if memstr(pattern, "(") {
+			return "#^" . pattern . "$#";
+		}
+
+		// Square brackets are also checked
+		if memstr(pattern, "[") {
+			return "#^" . pattern . "$#";
+		}
+
+		return pattern;
+	}
+
+	public function via(httpMethods)
+	{
+		let this->_methods = httpMethods;
+		return this;
+	}
+
+	public function extractNamedParams(string pattern)
+	{
+
+		char ch;
+		var tmp, matches;
+		boolean notValid = false;
+		int cursor, cursorVar, marker, bracketCount = 0, parenthesesCount = 0, foundPattern = 0;
+		int intermediate = 0, numberMatches = 0;
+		string route, item, variable, regexp;
+
+		if strlen(pattern) <= 0 {
+			return false;
+		}
+
+		let matches = [],
+		route = "";
+
+		for cursor, ch in pattern {
+
+			if parenthesesCount == 0 {
+				if ch == '{' {
+					if bracketCount == 0 {
+						let marker = cursor + 1,
+							intermediate = 0,
+							notValid = false;
+					}
+					let bracketCount++;
+				} else {
+					if ch == '}' {
+						let bracketCount--;
+						if intermediate > 0 {
+							if bracketCount == 0 {
+
+								let numberMatches++,
+									variable = null,
+									regexp = null,
+									item = (string) substr(pattern, marker, cursor - marker);
+
+								for cursorVar, ch in item {
+
+									if ch == '\0' {
+										break;
+									}
+
+									if cursorVar == 0 && !((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+										let notValid = true;
+										break;
+									}
+
+									if (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch >= '0' && ch <='9') || ch == '-' || ch == '_' || ch ==  ':' {
+										if ch == ':' {
+											let variable = (string) substr(item, 0, cursorVar),
+												regexp = (string) substr(item, cursorVar + 1);
+											break;
+										}
+									} else {
+										let notValid = true;
+										break;
+									}
+
+								}
+
+								if !notValid {
+
+									let tmp = numberMatches;
+
+									if variable && regexp {
+
+										let foundPattern = 0;
+										for ch in regexp {
+											if ch == '\0' {
+												break;
+											}
+											if !foundPattern {
+												if ch == '(' {
+													let foundPattern = 1;
+												}
+											} else {
+												if ch == ')' {
+													let foundPattern = 2;
+													break;
+												}
+											}
+										}
+
+										if foundPattern != 2 {
+											let route .= '(',
+												route .= regexp,
+												route .= ')';
+										} else {
+											let route .= regexp;
+										}
+										let matches[variable] = tmp;
+									} else {
+										let route .= "([^/]*)",
+											matches[item] = tmp;
+									}
+								} else {
+									let route .= "{" . item ."}";
+								}
+								continue;
+							}
+						}
+					}
+				}
+			}
+
+			if bracketCount == 0 {
+				if ch == '(' {
+					let parenthesesCount++;
+				} else {
+					if ch == ')' {
+						let parenthesesCount--;
+						if parenthesesCount == 0 {
+							let numberMatches++;
+						}
+					}
+				}
+			}
+
+			if bracketCount > 0 {
+				let intermediate++;
+			} else {
+				let route .= ch;
+			}
+		}
+
+		return [route, matches];
+	}
+
+	public function reConfigure(pattern, paths=null)
+	{
+		var moduleName, controllerName, actionName,
+			parts, routePaths, realClassName, namespaceName,
+			pcrePattern, compiledPattern, extracted;
+
+		if typeof pattern != "string" {
+			throw new Exception("The pattern must be string");
+		}
+
+		if paths !== null {
+			if typeof paths == "string" {
+
+				let moduleName = null,
+					controllerName = null,
+					actionName = null;
+
+				// Explode the short paths using the :: separator
+				let parts = explode("::", paths);
+
+				// Create the array paths dynamically
+				switch count(parts) {
+					case 3:
+						let moduleName = parts[0],
+							controllerName = parts[1],
+							actionName = parts[2];
+						break;
+					case 2:
+						let controllerName = parts[0],
+							actionName = parts[1];
+						break;
+					case 1:
+						let controllerName = parts[0];
+						break;
+				}
+
+				let routePaths = [];
+
+				// Process module name
+				if moduleName !== null {
+					let routePaths["module"] = moduleName;
+				}
+
+				// Process controller name
+				if controllerName !== null {
+
+					// Check if we need to obtain the namespace
+					if memstr(controllerName, "\\") {
+
+						// Extract the real class name from the namespaced class
+						let realClassName = get_class_ns(controllerName);
+
+						// Extract the namespace from the namespaced class
+						let namespaceName = get_ns_class(controllerName);
+
+						// Update the namespace
+						if namespaceName {
+							let routePaths["namespace"] = namespaceName;
+						}
+					} else {
+						let realClassName = controllerName;
+					}
+
+					// Always pass the controller to lowercase
+					let routePaths["controller"] = uncamelize(realClassName);
+				}
+
+				// Process action name
+				if actionName !== null {
+					let routePaths["action"] = actionName;
+				}
+			} else {
+				let routePaths = paths;
+			}
+		} else {
+			let routePaths = [];
+		}
+
+		if typeof routePaths !== "array" {
+			throw new Exception("The route contains invalid paths");
+		}
+
+		// If the route starts with '#' we assume that it is a regular expression
+		if !starts_with(pattern, "#") {
+
+			if memstr(pattern, "{") {
+				// The route has named parameters so we need to extract them
+				let extracted = this->extractNamedParams(pattern),
+					pcrePattern = extracted[0],
+					routePaths = array_merge(routePaths, extracted[1]);
+			} else {
+				let pcrePattern = pattern;
+			}
+
+			// Transform the route's pattern to a regular expression
+			let compiledPattern = this->compilePattern(pcrePattern);
+		} else {
+			let compiledPattern = pattern;
+		}
+
+		// Update the original pattern
+		let this->_pattern = pattern;
+
+		// Update the compiled pattern
+		let this->_compiledPattern = compiledPattern;
+
+		//Update the route's paths
+		let this->_paths = routePaths;
+	}
+
+	public function getName()
+	{
+		return this->_name;
+	}
+
+	public function setName(name)
+	{
+		let this->_name = name;
+		return this;
+	}
+
+	public function beforeMatch(callback)
+	{
+		let this->_beforeMatch = callback;
+		return this;
+	}
+
+	public function getBeforeMatch()
+	{
+		return this->_beforeMatch;
+	}
+
+	public function getRouteId()
+	{
+		return this->_id;
+	}
+
+	public function getPattern()
+	{
+		return this->_pattern;
+	}
+
+	public function getCompiledPattern()
+	{
+		return this->_compiledPattern;
+	}
+
+	public function getPaths()
+	{
+		return this->_paths;
+	}
+
+	public function getReversedPaths()
+	{
+		var reversed, path, position;
+
+		let reversed = [];
+		for path, position in this->_paths {
+			let reversed[position] = path;
+		}
+		return reversed;
+	}
+
+	public function setHttpMethods(httpMethods)
+	{
+		let this->_methods = httpMethods;
+		return this;
+	}
+
+	public function getHttpMethods()
+	{
+		return this->_methods;
+	}
+
+	public function setHostname(hostname)
+	{
+		let this->_hostname = hostname;
+		return this;
+	}
+
+	public function getHostname()
+	{
+		return this->_hostname;
+	}
+
+	public function convert(name, converter)
+	{
+		let this->_converters[name] = converter;
+		return this;
+	}
+
+	public function getConverters()
+	{
+		return this->_converters;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Router
+{
+	protected _dependencyInjector;
+
+	protected _uriSource;
+
+	protected _namespace = null;
+
+	protected _module = null;
+
+	protected _controller = null;
+
+	protected _action = null;
+
+	protected _params;
+
+	protected _routes;
+
+	protected _matchedRoute;
+
+	protected _matches;
+
+	protected _wasMatched = false;
+
+	protected _defaultNamespace;
+
+	protected _defaultModule;
+
+	protected _defaultController;
+
+	protected _defaultAction;
+
+	protected _defaultParams;
+
+	protected _removeExtraSlashes;
+
+	protected _notFoundPaths;
+
+	const URI_SOURCE_GET_URL = 0;
+
+	const URI_SOURCE_SERVER_REQUEST_URI = 1;
+
+	public function __construct(boolean defaultRoutes=true)
+	{
+		var routes;
+
+		let routes = [];
+		if defaultRoutes === true {
+
+			let routes[] = new Router\Route("#^/([a-zA-Z0-9\\_\\-]+)[/]{0,1}$#", [
+				"controller": 1
+			]);
+
+			let routes[] = new Router\Route("#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#", [
+				"controller": 1,
+				"action": 2,
+				"params": 3
+			]);
+		}
+
+		let this->_params = [],
+			this->_routes = routes;
+	}
+
+	public function setDI(<DiInterface> dependencyInjector)
+	{
+		let this->_dependencyInjector = dependencyInjector;
+	}
+
+	public function getDI()
+	{
+		return this->_dependencyInjector;
+	}
+
+	public function getRewriteUri()
+	{
+		var url, urlParts, realUri;
+
+		// By default we use $_GET['url'] to obtain the rewrite information
+		if !this->_uriSource {
+			if fetch url, _GET["_url"] {
+				if !url {
+					return url;
+				}
+			}
+		} else {
+			// Otherwise use the standard $_SERVER['REQUEST_URI']
+		 	if fetch url, _SERVER["REQUEST_URI"] {
+				let urlParts = explode("?", url),
+					realUri = urlParts[0];
+				if !realUri {
+					return realUri;
+				}
+			}
+		}
+		return "/";
+	}
+
+	public function setUriSource(var uriSource)
+	{
+		let this->_uriSource = uriSource;
+		return this;
+	}
+
+	public function removeExtraSlashes(var remove)
+	{
+		let this->_removeExtraSlashes = remove;
+		return this;
+	}
+
+	public function setDefaultNamespace(var namespaceName)
+	{
+		let this->_defaultNamespace = namespaceName;
+		return this;
+	}
+
+	public function setDefaultModule(var moduleName)
+	{
+		let this->_defaultModule = moduleName;
+		return this;
+	}
+
+	public function setDefaultController(controllerName)
+	{
+		let this->_defaultController = controllerName;
+		return this;
+	}
+
+	public function setDefaultAction(actionName)
+	{
+		let this->_defaultAction = actionName;
+		return this;
+	}
+
+	public function setDefaults(defaults)
+	{
+		var namespaceName, module, controller, action, params;
+
+		if typeof defaults !== "array" {
+			throw new Router\Exception("Defaults must be an array");
+		}
+
+		// Set a default namespace
+		if fetch namespaceName, defaults["namespace"] {
+			let this->_defaultNamespace = namespaceName;
+		}
+
+		// Set a default module
+		if fetch module, defaults["module"] {
+			let this->_defaultModule = module;
+		}
+
+		// Set a default controller
+		if fetch controller, defaults["controller"] {
+			let this->_defaultController = controller;
+		}
+
+		// Set a default action
+		if fetch action, defaults["action"] {
+			let this->_defaultAction = action;
+		}
+
+		// Set default parameters
+		if fetch params, defaults["params"] {
+			let this->_defaultParams = params;
+		}
+
+		return this;
+	}
+
+	public function doRemoveExtraSlashes(route)
+	{
+		return route;
+	}
+
+	public function handle(uri=null)
+	{
+		var realUri, request, currentHostName, routeFound, parts,
+			params, matches, notFoundPaths,
+			vnamespace, module,  controller, action, paramsStr, strParams,
+			paramsMerge, route, methods, dependencyInjector,
+			hostname, regexHostName, matched, pattern, handledUri, beforeMatch,
+			paths, converters, part, position, matchPosition;
+
+		if !uri {
+			// If 'uri' isn't passed as parameter it reads _GET['_url']
+			let realUri = this->getRewriteUri();
+		} else {
+			let realUri = uri;
+		}
+
+		// Remove extra slashes in the route
+		if this->_removeExtraSlashes {
+			let handledUri = this->doRemoveExtraSlashes(realUri);
+		} else {
+			let handledUri = realUri;
+		}
+
+		let request = null,
+			currentHostName = null,
+			routeFound = false,
+			parts = [],
+			params = [],
+			matches = null,
+			this->_wasMatched = false,
+			this->_matchedRoute = null;
+
+		// Routes are traversed in reversed order
+		for route in reverse this->_routes {
+
+			// Look for HTTP method constraints
+			let methods = route->getHttpMethods();
+			if methods !== null {
+
+				// Retrieve the request service from the container
+				if request === null {
+
+					let dependencyInjector = <DiInterface> this->_dependencyInjector;
+					if typeof dependencyInjector != "object" {
+						throw new Router\Exception("A dependency injection container is required to access the 'request' service");
+					}
+
+					let request = dependencyInjector->getShared("request");
+				}
+
+				// Check if the current method is allowed by the route
+				if request->isMethod(methods) === false {
+					continue;
+				}
+			}
+
+			// Look for hostname constraints
+			let hostname = route->getHostName();
+			if hostname !== null {
+
+				// Retrieve the request service from the container
+				if request === null {
+
+					let dependencyInjector = this->_dependencyInjector;
+					if typeof dependencyInjector != "object" {
+						throw new Router\Exception("A dependency injection container is required to access the 'request' service");
+					}
+
+					let request = dependencyInjector->getShared("request");
+				}
+
+				// Check if the current hostname is the same as the route
+				if typeof currentHostName != "object" {
+					let currentHostName = request->getHttpHost();
+				}
+
+				// No HTTP_HOST, maybe in CLI mode?
+				if typeof currentHostName != "null" {
+					continue;
+				}
+
+				// Check if the hostname restriction is the same as the current in the route
+				if memstr(hostname, "(") {
+					if memstr(hostname, "#") {
+						let regexHostName = "#^" . hostname . "$#";
+					} else {
+						let regexHostName = hostname;
+					}
+					let matched = preg_match(regexHostName, currentHostName);
+				} else {
+					let matched = currentHostName == hostname;
+				}
+
+				if !matched {
+					continue;
+				}
+
+			}
+
+			// If the route has parentheses use preg_match
+			let pattern = route->getCompiledPattern();
+			if memstr(pattern, "^") {
+				let routeFound = preg_match(pattern, handledUri, matches);
+			} else {
+				let routeFound = pattern == handledUri;
+			}
+
+			// Check for beforeMatch conditions
+			if routeFound {
+
+				let beforeMatch = route->getBeforeMatch();
+				if beforeMatch !== null {
+
+					// Check first if the callback is callable
+					if is_callable(beforeMatch) {
+						throw new Router\Exception("Before-Match callback is not callable in matched route");
+					}
+
+					// Call the function in the PHP userland
+					//let routeFound = {beforeMatch}([handledUri, route, this]);
+				}
+			}
+
+			if routeFound {
+
+				// Start from the default paths
+				let paths = route->getPaths(),
+					parts = paths;
+
+				// Check if the matches has variables
+				if typeof matches == "array" {
+
+					// Get the route converters if any
+					let converters = route->getConverters();
+
+					for part, position in paths {
+
+						if fetch matchPosition, matches[position] {
+
+							// Check if the part has a converter
+							if typeof converters == "array" {
+								if isset converters[part] {
+									continue;
+								}
+							}
+
+							// Update the parts if there is no converter
+							let parts[part] = matchPosition;
+						} else {
+
+							// Apply the converters anyway
+							if typeof converters == "array" {
+								if isset converters[part] {
+								}
+							}
+						}
+					}
+
+					// Update the matches generated by preg_match
+					let this->_matches = matches;
+				}
+
+				let this->_matchedRoute = route;
+				break;
+			}
+		}
+
+		// Update the wasMatched property indicating if the route was matched
+		if routeFound {
+			let this->_wasMatched = true;
+		} else {
+			let this->_wasMatched = false;
+		}
+
+		// The route wasn't found, try to use the not-found paths
+		if !routeFound {
+			let notFoundPaths = this->_notFoundPaths;
+			if notFoundPaths !== null {
+				let parts = notFoundPaths,
+					routeFound = true;
+			}
+		}
+
+		if routeFound {
+
+			// Check for a namespace
+			if fetch vnamespace, parts["namespace"] {
+				if !is_numeric(vnamespace) {
+					let this->_namespace = vnamespace;
+				}
+				unset parts["namespace"];
+			} else {
+				let this->_namespace = this->_defaultNamespace;
+			}
+
+			// Check for a module
+			if fetch module, parts["module"] {
+				if !is_numeric(module) {
+					let this->_module = module;
+				}
+				unset parts["module"];
+			} else {
+				let this->_module = this->_defaultModule;
+			}
+
+			// Check for a controller
+			if fetch controller, parts["controller"] {
+				if !is_numeric(controller) {
+					let this->_controller = controller;
+				}
+				unset parts["controller"];
+			} else {
+				let this->_controller = this->_defaultController;
+			}
+
+			// Check for an action
+			if fetch action, parts["action"] {
+				if !is_numeric(action) {
+					let this->_action = action;
+				}
+				unset parts["action"];
+			} else {
+				let this->_action = this->_defaultAction;
+			}
+
+			// Check for parameters
+			if fetch paramsStr, parts["params"] {
+				let strParams = substr(paramsStr, 1);
+				if (strParams) {
+					let params = explode("/", strParams);
+				}
+				unset parts["params"];
+			}
+
+			if count(params) {
+				let paramsMerge = array_merge(params, parts);
+			} else {
+				let paramsMerge = parts;
+			}
+
+			let this->_params = paramsMerge;
+
+		} else {
+
+			// Use default values if the route hasn't matched
+			let this->_namespace = this->_defaultNamespace,
+				this->_module = this->_defaultModule,
+				this->_controller = this->_defaultController,
+				this->_action = this->_defaultAction,
+				this->_params = this->_defaultParams;
+		}
+	}
+
+	public function add(pattern, paths=null, httpMethods=null)
+	{
+		var route;
+
+		// Every route is internally stored as a Stub\Router\Route
+		let route = new Router\Route(pattern, paths, httpMethods),
+			this->_routes[] = route;
+		return route;
+	}
+
+	public function clear()
+	{
+		let this->_routes = [];
+	}
+
+	public function getNamespaceName()
+	{
+		return this->_namespace;
+	}
+
+	public function getModuleName()
+	{
+		return this->_module;
+	}
+
+	public function getControllerName()
+	{
+		return this->_controller;
+	}
+
+	public function getActionName()
+	{
+		return this->_action;
+	}
+
+	public function getParams()
+	{
+		return this->_params;
+	}
+
+	public function getMatchedRoute()
+	{
+		return this->_matchedRoute;
+	}
+
+	public function getMatches()
+	{
+		return this->_matches;
+	}
+
+	public function wasMatched()
+	{
+		return this->_wasMatched;
+	}
+
+	public function getRoutes()
+	{
+		return this->_routes;
+	}
+}
+--USAGE--
+$tests = [
+    ['uri' => '',                                                       'controller' => 'index',         'action' => 'index'],
+    ['uri' => '/',                                                      'controller' => 'index',         'action' => 'index'],
+    ['uri' => '/documentation/index/hellao/aaadpqñda/bbbAdld/cc-ccc',   'controller' => 'documentation', 'action' => 'index'],
+    ['uri' => '/documentation/index/',                                 'controller' => 'documentation', 'action' => 'index'],
+    ['uri' => '/documentation/index',                                  'controller' => 'documentation', 'action' => 'index'],
+    ['uri' => '/documentation/',                                       'controller' => 'documentation', 'action' => null],
+    ['uri' => '/documentation',                                        'controller' => 'documentation', 'action' => null],
+    ['uri' => '/system/admin/a/edit/hellao/aaadp',                     'controller' => 'admin',         'action' => 'edit'],
+    ['uri' => '/es/news',                                              'controller' => 'news',          'action' => 'index'],
+    ['uri' => '/admin/posts/edit/100',                                 'controller' => 'posts',         'action' => 'edit'],
+    ['uri' => '/posts/2010/02/10/title/content',                       'controller' => 'posts',         'action' => 'show'],
+    ['uri' => '/manual/en/translate.adapter.html',                     'controller' => 'manual',        'action' => 'show'],
+    ['uri' => '/named-manual/en/translate.adapter.html',               'controller' => 'manual',        'action' => 'show'],
+    ['uri' => '/posts/1999/s/le-nice-title',                           'controller' => 'posts',         'action' => 'show'],
+    ['uri' => '/feed/fr/blog/diaporema.json',                          'controller' => 'feed',          'action' => 'get'],
+    ['uri' => '/posts/delete/150',                                     'controller' => 'posts',         'action' => 'delete'],
+    ['uri' => '/very/static/route',                                    'controller' => 'static',        'action' => 'route'],
+];
+
+$router = new \Stub\Router();
+
+$router->add('/', ['controller' => 'index', 'action' => 'index']);
+$router->add('/system/:controller/a/:action/:params', ['controller' => 1, 'action' => 2, 'params' => 3]);
+$router->add('/([a-z]{2})/:controller', ['controller' => 2, 'action' => 'index', 'language' => 1]);
+$router->add('/admin/:controller/:action/:int', ['controller' => 1, 'action' => 2, 'id' => 3]);
+$router->add('/posts/([0-9]{4})/([0-9]{2})/([0-9]{2})/:params', ['controller' => 'posts', 'action' => 'show', 'year' => 1, 'month' => 2, 'day' => 3, 'params' => 4]);
+$router->add('/manual/([a-z]{2})/([a-z\.]+)\.html', ['controller' => 'manual', 'action' => 'show', 'language' => 1, 'file' => 2]);
+$router->add('/named-manual/{language:([a-z]{2})}/{file:[a-z\.]+}\.html', ['controller' => 'manual', 'action' => 'show']);
+$router->add('/very/static/route', ['controller' => 'static', 'action' => 'route']);
+$router->add("/feed/{lang:[a-z]+}/blog/{blog:[a-z\-]+}\.{type:[a-z\-]+}", 'Feed::get');
+$router->add("/posts/{year:[0-9]+}/s/{title:[a-z\-]+}", 'Posts::show');
+$router->add('/posts/delete/{id}', 'Posts::delete');
+$router->add("/show/{id:video([0-9]+)}/{title:[a-z\-]+}", 'Videos::show');
+
+foreach ($tests as $test) {
+    $router->handle($test['uri']);
+    echo var_export($router->getControllerName(), true), "\n";
+    echo var_export($router->getActionName(), true), "\n";
+}
+--EXPECT--
+'index'
+'index'
+'index'
+'index'
+'documentation'
+'index'
+'documentation'
+'index'
+'documentation'
+'index'
+'documentation'
+NULL
+'documentation'
+NULL
+'admin'
+'edit'
+'news'
+'index'
+'posts'
+'edit'
+'posts'
+'show'
+'manual'
+'show'
+'manual'
+'show'
+'posts'
+'show'
+'feed'
+'get'
+'posts'
+'delete'
+'static'
+'route'

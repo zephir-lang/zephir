@@ -1,0 +1,39 @@
+--TEST--
+Issue #2543: a {get,set} shortcut with a typed docblock (@var int $name) compiles and the generated accessors use the type, not the variable name
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2543
+ */
+class Issue2543
+{
+    /** @var int $varIntPositive */
+    public varIntPositive = 10 { get, set };
+
+    /** @var string|null $label */
+    public label = null { get, set };
+}
+--USAGE--
+use Stub\Issue2543;
+
+// testShortcutsWithTypedDocblockWork
+$object = new Issue2543();
+$object->setVarIntPositive(42);
+echo var_export($object->getVarIntPositive(), true), "\n";
+$object->setLabel('hello');
+echo var_export($object->getLabel(), true), "\n";
+
+// testGeneratedAccessorsUseTheTypeNotTheVariableName
+$setter = new ReflectionMethod(Issue2543::class, 'setVarIntPositive');
+$param  = $setter->getParameters()[0];
+echo var_export($param->hasType(), true), "\n";
+echo var_export((string) $param->getType(), true), "\n";
+$getter = new ReflectionMethod(Issue2543::class, 'getVarIntPositive');
+echo var_export((string) $getter->getReturnType(), true), "\n";
+--EXPECT--
+42
+'hello'
+true
+'int'
+'int'

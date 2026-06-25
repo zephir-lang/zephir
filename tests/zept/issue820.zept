@@ -1,0 +1,56 @@
+--TEST--
+Issue #820: for k,v in iterator(non-Iterator) throws TypeError (not a segfault); real iterators work (port of tests/Extension/Issue820Test.php)
+--FILE--
+namespace Stub;
+
+class Issue820
+{
+    public static function testIterator(var obj)
+    {
+        var k, v, arr = [];
+
+        for k, v in iterator(obj) {
+            let arr[k] = v;
+        }
+
+        return arr;
+    }
+}
+--USAGE--
+use Stub\Issue820;
+
+// Non-Iterator inputs must throw TypeError, not segfault.
+foreach ([(object)['prop0' => 0, 'prop1' => 1, 'prop2' => 2], ['a' => 1, 'b' => 2], 42] as $bad) {
+    try {
+        Issue820::testIterator($bad);
+        echo "no-throw\n";
+    } catch (\Throwable $e) {
+        echo var_export($e instanceof \TypeError, true), "\n";
+    }
+}
+
+// Iterator implementor works.
+$iter = new \ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]);
+var_export(Issue820::testIterator($iter)); echo "\n";
+
+// IteratorAggregate implementor works.
+$agg = new class implements \IteratorAggregate {
+    public function getIterator(): \ArrayIterator
+    {
+        return new \ArrayIterator(['x' => 10, 'y' => 20]);
+    }
+};
+var_export(Issue820::testIterator($agg)); echo "\n";
+--EXPECT--
+true
+true
+true
+array (
+  'a' => 1,
+  'b' => 2,
+  'c' => 3,
+)
+array (
+  'x' => 10,
+  'y' => 20,
+)

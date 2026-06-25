@@ -1,0 +1,77 @@
+--TEST--
+Issue #2030: double-quoted escape sequences (\e, \u{...}, \xHH) match PHP byte-for-byte (port of tests/Extension/Issue2030Test.php)
+--FILE--
+namespace Stub;
+
+/**
+ * Double-quoted string escape sequences must match PHP byte-for-byte.
+ *
+ * @issue https://github.com/zephir-lang/zephir/issues/2030
+ */
+class Issue2030
+{
+	public function escapeChar() -> string
+	{
+		return "\e[0;31m";
+	}
+
+	public function unicodeAscii() -> string
+	{
+		return "\u{41}";
+	}
+
+	public function unicode2Byte() -> string
+	{
+		return "\u{E9}";
+	}
+
+	public function unicode3Byte() -> string
+	{
+		return "\u{20AC}";
+	}
+
+	public function unicode4Byte() -> string
+	{
+		return "\u{1F600}";
+	}
+
+	public function hexFollowedByHex() -> string
+	{
+		return "\x41BC";
+	}
+
+	public function maxCodepoint() -> string
+	{
+		return "\u{10FFFF}";
+	}
+
+	public function quotesAndBackslashes() -> string
+	{
+		return "a\"b\\c\u{1F4A9}";
+	}
+}
+--USAGE--
+$test = new \Stub\Issue2030();
+
+// Compare Zephir's compiled output against PHP's own evaluation of the same
+// escape sequences, so the assertions stay as clean booleans (no raw control
+// bytes / multibyte literals embedded in --EXPECT--).
+echo var_export($test->escapeChar()           === "\e[0;31m", true), "\n";
+echo var_export($test->unicodeAscii()         === "\u{41}", true), "\n";
+echo var_export($test->unicode2Byte()         === "\u{E9}", true), "\n";
+echo var_export($test->unicode3Byte()         === "\u{20AC}", true), "\n";
+echo var_export($test->unicode4Byte()         === "\u{1F600}", true), "\n";
+echo var_export($test->hexFollowedByHex()     === "\x41BC", true), "\n";
+echo var_export($test->hexFollowedByHex()     === 'ABC', true), "\n";
+echo var_export($test->maxCodepoint()         === "\u{10FFFF}", true), "\n";
+echo var_export($test->quotesAndBackslashes() === "a\"b\\c\u{1F4A9}", true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true
+true
+true
+true

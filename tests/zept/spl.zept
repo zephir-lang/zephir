@@ -1,0 +1,22 @@
+--TEST--
+Spl: static method returns a \SplFileObject built from a path argument (issue #1212, port of tests/Extension/SplTest.php)
+--FILE--
+namespace Stub;
+
+class Spl
+{
+    public static function issue1212(string file)
+    {
+        return new \SplFileObject(file);
+    }
+}
+--USAGE--
+$path = tempnam(sys_get_temp_dir(), 'spl');
+file_put_contents($path, "<?php\n");
+
+$result = \Stub\Spl::issue1212($path);
+echo var_export($result instanceof \SplFileObject, true), "\n";
+
+unlink($path);
+--EXPECT--
+true

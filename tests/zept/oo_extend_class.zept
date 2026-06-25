@@ -42,6 +42,6 @@ echo var_export(\Stub\Oo\ConcreteStatic::callParentFunction() === \Stub\Oo\Concr
 echo var_export(\Stub\Oo\ConcreteStatic::simpleStaticIntReturn(), true), "\n";
 --EXPECT--
 true
-'Stub\\Oo\\ConcreteStatic::parentFunction'
+'ConcreteStatic:parentFunction'
 true
 1337

@@ -1,0 +1,126 @@
+--TEST--
+Requires: require returning a value, require with define() side-effect, require via new symbol table ($this bound), template render with injected vars, and require_once semantics (port of tests/Extension/RequiresTest.php; phar sub-test dropped — not buildable self-contained)
+--FILE--
+namespace Stub\Requires;
+
+class External3
+{
+	protected someVariable;
+
+	public function req(var path, var requires) -> void
+	{
+		ob_clean();
+		require path;
+		requires->setContent(ob_get_contents());
+	}
+}
+--FILE--
+namespace Stub;
+
+use Stub\Requires\External3;
+
+class Requires
+{
+	protected content;
+
+	public function requireExternal1(var path) -> var
+	{
+		return require path;
+	}
+
+	public function requireExternal3(var path) -> var
+	{
+		var external3;
+
+		create_symbol_table();
+
+		let external3 = new External3();
+		external3->req(path, this);
+		return this->content;
+	}
+
+	public function setContent(var content) -> void
+	{
+		let this->content = content;
+	}
+
+	public function renderTemplate(string! templatePath, var params) -> var
+	{
+		create_symbol_table();
+
+		var key, value;
+
+		if typeof params == "array" {
+			for key, value in params {
+				let {key} = value;
+			}
+		}
+
+		return require templatePath;
+	}
+
+	public function requireOnce(string path) -> var
+	{
+	    return require_once path;
+	}
+}
+--USAGE--
+$dir = sys_get_temp_dir() . '/zept-requires-' . getmypid();
+@mkdir($dir, 0777, true);
+
+file_put_contents($dir . '/require-me-1.php', "<?php\nreturn [1, 2, 3];\n");
+file_put_contents($dir . '/require-me-2.php', "<?php\ndefine('REQUIRE_ME', 32);\n");
+file_put_contents($dir . '/require-me-3.php', "<?php\n\$this->someVariable['test'] = 'test';\necho \$this->someVariable['test'];\n");
+file_put_contents($dir . '/template.php', "<?php\nreturn \$a;\n");
+file_put_contents($dir . '/require-me-before-once.php', "<?php\nreturn [1, 2, 3];\n");
+file_put_contents($dir . '/require-me-once.php', "<?php\nconst REQUIRE_ONCE_ME = 43;\n");
+
+$test = new \Stub\Requires();
+
+// require returns the file's return value
+echo var_export($test->requireExternal1($dir . '/require-me-1.php'), true), "\n";
+
+// require executes side-effects (define) in the caller
+echo var_export(defined('REQUIRE_ME'), true), "\n";
+$test->requireExternal1($dir . '/require-me-2.php');
+echo var_export(defined('REQUIRE_ME'), true), "\n";
+
+// require through a new symbol table binds $this to the requiring object.
+// The stub's ob_clean()/ob_get_contents() needs an active output buffer, so
+// wrap the call exactly like the original PHPUnit test does.
+ob_start();
+$external3 = $test->requireExternal3($dir . '/require-me-3.php');
+ob_end_clean();
+echo var_export($external3, true), "\n";
+
+// template render with an injected variable
+echo var_export($test->renderTemplate($dir . '/template.php', ['a' => 2]), true), "\n";
+
+// require_once returns the value on first include, true when already included
+echo var_export($test->requireOnce($dir . '/require-me-before-once.php'), true), "\n";
+echo var_export($test->requireOnce($dir . '/require-me-before-once.php'), true), "\n";
+
+echo var_export(defined('REQUIRE_ONCE_ME'), true), "\n";
+$test->requireOnce($dir . '/require-me-once.php');
+echo var_export(defined('REQUIRE_ONCE_ME'), true), "\n";
+
+array_map('unlink', glob($dir . '/*.php'));
+@rmdir($dir);
+--EXPECT--
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+false
+true
+'test'
+2
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+true
+false
+true

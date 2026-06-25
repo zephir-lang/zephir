@@ -1,0 +1,42 @@
+--TEST--
+Issue #1790: assigning a non-constant bool expression to a dynamic property compiles and evaluates at runtime (port of tests/Extension/Issue1790Test.php)
+--FILE--
+namespace Stub;
+
+/**
+ * Assigning a non-constant boolean expression to a dynamic property used to
+ * fail to compile with a cryptic "?" error.
+ *
+ * @issue https://github.com/zephir-lang/zephir/issues/1790
+ */
+class Issue1790
+{
+	public flag;
+
+	public function setStringProp(var value)
+	{
+		let this->{"flag"} = value > 5;
+	}
+
+	public function setVariableProp(var key, var value)
+	{
+		let this->{key} = value > 5;
+	}
+}
+--USAGE--
+$test = new \Stub\Issue1790();
+
+$test->setStringProp(10);
+echo var_export($test->flag, true), "\n";
+$test->setStringProp(3);
+echo var_export($test->flag, true), "\n";
+
+$test->setVariableProp('flag', 10);
+echo var_export($test->flag, true), "\n";
+$test->setVariableProp('flag', 1);
+echo var_export($test->flag, true), "\n";
+--EXPECT--
+true
+false
+true
+false

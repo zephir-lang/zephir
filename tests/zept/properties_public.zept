@@ -1,0 +1,86 @@
+--TEST--
+Public property defaults/arrays, dynamic-string property read (#394), and inherited {set,get} array (#537) (port of tests/Extension/Properties/PublicPropertiesTest.php)
+--FILE--
+namespace Stub\Properties;
+
+class PublicProperties
+{
+    const TEST_CONST = 123;
+
+	public someNull;
+	public someNullInitial = null;
+	public someFalse = false;
+	public someTrue = true;
+	public someInteger = 10;
+	public someDouble = 10.25;
+	public someString = "test";
+	public someEmptyArray = [];
+	public someArray = [1, 2, 3, 4];
+
+	protected someArrayWithSpecifyKeys = ["a": "A", "b": "B", "c": "C"];
+
+	protected someArrayWithSubArray = [
+		"success": ["class": "alert alert-success"],
+		"info": ["class": "alert alert-info"],
+		"warning": ["class": "alert alert-warning"],
+		"danger": ["class": "alert alert-danger"]
+	];
+
+	protected someGetterSetterArray = [] { set, get };
+
+	public testPropertyFromSelfConstantValue = self::TEST_CONST;
+
+	public testPropertyFromClassNameConstantValue = PublicProperties::TEST_CONST;
+
+    public function test394Issue()
+    {
+		return this->{"someTrue"};
+    }
+}
+--FILE--
+namespace Stub\Properties;
+
+class ExtendsPublicProperties extends PublicProperties
+{
+	public testPropertyFromClassNameConstantValue = PublicProperties::TEST_CONST;
+
+	protected someGetterSetterArray = ["holy"];
+}
+--USAGE--
+// testAssertations
+$test = new \Stub\Properties\PublicProperties();
+echo var_export($test->someNull, true), "\n";
+echo var_export($test->someNullInitial, true), "\n";
+echo var_export($test->someFalse, true), "\n";
+echo var_export($test->someTrue, true), "\n";
+echo var_export($test->someInteger, true), "\n";
+echo var_export($test->someDouble, true), "\n";
+echo var_export($test->someString, true), "\n";
+echo var_export(is_array($test->someEmptyArray), true), "\n";
+echo var_export($test->someArray, true), "\n";
+
+// test394Issue
+echo var_export($test->test394Issue(), true), "\n";
+
+// test537Issue (inherited {set,get} array, issue #537)
+$ext = new \Stub\Properties\ExtendsPublicProperties();
+echo var_export($ext->getSomeGetterSetterArray(), true), "\n";
+--EXPECT--
+NULL
+NULL
+false
+true
+10
+10.25
+'test'
+true
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+)
+true
+array (
+  0 => 'holy',
+)

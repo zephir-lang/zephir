@@ -1,0 +1,34 @@
+--TEST--
+Issue #1628: a concrete subclass implementing the inherited abstract method compiles and runs (port of tests/Extension/Issue1628Test.php)
+--FILE--
+namespace Stub;
+
+abstract class Issue1628Abstract
+{
+    public function concrete() -> string
+    {
+        return "concrete";
+    }
+
+    abstract public function mustImplement() -> string;
+}
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1628
+ */
+class Issue1628 extends Issue1628Abstract
+{
+    public function mustImplement() -> string
+    {
+        return "implemented";
+    }
+}
+--USAGE--
+$object = new \Stub\Issue1628();
+echo var_export($object->mustImplement(), true), "\n";
+echo var_export($object->concrete(), true), "\n";
+--EXPECT--
+'implemented'
+'concrete'

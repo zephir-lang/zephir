@@ -1,0 +1,51 @@
+--TEST--
+Issue #2063: concat-assign (.=) on an object property appends instead of overwriting (port of tests/Extension/Issue2063Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2063
+{
+    private store = "";
+
+    public function add(string value) -> void
+    {
+        let this->store .= value;
+    }
+
+    public function add2(string value) -> void
+    {
+        let this->store = this->store . value;
+    }
+
+    public function addLiteral() -> void
+    {
+        let this->store .= "ab";
+        let this->store .= "cd";
+    }
+
+    public function get() -> string
+    {
+        return this->store;
+    }
+}
+--USAGE--
+$test = new \Stub\Issue2063();
+echo var_export($test->get(), true), "\n";
+$test->add('phalcon');
+$test->add(' framework');
+echo var_export($test->get(), true), "\n";
+
+$test2 = new \Stub\Issue2063();
+$test2->add2('phalcon');
+$test2->add2(' framework');
+echo var_export($test2->get(), true), "\n";
+
+$test3 = new \Stub\Issue2063();
+$test3->addLiteral();
+$test3->addLiteral();
+echo var_export($test3->get(), true), "\n";
+--EXPECT--
+''
+'phalcon framework'
+'phalcon framework'
+'abcdabcd'

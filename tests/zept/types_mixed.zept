@@ -206,7 +206,7 @@ array (
 true
 NULL
 array (
-  0 =>
+  0 => 
   array (
   ),
   1 => 'mixed string',
@@ -230,7 +230,7 @@ array (
 array (
   0 => 1337,
   1 => 'array',
-  2 =>
+  2 => 
   array (
   ),
 )

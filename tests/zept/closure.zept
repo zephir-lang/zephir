@@ -1,0 +1,292 @@
+--TEST--
+Closures: use() capture, closure-this property access/write (#2497/#1873), string capture (#2562), and private/protected callbacks via closure wrappers (#2321) (port of tests/Extension/ClosureTest.php)
+--FILE--
+namespace Stub;
+
+class Closures
+{
+    protected _argument;
+    protected _function;
+    protected _name = "default";
+    protected property1873 = "call from closure";
+
+	public function testUseCommand()
+	{
+		var abc = 1;
+		return function() use (abc) {
+			return abc + 1;
+		};
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/642
+     */
+	public function issue642()
+	{
+        var obj, closure;
+
+        let obj = new \stdClass();
+        let closure = function(config) { return config; };
+
+        return call_user_func_array(closure, [obj]);
+	}
+
+	public function issue1036SetArgument(var argument)
+	{
+	    let this->_argument = argument;
+	}
+
+	public function issue1036SetFunction(callable func)
+	{
+	    let this->_function = func;
+	}
+
+	public function issue1036Call()
+	{
+	    return call_user_func(this->_function, this->_argument);
+	}
+
+    public function issue2497Helper() -> string
+    {
+        return "hello";
+    }
+
+    public function issue2497ClosureThis() -> <\Closure>
+    {
+        return function() {
+            return this->issue2497Helper();
+        };
+    }
+
+    public function issue2497ClosureThisWithUse(var name) -> <\Closure>
+    {
+        return function() use (name) {
+            return this->issue2497Helper() . ":" . name;
+        };
+    }
+
+    public function issue2497PropertyAccess() -> <\Closure>
+    {
+        return function() {
+            return this->_name;
+        };
+    }
+
+    public function issue2497SetName(string name) -> void
+    {
+        let this->_name = name;
+    }
+
+    public function issue1873() -> <\Closure>
+    {
+        return function () {
+            return this->property1873;
+        };
+    }
+
+    public function issue1873ArrayProperty() -> <\Closure>
+    {
+        return function () {
+            return this->_argument;
+        };
+    }
+
+    public function issue1873MultipleProperties() -> <\Closure>
+    {
+        return function () {
+            return this->_name . ":" . this->property1873;
+        };
+    }
+
+    public function issue1873PropertyWriter() -> <\Closure>
+    {
+        return function (string value) {
+            let this->_name = value;
+        };
+    }
+
+    public function issue1873PropertyAndUse(var prefix) -> <\Closure>
+    {
+        return function () use (prefix) {
+            return prefix . ":" . this->property1873;
+        };
+    }
+
+    public function issue2562StringUse(string name) -> <\Closure>
+    {
+        return function () use (name) {
+            return this->issue2497Helper() . ":" . name;
+        };
+    }
+
+    public function issue2321CallPrivateCallback(string value) -> string
+    {
+        return this->issue2321filterQuery(value);
+    }
+
+    private function issue2321filterQuery(string value) -> string
+    {
+        return preg_replace_callback(
+            "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u",
+            function (array matches) {
+                return this->issue2321doUrlEncode(matches);
+            },
+            value
+        );
+    }
+
+    private function issue2321doUrlEncode(array matches) -> string
+    {
+        return rawurlencode(matches[0]);
+    }
+
+    public function issue2321ProtectedCallback(string value) -> string
+    {
+        return preg_replace_callback(
+            "/[a-z]/",
+            function (array matches) {
+                return this->issue2321ProtectedUpper(matches);
+            },
+            value
+        );
+    }
+
+    protected function issue2321ProtectedUpper(array matches) -> string
+    {
+        return strtoupper(matches[0]);
+    }
+
+    public function issue2321ArrayMapPrivate(array values) -> array
+    {
+        return array_map(
+            function (val) {
+                return this->issue2321Doubled(val);
+            },
+            values
+        );
+    }
+
+    private function issue2321Doubled(int val) -> int
+    {
+        return val * 2;
+    }
+}
+--USAGE--
+use Stub\Closures;
+
+// testUseCommand
+$test = new Closures();
+echo var_export($test->testUseCommand()(), true), "\n";
+echo var_export($test->issue642() instanceof \stdClass, true), "\n";
+
+// testIssue1036
+$test = new Closures();
+$test->issue1036SetArgument(true);
+$test->issue1036SetFunction(fn ($argument) => $argument);
+echo var_export($test->issue1036Call(), true), "\n";
+
+// testIssue2497ClosureThis
+$test = new Closures();
+$closure = $test->issue2497ClosureThis();
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+// testIssue2497ClosureThisWithUse
+$test = new Closures();
+$closure = $test->issue2497ClosureThisWithUse('world');
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+// testIssue2497PropertyAccess
+$test = new Closures();
+$closure = $test->issue2497PropertyAccess();
+echo var_export($closure(), true), "\n";
+$test->issue2497SetName('custom');
+$closure2 = $test->issue2497PropertyAccess();
+echo var_export($closure2(), true), "\n";
+
+// testIssue1873ClosureUsesProperty
+$test = new Closures();
+$closure = $test->issue1873();
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+// testIssue1873ClosureReadsArrayProperty
+$test = new Closures();
+$test->issue1036SetArgument(['a', 'b', 'c']);
+$closure = $test->issue1873ArrayProperty();
+echo var_export($closure(), true), "\n";
+
+// testIssue1873ClosureReadsMultipleProperties
+$test = new Closures();
+$test->issue2497SetName('Hello');
+$closure = $test->issue1873MultipleProperties();
+echo var_export($closure(), true), "\n";
+
+// testIssue1873ClosureWritesProperty
+$test = new Closures();
+$test->issue2497SetName('initial');
+$writer = $test->issue1873PropertyWriter();
+$writer('mutated');
+$reader = $test->issue2497PropertyAccess();
+echo var_export($reader(), true), "\n";
+
+// testIssue1873PropertyAndUseCompose
+$test = new Closures();
+$closure = $test->issue1873PropertyAndUse('prefix');
+echo var_export($closure(), true), "\n";
+
+// testIssue2562StringUse
+$test = new Closures();
+$closure = $test->issue2562StringUse('world');
+echo var_export($closure instanceof \Closure, true), "\n";
+echo var_export($closure(), true), "\n";
+
+// testIssue2321PrivateCallback
+$test = new Closures();
+echo var_export($test->issue2321CallPrivateCallback('hello'), true), "\n";
+
+// testIssue2321PrivateCallbackInvoked
+$test = new Closures();
+echo var_export($test->issue2321CallPrivateCallback('hello world'), true), "\n";
+echo var_export($test->issue2321CallPrivateCallback('ålcó'), true), "\n";
+
+// testIssue2321ProtectedCallback
+$test = new Closures();
+echo var_export($test->issue2321ProtectedCallback('hello123'), true), "\n";
+
+// testIssue2321ArrayMapPrivateCallback
+$test = new Closures();
+echo var_export($test->issue2321ArrayMapPrivate([1, 2, 3, 4]), true), "\n";
+--EXPECT--
+2
+true
+true
+true
+'hello'
+true
+'hello:world'
+'default'
+'custom'
+true
+'call from closure'
+array (
+  0 => 'a',
+  1 => 'b',
+  2 => 'c',
+)
+'Hello:call from closure'
+'mutated'
+'prefix:call from closure'
+true
+'hello:world'
+'hello'
+'hello%20world'
+'%C3%A5lc%C3%B3'
+'HELLO123'
+array (
+  0 => 2,
+  1 => 4,
+  2 => 6,
+  3 => 8,
+)

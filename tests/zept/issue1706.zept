@@ -1,0 +1,69 @@
+--TEST--
+Issue #1706: an exhaustive switch (default on every path) satisfies the return-type hint; switch-with-throw works (port of tests/Extension/Issue1706Test.php)
+--FILE--
+namespace Stub;
+
+/**
+ * Issue #1706: a switch that has a `default` clause and returns on every
+ * path is exhaustive and must satisfy the return-type hint.
+ */
+class Issue1706
+{
+    public function testSwitch() -> int
+    {
+        var a;
+        let a = 1;
+
+        switch a {
+            case 1:
+            default:
+                return 1;
+            case 2:
+                return 2;
+        }
+    }
+
+    public function switchDefaultLast(int a) -> int
+    {
+        switch a {
+            case 1:
+                return 10;
+            case 2:
+                return 20;
+            default:
+                return 0;
+        }
+    }
+
+    public function switchWithThrow(int a) -> string
+    {
+        switch a {
+            case 1:
+                return "one";
+            default:
+                throw new \Exception("bad");
+        }
+    }
+}
+--USAGE--
+$test = new \Stub\Issue1706();
+
+echo var_export($test->testSwitch(), true), "\n";
+echo var_export($test->switchDefaultLast(1), true), "\n";
+echo var_export($test->switchDefaultLast(2), true), "\n";
+echo var_export($test->switchDefaultLast(99), true), "\n";
+echo var_export($test->switchWithThrow(1), true), "\n";
+
+try {
+    $test->switchWithThrow(2);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Exception, true), "\n";
+}
+--EXPECT--
+1
+10
+20
+0
+'one'
+true

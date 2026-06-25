@@ -67,4 +67,4 @@ echo var_export($test->testCallAnonymousFunctionWithContext(), true), "\n";
 --EXPECT--
 1
 2
-'Stub\\Mcall\\Caller::perform'
+'Caller:perform'

@@ -1,0 +1,28 @@
+--TEST--
+get_object_vars returns all-visibility properties of $this (port of tests/Extension/Properties/GetObjectVarsTest.php, issue #1245)
+--FILE--
+namespace Stub\Properties;
+
+class GetObjectVars
+{
+    public    a = 1;
+    protected b = 2;
+    private   c = 3;
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1245
+     */
+    public function issue1245() -> array
+    {
+        return get_object_vars(this);
+    }
+}
+--USAGE--
+$test = new \Stub\Properties\GetObjectVars();
+echo var_export($test->issue1245(), true), "\n";
+--EXPECT--
+array (
+  'a' => 1,
+  'b' => 2,
+  'c' => 3,
+)

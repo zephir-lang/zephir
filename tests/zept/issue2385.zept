@@ -1,0 +1,113 @@
+--TEST--
+Issue #2385: isset() on object properties and array offsets returns false for null values (matching PHP), not only for missing keys (port of tests/Extension/Issue2385Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2385
+{
+    public declaredOnly;
+    public assignedNull;
+    public assignedValue;
+
+    public function __construct()
+    {
+        let this->assignedNull = null;
+        let this->assignedValue = "set";
+    }
+
+    public function checkDeclaredOnly() -> bool
+    {
+        return isset(this->declaredOnly);
+    }
+
+    public function checkAssignedNull() -> bool
+    {
+        return isset(this->assignedNull);
+    }
+
+    public function checkAssignedValue() -> bool
+    {
+        return isset(this->assignedValue);
+    }
+
+    public function checkDynamicKeyNull(string key) -> bool
+    {
+        return isset(this->{key});
+    }
+
+    public function checkArrayKeyNull() -> bool
+    {
+        var arr;
+        let arr = ["a": null];
+        return isset(arr["a"]);
+    }
+
+    public function checkArrayKeyValue() -> bool
+    {
+        var arr;
+        let arr = ["a": "v"];
+        return isset(arr["a"]);
+    }
+
+    public function checkArrayKeyMissing() -> bool
+    {
+        var arr;
+        let arr = ["b": "v"];
+        return isset(arr["a"]);
+    }
+
+    public function checkArrayLongKeyNull() -> bool
+    {
+        var arr;
+        let arr = [0: null];
+        return isset(arr[0]);
+    }
+
+    public function checkArrayLongKeyValue() -> bool
+    {
+        var arr;
+        let arr = [0: "v"];
+        return isset(arr[0]);
+    }
+
+    public function checkArrayVarKeyNull(var key) -> bool
+    {
+        var arr;
+        let arr = ["a": null];
+        return isset(arr[key]);
+    }
+
+    public function checkArrayVarKeyValue(var key) -> bool
+    {
+        var arr;
+        let arr = ["a": "v"];
+        return isset(arr[key]);
+    }
+}
+--USAGE--
+$sut = new \Stub\Issue2385();
+echo var_export($sut->checkDeclaredOnly(), true), "\n";
+echo var_export($sut->checkAssignedNull(), true), "\n";
+echo var_export($sut->checkAssignedValue(), true), "\n";
+echo var_export($sut->checkDynamicKeyNull('assignedNull'), true), "\n";
+echo var_export($sut->checkDynamicKeyNull('assignedValue'), true), "\n";
+echo var_export($sut->checkArrayKeyNull(), true), "\n";
+echo var_export($sut->checkArrayKeyValue(), true), "\n";
+echo var_export($sut->checkArrayKeyMissing(), true), "\n";
+echo var_export($sut->checkArrayLongKeyNull(), true), "\n";
+echo var_export($sut->checkArrayLongKeyValue(), true), "\n";
+echo var_export($sut->checkArrayVarKeyNull('a'), true), "\n";
+echo var_export($sut->checkArrayVarKeyValue('a'), true), "\n";
+--EXPECT--
+false
+false
+true
+false
+true
+false
+true
+false
+false
+true
+false
+true

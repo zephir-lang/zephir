@@ -1,0 +1,58 @@
+--TEST--
+Constant parameter default (#2566): class-constant defaults (self::CONST) are folded into arg_info and readable via Reflection (port of tests/Extension/ConstantParameterDefaultTest.php)
+--FILE--
+namespace Stub;
+
+class ConstantParameterDefault
+{
+    const DEFAULT_CIPHER = "aes-256-cfb";
+    const DEFAULT_ROUNDS = 12;
+
+    protected cipher;
+    protected rounds;
+
+    public function __construct(
+        string cipher = self::DEFAULT_CIPHER,
+        int rounds = self::DEFAULT_ROUNDS
+    ) {
+        let this->cipher = cipher;
+        let this->rounds = rounds;
+    }
+
+    public function getCipher() -> string
+    {
+        return this->cipher;
+    }
+
+    public function getRounds() -> int
+    {
+        return this->rounds;
+    }
+}
+--USAGE--
+$ctor = (new \ReflectionClass(\Stub\ConstantParameterDefault::class))->getConstructor();
+
+$params = [];
+foreach ($ctor->getParameters() as $p) {
+    $params[$p->getName()] = $p;
+}
+
+// string class-constant default (self::DEFAULT_CIPHER)
+echo var_export($params['cipher']->isDefaultValueAvailable(), true), "\n";
+echo var_export($params['cipher']->getDefaultValue(), true), "\n";
+
+// int class-constant default (self::DEFAULT_ROUNDS)
+echo var_export($params['rounds']->isDefaultValueAvailable(), true), "\n";
+echo var_export($params['rounds']->getDefaultValue(), true), "\n";
+
+// runtime defaults also reflect the constants
+$obj = new \Stub\ConstantParameterDefault();
+echo var_export($obj->getCipher(), true), "\n";
+echo var_export($obj->getRounds(), true), "\n";
+--EXPECT--
+true
+'aes-256-cfb'
+true
+12
+'aes-256-cfb'
+12

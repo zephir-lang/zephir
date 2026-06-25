@@ -1,0 +1,22 @@
+--TEST--
+Issue #914: a class extending native \mysqli is an instanceof \mysqli (port of tests/Extension/Issue914Test.php)
+--SKIPIF--
+<?php
+if (!extension_loaded('mysqli')) {
+    echo 'skip ext/mysqli not loaded';
+}
+--FILE--
+namespace Stub;
+
+class Issue914 extends \mysqli
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+--USAGE--
+$test = new \Stub\Issue914();
+echo var_export($test instanceof \mysqli, true), "\n";
+--EXPECT--
+true
