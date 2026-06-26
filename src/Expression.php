@@ -73,7 +73,6 @@ use function str_replace;
 use function strlen;
 use function substr;
 
-
 /**
  * Represents an expression.
  * Most language constructs in a language are expressions.
