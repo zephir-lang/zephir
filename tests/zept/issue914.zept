@@ -6,6 +6,12 @@ if (!extension_loaded('mysqli')) {
     echo 'skip ext/mysqli not loaded';
 }
 --INI--
+; mysqli links against mysqlnd's symbols (e.g. mysqlnd_global_stats). The
+; --USAGE-- run is isolated with `php -n`, so unlike the full-ini --SKIPIF--
+; check it must load mysqlnd first or mysqli fails with an undefined symbol
+; (where the distro ships mysqlnd as a separate .so, e.g. setup-php on Ubuntu).
+; Harmless where mysqlnd is built statically: the load warning goes to stderr.
+extension=mysqlnd
 extension=mysqli
 --FILE--
 namespace Stub;
