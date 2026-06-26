@@ -1,0 +1,927 @@
+--TEST--
+NativeArray: literals/typed arrays, access, single+multi update, keys/implode, and issues #110/#264/#743/#709/#1140/#1159 (port of tests/Extension/NativeArrayTest.php)
+--FILE--
+namespace Stub;
+
+class NativeArray
+{
+	protected prefixes = [];
+
+	public function testArray1() -> array
+	{
+		var a;
+		let a = [];
+		return a;
+	}
+
+	public function testArray2() -> array
+	{
+		var a;
+		let a = [1, 2, 3];
+		return a;
+	}
+
+	public function testArray3() -> array
+	{
+		var a;
+		let a = [1.1, 2.2, 3.3];
+		return a;
+	}
+
+	public function testArray4() -> array
+	{
+		var a;
+		let a = [false, true, false];
+		return a;
+	}
+
+	public function testArray5() -> array
+	{
+		var a;
+		let a = [null, null, null];
+		return a;
+	}
+
+	public function testArray6() -> array
+	{
+		var a;
+		let a = ["x", "y", "z"];
+		return a;
+	}
+
+	public function testArray7() -> array
+	{
+		var d; int a, b, c;
+		let a = 1, b = 2, c = 3;
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray8() -> array
+	{
+		var d; double a, b, c;
+		let a = 1, b = 2, c = 3;
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray9() -> array
+	{
+		var d; boolean a, b, c;
+		let a = true, b = false, c = true;
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray10() -> array
+	{
+		var d; string a, b, c;
+		let a = "hello1", b = "hello2", c = "hello3";
+		let d = [a, b, c];
+		return d;
+	}
+
+	public function testArray11() -> array
+	{
+		var a, b, c;
+		let a = [1, 2, 3];
+		let b = [4, 5, 6];
+		let c = [a, b];
+		return c;
+	}
+
+	public function testArray12() -> array
+	{
+		var a, b, c;
+		let a = [1, 2, 3];
+		let b = [a];
+		let c = [b];
+		return c;
+	}
+
+	public function testArray13() -> array
+	{
+		var a;
+		let a = [1: "hello1", 2: "hello2", 3: "hello3"];
+		return a;
+	}
+
+	public function testArray14() -> array
+	{
+		var a;
+		let a = ["hello1": 1, "hello2": 2, "hello3": 3];
+		return a;
+	}
+
+	public function testArray15() -> array
+	{
+		var a;
+		let a = ["hello1": true, "hello2": false, "hello3": true];
+		return a;
+	}
+
+	public function testArray16() -> array
+	{
+		var a;
+		let a = ["hello1": 1.0, "hello2": 2.0, "hello3": 3.0];
+		return a;
+	}
+
+	public function testArray17() -> array
+	{
+		var a;
+		let a = ["hello1": null, "hello2": null, "hello3": null];
+		return a;
+	}
+
+	public function testArray18() -> array
+	{
+		var a;
+		let a = ["hello1": "a", "hello2": "b", "hello3": "c"];
+		return a;
+	}
+
+	public function testArray19() -> array
+	{
+		var a;
+		let a = [0: true, 1: false, 2: true];
+		return a;
+	}
+
+	public function testArray20() -> array
+	{
+		var a;
+		let a = [0: 1.0, 1: 2.0, 2: 3.0];
+		return a;
+	}
+
+	public function testArray21() -> array
+	{
+		var a;
+		let a = [0: null, 1: null, 2: null];
+		return a;
+	}
+
+	public function testArray22() -> array
+	{
+		var a;
+		let a = [0: 4, 1: 5, 2: 6];
+		return a;
+	}
+
+	public function testArray23() -> array
+	{
+		var a; int b;
+
+		let b = 0,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArray24() -> array
+	{
+		var a; double b;
+
+		let b = 0.0,
+			a = [0: b, 1: b, 2: b];
+		return a;
+	}
+
+	public function testArrayAccess1() -> long
+	{
+		var a, b;
+
+		let a = [1, 2, 3], b = a[0];
+
+		return b;
+	}
+
+	public function testArrayAccess2() -> long
+	{
+		var a, b;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			b = a["a"];
+
+		return b;
+	}
+
+	public function testArrayAccess3() -> long
+	{
+		var a, b;
+		long c;
+
+		let a = [1, 2, 3],
+			c = 0,
+			b = a[c];
+
+		return b;
+	}
+
+	public function testArrayAccess4() -> long
+	{
+		var a, b;
+		string c;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			c = "a",
+			b = a[c];
+
+		return b;
+	}
+
+	public function testArrayAccess5() -> long
+	{
+		var a, b, c;
+
+		let a = ["a": 1, "b": 2, "c": 3],
+			c = "a",
+			b = a[c];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess1() -> string
+	{
+		var a, b;
+
+		let a = [0: [0: "a", 1: "b"]],
+			b = a[0][0];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess2() -> string
+	{
+		var a, b;
+
+		let a = [["a", "b"]],
+			b = a[0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess3() -> string
+	{
+		var a, b;
+
+		let a = [[["a", "b"]]],
+			b = a[0][0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess4() -> string
+	{
+		var a, b;
+
+		let a = [[["a", "b"]]],
+			b = a[0][0][1];
+
+		return b;
+	}
+
+	public function testArrayMultipleAccess5() -> int
+	{
+		var a, b;
+
+		let a = ["a": ["b": ["c": 0, "d": 1]]],
+			b = a["a"]["b"]["c"];
+
+		return b;
+	}
+
+	public function testArrayUpdate1() -> array
+	{
+		var a;
+		let a = [1, 2, 3], a[0] = 4;
+		return a;
+	}
+
+	public function testArrayUpdate2() -> array
+	{
+		var a; int b;
+		let a = [1, 2, 3],
+			b = 0,
+			a[b] = 4;
+		return a;
+	}
+
+	public function testArrayUpdate3() -> array
+	{
+		var a; int b;
+		let a = [1, 2, 3],
+			b = 0,
+			a[b] = 4,
+			b = 1,
+			a[b] = 5;
+		return a;
+	}
+
+	public function testArrayUpdate4() -> array
+	{
+		var a;
+		let a = ["a": 1, "b": 2, "c": 3], a["a"] = 4;
+		return a;
+	}
+
+	public function testMultipleArrayUpdate1() -> array
+	{
+		var a;
+
+		let a = [], a["x"]["y"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate2() -> array
+	{
+		var a;
+
+		let a = [], a["x"]["y"]["z"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate3() -> array
+	{
+		var a;
+
+		let a = [], a[0][1] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate4() -> array
+	{
+		var a;
+
+		let a = [], a[0][1][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate5() -> array
+	{
+		var a;
+
+		let a = [], a["a"][1]["c"] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate6() -> array
+	{
+		var a;
+
+		let a = [], a[0]["b"][2] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate7() -> array
+	{
+		var a;
+
+		let a = [],
+			a["a"][1]["c"] = true,
+			a[0]["b"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate8() -> array
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][2] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate9() -> array
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][1] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate10() -> array
+	{
+		var a;
+
+		let a = [],
+			a["a"][0] = null,
+			a["a"][1] = true,
+			a["a"][1]["c"] = false;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate11() -> array
+	{
+		var a, b = "y", c = "x";
+
+		let a = [], a[b][c] = null;
+
+		return a;
+	}
+
+	public function testMultipleArrayUpdate12() -> array
+	{
+		var a, b = "y", c = "x", d = "z";
+
+		let a = [], a[b][c][d] = null;
+
+		return a;
+	}
+
+	public function testArrayKeys(var param) -> array
+	{
+		return array_keys(param);
+	}
+
+	public function testImplodeArray(var param) -> string
+	{
+		return implode("|", array_keys(param));
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/110
+	 */
+	public function issue110()-> string
+	{
+		var byteUnits;
+		let byteUnits = ["B": 0, "K": 10, "M": 20, "G": 30, "T": 40, "KB": 10, "MB": 20, "GB": 30, "TB": 40];
+		return implode("|", array_keys(byteUnits));
+	}
+
+	public function issue264(array tokens) -> bool
+	{
+	    return !isset(tokens[1]);
+	}
+
+	public function issue743a(array current743a) -> array
+	{
+		let current743a[42]["str"] = "ok";
+		return current743a;
+	}
+
+	public function issue743b(array current) -> array
+	{
+		let current["str"][42] = "ok";
+		return current;
+	}
+
+	public function issue743c(array current) -> array
+	{
+		var key;
+		let key = "hey";
+		let current["str"][$key] = "ok";
+		return current;
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/709
+	 */
+	public function issue709() -> bool
+	{
+		var c, arr;
+		var works = true;
+
+		for c in range(0, 50) {
+			let arr = [1, 2];
+			let arr = arr[array_rand(arr)];
+			if arr < 0 || arr > 2 {
+				let works = false;
+			}
+		}
+		return works;
+	}
+
+	public function Issue1140(string prefix, string baseDir)
+	{
+		if !isset this->prefixes[prefix] {
+		    let this->prefixes[prefix] = [];
+		}
+		array_push(this->prefixes[prefix], baseDir);
+		return this->prefixes;
+	}
+
+	public function Issue1159()
+	{
+		var myvar;
+		let myvar = 1;
+
+		let myvar = [myvar];
+		return myvar;
+	}
+}
+--USAGE--
+$test = new \Stub\NativeArray();
+
+// testArray
+echo var_export($test->testArray1(), true), "\n";
+echo var_export($test->testArray2(), true), "\n";
+echo var_export($test->testArray3(), true), "\n";
+echo var_export($test->testArray4(), true), "\n";
+echo var_export($test->testArray5(), true), "\n";
+echo var_export($test->testArray6(), true), "\n";
+echo var_export($test->testArray7(), true), "\n";
+echo var_export($test->testArray8(), true), "\n";
+echo var_export($test->testArray9(), true), "\n";
+echo var_export($test->testArray10(), true), "\n";
+echo var_export($test->testArray11(), true), "\n";
+echo var_export($test->testArray12(), true), "\n";
+echo var_export($test->testArray13(), true), "\n";
+echo var_export($test->testArray14(), true), "\n";
+echo var_export($test->testArray15(), true), "\n";
+echo var_export($test->testArray16(), true), "\n";
+echo var_export($test->testArray17(), true), "\n";
+echo var_export($test->testArray18(), true), "\n";
+echo var_export($test->testArray19(), true), "\n";
+echo var_export($test->testArray20(), true), "\n";
+echo var_export($test->testArray21(), true), "\n";
+echo var_export($test->testArray22(), true), "\n";
+echo var_export($test->testArray23(), true), "\n";
+echo var_export($test->testArray24(), true), "\n";
+
+// testArrayAccess
+echo var_export($test->testArrayAccess1(), true), "\n";
+echo var_export($test->testArrayAccess2(), true), "\n";
+echo var_export($test->testArrayAccess3(), true), "\n";
+echo var_export($test->testArrayAccess4(), true), "\n";
+echo var_export($test->testArrayAccess5(), true), "\n";
+
+// testArrayMultipleAccess
+echo var_export($test->testArrayMultipleAccess1(), true), "\n";
+echo var_export($test->testArrayMultipleAccess2(), true), "\n";
+echo var_export($test->testArrayMultipleAccess3(), true), "\n";
+echo var_export($test->testArrayMultipleAccess4(), true), "\n";
+echo var_export($test->testArrayMultipleAccess5(), true), "\n";
+
+// testArrayUpdate
+echo var_export($test->testArrayUpdate1(), true), "\n";
+echo var_export($test->testArrayUpdate2(), true), "\n";
+echo var_export($test->testArrayUpdate3(), true), "\n";
+echo var_export($test->testArrayUpdate4(), true), "\n";
+
+// testMultipleArrayUpdate
+echo var_export($test->testMultipleArrayUpdate1(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate2(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate3(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate4(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate5(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate6(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate7(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate8(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate9(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate10(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate11(), true), "\n";
+echo var_export($test->testMultipleArrayUpdate12(), true), "\n";
+
+// testArrayKeys
+echo var_export($test->testArrayKeys(['test1' => 1, 'test2' => 2, 'test3' => 3]), true), "\n";
+echo var_export($test->testArrayKeys([1, 2, 3, 4, 5, 6]), true), "\n";
+
+// testImplodeArray
+echo var_export($test->testImplodeArray(['test1' => 1, 'test2' => 2, 'test3' => 3]), true), "\n";
+
+// testIssue110
+echo var_export($test->issue110(), true), "\n";
+
+// testIssue264
+echo var_export($test->issue264([1, 2, 3]), true), "\n";
+
+// testIssue743
+echo var_export($test->issue743a([42 => []]), true), "\n";
+echo var_export($test->issue743b(['str' => []]), true), "\n";
+echo var_export($test->issue743c(['str' => []]), true), "\n";
+
+// testIssue709
+echo var_export($test->issue709(), true), "\n";
+
+// testIssue1140
+echo var_export($test->Issue1140('phalcon', '/var/www/html/phalcon'), true), "\n";
+
+// testIssue1159
+echo var_export($test->Issue1159(), true), "\n";
+--EXPECT--
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 1.1,
+  1 => 2.2,
+  2 => 3.3,
+)
+array (
+  0 => false,
+  1 => true,
+  2 => false,
+)
+array (
+  0 => NULL,
+  1 => NULL,
+  2 => NULL,
+)
+array (
+  0 => 'x',
+  1 => 'y',
+  2 => 'z',
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 1.0,
+  1 => 2.0,
+  2 => 3.0,
+)
+array (
+  0 => true,
+  1 => false,
+  2 => true,
+)
+array (
+  0 => 'hello1',
+  1 => 'hello2',
+  2 => 'hello3',
+)
+array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 2,
+    2 => 3,
+  ),
+  1 => 
+  array (
+    0 => 4,
+    1 => 5,
+    2 => 6,
+  ),
+)
+array (
+  0 => 
+  array (
+    0 => 
+    array (
+      0 => 1,
+      1 => 2,
+      2 => 3,
+    ),
+  ),
+)
+array (
+  1 => 'hello1',
+  2 => 'hello2',
+  3 => 'hello3',
+)
+array (
+  'hello1' => 1,
+  'hello2' => 2,
+  'hello3' => 3,
+)
+array (
+  'hello1' => true,
+  'hello2' => false,
+  'hello3' => true,
+)
+array (
+  'hello1' => 1.0,
+  'hello2' => 2.0,
+  'hello3' => 3.0,
+)
+array (
+  'hello1' => NULL,
+  'hello2' => NULL,
+  'hello3' => NULL,
+)
+array (
+  'hello1' => 'a',
+  'hello2' => 'b',
+  'hello3' => 'c',
+)
+array (
+  0 => true,
+  1 => false,
+  2 => true,
+)
+array (
+  0 => 1.0,
+  1 => 2.0,
+  2 => 3.0,
+)
+array (
+  0 => NULL,
+  1 => NULL,
+  2 => NULL,
+)
+array (
+  0 => 4,
+  1 => 5,
+  2 => 6,
+)
+array (
+  0 => 0,
+  1 => 0,
+  2 => 0,
+)
+array (
+  0 => 0.0,
+  1 => 0.0,
+  2 => 0.0,
+)
+1
+1
+1
+1
+1
+'a'
+'b'
+'b'
+'b'
+0
+array (
+  0 => 4,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 4,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 4,
+  1 => 5,
+  2 => 3,
+)
+array (
+  'a' => 4,
+  'b' => 2,
+  'c' => 3,
+)
+array (
+  'x' => 
+  array (
+    'y' => NULL,
+  ),
+)
+array (
+  'x' => 
+  array (
+    'y' => 
+    array (
+      'z' => NULL,
+    ),
+  ),
+)
+array (
+  0 => 
+  array (
+    1 => NULL,
+  ),
+)
+array (
+  0 => 
+  array (
+    1 => 
+    array (
+      2 => NULL,
+    ),
+  ),
+)
+array (
+  'a' => 
+  array (
+    1 => 
+    array (
+      'c' => NULL,
+    ),
+  ),
+)
+array (
+  0 => 
+  array (
+    'b' => 
+    array (
+      2 => NULL,
+    ),
+  ),
+)
+array (
+  'a' => 
+  array (
+    1 => 
+    array (
+      'c' => true,
+    ),
+  ),
+  0 => 
+  array (
+    'b' => 
+    array (
+      2 => false,
+    ),
+  ),
+)
+array (
+  'a' => 
+  array (
+    0 => NULL,
+    1 => true,
+    2 => false,
+  ),
+)
+array (
+  'a' => 
+  array (
+    0 => NULL,
+    1 => false,
+  ),
+)
+array (
+  'a' => 
+  array (
+    0 => NULL,
+    1 => 
+    array (
+      'c' => false,
+    ),
+  ),
+)
+array (
+  'y' => 
+  array (
+    'x' => NULL,
+  ),
+)
+array (
+  'y' => 
+  array (
+    'x' => 
+    array (
+      'z' => NULL,
+    ),
+  ),
+)
+array (
+  0 => 'test1',
+  1 => 'test2',
+  2 => 'test3',
+)
+array (
+  0 => 0,
+  1 => 1,
+  2 => 2,
+  3 => 3,
+  4 => 4,
+  5 => 5,
+)
+'test1|test2|test3'
+'B|K|M|G|T|KB|MB|GB|TB'
+false
+array (
+  42 => 
+  array (
+    'str' => 'ok',
+  ),
+)
+array (
+  'str' => 
+  array (
+    42 => 'ok',
+  ),
+)
+array (
+  'str' => 
+  array (
+    'hey' => 'ok',
+  ),
+)
+true
+array (
+  'phalcon' => 
+  array (
+    0 => '/var/www/html/phalcon',
+  ),
+)
+array (
+  0 => 1,
+)

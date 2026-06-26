@@ -1,0 +1,38 @@
+--TEST--
+Private method called through a public method on a subclass resolves correctly (run() subset of tests/Extension/Oo/Scopes/PrivateScopeTest.php; private-property-scope cases need PHP fixture classes and are skipped)
+--FILE--
+namespace Stub\Oo\Scopes;
+
+interface ScopeTesterInterface
+{
+    public function run() -> string;
+}
+--FILE--
+namespace Stub\Oo\Scopes;
+
+class HasPrivateMethod
+{
+    public function callPrivateMethod() -> string
+    {
+        return this->isPrivate();
+    }
+
+    private function isPrivate() -> string
+    {
+        return __FUNCTION__;
+    }
+}
+--FILE--
+namespace Stub\Oo\Scopes;
+
+class PrivateScopeTester extends HasPrivateMethod implements ScopeTesterInterface
+{
+    public function run() -> string
+    {
+        return this->callPrivateMethod();
+    }
+}
+--USAGE--
+echo var_export((new \Stub\Oo\Scopes\PrivateScopeTester())->run(), true), "\n";
+--EXPECT--
+'isPrivate'

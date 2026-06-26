@@ -1,0 +1,23 @@
+--TEST--
+Issue #893: a class extending a native \DOMDocument exposes inherited childNodes as a \DOMNodeList (port of tests/Extension/Issue893Test.php)
+--SKIPIF--
+<?php
+if (!extension_loaded('dom')) {
+    echo 'skip ext/dom not loaded';
+}
+--INI--
+extension=dom
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/893
+ */
+class Issue893 extends \DOMDocument
+{
+}
+--USAGE--
+$DOM = new \Stub\Issue893();
+echo var_export($DOM->childNodes instanceof \DOMNodeList, true), "\n";
+--EXPECT--
+true

@@ -1,0 +1,66 @@
+--TEST--
+function_exists with a passed name, a literal string, and over a built-in list (#1547) (port of tests/Extension/FunctionExistsTest.php)
+--FILE--
+namespace Stub;
+
+class FunctionExists
+{
+	public function testWithPassedName(string func) -> bool
+	{
+		return function_exists(func);
+	}
+
+	public function testBuiltInFunctions() -> array
+	{
+		var func;
+		array result = [];
+
+		array functions = [
+			"substr",
+			"cubstr",
+			"ucfirst",
+			"bcfirst",
+			"stripos",
+			"ktripos",
+			"trim",
+			"prim"
+		];
+
+		for func in functions {
+			let result[func] = function_exists(func);
+		}
+
+		return result;
+	}
+
+	public function testWithString() -> bool
+	{
+		return function_exists("substr");
+	}
+}
+--USAGE--
+$test = new \Stub\FunctionExists();
+
+// A couple of known internal function names (providerInternalFunctions picks
+// random internals in the original; these are always present).
+echo var_export($test->testWithPassedName('strlen'), true), "\n";
+echo var_export($test->testWithPassedName('array_map'), true), "\n";
+
+echo var_export($test->testWithString(), true), "\n";
+
+var_export($test->testBuiltInFunctions());
+echo "\n";
+--EXPECT--
+true
+true
+true
+array (
+  'substr' => true,
+  'cubstr' => false,
+  'ucfirst' => true,
+  'bcfirst' => false,
+  'stripos' => true,
+  'ktripos' => false,
+  'trim' => true,
+  'prim' => false,
+)

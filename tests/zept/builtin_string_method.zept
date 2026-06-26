@@ -1,0 +1,245 @@
+--TEST--
+BuiltIn string methods: camelize/uncamelize, length, index, trim, case, format, md5/sha1, nl2br/repeat/shuffle/rev, parseCsv (port of tests/Extension/BuiltIn/StringMethodTest.php; warning-emission rows dropped)
+--FILE--
+namespace Stub\BuiltIn;
+
+class StringMethods
+{
+    public function camelize(string str, var delimiter = null) -> string
+    {
+        return str->camelize(delimiter);
+    }
+
+    public function uncamelize(string str, var delimiter = null) -> string
+    {
+        return str->uncamelize(delimiter);
+    }
+
+    public function getLength1()
+    {
+        return "hello"->length();
+    }
+
+    public function getLength2()
+    {
+        return ("hello")->length();
+    }
+
+    public function getLength3()
+    {
+        return ("hello" . "hello")->length();
+    }
+
+    public function getLength4(string a)
+    {
+        return a->length();
+    }
+
+    public function getLength5(string a)
+    {
+        return ("hello" . a)->length();
+    }
+
+    public function getIndex(string str, string needle)
+    {
+        return str->index(needle);
+    }
+
+    public function getIndexWithPosition(string str, string needle, int position)
+    {
+        return str->index(needle, position);
+    }
+
+    public function getTrimmed()
+    {
+        return " hello \t\n"->trim();
+    }
+
+    public function getTrimmed1(string str)
+    {
+        return str->trim();
+    }
+
+    public function getLeftTrimmed(string str)
+    {
+        return str->trimLeft();
+    }
+
+    public function getRightTrimmed(string str)
+    {
+        return str->trimRight();
+    }
+
+    public function getLower(string str)
+    {
+        return str->lower();
+    }
+
+    public function getUpper(string str)
+    {
+        return str->upper();
+    }
+
+    public function getLowerFirst(string str)
+    {
+        return str->lowerFirst();
+    }
+
+    public function getUpperFirst(string str)
+    {
+        return str->upperFirst();
+    }
+
+    public function getFormatted(string str)
+    {
+        return "hello %s!"->format(str);
+    }
+
+    public function getMd5(string str)
+    {
+        return str->md5();
+    }
+
+    public function getSha1(string str)
+    {
+        return str->sha1();
+    }
+
+    public function getNl2br(string str)
+    {
+        return str->nl2br();
+    }
+
+    public function getParsedCsv(string str)
+    {
+        return str->parseCsv();
+    }
+
+    public function getRepeatted(string str, int count)
+    {
+        return str->repeat(count);
+    }
+
+    public function getShuffled(string str)
+    {
+        return str->shuffle();
+    }
+
+    public function getReversed(string str)
+    {
+        return str->rev();
+    }
+}
+--USAGE--
+// PHP 8.4+ emits a str_getcsv() $escape deprecation (->parseCsv below); PHPUnit never echoes
+// deprecations into asserted output, so silence them here (no-op on <= 8.3) to keep stdout stable.
+error_reporting(E_ALL & ~E_DEPRECATED);
+$test = new \Stub\BuiltIn\StringMethods();
+// camelize
+echo var_export($test->camelize('=_camelize', '_'), true), "\n";
+echo var_export($test->camelize('camelize', '_'), true), "\n";
+echo var_export($test->camelize('came_li_ze', '_'), true), "\n";
+echo var_export($test->camelize('came_li_ze', null), true), "\n";
+echo var_export($test->camelize('came#li#ze', '#'), true), "\n";
+echo var_export($test->camelize('came li ze', ' '), true), "\n";
+echo var_export($test->camelize('came.li^ze', '.^'), true), "\n";
+echo var_export($test->camelize('c_a-m_e-l_i-z_e', '-_'), true), "\n";
+echo var_export($test->camelize('c_a-m_e-l_i-z_e', null), true), "\n";
+echo var_export($test->camelize('came.li.ze', '.'), true), "\n";
+echo var_export($test->camelize('came-li-ze', '-'), true), "\n";
+echo var_export($test->camelize('c+a+m+e+l+i+z+e', '+'), true), "\n";
+// uncamelize
+echo var_export($test->uncamelize('=Camelize', '_'), true), "\n";
+echo var_export($test->uncamelize('Camelize', '_'), true), "\n";
+echo var_export($test->uncamelize('Camelize', null), true), "\n";
+echo var_export($test->uncamelize('CameLiZe', '_'), true), "\n";
+echo var_export($test->uncamelize('CameLiZe', '#'), true), "\n";
+echo var_export($test->uncamelize('CameLiZe', ' '), true), "\n";
+echo var_export($test->uncamelize('CameLiZe', '.'), true), "\n";
+echo var_export($test->uncamelize('CameLiZe', '-'), true), "\n";
+echo var_export($test->uncamelize('CAMELIZE', '/'), true), "\n";
+// length
+echo var_export($test->getLength1(), true), "\n";
+echo var_export($test->getLength2(), true), "\n";
+echo var_export($test->getLength3(), true), "\n";
+echo var_export($test->getLength4('foo'), true), "\n";
+echo var_export($test->getLength5('bar'), true), "\n";
+// index
+echo var_export($test->getIndex('test', 't'), true), "\n";
+echo var_export($test->getIndexWithPosition('test', 't', 1), true), "\n";
+// trim
+echo var_export($test->getTrimmed(), true), "\n";
+echo var_export($test->getTrimmed1(' foo bar  '), true), "\n";
+echo var_export($test->getLeftTrimmed(' foo bar  '), true), "\n";
+echo var_export($test->getRightTrimmed(' foo bar  '), true), "\n";
+// case
+echo var_export($test->getUpper('foo'), true), "\n";
+echo var_export($test->getLower('FOO'), true), "\n";
+echo var_export($test->getUpperFirst('foo'), true), "\n";
+echo var_export($test->getLowerFirst('FOO'), true), "\n";
+// format
+echo var_export($test->getFormatted('zephir'), true), "\n";
+// hashes
+echo var_export($test->getMd5('hello world!'), true), "\n";
+echo var_export($test->getSha1('hello world!'), true), "\n";
+// modifications
+echo var_export($test->getNl2br("\nfoo\n"), true), "\n";
+echo var_export($test->getRepeatted('foobar', 2), true), "\n";
+$shuffled = $test->getShuffled('hello world');
+echo var_export($shuffled !== 'hello world', true), "\n";
+echo var_export(strlen($shuffled), true), "\n";
+echo var_export($test->getReversed('hello'), true), "\n";
+// parsers
+echo var_export($test->getParsedCsv('foo,bar,"baz"'), true), "\n";
+--EXPECT--
+'=Camelize'
+'Camelize'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CameLiZe'
+'CAMELIZE'
+'CAMELIZE'
+'CameLiZe'
+'CameLiZe'
+'CAMELIZE'
+'=_camelize'
+'camelize'
+'camelize'
+'came_li_ze'
+'came#li#ze'
+'came li ze'
+'came.li.ze'
+'came-li-ze'
+'c/a/m/e/l/i/z/e'
+5
+5
+10
+3
+8
+0
+3
+'hello'
+'foo bar'
+'foo bar  '
+' foo bar'
+'FOO'
+'foo'
+'Foo'
+'fOO'
+'hello zephir!'
+'fc3ff98e8c6a0d3087d515c0473f8677'
+'430ce34d020724ed75a196dfc2ad67c77772d169'
+'<br />
+foo<br />
+'
+'foobarfoobar'
+true
+11
+'olleh'
+array (
+  0 => 'foo',
+  1 => 'bar',
+  2 => 'baz',
+)

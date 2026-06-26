@@ -1,0 +1,24 @@
+--TEST--
+Declare: var initialized from an mcall expression returns the called method's value (port of tests/Extension/DeclareTest.php)
+--FILE--
+namespace Stub;
+
+class DeclareTest
+{
+	public function testDeclare14()
+	{
+		var a = "hello";
+		return a;
+	}
+
+	public function testDeclareMcallExpression()
+	{
+		var a = this->testDeclare14();
+		return a;
+	}
+}
+--USAGE--
+$test = new \Stub\DeclareTest();
+echo var_export($test->testDeclareMcallExpression(), true), "\n";
+--EXPECT--
+'hello'

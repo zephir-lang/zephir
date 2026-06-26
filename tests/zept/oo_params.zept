@@ -1,0 +1,104 @@
+--TEST--
+OO typed params: same-namespace/other-namespace instantiation, int/double/string/bool/array setters, default param values (success subset of tests/Extension/Oo/OoParamsTest.php; PHP-version-specific TypeError/ArgumentCountError message cases dropped)
+--FILE--
+namespace Stub\Oo;
+
+class OoDynamicA
+{
+    public function execute() {
+        return "A";
+    }
+}
+--FILE--
+namespace Stub\Oo;
+
+class OoParams
+{
+    public function createThisClassWithoutWriteCurrentNamespace()
+    {
+        return new OoParams();
+    }
+
+    public function createOtherClassWithoutWriteCurrentNamespace()
+    {
+        return new OoDynamicA();
+    }
+
+    public function setAge(int age)
+    {
+        return age;
+    }
+
+    public function setAverage(double average)
+    {
+        return average;
+    }
+
+    public function setName(string name)
+    {
+        return name;
+    }
+
+    public function setEnabled(boolean enabled)
+    {
+        return enabled;
+    }
+
+    public function setList(array someList)
+    {
+        return someList;
+    }
+
+    public function getDefaultParamValue(int i = 0)
+    {
+        return i;
+    }
+
+    public function getDefaultParamValue1(int i = 1)
+    {
+        return i;
+    }
+
+    public function getDefaultParamValueStr(string str = "default")
+    {
+        return str;
+    }
+}
+--USAGE--
+$test = new \Stub\Oo\OoParams();
+echo var_export($test->createThisClassWithoutWriteCurrentNamespace() instanceof \Stub\Oo\OoParams, true), "\n";
+echo var_export($test->createOtherClassWithoutWriteCurrentNamespace() instanceof \Stub\Oo\OoDynamicA, true), "\n";
+echo var_export($test->setAge(17), true), "\n";
+echo var_export($test->setAverage(17.1), true), "\n";
+echo var_export($test->setAverage(17), true), "\n";
+echo var_export($test->setAverage('17.5'), true), "\n";
+echo var_export($test->setName('peter'), true), "\n";
+echo var_export($test->setEnabled(true), true), "\n";
+echo var_export($test->setEnabled(false), true), "\n";
+echo var_export($test->setList([1, 2, 3, 4, 5]), true), "\n";
+echo var_export($test->setList([]), true), "\n";
+echo var_export($test->getDefaultParamValue(), true), "\n";
+echo var_export($test->getDefaultParamValue1(), true), "\n";
+echo var_export($test->getDefaultParamValueStr(), true), "\n";
+--EXPECT--
+true
+true
+17
+17.1
+17.0
+17.5
+'peter'
+true
+false
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+  4 => 5,
+)
+array (
+)
+0
+1
+'default'

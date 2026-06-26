@@ -1,0 +1,66 @@
+--TEST--
+Reflection: method parameter default values (bool/string/int/double + nullable) are introspectable (port of tests/Extension/MethodPropertiesDefaultValuesReflectionTest.php)
+--FILE--
+namespace Stub;
+
+class MethodsWithDefaultValues
+{
+    public function testBool(bool param = true) -> void
+    {
+    }
+
+    public function testNullableBool(bool param = null) -> void
+    {
+    }
+
+    public function testString(string param = "va'lue") -> void
+    {
+    }
+
+    public function testNullableString(string param = null) -> void
+    {
+    }
+
+    public function testInt(int param = 1337) -> void
+    {
+    }
+
+    public function testNullableInt(int param = null) -> void
+    {
+    }
+
+    public function testDouble(double param = 13.37) -> void
+    {
+    }
+
+    public function testNullableDouble(double param = null) -> void
+    {
+    }
+}
+--USAGE--
+$reflection = new ReflectionClass(\Stub\MethodsWithDefaultValues::class);
+
+$methods = [
+    'testBool',
+    'testNullableBool',
+    'testString',
+    'testNullableString',
+    'testInt',
+    'testNullableInt',
+    'testDouble',
+    'testNullableDouble',
+];
+
+foreach ($methods as $method) {
+    $param = $reflection->getMethod($method)->getParameters()[0];
+    echo var_export($param->isDefaultValueAvailable(), true), ' ', var_export($param->getDefaultValue(), true), "\n";
+}
+--EXPECT--
+true true
+true NULL
+true 'va\'lue'
+true NULL
+true 1337
+true NULL
+true 13.37
+true NULL

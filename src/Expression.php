@@ -73,8 +73,6 @@ use function str_replace;
 use function strlen;
 use function substr;
 
-use const PHP_EOL;
-
 /**
  * Represents an expression.
  * Most language constructs in a language are expressions.
@@ -119,13 +117,13 @@ class Expression
             case 'string':
                 return new LiteralCompiledExpression(
                     'string',
-                    str_replace(PHP_EOL, '\\n', $expression['value']),
+                    self::escapeNewlines($expression['value']),
                     $expression
                 );
             case 'istring':
                 return new LiteralCompiledExpression(
                     'istring',
-                    str_replace(PHP_EOL, '\\n', $expression['value']),
+                    self::escapeNewlines($expression['value']),
                     $expression
                 );
 
@@ -578,5 +576,21 @@ class Expression
     public function setReadOnly(bool $readOnly): void
     {
         $this->readOnly = $readOnly;
+    }
+
+    /**
+     * Escapes every newline variant in a string literal to the C escape `\n`.
+     *
+     * A multiline string literal carries the source's raw line endings into the
+     * generated C string constant. Those must be escaped or the C compiler sees
+     * a literal newline inside `"..."`: gcc/clang only warn, but MSVC rejects it
+     * ("error C2001: newline in constant"). Normalising CRLF, lone CR and lone
+     * LF alike (rather than just `PHP_EOL`, which is platform-dependent and
+     * leaves the other variants raw) keeps the output valid and identical on
+     * every host regardless of how the source was checked out.
+     */
+    private static function escapeNewlines(string $value): string
+    {
+        return str_replace(["\r\n", "\r", "\n"], '\\n', $value);
     }
 }

@@ -1,0 +1,55 @@
+--TEST--
+Issue #2167: [Class,"protectedMethod"] array-callable fails PHP callable validation for a Zephir internal method (locked-down failure mode); closure-wrapper workaround delegating via FQ static call succeeds (port of tests/Extension/Issue2167Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2167
+{
+    protected a;
+
+    public function __construct(array data)
+    {
+        let this->a = data;
+    }
+
+    public function reduceWithArrayCallable() -> string
+    {
+        return (string) array_reduce(
+            this->a,
+            ["Stub\\Issue2167", "implodeRow"],
+            ""
+        );
+    }
+
+    public function reduceWithClosureWrapper() -> string
+    {
+        return (string) array_reduce(
+            this->a,
+            function (carry, row) {
+                return \Stub\Issue2167::implodeRow(carry, row);
+            },
+            ""
+        );
+    }
+
+    protected static function implodeRow(const string carry, const array row) -> string
+    {
+        return carry . "[ " . implode(" ", row) . " ]";
+    }
+}
+--USAGE--
+$sut = new \Stub\Issue2167([[1, 2, 3], [4, 5, 6]]);
+
+// Direct [class, protectedMethod] array callable fails PHP's callable validation.
+try {
+    $sut->reduceWithArrayCallable();
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \TypeError, true), "\n";
+}
+
+// Supported workaround: closure delegating via FQ static call.
+echo var_export($sut->reduceWithClosureWrapper(), true), "\n";
+--EXPECT--
+true
+'[ 1 2 3 ][ 4 5 6 ]'

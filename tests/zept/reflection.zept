@@ -1,0 +1,55 @@
+--TEST--
+Reflection: methods returning ReflectionClass/ReflectionFunction/ReflectionParameter (port of tests/Extension/ReflectionTest.php)
+--FILE--
+namespace Stub;
+
+use ReflectionClass;
+use ReflectionFunction;
+use ReflectionParameter;
+
+class Reflection
+{
+    private reflectionParameter = null;
+
+    public function getReflectionClass() -> <ReflectionClass>
+    {
+        var r;
+        let r = new ReflectionClass(this);
+
+        return r;
+    }
+
+    public function getReflectionFunction() -> <ReflectionFunction>
+    {
+        var r;
+        let r = new ReflectionFunction("abs");
+
+        return r;
+    }
+
+    public function setReflectionParameter(<ReflectionParameter> parameter) -> <ReflectionParameter>
+    {
+        let this->reflectionParameter = parameter;
+
+        return this->reflectionParameter;
+    }
+
+    public function getReflectionParameter() -> <ReflectionParameter> | null
+    {
+        return this->reflectionParameter;
+    }
+}
+--USAGE--
+$class = new \Stub\Reflection();
+
+echo var_export($class->getReflectionClass() instanceof \ReflectionClass, true), "\n";
+echo var_export($class->getReflectionFunction() instanceof \ReflectionFunction, true), "\n";
+echo var_export($class->getReflectionParameter(), true), "\n";
+
+$class->setReflectionParameter(new \ReflectionParameter(fn ($test) => 1, 0));
+echo var_export($class->getReflectionParameter() instanceof \ReflectionParameter, true), "\n";
+--EXPECT--
+true
+true
+NULL
+true

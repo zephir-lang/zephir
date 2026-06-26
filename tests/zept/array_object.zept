@@ -1,0 +1,16 @@
+--TEST--
+ArrayObject: a Zephir class extending \ArrayObject supports array-style offset set/get (port of tests/Extension/ArrayObjectTest.php)
+--FILE--
+namespace Stub;
+
+class ArrayObject extends \ArrayObject
+{
+}
+--USAGE--
+$test = new \Stub\ArrayObject();
+echo var_export($test instanceof \ArrayObject, true), "\n";
+$test['test_2'] = 1;
+echo var_export($test['test_2'], true), "\n";
+--EXPECT--
+true
+1

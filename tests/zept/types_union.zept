@@ -1,0 +1,24 @@
+--TEST--
+Types union: `int | false` returns 1 or false (port of tests/Extension/Types/UnionTypesTest.php)
+--FILE--
+namespace Stub\Types;
+
+class MayBe
+{
+    public function gc(int maxlifetime) -> int | false
+    {
+        return 1;
+    }
+
+    public function gcFalse() -> int | false
+    {
+        return false;
+    }
+}
+--USAGE--
+$class = new \Stub\Types\MayBe();
+echo var_export($class->gc(123), true), "\n";
+echo var_export($class->gcFalse(), true), "\n";
+--EXPECT--
+1
+false

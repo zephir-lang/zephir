@@ -1,0 +1,53 @@
+--TEST--
+Chained method calls return the same instance through public/protected/private hops (port of tests/Extension/McallChainedTest.php)
+--FILE--
+namespace Stub;
+
+class McallChained
+{
+	private temp;
+
+	public function testMethod1()
+	{
+		return this;
+	}
+
+	protected function testMethod2()
+	{
+		return this;
+	}
+
+	private function testMethod3()
+	{
+		return this;
+	}
+
+	public function testChained1()
+	{
+		return this->testMethod1()
+				   ->testMethod2();
+	}
+
+	public function testChained2()
+	{
+		return this->testMethod1()
+				   ->testMethod3()
+				   ->testMethod2();
+	}
+
+	public function testChained3()
+	{
+		return this->testMethod3()
+				   ->testMethod2()
+				   ->testMethod1();
+	}
+}
+--USAGE--
+$test = new \Stub\McallChained();
+echo var_export($test->testChained1() === $test, true), "\n";
+echo var_export($test->testChained2() === $test, true), "\n";
+echo var_export($test->testChained3() === $test, true), "\n";
+--EXPECT--
+true
+true
+true

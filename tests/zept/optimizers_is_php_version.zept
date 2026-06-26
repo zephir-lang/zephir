@@ -1,0 +1,79 @@
+--TEST--
+Optimizers is_php_version: version comparisons that are stable on any PHP 8 build (port of tests/Extension/Optimizers/IsPhpVersionTest.php)
+--SKIPIF--
+<?php if (PHP_MAJOR_VERSION !== 8) echo "skip requires PHP 8 (results below assume major version 8)";
+--FILE--
+namespace Stub;
+
+class Issue1404
+{
+	public function testIsPhpVersionUsingInteger70000() -> bool
+	{
+		return is_php_version(7);
+	}
+
+	public function testIsPhpVersionUsingDouble70100() -> bool
+	{
+		return is_php_version(7.1);
+	}
+
+	public function testIsPhpVersionUsingLong70000() -> bool
+	{
+		return is_php_version(2147483647);
+	}
+
+	public function testIsPhpVersionUsingString70000() -> bool
+	{
+		return is_php_version("7");
+	}
+
+	public function testIsPhpVersionUsingZero() -> bool
+	{
+		return is_php_version(0);
+	}
+
+	public function testIsPhpVersionUsing50000() -> bool
+	{
+		return is_php_version("5");
+	}
+
+	public function testIsPhpVersionUsing50500() -> bool
+	{
+		return is_php_version("5.5");
+	}
+
+	public function testIsPhpVersionUsing50600() -> bool
+	{
+		return is_php_version("5.6");
+	}
+
+	public function testCurrentMajor() -> bool
+	{
+		return is_php_version("8");
+	}
+}
+--USAGE--
+$test = new \Stub\Issue1404();
+
+// All of these reference versions other than the running PHP 8.x, so are false.
+echo var_export($test->testIsPhpVersionUsingInteger70000(), true), "\n"; // 7
+echo var_export($test->testIsPhpVersionUsingDouble70100(), true), "\n";  // 7.1
+echo var_export($test->testIsPhpVersionUsingLong70000(), true), "\n";    // huge -> not 8.x
+echo var_export($test->testIsPhpVersionUsingString70000(), true), "\n";  // "7"
+echo var_export($test->testIsPhpVersionUsingZero(), true), "\n";         // 0
+echo var_export($test->testIsPhpVersionUsing50000(), true), "\n";        // "5"
+echo var_export($test->testIsPhpVersionUsing50500(), true), "\n";        // "5.5"
+echo var_export($test->testIsPhpVersionUsing50600(), true), "\n";        // "5.6"
+
+// Matching only the major version of the running PHP (8) is true.
+echo var_export($test->testCurrentMajor(), true), "\n";                  // "8"
+--EXPECT--
+false
+false
+false
+false
+false
+false
+false
+false
+true

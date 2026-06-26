@@ -1,0 +1,53 @@
+--TEST--
+Globals\Server: reading _SERVER superglobal keys (PHP_SELF / SCRIPT_NAME / HTTP_USER_AGENT) (issue #1961/#1970) (port of tests/Extension/Globals/ServerTest.php)
+--FILE--
+namespace Stub\Globals;
+
+class Server
+{
+    /**
+    * @see https://github.com/zephir-lang/zephir/issues/1961
+    */
+    public function f1() -> void
+    {
+        echo _SERVER["PHP_SELF"];
+        this->f2();
+        echo _SERVER["PHP_SELF"];
+    }
+
+    public function f2() -> void
+    {
+        echo _SERVER["SCRIPT_NAME"];
+    }
+
+    /**
+    * @see https://github.com/zephir-lang/zephir/issues/1970
+    */
+    public function check() -> var
+    {
+        return _SERVER["HTTP_USER_AGENT"];
+    }
+}
+--USAGE--
+$test = new \Stub\Globals\Server();
+
+// Set known values so f1() prints PHP_SELF, SCRIPT_NAME, PHP_SELF in order
+// (mirrors testShouldPrintPhpSelf which expects str_repeat(PHP_SELF, 3) when
+// PHP_SELF === SCRIPT_NAME).
+$_SERVER['PHP_SELF']    = '/index.php';
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+
+ob_start();
+$test->f1();
+$actual = ob_get_contents();
+ob_end_clean();
+echo var_export($actual, true), "\n";
+echo var_export($actual === str_repeat($_SERVER['PHP_SELF'], 3), true), "\n";
+
+// testShouldPrintUserAgent
+$_SERVER['HTTP_USER_AGENT'] = 'Test';
+echo var_export($test->check(), true), "\n";
+--EXPECT--
+'/index.php/index.php/index.php'
+true
+'Test'

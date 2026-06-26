@@ -1,0 +1,56 @@
+--TEST--
+Issue #663: is_array_assoc/is_array_indexed handle non-array and empty inputs safely (port of tests/Extension/Issue663Test.php)
+--FILE--
+namespace Stub;
+
+class Issue663
+{
+    public static function is_array_assoc(arr) -> bool
+    {
+        if (!is_array(arr) || empty(arr)) {
+            return false;
+        }
+
+        return static::is_array_assoc_internal(arr);
+    }
+
+    private static function is_array_assoc_internal(array arr) -> bool
+    {
+        int count, i;
+        let count = count(arr);
+        for i in range(0, count - 1) {
+            if (!isset(arr[i])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static function is_array_indexed(arr) -> bool
+    {
+        if (!is_array(arr) || empty(arr)) {
+            return false;
+        }
+
+        return !static::is_array_assoc_internal(arr);
+    }
+}
+--USAGE--
+use Stub\Issue663;
+
+// The populated-array cases are version-guarded to PHP < 8.2 in the original;
+// containers are 8.3, so only the non-array / empty cases are asserted here.
+echo var_export(Issue663::is_array_assoc(false), true), "\n";
+echo var_export(Issue663::is_array_assoc(1), true), "\n";
+echo var_export(Issue663::is_array_assoc([]), true), "\n";
+echo var_export(Issue663::is_array_indexed(false), true), "\n";
+echo var_export(Issue663::is_array_indexed(1), true), "\n";
+echo var_export(Issue663::is_array_indexed([]), true), "\n";
+--EXPECT--
+false
+false
+false
+false
+false
+false

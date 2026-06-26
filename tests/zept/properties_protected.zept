@@ -1,0 +1,108 @@
+--TEST--
+Protected property defaults via getters, {set,get} shortcut round-trip, and default value on a PHP subclass (port of tests/Extension/Properties/ProtectedPropertiesTest.php, issue #2089)
+--FILE--
+namespace Stub\Properties;
+
+class ProtectedProperties
+{
+	protected someNull;
+	protected someNullInitial = null;
+	protected someFalse = false;
+	protected someTrue = true;
+	protected someInteger = 10;
+	protected someDouble = 10.25;
+	protected someString = "test";
+
+	protected someVar {set, get};
+
+	protected someArrayVar = [] { set, get };
+
+	public function getSomeNull()
+	{
+		return this->someNull;
+	}
+
+	public function setSomeNull(var param)
+	{
+		let this->someNull = param;
+	}
+
+	public function getSomeNullInitial()
+	{
+		return this->someNullInitial;
+	}
+
+	public function getSomeFalse()
+	{
+		return this->someFalse;
+	}
+
+	public function getSomeTrue()
+	{
+		return this->someTrue;
+	}
+
+	public function getSomeInteger()
+	{
+		return this->someInteger;
+	}
+
+	public function getSomeDouble()
+	{
+		return this->someDouble;
+	}
+
+	public function getSomeString()
+	{
+		return this->someString;
+	}
+}
+--USAGE--
+// The original test extends the Zephir class with a PHP mock; declare it here.
+class ExtendsProtectedProperties extends \Stub\Properties\ProtectedProperties
+{
+    protected $someArrayVar = [
+        'key' => 'value',
+    ];
+}
+
+// testShouldGetDefaultValueOfProtectedPropertiesUsingGetters
+$test = new \Stub\Properties\ProtectedProperties();
+echo var_export($test->getSomeNull(), true), "\n";
+echo var_export($test->getSomeNullInitial(), true), "\n";
+echo var_export($test->getSomeFalse(), true), "\n";
+echo var_export($test->getSomeTrue(), true), "\n";
+echo var_export($test->getSomeInteger(), true), "\n";
+echo var_export($test->getSomeDouble(), true), "\n";
+echo var_export($test->getSomeString(), true), "\n";
+
+// testShouldSetAndGetProtectedPropertyUsingShortcuts (round-trip a random value)
+$rand = uniqid('', true);
+$test->setSomeVar($rand);
+echo var_export($test->getSomeVar() === $rand, true), "\n";
+
+// testShouldSetAndGetProtectedPropertyUsingExtendedClass (issue #2089)
+$ext = new ExtendsProtectedProperties();
+echo var_export($ext->getSomeArrayVar(), true), "\n";
+$ext->setSomeArrayVar(['key' => 'value']);
+echo var_export($ext->getSomeArrayVar(), true), "\n";
+$ext->setSomeArrayVar(['key2' => 'value2']);
+echo var_export($ext->getSomeArrayVar(), true), "\n";
+--EXPECT--
+NULL
+NULL
+false
+true
+10
+10.25
+'test'
+true
+array (
+  'key' => 'value',
+)
+array (
+  'key' => 'value',
+)
+array (
+  'key2' => 'value2',
+)

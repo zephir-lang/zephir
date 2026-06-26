@@ -1,0 +1,30 @@
+--TEST--
+Issue #914: a class extending native \mysqli is an instanceof \mysqli (port of tests/Extension/Issue914Test.php)
+--SKIPIF--
+<?php
+if (!extension_loaded('mysqli')) {
+    echo 'skip ext/mysqli not loaded';
+}
+--INI--
+; mysqli links against mysqlnd's symbols (e.g. mysqlnd_global_stats). The
+; --USAGE-- run is isolated with `php -n`, so unlike the full-ini --SKIPIF--
+; check it must load mysqlnd first or mysqli fails with an undefined symbol
+; (where the distro ships mysqlnd as a separate .so, e.g. setup-php on Ubuntu).
+; Harmless where mysqlnd is built statically: the load warning goes to stderr.
+extension=mysqlnd
+extension=mysqli
+--FILE--
+namespace Stub;
+
+class Issue914 extends \mysqli
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+--USAGE--
+$test = new \Stub\Issue914();
+echo var_export($test instanceof \mysqli, true), "\n";
+--EXPECT--
+true

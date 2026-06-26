@@ -1,0 +1,87 @@
+--TEST--
+Ternary type coercion: ternary result assigned into typed targets (int/double/string/bool), nested ternary, ternary in return with type cast
+--FILE--
+namespace Stub;
+
+class TernaryTypeCoerce
+{
+    public function toIntTarget(boolean b) -> int
+    {
+        int r;
+        let r = b ? 10 : 20;
+        return r;
+    }
+
+    public function intStringMix(boolean b) -> string
+    {
+        string r;
+        let r = b ? "yes" : "no";
+        return r;
+    }
+
+    public function doubleTarget(boolean b) -> double
+    {
+        double r;
+        let r = b ? 1 : 2;
+        return r;
+    }
+
+    public function boolFromComparison(int n) -> boolean
+    {
+        boolean r;
+        let r = n > 0 ? true : false;
+        return r;
+    }
+
+    public function nestedTernary(int n) -> string
+    {
+        string r;
+        let r = n < 0 ? "neg" : (n == 0 ? "zero" : "pos");
+        return r;
+    }
+
+    public function ternaryWithCast(var v) -> int
+    {
+        int r;
+        let r = v ? (int) v : 0;
+        return r;
+    }
+
+    public function elvisToTyped(var v) -> string
+    {
+        string r;
+        let r = v ?: "default";
+        return r;
+    }
+}
+--USAGE--
+$t = new \Stub\TernaryTypeCoerce();
+echo var_export($t->toIntTarget(true), true), "\n";        // 10
+echo var_export($t->toIntTarget(false), true), "\n";       // 20
+echo var_export($t->intStringMix(true), true), "\n";       // 'yes'
+echo var_export($t->doubleTarget(true), true), "\n";       // 1.0  (double target)
+echo var_export($t->doubleTarget(false), true), "\n";      // 2.0
+echo var_export($t->boolFromComparison(5), true), "\n";    // true
+echo var_export($t->boolFromComparison(-5), true), "\n";   // false
+echo var_export($t->nestedTernary(-3), true), "\n";        // 'neg'
+echo var_export($t->nestedTernary(0), true), "\n";         // 'zero'
+echo var_export($t->nestedTernary(8), true), "\n";         // 'pos'
+echo var_export($t->ternaryWithCast("42abc"), true), "\n"; // 42
+echo var_export($t->ternaryWithCast(0), true), "\n";       // 0
+echo var_export($t->elvisToTyped("set"), true), "\n";      // 'set'
+echo var_export($t->elvisToTyped(""), true), "\n";         // 'default'
+--EXPECT--
+10
+20
+'yes'
+1.0
+2.0
+true
+false
+'neg'
+'zero'
+'pos'
+42
+0
+'set'
+'default'

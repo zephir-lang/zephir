@@ -1,0 +1,95 @@
+--TEST--
+BuiltIn array methods: join/reversed/map on array literals and vars, plus issue #733 (port of tests/Extension/BuiltIn/ArrayMethodsTest.php)
+--FILE--
+namespace Stub\BuiltIn;
+
+class ArrayMethods
+{
+	public function getJoin1()
+	{
+		return [1, 2, 3]->join("-");
+	}
+
+	public function getReversed1()
+	{
+		return [1, 2, 3]->reversed();
+	}
+
+	public function getMap1()
+	{
+		return [1, 2, 3]->map(x => x * 100);
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+	public function issue733BuiltInJoinSpecialChars(string! a, var b = null) -> string
+	{
+	    if b === null || b === false {
+            return a->trimleft();
+        }
+
+        if typeof b == "array" {
+            let b = b->join("");
+        }
+
+        let b = preg_replace("#[-\[\]:\\\\^/]#", "\\\\$0", b);
+
+        return preg_replace("/^[" . b . "]+/u", "", a);
+	}
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function issue733JoinOnVar(var input) -> string
+    {
+        return input->join(",");
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function issue733ReversedOnVar(var input) -> array
+    {
+        return input->reversed();
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/733
+     */
+    public function issue733JoinOnLiteralArray() -> string
+    {
+        return ["a", "b", "c"]->join("|");
+    }
+}
+--USAGE--
+$m = new \Stub\BuiltIn\ArrayMethods();
+echo var_export($m->getJoin1(), true), "\n";
+echo var_export($m->getReversed1(), true), "\n";
+echo var_export($m->getMap1(), true), "\n";
+echo var_export($m->issue733BuiltInJoinSpecialChars('ålcó', ['å', 'l']), true), "\n";
+echo var_export($m->issue733JoinOnVar([1, 2, 3]), true), "\n";
+echo var_export($m->issue733JoinOnVar([]), true), "\n";
+echo var_export($m->issue733ReversedOnVar(['a', 'b', 'c']), true), "\n";
+echo var_export($m->issue733JoinOnLiteralArray(), true), "\n";
+--EXPECT--
+'1-2-3'
+array (
+  0 => 3,
+  1 => 2,
+  2 => 1,
+)
+array (
+  0 => 100,
+  1 => 200,
+  2 => 300,
+)
+'có'
+'1,2,3'
+''
+array (
+  0 => 'c',
+  1 => 'b',
+  2 => 'a',
+)
+'a|b|c'

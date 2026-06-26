@@ -1,0 +1,32 @@
+--TEST--
+Issue #2565: instanceof narrows the type inside the guard so a subtype-only method (ReflectionNamedType::getName) resolves
+--FILE--
+namespace Stub;
+
+use ReflectionNamedType;
+use ReflectionType;
+
+class Issue2565
+{
+    public function resolveType(<ReflectionType> type) -> string | null
+    {
+        if type instanceof ReflectionNamedType {
+            return type->getName();
+        }
+
+        return null;
+    }
+}
+--USAGE--
+$object = new \Stub\Issue2565();
+
+// testNarrowsTypeInsideInstanceOfGuard: a single named type
+$named = (new ReflectionFunction(fn (int $x) => $x))->getParameters()[0]->getType();
+echo var_export($object->resolveType($named), true), "\n";
+
+// testReturnsNullForNonNamedType: a union type is ReflectionType but not ReflectionNamedType
+$union = (new ReflectionFunction(fn (int|string $x) => $x))->getParameters()[0]->getType();
+echo var_export($object->resolveType($union), true), "\n";
+--EXPECT--
+'int'
+NULL

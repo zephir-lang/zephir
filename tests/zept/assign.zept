@@ -1,0 +1,447 @@
+--TEST--
+Assign: typed scalar coercions, compound assigns, nested array/property assigns, superglobals, issue597 (port of tests/Extension/AssignTest.php)
+--FILE--
+namespace Stub;
+
+class Assign
+{
+	protected testVar { get };
+	protected myArray { get };
+	protected static testVarStatic;
+
+	public function testAssign1() -> int { int a; let a = 1; return a; }
+	public function testAssign2() -> int { int a; let a = true; return a; }
+	public function testAssign3() -> int { int a; let a = false; return a; }
+	public function testAssign4() -> int { int a; let a = null; return a; }
+	public function testAssign5() -> int { int a; let a = 2.0; return a; }
+	public function testAssign6() -> bool { boolean a; let a = 1; return a; }
+	public function testAssign7() -> bool { boolean a; let a = 1.0; return a; }
+	public function testAssign8() -> bool { boolean a; let a = true; return a; }
+	public function testAssign9() -> bool { boolean a; let a = false; return a; }
+	public function testAssign10() -> bool { boolean a; let a = null; return a; }
+	public function testAssign11() -> double { double a; let a = null; return a; }
+	public function testAssign12() -> double { double a; let a = 4; return a; }
+	public function testAssign13() -> double { double a; let a = false; return a; }
+	public function testAssign14() -> double { double a; let a = true; return a; }
+	public function testAssign15() -> double { double a; let a = 5.0; return a; }
+	public function testAssign16() -> int { var a; let a = 1; return a; }
+	public function testAssign17() -> double { var a; let a = 1.0; return a; }
+	public function testAssign18() -> bool { var a; let a = false; return a; }
+	public function testAssign19() -> bool { var a; let a = true; return a; }
+	public function testAssign20() -> null { var a; let a = null; return a; }
+	public function testAssign21() -> int { int a, b; let a = 1, b = a; return b; }
+	public function testAssign22() -> double { double a, b; let a = 1.0, b = a; return b; }
+	public function testAssign23() -> bool { boolean a, b; let a = true, b = a; return b; }
+	public function testAssign24() -> double { int a; double b; let a = 1, b = a; return b; }
+	public function testAssign25() -> double { int a; double b; let a = 1, b = a; return b; }
+	public function testAssign26() -> int { int b; double a; let a = 1, b = a; return b; }
+	public function testAssign27() -> double { int b; double a; let b = 1, a = b; return a; }
+	public function testAssign28() -> bool { int b; boolean a; let b = 1, a = b; return a; }
+	public function testAssign29() -> bool { double b; boolean a; let b = 1.0, a = b; return a; }
+	public function testAssign30() -> int { boolean b; int a; let b = false, a = b; return a; }
+	public function testAssign31() -> double { boolean b; double a; let b = false, a = b; return a; }
+	public function testAssign32() -> bool { boolean b; var a; let b = false, a = b; return a; }
+	public function testAssign33() -> bool { boolean b; var a; let b = false, a = b; return a; }
+	public function testAssign34() -> bool { int b; var a; let b = false, a = b; return a; }
+	public function testAssign35() -> bool { double b; var a; let b = false, a = b; return a; }
+	public function testAssign36() -> bool { var b; var a; let b = false, a = b; return a; }
+
+	public function testAssign37() -> array
+	{
+		var v = "abc";
+		var arr = [];
+		let arr = ["a": ["b_key": "b_val", "b": []]];
+		let arr["a"]["b"]["d_key"] = "d_val";
+		let arr["s"] = 1;
+		let arr["a"]["b"]["c"]["d"]["e"] = "f";
+		let arr[1] = [2: [3: 4]];
+		let arr[1][2][5] = 6;
+		let arr[1][2][v] = v;
+		return arr;
+	}
+
+	public function testAssign38(index) -> array
+	{
+		var arr = [];
+		let arr[index] = "val";
+		return arr;
+	}
+
+	public function testAssign39() -> int
+	{
+		var a, b, c;
+		let a = "hello", b = false;
+		let a = 10, b = "140";
+		let c = a + b;
+		return c;
+	}
+
+	public function testAssign40() -> int
+	{
+		var a, b;
+		let b = new \stdClass(), a = [];
+		let a = "123", b = 7;
+		return a - b;
+	}
+
+	public function testAssign41(int num) -> int { var a; let a = 42; let a /= num; return a; }
+	public function testAssign42(int num) -> int { var a; let a = 2; let num /= a; return num; }
+	public function testAssign43(int num) -> int { var a; let a = 43; let a %= num; return a; }
+	public function testAssign44(int num) -> int { var a; let a = 2; let num %= a; return num; }
+
+	public function testPropertyIncr1() { let this->testVar = 1; let this->testVar++; return this->testVar; }
+	public function testPropertyAddAssign1() { let this->testVar = 0; let this->testVar += 2; return this->testVar; }
+	public function testPropertyAddAssign2() { let this->testVar = 1; let this->testVar += 2; return this->testVar; }
+	public function testPropertyAssignValuePlus1() { let this->testVar = 1; let this->testVar = this->testVar + 1; return this->testVar; }
+	public function testPropertyDecr() { let this->testVar = 2; let this->testVar--; return this->testVar; }
+	public function testPropertySubAssign1() { let this->testVar = 0; let this->testVar -= 2; return this->testVar; }
+	public function testPropertySubAssign2() { let this->testVar = 1; let this->testVar -= 2; return this->testVar; }
+	public function testPropertyMulAssign1() { let this->testVar = 1; let this->testVar *= 2; return this->testVar; }
+	public function testPropertyMulAssign2() { let this->testVar = 1; let this->testVar *= 3; return this->testVar; }
+	public function testPropertyAssignStringConcat() { let this->testVar = "test"; let this->testVar .= " string"; return this->testVar; }
+
+	public function testPropertyArray14()
+	{
+		var v = "abc";
+		let this->myArray = ["a": ["b_key": "b_val"]];
+		let this->myArray["a"]["b"]["d_key"] = "d_val";
+		let this->myArray[1] = [2: [3: 4]];
+		let this->myArray["s"] = 1;
+		let this->myArray["a"]["b"]["c"]["d"]["e"] = "f";
+		let this->myArray[1][2][5] = 6;
+		let this->myArray[1][2][v] = v;
+		return this->myArray;
+	}
+
+	public function testStaticPropertyArrayMulti4()
+	{
+		var v = "abc";
+		let self::testVarStatic = ["a": ["b_key": "b_val"]];
+		let self::testVarStatic["a"]["b"]["d_key"] = "d_val";
+		let self::testVarStatic[1] = [2: [3: 4]];
+		let self::testVarStatic["s"] = 1;
+		let self::testVarStatic["a"]["b"]["c"]["d"]["e"] = "f";
+		let self::testVarStatic[1][2][5] = 6;
+		let self::testVarStatic[1][2][v] = v;
+		return self::testVarStatic;
+	}
+
+	public function testStaticPropertyArrayAppend()
+	{
+		let self::testVarStatic = [];
+		let self::testVarStatic[] = "test";
+		let self::testVarStatic[] = 1;
+		let self::testVarStatic[] = 1.5;
+		let self::testVarStatic[] = false;
+		let self::testVarStatic[] = [];
+		return self::testVarStatic;
+	}
+
+	public function testArrayVarAssign1(var index, var value)
+	{
+		var a;
+		let a = [];
+		let a[index] = value;
+		return a;
+	}
+
+	public function testArrayVarAssign2(var index, var value)
+	{
+		var _POST;
+		let _POST = [];
+		let _POST[index] = value;
+		return _POST;
+	}
+
+	public function testArrayBoolExpressionAssign()
+	{
+		var str = "abc";
+		let this->myArray = [];
+		let this->myArray["a"] = str == "abc";
+		let this->myArray["b"] = str != "abc";
+		return this->myArray;
+	}
+
+	public function testAssignBitwiseX(int a, int b)
+	{
+		var op, i;
+		var result = [];
+		for op in ["or", "and", "xor", "shiftleft", "shiftright"] {
+			let i = a;
+			switch op {
+				case "or": let i |= b; break;
+				case "and": let i &= b; break;
+				case "xor": let i ^= b; break;
+				case "shiftleft": let i <<= b; break;
+				case "shiftright": let i >>= b; break;
+			}
+			let result[op] = i;
+		}
+		return result;
+	}
+
+	public function testGlobalVarAssign(var index, var value)
+	{
+		let _POST[index] = value;
+	}
+
+	public function testAssignSuperGlobals()
+	{
+		var v = "stest2";
+		let _GET["steststr"] = "stest";
+		let _GET["steststr2"] = v;
+		let _GET["stestint"] = 1;
+		let _GET["stestint2"] = 2;
+		let _GET[v] = "testval";
+	}
+
+	public function issue597()
+	{
+		if isset _POST["a"] {
+			if isset _GET["r"] {
+			}
+		}
+		if isset _GET["s"] {
+			var s;
+			let s = _GET["s"] * 5;
+			let _GET["s"] = s;
+			return s;
+		}
+	}
+}
+--USAGE--
+$t = new \Stub\Assign();
+
+// variable-assignment provider (typed coercions / compound assigns)
+$varTests = [
+    'testAssign1','testAssign2','testAssign3','testAssign4','testAssign5','testAssign6',
+    'testAssign7','testAssign8','testAssign9','testAssign10','testAssign11','testAssign12',
+    'testAssign13','testAssign14','testAssign15','testAssign16','testAssign17','testAssign18',
+    'testAssign19','testAssign20','testAssign21','testAssign22','testAssign23','testAssign24',
+    'testAssign25','testAssign26','testAssign27','testAssign28','testAssign29','testAssign30',
+    'testAssign31','testAssign32','testAssign33','testAssign34','testAssign35','testAssign36',
+    'testAssign37',
+];
+foreach ($varTests as $m) {
+    echo var_export($t->$m(), true), "\n";
+}
+echo var_export($t->testAssign38('i'), true), "\n";
+echo var_export($t->testAssign39(), true), "\n";
+echo var_export($t->testAssign40(), true), "\n";
+echo var_export($t->testAssign41(2), true), "\n";
+echo var_export($t->testAssign42(86), true), "\n";
+echo var_export($t->testAssign43(2), true), "\n";
+echo var_export($t->testAssign44(41), true), "\n";
+
+// property-assignment provider
+echo var_export($t->testPropertyIncr1(), true), "\n";
+echo var_export($t->testPropertyAddAssign1(), true), "\n";
+echo var_export($t->testPropertyAddAssign2(), true), "\n";
+echo var_export($t->testPropertyAssignValuePlus1(), true), "\n";
+echo var_export($t->testPropertyDecr(), true), "\n";
+echo var_export($t->testPropertySubAssign1(), true), "\n";
+echo var_export($t->testPropertySubAssign2(), true), "\n";
+echo var_export($t->testPropertyMulAssign1(), true), "\n";
+echo var_export($t->testPropertyMulAssign2(), true), "\n";
+echo var_export($t->testPropertyAssignStringConcat(), true), "\n";
+echo var_export($t->testArrayVarAssign1('test_index', 'value'), true), "\n";
+echo var_export($t->testArrayVarAssign2('test_index', 'value'), true), "\n";
+echo var_export($t->testPropertyArray14(), true), "\n";
+echo var_export($t->testStaticPropertyArrayMulti4(), true), "\n";
+echo var_export($t->testStaticPropertyArrayAppend(), true), "\n";
+echo var_export($t->testArrayBoolExpressionAssign(), true), "\n";
+echo var_export($t->testAssignBitwiseX(900, 5), true), "\n";
+
+// superglobal assignment (issue #159 / #725)
+$_POST = [];
+echo var_export(!isset($_POST['test_index']), true), "\n";
+$t->testGlobalVarAssign('test_index', 'value');
+echo var_export($_POST['test_index'], true), "\n";
+
+$_GET = [];
+$t->testAssignSuperGlobals();
+echo var_export($_GET['steststr'], true), "\n";
+echo var_export($_GET['steststr2'], true), "\n";
+echo var_export($_GET['stestint'], true), "\n";
+echo var_export($_GET['stestint2'], true), "\n";
+echo var_export($_GET['stest2'], true), "\n";
+
+// issue #597
+$_GET = [];
+$t->issue597();
+echo var_export(empty($_GET), true), "\n";
+$_GET['s'] = 10;
+$t->issue597();
+echo var_export($_GET['s'], true), "\n";
+--EXPECT--
+1
+1
+0
+0
+2
+true
+true
+true
+false
+false
+0.0
+4.0
+0.0
+1.0
+5.0
+1
+1.0
+false
+true
+NULL
+1
+1.0
+true
+1.0
+1.0
+1
+1.0
+true
+true
+0
+0.0
+false
+false
+false
+false
+false
+array (
+  'a' => 
+  array (
+    'b_key' => 'b_val',
+    'b' => 
+    array (
+      'd_key' => 'd_val',
+      'c' => 
+      array (
+        'd' => 
+        array (
+          'e' => 'f',
+        ),
+      ),
+    ),
+  ),
+  's' => 1,
+  1 => 
+  array (
+    2 => 
+    array (
+      3 => 4,
+      5 => 6,
+      'abc' => 'abc',
+    ),
+  ),
+)
+array (
+  'i' => 'val',
+)
+150
+116
+21
+43
+1
+1
+2
+2
+3
+2
+1
+-2
+-1
+2
+3
+'test string'
+array (
+  'test_index' => 'value',
+)
+array (
+  'test_index' => 'value',
+)
+array (
+  'a' => 
+  array (
+    'b_key' => 'b_val',
+    'b' => 
+    array (
+      'd_key' => 'd_val',
+      'c' => 
+      array (
+        'd' => 
+        array (
+          'e' => 'f',
+        ),
+      ),
+    ),
+  ),
+  1 => 
+  array (
+    2 => 
+    array (
+      3 => 4,
+      5 => 6,
+      'abc' => 'abc',
+    ),
+  ),
+  's' => 1,
+)
+array (
+  'a' => 
+  array (
+    'b_key' => 'b_val',
+    'b' => 
+    array (
+      'd_key' => 'd_val',
+      'c' => 
+      array (
+        'd' => 
+        array (
+          'e' => 'f',
+        ),
+      ),
+    ),
+  ),
+  1 => 
+  array (
+    2 => 
+    array (
+      3 => 4,
+      5 => 6,
+      'abc' => 'abc',
+    ),
+  ),
+  's' => 1,
+)
+array (
+  0 => 'test',
+  1 => 1,
+  2 => 1.5,
+  3 => false,
+  4 => 
+  array (
+  ),
+)
+array (
+  'a' => true,
+  'b' => false,
+)
+array (
+  'or' => 901,
+  'and' => 4,
+  'xor' => 897,
+  'shiftleft' => 28800,
+  'shiftright' => 28,
+)
+true
+'value'
+'stest'
+'stest2'
+1
+2
+'testval'
+true
+50

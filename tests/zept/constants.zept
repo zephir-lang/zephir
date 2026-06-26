@@ -1,0 +1,207 @@
+--TEST--
+Constants: class consts (null/bool/int/double/string), self/parent reads, env + magic constants, string-const with delimiters/vars (port of tests/Extension/ConstantsTest.php)
+--FILE--
+namespace Stub;
+
+class ConstantsParent
+{
+	const P1 = null;
+	const P2 = false;
+	const P3 = true;
+	const P4 = 10;
+	const P5 = 10.25;
+	const P6 = "test";
+}
+--FILE--
+namespace Stub\Oo;
+
+class ConstantsInterface
+{
+	const CLASSNAME = __CLASS__;
+	const NAMESPACENAME = __NAMESPACE__;
+}
+--FILE--
+namespace Stub;
+
+class Constants extends ConstantsParent
+{
+	const C1 = null;
+	const C2 = false;
+	const C3 = true;
+	const C4 = 10;
+	const C5 = 10.25;
+	const C5_SELF = self::C5;
+	const C5_BY_NAME = Constants::C5;
+	const C6 = "test";
+	const className = __CLASS__;
+	const STD_PROP_LIST = \ArrayObject::STD_PROP_LIST;
+
+	/** Test Issue 1571 */
+	const DEFAULT_PATH_DELIMITER  = ".";
+	const PROPERTY_WITH_VARS = "$SOME/CSRF/KEY$";
+
+	protected propWsVarsAssigned = "$SOME/CSRF/KEY$";
+	protected propWsVarsGet = self::PROPERTY_WITH_VARS {get};
+
+	protected propertyC1 = self::C1 {get};
+	protected propertyC2 = self::C2 {get};
+	protected propertyC3 = self::C3 {get};
+	protected propertyC4 = self::C4 {get};
+	protected propertyC5 = self::C5 {get};
+	protected propertyC6 = self::C6 {get};
+
+	protected propertyC9 = "some-value" {get};
+
+	public function testReadConstant()
+	{
+		return ENT_QUOTES;
+	}
+
+	public function testReadClassConstant1()
+	{
+		return Constants::C4;
+	}
+
+	public function testReadClassConstant2()
+	{
+		return self::C4;
+	}
+
+	public function testReadClassConstant3()
+	{
+		return parent::P4;
+	}
+
+	public function testPHPVersionEnvConstant()
+	{
+		return PHP_VERSION;
+	}
+
+	public function testClassMagicConstant()
+	{
+		return __CLASS__;
+	}
+
+	public function testMethodMagicConstant()
+	{
+		return __METHOD__;
+	}
+
+	public function testFunctionMagicConstant()
+	{
+		return __FUNCTION__;
+	}
+
+	public function testNamespaceMagicConstant()
+	{
+		return __NAMESPACE__;
+	}
+
+	public function testPHPVersionEnvConstantInExpValue()
+	{
+		var a;
+		let a = PHP_VERSION;
+		return a;
+	}
+
+	public function testStringDelimiterConstantDoubleQuoted()
+	{
+		var delimiter;
+		let delimiter = Constants::DEFAULT_PATH_DELIMITER;
+		return delimiter;
+	}
+
+	public function testStringConstantWithVars()
+	{
+		var property;
+		let property = Constants::PROPERTY_WITH_VARS;
+		return property;
+	}
+
+	public function testStringPropertyWithVarsAssigned()
+	{
+		return this->propWsVarsAssigned;
+	}
+
+	public function testStringPropertyWithVarsGet()
+	{
+		return this->propWsVarsGet;
+	}
+}
+--USAGE--
+$test = new \Stub\Constants();
+
+// constant declarations read statically
+echo var_export(\Stub\Constants::C1, true), "\n";
+echo var_export(\Stub\Constants::C2, true), "\n";
+echo var_export(\Stub\Constants::C3, true), "\n";
+echo var_export(\Stub\Constants::C4, true), "\n";
+echo var_export(\Stub\Constants::C5, true), "\n";
+echo var_export(\Stub\Constants::C6, true), "\n";
+echo var_export(\Stub\Constants::className, true), "\n";
+echo var_export(\Stub\Constants::STD_PROP_LIST === \ArrayObject::STD_PROP_LIST, true), "\n";
+
+// getters generated from `{get}` shortcut properties
+echo var_export($test->getPropertyC1(), true), "\n";
+echo var_export($test->getPropertyC2(), true), "\n";
+echo var_export($test->getPropertyC3(), true), "\n";
+echo var_export($test->getPropertyC4(), true), "\n";
+echo var_export($test->getPropertyC5(), true), "\n";
+echo var_export($test->getPropertyC6(), true), "\n";
+echo var_export($test->getPropertyC9(), true), "\n";
+
+// reading constants from method bodies
+echo var_export($test->testReadConstant() === ENT_QUOTES, true), "\n";
+echo var_export($test->testReadClassConstant1(), true), "\n";
+echo var_export($test->testReadClassConstant2(), true), "\n";
+echo var_export($test->testReadClassConstant3(), true), "\n";
+
+// env constant PHP_VERSION is a non-empty string
+echo var_export(is_string($test->testPHPVersionEnvConstant()) && $test->testPHPVersionEnvConstant() !== '', true), "\n";
+echo var_export(is_string($test->testPHPVersionEnvConstantInExpValue()) && $test->testPHPVersionEnvConstantInExpValue() !== '', true), "\n";
+
+// magic constants
+echo var_export($test->testNamespaceMagicConstant(), true), "\n";
+echo var_export($test->testClassMagicConstant(), true), "\n";
+echo var_export($test->testMethodMagicConstant(), true), "\n";
+echo var_export($test->testFunctionMagicConstant(), true), "\n";
+echo var_export(\Stub\Oo\ConstantsInterface::CLASSNAME, true), "\n";
+echo var_export(\Stub\Oo\ConstantsInterface::NAMESPACENAME, true), "\n";
+
+// string constants with delimiters / php-like vars (issue #1571)
+echo var_export($test->testStringDelimiterConstantDoubleQuoted(), true), "\n";
+echo var_export($test->testStringConstantWithVars(), true), "\n";
+echo var_export($test->testStringPropertyWithVarsAssigned(), true), "\n";
+echo var_export($test->testStringPropertyWithVarsGet(), true), "\n";
+--EXPECT--
+NULL
+false
+true
+10
+10.25
+'test'
+'Stub\\Constants'
+true
+NULL
+false
+true
+10
+10.25
+'test'
+'some-value'
+true
+10
+10
+10
+true
+true
+'Stub'
+'Stub\\Constants'
+'Constants:testMethodMagicConstant'
+'testFunctionMagicConstant'
+'Stub\\Oo\\ConstantsInterface'
+'Stub\\Oo'
+'.'
+'$SOME/CSRF/KEY$'
+'$SOME/CSRF/KEY$'
+'$SOME/CSRF/KEY$'

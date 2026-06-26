@@ -1,0 +1,60 @@
+--TEST--
+Dynamic instantiation new {className}() respects constructor visibility: protected/private ctor throws \Error, public ctor builds (#882) (port of tests/Extension/Oo/Issue882Test.php)
+--FILE--
+namespace Stub;
+
+class Issue882
+{
+    public static function initClass(string className)
+    {
+        return new {className}();
+    }
+}
+--USAGE--
+class Issue882PublicCtor
+{
+    public $built = false;
+
+    public function __construct()
+    {
+        $this->built = true;
+    }
+}
+
+class Issue882ProtectedCtor
+{
+    protected function __construct()
+    {
+    }
+}
+
+class Issue882PrivateCtor
+{
+    private function __construct()
+    {
+    }
+}
+
+// instanceof + message check (mirrors PHPUnit expectException + expectExceptionMessage).
+try {
+    \Stub\Issue882::initClass(\Issue882ProtectedCtor::class);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Error, true), ' ', $e->getMessage(), "\n";
+}
+
+try {
+    \Stub\Issue882::initClass(\Issue882PrivateCtor::class);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Error, true), ' ', $e->getMessage(), "\n";
+}
+
+$object = \Stub\Issue882::initClass(\Issue882PublicCtor::class);
+echo var_export($object instanceof \Issue882PublicCtor, true), "\n";
+echo var_export($object->built, true), "\n";
+--EXPECT--
+true Call to protected Issue882ProtectedCtor::__construct() from scope Stub\Issue882
+true Call to private Issue882PrivateCtor::__construct() from scope Stub\Issue882
+true
+true

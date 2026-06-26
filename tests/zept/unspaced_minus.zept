@@ -1,0 +1,95 @@
+--TEST--
+Unspaced binary minus and other glued operators lexed correctly (#2011): a-1, a+1, a*2, a/2, a%5, a*-1, a*2-1, range(0,len-1) (port of tests/Extension/UnspacedMinusTest.php)
+--FILE--
+namespace Stub;
+
+class UnspacedMinus
+{
+    public function rangeLen(int len) -> array
+    {
+        var i, out = [];
+        for i in range(0, len-1) {
+            let out[] = i;
+        }
+        return out;
+    }
+
+    public function glued(int a) -> int
+    {
+        return a-1;
+    }
+
+    public function spaceBefore(int a) -> int
+    {
+        return a -1;
+    }
+
+    public function arrayIndex(array a) -> int
+    {
+        return a[0]-1;
+    }
+
+    public function negativeLiteral() -> int
+    {
+        return -1;
+    }
+
+    public function gluedAdd(int a) -> int
+    {
+        return a+1;
+    }
+
+    public function gluedMul(int a) -> int
+    {
+        return a*2;
+    }
+
+    public function gluedDiv(int a) -> double
+    {
+        return a/2;
+    }
+
+    public function gluedMod(int a) -> int
+    {
+        return (int) (a%5);
+    }
+
+    public function mulByNegative(int a) -> int
+    {
+        return a*-1;
+    }
+
+    public function chained(int a) -> int
+    {
+        return a*2-1;
+    }
+}
+--USAGE--
+$test = new \Stub\UnspacedMinus();
+echo var_export($test->rangeLen(3), true), "\n";
+echo var_export($test->glued(42), true), "\n";
+echo var_export($test->spaceBefore(42), true), "\n";
+echo var_export($test->arrayIndex([10]), true), "\n";
+echo var_export($test->negativeLiteral(), true), "\n";
+echo var_export($test->gluedAdd(42), true), "\n";
+echo var_export($test->gluedMul(42), true), "\n";
+echo var_export($test->gluedDiv(42), true), "\n";
+echo var_export($test->gluedMod(42), true), "\n";
+echo var_export($test->mulByNegative(42), true), "\n";
+echo var_export($test->chained(42), true), "\n";
+--EXPECT--
+array (
+  0 => 0,
+  1 => 1,
+  2 => 2,
+)
+41
+41
+9
+-1
+43
+84
+21.0
+2
+-42
+83

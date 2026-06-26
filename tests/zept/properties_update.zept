@@ -1,0 +1,23 @@
+--TEST--
+Appending to an array property (let this->p1[] = value) preserves prior elements (port of tests/Extension/Properties/PropertyUpdateTest.php)
+--FILE--
+namespace Stub\Properties;
+
+class PropertyUpdate
+{
+    public p1;
+
+    public function update1() {
+        let this->p1[] = "aaa";
+    }
+}
+--USAGE--
+$test = new \Stub\Properties\PropertyUpdate();
+$test->p1 = [111];
+$test->update1();
+echo var_export($test->p1, true), "\n";
+--EXPECT--
+array (
+  0 => 111,
+  1 => 'aaa',
+)

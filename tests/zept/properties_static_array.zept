@@ -1,0 +1,27 @@
+--TEST--
+Static array property defaults (empty + populated) (port of tests/Extension/Properties/StaticPropertyArrayTest.php, issues #367/#188)
+--FILE--
+namespace Stub\Properties;
+
+/**
+ * @link https://github.com/zephir-lang/zephir/issues/367
+ * @link https://github.com/zephir-lang/zephir/issues/188
+ */
+class StaticPropertyArray
+{
+	public static someEmptyArray = [];
+
+	public static someArray = [1, 2, 3, 4];
+}
+--USAGE--
+echo var_export(\Stub\Properties\StaticPropertyArray::$someEmptyArray, true), "\n";
+echo var_export(\Stub\Properties\StaticPropertyArray::$someArray, true), "\n";
+--EXPECT--
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+)

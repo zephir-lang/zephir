@@ -1,0 +1,143 @@
+--TEST--
+Vars: var_dump / var_export for arrays, scalars, two/three params, count optimizer, get_defined_vars (port of tests/Extension/VarsTest.php)
+--FILE--
+namespace Stub;
+
+class Vars
+{
+    public function testVarDump()
+    {
+        var a, ar;
+        let a = "hello";
+        let ar = [1, "world", false];
+        var_dump(ar);
+        var_dump(a);
+    }
+
+    public function testVarExport()
+    {
+        var a, ar, ret;
+        let a = "hello";
+        let ar = [1, "world", false];
+        var_export(ar);
+        let ret = var_export(ar);
+        var_export(a);
+        let ret = var_export(a);
+        return ret;
+    }
+
+    public function test88Issue(string! param1, string param2 = null)
+    {
+        var_dump(param1);
+        var_dump(param2);
+        var_export(param1);
+        var_export(param2);
+    }
+
+    public function test88IssueParam2InitString(string! param1, string param2 = "test string")
+    {
+        var_export(param2);
+    }
+
+    public function testVarDump2param(var p1, var p2)
+    {
+        var_dump(p1, p2);
+    }
+
+    public function testVarDump3param(var p1, var p2, var p3)
+    {
+        var_dump(p1, p2, p3);
+    }
+
+    public function testCountOptimizerVarDumpAndExport(var testVar)
+    {
+        var_dump(count(testVar));
+        var_export(count(testVar));
+    }
+
+    public function testArrayTypeVarDumpAndExport(array testVar = [])
+    {
+        var_dump(testVar);
+        var_export(testVar);
+    }
+
+    public function testIntVarDump()
+    {
+        int a;
+        let a = 1;
+        var_dump(a);
+        var_export(a);
+    }
+
+    public function testDoubleVarDump()
+    {
+        double a;
+        let a = 1;
+        var_dump(a);
+        var_export(a);
+    }
+
+    public function testBoolVarDump()
+    {
+        bool a;
+        let a = true;
+        var_dump(a);
+        var_export(a);
+    }
+
+    public function testGetDefinedVars()
+    {
+        int a = 1;
+        double pi = 3.14;
+        return get_defined_vars();
+    }
+}
+--USAGE--
+$test = new \Stub\Vars();
+
+// Strip newlines + spaces, matching the original test's normalization that
+// hides PHP-version-specific var_dump whitespace differences.
+function norm(callable $fn): string {
+    ob_start();
+    $fn();
+    return str_replace(["\n", " "], "", ob_get_clean());
+}
+
+echo norm(fn() => $test->testVarDump()), "\n";
+
+// testVarExport prints its array+string and ALSO returns "'hello'".
+$ret = null;
+$printed = norm(function () use ($test, &$ret) { $ret = $test->testVarExport(); });
+echo $printed, "\n";
+echo var_export($ret, true), "\n";
+
+echo norm(fn() => $test->testVarDump2param(3.1, true)), "\n";
+echo norm(fn() => $test->testVarDump3param(3.1, true, [1, 2, 3])), "\n";
+echo norm(fn() => $test->test88Issue('foo', 'bar')), "\n";
+echo norm(fn() => $test->test88IssueParam2InitString('foo', 'bar')), "\n";
+echo norm(fn() => $test->testCountOptimizerVarDumpAndExport([1, 2, 3, 4, 5])), "\n";
+echo norm(fn() => $test->testArrayTypeVarDumpAndExport([1, 2, 3])), "\n";
+echo norm(fn() => $test->testIntVarDump()), "\n";
+echo norm(fn() => $test->testDoubleVarDump()), "\n";
+echo norm(fn() => $test->testBoolVarDump()), "\n";
+
+// get_defined_vars() inside a Zephir (C) method reads the most recent userland
+// frame's locals. WHICH locals exist depends on the calling script, so only the
+// portable invariant is asserted: the caller's bound $test is visible and is the
+// same object (the original test's real behavioral point).
+$defined = $test->testGetDefinedVars();
+echo var_export(($defined['test'] ?? null) === $test, true), "\n";
+--EXPECT--
+array(3){[0]=>int(1)[1]=>string(5)"world"[2]=>bool(false)}string(5)"hello"
+array(0=>1,1=>'world',2=>false,)'hello'
+'\'hello\''
+float(3.1)bool(true)
+float(3.1)bool(true)array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}
+string(3)"foo"string(3)"bar"'foo''bar'
+'bar'
+int(5)5
+array(3){[0]=>int(1)[1]=>int(2)[2]=>int(3)}array(0=>1,1=>2,2=>3,)
+int(1)1
+float(1)1.0
+bool(true)true
+true

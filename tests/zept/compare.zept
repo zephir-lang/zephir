@@ -1,0 +1,130 @@
+--TEST--
+Compare: int/double less, greater-equal, const PI comparisons, strict string equals, null equals, not-identical-zero (port of tests/Extension/CompareTest.php)
+--FILE--
+namespace Stub;
+
+class Compare
+{
+    const PI = 3.14;
+
+    public function isLessInt(int a, int b)
+    {
+        return a < b;
+    }
+
+    public function isGreaterEqual(int a, int b)
+    {
+        return a >= b;
+    }
+
+    public function isLessDouble(double a, double b)
+    {
+        return a < b;
+    }
+
+    public function isLessThenPi(double a)
+    {
+        return a < self::PI;
+    }
+
+    public function isMoreThenPi(double a)
+    {
+        return self::PI < a;
+    }
+
+    public function testVarWithStringEquals(string! str)
+    {
+        if str === "wrong testing" {
+            let str = "NOK";
+        } else {
+            if str === "another testing" {
+                let str = "NOK";
+            } else {
+                if str === "testing" {
+                    let str = "OK";
+                } else {
+                    let str = "NOK";
+                }
+            }
+        }
+
+        return str;
+    }
+
+    public function testVarEqualsNull(var a)
+    {
+        if (a === NULL) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function testNullEqualsVar(var a)
+    {
+        if (NULL === a) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function testNotIdenticalZeroVar()
+    {
+        var a = 5;
+        return 0 != a;
+    }
+
+    public function testNotIdenticalZeroInt()
+    {
+        int a = 5;
+        return 0 != a;
+    }
+
+    public function testNotIdenticalZeroLong()
+    {
+        long a = 5;
+        return 0 != a;
+    }
+}
+--USAGE--
+$test = new \Stub\Compare();
+echo var_export($test->isLessInt(1, 2), true), "\n";
+echo var_export($test->isLessDouble(1.1, 1.2), true), "\n";
+echo var_export($test->isLessInt(20, 10), true), "\n";
+echo var_export($test->isGreaterEqual(3, 2), true), "\n";
+echo var_export($test->isGreaterEqual(2, 2), true), "\n";
+echo var_export($test->isGreaterEqual(1, 2), true), "\n";
+echo var_export($test->isLessThenPi(3.12), true), "\n";
+echo var_export($test->isMoreThenPi(3.15), true), "\n";
+echo var_export($test->testVarWithStringEquals('wrong testing'), true), "\n";
+echo var_export($test->testVarWithStringEquals('another testing'), true), "\n";
+echo var_export($test->testVarWithStringEquals('testing'), true), "\n";
+echo var_export($test->testVarWithStringEquals('testing nok'), true), "\n";
+echo var_export($test->testVarEqualsNull(null), true), "\n";
+echo var_export($test->testVarEqualsNull(1), true), "\n";
+echo var_export($test->testNullEqualsVar(null), true), "\n";
+echo var_export($test->testNullEqualsVar(1), true), "\n";
+echo var_export($test->testNotIdenticalZeroVar(), true), "\n";
+echo var_export($test->testNotIdenticalZeroInt(), true), "\n";
+echo var_export($test->testNotIdenticalZeroLong(), true), "\n";
+--EXPECT--
+true
+true
+false
+true
+true
+false
+true
+true
+'NOK'
+'NOK'
+'OK'
+'NOK'
+true
+false
+true
+false
+true
+true
+true

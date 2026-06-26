@@ -1,0 +1,69 @@
+--TEST--
+Built-in function pipeline: nested string/array calls composed in one expression (strtoupper/trim/implode/array_map/explode/array_filter/count)
+--FILE--
+namespace Stub;
+
+class BuiltinPipeline
+{
+    public function shout(string s) -> string
+    {
+        return strtoupper(trim(s));
+    }
+
+    public function csvToList(string csv) -> array
+    {
+        return explode(",", csv);
+    }
+
+    public function joinUpper(array words) -> string
+    {
+        return implode("-", array_map("strtoupper", words));
+    }
+
+    public function lengths(array words) -> array
+    {
+        return array_map("strlen", words);
+    }
+
+    public function nonEmptyCount(array items) -> int
+    {
+        return count(array_filter(items));
+    }
+
+    public function roundTrip(string csv) -> string
+    {
+        var parts;
+        let parts = explode(",", csv);
+        return implode("|", parts);
+    }
+
+    public function sumStrlens(array words) -> int
+    {
+        return array_sum(array_map("strlen", words));
+    }
+}
+--USAGE--
+$t = new \Stub\BuiltinPipeline();
+echo var_export($t->shout("  hello  "), true), "\n";              // 'HELLO'
+echo var_export($t->csvToList("a,b,c"), true), "\n";
+echo var_export($t->joinUpper(["foo", "bar"]), true), "\n";      // 'FOO-BAR'
+echo var_export($t->lengths(["a", "bb", "ccc"]), true), "\n";
+echo var_export($t->nonEmptyCount(["x", "", "y", 0, "z"]), true), "\n"; // 3
+echo var_export($t->roundTrip("1,2,3"), true), "\n";             // '1|2|3'
+echo var_export($t->sumStrlens(["ab", "cde"]), true), "\n";      // 5
+--EXPECT--
+'HELLO'
+array (
+  0 => 'a',
+  1 => 'b',
+  2 => 'c',
+)
+'FOO-BAR'
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+3
+'1|2|3'
+5
