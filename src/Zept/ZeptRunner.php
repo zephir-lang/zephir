@@ -17,7 +17,9 @@ use Zephir\Os;
 
 use function array_merge;
 use function bin2hex;
+use function clearstatcache;
 use function defined;
+use function file_get_contents;
 use function file_put_contents;
 use function getenv;
 use function ini_get;
@@ -105,9 +107,27 @@ final class ZeptRunner
                 defined('ZEND_THREAD_SAFE') && ZEND_THREAD_SAFE === true,
                 $namespace
             );
+
+            // On Windows `zephir compile` alone does not reliably yield the
+            // binary: its internal configure omits --with-prefix, so the build
+            // tree cannot locate the PHP install and nmake produces nothing.
+            // The shipped Windows build (.github/workflows/build-win-ext) works
+            // around this by running configure (with --with-prefix) and nmake
+            // explicitly. Mirror that here, reusing the phpize/configure.js
+            // fix-ups `zephir compile` already applied, so per-case builds match
+            // the production flow.
+            $windowsBuild = '';
+            if (!is_file($artifact) && Os::isWindows()) {
+                $windowsBuild = $this->finishWindowsBuild($dir, $namespace, $env);
+                clearstatcache(true, $artifact);
+            }
+
             if (!is_file($artifact)) {
                 return ZeptResult::error(
-                    "zephir compile produced no extension:\n" . $compile['stderr'] . $compile['stdout']
+                    "zephir compile produced no extension:\n"
+                    . $compile['stderr'] . $compile['stdout'] . $windowsBuild
+                    . self::buildLog($dir, 'compile-errors.log')
+                    . self::buildLog($dir, 'compile.log')
                 );
             }
 
@@ -161,6 +181,58 @@ final class ZeptRunner
         $release = ($intSize === 8 ? 'x64/' : '') . 'Release' . ($threadSafe ? '_TS' : '');
 
         return 'ext/' . $release . '/php_' . $namespace . '.dll';
+    }
+
+    /**
+     * Finish the native build on Windows the way the shipped build does.
+     *
+     * `zephir compile` has already generated the C sources, phpized the ext
+     * dir and patched configure.js; what it does NOT do on Windows is pass
+     * --with-prefix to configure, without which the build tree cannot locate
+     * the PHP install and nmake yields no DLL. Re-run configure with the prefix
+     * derived from the running PHP binary, then nmake — mirroring
+     * `.github/workflows/build-win-ext` (configure --with-prefix + explicit
+     * nmake). Runs only when the first attempt left no artifact, so a working
+     * `zephir compile` is never double-built.
+     *
+     * @param array<string, string> $env
+     *
+     * @return string Combined configure/nmake output, surfaced on failure.
+     */
+    private function finishWindowsBuild(string $dir, string $namespace, array $env): string
+    {
+        $ext    = $dir . '/ext';
+        $prefix = \dirname(PHP_BINARY);
+
+        $configure = $this->runProcess(
+            ['cmd', '/c', 'configure.bat', '--enable-' . $namespace, '--with-prefix=' . $prefix],
+            $ext,
+            $env
+        );
+        $make = $this->runProcess(['cmd', '/c', 'nmake'], $ext, $env);
+
+        return $configure['stderr'] . $configure['stdout'] . $make['stderr'] . $make['stdout'];
+    }
+
+    /**
+     * Tail of a native-build log `zephir compile` leaves in the project dir.
+     *
+     * The compiler writes make/nmake output to `compile.log` /
+     * `compile-errors.log` files rather than to its own stdout/stderr, so a
+     * build failure surfaces with an otherwise empty process output — most
+     * visibly on Windows, where it left the "produced no extension" error with
+     * no diagnosable reason. Surfacing these makes such failures actionable.
+     */
+    private static function buildLog(string $dir, string $name): string
+    {
+        $path = $dir . '/' . $name;
+        if (!is_file($path)) {
+            return '';
+        }
+
+        $contents = trim((string) file_get_contents($path));
+
+        return $contents === '' ? '' : "\n--- {$name} ---\n" . $contents;
     }
 
     /**
