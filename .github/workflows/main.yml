@@ -187,7 +187,18 @@ jobs:
 
       - name: Black-box Testing
         if: always()
-        run: php vendor/bin/phpunit --testsuite BlackBox --no-coverage
+        # The .zept group (@group zept) is excluded here: each case is a full
+        # cold phpize/configure/make and would dominate every matrix leg. It is
+        # run separately, in parallel, on Linux only (the step below).
+        run: php vendor/bin/phpunit --testsuite BlackBox --exclude-group zept --no-coverage
+
+      - name: Zept Suite (parallel)
+        # Linux only: the .zept end-to-end build path is OS-agnostic (per-OS C
+        # behaviour is covered by the Extension suite + main build), and the
+        # Linux runners are the fastest. Sharded across CPUs by the script, so
+        # the ~200 per-case builds run concurrently instead of serially.
+        if: always() && runner.os == 'Linux'
+        run: .ci/run-zept-parallel.sh
 
   build-and-test-php-parser:
     name: "PHP-Parser (no ext)-PHP-${{ matrix.php }}"
@@ -272,7 +283,10 @@ jobs:
 
       - name: Black-box Testing
         if: always()
-        run: php vendor/bin/phpunit --testsuite BlackBox --no-coverage
+        # @group zept excluded: this job already forces the pure-PHP parser,
+        # which is exactly what the .zept runner uses, so the zept cases here
+        # would duplicate the Linux build-and-test legs at full build cost.
+        run: php vendor/bin/phpunit --testsuite BlackBox --exclude-group zept --no-coverage
 
   upload-coverage:
     permissions:
