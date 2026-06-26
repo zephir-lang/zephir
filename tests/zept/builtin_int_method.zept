@@ -89,15 +89,20 @@ echo var_export($test->getAbs(10), true), "\n";
 echo var_export($test->getAbs1(), true), "\n";
 echo var_export($test->getPow(2, 4), true), "\n";
 echo var_export($test->getSqrt(4), true), "\n";
-echo var_export($test->getExp(2), true), "\n";
-echo var_export($test->getLog(10), true), "\n";
+// Transcendental results are libm-dependent and differ by ~1 ULP across
+// platforms (e.g. tan(1) prints 1.5574077246549023 on glibc but
+// 1.557407724654902 on macOS), so assert parity with PHP's own builtins —
+// which use the same libm the extension links against — rather than a
+// hardcoded literal. Mirrors the original assertSame(exp(2), getExp(2)) port.
+echo var_export($test->getExp(2) === exp(2), true), "\n";
+echo var_export($test->getLog(10) === log(10), true), "\n";
 echo var_export($test->getLog(10, 10), true), "\n";
-echo var_export($test->getSin(1), true), "\n";
-echo var_export($test->getCos(1), true), "\n";
-echo var_export($test->getTan(1), true), "\n";
-echo var_export($test->getAsin(1), true), "\n";
+echo var_export($test->getSin(1) === sin(1), true), "\n";
+echo var_export($test->getCos(1) === cos(1), true), "\n";
+echo var_export($test->getTan(1) === tan(1), true), "\n";
+echo var_export($test->getAsin(1) === asin(1), true), "\n";
 echo var_export($test->getAcos(1), true), "\n";
-echo var_export($test->getAtan(1), true), "\n";
+echo var_export($test->getAtan(1) === atan(1), true), "\n";
 echo var_export($test->getBinary(255), true), "\n";
 echo var_export($test->getHex(255), true), "\n";
 echo var_export($test->getOctal(255), true), "\n";
@@ -106,15 +111,15 @@ echo var_export($test->getOctal(255), true), "\n";
 5
 16
 2.0
-7.38905609893065
-2.302585092994046
+true
+true
 1.0
-0.8414709848078965
-0.5403023058681398
-1.5574077246549023
-1.5707963267948966
+true
+true
+true
+true
 0.0
-0.7853981633974483
+true
 '11111111'
 'ff'
 '377'
