@@ -60,4 +60,47 @@ final class ZeptRunnerTest extends TestCase
             ZeptRunner::relativeExtensionPath(true, 4, true, 'stub')
         );
     }
+
+    public function testUsageCommandIsolatesFromSystemIni(): void
+    {
+        $command = ZeptRunner::isolatedUsageCommand('php', '/ext-dir', [], '/tmp/build/stub.so', '/tmp/usage.php');
+
+        // -n must come first so the system php.ini/conf.d (which may enable a
+        // colliding same-named extension) is ignored.
+        $this->assertSame(['php', '-n'], \array_slice($command, 0, 2));
+        // Startup/error noise must go to stderr, not the asserted stdout.
+        $this->assertContains('display_errors=stderr', $command);
+        $this->assertContains('extension_dir=/ext-dir', $command);
+        $this->assertContains('extension=/tmp/build/stub.so', $command);
+        $this->assertSame('/tmp/usage.php', $command[\count($command) - 1]);
+    }
+
+    public function testUsageCommandLoadsFreshExtensionAfterCaseIniDirectives(): void
+    {
+        $command = ZeptRunner::isolatedUsageCommand(
+            'php',
+            '/ext-dir',
+            ['extension=mysqli'],
+            '/tmp/build/stub.so',
+            '/tmp/usage.php'
+        );
+
+        // A case dependency declared via --INI-- (e.g. mysqli) must be loaded
+        // before the freshly built extension that links against it.
+        $mysqli = \array_search('extension=mysqli', $command, true);
+        $fresh  = \array_search('extension=/tmp/build/stub.so', $command, true);
+
+        $this->assertNotFalse($mysqli);
+        $this->assertNotFalse($fresh);
+        $this->assertLessThan($fresh, $mysqli);
+    }
+
+    public function testUsageCommandOmitsExtensionDirWhenUnknown(): void
+    {
+        $command = ZeptRunner::isolatedUsageCommand('php', '', [], '/tmp/build/stub.so', '/tmp/usage.php');
+
+        foreach ($command as $arg) {
+            $this->assertStringStartsNotWith('extension_dir=', $arg);
+        }
+    }
 }

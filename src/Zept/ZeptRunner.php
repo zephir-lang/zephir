@@ -20,6 +20,7 @@ use function bin2hex;
 use function defined;
 use function file_put_contents;
 use function getenv;
+use function ini_get;
 use function is_dir;
 use function is_file;
 use function is_resource;
@@ -113,12 +114,13 @@ final class ZeptRunner
             $usageFile = $dir . '/usage.php';
             file_put_contents($usageFile, $this->asPhpScript($zept->usage));
 
-            $command = [$this->phpBin, '-d', 'extension=' . $artifact];
-            foreach ($this->iniDirectives($zept) as $directive) {
-                $command[] = '-d';
-                $command[] = $directive;
-            }
-            $command[] = $usageFile;
+            $command = self::isolatedUsageCommand(
+                $this->phpBin,
+                (string) ini_get('extension_dir'),
+                $this->iniDirectives($zept),
+                $artifact,
+                $usageFile
+            );
 
             $usage = $this->runProcess($command, $dir);
 
@@ -159,6 +161,57 @@ final class ZeptRunner
         $release = ($intSize === 8 ? 'x64/' : '') . 'Release' . ($threadSafe ? '_TS' : '');
 
         return 'ext/' . $release . '/php_' . $namespace . '.dll';
+    }
+
+    /**
+     * Builds the argv for the `--USAGE--` run as an isolated PHP process.
+     *
+     * Crucially it passes `-n` so the system php.ini and its conf.d are
+     * ignored: the host test environment frequently has a same-named extension
+     * already enabled globally (e.g. the prebuilt `stub`), and PHP refuses to
+     * load a second module of that name — the freshly compiled one would be
+     * silently shadowed. With `-n` the only loaded module is the one built for
+     * the case under test.
+     *
+     * Because `-n` also drops `extension_dir`, it is restored so a case can
+     * still pull in shared modules it depends on via an `--INI--`
+     * `extension=<name>` directive (e.g. mysqli). The freshly built extension
+     * is loaded last so anything it links against is already present.
+     *
+     * Startup/error output is forced to stderr: `-n` resets `display_errors`
+     * to its compiled-in default (stdout), which would otherwise let an
+     * `extension=<name>` directive for a statically-built module emit a benign
+     * "Unable to load dynamic library" warning straight into the asserted
+     * stdout. The module is still available; we just keep the noise off stdout.
+     *
+     * @param list<string> $iniDirectives
+     *
+     * @return list<string>
+     */
+    public static function isolatedUsageCommand(
+        string $phpBin,
+        string $extensionDir,
+        array $iniDirectives,
+        string $artifact,
+        string $usageFile
+    ): array {
+        $command = [$phpBin, '-n', '-d', 'display_errors=stderr'];
+
+        if ($extensionDir !== '') {
+            $command[] = '-d';
+            $command[] = 'extension_dir=' . $extensionDir;
+        }
+
+        foreach ($iniDirectives as $directive) {
+            $command[] = '-d';
+            $command[] = $directive;
+        }
+
+        $command[] = '-d';
+        $command[] = 'extension=' . $artifact;
+        $command[] = $usageFile;
+
+        return $command;
     }
 
     /**

@@ -5,6 +5,8 @@ Issue #914: a class extending native \mysqli is an instanceof \mysqli (port of t
 if (!extension_loaded('mysqli')) {
     echo 'skip ext/mysqli not loaded';
 }
+--INI--
+extension=mysqli
 --FILE--
 namespace Stub;
 

@@ -2,6 +2,8 @@
 Openssl: openssl_random_pseudo_bytes length, loop count, and openssl_encrypt non-false (port of tests/Extension/OpensslTest.php)
 --SKIPIF--
 <?php if (!extension_loaded('openssl')) echo 'skip openssl not loaded';
+--INI--
+extension=openssl
 --FILE--
 namespace Stub;
 

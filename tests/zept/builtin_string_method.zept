@@ -131,6 +131,9 @@ class StringMethods
     }
 }
 --USAGE--
+// PHP 8.4+ emits a str_getcsv() $escape deprecation (->parseCsv below); PHPUnit never echoes
+// deprecations into asserted output, so silence them here (no-op on <= 8.3) to keep stdout stable.
+error_reporting(E_ALL & ~E_DEPRECATED);
 $test = new \Stub\BuiltIn\StringMethods();
 // camelize
 echo var_export($test->camelize('=_camelize', '_'), true), "\n";

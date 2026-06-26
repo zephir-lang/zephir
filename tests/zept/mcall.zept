@@ -1,5 +1,7 @@
 --TEST--
 Method calls: public/protected/private, dynamic name, optional params, typed array/object params (+Reflection), #1136 finfo, #2245 nullable (port of tests/Extension/MCallTest.php)
+--INI--
+extension=fileinfo
 --FILE--
 namespace Stub\Oo;
 

@@ -5,6 +5,8 @@ Issue #893: a class extending a native \DOMDocument exposes inherited childNodes
 if (!extension_loaded('dom')) {
     echo 'skip ext/dom not loaded';
 }
+--INI--
+extension=dom
 --FILE--
 namespace Stub;
 
