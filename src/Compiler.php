@@ -290,8 +290,15 @@ final class Compiler
         }
 
         if (Os::isWindows()) {
-            // TODO(klay): Make this better. Looks like it is non standard Env. Var
-            exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
+            // Prefer the dev-pack's phpize when %PHP_DEVPACK% is exported,
+            // otherwise fall back to the `phpize` already on PATH (the PHP SDK
+            // setup puts it there). Without this fallback a cold compile in an
+            // environment that lacks %PHP_DEVPACK% runs `\phpize`, which Windows
+            // reports as "The system cannot find the path specified." and never
+            // produces the configure.js read further below.
+            $phpize = getenv('PHP_DEVPACK') ? '%PHP_DEVPACK%\\phpize' : 'phpize';
+
+            exec('cd ext && ' . $phpize . ' --clean', $output, $exit);
 
             $releaseFolder = $this->getWindowsReleaseDir();
             if (file_exists($releaseFolder)) {
@@ -299,8 +306,7 @@ final class Compiler
             }
 
             $this->logger->info('Preparing for PHP compilation...');
-            // TODO(klay): Make this better. Looks like it is non standard Env. Var
-            exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
+            exec('cd ext && ' . $phpize, $output, $exit);
 
             /**
              * fix until patch hits all supported PHP builds.

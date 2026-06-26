@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Zephir\Zept;
 
+use Zephir\Os;
+
 use function array_merge;
 use function bin2hex;
+use function defined;
 use function file_put_contents;
 use function getenv;
 use function is_dir;
@@ -92,10 +95,16 @@ final class ZeptRunner
             }
 
             // `zephir compile` does not propagate a non-zero exit code, so the
-            // produced .so is the reliable success signal.
-            $compile = $this->runProcess([$this->phpBin, $this->zephirBin, 'compile'], $dir, $env);
-            $so      = $dir . '/ext/modules/' . $namespace . '.so';
-            if (!is_file($so)) {
+            // produced binary is the reliable success signal. Its name/location
+            // is OS-dependent (a `.so` on *nix, a `php_<ns>.dll` on Windows).
+            $compile  = $this->runProcess([$this->phpBin, $this->zephirBin, 'compile'], $dir, $env);
+            $artifact = $dir . '/' . self::relativeExtensionPath(
+                Os::isWindows(),
+                PHP_INT_SIZE,
+                defined('ZEND_THREAD_SAFE') && ZEND_THREAD_SAFE === true,
+                $namespace
+            );
+            if (!is_file($artifact)) {
                 return ZeptResult::error(
                     "zephir compile produced no extension:\n" . $compile['stderr'] . $compile['stdout']
                 );
@@ -104,7 +113,7 @@ final class ZeptRunner
             $usageFile = $dir . '/usage.php';
             file_put_contents($usageFile, $this->asPhpScript($zept->usage));
 
-            $command = [$this->phpBin, '-d', 'extension=' . $so];
+            $command = [$this->phpBin, '-d', 'extension=' . $artifact];
             foreach ($this->iniDirectives($zept) as $directive) {
                 $command[] = '-d';
                 $command[] = $directive;
@@ -126,6 +135,30 @@ final class ZeptRunner
         } finally {
             $this->removeDir($dir);
         }
+    }
+
+    /**
+     * Project-relative path of the binary a successful `zephir compile`
+     * produces. This differs per platform: a `.so` under `ext/modules` on
+     * *nix, and a `php_<ns>.dll` under the MSVC release directory on Windows
+     * (mirrors {@see \Zephir\Compiler::getWindowsReleaseDir()}).
+     *
+     * Pure and fully parameterised so every branch is unit-testable on any
+     * host, independent of where it happens to run.
+     */
+    public static function relativeExtensionPath(
+        bool $isWindows,
+        int $intSize,
+        bool $threadSafe,
+        string $namespace
+    ): string {
+        if (!$isWindows) {
+            return 'ext/modules/' . $namespace . '.so';
+        }
+
+        $release = ($intSize === 8 ? 'x64/' : '') . 'Release' . ($threadSafe ? '_TS' : '');
+
+        return 'ext/' . $release . '/php_' . $namespace . '.dll';
     }
 
     /**
