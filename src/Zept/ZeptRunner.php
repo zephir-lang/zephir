@@ -17,10 +17,10 @@ use Zephir\Os;
 
 use function array_merge;
 use function bin2hex;
-use function clearstatcache;
 use function defined;
 use function file_get_contents;
 use function file_put_contents;
+use function getcwd;
 use function getenv;
 use function ini_get;
 use function is_dir;
@@ -65,7 +65,7 @@ final class ZeptRunner
     ) {
         $this->zephirBin = $zephirBin;
         $this->phpBin    = $phpBin ?? PHP_BINARY;
-        $this->workRoot  = $workRoot ?? sys_get_temp_dir();
+        $this->workRoot  = $workRoot ?? self::defaultWorkRoot();
         $this->matcher   = $matcher ?? new OutputMatcher();
     }
 
@@ -108,24 +108,10 @@ final class ZeptRunner
                 $namespace
             );
 
-            // On Windows `zephir compile` alone does not reliably yield the
-            // binary: its internal configure omits --with-prefix, so the build
-            // tree cannot locate the PHP install and nmake produces nothing.
-            // The shipped Windows build (.github/workflows/build-win-ext) works
-            // around this by running configure (with --with-prefix) and nmake
-            // explicitly. Mirror that here, reusing the phpize/configure.js
-            // fix-ups `zephir compile` already applied, so per-case builds match
-            // the production flow.
-            $windowsBuild = '';
-            if (!is_file($artifact) && Os::isWindows()) {
-                $windowsBuild = $this->finishWindowsBuild($dir, $namespace, $env);
-                clearstatcache(true, $artifact);
-            }
-
             if (!is_file($artifact)) {
                 return ZeptResult::error(
                     "zephir compile produced no extension:\n"
-                    . $compile['stderr'] . $compile['stdout'] . $windowsBuild
+                    . $compile['stderr'] . $compile['stdout']
                     . self::buildLog($dir, 'compile-errors.log')
                     . self::buildLog($dir, 'compile.log')
                 );
@@ -184,37 +170,6 @@ final class ZeptRunner
     }
 
     /**
-     * Finish the native build on Windows the way the shipped build does.
-     *
-     * `zephir compile` has already generated the C sources, phpized the ext
-     * dir and patched configure.js; what it does NOT do on Windows is pass
-     * --with-prefix to configure, without which the build tree cannot locate
-     * the PHP install and nmake yields no DLL. Re-run configure with the prefix
-     * derived from the running PHP binary, then nmake — mirroring
-     * `.github/workflows/build-win-ext` (configure --with-prefix + explicit
-     * nmake). Runs only when the first attempt left no artifact, so a working
-     * `zephir compile` is never double-built.
-     *
-     * @param array<string, string> $env
-     *
-     * @return string Combined configure/nmake output, surfaced on failure.
-     */
-    private function finishWindowsBuild(string $dir, string $namespace, array $env): string
-    {
-        $ext    = $dir . '/ext';
-        $prefix = \dirname(PHP_BINARY);
-
-        $configure = $this->runProcess(
-            ['cmd', '/c', 'configure.bat', '--enable-' . $namespace, '--with-prefix=' . $prefix],
-            $ext,
-            $env
-        );
-        $make = $this->runProcess(['cmd', '/c', 'nmake'], $ext, $env);
-
-        return $configure['stderr'] . $configure['stdout'] . $make['stderr'] . $make['stdout'];
-    }
-
-    /**
      * Tail of a native-build log `zephir compile` leaves in the project dir.
      *
      * The compiler writes make/nmake output to `compile.log` /
@@ -233,6 +188,31 @@ final class ZeptRunner
         $contents = trim((string) file_get_contents($path));
 
         return $contents === '' ? '' : "\n--- {$name} ---\n" . $contents;
+    }
+
+    /**
+     * Default throwaway-build root.
+     *
+     * On Windows `nmake` rejects '~' in a makefile macro
+     * ("fatal error U1001: illegal character '~' in macro"), so a build tree
+     * under a short-name (8.3) path component — as the runner's TEMP is, e.g.
+     * `C:\Users\RUNNER~1\AppData\Local\Temp` — breaks every per-case build.
+     * The working directory has no such component, so prefer it there.
+     * Elsewhere (and when TEMP is already a long path) the system temp dir is
+     * used unchanged.
+     */
+    private static function defaultWorkRoot(): string
+    {
+        $tmp = sys_get_temp_dir();
+
+        if (Os::isWindows() && strpos($tmp, '~') !== false) {
+            $cwd = getcwd();
+            if ($cwd !== false) {
+                return $cwd;
+            }
+        }
+
+        return $tmp;
     }
 
     /**
