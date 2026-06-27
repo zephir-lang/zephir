@@ -1362,27 +1362,27 @@ class Method
             }
 
             /**
-             * Emit deprecation warning for string! parameters.
-             * Z_PARAM_STR already enforces strict string typing at the
-             * engine level, making the ! modifier redundant.
+             * Emit a deprecation notice for every `!` (strict type) parameter.
+             * PHP now enforces scalar argument types itself, so the `!` modifier
+             * is redundant and will be removed; a future parser will no longer
+             * recognize it (see #2274, precursor to #2275).
              */
             foreach ($this->parameters->getParameters() as $parameter) {
                 if (!empty($parameter['variadic'])) {
                     continue;
                 }
-                $paramMandatory = $parameter['mandatory'] ?? 0;
-                $paramDataType  = $this->getParamDataType($parameter);
-                if ($paramMandatory && $paramDataType === 'string') {
+                if ($parameter['mandatory'] ?? 0) {
                     $compilationContext->logger->warning(
                         sprintf(
-                            "The '!' (strict) modifier on string parameter '%s' is deprecated "
-                            . "and will be removed in a future version. String parameters are "
-                            . "now strict by default via Z_PARAM_STR in %s::%s",
+                            "The '!' (strict type) modifier on parameter '%s' (%s) is deprecated "
+                            . "and will be removed; the parser will no longer recognize it in a "
+                            . "future version. Remove the '!' in %s::%s",
                             $parameter['name'],
+                            $this->getParamDataType($parameter),
                             $this->getClassDefinition()?->getCompleteName() ?? '[unknown]',
                             $this->getName()
                         ),
-                        ['deprecated-strict-string', $parameter]
+                        ['deprecated-strict-type', $parameter]
                     );
                 }
             }

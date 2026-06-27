@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ### Changed
 - The `ext-zephir_parser` C extension is now **optional**: it is used as a fast path when loaded, otherwise the built-in PHP parser handles parsing. Set the `ZEPHIR_FORCE_PHP_PARSER` environment variable to force the PHP backend even when the extension is present (useful for differential testing and deterministic builds). `Zephir\Parser\Manager::isAvailable()` is now always `true` [#2495](https://github.com/zephir-lang/zephir/issues/2495)
 
+### Deprecated
+- The `!` (strict type) modifier on argument types (e.g. `int! a`) now emits a deprecation notice during `zephir generate`. A future parser will no longer recognize it. Suppress with `-Wdeprecated-strict-type` [#2274](https://github.com/zephir-lang/zephir/issues/2274)
+
 ## [0.23.0] - 2026-06-06
 
 ### Added
