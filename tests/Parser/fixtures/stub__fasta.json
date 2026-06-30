@@ -1,0 +1,1572 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__fasta.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Fasta",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fastaRepeat",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fasta.zep",
+                            "line": 7,
+                            "char": 31
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "seq",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fasta.zep",
+                            "line": 7,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "seqi",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fasta.zep",
+                                        "line": 9,
+                                        "char": 15
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 15
+                                },
+                                {
+                                    "variable": "len",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 20
+                                },
+                                {
+                                    "variable": "i",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 23
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 26
+                                },
+                                {
+                                    "variable": "k",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 29
+                                },
+                                {
+                                    "variable": "l",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 32
+                                },
+                                {
+                                    "variable": "block",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 39
+                                },
+                                {
+                                    "variable": "str",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 44
+                                },
+                                {
+                                    "variable": "lines",
+                                    "file": "stub__fasta.zep",
+                                    "line": 9,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 11,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "len",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "seq",
+                                            "file": "stub__fasta.zep",
+                                            "line": 11,
+                                            "char": 19
+                                        },
+                                        "name": "length",
+                                        "call-type": 1,
+                                        "file": "stub__fasta.zep",
+                                        "line": 11,
+                                        "char": 28
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 11,
+                                    "char": 28
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "str",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "join",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "seq",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 12,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 12,
+                                                "char": 20
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "new-type",
+                                                    "internal-type": "array",
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "add",
+                                                                "left": {
+                                                                    "type": "mul",
+                                                                    "left": {
+                                                                        "type": "variable",
+                                                                        "value": "len",
+                                                                        "file": "stub__fasta.zep",
+                                                                        "line": 12,
+                                                                        "char": 36
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "int",
+                                                                        "value": "60",
+                                                                        "file": "stub__fasta.zep",
+                                                                        "line": 12,
+                                                                        "char": 41
+                                                                    },
+                                                                    "file": "stub__fasta.zep",
+                                                                    "line": 12,
+                                                                    "char": 41
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__fasta.zep",
+                                                                    "line": 12,
+                                                                    "char": 44
+                                                                },
+                                                                "file": "stub__fasta.zep",
+                                                                "line": 12,
+                                                                "char": 44
+                                                            },
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 12,
+                                                            "char": 44
+                                                        }
+                                                    ],
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 12,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 12,
+                                                "char": 45
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 12,
+                                        "char": 46
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 12,
+                                    "char": 46
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "lines",
+                                    "expr": {
+                                        "type": "new-type",
+                                        "internal-type": "array",
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "mul",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "len",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 13,
+                                                        "char": 26
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "len",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 13,
+                                                        "char": 31
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 13,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 13,
+                                                "char": 31
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 13,
+                                        "char": 32
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 13,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 15,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "mul",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "len",
+                                            "file": "stub__fasta.zep",
+                                            "line": 15,
+                                            "char": 15
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "len",
+                                            "file": "stub__fasta.zep",
+                                            "line": 15,
+                                            "char": 20
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 15,
+                                        "char": 20
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 15,
+                                    "char": 20
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "j",
+                                        "file": "stub__fasta.zep",
+                                        "line": 16,
+                                        "char": 9
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 16,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 18,
+                            "char": 6
+                        },
+                        {
+                            "type": "loop",
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "less-equal",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "j",
+                                            "file": "stub__fasta.zep",
+                                            "line": 19,
+                                            "char": 9
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "-1",
+                                            "file": "stub__fasta.zep",
+                                            "line": 19,
+                                            "char": 14
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 19,
+                                        "char": 14
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "break",
+                                            "file": "stub__fasta.zep",
+                                            "line": 21,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 22,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "decr",
+                                            "variable": "j",
+                                            "file": "stub__fasta.zep",
+                                            "line": 22,
+                                            "char": 11
+                                        },
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "lines",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "j",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 22,
+                                                    "char": 20
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "substr",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "str",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 22,
+                                                            "char": 34
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 22,
+                                                        "char": 34
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "mul",
+                                                            "left": {
+                                                                "type": "int",
+                                                                "value": "60",
+                                                                "file": "stub__fasta.zep",
+                                                                "line": 22,
+                                                                "char": 39
+                                                            },
+                                                            "right": {
+                                                                "type": "variable",
+                                                                "value": "j",
+                                                                "file": "stub__fasta.zep",
+                                                                "line": 22,
+                                                                "char": 42
+                                                            },
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 22,
+                                                            "char": 42
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 22,
+                                                        "char": 42
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "int",
+                                                            "value": "60",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 22,
+                                                            "char": 46
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 22,
+                                                        "char": 46
+                                                    }
+                                                ],
+                                                "file": "stub__fasta.zep",
+                                                "line": 22,
+                                                "char": 47
+                                            },
+                                            "file": "stub__fasta.zep",
+                                            "line": 22,
+                                            "char": 47
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 23,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 25,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fasta.zep",
+                                        "line": 25,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 25,
+                                    "char": 12
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "l",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "floor",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "div",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "n",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 26,
+                                                        "char": 16
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "60",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 26,
+                                                        "char": 20
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 26,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 26,
+                                                "char": 20
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 26,
+                                        "char": 21
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 26,
+                                    "char": 21
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "k",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "floor",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "div",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "l",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 27,
+                                                        "char": 16
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "i",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 27,
+                                                        "char": 19
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 27,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 27,
+                                                "char": 19
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 27,
+                                        "char": 20
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 27,
+                                    "char": 20
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "block",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "join",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "\\n",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 28,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 28,
+                                                "char": 19
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "lines",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 28,
+                                                    "char": 26
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 28,
+                                                "char": 26
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 28,
+                                        "char": 27
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 28,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 30,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "j",
+                                    "file": "stub__fasta.zep",
+                                    "line": 30,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "k",
+                                    "file": "stub__fasta.zep",
+                                    "line": 30,
+                                    "char": 15
+                                },
+                                "file": "stub__fasta.zep",
+                                "line": 30,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "variable",
+                                            "value": "block",
+                                            "file": "stub__fasta.zep",
+                                            "line": 31,
+                                            "char": 14
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 32,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "j",
+                                            "file": "stub__fasta.zep",
+                                            "line": 32,
+                                            "char": 11
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 33,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 35,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fasta.zep",
+                                        "line": 35,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 35,
+                                    "char": 12
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "k",
+                                    "expr": {
+                                        "type": "mod",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "l",
+                                            "file": "stub__fasta.zep",
+                                            "line": 36,
+                                            "char": 10
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "i",
+                                            "file": "stub__fasta.zep",
+                                            "line": 36,
+                                            "char": 13
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 36,
+                                        "char": 13
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 36,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 37,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "j",
+                                    "file": "stub__fasta.zep",
+                                    "line": 37,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "k",
+                                    "file": "stub__fasta.zep",
+                                    "line": 37,
+                                    "char": 15
+                                },
+                                "file": "stub__fasta.zep",
+                                "line": 37,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "array-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "lines",
+                                                "file": "stub__fasta.zep",
+                                                "line": 38,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "j",
+                                                "file": "stub__fasta.zep",
+                                                "line": 38,
+                                                "char": 16
+                                            },
+                                            "file": "stub__fasta.zep",
+                                            "line": 38,
+                                            "char": 17
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 39,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "j",
+                                            "file": "stub__fasta.zep",
+                                            "line": 39,
+                                            "char": 11
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 40,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 42,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "greater",
+                                "left": {
+                                    "type": "mod",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "n",
+                                        "file": "stub__fasta.zep",
+                                        "line": 42,
+                                        "char": 8
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "60",
+                                        "file": "stub__fasta.zep",
+                                        "line": 42,
+                                        "char": 13
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 42,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__fasta.zep",
+                                    "line": 42,
+                                    "char": 17
+                                },
+                                "file": "stub__fasta.zep",
+                                "line": 42,
+                                "char": 17
+                            },
+                            "statements": [
+                                {
+                                    "type": "echo",
+                                    "expressions": [
+                                        {
+                                            "type": "fcall",
+                                            "name": "substr",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "array-access",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "lines",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 43,
+                                                            "char": 21
+                                                        },
+                                                        "right": {
+                                                            "type": "variable",
+                                                            "value": "k",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 43,
+                                                            "char": 23
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 43,
+                                                        "char": 24
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 43,
+                                                    "char": 24
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "int",
+                                                        "value": "0",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 43,
+                                                        "char": 27
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 43,
+                                                    "char": 27
+                                                },
+                                                {
+                                                    "parameter": {
+                                                        "type": "mod",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "n",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 43,
+                                                            "char": 31
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "60",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 43,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 43,
+                                                        "char": 35
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 43,
+                                                    "char": 35
+                                                }
+                                            ],
+                                            "file": "stub__fasta.zep",
+                                            "line": 43,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "file": "stub__fasta.zep",
+                                    "line": 44,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 45,
+                            "char": 3
+                        }
+                    ],
+                    "file": "stub__fasta.zep",
+                    "line": 7,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fastRandom",
+                    "file": "stub__fasta.zep",
+                    "line": 47,
+                    "last-line": 52,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "main",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fasta.zep",
+                            "line": 52,
+                            "char": 25
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "alu",
+                                    "file": "stub__fasta.zep",
+                                    "line": 54,
+                                    "char": 10
+                                },
+                                {
+                                    "variable": "iub",
+                                    "file": "stub__fasta.zep",
+                                    "line": 54,
+                                    "char": 15
+                                },
+                                {
+                                    "variable": "homoSap",
+                                    "file": "stub__fasta.zep",
+                                    "line": 54,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 56,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "alu",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "concat",
+                                            "left": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "concat",
+                                                    "left": {
+                                                        "type": "concat",
+                                                        "left": {
+                                                            "type": "concat",
+                                                            "left": {
+                                                                "type": "string",
+                                                                "value": "GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGG",
+                                                                "file": "stub__fasta.zep",
+                                                                "line": 56,
+                                                                "char": 56
+                                                            },
+                                                            "right": {
+                                                                "type": "string",
+                                                                "value": "GAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGA",
+                                                                "file": "stub__fasta.zep",
+                                                                "line": 57,
+                                                                "char": 48
+                                                            },
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 57,
+                                                            "char": 48
+                                                        },
+                                                        "right": {
+                                                            "type": "string",
+                                                            "value": "CCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAAT",
+                                                            "file": "stub__fasta.zep",
+                                                            "line": 58,
+                                                            "char": 48
+                                                        },
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 58,
+                                                        "char": 48
+                                                    },
+                                                    "right": {
+                                                        "type": "string",
+                                                        "value": "ACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCA",
+                                                        "file": "stub__fasta.zep",
+                                                        "line": 59,
+                                                        "char": 48
+                                                    },
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 59,
+                                                    "char": 48
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": "GCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGG",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 60,
+                                                    "char": 48
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 60,
+                                                "char": 48
+                                            },
+                                            "right": {
+                                                "type": "string",
+                                                "value": "AGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCC",
+                                                "file": "stub__fasta.zep",
+                                                "line": 61,
+                                                "char": 48
+                                            },
+                                            "file": "stub__fasta.zep",
+                                            "line": 61,
+                                            "char": 48
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "AGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAA",
+                                            "file": "stub__fasta.zep",
+                                            "line": 62,
+                                            "char": 40
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 62,
+                                        "char": 40
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 62,
+                                    "char": 40
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 64,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "iub",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 16
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.27",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 22
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "c",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 25
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.12",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 31
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "g",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 34
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.12",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 40
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "t",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 43
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.27",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 49
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "B",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 52
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 58
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "D",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 61
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 67
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 67
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "H",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 70
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 76
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 76
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "K",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 79
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 64,
+                                                    "char": 85
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 64,
+                                                "char": 85
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "M",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 7
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 13
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 13
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "N",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 16
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 22
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "R",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 25
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 31
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "S",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 34
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 40
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "V",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 43
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 49
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "W",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 52
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 58
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "Y",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 61
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.02",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 65,
+                                                    "char": 68
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 65,
+                                                "char": 68
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 65,
+                                        "char": 69
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 65,
+                                    "char": 69
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 67,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "homoSap",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 5
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.3029549426680",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 68,
+                                                "char": 22
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "c",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 25
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.1979883004921",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 42
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 68,
+                                                "char": 42
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "g",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 45
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.1975473066391",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 62
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 68,
+                                                "char": 62
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "t",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 68,
+                                                    "char": 65
+                                                },
+                                                "value": {
+                                                    "type": "double",
+                                                    "value": "0.3015094502008",
+                                                    "file": "stub__fasta.zep",
+                                                    "line": 69,
+                                                    "char": 3
+                                                },
+                                                "file": "stub__fasta.zep",
+                                                "line": 69,
+                                                "char": 3
+                                            }
+                                        ],
+                                        "file": "stub__fasta.zep",
+                                        "line": 69,
+                                        "char": 4
+                                    },
+                                    "file": "stub__fasta.zep",
+                                    "line": 69,
+                                    "char": 4
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 71,
+                            "char": 6
+                        },
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "string",
+                                    "value": ">ONE Homo sapiens alu",
+                                    "file": "stub__fasta.zep",
+                                    "line": 71,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__fasta.zep",
+                            "line": 72,
+                            "char": 6
+                        },
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__fasta.zep",
+                                    "line": 72,
+                                    "char": 8
+                                },
+                                "name": "fastaRepeat",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "mul",
+                                            "left": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__fasta.zep",
+                                                "line": 72,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__fasta.zep",
+                                                "line": 72,
+                                                "char": 26
+                                            },
+                                            "file": "stub__fasta.zep",
+                                            "line": 72,
+                                            "char": 26
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 72,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "alu",
+                                            "file": "stub__fasta.zep",
+                                            "line": 72,
+                                            "char": 31
+                                        },
+                                        "file": "stub__fasta.zep",
+                                        "line": 72,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__fasta.zep",
+                                "line": 72,
+                                "char": 32
+                            },
+                            "file": "stub__fasta.zep",
+                            "line": 79,
+                            "char": 3
+                        }
+                    ],
+                    "file": "stub__fasta.zep",
+                    "line": 52,
+                    "last-line": 80,
+                    "char": 17
+                }
+            ],
+            "file": "stub__fasta.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__fasta.zep",
+        "line": 4,
+        "char": 5
+    }
+]

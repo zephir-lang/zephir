@@ -76,23 +76,39 @@ trait RunsZephirCommands
             $args,
         );
 
+        // Redirect the child's stdout/stderr to temp files instead of pipes.
+        // Draining pipes sequentially (stdout to EOF, then stderr) deadlocks on
+        // Windows once either stream exceeds the ~4 KB pipe buffer: the child
+        // blocks writing the not-yet-read stream while the parent blocks reading
+        // the other. Files have no such limit and yield identical bytes on every
+        // platform.
+        $stdoutFile = tempnam(sys_get_temp_dir(), 'zephir-out');
+        $stderrFile = tempnam(sys_get_temp_dir(), 'zephir-err');
+
         $descriptors = [
             0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
+            1 => ['file', $stdoutFile, 'w'],
+            2 => ['file', $stderrFile, 'w'],
         ];
 
         $process = proc_open($command, $descriptors, $pipes, $cwd ?: null);
         if (!is_resource($process)) {
+            @unlink($stdoutFile);
+            @unlink($stderrFile);
+
             return ['exitCode' => -1, 'stdout' => '', 'stderr' => 'Failed to start process'];
         }
 
-        fclose($pipes[0]);
-        $stdout = stream_get_contents($pipes[1]);
-        $stderr = stream_get_contents($pipes[2]);
-        fclose($pipes[1]);
-        fclose($pipes[2]);
+        if (isset($pipes[0])) {
+            fclose($pipes[0]);
+        }
         $exitCode = proc_close($process);
+
+        $stdout = file_get_contents($stdoutFile);
+        $stderr = file_get_contents($stderrFile);
+
+        @unlink($stdoutFile);
+        @unlink($stderrFile);
 
         return [
             'exitCode' => $exitCode,

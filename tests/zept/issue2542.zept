@@ -1,0 +1,22 @@
+--TEST--
+Issue #2542: class constants initialized from predefined PHP constants are folded at compile time
+--FILE--
+namespace Stub;
+
+class Issue2542
+{
+    const VERSION_ID = PHP_VERSION_ID;
+    const INT_SIZE = PHP_INT_SIZE;
+    const OS = PHP_OS;
+}
+--USAGE--
+use Stub\Issue2542;
+
+// Values are host-dependent; assert the folded constant equals the live PHP constant.
+echo var_export(Issue2542::VERSION_ID === PHP_VERSION_ID, true), "\n";
+echo var_export(Issue2542::INT_SIZE === PHP_INT_SIZE, true), "\n";
+echo var_export(Issue2542::OS === PHP_OS, true), "\n";
+--EXPECT--
+true
+true
+true

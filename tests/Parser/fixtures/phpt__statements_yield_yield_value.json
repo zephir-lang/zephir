@@ -1,0 +1,24 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "yield",
+                "expr": {
+                    "type": "char",
+                    "value": "value",
+                    "file": "phpt__statements_yield_yield_value.zep",
+                    "line": 2,
+                    "char": 14
+                },
+                "file": "phpt__statements_yield_yield_value.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_yield_yield_value.zep",
+        "line": 1,
+        "char": 9
+    }
+]

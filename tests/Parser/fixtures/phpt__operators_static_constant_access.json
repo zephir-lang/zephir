@@ -1,0 +1,37 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "static-constant-access",
+                    "left": {
+                        "type": "variable",
+                        "value": "MyClass",
+                        "file": "phpt__operators_static_constant_access.zep",
+                        "line": 2,
+                        "char": 26
+                    },
+                    "right": {
+                        "type": "variable",
+                        "value": "MY_CONSTANT",
+                        "file": "phpt__operators_static_constant_access.zep",
+                        "line": 2,
+                        "char": 26
+                    },
+                    "file": "phpt__operators_static_constant_access.zep",
+                    "line": 2,
+                    "char": 26
+                },
+                "file": "phpt__operators_static_constant_access.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_static_constant_access.zep",
+        "line": 1,
+        "char": 9
+    }
+]

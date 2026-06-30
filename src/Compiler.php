@@ -290,8 +290,15 @@ final class Compiler
         }
 
         if (Os::isWindows()) {
-            // TODO(klay): Make this better. Looks like it is non standard Env. Var
-            exec('cd ext && %PHP_DEVPACK%\\phpize --clean', $output, $exit);
+            // Prefer the dev-pack's phpize when %PHP_DEVPACK% is exported,
+            // otherwise fall back to the `phpize` already on PATH (the PHP SDK
+            // setup puts it there). Without this fallback a cold compile in an
+            // environment that lacks %PHP_DEVPACK% runs `\phpize`, which Windows
+            // reports as "The system cannot find the path specified." and never
+            // produces the configure.js read further below.
+            $phpize = getenv('PHP_DEVPACK') ? '%PHP_DEVPACK%\\phpize' : 'phpize';
+
+            exec('cd ext && ' . $phpize . ' --clean', $output, $exit);
 
             $releaseFolder = $this->getWindowsReleaseDir();
             if (file_exists($releaseFolder)) {
@@ -299,8 +306,7 @@ final class Compiler
             }
 
             $this->logger->info('Preparing for PHP compilation...');
-            // TODO(klay): Make this better. Looks like it is non standard Env. Var
-            exec('cd ext && %PHP_DEVPACK%\\phpize', $output, $exit);
+            exec('cd ext && ' . $phpize, $output, $exit);
 
             /**
              * fix until patch hits all supported PHP builds.
@@ -1513,41 +1519,68 @@ final class Compiler
      */
     public function loadExternalClass(string $className, string $location): bool
     {
-        $filePath = $location
-            . DIRECTORY_SEPARATOR
-            . strtolower(
-                str_replace('\\', DIRECTORY_SEPARATOR, $className)
-            )
-            . '.zep';
-
         /**
-         * Fix the class name.
+         * Canonical registry key. Class names are matched case-insensitively
+         * everywhere else (see getClassDefinition()/isClass()), so the key only
+         * needs to be stable, not an exact match of the on-disk casing.
          */
-        $className = implode(
+        $registryKey = implode(
             '\\',
-            array_map(
-                'ucfirst',
-                explode('\\', $className)
-            )
+            array_map('ucfirst', explode('\\', $className))
         );
 
-        if (isset($this->files[$className])) {
+        if (isset($this->files[$registryKey])) {
             return true;
         }
 
-        if (!file_exists($filePath)) {
+        $filePath = $this->locateExternalClassFile($className, $location);
+        if ($filePath === null) {
             return false;
         }
 
         /** @var CompilerFile|CompilerFileAnonymous $compilerFile */
-        $compilerFile = $this->compilerFileFactory->create($className, $filePath);
+        $compilerFile = $this->compilerFileFactory->create($registryKey, $filePath);
         $compilerFile->setIsExternal(true);
         $compilerFile->preCompile($this);
 
-        $this->files[$className]       = $compilerFile;
-        $this->definitions[$className] = $compilerFile->getClassDefinition();
+        $this->files[$registryKey]       = $compilerFile;
+        $this->definitions[$registryKey] = $compilerFile->getClassDefinition();
 
         return true;
+    }
+
+    /**
+     * Resolves the `.zep` file for an external class, trying path casings in
+     * priority order:
+     *
+     *   1. the namespace exactly as written — PSR-4 layouts require the
+     *      directory/file casing to match the namespace, and on a
+     *      case-sensitive filesystem this is the only form that resolves;
+     *   2. a fully lower-cased path — backward compatibility with the historic
+     *      all-lowercase behavior.
+     *
+     * Returns the first candidate that exists, or null when none match.
+     *
+     * @see https://github.com/zephir-lang/zephir/pull/2499
+     */
+    private function locateExternalClassFile(string $className, string $location): ?string
+    {
+        $relativePath = str_replace('\\', DIRECTORY_SEPARATOR, $className);
+
+        $candidates = [$relativePath];
+        $lowercased = strtolower($relativePath);
+        if ($lowercased !== $relativePath) {
+            $candidates[] = $lowercased;
+        }
+
+        foreach ($candidates as $candidate) {
+            $filePath = $location . DIRECTORY_SEPARATOR . $candidate . '.zep';
+            if (file_exists($filePath)) {
+                return $filePath;
+            }
+        }
+
+        return null;
     }
 
     /**

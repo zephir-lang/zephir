@@ -1,0 +1,282 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Scopes",
+        "file": "stub__oo_scopes_abstractclassmagic.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "AbstractClassMagic",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "setCount",
+                    "default": {
+                        "type": "int",
+                        "value": "0",
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 5,
+                        "char": 24
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 6,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "privateProperty",
+                    "default": {
+                        "type": "string",
+                        "value": "private",
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 6,
+                        "char": 38
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 7,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "protectedProperty",
+                    "default": {
+                        "type": "string",
+                        "value": "protected",
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 7,
+                        "char": 44
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 8,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "publicProperty",
+                    "default": {
+                        "type": "string",
+                        "value": "public",
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 8,
+                        "char": 35
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 10,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__set",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 10,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 10,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "name",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                        "line": 12,
+                                        "char": 33
+                                    },
+                                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                    "line": 12,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 13,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "setCount",
+                                    "expr": {
+                                        "type": "add",
+                                        "left": {
+                                            "type": "property-access",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "this",
+                                                "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                                "line": 13,
+                                                "char": 35
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "setCount",
+                                                "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                                "line": 13,
+                                                "char": 45
+                                            },
+                                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                            "line": 13,
+                                            "char": 45
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                            "line": 13,
+                                            "char": 48
+                                        },
+                                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                        "line": 13,
+                                        "char": 48
+                                    },
+                                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                    "line": 13,
+                                    "char": 48
+                                }
+                            ],
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 14,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 10,
+                    "last-line": 16,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__get",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 16,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-dynamic-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                    "line": 18,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "name",
+                                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                    "line": 18,
+                                    "char": 28
+                                },
+                                "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                "line": 18,
+                                "char": 28
+                            },
+                            "file": "stub__oo_scopes_abstractclassmagic.zep",
+                            "line": 19,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_abstractclassmagic.zep",
+                                "line": 17,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_abstractclassmagic.zep",
+                        "line": 17,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_abstractclassmagic.zep",
+                    "line": 16,
+                    "last-line": 20,
+                    "char": 19
+                }
+            ],
+            "file": "stub__oo_scopes_abstractclassmagic.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__oo_scopes_abstractclassmagic.zep",
+        "line": 3,
+        "char": 14
+    }
+]

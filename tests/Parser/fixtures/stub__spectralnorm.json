@@ -1,0 +1,1952 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__spectralnorm.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * SpectralNorm\n *\n * @see https:\/\/mathworld.wolfram.com\/SpectralNorm.html\n *",
+        "file": "stub__spectralnorm.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "SpectralNorm",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "private",
+                        "inline"
+                    ],
+                    "type": "method",
+                    "name": "Ax",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "i",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 11,
+                            "char": 30
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "j",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 11,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "div",
+                                "left": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 13,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "add",
+                                        "left": {
+                                            "type": "add",
+                                            "left": {
+                                                "type": "list",
+                                                "left": {
+                                                    "type": "div",
+                                                    "left": {
+                                                        "type": "mul",
+                                                        "left": {
+                                                            "type": "list",
+                                                            "left": {
+                                                                "type": "add",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "i",
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 13,
+                                                                    "char": 17
+                                                                },
+                                                                "right": {
+                                                                    "type": "variable",
+                                                                    "value": "j",
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 13,
+                                                                    "char": 20
+                                                                },
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 13,
+                                                                "char": 20
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 13,
+                                                            "char": 22
+                                                        },
+                                                        "right": {
+                                                            "type": "list",
+                                                            "left": {
+                                                                "type": "add",
+                                                                "left": {
+                                                                    "type": "add",
+                                                                    "left": {
+                                                                        "type": "variable",
+                                                                        "value": "i",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 13,
+                                                                        "char": 27
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "variable",
+                                                                        "value": "j",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 13,
+                                                                        "char": 31
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 13,
+                                                                    "char": 31
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 13,
+                                                                    "char": 34
+                                                                },
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 13,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 13,
+                                                            "char": 36
+                                                        },
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 13,
+                                                        "char": 36
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "2",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 13,
+                                                        "char": 39
+                                                    },
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 13,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 13,
+                                                "char": 41
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 13,
+                                                "char": 45
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 13,
+                                            "char": 45
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 13,
+                                            "char": 48
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 13,
+                                        "char": 48
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 13,
+                                    "char": 49
+                                },
+                                "file": "stub__spectralnorm.zep",
+                                "line": 13,
+                                "char": 49
+                            },
+                            "file": "stub__spectralnorm.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spectralnorm.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 24
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "Au",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 16,
+                            "char": 27
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "u",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\SplFixedArray",
+                                "file": "stub__spectralnorm.zep",
+                                "line": 16,
+                                "char": 46
+                            },
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 16,
+                            "char": 47
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "v",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\SplFixedArray",
+                                "file": "stub__spectralnorm.zep",
+                                "line": 16,
+                                "char": 66
+                            },
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 16,
+                            "char": 67
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "t",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 18,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 18,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 18,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 19,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 19,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 19,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "sub",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 19,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 19,
+                                                "char": 26
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 19,
+                                            "char": 26
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 19,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 19,
+                                "char": 28
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "t",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 20,
+                                                "char": 13
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 20,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 21,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "for",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "range",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 21,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 21,
+                                                "char": 20
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "sub",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "n",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 21,
+                                                        "char": 24
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "1",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 21,
+                                                        "char": 27
+                                                    },
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 21,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 21,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 21,
+                                        "char": 29
+                                    },
+                                    "value": "j",
+                                    "reverse": 0,
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "add-assign",
+                                                    "variable": "t",
+                                                    "expr": {
+                                                        "type": "mul",
+                                                        "left": {
+                                                            "type": "mcall",
+                                                            "variable": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 22,
+                                                                "char": 18
+                                                            },
+                                                            "name": "Ax",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "i",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 22,
+                                                                        "char": 23
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 22,
+                                                                    "char": 23
+                                                                },
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "j",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 22,
+                                                                        "char": 26
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 22,
+                                                                    "char": 26
+                                                                }
+                                                            ],
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 22,
+                                                            "char": 28
+                                                        },
+                                                        "right": {
+                                                            "type": "mcall",
+                                                            "variable": {
+                                                                "type": "variable",
+                                                                "value": "u",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 22,
+                                                                "char": 32
+                                                            },
+                                                            "name": "offsetGet",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "j",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 22,
+                                                                        "char": 44
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 22,
+                                                                    "char": 44
+                                                                }
+                                                            ],
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 22,
+                                                            "char": 45
+                                                        },
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 22,
+                                                        "char": 45
+                                                    },
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 22,
+                                                    "char": 45
+                                                }
+                                            ],
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 23,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 24,
+                                    "char": 4
+                                },
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "v",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 24,
+                                            "char": 6
+                                        },
+                                        "name": "offsetSet",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 24,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 24,
+                                                "char": 18
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "t",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 24,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 24,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 24,
+                                        "char": 22
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 25,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 26,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spectralnorm.zep",
+                    "line": 16,
+                    "last-line": 28,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "Atu",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 28,
+                            "char": 28
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "u",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\SplFixedArray",
+                                "file": "stub__spectralnorm.zep",
+                                "line": 28,
+                                "char": 47
+                            },
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 28,
+                            "char": 48
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "v",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "\\SplFixedArray",
+                                "file": "stub__spectralnorm.zep",
+                                "line": 28,
+                                "char": 67
+                            },
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 28,
+                            "char": 68
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "t",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 30,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 30,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 30,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 31,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 31,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 31,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "sub",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 31,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 31,
+                                                "char": 26
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 31,
+                                            "char": 26
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 31,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 31,
+                                "char": 28
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "t",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "0",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 32,
+                                                "char": 13
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 32,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 33,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "for",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "range",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 33,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 33,
+                                                "char": 20
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "sub",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "n",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 33,
+                                                        "char": 24
+                                                    },
+                                                    "right": {
+                                                        "type": "int",
+                                                        "value": "1",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 33,
+                                                        "char": 27
+                                                    },
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 33,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 33,
+                                                "char": 27
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 33,
+                                        "char": 29
+                                    },
+                                    "value": "j",
+                                    "reverse": 0,
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "add-assign",
+                                                    "variable": "t",
+                                                    "expr": {
+                                                        "type": "mul",
+                                                        "left": {
+                                                            "type": "mcall",
+                                                            "variable": {
+                                                                "type": "variable",
+                                                                "value": "this",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 34,
+                                                                "char": 18
+                                                            },
+                                                            "name": "Ax",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "j",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 34,
+                                                                        "char": 23
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 34,
+                                                                    "char": 23
+                                                                },
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "i",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 34,
+                                                                        "char": 26
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 34,
+                                                                    "char": 26
+                                                                }
+                                                            ],
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 34,
+                                                            "char": 28
+                                                        },
+                                                        "right": {
+                                                            "type": "mcall",
+                                                            "variable": {
+                                                                "type": "variable",
+                                                                "value": "u",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 34,
+                                                                "char": 32
+                                                            },
+                                                            "name": "offsetGet",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "variable",
+                                                                        "value": "j",
+                                                                        "file": "stub__spectralnorm.zep",
+                                                                        "line": 34,
+                                                                        "char": 44
+                                                                    },
+                                                                    "file": "stub__spectralnorm.zep",
+                                                                    "line": 34,
+                                                                    "char": 44
+                                                                }
+                                                            ],
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 34,
+                                                            "char": 45
+                                                        },
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 34,
+                                                        "char": 45
+                                                    },
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 34,
+                                                    "char": 45
+                                                }
+                                            ],
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 35,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 36,
+                                    "char": 4
+                                },
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "v",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 36,
+                                            "char": 6
+                                        },
+                                        "name": "offsetSet",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 36,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 36,
+                                                "char": 18
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "t",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 36,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 36,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 36,
+                                        "char": 22
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 37,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spectralnorm.zep",
+                    "line": 28,
+                    "last-line": 40,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "AtAu",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 40,
+                            "char": 25
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "u",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 40,
+                            "char": 28
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "v",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 40,
+                            "char": 31
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "w",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 40,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 42,
+                                    "char": 8
+                                },
+                                "name": "Au",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 42,
+                                            "char": 13
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 42,
+                                        "char": 13
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "u",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 42,
+                                            "char": 16
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 42,
+                                        "char": 16
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "w",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 42,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 42,
+                                        "char": 19
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 42,
+                                "char": 20
+                            },
+                            "file": "stub__spectralnorm.zep",
+                            "line": 43,
+                            "char": 6
+                        },
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 43,
+                                    "char": 8
+                                },
+                                "name": "Atu",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 43,
+                                            "char": 14
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 43,
+                                        "char": 14
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "w",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 43,
+                                            "char": 17
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 43,
+                                        "char": 17
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "v",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 43,
+                                            "char": 20
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 43,
+                                        "char": 20
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 43,
+                                "char": 21
+                            },
+                            "file": "stub__spectralnorm.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spectralnorm.zep",
+                    "line": 40,
+                    "last-line": 46,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "process",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__spectralnorm.zep",
+                            "line": 46,
+                            "char": 31
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 48,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "vv",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 48,
+                                        "char": 16
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 48,
+                                    "char": 16
+                                },
+                                {
+                                    "variable": "vBv",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 48,
+                                        "char": 25
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 48,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 49,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "u",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 49,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 49,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "w",
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 49,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 51,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "u",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\SplFixedArray",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 51,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 51,
+                                                "char": 31
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 51,
+                                        "char": 32
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 51,
+                                    "char": 32
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "v",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\SplFixedArray",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 51,
+                                                    "char": 58
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 51,
+                                                "char": 58
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 51,
+                                        "char": 59
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 51,
+                                    "char": 59
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "w",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\SplFixedArray",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 51,
+                                                    "char": 85
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 51,
+                                                "char": 85
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 51,
+                                        "char": 86
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 51,
+                                    "char": 86
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 53,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 53,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 53,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "sub",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 53,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 53,
+                                                "char": 26
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 53,
+                                            "char": 26
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 53,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 53,
+                                "char": 28
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "u",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 54,
+                                            "char": 6
+                                        },
+                                        "name": "offsetSet",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 54,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 54,
+                                                "char": 18
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 54,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 54,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 54,
+                                        "char": 22
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 55,
+                                    "char": 4
+                                },
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "v",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 55,
+                                            "char": 6
+                                        },
+                                        "name": "offsetSet",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 55,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 55,
+                                                "char": 18
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 55,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 55,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 55,
+                                        "char": 22
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 56,
+                                    "char": 4
+                                },
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "w",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 56,
+                                            "char": 6
+                                        },
+                                        "name": "offsetSet",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 56,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 56,
+                                                "char": 18
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 56,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 56,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 56,
+                                        "char": 22
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 57,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 59,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 59,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 59,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "9",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 59,
+                                            "char": 22
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 59,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 59,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 60,
+                                            "char": 9
+                                        },
+                                        "name": "AtAu",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 60,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 60,
+                                                "char": 16
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "u",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 60,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 60,
+                                                "char": 19
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 60,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 60,
+                                                "char": 22
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "w",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 60,
+                                                    "char": 25
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 60,
+                                                "char": 25
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 60,
+                                        "char": 26
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 61,
+                                    "char": 7
+                                },
+                                {
+                                    "type": "mcall",
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 61,
+                                            "char": 9
+                                        },
+                                        "name": "AtAu",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "n",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 61,
+                                                    "char": 16
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 61,
+                                                "char": 16
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "v",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 61,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 61,
+                                                "char": 19
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "u",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 61,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 61,
+                                                "char": 22
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "w",
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 61,
+                                                    "char": 25
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 61,
+                                                "char": 25
+                                            }
+                                        ],
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 61,
+                                        "char": 26
+                                    },
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 62,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 64,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 64,
+                                            "char": 19
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 64,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "sub",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 64,
+                                                "char": 23
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 64,
+                                                "char": 26
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 64,
+                                            "char": 26
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 64,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 64,
+                                "char": 28
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "vBv",
+                                            "expr": {
+                                                "type": "mul",
+                                                "left": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "u",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 65,
+                                                        "char": 16
+                                                    },
+                                                    "name": "offsetGet",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 65,
+                                                                "char": 28
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 65,
+                                                            "char": 28
+                                                        }
+                                                    ],
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 65,
+                                                    "char": 30
+                                                },
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "v",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 65,
+                                                        "char": 34
+                                                    },
+                                                    "name": "offsetGet",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 65,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 65,
+                                                            "char": 46
+                                                        }
+                                                    ],
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 65,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 65,
+                                                "char": 47
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 65,
+                                            "char": 47
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 66,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "vv",
+                                            "expr": {
+                                                "type": "mul",
+                                                "left": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "v",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 66,
+                                                        "char": 16
+                                                    },
+                                                    "name": "offsetGet",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 66,
+                                                                "char": 28
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 66,
+                                                            "char": 28
+                                                        }
+                                                    ],
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 66,
+                                                    "char": 30
+                                                },
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "v",
+                                                        "file": "stub__spectralnorm.zep",
+                                                        "line": 66,
+                                                        "char": 34
+                                                    },
+                                                    "name": "offsetGet",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "variable",
+                                                                "value": "i",
+                                                                "file": "stub__spectralnorm.zep",
+                                                                "line": 66,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__spectralnorm.zep",
+                                                            "line": 66,
+                                                            "char": 46
+                                                        }
+                                                    ],
+                                                    "file": "stub__spectralnorm.zep",
+                                                    "line": 66,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 66,
+                                                "char": 47
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 66,
+                                            "char": 47
+                                        }
+                                    ],
+                                    "file": "stub__spectralnorm.zep",
+                                    "line": 67,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__spectralnorm.zep",
+                            "line": 69,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "div",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "vBv",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 69,
+                                                "char": 19
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "vv",
+                                                "file": "stub__spectralnorm.zep",
+                                                "line": 69,
+                                                "char": 23
+                                            },
+                                            "file": "stub__spectralnorm.zep",
+                                            "line": 69,
+                                            "char": 23
+                                        },
+                                        "file": "stub__spectralnorm.zep",
+                                        "line": 69,
+                                        "char": 23
+                                    }
+                                ],
+                                "file": "stub__spectralnorm.zep",
+                                "line": 69,
+                                "char": 24
+                            },
+                            "file": "stub__spectralnorm.zep",
+                            "line": 70,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__spectralnorm.zep",
+                    "line": 46,
+                    "last-line": 71,
+                    "char": 16
+                }
+            ],
+            "file": "stub__spectralnorm.zep",
+            "line": 9,
+            "char": 5
+        },
+        "file": "stub__spectralnorm.zep",
+        "line": 9,
+        "char": 5
+    }
+]

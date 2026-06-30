@@ -1,0 +1,20 @@
+[
+    {
+        "type": "class",
+        "name": "RBF",
+        "abstract": 0,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "IFACE",
+                "file": "phpt__classes_all_caps_class_hierarchy__1.zep",
+                "line": 1,
+                "char": 29
+            }
+        ],
+        "file": "phpt__classes_all_caps_class_hierarchy__1.zep",
+        "line": 1,
+        "char": 6
+    }
+]

@@ -1,0 +1,79 @@
+--TEST--
+String char iteration: for ch in str and for k, ch in str with char-typed value, reverse, and break/continue
+--FILE--
+namespace Stub;
+
+class StringIteration
+{
+    public function sumBytes(string s) -> int
+    {
+        char ch;
+        int total = 0;
+        for ch in s {
+            let total += ch;
+        }
+        return total;
+    }
+
+    public function indexedSum(string s) -> int
+    {
+        int k;
+        char ch;
+        int total = 0;
+        for k, ch in s {
+            let total += k * 100;
+            let total += ch;
+        }
+        return total;
+    }
+
+    public function reverseBytes(string s) -> int
+    {
+        char ch;
+        int acc = 0;
+        for ch in reverse s {
+            let acc = acc * 1000;
+            let acc += ch;
+        }
+        return acc;
+    }
+
+    public function countUntilSpace(string s) -> int
+    {
+        char ch;
+        int n = 0;
+        for ch in s {
+            if ch == ' ' {
+                break;
+            }
+            let n++;
+        }
+        return n;
+    }
+
+    public function countVowels(string s) -> int
+    {
+        char ch;
+        int n = 0;
+        for ch in s {
+            if ch != 'a' && ch != 'e' && ch != 'i' && ch != 'o' && ch != 'u' {
+                continue;
+            }
+            let n++;
+        }
+        return n;
+    }
+}
+--USAGE--
+$t = new \Stub\StringIteration();
+echo var_export($t->sumBytes("abc"), true), "\n";       // 97+98+99
+echo var_export($t->indexedSum("AB"), true), "\n";      // (0*100+65) + (1*100+66)
+echo var_export($t->reverseBytes("AB"), true), "\n";    // reverse iteration over 2-char string
+echo var_export($t->countUntilSpace("foo bar"), true), "\n";
+echo var_export($t->countVowels("education"), true), "\n";
+--EXPECT--
+294
+231
+66065
+3
+5

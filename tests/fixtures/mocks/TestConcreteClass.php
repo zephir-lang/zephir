@@ -17,7 +17,7 @@ class TestConcreteClass extends TestAbstract
         return func_get_args();
     }
 
-    public function returnOneOfScalar()
+    public function returnOneOfScalar(): string|int|float|bool
     {
         return __METHOD__;
     }

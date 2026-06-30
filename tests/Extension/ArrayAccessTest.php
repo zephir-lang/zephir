@@ -34,6 +34,16 @@ final class ArrayAccessTest extends TestCase
         $this->assertSame(2, $class->get());
     }
 
+    /**
+     * @see https://github.com/zephir-lang/zephir/issues/1877
+     */
+    public function testIssue1877(): void
+    {
+        $class = new \Stub\ArrayAccessTest();
+
+        $this->assertSame('bbb', $class->issue1877());
+    }
+
     public function testUnsetByKeyFromArray(): void
     {
         $class = new \Stub\ArrayAccessTest();

@@ -168,7 +168,13 @@ class StaticPropertySub
                         $compilationContext
                     );
                 } else {
-                    $codePrinter->output('ZVAL_EMPTY_STRING(' . $tempVariable->getName() . ');');
+                    // ZVAL_EMPTY_STRING expects a zval *; use the variable code
+                    // (&_0) rather than the bare name (_0). See #2409.
+                    $codePrinter->output(
+                        'ZVAL_EMPTY_STRING('
+                        . $compilationContext->backend->getVariableCode($tempVariable)
+                        . ');'
+                    );
                 }
 
                 $this->checkVariableTemporal($tempVariable);

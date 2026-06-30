@@ -1,0 +1,1 @@
+class RBF implements IFACE {}

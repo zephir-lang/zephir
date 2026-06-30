@@ -1,0 +1,707 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__operator.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Operator",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIdentical",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param1",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 5,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "param2",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 5,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "param1",
+                                    "file": "stub__operator.zep",
+                                    "line": 7,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "param2",
+                                    "file": "stub__operator.zep",
+                                    "line": 7,
+                                    "char": 27
+                                },
+                                "file": "stub__operator.zep",
+                                "line": 7,
+                                "char": 27
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIdenticalIfComplex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "input",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 10,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "stub__operator.zep",
+                                    "line": 12,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "stub__operator.zep",
+                                    "line": 12,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 13,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "1",
+                                                    "file": "stub__operator.zep",
+                                                    "line": 13,
+                                                    "char": 13
+                                                },
+                                                "value": {
+                                                    "type": "variable",
+                                                    "value": "input",
+                                                    "file": "stub__operator.zep",
+                                                    "line": 13,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__operator.zep",
+                                                "line": 13,
+                                                "char": 20
+                                            }
+                                        ],
+                                        "file": "stub__operator.zep",
+                                        "line": 13,
+                                        "char": 21
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 13,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 14,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__operator.zep",
+                                        "line": 14,
+                                        "char": 16
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 14,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 16,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not-identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__operator.zep",
+                                    "line": 16,
+                                    "char": 10
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__operator.zep",
+                                        "line": 16,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "1",
+                                        "file": "stub__operator.zep",
+                                        "line": 16,
+                                        "char": 15
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 16,
+                                    "char": 17
+                                },
+                                "file": "stub__operator.zep",
+                                "line": 16,
+                                "char": 17
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__operator.zep",
+                                        "line": 17,
+                                        "char": 15
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 18,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 19,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__operator.zep",
+                                "line": 19,
+                                "char": 15
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 10,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIdenticalVarFalse",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 22,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "param",
+                                    "file": "stub__operator.zep",
+                                    "line": 24,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__operator.zep",
+                                    "line": 24,
+                                    "char": 25
+                                },
+                                "file": "stub__operator.zep",
+                                "line": 24,
+                                "char": 25
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 22,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIdenticalFalseVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "param",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 27,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__operator.zep",
+                                    "line": 29,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "param",
+                                    "file": "stub__operator.zep",
+                                    "line": 29,
+                                    "char": 25
+                                },
+                                "file": "stub__operator.zep",
+                                "line": 29,
+                                "char": 25
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 27,
+                    "last-line": 32,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testBoolComparison",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "varTrue",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 32,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "varFalse",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 32,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "var1",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__operator.zep",
+                                        "line": 34,
+                                        "char": 18
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 34,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 35,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "var2",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__operator.zep",
+                                        "line": 35,
+                                        "char": 25
+                                    },
+                                    "file": "stub__operator.zep",
+                                    "line": 35,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__operator.zep",
+                            "line": 37,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varTrue",
+                                                "file": "stub__operator.zep",
+                                                "line": 38,
+                                                "char": 13
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var1",
+                                                "file": "stub__operator.zep",
+                                                "line": 38,
+                                                "char": 19
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 38,
+                                            "char": 19
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 38,
+                                        "char": 19
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "identical",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varTrue",
+                                                "file": "stub__operator.zep",
+                                                "line": 39,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var1",
+                                                "file": "stub__operator.zep",
+                                                "line": 39,
+                                                "char": 20
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 39,
+                                            "char": 20
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 39,
+                                        "char": 20
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varFalse",
+                                                "file": "stub__operator.zep",
+                                                "line": 40,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var2",
+                                                "file": "stub__operator.zep",
+                                                "line": 40,
+                                                "char": 20
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 40,
+                                            "char": 20
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 40,
+                                        "char": 20
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "identical",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varFalse",
+                                                "file": "stub__operator.zep",
+                                                "line": 41,
+                                                "char": 15
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var2",
+                                                "file": "stub__operator.zep",
+                                                "line": 41,
+                                                "char": 21
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 41,
+                                            "char": 21
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 41,
+                                        "char": 21
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "not-equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varTrue",
+                                                "file": "stub__operator.zep",
+                                                "line": 42,
+                                                "char": 13
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var2",
+                                                "file": "stub__operator.zep",
+                                                "line": 42,
+                                                "char": 19
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 42,
+                                            "char": 19
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 42,
+                                        "char": 19
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "not-identical",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varTrue",
+                                                "file": "stub__operator.zep",
+                                                "line": 43,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var2",
+                                                "file": "stub__operator.zep",
+                                                "line": 43,
+                                                "char": 20
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 43,
+                                            "char": 20
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 43,
+                                        "char": 20
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "not-equals",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varFalse",
+                                                "file": "stub__operator.zep",
+                                                "line": 44,
+                                                "char": 14
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var1",
+                                                "file": "stub__operator.zep",
+                                                "line": 44,
+                                                "char": 20
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 44,
+                                            "char": 20
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 44,
+                                        "char": 20
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "not-identical",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "varFalse",
+                                                "file": "stub__operator.zep",
+                                                "line": 45,
+                                                "char": 15
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "var1",
+                                                "file": "stub__operator.zep",
+                                                "line": 46,
+                                                "char": 5
+                                            },
+                                            "file": "stub__operator.zep",
+                                            "line": 46,
+                                            "char": 5
+                                        },
+                                        "file": "stub__operator.zep",
+                                        "line": 46,
+                                        "char": 5
+                                    }
+                                ],
+                                "file": "stub__operator.zep",
+                                "line": 46,
+                                "char": 6
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 47,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 32,
+                    "last-line": 49,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNewInstanceOperator",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "className",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__operator.zep",
+                            "line": 49,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "className",
+                                "dynamic": 1,
+                                "file": "stub__operator.zep",
+                                "line": 51,
+                                "char": 33
+                            },
+                            "file": "stub__operator.zep",
+                            "line": 52,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__operator.zep",
+                    "line": 49,
+                    "last-line": 53,
+                    "char": 19
+                }
+            ],
+            "file": "stub__operator.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__operator.zep",
+        "line": 3,
+        "char": 5
+    }
+]

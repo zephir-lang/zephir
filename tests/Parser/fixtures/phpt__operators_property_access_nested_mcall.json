@@ -1,0 +1,84 @@
+[
+    {
+        "type": "namespace",
+        "name": "Debug",
+        "file": "phpt__operators_property_access_nested_mcall.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Caller",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "child",
+                    "file": "phpt__operators_property_access_nested_mcall.zep",
+                    "line": 7,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "invoke",
+                    "statements": [
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "property-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "this",
+                                        "file": "phpt__operators_property_access_nested_mcall.zep",
+                                        "line": 9,
+                                        "char": 14
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "child",
+                                        "file": "phpt__operators_property_access_nested_mcall.zep",
+                                        "line": 9,
+                                        "char": 21
+                                    },
+                                    "file": "phpt__operators_property_access_nested_mcall.zep",
+                                    "line": 9,
+                                    "char": 21
+                                },
+                                "name": "doSomething",
+                                "call-type": 1,
+                                "file": "phpt__operators_property_access_nested_mcall.zep",
+                                "line": 9,
+                                "char": 35
+                            },
+                            "file": "phpt__operators_property_access_nested_mcall.zep",
+                            "line": 10,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__operators_property_access_nested_mcall.zep",
+                    "line": 7,
+                    "last-line": 11,
+                    "char": 19
+                }
+            ],
+            "file": "phpt__operators_property_access_nested_mcall.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__operators_property_access_nested_mcall.zep",
+        "line": 3,
+        "char": 5
+    }
+]

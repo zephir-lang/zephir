@@ -221,7 +221,7 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_LONG(&_0, 1);
 	ZVAL_LONG(&_1, 2);
-	ZEPHIR_CALL_FUNCTION(&_2, "mt_rand", NULL, 42, &_0, &_1);
+	ZEPHIR_CALL_FUNCTION(&_2, "mt_rand", NULL, 43, &_0, &_1);
 	zephir_check_call_status();
 	do {
 		if (ZEPHIR_IS_LONG(&_2, 100)) {
@@ -230,7 +230,6 @@ PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch13)
 		RETURN_MM_LONG(0);
 	} while(0);
 
-	ZEPHIR_MM_RESTORE();
 }
 
 PHP_METHOD(Stub_Flow_SwitchFlow, testSwitch14)

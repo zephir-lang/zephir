@@ -1,0 +1,649 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Class with constructor\n *",
+        "file": "stub__oo_oonativeimplements.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_oonativeimplements.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "OoNativeImplements",
+        "abstract": 0,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "\\Countable",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 9,
+                "char": 18
+            },
+            {
+                "type": "variable",
+                "value": "\\Iterator",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 10,
+                "char": 17
+            },
+            {
+                "type": "variable",
+                "value": "\\OuterIterator",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 11,
+                "char": 22
+            },
+            {
+                "type": "variable",
+                "value": "\\RecursiveIterator",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 12,
+                "char": 26
+            },
+            {
+                "type": "variable",
+                "value": "\\SeekableIterator",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 13,
+                "char": 25
+            },
+            {
+                "type": "variable",
+                "value": "\\Serializable",
+                "file": "stub__oo_oonativeimplements.zep",
+                "line": 16,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "count",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 20,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "current",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 27,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 27,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 26,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "key",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 31,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 31,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 30,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "next",
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 35,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 34,
+                    "last-line": 38,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "rewind",
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 39,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 38,
+                    "last-line": 42,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "valid",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 43,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 43,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 42,
+                    "last-line": 48,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getInnerIterator",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\Iterator",
+                                    "file": "stub__oo_oonativeimplements.zep",
+                                    "line": 48,
+                                    "char": 51
+                                },
+                                "collection": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 48,
+                                "char": 51
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 49,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 49,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 48,
+                    "last-line": 54,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getChildren",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\RecursiveIterator",
+                                    "file": "stub__oo_oonativeimplements.zep",
+                                    "line": 55,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 55,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 55,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 54,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "hasChildren",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 58,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 58,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 57,
+                    "last-line": 63,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "seek",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "position",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 63,
+                            "char": 35
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 64,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 63,
+                    "last-line": 68,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getIterator",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\Traversable",
+                                    "file": "stub__oo_oonativeimplements.zep",
+                                    "line": 69,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 69,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 69,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 68,
+                    "last-line": 73,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "offsetExists",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 73,
+                            "char": 38
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 74,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 74,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 73,
+                    "last-line": 77,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "offsetGet",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 77,
+                            "char": 35
+                        }
+                    ],
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 77,
+                    "last-line": 81,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "offsetSet",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 81,
+                            "char": 35
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 81,
+                            "char": 42
+                        }
+                    ],
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 81,
+                    "last-line": 85,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "offsetUnset",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 85,
+                            "char": 37
+                        }
+                    ],
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 85,
+                    "last-line": 90,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "serialize",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 91,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 91,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 90,
+                    "last-line": 94,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "unserialize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "serialized",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 94,
+                            "char": 47
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 95,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 94,
+                    "last-line": 98,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__serialize",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty-array",
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 100,
+                                "char": 15
+                            },
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 101,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__oo_oonativeimplements.zep",
+                                "line": 99,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 99,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 98,
+                    "last-line": 103,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__unserialize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "data",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_oonativeimplements.zep",
+                            "line": 103,
+                            "char": 42
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__oo_oonativeimplements.zep",
+                        "line": 104,
+                        "char": 2
+                    },
+                    "file": "stub__oo_oonativeimplements.zep",
+                    "line": 103,
+                    "last-line": 106,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_oonativeimplements.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__oo_oonativeimplements.zep",
+        "line": 8,
+        "char": 5
+    }
+]

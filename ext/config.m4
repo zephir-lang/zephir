@@ -21,6 +21,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/interfaces/interfaceintsignature.zep.c
 	stub/invokes/abstractinvoker.zep.c
 	stub/invokes/abstractinvokercomplex.zep.c
+	stub/issue1628abstract.zep.c
 	stub/issue2165/issueinterface.zep.c
 	stub/issue2324.zep.c
 	stub/issue2505.zep.c
@@ -39,6 +40,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/arithmetic.zep.c
 	stub/arrayaccessarr.zep.c
 	stub/arrayaccessobj.zep.c
+	stub/arrayaccessproperty.zep.c
 	stub/arrayaccesstest.zep.c
 	stub/arrayiterator.zep.c
 	stub/arrayiteratortest.zep.c
@@ -60,6 +62,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/closures.zep.c
 	stub/compare.zep.c
 	stub/concat.zep.c
+	stub/constantparameterdefault.zep.c
 	stub/constants.zep.c
 	stub/constantsinterface.zep.c
 	stub/constantsinterfacea.zep.c
@@ -111,16 +114,30 @@ if test "$PHP_STUB" = "yes"; then
 	stub/issue1134.zep.c
 	stub/issue1404.zep.c
 	stub/issue1521.zep.c
+	stub/issue1628.zep.c
+	stub/issue1706.zep.c
+	stub/issue1790.zep.c
+	stub/issue2030.zep.c
+	stub/issue2063.zep.c
 	stub/issue2165/issue.zep.c
 	stub/issue2167.zep.c
 	stub/issue2324extended.zep.c
 	stub/issue2385.zep.c
+	stub/issue2394.zep.c
+	stub/issue2409.zep.c
+	stub/issue2428.zep.c
 	stub/issue2469.zep.c
 	stub/issue2505crosschain.zep.c
 	stub/issue2505extended.zep.c
 	stub/issue2522.zep.c
+	stub/issue2533.zep.c
 	stub/issue2537child.zep.c
+	stub/issue2542.zep.c
+	stub/issue2543.zep.c
 	stub/issue2546.zep.c
+	stub/issue2564.zep.c
+	stub/issue2564padfactory.zep.c
+	stub/issue2565.zep.c
 	stub/issue663.zep.c
 	stub/issue808.zep.c
 	stub/issue820.zep.c
@@ -198,6 +215,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/properties/app.zep.c
 	stub/properties/extendspublicproperties.zep.c
 	stub/properties/getobjectvars.zep.c
+	stub/properties/nestedproperty.zep.c
+	stub/properties/nestedpropertytarget.zep.c
 	stub/properties/privateproperties.zep.c
 	stub/properties/propertyarray.zep.c
 	stub/properties/propertyupdate.zep.c
@@ -239,7 +258,9 @@ if test "$PHP_STUB" = "yes"; then
 	stub/types/mixedtype.zep.c
 	stub/types/obj.zep.c
 	stub/unknownclass.zep.c
+	stub/unreachableloop.zep.c
 	stub/unsettest.zep.c
+	stub/unspacedminus.zep.c
 	stub/usetest.zep.c
 	stub/variadic.zep.c
 	stub/vars.zep.c
@@ -272,7 +293,8 @@ if test "$PHP_STUB" = "yes"; then
 	stub/26__closure.zep.c
 	stub/27__closure.zep.c
 	stub/28__closure.zep.c
-	stub/29__closure.zep.c "
+	stub/29__closure.zep.c
+	stub/30__closure.zep.c "
 	PHP_NEW_EXTENSION(stub, $stub_sources, $ext_shared,, )
 	PHP_ADD_BUILD_DIR([$ext_builddir/kernel/])
 	for dir in "stub stub/args/single stub/bench stub/builtin stub/constructors stub/flow stub/globals stub/globals/session stub/integration/psr stub/integration/psr/http/message stub/interfaces stub/invokes stub/issue2165 stub/mcall stub/namespaces stub/namespaces/a/b stub/oo stub/oo/extend stub/oo/extend/db stub/oo/extend/db/query stub/oo/extend/db/query/placeholder stub/oo/extend/spl stub/oo/scopes stub/ooimpl stub/optimizers stub/properties stub/requires stub/router stub/typehinting stub/types"; do

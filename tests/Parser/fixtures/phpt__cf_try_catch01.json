@@ -1,0 +1,17 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "try-catch",
+                "file": "phpt__cf_try_catch01.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_try_catch01.zep",
+        "line": 1,
+        "char": 9
+    }
+]

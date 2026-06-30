@@ -1,0 +1,147 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "null",
+                            "file": "phpt__base_literals.zep",
+                            "line": 2,
+                            "char": 14
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 2,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "null",
+                            "file": "phpt__base_literals.zep",
+                            "line": 3,
+                            "char": 14
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 3,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 5,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__base_literals.zep",
+                            "line": 5,
+                            "char": 14
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 5,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 6,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__base_literals.zep",
+                            "line": 6,
+                            "char": 14
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 6,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 8,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bool",
+                            "value": "false",
+                            "file": "phpt__base_literals.zep",
+                            "line": 8,
+                            "char": 15
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 8,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 9,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bool",
+                            "value": "false",
+                            "file": "phpt__base_literals.zep",
+                            "line": 9,
+                            "char": 15
+                        },
+                        "file": "phpt__base_literals.zep",
+                        "line": 9,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__base_literals.zep",
+                "line": 10,
+                "char": 1
+            }
+        ],
+        "file": "phpt__base_literals.zep",
+        "line": 1,
+        "char": 9
+    }
+]

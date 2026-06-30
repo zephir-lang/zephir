@@ -1,0 +1,93 @@
+--TEST--
+Typed array locals: array x = [] declaration, heterogeneous/nested literal build, mixed string+int keys, array_keys/array_values over a built map
+--FILE--
+namespace Stub;
+
+class TypedArrayBuild
+{
+    public function heterogeneous() -> array
+    {
+        array result = [];
+        let result["int"] = 1;
+        let result["str"] = "two";
+        let result["float"] = 3.5;
+        let result["bool"] = true;
+        let result["nested"] = [10, 20, ["deep": "v"]];
+        let result[7] = "seven";
+        return result;
+    }
+
+    public function buildMap() -> array
+    {
+        array m = [];
+        int i;
+        for i in range(1, 3) {
+            let m[i] = i * i;
+        }
+        return m;
+    }
+
+    public function keysOf(array m) -> array
+    {
+        return array_keys(m);
+    }
+
+    public function valuesOf(array m) -> array
+    {
+        return array_values(m);
+    }
+
+    public function appendGrow() -> array
+    {
+        array a = [];
+        let a[] = "first";
+        let a[] = "second";
+        let a[] = "third";
+        return a;
+    }
+}
+--USAGE--
+$t = new \Stub\TypedArrayBuild();
+echo var_export($t->heterogeneous(), true), "\n";
+echo var_export($t->buildMap(), true), "\n";
+$m = ["a" => 1, "b" => 2, "c" => 3];
+echo var_export($t->keysOf($m), true), "\n";
+echo var_export($t->valuesOf($m), true), "\n";
+echo var_export($t->appendGrow(), true), "\n";
+--EXPECT--
+array (
+  'int' => 1,
+  'str' => 'two',
+  'float' => 3.5,
+  'bool' => true,
+  'nested' => 
+  array (
+    0 => 10,
+    1 => 20,
+    2 => 
+    array (
+      'deep' => 'v',
+    ),
+  ),
+  7 => 'seven',
+)
+array (
+  1 => 1,
+  2 => 4,
+  3 => 9,
+)
+array (
+  0 => 'a',
+  1 => 'b',
+  2 => 'c',
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 'first',
+  1 => 'second',
+  2 => 'third',
+)

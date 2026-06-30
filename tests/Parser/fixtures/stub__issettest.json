@@ -1,0 +1,840 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Unset statement tests\n *",
+        "file": "stub__issettest.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issettest.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "IssetTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "s",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "key": {
+                                    "type": "string",
+                                    "value": "a",
+                                    "file": "stub__issettest.zep",
+                                    "line": 10,
+                                    "char": 15
+                                },
+                                "value": {
+                                    "type": "string",
+                                    "value": "true",
+                                    "file": "stub__issettest.zep",
+                                    "line": 10,
+                                    "char": 21
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 10,
+                                "char": 21
+                            }
+                        ],
+                        "file": "stub__issettest.zep",
+                        "line": 10,
+                        "char": 22
+                    },
+                    "file": "stub__issettest.zep",
+                    "line": 12,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetArray1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 12,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 12,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 14,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 14,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 14,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 14,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 15,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 12,
+                    "last-line": 17,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetArray2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 17,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 17,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 19,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 19,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 19,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 19,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 17,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetArray3",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 22,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 22,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 24,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 24,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 24,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 24,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 22,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetArray4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 27,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 29,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__issettest.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 29,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 29,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 27,
+                    "last-line": 32,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetArray5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 32,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 34,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 34,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 34,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 34,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 35,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 32,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetProperty1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 37,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "property-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 39,
+                                        "char": 18
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 39,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 39,
+                                    "char": 20
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 39,
+                                "char": 20
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 40,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 37,
+                    "last-line": 42,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetProperty2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 42,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 42,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 44,
+                                        "char": 18
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 44,
+                                        "char": 22
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 44,
+                                    "char": 22
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 44,
+                                "char": 22
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 45,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 42,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetProperty3",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 47,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "property-string-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 49,
+                                        "char": 18
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "b",
+                                        "file": "stub__issettest.zep",
+                                        "line": 49,
+                                        "char": 22
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 49,
+                                    "char": 22
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 49,
+                                "char": 22
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 47,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetDynamicProperty1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "g",
+                                    "file": "stub__issettest.zep",
+                                    "line": 54,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 55,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "g",
+                                    "expr": {
+                                        "type": "property-string-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "stub__issettest.zep",
+                                            "line": 55,
+                                            "char": 16
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "s",
+                                            "file": "stub__issettest.zep",
+                                            "line": 55,
+                                            "char": 20
+                                        },
+                                        "file": "stub__issettest.zep",
+                                        "line": 55,
+                                        "char": 20
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 55,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 56,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "g",
+                                        "file": "stub__issettest.zep",
+                                        "line": 56,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 56,
+                                        "char": 15
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 56,
+                                    "char": 17
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 56,
+                                "char": 17
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__issettest.zep",
+                                        "line": 57,
+                                        "char": 15
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 58,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 59,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__issettest.zep",
+                                "line": 59,
+                                "char": 15
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 60,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 52,
+                    "last-line": 62,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIssetDynamicProperty2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "inp",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issettest.zep",
+                            "line": 62,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "g",
+                                    "file": "stub__issettest.zep",
+                                    "line": 64,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 65,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "g",
+                                    "expr": {
+                                        "type": "property-string-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "inp",
+                                            "file": "stub__issettest.zep",
+                                            "line": 65,
+                                            "char": 15
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "s",
+                                            "file": "stub__issettest.zep",
+                                            "line": 65,
+                                            "char": 19
+                                        },
+                                        "file": "stub__issettest.zep",
+                                        "line": 65,
+                                        "char": 19
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 65,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 67,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "g",
+                                        "file": "stub__issettest.zep",
+                                        "line": 67,
+                                        "char": 13
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "a",
+                                        "file": "stub__issettest.zep",
+                                        "line": 67,
+                                        "char": 15
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 67,
+                                    "char": 17
+                                },
+                                "file": "stub__issettest.zep",
+                                "line": 67,
+                                "char": 17
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__issettest.zep",
+                                        "line": 68,
+                                        "char": 15
+                                    },
+                                    "file": "stub__issettest.zep",
+                                    "line": 69,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__issettest.zep",
+                            "line": 70,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__issettest.zep",
+                                "line": 70,
+                                "char": 15
+                            },
+                            "file": "stub__issettest.zep",
+                            "line": 71,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__issettest.zep",
+                    "line": 62,
+                    "last-line": 72,
+                    "char": 16
+                }
+            ],
+            "file": "stub__issettest.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__issettest.zep",
+        "line": 8,
+        "char": 5
+    }
+]

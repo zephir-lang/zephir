@@ -1,0 +1,456 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "add",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 2,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 2,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 2,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 2,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 3,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 3,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 3,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 3,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 4,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "mul",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 4,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 4,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 4,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 4,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 5,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "div",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 5,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 5,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 5,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 5,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 6,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "mod",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 6,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 6,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 6,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 6,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 7,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "add",
+                            "left": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 7,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "2",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 7,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 7,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 7,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 8,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "sub",
+                            "left": {
+                                "type": "int",
+                                "value": "5",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 8,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 8,
+                                "char": 13
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 8,
+                            "char": 13
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 8,
+                        "char": 13
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 9,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "mul",
+                            "left": {
+                                "type": "array-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "arr",
+                                    "file": "phpt__operators_arithmetic_unspaced.zep",
+                                    "line": 9,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "phpt__operators_arithmetic_unspaced.zep",
+                                    "line": 9,
+                                    "char": 15
+                                },
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 9,
+                                "char": 16
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 9,
+                                "char": 18
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 9,
+                            "char": 18
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 9,
+                        "char": 18
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 10,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "mul",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 10,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "-1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 10,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 10,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 10,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 11,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "add",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 11,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "-1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 11,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 11,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 11,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 12,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "div",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 12,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "-2",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 12,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 12,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 12,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 13,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "mod",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 13,
+                                "char": 11
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "-1",
+                                "file": "phpt__operators_arithmetic_unspaced.zep",
+                                "line": 13,
+                                "char": 14
+                            },
+                            "file": "phpt__operators_arithmetic_unspaced.zep",
+                            "line": 13,
+                            "char": 14
+                        },
+                        "file": "phpt__operators_arithmetic_unspaced.zep",
+                        "line": 13,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__operators_arithmetic_unspaced.zep",
+                "line": 14,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_arithmetic_unspaced.zep",
+        "line": 1,
+        "char": 9
+    }
+]

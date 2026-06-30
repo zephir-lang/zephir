@@ -1,0 +1,141 @@
+--TEST--
+Static property access: empty-default fallback args and self::prop mutation inside a loop (port of tests/Extension/SPropertyAccessTest.php, issue #1494)
+--FILE--
+namespace Stub;
+
+class ScallExternal
+{
+	public static sproperty;
+}
+--FILE--
+namespace Stub;
+
+class SPropertyAccess
+{
+	protected static a;
+	private static b;
+	protected static delimiter = ".";
+	protected static _delimiterWithUnderscore = ".";
+	protected static stringVar = "";
+	protected static intVar = 0;
+	protected static doubleVar = 0.0;
+	protected static arrayVar = [];
+
+	public function __construct()
+	{
+		let self::a = "abc";
+		let self::b = substr(self::a, 0, 1);
+		let ScallExternal::sproperty = self::b;
+		let self::b = ScallExternal::sproperty;
+	}
+
+	public function testArgumentWithUnderscore(var delimiter = null)
+	{
+		if empty delimiter {
+			let delimiter = self::_delimiterWithUnderscore;
+		}
+
+		return delimiter;
+	}
+
+	public function testArgument(var delimiter = null)
+	{
+		if empty delimiter {
+			let delimiter = self::delimiter;
+		}
+
+		return delimiter;
+	}
+
+	public static function mutateStringVarInsideCycle() -> string
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = " + ";
+			let self::stringVar = self::stringVar . i;
+		}
+
+		return self::stringVar;
+	}
+
+	/**
+	 * @see https://github.com/zephir-lang/zephir/issues/1494
+	 */
+	public static function mutateIntVarInsideCycle() -> int
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = 42;
+			let self::intVar = i;
+		}
+
+		return self::intVar;
+	}
+
+	/**
+	 * @see https://github.com/zephir-lang/zephir/issues/1494
+	 */
+	public static function mutateDoubleVarInsideCycle() -> double
+	{
+		var i;
+
+		for _ in range(0, 3) {
+			let i = 3.14;
+			let self::doubleVar = i;
+		}
+
+		return self::doubleVar;
+	}
+
+	public static function mutateArrayVarInsideCycle() -> array
+	{
+		var i, j;
+
+		for i in range(0, 3) {
+			let j = [i: i];
+			let self::arrayVar = self::arrayVar + j;
+		}
+
+		return self::arrayVar;
+	}
+}
+--USAGE--
+use Stub\SPropertyAccess;
+
+$spa = new SPropertyAccess();
+
+// testStaticPropertyAccess
+echo var_export($spa->testArgument(','), true), "\n";
+echo var_export($spa->testArgument(), true), "\n";
+
+// testStaticPropertyAccessWithUnderscore
+echo var_export($spa->testArgumentWithUnderscore(','), true), "\n";
+echo var_export($spa->testArgumentWithUnderscore(), true), "\n";
+
+// testShouldMutateStringVarInsideCycle
+echo var_export(SPropertyAccess::mutateStringVarInsideCycle() === str_repeat(' + ', 4), true), "\n";
+
+// testShouldMutateIntVarInsideCycle (issue #1494)
+echo var_export(SPropertyAccess::mutateIntVarInsideCycle(), true), "\n";
+
+// testShouldMutateDoubleVarInsideCycle (issue #1494)
+echo var_export(SPropertyAccess::mutateDoubleVarInsideCycle(), true), "\n";
+
+// testShouldMutateArrayVarInsideCycle
+echo var_export(SPropertyAccess::mutateArrayVarInsideCycle(), true), "\n";
+--EXPECT--
+','
+'.'
+','
+'.'
+true
+42
+3.14
+array (
+  0 => 0,
+  1 => 1,
+  2 => 2,
+  3 => 3,
+)

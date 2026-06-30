@@ -1,0 +1,27 @@
+--TEST--
+Issue #1097: an elseif sub-expression must not evaluate once an earlier branch matches
+--FILE--
+namespace Zept;
+
+class Issue1097
+{
+    public function classify(var myvar) -> string
+    {
+        if is_string(myvar) {
+            return "string";
+        } elseif is_string(myvar[0]) {
+            return "array-of-string";
+        }
+
+        return "other";
+    }
+}
+--USAGE--
+$o = new Zept\Issue1097();
+echo $o->classify("hello"), "\n";
+echo $o->classify(["a", "b"]), "\n";
+echo $o->classify([42]), "\n";
+--EXPECT--
+string
+array-of-string
+other

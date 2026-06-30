@@ -1,0 +1,71 @@
+--TEST--
+json: json_encode (object/array/options) and json_decode (object/assoc/array) (port of tests/Extension/JsonTest.php)
+--SKIPIF--
+<?php if (!extension_loaded('json')) echo "skip ext-json not loaded";
+--FILE--
+namespace Stub;
+
+class Json
+{
+	public function testEncodeObject()
+	{
+		var obj;
+		let obj = ["a": "hello", "b": "world", "c": 128];
+		return json_encode(obj);
+	}
+
+	public function testEncodeArray()
+	{
+		var arr;
+		let arr = [1, 2, 3];
+		return json_encode(arr);
+	}
+
+	public function testEncodeOptions()
+	{
+		var arr;
+		let arr = ["<foo>", "'bar'", "&blong&", "\xc3\xa9"];
+		return json_encode(arr, JSON_HEX_TAG);
+	}
+
+	public function testDecodeObject()
+	{
+		var obj = "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}";
+		return json_decode(obj);
+	}
+
+	public function testDecodeObject2()
+	{
+		var obj = "{\"a\":\"hello\",\"b\":\"world\",\"c\":128}";
+		return json_decode(obj, true);
+	}
+
+	public function testDecodeArray()
+	{
+		var arr;
+		let arr = "[1,2,3]";
+		return json_decode(arr);
+	}
+}
+--USAGE--
+$test = new \Stub\Json();
+
+echo var_export($test->testEncodeObject(), true), "\n";
+echo var_export($test->testEncodeArray(), true), "\n";
+echo var_export($test->testEncodeOptions(), true), "\n";
+
+$obj1 = $test->testDecodeObject();
+echo var_export($obj1->a, true), "\n";
+
+$arr1 = $test->testDecodeArray();
+echo var_export($arr1[1], true), "\n";
+
+$obj2 = $test->testDecodeObject2();
+echo var_export($obj2['a'], true), "\n";
+--EXPECT--
+'{"a":"hello","b":"world","c":128}'
+'[1,2,3]'
+'["\\u003Cfoo\\u003E","\'bar\'","&blong&","\\u00e9"]'
+'hello'
+2
+'hello'

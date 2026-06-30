@@ -1,0 +1,77 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__internalinterfaces.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "InternalInterfaces",
+        "abstract": 0,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "\\Countable",
+                "file": "stub__internalinterfaces.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "count",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "0",
+                                "file": "stub__internalinterfaces.zep",
+                                "line": 8,
+                                "char": 14
+                            },
+                            "file": "stub__internalinterfaces.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__internalinterfaces.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__internalinterfaces.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__internalinterfaces.zep",
+                    "line": 6,
+                    "last-line": 10,
+                    "char": 16
+                }
+            ],
+            "file": "stub__internalinterfaces.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__internalinterfaces.zep",
+        "line": 4,
+        "char": 5
+    }
+]

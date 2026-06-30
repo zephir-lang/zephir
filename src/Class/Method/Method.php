@@ -96,11 +96,25 @@ class Method
     protected bool              $isStatic     = false;
     protected ?LocalContextPass $localContext = null;
     /**
-     * Zend MAY_BE_* types.
+     * Maps a Zephir return-type name to its Zend `MAY_BE_*` type-mask bit.
+     *
+     * Used both to decide whether a union return type can be expressed as an
+     * arginfo type mask (see areReturnTypesCompatible()) and to build that
+     * mask (see ArgInfoDefinition). Only non-null, non-class scalar types live
+     * here; `null` and class/object types are handled separately.
      */
     protected array $mayBeArgTypes = [
-        'int'   => 'MAY_BE_LONG',
-        'false' => 'MAY_BE_FALSE',
+        'int'    => 'MAY_BE_LONG',
+        'uint'   => 'MAY_BE_LONG',
+        'long'   => 'MAY_BE_LONG',
+        'ulong'  => 'MAY_BE_LONG',
+        'char'   => 'MAY_BE_LONG',
+        'uchar'  => 'MAY_BE_LONG',
+        'double' => 'MAY_BE_DOUBLE',
+        'bool'   => 'MAY_BE_BOOL',
+        'false'  => 'MAY_BE_FALSE',
+        'string' => 'MAY_BE_STRING',
+        'array'  => 'MAY_BE_ARRAY',
     ];
     /**
      * Whether the variable is mixed.
@@ -162,33 +176,30 @@ class Method
     }
 
     /**
-     * Checks if the method have compatible return types.
+     * Checks if the method's return type(s) can be expressed in arginfo.
+     *
+     * A return type is renderable when every declared member is something the
+     * engine can describe: `void`, `null`, `mixed`, a class/object, or a scalar
+     * that has a `MAY_BE_*` mask bit. Any other member (e.g. `variable`,
+     * `callable`, `resource`) makes the whole return type undeterminable, so we
+     * emit no return-type arginfo at all. Unions of renderable members — of any
+     * arity, scalar and/or class — are fully supported and enforced by PHP,
+     * just like a hand-written union return type.
      */
     public function areReturnTypesCompatible(): bool
     {
-        // void
         if ($this->isVoid()) {
             return true;
         }
 
-        $totalTypes = count($this->returnTypes);
-
-        // union types
-        if ($totalTypes > 1) {
-            $diff = array_diff(array_keys($this->returnTypes), array_keys($this->mayBeArgTypes));
-            if (count($diff) === 0) {
-                return true;
+        foreach (array_keys($this->returnTypes) as $type) {
+            if (in_array($type, ['object', 'null', 'mixed'], true)) {
+                continue;
             }
-        }
 
-        // T1 | T2
-        if (2 === $totalTypes && !isset($this->returnTypes['null'])) {
-            return false;
-        }
-
-        // null | T1 | T2
-        if ($totalTypes > 2) {
-            return false;
+            if (!isset($this->mayBeArgTypes[$type])) {
+                return false;
+            }
         }
 
         return true;
@@ -920,6 +931,9 @@ class Method
             $localVar->setDynamicTypes($localVar->getType());
             $localVar->setType('variable');
             $localVar->setIsDoublePointer(false);
+            // Captured string params are zend_string * outside, but inside the
+            // closure they live as a zval (the static property). See #2562.
+            $localVar->setIsNativeString(false);
             $symbolTable->addRawVariable($localVar);
         }
 
@@ -1348,27 +1362,27 @@ class Method
             }
 
             /**
-             * Emit deprecation warning for string! parameters.
-             * Z_PARAM_STR already enforces strict string typing at the
-             * engine level, making the ! modifier redundant.
+             * Emit a deprecation notice for every `!` (strict type) parameter.
+             * PHP now enforces scalar argument types itself, so the `!` modifier
+             * is redundant and will be removed; a future parser will no longer
+             * recognize it (see #2274, precursor to #2275).
              */
             foreach ($this->parameters->getParameters() as $parameter) {
                 if (!empty($parameter['variadic'])) {
                     continue;
                 }
-                $paramMandatory = $parameter['mandatory'] ?? 0;
-                $paramDataType  = $this->getParamDataType($parameter);
-                if ($paramMandatory && $paramDataType === 'string') {
+                if ($parameter['mandatory'] ?? 0) {
                     $compilationContext->logger->warning(
                         sprintf(
-                            "The '!' (strict) modifier on string parameter '%s' is deprecated "
-                            . "and will be removed in a future version. String parameters are "
-                            . "now strict by default via Z_PARAM_STR in %s::%s",
+                            "The '!' (strict type) modifier on parameter '%s' (%s) is deprecated "
+                            . "and will be removed; the parser will no longer recognize it in a "
+                            . "future version. Remove the '!' in %s::%s",
                             $parameter['name'],
+                            $this->getParamDataType($parameter),
                             $this->getClassDefinition()?->getCompleteName() ?? '[unknown]',
                             $this->getName()
                         ),
-                        ['deprecated-strict-string', $parameter]
+                        ['deprecated-strict-type', $parameter]
                     );
                 }
             }
@@ -1783,7 +1797,8 @@ class Method
             if (
                 'return' !== $lastType &&
                 'throw' !== $lastType &&
-                !$this->hasChildReturnStatementType($statement)
+                !$this->hasChildReturnStatementType($statement) &&
+                !('switch' === $lastType && $this->switchAlwaysReturns($statement))
             ) {
                 if ($symbolTable->getMustGrownStack()) {
                     $compilationContext->headersManager->add('kernel/memory');
@@ -2261,6 +2276,80 @@ class Method
             }
 
             return $this->hasChildReturnStatementType($item);
+        }
+
+        return false;
+    }
+
+    /**
+     * Issue #1706: tells whether a `switch` statement is guaranteed to return
+     * (or throw) on every path. This holds when it has a `default` clause, its
+     * last clause always exits, and every clause either always exits or is
+     * empty (falling through to a later clause that exits).
+     */
+    private function switchAlwaysReturns(array $statement): bool
+    {
+        if (empty($statement['clauses']) || !is_array($statement['clauses'])) {
+            return false;
+        }
+
+        $clauses    = $statement['clauses'];
+        $hasDefault = false;
+        foreach ($clauses as $clause) {
+            if ('default' === ($clause['type'] ?? null)) {
+                $hasDefault = true;
+                break;
+            }
+        }
+
+        if (!$hasDefault) {
+            return false;
+        }
+
+        $lastIndex = array_key_last($clauses);
+        foreach ($clauses as $index => $clause) {
+            $statements = $clause['statements'] ?? [];
+
+            if ($this->statementsAlwaysExit($statements)) {
+                continue;
+            }
+
+            // The last clause must exit; otherwise execution falls off the end.
+            // An empty earlier clause is allowed: it falls through to the next.
+            if ($index === $lastIndex || [] !== $statements) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Tells whether a block of statements is guaranteed to exit the method on
+     * every path (its last reachable statement is a `return`/`throw`, an
+     * exhaustive `if`/`else`, or an exhaustive `switch`).
+     */
+    private function statementsAlwaysExit(array $statements): bool
+    {
+        if ([] === $statements) {
+            return false;
+        }
+
+        $last = end($statements);
+        $type = $last['type'] ?? null;
+
+        if ('return' === $type || 'throw' === $type) {
+            return true;
+        }
+
+        if ('if' === $type) {
+            return isset($last['else_statements'])
+                && $this->statementsAlwaysExit($last['statements'] ?? [])
+                && $this->statementsAlwaysExit($last['else_statements']);
+        }
+
+        if ('switch' === $type) {
+            return $this->switchAlwaysReturns($last);
         }
 
         return false;

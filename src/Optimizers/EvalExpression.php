@@ -159,7 +159,16 @@ class EvalExpression
                     $exprRaw
                 );
                 $possibleValue = $variableRight->getPossibleValue();
-                if ($possibleValue instanceof LiteralCompiledExpression) {
+                /**
+                 * Inside a loop the linearly-tracked "possible value" is not
+                 * reliable: the variable may be reassigned later in the loop
+                 * body, so the next iteration observes a different value. Skip
+                 * the constant-folding unreachability optimization there to
+                 * avoid false "Unreachable code" positives.
+                 *
+                 * @see https://github.com/zephir-lang/zephir/issues/1170
+                 */
+                if ($possibleValue instanceof LiteralCompiledExpression && !$compilationContext->insideCycle) {
                     $possibleValueBranch = $variableRight->getPossibleValueBranch();
                     if ($possibleValueBranch instanceof Branch) {
                         /**

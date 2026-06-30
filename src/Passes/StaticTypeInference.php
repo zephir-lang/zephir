@@ -17,8 +17,6 @@ use Zephir\StatementsBlock;
 
 use function is_string;
 
-use const PHP_EOL;
-
 /**
  * This pass try to infer typing on dynamic variables so the compiler
  * can replace them by low level types automatically
@@ -30,36 +28,31 @@ class StaticTypeInference
 
     public function declareVariables(array $statement): void
     {
-        /**
-         * AST node types that compileExpression() folds to `variable` because
-         * the expression materializes into a zval temp. Without this list,
-         * `var x = fn(...)` (or `clone`, `require`, ranges, etc.) marks `x`
-         * in the symbol table with the raw AST type (e.g. `closure`), then
-         * `Let\Variable::assign()` fails with `Unknown type: closure`.
-         *
-         * @see https://github.com/zephir-lang/zephir/issues/2522.
-         */
-        static $foldToVariable = [
-            'closure'                => true,
-            'closure-arrow'          => true,
-            'clone'                  => true,
-            'require'                => true,
-            'require_once'           => true,
-            'irange'                 => true,
-            'erange'                 => true,
-            'static-constant-access' => true,
-        ];
-
         foreach ($statement['variables'] as $variable) {
-            if (!isset($this->variables[$variable['variable']]) && isset($variable['expr']['type'])) {
-                $exprType = $variable['expr']['type'];
-                if ('empty-array' === $exprType || 'array' === $exprType) {
-                    $this->markVariable($variable['variable'], 'array');
-                } elseif (isset($foldToVariable[$exprType])) {
-                    $this->markVariable($variable['variable'], 'variable');
-                } else {
-                    $this->markVariable($variable['variable'], $exprType);
-                }
+            if (isset($this->variables[$variable['variable']]) || !isset($variable['expr']['type'])) {
+                continue;
+            }
+
+            $exprType = $variable['expr']['type'];
+            if ('empty-array' === $exprType || 'array' === $exprType) {
+                // Keep arrays explicitly typed as before.
+                $this->markVariable($variable['variable'], 'array');
+                continue;
+            }
+
+            /**
+             * A declaration default value is an assignment, so infer its type with
+             * the same routine `let` uses (see passLetStatement()). Peeking at the
+             * raw AST node type instead marked the variable with a non-type (e.g.
+             * `add`, `concat`, `mcall`, `closure`), which then crashed
+             * Let\Variable::assign() with "Unknown type: ...".
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2394
+             * @see https://github.com/zephir-lang/zephir/issues/2522
+             */
+            $type = $this->passExpression($variable['expr']);
+            if (is_string($type)) {
+                $this->markVariable($variable['variable'], $type);
             }
         }
     }
@@ -184,8 +177,9 @@ class StaticTypeInference
                 break;
 
             default:
-                // TODO: Find the reason
-                echo 'StaticTypeInference=', $currentType, ' ', $type, PHP_EOL;
+                // The current type is not one we can merge with; degrade the
+                // variable to a dynamic one so it is not optimized away.
+                $this->variables[$variable] = 'undefined';
                 break;
         }
     }
@@ -424,8 +418,8 @@ class StaticTypeInference
                 return 'undefined';
 
             default:
-                echo 'STI=', $expression['type'], PHP_EOL;
-                break;
+                // Unknown expression node: do not infer a type for it.
+                return null;
         }
     }
 

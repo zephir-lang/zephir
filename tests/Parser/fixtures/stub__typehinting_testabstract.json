@@ -1,0 +1,426 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\TypeHinting",
+        "file": "stub__typehinting_testabstract.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "TestAbstract",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFunc",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "text",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "empty-array",
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 5,
+                                "char": 51
+                            },
+                            "reference": 0,
+                            "file": "stub__typehinting_testabstract.zep",
+                            "line": 5,
+                            "char": 51
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "text2",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "string",
+                                "value": "",
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 5,
+                                "char": 68
+                            },
+                            "reference": 0,
+                            "file": "stub__typehinting_testabstract.zep",
+                            "line": 5,
+                            "char": 68
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "flag",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 5,
+                                "char": 89
+                            },
+                            "reference": 0,
+                            "file": "stub__typehinting_testabstract.zep",
+                            "line": 5,
+                            "char": 89
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "optional",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 5,
+                                "char": 110
+                            },
+                            "reference": 0,
+                            "file": "stub__typehinting_testabstract.zep",
+                            "line": 5,
+                            "char": 110
+                        }
+                    ],
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 5,
+                    "last-line": 6,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnOneOfScalar",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 54
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "uint",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 61
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 68
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 76
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 85
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 94
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 104
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 6,
+                                "char": 110
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 6,
+                        "char": 110
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 6,
+                    "last-line": 7,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnInt",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 7,
+                                "char": 45
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 7,
+                        "char": 45
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 7,
+                    "last-line": 8,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnUint",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "uint",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 8,
+                                "char": 47
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 8,
+                        "char": 47
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 8,
+                    "last-line": 9,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnLong",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 9,
+                                "char": 47
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 9,
+                        "char": 47
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 9,
+                    "last-line": 10,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnFloat",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 10,
+                                "char": 49
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 10,
+                        "char": 49
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 10,
+                    "last-line": 11,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnDouble",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 11,
+                                "char": 51
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 11,
+                        "char": 51
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 11,
+                    "last-line": 12,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnString",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 12,
+                                "char": 51
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 12,
+                        "char": 51
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 12,
+                    "last-line": 13,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnBoolean",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 13,
+                                "char": 53
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 13,
+                        "char": 53
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 13,
+                    "last-line": 14,
+                    "char": 25
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnChar",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "char",
+                                "mandatory": 0,
+                                "file": "stub__typehinting_testabstract.zep",
+                                "line": 14,
+                                "char": 47
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__typehinting_testabstract.zep",
+                        "line": 14,
+                        "char": 47
+                    },
+                    "file": "stub__typehinting_testabstract.zep",
+                    "line": 14,
+                    "last-line": 15,
+                    "char": 25
+                }
+            ],
+            "file": "stub__typehinting_testabstract.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__typehinting_testabstract.zep",
+        "line": 3,
+        "char": 14
+    }
+]

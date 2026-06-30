@@ -1,0 +1,1043 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__variadic.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Free (non-method) variadic function \u2014 the exact form from issue #2025:\n * `function f(...params)`. Exercises the PHP_FUNCTION code path.\n *",
+        "file": "stub__variadic.zep",
+        "line": 7,
+        "char": 8
+    },
+    {
+        "type": "function",
+        "name": "variadicSum",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "numbers",
+                "const": 0,
+                "data-type": "variable",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "stub__variadic.zep",
+                "line": 7,
+                "char": 32,
+                "variadic": 1
+            }
+        ],
+        "statements": [
+            {
+                "type": "declare",
+                "data-type": "int",
+                "variables": [
+                    {
+                        "variable": "total",
+                        "expr": {
+                            "type": "int",
+                            "value": "0",
+                            "file": "stub__variadic.zep",
+                            "line": 9,
+                            "char": 18
+                        },
+                        "file": "stub__variadic.zep",
+                        "line": 9,
+                        "char": 18
+                    }
+                ],
+                "file": "stub__variadic.zep",
+                "line": 10,
+                "char": 7
+            },
+            {
+                "type": "declare",
+                "data-type": "variable",
+                "variables": [
+                    {
+                        "variable": "n",
+                        "file": "stub__variadic.zep",
+                        "line": 10,
+                        "char": 10
+                    }
+                ],
+                "file": "stub__variadic.zep",
+                "line": 12,
+                "char": 7
+            },
+            {
+                "type": "for",
+                "expr": {
+                    "type": "variable",
+                    "value": "numbers",
+                    "file": "stub__variadic.zep",
+                    "line": 12,
+                    "char": 22
+                },
+                "value": "n",
+                "reverse": 0,
+                "statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "add-assign",
+                                "variable": "total",
+                                "expr": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__variadic.zep",
+                                    "line": 13,
+                                    "char": 22
+                                },
+                                "file": "stub__variadic.zep",
+                                "line": 13,
+                                "char": 22
+                            }
+                        ],
+                        "file": "stub__variadic.zep",
+                        "line": 14,
+                        "char": 5
+                    }
+                ],
+                "file": "stub__variadic.zep",
+                "line": 16,
+                "char": 10
+            },
+            {
+                "type": "return",
+                "expr": {
+                    "type": "variable",
+                    "value": "total",
+                    "file": "stub__variadic.zep",
+                    "line": 16,
+                    "char": 17
+                },
+                "file": "stub__variadic.zep",
+                "line": 17,
+                "char": 1
+            }
+        ],
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "int",
+                    "mandatory": 0,
+                    "file": "stub__variadic.zep",
+                    "line": 8,
+                    "char": 1
+                }
+            ],
+            "void": 0,
+            "file": "stub__variadic.zep",
+            "line": 8,
+            "char": 1
+        },
+        "file": "stub__variadic.zep",
+        "line": 7,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "Variadic",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "collect",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "args",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 24,
+                            "char": 36,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "args",
+                                "file": "stub__variadic.zep",
+                                "line": 26,
+                                "char": 20
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 27,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Variadic only, untyped: collects every argument into an array.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 25,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 25,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 24,
+                    "last-line": 31,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "sum",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "first",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 32,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "rest",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 32,
+                            "char": 43,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "total",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "first",
+                                        "file": "stub__variadic.zep",
+                                        "line": 34,
+                                        "char": 26
+                                    },
+                                    "file": "stub__variadic.zep",
+                                    "line": 34,
+                                    "char": 26
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 35,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "n",
+                                    "file": "stub__variadic.zep",
+                                    "line": 35,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 37,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "rest",
+                                "file": "stub__variadic.zep",
+                                "line": 37,
+                                "char": 23
+                            },
+                            "value": "n",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "total",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "n",
+                                                "file": "stub__variadic.zep",
+                                                "line": 38,
+                                                "char": 26
+                                            },
+                                            "file": "stub__variadic.zep",
+                                            "line": 38,
+                                            "char": 26
+                                        }
+                                    ],
+                                    "file": "stub__variadic.zep",
+                                    "line": 39,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 41,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "total",
+                                "file": "stub__variadic.zep",
+                                "line": 41,
+                                "char": 21
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 42,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Fixed required parameter followed by a variadic one.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 33,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 33,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 32,
+                    "last-line": 46,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "countExtra",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "required",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 47,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "rest",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 47,
+                            "char": 53,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "count",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "rest",
+                                            "file": "stub__variadic.zep",
+                                            "line": 49,
+                                            "char": 26
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 49,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__variadic.zep",
+                                "line": 49,
+                                "char": 27
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 50,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Counts only the variadic (trailing) arguments.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 48,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 48,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 47,
+                    "last-line": 54,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "joinStrings",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "glue",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 55,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "parts",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 55,
+                            "char": 61,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "implode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "glue",
+                                            "file": "stub__variadic.zep",
+                                            "line": 57,
+                                            "char": 28
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 57,
+                                        "char": 28
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "parts",
+                                            "file": "stub__variadic.zep",
+                                            "line": 57,
+                                            "char": 35
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 57,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__variadic.zep",
+                                "line": 57,
+                                "char": 36
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 58,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Typed variadic parameter.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 56,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 56,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 55,
+                    "last-line": 63,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "describe",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "req",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 64,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "opt",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "0",
+                                "file": "stub__variadic.zep",
+                                "line": 64,
+                                "char": 50
+                            },
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 64,
+                            "char": 50
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "params",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 64,
+                            "char": 61,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "req",
+                                            "file": "stub__variadic.zep",
+                                            "line": 66,
+                                            "char": 20
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 66,
+                                        "char": 20
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "opt",
+                                            "file": "stub__variadic.zep",
+                                            "line": 66,
+                                            "char": 25
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 66,
+                                        "char": 25
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "fcall",
+                                            "name": "count",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "variable",
+                                                        "value": "params",
+                                                        "file": "stub__variadic.zep",
+                                                        "line": 66,
+                                                        "char": 39
+                                                    },
+                                                    "file": "stub__variadic.zep",
+                                                    "line": 66,
+                                                    "char": 39
+                                                }
+                                            ],
+                                            "file": "stub__variadic.zep",
+                                            "line": 66,
+                                            "char": 40
+                                        },
+                                        "file": "stub__variadic.zep",
+                                        "line": 66,
+                                        "char": 40
+                                    }
+                                ],
+                                "file": "stub__variadic.zep",
+                                "line": 66,
+                                "char": 41
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 67,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Required + optional fixed parameter followed by a variadic one\n     * (the example from issue #2025).\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 65,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 65,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 64,
+                    "last-line": 71,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "staticCollect",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "args",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 72,
+                            "char": 49,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "args",
+                                "file": "stub__variadic.zep",
+                                "line": 74,
+                                "char": 20
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 75,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Static variadic method \u2014 exercises the static-context code path.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 73,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 73,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 72,
+                    "last-line": 80,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "totalLength",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "rows",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 81,
+                            "char": 46,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "total",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__variadic.zep",
+                                        "line": 83,
+                                        "char": 22
+                                    },
+                                    "file": "stub__variadic.zep",
+                                    "line": 83,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 84,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "row",
+                                    "file": "stub__variadic.zep",
+                                    "line": 84,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 86,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "rows",
+                                "file": "stub__variadic.zep",
+                                "line": 86,
+                                "char": 25
+                            },
+                            "value": "row",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "total",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "count",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "row",
+                                                            "file": "stub__variadic.zep",
+                                                            "line": 87,
+                                                            "char": 34
+                                                        },
+                                                        "file": "stub__variadic.zep",
+                                                        "line": 87,
+                                                        "char": 34
+                                                    }
+                                                ],
+                                                "file": "stub__variadic.zep",
+                                                "line": 87,
+                                                "char": 35
+                                            },
+                                            "file": "stub__variadic.zep",
+                                            "line": 87,
+                                            "char": 35
+                                        }
+                                    ],
+                                    "file": "stub__variadic.zep",
+                                    "line": 88,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 90,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "total",
+                                "file": "stub__variadic.zep",
+                                "line": 90,
+                                "char": 21
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 91,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Array-typed variadic: each argument is an array; returns the total\n     * number of elements across all of them.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 82,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 82,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 81,
+                    "last-line": 96,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "classNames",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "objects",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__variadic.zep",
+                            "line": 97,
+                            "char": 42,
+                            "variadic": 1
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "names",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__variadic.zep",
+                                        "line": 99,
+                                        "char": 25
+                                    },
+                                    "file": "stub__variadic.zep",
+                                    "line": 99,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 100,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__variadic.zep",
+                                    "line": 100,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 102,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "objects",
+                                "file": "stub__variadic.zep",
+                                "line": 102,
+                                "char": 28
+                            },
+                            "value": "obj",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "names",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "get_class",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "obj",
+                                                            "file": "stub__variadic.zep",
+                                                            "line": 103,
+                                                            "char": 40
+                                                        },
+                                                        "file": "stub__variadic.zep",
+                                                        "line": 103,
+                                                        "char": 40
+                                                    }
+                                                ],
+                                                "file": "stub__variadic.zep",
+                                                "line": 103,
+                                                "char": 41
+                                            },
+                                            "file": "stub__variadic.zep",
+                                            "line": 103,
+                                            "char": 41
+                                        }
+                                    ],
+                                    "file": "stub__variadic.zep",
+                                    "line": 104,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__variadic.zep",
+                            "line": 106,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "names",
+                                "file": "stub__variadic.zep",
+                                "line": 106,
+                                "char": 21
+                            },
+                            "file": "stub__variadic.zep",
+                            "line": 107,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Collects objects and returns their class names. Exercises a variadic\n     * that carries object values.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__variadic.zep",
+                                "line": 98,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__variadic.zep",
+                        "line": 98,
+                        "char": 5
+                    },
+                    "file": "stub__variadic.zep",
+                    "line": 97,
+                    "last-line": 108,
+                    "char": 19
+                }
+            ],
+            "file": "stub__variadic.zep",
+            "line": 19,
+            "char": 5
+        },
+        "file": "stub__variadic.zep",
+        "line": 19,
+        "char": 5
+    }
+]

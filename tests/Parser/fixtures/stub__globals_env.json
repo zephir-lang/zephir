@@ -1,0 +1,133 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Globals",
+        "file": "stub__globals_env.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Env",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "read",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_env.zep",
+                            "line": 6,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "ternary",
+                                "left": {
+                                    "type": "isset",
+                                    "left": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "_ENV",
+                                            "file": "stub__globals_env.zep",
+                                            "line": 8,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "name",
+                                            "file": "stub__globals_env.zep",
+                                            "line": 8,
+                                            "char": 25
+                                        },
+                                        "file": "stub__globals_env.zep",
+                                        "line": 8,
+                                        "char": 27
+                                    },
+                                    "file": "stub__globals_env.zep",
+                                    "line": 8,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_ENV",
+                                        "file": "stub__globals_env.zep",
+                                        "line": 8,
+                                        "char": 33
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "name",
+                                        "file": "stub__globals_env.zep",
+                                        "line": 8,
+                                        "char": 38
+                                    },
+                                    "file": "stub__globals_env.zep",
+                                    "line": 8,
+                                    "char": 40
+                                },
+                                "extra": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__globals_env.zep",
+                                    "line": 8,
+                                    "char": 47
+                                },
+                                "file": "stub__globals_env.zep",
+                                "line": 8,
+                                "char": 47
+                            },
+                            "file": "stub__globals_env.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__globals_env.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__globals_env.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__globals_env.zep",
+                    "line": 6,
+                    "last-line": 10,
+                    "char": 16
+                }
+            ],
+            "file": "stub__globals_env.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__globals_env.zep",
+        "line": 4,
+        "char": 5
+    }
+]

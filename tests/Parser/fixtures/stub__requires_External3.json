@@ -1,0 +1,151 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * External3 operations\n *",
+        "file": "stub__requires_External3.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Requires",
+        "file": "stub__requires_External3.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "External3",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someVariable",
+                    "file": "stub__requires_External3.zep",
+                    "line": 12,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "req",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "path",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__requires_External3.zep",
+                            "line": 12,
+                            "char": 30
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "requires",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__requires_External3.zep",
+                            "line": 12,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "fcall",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ob_clean",
+                                "call-type": 1,
+                                "file": "stub__requires_External3.zep",
+                                "line": 14,
+                                "char": 13
+                            },
+                            "file": "stub__requires_External3.zep",
+                            "line": 15,
+                            "char": 9
+                        },
+                        {
+                            "type": "require",
+                            "expr": {
+                                "type": "variable",
+                                "value": "path",
+                                "file": "stub__requires_External3.zep",
+                                "line": 15,
+                                "char": 15
+                            },
+                            "file": "stub__requires_External3.zep",
+                            "line": 16,
+                            "char": 10
+                        },
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "requires",
+                                    "file": "stub__requires_External3.zep",
+                                    "line": 16,
+                                    "char": 12
+                                },
+                                "name": "setContent",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "fcall",
+                                            "name": "ob_get_contents",
+                                            "call-type": 1,
+                                            "file": "stub__requires_External3.zep",
+                                            "line": 16,
+                                            "char": 41
+                                        },
+                                        "file": "stub__requires_External3.zep",
+                                        "line": 16,
+                                        "char": 41
+                                    }
+                                ],
+                                "file": "stub__requires_External3.zep",
+                                "line": 16,
+                                "char": 42
+                            },
+                            "file": "stub__requires_External3.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__requires_External3.zep",
+                        "line": 13,
+                        "char": 2
+                    },
+                    "file": "stub__requires_External3.zep",
+                    "line": 12,
+                    "last-line": 18,
+                    "char": 16
+                }
+            ],
+            "file": "stub__requires_External3.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__requires_External3.zep",
+        "line": 8,
+        "char": 5
+    }
+]

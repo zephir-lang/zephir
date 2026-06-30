@@ -1,0 +1,54 @@
+--TEST--
+Issue #2324: new static() resolves to the called class (LSB); new self() resolves to the lexical class (port of tests/Extension/Issue2324Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2324
+{
+    public function __construct()
+    {
+    }
+
+    public static function makeStatic()
+    {
+        var obj;
+        let obj = new static();
+        return get_class(obj);
+    }
+
+    public static function makeSelf()
+    {
+        var obj;
+        let obj = new self();
+        return get_class(obj);
+    }
+
+    public function makeStaticInstance()
+    {
+        var obj;
+        let obj = new static();
+        return get_class(obj);
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2324Extended extends Issue2324
+{
+}
+--USAGE--
+echo var_export(\Stub\Issue2324::makeStatic() === \Stub\Issue2324::class, true), "\n";
+echo var_export(\Stub\Issue2324Extended::makeStatic() === \Stub\Issue2324Extended::class, true), "\n";
+echo var_export(\Stub\Issue2324::makeSelf() === \Stub\Issue2324::class, true), "\n";
+echo var_export(\Stub\Issue2324Extended::makeSelf() === \Stub\Issue2324::class, true), "\n";
+$base = new \Stub\Issue2324();
+$sub = new \Stub\Issue2324Extended();
+echo var_export($base->makeStaticInstance() === \Stub\Issue2324::class, true), "\n";
+echo var_export($sub->makeStaticInstance() === \Stub\Issue2324Extended::class, true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true

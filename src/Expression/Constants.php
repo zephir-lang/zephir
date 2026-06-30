@@ -129,7 +129,11 @@ class Constants
                     return new LiteralCompiledExpression('string', Name::addSlashes($constantName), $expression);
 
                 case 'object':
-                    throw new CompilerException('?');
+                    throw new CompilerException(
+                        "PHP constant '" . $expression['value'] . "' resolves to an "
+                        . 'object, which cannot be used as a compile-time constant',
+                        $expression
+                    );
                 default:
                     return new LiteralCompiledExpression($type, $constantName, $expression);
             }
@@ -168,6 +172,31 @@ class Constants
                 "Magic constant '" . $constantName . "' is not supported",
                 ['not-supported-magic-constant', $expression]
             );
+
+            return new LiteralCompiledExpression('null', null, $expression);
+        }
+
+        /**
+         * A constant initializer compiled outside an executable scope (a
+         * class/interface constant declaration) has no symbol table, so the
+         * runtime `ZEPHIR_GET_CONSTANT` path below is unavailable. Fold a
+         * defined PHP constant to its literal value instead.
+         *
+         * @see https://github.com/zephir-lang/zephir/issues/2542
+         */
+        if (null === $compilationContext->symbolTable) {
+            if (defined($constantName)) {
+                $value = constant($constantName);
+
+                return match (strtolower(gettype($value))) {
+                    'integer' => new LiteralCompiledExpression('int', $value, $expression),
+                    'double'  => new LiteralCompiledExpression('double', $value, $expression),
+                    'boolean' => new LiteralCompiledExpression('bool', $value ? 'true' : 'false', $expression),
+                    'string'  => new LiteralCompiledExpression('string', $value, $expression),
+                    'null'    => new LiteralCompiledExpression('null', null, $expression),
+                    default   => new LiteralCompiledExpression('null', null, $expression),
+                };
+            }
 
             return new LiteralCompiledExpression('null', null, $expression);
         }

@@ -1,0 +1,418 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_privateproperties.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "PrivateProperties",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someNull",
+                    "docblock": "**\n\t * This is a private property with no initial value\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 14,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someNullInitial",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 15,
+                        "char": 32
+                    },
+                    "docblock": "**\n\t * This is a private property with initial null value\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 19,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someFalse",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 20,
+                        "char": 27
+                    },
+                    "docblock": "**\n\t * This is a private property with initial boolean false\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 24,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someTrue",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 25,
+                        "char": 25
+                    },
+                    "docblock": "**\n\t * This is a private property with initial boolean true\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 29,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someInteger",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 30,
+                        "char": 26
+                    },
+                    "docblock": "**\n\t * This is a private property with an initial integer value\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 34,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someDouble",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 35,
+                        "char": 28
+                    },
+                    "docblock": "**\n\t * This is a private property with an initial double value\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 39,
+                    "char": 3
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "someString",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__properties_privateproperties.zep",
+                        "line": 40,
+                        "char": 27
+                    },
+                    "docblock": "**\n\t * This is a private property with an initial string value\n\t *",
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 42,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNull",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 44,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNull",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 44,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 44,
+                                "char": 24
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 45,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 42,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeNullInitial",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 49,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someNullInitial",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 49,
+                                    "char": 31
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 49,
+                                "char": 31
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 47,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeFalse",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 54,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someFalse",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 54,
+                                    "char": 25
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 54,
+                                "char": 25
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 55,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 52,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeTrue",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 59,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someTrue",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 59,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 59,
+                                "char": 24
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 60,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 57,
+                    "last-line": 62,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeInteger",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 64,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someInteger",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 64,
+                                    "char": 27
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 64,
+                                "char": 27
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 65,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 62,
+                    "last-line": 67,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeDouble",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 69,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someDouble",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 69,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 69,
+                                "char": 26
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 70,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 67,
+                    "last-line": 72,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getSomeString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 74,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "someString",
+                                    "file": "stub__properties_privateproperties.zep",
+                                    "line": 74,
+                                    "char": 26
+                                },
+                                "file": "stub__properties_privateproperties.zep",
+                                "line": 74,
+                                "char": 26
+                            },
+                            "file": "stub__properties_privateproperties.zep",
+                            "line": 75,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__properties_privateproperties.zep",
+                    "line": 72,
+                    "last-line": 77,
+                    "char": 16
+                }
+            ],
+            "file": "stub__properties_privateproperties.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__properties_privateproperties.zep",
+        "line": 4,
+        "char": 5
+    }
+]

@@ -1,0 +1,45 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__base_cblocks.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Test",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "block",
+                    "statements": [
+                        {
+                            "type": "cblock",
+                            "value": "\n\n            \/\/ Some comment\n\n            {\n                while(1) {\n                    RETURN_MM_NULL();\n                }\n            }\n        ",
+                            "file": "phpt__base_cblocks.zep",
+                            "line": 17,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__base_cblocks.zep",
+                    "line": 5,
+                    "last-line": 18,
+                    "char": 19
+                }
+            ],
+            "file": "phpt__base_cblocks.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__base_cblocks.zep",
+        "line": 3,
+        "char": 5
+    }
+]

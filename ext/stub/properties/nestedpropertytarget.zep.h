@@ -1,0 +1,5 @@
+
+extern zend_class_entry *stub_properties_nestedpropertytarget_ce;
+
+ZEPHIR_INIT_CLASS(Stub_Properties_NestedPropertyTarget);
+

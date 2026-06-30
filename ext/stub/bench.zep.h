@@ -18,6 +18,10 @@ PHP_METHOD(Stub_Bench, variadicSumNarrowLoop);
 PHP_METHOD(Stub_Bench, variadicSumWideLoop);
 PHP_METHOD(Stub_Bench, funcGetArgsSum);
 PHP_METHOD(Stub_Bench, funcGetArgsSumLoop);
+PHP_METHOD(Stub_Bench, finalReturnConst);
+PHP_METHOD(Stub_Bench, staticReturnConst);
+PHP_METHOD(Stub_Bench, finalDispatchLoop);
+PHP_METHOD(Stub_Bench, staticDispatchLoop);
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_bench___construct, 0, 0, 0)
 ZEND_END_ARG_INFO()
@@ -81,6 +85,20 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_funcgetargssumloop, 0
 	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_finalreturnconst, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_staticreturnconst, 0, 0, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_finaldispatchloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_bench_staticdispatchloop, 0, 1, IS_LONG, 0)
+	ZEND_ARG_TYPE_INFO(0, n, IS_LONG, 0)
+ZEND_END_ARG_INFO()
+
 ZEPHIR_INIT_FUNCS(stub_bench_method_entry) {
 PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
 	PHP_ME(Stub_Bench, forOverArray, arginfo_stub_bench_foroverarray, ZEND_ACC_PUBLIC)
@@ -97,5 +115,9 @@ PHP_ME(Stub_Bench, __construct, arginfo_stub_bench___construct, ZEND_ACC_PUBLIC|
 	PHP_ME(Stub_Bench, variadicSumWideLoop, arginfo_stub_bench_variadicsumwideloop, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, funcGetArgsSum, arginfo_stub_bench_funcgetargssum, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Bench, funcGetArgsSumLoop, arginfo_stub_bench_funcgetargssumloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, finalReturnConst, arginfo_stub_bench_finalreturnconst, ZEND_ACC_FINAL|ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, staticReturnConst, arginfo_stub_bench_staticreturnconst, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+	PHP_ME(Stub_Bench, finalDispatchLoop, arginfo_stub_bench_finaldispatchloop, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Bench, staticDispatchLoop, arginfo_stub_bench_staticdispatchloop, ZEND_ACC_PUBLIC)
 	PHP_FE_END
 };

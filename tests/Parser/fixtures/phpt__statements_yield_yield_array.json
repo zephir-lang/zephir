@@ -1,0 +1,68 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "yield",
+                "expr": {
+                    "type": "array",
+                    "left": [
+                        {
+                            "key": {
+                                "type": "char",
+                                "value": "key",
+                                "file": "phpt__statements_yield_yield_array.zep",
+                                "line": 2,
+                                "char": 13
+                            },
+                            "value": {
+                                "type": "char",
+                                "value": "value",
+                                "file": "phpt__statements_yield_yield_array.zep",
+                                "line": 2,
+                                "char": 21
+                            },
+                            "file": "phpt__statements_yield_yield_array.zep",
+                            "line": 2,
+                            "char": 21
+                        },
+                        {
+                            "value": {
+                                "type": "char",
+                                "value": "another",
+                                "file": "phpt__statements_yield_yield_array.zep",
+                                "line": 2,
+                                "char": 31
+                            },
+                            "file": "phpt__statements_yield_yield_array.zep",
+                            "line": 2,
+                            "char": 31
+                        },
+                        {
+                            "value": {
+                                "type": "char",
+                                "value": "val",
+                                "file": "phpt__statements_yield_yield_array.zep",
+                                "line": 2,
+                                "char": 37
+                            },
+                            "file": "phpt__statements_yield_yield_array.zep",
+                            "line": 2,
+                            "char": 37
+                        }
+                    ],
+                    "file": "phpt__statements_yield_yield_array.zep",
+                    "line": 2,
+                    "char": 38
+                },
+                "file": "phpt__statements_yield_yield_array.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_yield_yield_array.zep",
+        "line": 1,
+        "char": 9
+    }
+]

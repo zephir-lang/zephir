@@ -8,6 +8,7 @@ PHP_METHOD(Stub_ArrayAccessTest, get);
 PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromArray);
 PHP_METHOD(Stub_ArrayAccessTest, unsetByKeyFromProperty);
 PHP_METHOD(Stub_ArrayAccessTest, issue645);
+PHP_METHOD(Stub_ArrayAccessTest, issue1877);
 PHP_METHOD(Stub_ArrayAccessTest, issue1155);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test1);
 PHP_METHOD(Stub_ArrayAccessTest, issue1094Test2);
@@ -38,6 +39,9 @@ ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_unsetbykeyf
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue645, 0, 0, IS_ARRAY, 0)
+ZEND_END_ARG_INFO()
+
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1877, 0, 0, IS_STRING, 0)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_arrayaccesstest_issue1155, 0, 0, _IS_BOOL, 0)
@@ -87,6 +91,7 @@ PHP_ME(Stub_ArrayAccessTest, get, arginfo_stub_arrayaccesstest_get, ZEND_ACC_PUB
 	PHP_ME(Stub_ArrayAccessTest, unsetByKeyFromArray, arginfo_stub_arrayaccesstest_unsetbykeyfromarray, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, unsetByKeyFromProperty, arginfo_stub_arrayaccesstest_unsetbykeyfromproperty, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue645, arginfo_stub_arrayaccesstest_issue645, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_ArrayAccessTest, issue1877, arginfo_stub_arrayaccesstest_issue1877, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1155, arginfo_stub_arrayaccesstest_issue1155, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test1, arginfo_stub_arrayaccesstest_issue1094test1, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_ArrayAccessTest, issue1094Test2, arginfo_stub_arrayaccesstest_issue1094test2, ZEND_ACC_PUBLIC)

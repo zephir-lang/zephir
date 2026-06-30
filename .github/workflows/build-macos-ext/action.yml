@@ -57,6 +57,18 @@ runs:
         # Also help pkg-config aware scripts find pcre2
         export PKG_CONFIG_PATH="${BREW_PREFIX}/lib/pkgconfig:${PKG_CONFIG_PATH}"
 
+        # Persist the Homebrew-augmented toolchain env to subsequent job steps.
+        # The .zept Black-box suite shells out to `zephir compile` once per case
+        # from the test step; without these, each per-case build fails to find
+        # Homebrew headers/libs (macOS clang does not search /opt/homebrew by
+        # default). CFLAGS is intentionally not persisted: the compiler forces
+        # its own CFLAGS during configure, but honours CPPFLAGS/LDFLAGS from env.
+        {
+          echo "CPPFLAGS=${CPPFLAGS}"
+          echo "LDFLAGS=${LDFLAGS}"
+          echo "PKG_CONFIG_PATH=${PKG_CONFIG_PATH}"
+        } >> "$GITHUB_ENV"
+
         echo "Compiler: ${CC}"
         echo "CFLAGS: ${CFLAGS}"
         echo "LDFLAGS: ${LDFLAGS}"

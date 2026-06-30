@@ -19,6 +19,8 @@ use Zephir\Exception;
 use Zephir\Expression\Constants;
 use Zephir\Expression\StaticConstantAccess;
 
+use function in_array;
+
 /**
  * Represents a class constant
  */
@@ -40,6 +42,17 @@ class Constant
     public function compile(CompilationContext $compilationContext): void
     {
         $this->processValue($compilationContext);
+
+        if (in_array($this->value['type'], ['array', 'empty-array'], true)) {
+            $compilationContext->backend->declareArrayConstant(
+                $this->getName(),
+                $this->value,
+                $compilationContext
+            );
+
+            return;
+        }
+
         $constantValue = $this->value['value'] ?? null;
         $compilationContext->backend->declareConstant(
             $this->value['type'],

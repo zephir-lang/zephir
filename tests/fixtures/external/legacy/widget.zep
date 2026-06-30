@@ -1,0 +1,5 @@
+namespace Legacy;
+
+class Widget
+{
+}

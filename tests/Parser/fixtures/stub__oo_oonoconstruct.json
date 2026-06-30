@@ -1,0 +1,25 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Class without constructor\n *",
+        "file": "stub__oo_oonoconstruct.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_oonoconstruct.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "OoNoConstruct",
+        "abstract": 0,
+        "final": 0,
+        "file": "stub__oo_oonoconstruct.zep",
+        "line": 8,
+        "char": 5
+    }
+]

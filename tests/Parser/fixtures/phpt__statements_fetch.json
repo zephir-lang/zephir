@@ -1,0 +1,50 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "fetch",
+                "expr": {
+                    "type": "fetch",
+                    "left": {
+                        "type": "variable",
+                        "value": "item",
+                        "file": "phpt__statements_fetch.zep",
+                        "line": 2,
+                        "char": 22
+                    },
+                    "right": {
+                        "type": "array-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "arr",
+                            "file": "phpt__statements_fetch.zep",
+                            "line": 2,
+                            "char": 17
+                        },
+                        "right": {
+                            "type": "string",
+                            "value": "key",
+                            "file": "phpt__statements_fetch.zep",
+                            "line": 2,
+                            "char": 21
+                        },
+                        "file": "phpt__statements_fetch.zep",
+                        "line": 2,
+                        "char": 22
+                    },
+                    "file": "phpt__statements_fetch.zep",
+                    "line": 2,
+                    "char": 22
+                },
+                "file": "phpt__statements_fetch.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_fetch.zep",
+        "line": 1,
+        "char": 9
+    }
+]

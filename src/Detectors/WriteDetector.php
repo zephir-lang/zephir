@@ -230,6 +230,18 @@ class WriteDetector
             if (isset($assignment['expr'])) {
                 $this->passExpression($assignment['expr']);
             }
+
+            /**
+             * Nested object-property assignments (`let a->b->c = expr;`) carry
+             * the target as a `left` expression rather than a plain variable.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2532
+             */
+            if ('property-access' === $assignment['assign-type']) {
+                $this->passExpression($assignment['left']);
+                continue;
+            }
+
             $this->increaseMutations($assignment['variable']);
             if (self::DETECT_VALUE_IN_ASSIGNMENT == ($this->detectionFlags & self::DETECT_VALUE_IN_ASSIGNMENT)) {
                 if (isset($assignment['expr'])) {

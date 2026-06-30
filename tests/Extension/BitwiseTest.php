@@ -132,5 +132,14 @@ final class BitwiseTest extends TestCase
          * @issue https://github.com/zephir-lang/zephir/issues/1581
          */
         $this->assertSame(123 ^ 321, $test->testbitwiseXor());
+
+        /**
+         * Hexadecimal literals in constant-folded operations.
+         *
+         * @issue https://github.com/zephir-lang/zephir/issues/2014
+         */
+        $this->assertSame(0xffffffff << 32, $test->issue2014ShiftLeft());
+        $this->assertSame(0xff & 0x0f, $test->issue2014HexAnd());
+        $this->assertSame(0xff + 1, $test->issue2014HexArithmetic());
     }
 }

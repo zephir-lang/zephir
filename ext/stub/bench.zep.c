@@ -719,3 +719,80 @@ PHP_METHOD(Stub_Bench, funcGetArgsSumLoop)
 	RETURN_MM_LONG(sum);
 }
 
+/**
+ * Call-dispatch micro-workloads for the FastCall investigation (#1510).
+ * Each loops a trivial callee so the measured cost is dominated by the
+ * call machinery (cache lookup + fcic setup + zend_call_function), not the
+ * callee body. Three dispatch flavours exercise distinct kernel paths.
+ */
+PHP_METHOD(Stub_Bench, finalReturnConst)
+{
+
+	RETURN_LONG(7);
+}
+
+PHP_METHOD(Stub_Bench, staticReturnConst)
+{
+
+	RETURN_LONG(7);
+}
+
+PHP_METHOD(Stub_Bench, finalDispatchLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zephir_fcall_cache_entry *_1 = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, _0$$3;
+	long n, i, sum;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_CALL_METHOD(&_0$$3, this_ptr, "finalreturnconst", &_1, 11);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+
+PHP_METHOD(Stub_Bench, staticDispatchLoop)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zephir_fcall_cache_entry *_1 = NULL;
+	zval *n_param = NULL, _0$$3;
+	long n, i, sum;
+
+	ZVAL_UNDEF(&_0$$3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	i = 0;
+	sum = 0;
+	while (1) {
+		if (!(i < n)) {
+			break;
+		}
+		ZEPHIR_CALL_SELF(&_0$$3, "staticreturnconst", &_1, 0);
+		zephir_check_call_status();
+		sum += zephir_get_numberval(&_0$$3);
+		i++;
+	}
+	RETURN_MM_LONG(sum);
+}
+

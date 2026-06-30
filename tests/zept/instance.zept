@@ -1,0 +1,115 @@
+--TEST--
+create_instance_params builds an instance through a constructor taking more than 10 typed params (#1339) (port of tests/Extension/InstanceTest.php; the 11 dependency classes are inlined as minimal stubs since the ctor body is empty)
+--FILE--
+namespace Stub;
+
+class Arithmetic
+{
+}
+--FILE--
+namespace Stub;
+
+class ArrayObject
+{
+}
+--FILE--
+namespace Stub;
+
+class Assign
+{
+}
+--FILE--
+namespace Stub;
+
+class Bitwise
+{
+}
+--FILE--
+namespace Stub;
+
+class BranchPrediction
+{
+}
+--FILE--
+namespace Stub;
+
+class Cast
+{
+}
+--FILE--
+namespace Stub;
+
+class Cblock
+{
+}
+--FILE--
+namespace Stub;
+
+class Chars
+{
+}
+--FILE--
+namespace Stub;
+
+class Closures
+{
+}
+--FILE--
+namespace Stub;
+
+class Compare
+{
+}
+--FILE--
+namespace Stub;
+
+class Concat
+{
+}
+--FILE--
+namespace Stub;
+
+class Instance
+{
+    public function __construct(
+        <Arithmetic> a1,
+        <ArrayObject> a2,
+        <Assign> a3,
+        <Bitwise> a4,
+        <BranchPrediction> a5,
+        <Cast> a6,
+        <Cblock> a7,
+        <Chars> a8,
+        <Closures> a9,
+        <Compare> a10,
+        <Concat> a11
+    )
+    {
+
+    }
+
+    public static function testIssue1339() -> <Instance>
+    {
+        var parameters;
+
+        let parameters = [
+            new Arithmetic(),
+            new ArrayObject(),
+            new Assign(),
+            new Bitwise(),
+            new BranchPrediction(),
+            new Cast(),
+            new Cblock(),
+            new Chars(),
+            new Closures(),
+            new Compare(),
+            new Concat()
+        ];
+
+        return create_instance_params("Stub\\Instance", parameters);
+    }
+}
+--USAGE--
+echo var_export(\Stub\Instance::testIssue1339() instanceof \Stub\Instance, true), "\n";
+--EXPECT--
+true

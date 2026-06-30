@@ -1,0 +1,17 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "return",
+                "file": "phpt__statements_return.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_return.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,3281 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__strings.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Strings",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "camelize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 6,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 6,
+                                "char": 59
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 6,
+                            "char": 59
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "camelize",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 8,
+                                            "char": 22
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 8,
+                                        "char": 22
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "delimiter",
+                                            "file": "stub__strings.zep",
+                                            "line": 8,
+                                            "char": 33
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 8,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 8,
+                                "char": 34
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "uncamelize",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 11,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 11,
+                                "char": 61
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 11,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "uncamelize",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 13,
+                                            "char": 24
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 13,
+                                        "char": 24
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "delimiter",
+                                            "file": "stub__strings.zep",
+                                            "line": 13,
+                                            "char": 35
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 13,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 13,
+                                "char": 36
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTrim",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 16,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "trim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 18,
+                                            "char": 18
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 18,
+                                        "char": 18
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 18,
+                                "char": 19
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testRtrim",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 21,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "rtrim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 23,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 23,
+                                        "char": 19
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 23,
+                                "char": 20
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testLtrim",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 26,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ltrim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 28,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 28,
+                                        "char": 19
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 28,
+                                "char": 20
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 26,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTrim2Params",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 31,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "charlist",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 31,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "trim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 33,
+                                            "char": 18
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 33,
+                                        "char": 18
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "charlist",
+                                            "file": "stub__strings.zep",
+                                            "line": 33,
+                                            "char": 28
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 33,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 33,
+                                "char": 29
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 34,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 31,
+                    "last-line": 36,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testRtrim2Params",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 36,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "charlist",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 36,
+                            "char": 56
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "rtrim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 38,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 38,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "charlist",
+                                            "file": "stub__strings.zep",
+                                            "line": 38,
+                                            "char": 29
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 38,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 38,
+                                "char": 30
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 36,
+                    "last-line": 41,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testLtrim2Params",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 41,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "charlist",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 41,
+                            "char": 56
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "ltrim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 43,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 43,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "charlist",
+                                            "file": "stub__strings.zep",
+                                            "line": 43,
+                                            "char": 29
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 43,
+                                        "char": 29
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 43,
+                                "char": 30
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 41,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testImplode",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "glue",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 46,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "pieces",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 46,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "implode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "glue",
+                                            "file": "stub__strings.zep",
+                                            "line": 48,
+                                            "char": 22
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 48,
+                                        "char": 22
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "pieces",
+                                            "file": "stub__strings.zep",
+                                            "line": 48,
+                                            "char": 30
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 48,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 48,
+                                "char": 31
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 49,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 46,
+                    "last-line": 51,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStrpos",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "haystack",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 51,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "needle",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 51,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "strpos",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "haystack",
+                                            "file": "stub__strings.zep",
+                                            "line": 53,
+                                            "char": 25
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 53,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "needle",
+                                            "file": "stub__strings.zep",
+                                            "line": 53,
+                                            "char": 33
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 53,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 53,
+                                "char": 34
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 51,
+                    "last-line": 56,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStrposOffset",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "haystack",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 56,
+                            "char": 47
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "needle",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 56,
+                            "char": 59
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "offset",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 56,
+                            "char": 71
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "strpos",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "haystack",
+                                            "file": "stub__strings.zep",
+                                            "line": 58,
+                                            "char": 25
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 58,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "needle",
+                                            "file": "stub__strings.zep",
+                                            "line": 58,
+                                            "char": 33
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 58,
+                                        "char": 33
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "offset",
+                                            "file": "stub__strings.zep",
+                                            "line": 58,
+                                            "char": 41
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 58,
+                                        "char": 41
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 58,
+                                "char": 42
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 56,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExplode",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "delimiter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 61,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 61,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "explode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "delimiter",
+                                            "file": "stub__strings.zep",
+                                            "line": 63,
+                                            "char": 27
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 63,
+                                        "char": 27
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 63,
+                                            "char": 32
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 63,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 63,
+                                "char": 33
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 61,
+                    "last-line": 66,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExplodeStr",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 66,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "explode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": ",",
+                                            "file": "stub__strings.zep",
+                                            "line": 68,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 68,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 68,
+                                            "char": 24
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 68,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 68,
+                                "char": 25
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 66,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testExplodeLimit",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 71,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "limit",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 71,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "explode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": ",",
+                                            "file": "stub__strings.zep",
+                                            "line": 73,
+                                            "char": 19
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 73,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 73,
+                                            "char": 24
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 73,
+                                        "char": 24
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "limit",
+                                            "file": "stub__strings.zep",
+                                            "line": 73,
+                                            "char": 31
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 73,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 73,
+                                "char": 32
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 74,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 71,
+                    "last-line": 76,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSubstr",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 76,
+                            "char": 36
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "from",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 76,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "len",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 76,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 78,
+                                            "char": 20
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 78,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "from",
+                                            "file": "stub__strings.zep",
+                                            "line": 78,
+                                            "char": 26
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 78,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "len",
+                                            "file": "stub__strings.zep",
+                                            "line": 78,
+                                            "char": 31
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 78,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 78,
+                                "char": 32
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 79,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 76,
+                    "last-line": 81,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSubstr2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 81,
+                            "char": 37
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "from",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 81,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 83,
+                                            "char": 20
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 83,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "from",
+                                            "file": "stub__strings.zep",
+                                            "line": 83,
+                                            "char": 26
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 83,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 83,
+                                "char": 27
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 84,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 81,
+                    "last-line": 86,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSubstr3",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 86,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 88,
+                                            "char": 20
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 88,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "-1",
+                                            "file": "stub__strings.zep",
+                                            "line": 88,
+                                            "char": 24
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 88,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 88,
+                                "char": 25
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 89,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 86,
+                    "last-line": 91,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testSubstr4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 91,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "substr",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 93,
+                                            "char": 20
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 93,
+                                        "char": 20
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__strings.zep",
+                                            "line": 93,
+                                            "char": 23
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 93,
+                                        "char": 23
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "-1",
+                                            "file": "stub__strings.zep",
+                                            "line": 93,
+                                            "char": 27
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 93,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 93,
+                                "char": 28
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 94,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 91,
+                    "last-line": 96,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testAddslashes",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 96,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "addslashes",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 98,
+                                            "char": 24
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 98,
+                                        "char": 24
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 98,
+                                "char": 25
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 99,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 96,
+                    "last-line": 101,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStripslashes",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 101,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "stripslashes",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 103,
+                                            "char": 26
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 103,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 103,
+                                "char": 27
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 104,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 101,
+                    "last-line": 106,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testStripcslashes",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 106,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "stripcslashes",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__strings.zep",
+                                            "line": 108,
+                                            "char": 27
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 108,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 108,
+                                "char": 28
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 109,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 107,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 107,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 106,
+                    "last-line": 111,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testHashEquals",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str1",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 111,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "str2",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 111,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "hash_equals",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str1",
+                                            "file": "stub__strings.zep",
+                                            "line": 113,
+                                            "char": 26
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 113,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "str2",
+                                            "file": "stub__strings.zep",
+                                            "line": 113,
+                                            "char": 32
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 113,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 113,
+                                "char": 33
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 114,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 112,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 112,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 111,
+                    "last-line": 116,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testHardcodedMultilineString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "\n            Hello world\n        ",
+                                "file": "stub__strings.zep",
+                                "line": 118,
+                                "char": 43
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 119,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 116,
+                    "last-line": 121,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEchoMultilineString",
+                    "statements": [
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "string",
+                                    "value": "\n            Hello world\n        ",
+                                    "file": "stub__strings.zep",
+                                    "line": 123,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 124,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 121,
+                    "last-line": 126,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testTrimMultilineString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "trim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "\n            Hello world\n        ",
+                                            "file": "stub__strings.zep",
+                                            "line": 128,
+                                            "char": 48
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 128,
+                                        "char": 48
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 128,
+                                "char": 49
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 129,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 126,
+                    "last-line": 131,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testWellEscapedMultilineString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "trim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "\n            \\\\\\\"\\}\\$hello\\$\\\\\\\"\\'\n        ",
+                                            "file": "stub__strings.zep",
+                                            "line": 133,
+                                            "char": 58
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 133,
+                                        "char": 58
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 133,
+                                "char": 59
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 134,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 131,
+                    "last-line": 136,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInternedString1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "istring",
+                                "value": "hello",
+                                "file": "stub__strings.zep",
+                                "line": 138,
+                                "char": 16
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 139,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 136,
+                    "last-line": 141,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInternedString2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "istring",
+                                    "value": " hello ",
+                                    "file": "stub__strings.zep",
+                                    "line": 143,
+                                    "char": 19
+                                },
+                                "name": "trim",
+                                "call-type": 1,
+                                "file": "stub__strings.zep",
+                                "line": 143,
+                                "char": 26
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 144,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 141,
+                    "last-line": 146,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "strToHex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 146,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__strings.zep",
+                                        "line": 148,
+                                        "char": 12
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 148,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 149,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "ret",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__strings.zep",
+                                        "line": 149,
+                                        "char": 16
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 149,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 150,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "less",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "i",
+                                        "file": "stub__strings.zep",
+                                        "line": 150,
+                                        "char": 12
+                                    },
+                                    "right": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__strings.zep",
+                                            "line": 150,
+                                            "char": 20
+                                        },
+                                        "name": "length",
+                                        "call-type": 1,
+                                        "file": "stub__strings.zep",
+                                        "line": 150,
+                                        "char": 29
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 150,
+                                    "char": 29
+                                },
+                                "file": "stub__strings.zep",
+                                "line": 150,
+                                "char": 31
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "concat-assign",
+                                            "variable": "ret",
+                                            "expr": {
+                                                "type": "fcall",
+                                                "name": "dechex",
+                                                "call-type": 1,
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "fcall",
+                                                            "name": "ord",
+                                                            "call-type": 1,
+                                                            "parameters": [
+                                                                {
+                                                                    "parameter": {
+                                                                        "type": "array-access",
+                                                                        "left": {
+                                                                            "type": "variable",
+                                                                            "value": "value",
+                                                                            "file": "stub__strings.zep",
+                                                                            "line": 151,
+                                                                            "char": 30
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "variable",
+                                                                            "value": "i",
+                                                                            "file": "stub__strings.zep",
+                                                                            "line": 151,
+                                                                            "char": 32
+                                                                        },
+                                                                        "file": "stub__strings.zep",
+                                                                        "line": 151,
+                                                                        "char": 33
+                                                                    },
+                                                                    "file": "stub__strings.zep",
+                                                                    "line": 151,
+                                                                    "char": 33
+                                                                }
+                                                            ],
+                                                            "file": "stub__strings.zep",
+                                                            "line": 151,
+                                                            "char": 34
+                                                        },
+                                                        "file": "stub__strings.zep",
+                                                        "line": 151,
+                                                        "char": 34
+                                                    }
+                                                ],
+                                                "file": "stub__strings.zep",
+                                                "line": 151,
+                                                "char": 35
+                                            },
+                                            "file": "stub__strings.zep",
+                                            "line": 151,
+                                            "char": 35
+                                        }
+                                    ],
+                                    "file": "stub__strings.zep",
+                                    "line": 152,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__strings.zep",
+                                            "line": 152,
+                                            "char": 11
+                                        }
+                                    ],
+                                    "file": "stub__strings.zep",
+                                    "line": 153,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 154,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "ret",
+                                "file": "stub__strings.zep",
+                                "line": 154,
+                                "char": 13
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 155,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 147,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 147,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 146,
+                    "last-line": 157,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1267",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 157,
+                            "char": 33
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "file": "stub__strings.zep",
+                                    "line": 159,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 160,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "value",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "str_replace",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "array",
+                                                    "left": [
+                                                        {
+                                                            "value": {
+                                                                "type": "string",
+                                                                "value": "\\\\",
+                                                                "file": "stub__strings.zep",
+                                                                "line": 160,
+                                                                "char": 30
+                                                            },
+                                                            "file": "stub__strings.zep",
+                                                            "line": 160,
+                                                            "char": 30
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "string",
+                                                                "value": "\\\"",
+                                                                "file": "stub__strings.zep",
+                                                                "line": 160,
+                                                                "char": 34
+                                                            },
+                                                            "file": "stub__strings.zep",
+                                                            "line": 160,
+                                                            "char": 34
+                                                        },
+                                                        {
+                                                            "value": {
+                                                                "type": "string",
+                                                                "value": "'",
+                                                                "file": "stub__strings.zep",
+                                                                "line": 160,
+                                                                "char": 37
+                                                            },
+                                                            "file": "stub__strings.zep",
+                                                            "line": 160,
+                                                            "char": 37
+                                                        }
+                                                    ],
+                                                    "file": "stub__strings.zep",
+                                                    "line": 160,
+                                                    "char": 38
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 160,
+                                                "char": 38
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 160,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 160,
+                                                "char": 40
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "value",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 160,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 160,
+                                                "char": 47
+                                            }
+                                        ],
+                                        "file": "stub__strings.zep",
+                                        "line": 160,
+                                        "char": 48
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 160,
+                                    "char": 48
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 161,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "value",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "filter_var",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "value",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 161,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 161,
+                                                "char": 31
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "constant",
+                                                    "value": "FILTER_UNSAFE_RAW",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 161,
+                                                    "char": 50
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 161,
+                                                "char": 50
+                                            }
+                                        ],
+                                        "file": "stub__strings.zep",
+                                        "line": 161,
+                                        "char": 51
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 161,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 162,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "trim",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "fcall",
+                                                    "name": "stripslashes",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "fcall",
+                                                                "name": "strip_tags",
+                                                                "call-type": 1,
+                                                                "parameters": [
+                                                                    {
+                                                                        "parameter": {
+                                                                            "type": "variable",
+                                                                            "value": "value",
+                                                                            "file": "stub__strings.zep",
+                                                                            "line": 162,
+                                                                            "char": 45
+                                                                        },
+                                                                        "file": "stub__strings.zep",
+                                                                        "line": 162,
+                                                                        "char": 45
+                                                                    }
+                                                                ],
+                                                                "file": "stub__strings.zep",
+                                                                "line": 162,
+                                                                "char": 46
+                                                            },
+                                                            "file": "stub__strings.zep",
+                                                            "line": 162,
+                                                            "char": 46
+                                                        }
+                                                    ],
+                                                    "file": "stub__strings.zep",
+                                                    "line": 162,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 162,
+                                                "char": 47
+                                            }
+                                        ],
+                                        "file": "stub__strings.zep",
+                                        "line": 162,
+                                        "char": 48
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 162,
+                                    "char": 48
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 163,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "trim",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "fcall",
+                                            "name": "stripcslashes",
+                                            "call-type": 1,
+                                            "parameters": [
+                                                {
+                                                    "parameter": {
+                                                        "type": "fcall",
+                                                        "name": "strip_tags",
+                                                        "call-type": 1,
+                                                        "parameters": [
+                                                            {
+                                                                "parameter": {
+                                                                    "type": "variable",
+                                                                    "value": "value",
+                                                                    "file": "stub__strings.zep",
+                                                                    "line": 163,
+                                                                    "char": 45
+                                                                },
+                                                                "file": "stub__strings.zep",
+                                                                "line": 163,
+                                                                "char": 45
+                                                            }
+                                                        ],
+                                                        "file": "stub__strings.zep",
+                                                        "line": 163,
+                                                        "char": 46
+                                                    },
+                                                    "file": "stub__strings.zep",
+                                                    "line": 163,
+                                                    "char": 46
+                                                }
+                                            ],
+                                            "file": "stub__strings.zep",
+                                            "line": 163,
+                                            "char": 47
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 163,
+                                        "char": 47
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 163,
+                                "char": 48
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 164,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__strings.zep",
+                    "line": 157,
+                    "last-line": 166,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2186",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 166,
+                                "char": 45
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 166,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__strings.zep",
+                                    "line": 168,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "null",
+                                    "file": "stub__strings.zep",
+                                    "line": 168,
+                                    "char": 25
+                                },
+                                "file": "stub__strings.zep",
+                                "line": 168,
+                                "char": 25
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 169,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 167,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 167,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 166,
+                    "last-line": 171,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2186SegFault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 171,
+                                "char": 53
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 171,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__strings.zep",
+                                "line": 173,
+                                "char": 13
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__strings.zep",
+                                        "line": 174,
+                                        "char": 21
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 175,
+                                    "char": 6
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 177,
+                            "char": 11
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__strings.zep",
+                                "line": 177,
+                                "char": 18
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 178,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 172,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 172,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 171,
+                    "last-line": 180,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2186SegFaultCall",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 180,
+                                "char": 57
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 180,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__strings.zep",
+                                    "line": 182,
+                                    "char": 18
+                                },
+                                "name": "issue2186Child1",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__strings.zep",
+                                            "line": 182,
+                                            "char": 38
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 182,
+                                        "char": 38
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 182,
+                                "char": 39
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 183,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 181,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 181,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 180,
+                    "last-line": 185,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "issue2186Child1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 185,
+                                "char": 54
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 185,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__strings.zep",
+                                    "line": 187,
+                                    "char": 18
+                                },
+                                "name": "issue2186Child2",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__strings.zep",
+                                            "line": 187,
+                                            "char": 38
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 187,
+                                        "char": 38
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 187,
+                                "char": 39
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 188,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 186,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 186,
+                        "char": 2
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 185,
+                    "last-line": 190,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "issue2186Child2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 190,
+                                "char": 57
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 190,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "output",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__strings.zep",
+                                        "line": 192,
+                                        "char": 22
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 192,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 194,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__strings.zep",
+                                "line": 194,
+                                "char": 16
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "output",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "val",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 195,
+                                                    "char": 30
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": " all ok",
+                                                    "file": "stub__strings.zep",
+                                                    "line": 195,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__strings.zep",
+                                                "line": 195,
+                                                "char": 39
+                                            },
+                                            "file": "stub__strings.zep",
+                                            "line": 195,
+                                            "char": 39
+                                        }
+                                    ],
+                                    "file": "stub__strings.zep",
+                                    "line": 196,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 198,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "output",
+                                "file": "stub__strings.zep",
+                                "line": 198,
+                                "char": 22
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 199,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 191,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 191,
+                        "char": 5
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 190,
+                    "last-line": 203,
+                    "char": 22
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2234Strict",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 204,
+                                "char": 55
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 204,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__strings.zep",
+                                    "line": 206,
+                                    "char": 22
+                                },
+                                "right": {
+                                    "type": "null",
+                                    "file": "stub__strings.zep",
+                                    "line": 206,
+                                    "char": 28
+                                },
+                                "file": "stub__strings.zep",
+                                "line": 206,
+                                "char": 28
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 207,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2234\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 205,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 205,
+                        "char": 5
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 204,
+                    "last-line": 211,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2234StrictParent",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 212,
+                                "char": 61
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 212,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__strings.zep",
+                                    "line": 214,
+                                    "char": 21
+                                },
+                                "name": "issue2234StrictChild",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__strings.zep",
+                                            "line": 214,
+                                            "char": 46
+                                        },
+                                        "file": "stub__strings.zep",
+                                        "line": 214,
+                                        "char": 46
+                                    }
+                                ],
+                                "file": "stub__strings.zep",
+                                "line": 214,
+                                "char": 47
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 215,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2234\n     *",
+                    "file": "stub__strings.zep",
+                    "line": 212,
+                    "last-line": 219,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "issue2234StrictChild",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 220,
+                                "char": 63
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 220,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__strings.zep",
+                                "line": 222,
+                                "char": 19
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 223,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2234\n     *",
+                    "file": "stub__strings.zep",
+                    "line": 220,
+                    "last-line": 227,
+                    "char": 22
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "nullableStringReturnType",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 228,
+                                "char": 64
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 228,
+                            "char": 64
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "not-identical",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "val",
+                                        "file": "stub__strings.zep",
+                                        "line": 230,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "null",
+                                        "file": "stub__strings.zep",
+                                        "line": 230,
+                                        "char": 25
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 230,
+                                    "char": 25
+                                },
+                                "file": "stub__strings.zep",
+                                "line": 230,
+                                "char": 27
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "val",
+                                        "file": "stub__strings.zep",
+                                        "line": 231,
+                                        "char": 23
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 232,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 234,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 234,
+                                "char": 20
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 235,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1932\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 228,
+                                "char": 76
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 229,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 229,
+                        "char": 5
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 228,
+                    "last-line": 239,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue2299NullableStringCondition",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "roleName",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 240,
+                                "char": 76
+                            },
+                            "reference": 0,
+                            "file": "stub__strings.zep",
+                            "line": 240,
+                            "char": 76
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not-identical",
+                                "left": {
+                                    "type": "null",
+                                    "file": "stub__strings.zep",
+                                    "line": 242,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "roleName",
+                                    "file": "stub__strings.zep",
+                                    "line": 242,
+                                    "char": 30
+                                },
+                                "file": "stub__strings.zep",
+                                "line": 242,
+                                "char": 30
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "roleName",
+                                        "file": "stub__strings.zep",
+                                        "line": 243,
+                                        "char": 28
+                                    },
+                                    "file": "stub__strings.zep",
+                                    "line": 244,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__strings.zep",
+                            "line": 246,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "null",
+                                "file": "stub__strings.zep",
+                                "line": 246,
+                                "char": 20
+                            },
+                            "file": "stub__strings.zep",
+                            "line": 247,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2299\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 240,
+                                "char": 88
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__strings.zep",
+                                "line": 241,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__strings.zep",
+                        "line": 241,
+                        "char": 5
+                    },
+                    "file": "stub__strings.zep",
+                    "line": 240,
+                    "last-line": 248,
+                    "char": 19
+                }
+            ],
+            "file": "stub__strings.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__strings.zep",
+        "line": 4,
+        "char": 5
+    }
+]

@@ -1,0 +1,48 @@
+--TEST--
+Issue #1134: optional array params with defaults expose isOptional/isDefaultValueAvailable via Reflection (port of tests/Extension/Issue1134Test.php)
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1134
+ */
+class Issue1134
+{
+    private data;
+
+    public function __construct(array config = [])
+    {
+        let this->data = config;
+    }
+
+    public function arrayWithFilledDefaultValue(array someDefaultData = ["key": "val"])
+    {
+        return someDefaultData;
+    }
+}
+--USAGE--
+use Stub\Issue1134;
+
+$ref = new \ReflectionClass(Issue1134::class);
+
+$params = $ref->getConstructor()->getParameters();
+echo var_export($params[0]->getName(), true), "\n";
+echo var_export($params[0]->isOptional(), true), "\n";
+echo var_export($params[0]->isDefaultValueAvailable(), true), "\n";
+
+$params2 = $ref->getMethod('arrayWithFilledDefaultValue')->getParameters();
+echo var_export($params2[0]->getName(), true), "\n";
+echo var_export($params2[0]->isOptional(), true), "\n";
+echo var_export($params2[0]->isDefaultValueAvailable(), true), "\n";
+
+$class = new Issue1134();
+var_export($class->arrayWithFilledDefaultValue()); echo "\n";
+--EXPECT--
+'config'
+true
+true
+'someDefaultData'
+true
+true
+array (
+)

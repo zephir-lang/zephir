@@ -1,0 +1,34 @@
+--TEST--
+array_merge optimizer: merging two required arrays (port of tests/Extension/Optimizers/ArrayMergeTest.php)
+--FILE--
+namespace Stub\Optimizers;
+
+class ArrayMerge
+{
+	static public function mergeTwoRequiredArrays(array arr1, array arr2)
+	{
+		return array_merge(arr1, arr2);
+	}
+}
+--USAGE--
+echo var_export(\Stub\Optimizers\ArrayMerge::mergeTwoRequiredArrays([1, 2, 3], [4, 5]), true), "\n";
+echo var_export(\Stub\Optimizers\ArrayMerge::mergeTwoRequiredArrays([1, 2, 3], []), true), "\n";
+echo var_export(\Stub\Optimizers\ArrayMerge::mergeTwoRequiredArrays([], [1, 2, 3]), true), "\n";
+--EXPECT--
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+  3 => 4,
+  4 => 5,
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)

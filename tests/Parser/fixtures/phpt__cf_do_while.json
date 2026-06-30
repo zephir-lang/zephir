@@ -1,0 +1,24 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "do-while",
+                "expr": {
+                    "type": "bool",
+                    "value": "true",
+                    "file": "phpt__cf_do_while.zep",
+                    "line": 2,
+                    "char": 19
+                },
+                "file": "phpt__cf_do_while.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_do_while.zep",
+        "line": 1,
+        "char": 9
+    }
+]

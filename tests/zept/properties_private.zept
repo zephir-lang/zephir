@@ -1,0 +1,67 @@
+--TEST--
+Private property default values returned via getters (port of tests/Extension/Properties/PrivatePropertiesTest.php)
+--FILE--
+namespace Stub\Properties;
+
+class PrivateProperties
+{
+	private someNull;
+	private someNullInitial = null;
+	private someFalse = false;
+	private someTrue = true;
+	private someInteger = 10;
+	private someDouble = 10.25;
+	private someString = "test";
+
+	public function getSomeNull()
+	{
+		return this->someNull;
+	}
+
+	public function getSomeNullInitial()
+	{
+		return this->someNullInitial;
+	}
+
+	public function getSomeFalse()
+	{
+		return this->someFalse;
+	}
+
+	public function getSomeTrue()
+	{
+		return this->someTrue;
+	}
+
+	public function getSomeInteger()
+	{
+		return this->someInteger;
+	}
+
+	public function getSomeDouble()
+	{
+		return this->someDouble;
+	}
+
+	public function getSomeString()
+	{
+		return this->someString;
+	}
+}
+--USAGE--
+$test = new \Stub\Properties\PrivateProperties();
+echo var_export($test->getSomeNull(), true), "\n";
+echo var_export($test->getSomeNullInitial(), true), "\n";
+echo var_export($test->getSomeFalse(), true), "\n";
+echo var_export($test->getSomeTrue(), true), "\n";
+echo var_export($test->getSomeInteger(), true), "\n";
+echo var_export($test->getSomeDouble(), true), "\n";
+echo var_export($test->getSomeString(), true), "\n";
+--EXPECT--
+NULL
+NULL
+false
+true
+10
+10.25
+'test'

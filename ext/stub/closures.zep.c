@@ -186,7 +186,7 @@ PHP_METHOD(Stub_Closures, issue1036Call)
 
 	zephir_read_property(&_0, this_ptr, ZEND_STRL("_function"), PH_NOISY_CC | PH_READONLY);
 	zephir_read_property(&_1, this_ptr, ZEND_STRL("_argument"), PH_NOISY_CC | PH_READONLY);
-	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 35, &_0, &_1);
+	ZEPHIR_RETURN_CALL_FUNCTION("call_user_func", NULL, 36, &_0, &_1);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -304,11 +304,8 @@ PHP_METHOD(Stub_Closures, issue1873PropertyWriter)
  * Variant: closure reads a property AND uses a captured local via
  * `use()`. Verifies #1873 (property) and #2497 (use) compose.
  *
- * The captured variable is `var` (not `string`) because Zephir's
- * native-string parameter refactor (#2462) stores string params as
- * `zend_string *` which the `use()` plumbing in closure stubs doesn't
- * yet wrap to a zval — that's an orthogonal limitation worth tracking
- * separately.
+ * String-typed captures are covered separately by #2562
+ * (see issue2562StringUse).
  */
 PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
 {
@@ -322,6 +319,32 @@ PHP_METHOD(Stub_Closures, issue1873PropertyAndUse)
 	zephir_fetch_params_without_memory_grow(1, 0, &prefix);
 	zephir_create_closure_ex(return_value, this_ptr, stub_18__closure_ce, SL("__invoke"));
 	zephir_update_static_property_ce(stub_18__closure_ce, ZEND_STRL("prefix"), prefix);
+	return;
+}
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2562
+ *
+ * Capturing a scalar `string`-typed variable in a closure via `use()`.
+ * String params are stored as `zend_string *` (#2462), so the capture
+ * must box them with ZVAL_STR, not ZVAL_STRING (which expects char *).
+ */
+PHP_METHOD(Stub_Closures, issue2562StringUse)
+{
+	zval name_zv, _0;
+	zend_string *name = NULL;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&name_zv);
+	ZVAL_UNDEF(&_0);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_STR(name)
+	ZEND_PARSE_PARAMETERS_END();
+	ZVAL_STR(&name_zv, name);
+	zephir_create_closure_ex(return_value, this_ptr, stub_19__closure_ce, SL("__invoke"));
+	ZVAL_UNDEF(&_0);
+	ZVAL_STR(&_0, name);
+	zephir_update_static_property_ce(stub_19__closure_ce, ZEND_STRL("name"), &_0);
 	return;
 }
 
@@ -359,7 +382,7 @@ PHP_METHOD(Stub_Closures, issue2321CallPrivateCallback)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_memory_observe(&value_zv);
 	ZVAL_STR_COPY(&value_zv, value);
-	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 36, &value_zv);
+	ZEPHIR_RETURN_CALL_METHOD(this_ptr, "issue2321filterquery", NULL, 37, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -384,10 +407,10 @@ PHP_METHOD(Stub_Closures, issue2321filterQuery)
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, this_ptr, stub_19__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, this_ptr, stub_20__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/(?:[^%:!\\$&'\\(\\)\\*\\+,;=@\\/\\?]+|%(?![A-Fa-f0-9]{2}))/u");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 37, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 38, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -408,8 +431,8 @@ PHP_METHOD(Stub_Closures, issue2321doUrlEncode)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 248);
-	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 38, &_0);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 259);
+	ZEPHIR_RETURN_CALL_FUNCTION("rawurlencode", NULL, 39, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -441,10 +464,10 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedCallback)
 	ZVAL_STR_COPY(&value_zv, value);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, this_ptr, stub_20__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&_0, this_ptr, stub_21__closure_ce, SL("__invoke"));
 	ZEPHIR_INIT_VAR(&_1);
 	ZVAL_STRING(&_1, "/[a-z]/");
-	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 37, &_1, &_0, &value_zv);
+	ZEPHIR_RETURN_CALL_FUNCTION("preg_replace_callback", NULL, 38, &_1, &_0, &value_zv);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -464,7 +487,7 @@ PHP_METHOD(Stub_Closures, issue2321ProtectedUpper)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &matches_param);
 	zephir_get_arrval(&matches, matches_param);
-	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 271);
+	zephir_array_fetch_long(&_0, &matches, 0, PH_NOISY | PH_READONLY, "stub/closures.zep", 282);
 	zephir_fast_strtoupper(return_value, &_0);
 	RETURN_MM();
 }
@@ -494,8 +517,8 @@ PHP_METHOD(Stub_Closures, issue2321ArrayMapPrivate)
 	zephir_get_arrval(&values, values_param);
 	ZEPHIR_INIT_VAR(&_0);
 	ZEPHIR_INIT_NVAR(&_0);
-	zephir_create_closure_ex(&_0, this_ptr, stub_21__closure_ce, SL("__invoke"));
-	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 12, &_0, &values);
+	zephir_create_closure_ex(&_0, this_ptr, stub_22__closure_ce, SL("__invoke"));
+	ZEPHIR_RETURN_CALL_FUNCTION("array_map", NULL, 13, &_0, &values);
 	zephir_check_call_status();
 	RETURN_MM();
 }

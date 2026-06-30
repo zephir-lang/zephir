@@ -1,0 +1,134 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__arrayiteratortest.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ArrayIteratorTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "test",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__arrayiteratortest.zep",
+                                    "line": 7,
+                                    "char": 10
+                                },
+                                {
+                                    "variable": "k",
+                                    "file": "stub__arrayiteratortest.zep",
+                                    "line": 7,
+                                    "char": 13
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__arrayiteratortest.zep",
+                                    "line": 7,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__arrayiteratortest.zep",
+                            "line": 8,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "ArrayIterator",
+                                        "dynamic": 0,
+                                        "file": "stub__arrayiteratortest.zep",
+                                        "line": 8,
+                                        "char": 32
+                                    },
+                                    "file": "stub__arrayiteratortest.zep",
+                                    "line": 8,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__arrayiteratortest.zep",
+                            "line": 9,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "arr",
+                                "file": "stub__arrayiteratortest.zep",
+                                "line": 9,
+                                "char": 19
+                            },
+                            "key": "k",
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__arrayiteratortest.zep",
+                                            "line": 10,
+                                            "char": 13
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "v",
+                                            "file": "stub__arrayiteratortest.zep",
+                                            "line": 10,
+                                            "char": 16
+                                        },
+                                        "file": "stub__arrayiteratortest.zep",
+                                        "line": 10,
+                                        "char": 16
+                                    },
+                                    "file": "stub__arrayiteratortest.zep",
+                                    "line": 11,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__arrayiteratortest.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__arrayiteratortest.zep",
+                    "line": 5,
+                    "last-line": 13,
+                    "char": 23
+                }
+            ],
+            "file": "stub__arrayiteratortest.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__arrayiteratortest.zep",
+        "line": 3,
+        "char": 5
+    }
+]

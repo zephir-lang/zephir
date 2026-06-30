@@ -34,7 +34,7 @@ ZEPHIR_INIT_CLASS(Stub_Cast)
 PHP_METHOD(Stub_Cast, testCharCastFromChar)
 {
 
-	RETURN_LONG('a');
+	RETURN_LONG((unsigned char) ('a'));
 }
 
 /**
@@ -45,7 +45,7 @@ PHP_METHOD(Stub_Cast, testCharCastFromVariableChar)
 	char a, _0;
 	a = 'A';
 	_0 = a;
-	RETURN_LONG(_0);
+	RETURN_LONG((unsigned char) _0);
 }
 
 /**
@@ -1054,5 +1054,35 @@ PHP_METHOD(Stub_Cast, testIssue828)
 	ZVAL_LONG(&_0, intNonNumeric);
 	zephir_array_append(&ret, &_0, PH_SEPARATE, "stub/cast.zep", 512);
 	RETURN_CTOR(&ret);
+}
+
+/**
+ * Reassigning a variable whose first inferred type comes from an
+ * `(object)` cast used to make the static type-inference pass leak
+ * `StaticTypeInference=object undefined` to stdout during compilation.
+ *
+ * @see https://github.com/zephir-lang/zephir/issues/1877
+ */
+PHP_METHOD(Stub_Cast, testObjectCastThenReassign)
+{
+	zval _0;
+	zval data, _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+
+	ZVAL_UNDEF(&data);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+
+	ZEPHIR_INIT_VAR(&_0);
+	zephir_create_array(&_0, 1, 0);
+	add_assoc_stringl_ex(&_0, SL("key"), SL("value"));
+	ZEPHIR_CPY_WRT(&_1, &_0);
+	zephir_convert_to_object(&_1);
+	ZEPHIR_CPY_WRT(&data, &_1);
+	ZEPHIR_INIT_NVAR(&data);
+	ZVAL_STRING(&data, "reassigned");
+	RETURN_CCTOR(&data);
 }
 

@@ -1,0 +1,81 @@
+--TEST--
+try/catch: throwing a literal-message and a var-message Exception propagates (port of tests/Extension/TryTest.php)
+--FILE--
+namespace Stub;
+
+use Exception, RuntimeException, DomainException;
+
+class TryTest
+{
+	public function testThrow1()
+	{
+		throw new Exception("error");
+	}
+
+	public function testThrow2()
+	{
+		var message = "error";
+		throw new Exception(message);
+	}
+
+	public function testTry3()
+	{
+		try {
+			throw new Exception("error!");
+		} catch Exception {
+			return "error";
+		}
+
+		return false;
+	}
+
+	public function testTry4(boolean a)
+	{
+		try {
+			if a {
+				throw new Exception("error!");
+			} else {
+				throw new RuntimeException("error!");
+			}
+		} catch RuntimeException {
+			return "domain error";
+		} catch Exception {
+			return "error";
+		}
+
+		return false;
+	}
+
+	public function testTry5(boolean a)
+	{
+		try {
+			if a {
+				throw new Exception("error!");
+			} else {
+				throw new RuntimeException("error!");
+			}
+		} catch RuntimeException|Exception  {
+			return "any error";
+		}
+
+		return false;
+	}
+}
+--USAGE--
+$test = new \Stub\TryTest();
+
+function show($t, $fn, $expect, ...$args) {
+    try {
+        $t->$fn(...$args);
+        echo "no-throw\n";
+    } catch (\Throwable $e) {
+        echo var_export($e instanceof $expect, true), ' ', $e->getMessage(), "\n";
+    }
+}
+
+// testThrow1 / testThrow2 (expectException \Exception)
+show($test, 'testThrow1', \Exception::class);
+show($test, 'testThrow2', \Exception::class);
+--EXPECT--
+true error
+true error

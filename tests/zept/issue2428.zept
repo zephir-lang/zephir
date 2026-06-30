@@ -1,0 +1,155 @@
+--TEST--
+Issue #2428: union return types survive into compiled arginfo — Reflection reports every member and the engine enforces the union on a userland override (port of tests/Extension/Issue2428Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2428
+{
+    public function scalarUnion(bool flag) -> int | string
+    {
+        return flag ? 1 : "x";
+    }
+
+    public function scalarUnionNullable(int n) -> int | string | null
+    {
+        return n;
+    }
+
+    public function classUnion(bool flag) -> <\stdClass> | <\ArrayObject>
+    {
+        return flag ? new \stdClass() : new \ArrayObject();
+    }
+
+    public function classUnionNullable(int n) -> <\stdClass> | <\ArrayObject> | null
+    {
+        return n > 0 ? new \stdClass() : null;
+    }
+
+    public function classOrScalar(bool flag) -> <\stdClass> | int
+    {
+        return flag ? new \stdClass() : 5;
+    }
+
+    public function arrayOrObject(bool flag) -> array | object
+    {
+        return flag ? [] : new \stdClass();
+    }
+
+    public function dynamicReturn(var value) -> int | string
+    {
+        return value;
+    }
+}
+--USAGE--
+function returnTypeNames(string $method): array {
+    $type = (new \ReflectionMethod(\Stub\Issue2428::class, $method))->getReturnType();
+    $names = [];
+    if ($type instanceof \ReflectionUnionType) {
+        foreach ($type->getTypes() as $member) {
+            $names[] = $member->getName();
+        }
+    } elseif ($type instanceof \ReflectionNamedType) {
+        $names[] = $type->getName();
+        if ($type->allowsNull() && 'null' !== $type->getName()) {
+            $names[] = 'null';
+        }
+    }
+    $names = array_map('strtolower', $names);
+    sort($names);
+    return $names;
+}
+
+$sut = new \Stub\Issue2428();
+
+echo var_export(returnTypeNames('scalarUnion'), true), "\n";
+echo var_export($sut->scalarUnion(true), true), "\n";
+echo var_export($sut->scalarUnion(false), true), "\n";
+
+echo var_export(returnTypeNames('scalarUnionNullable'), true), "\n";
+echo var_export($sut->scalarUnionNullable(7), true), "\n";
+
+echo var_export(returnTypeNames('classUnion'), true), "\n";
+echo var_export($sut->classUnion(true) instanceof \stdClass, true), "\n";
+echo var_export($sut->classUnion(false) instanceof \ArrayObject, true), "\n";
+
+echo var_export(returnTypeNames('classUnionNullable'), true), "\n";
+echo var_export($sut->classUnionNullable(0), true), "\n";
+echo var_export($sut->classUnionNullable(1) instanceof \stdClass, true), "\n";
+
+echo var_export(returnTypeNames('classOrScalar'), true), "\n";
+echo var_export($sut->classOrScalar(true) instanceof \stdClass, true), "\n";
+echo var_export($sut->classOrScalar(false), true), "\n";
+
+echo var_export(returnTypeNames('arrayOrObject'), true), "\n";
+echo var_export($sut->arrayOrObject(true), true), "\n";
+echo var_export($sut->arrayOrObject(false) instanceof \stdClass, true), "\n";
+
+echo var_export(returnTypeNames('dynamicReturn'), true), "\n";
+echo var_export($sut->dynamicReturn(42), true), "\n";
+echo var_export($sut->dynamicReturn('ok'), true), "\n";
+
+// Internal method returning outside its declared union does not crash.
+echo var_export($sut->dynamicReturn([1, 2, 3]), true), "\n";
+
+// Userland override of the method must honor the inherited int|string union.
+eval('namespace Extension; class Issue2428Child extends \\Stub\\Issue2428 { public function dynamicReturn($value): int|string { return $value; } }');
+$child = new \Extension\Issue2428Child();
+echo var_export($child->dynamicReturn(7), true), "\n";
+try {
+    $child->dynamicReturn([1, 2, 3]);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \TypeError, true), "\n";
+}
+--EXPECT--
+array (
+  0 => 'int',
+  1 => 'string',
+)
+1
+'x'
+array (
+  0 => 'int',
+  1 => 'null',
+  2 => 'string',
+)
+7
+array (
+  0 => 'arrayobject',
+  1 => 'stdclass',
+)
+true
+true
+array (
+  0 => 'arrayobject',
+  1 => 'null',
+  2 => 'stdclass',
+)
+NULL
+true
+array (
+  0 => 'int',
+  1 => 'stdclass',
+)
+true
+5
+array (
+  0 => 'array',
+  1 => 'object',
+)
+array (
+)
+true
+array (
+  0 => 'int',
+  1 => 'string',
+)
+42
+'ok'
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+7
+true

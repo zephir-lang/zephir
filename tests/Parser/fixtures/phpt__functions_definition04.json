@@ -1,0 +1,32 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "cast": {
+                        "type": "variable",
+                        "value": "App\\MyInterface",
+                        "file": "phpt__functions_definition04.zep",
+                        "line": 1,
+                        "char": 39
+                    },
+                    "collection": 0,
+                    "file": "phpt__functions_definition04.zep",
+                    "line": 1,
+                    "char": 39
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_definition04.zep",
+            "line": 1,
+            "char": 39
+        },
+        "file": "phpt__functions_definition04.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,27 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "scall",
+                "expr": {
+                    "type": "scall",
+                    "dynamic-class": 0,
+                    "class": "static",
+                    "dynamic": 2,
+                    "name": "name",
+                    "file": "phpt__statements_scall_string_method_static.zep",
+                    "line": 2,
+                    "char": 18
+                },
+                "file": "phpt__statements_scall_string_method_static.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_scall_string_method_static.zep",
+        "line": 1,
+        "char": 9
+    }
+]

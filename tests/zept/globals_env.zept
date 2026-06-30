@@ -1,0 +1,28 @@
+--TEST--
+Globals\Env: reading the _ENV superglobal (missing key -> false, present key -> value) (port of tests/Extension/Globals/EnvTest.php)
+--SKIPIF--
+<?php if (!str_contains(ini_get('variables_order'), 'E')) echo 'skip variables_order has no E';
+--FILE--
+namespace Stub\Globals;
+
+class Env
+{
+	public function read(string name) -> var
+	{
+		return isset _ENV[name] ? _ENV[name] : false;
+	}
+}
+--USAGE--
+$tester = new \Stub\Globals\Env();
+
+// Missing key -> false (mirrors testEmpty)
+echo var_export($tester->read('non-existing-zephir-key'), true), "\n";
+
+// Newly-set key is readable through the compiled ext (mirrors testReadNew)
+$_ENV['NEW_VARIABLEFROM'] = 'testReadNew';
+echo var_export($tester->read('NEW_VARIABLEFROM'), true), "\n";
+echo var_export($_ENV['NEW_VARIABLEFROM'] === $tester->read('NEW_VARIABLEFROM'), true), "\n";
+--EXPECT--
+false
+'testReadNew'
+true

@@ -280,4 +280,21 @@ final class ArithmeticTest extends TestCase
         $this->assertSame(-1234567, $this->class->negativeLong(-1234567));
         $this->assertSame(1234567, $this->class->negativeLong(1234567));
     }
+
+    public function testIssue2010NumberValPrecision(): void
+    {
+        // 1e18 + 12 must stay exact, not be rounded through a double
+        $this->assertSame(1000000000000000012, $this->class->longPlusVar(12));
+        $this->assertSame(1000000000000000012, $this->class->longLiteralPlusVar(12));
+    }
+
+    public function testIssue2010ShiftOrPrecedence(): void
+    {
+        $hmac = [
+            195, 27, 216, 98, 57, 79, 54, 206, 194, 54, 232,
+            46, 121, 107, 161, 141, 244, 185, 154, 78,
+        ];
+
+        $this->assertSame(562951353, $this->class->shiftOrPrecedence($hmac, 14));
+    }
 }

@@ -1,0 +1,80 @@
+--TEST--
+TypeHinting abstract (#1667): a PHP child class can extend a Zephir abstract with type-hinted params and multiple/scalar return-type hints (port of tests/Extension/TypeHinting/AbstractTest.php)
+--FILE--
+namespace Stub\TypeHinting;
+
+abstract class TestAbstract
+{
+	abstract public function testFunc(array text = [], string text2 = "", boolean flag = true, int optional = null);
+	abstract public function returnOneOfScalar() -> int | uint | long | float | double | string | boolean | char;
+	abstract public function returnInt() -> int;
+	abstract public function returnUint() -> uint;
+	abstract public function returnLong() -> long;
+	abstract public function returnFloat() -> float;
+	abstract public function returnDouble() -> double;
+	abstract public function returnString() -> string;
+	abstract public function returnBoolean() -> boolean;
+	abstract public function returnChar() -> char;
+}
+--USAGE--
+// Concrete PHP child that must remain signature-compatible with the
+// Zephir abstract base (this is the crux of issue #1667).
+class TestConcreteClass extends \Stub\TypeHinting\TestAbstract
+{
+    public function testFunc(array $text = [], string $text2 = '', bool $flag = true, ?int $optional = null)
+    {
+        return func_get_args();
+    }
+    public function returnOneOfScalar(): string|int|float|bool { return __METHOD__; }
+    public function returnInt(): int { return 1; }
+    public function returnUint(): int { return 1; }
+    public function returnLong(): int { return 1; }
+    public function returnFloat(): float { return 1.0; }
+    public function returnDouble(): float { return 1.0; }
+    public function returnString(): string { return __METHOD__; }
+    public function returnBoolean(): bool { return true; }
+    public function returnChar(): int { return 1; }
+}
+
+$child = new TestConcreteClass();
+
+echo var_export($child->testFunc([1667], '/', true, null), true), "\n";
+echo var_export($child->testFunc(['issue'], '\\', true, 1667), true), "\n";
+
+echo var_export($child->returnOneOfScalar(), true), "\n";
+echo var_export($child->returnInt(), true), "\n";
+echo var_export($child->returnUint(), true), "\n";
+echo var_export($child->returnLong(), true), "\n";
+echo var_export($child->returnFloat(), true), "\n";
+echo var_export($child->returnDouble(), true), "\n";
+echo var_export($child->returnString(), true), "\n";
+echo var_export($child->returnBoolean(), true), "\n";
+echo var_export($child->returnChar(), true), "\n";
+--EXPECT--
+array (
+  0 => 
+  array (
+    0 => 1667,
+  ),
+  1 => '/',
+  2 => true,
+  3 => NULL,
+)
+array (
+  0 => 
+  array (
+    0 => 'issue',
+  ),
+  1 => '\\',
+  2 => true,
+  3 => 1667,
+)
+'TestConcreteClass::returnOneOfScalar'
+1
+1
+1
+1.0
+1.0
+'TestConcreteClass::returnString'
+true
+1

@@ -1,0 +1,25 @@
+--TEST--
+eval() of a code string returns the evaluated result (port of tests/Extension/EvalTest.php)
+--SKIPIF--
+<?php
+$disabled = array_map('trim', explode(',', (string) ini_get('disable_functions')));
+if (in_array('eval', $disabled, true)) {
+    echo 'skip eval() is disabled via disable_functions';
+}
+--FILE--
+namespace Stub;
+
+class EvalTest
+{
+    public function evalCode(string code)
+    {
+        return eval(code);
+    }
+}
+--USAGE--
+$test = new \Stub\EvalTest();
+echo var_export($test->evalCode('return 1 + 1;'), true), "\n";
+echo var_export($test->evalCode('$g = pow(2, 2); return $g * 2;'), true), "\n";
+--EXPECT--
+2
+8

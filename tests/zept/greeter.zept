@@ -1,0 +1,17 @@
+--TEST--
+A compiled Zephir class returns a value usable from PHP
+--FILE--
+namespace Zept;
+
+class Greeter
+{
+    public function hi(string name) -> string
+    {
+        return "hi " . name;
+    }
+}
+--USAGE--
+$g = new Zept\Greeter();
+echo $g->hi("zephir"), "\n";
+--EXPECT--
+hi zephir

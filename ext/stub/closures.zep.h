@@ -26,6 +26,7 @@ PHP_METHOD(Stub_Closures, issue1873ArrayProperty);
 PHP_METHOD(Stub_Closures, issue1873MultipleProperties);
 PHP_METHOD(Stub_Closures, issue1873PropertyWriter);
 PHP_METHOD(Stub_Closures, issue1873PropertyAndUse);
+PHP_METHOD(Stub_Closures, issue2562StringUse);
 PHP_METHOD(Stub_Closures, issue2321CallPrivateCallback);
 PHP_METHOD(Stub_Closures, issue2321filterQuery);
 PHP_METHOD(Stub_Closures, issue2321doUrlEncode);
@@ -110,6 +111,10 @@ ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue1873propertyan
 	ZEND_ARG_INFO(0, prefix)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_WITH_RETURN_OBJ_INFO_EX(arginfo_stub_closures_issue2562stringuse, 0, 1, Closure, 0)
+	ZEND_ARG_TYPE_INFO(0, name, IS_STRING, 0)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(arginfo_stub_closures_issue2321callprivatecallback, 0, 1, IS_STRING, 0)
 	ZEND_ARG_TYPE_INFO(0, value, IS_STRING, 0)
 ZEND_END_ARG_INFO()
@@ -162,6 +167,7 @@ PHP_ME(Stub_Closures, issue1036Call, arginfo_stub_closures_issue1036call, ZEND_A
 	PHP_ME(Stub_Closures, issue1873MultipleProperties, arginfo_stub_closures_issue1873multipleproperties, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue1873PropertyWriter, arginfo_stub_closures_issue1873propertywriter, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue1873PropertyAndUse, arginfo_stub_closures_issue1873propertyanduse, ZEND_ACC_PUBLIC)
+	PHP_ME(Stub_Closures, issue2562StringUse, arginfo_stub_closures_issue2562stringuse, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2321CallPrivateCallback, arginfo_stub_closures_issue2321callprivatecallback, ZEND_ACC_PUBLIC)
 	PHP_ME(Stub_Closures, issue2321filterQuery, arginfo_stub_closures_issue2321filterquery, ZEND_ACC_PRIVATE)
 	PHP_ME(Stub_Closures, issue2321doUrlEncode, arginfo_stub_closures_issue2321dourlencode, ZEND_ACC_PRIVATE)

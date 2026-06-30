@@ -1,0 +1,32 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__extendedinterface.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "ExtendedInterface",
+        "extends": [
+            {
+                "type": "variable",
+                "value": "\\IteratorAggregate",
+                "file": "stub__extendedinterface.zep",
+                "line": 3,
+                "char": 55
+            },
+            {
+                "type": "variable",
+                "value": "\\Countable",
+                "file": "stub__extendedinterface.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "stub__extendedinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

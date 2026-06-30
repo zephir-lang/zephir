@@ -1,0 +1,1533 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__fibonnaci.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Fibonnaci",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fibInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 9,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "y",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 9,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 9,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "z",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 9,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 11,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "z",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 11,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 11,
+                                    "char": 12
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 12,
+                                        "char": 9
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 12,
+                                    "char": 9
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "y",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 13,
+                                        "char": 9
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 13,
+                                    "char": 9
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 14,
+                                        "char": 10
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 14,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 15,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "z",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 15,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 15,
+                                    "char": 15
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 15,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "z",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "x",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 16,
+                                                    "char": 14
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "y",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 16,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 16,
+                                                "char": 17
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 16,
+                                            "char": 17
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "x",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "y",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 17,
+                                                "char": 10
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 17,
+                                            "char": 10
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "y",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "z",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 18,
+                                                "char": 10
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 18,
+                                            "char": 10
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 19,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 20,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "z",
+                                "file": "stub__fibonnaci.zep",
+                                "line": 20,
+                                "char": 11
+                            },
+                            "file": "stub__fibonnaci.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 7,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fibDouble",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "double",
+                            "variables": [
+                                {
+                                    "variable": "x",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 25,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "y",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 25,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 25,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "z",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 25,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 27,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "z",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "0.0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 27,
+                                        "char": 14
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 27,
+                                    "char": 14
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "x",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "1.0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 28,
+                                        "char": 11
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 28,
+                                    "char": 11
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "y",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "2.0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 29,
+                                        "char": 11
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 29,
+                                    "char": 11
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "double",
+                                        "value": "10.0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 30,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 30,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 31,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "z",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 31,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 31,
+                                    "char": 15
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 31,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "z",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "x",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 32,
+                                                    "char": 14
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "y",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 32,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 32,
+                                                "char": 17
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 32,
+                                            "char": 17
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "x",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "y",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 33,
+                                                "char": 10
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 33,
+                                            "char": 10
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "y",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "z",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 34,
+                                                "char": 10
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 34,
+                                            "char": 10
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 35,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "z",
+                                "file": "stub__fibonnaci.zep",
+                                "line": 36,
+                                "char": 11
+                            },
+                            "file": "stub__fibonnaci.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 23,
+                    "last-line": 39,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fibArray",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "fib",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 41,
+                                    "char": 10
+                                },
+                                {
+                                    "variable": "a",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 41,
+                                    "char": 13
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 41,
+                                    "char": 16
+                                },
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 41,
+                                    "char": 19
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 42,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 42,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 42,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "k",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 42,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "j",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 42,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 44,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "fib",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 44,
+                                                    "char": 15
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 44,
+                                                "char": 15
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 44,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 44,
+                                                "char": 18
+                                            }
+                                        ],
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 44,
+                                        "char": 19
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 44,
+                                    "char": 19
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 45,
+                                        "char": 9
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 45,
+                                    "char": 9
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 46,
+                                        "char": 10
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 46,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 48,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 48,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 48,
+                                    "char": 15
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 48,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "k",
+                                            "expr": {
+                                                "type": "sub",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 49,
+                                                    "char": 14
+                                                },
+                                                "right": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 49,
+                                                    "char": 17
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 49,
+                                                "char": 17
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 49,
+                                            "char": 17
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "sub",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 50,
+                                                    "char": 11
+                                                },
+                                                "right": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 50,
+                                                    "char": 14
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 50,
+                                                "char": 14
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 50,
+                                            "char": 14
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "a",
+                                            "expr": {
+                                                "type": "array-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "fib",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 51,
+                                                    "char": 12
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "k",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 51,
+                                                    "char": 14
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 51,
+                                                "char": 15
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 51,
+                                            "char": 15
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "b",
+                                            "expr": {
+                                                "type": "array-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "fib",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 52,
+                                                    "char": 12
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "j",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 52,
+                                                    "char": 14
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 52,
+                                                "char": 15
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 52,
+                                            "char": 15
+                                        },
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "c",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 53,
+                                                    "char": 11
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "b",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 53,
+                                                    "char": 14
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 53,
+                                                "char": 14
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 53,
+                                            "char": 14
+                                        },
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "fib",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 54,
+                                                    "char": 10
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "c",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 54,
+                                                "char": 15
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 54,
+                                            "char": 15
+                                        },
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 55,
+                                            "char": 8
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 56,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 58,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "fib",
+                                "file": "stub__fibonnaci.zep",
+                                "line": 58,
+                                "char": 13
+                            },
+                            "file": "stub__fibonnaci.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 39,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "fibArray2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "fib",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 63,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 63,
+                            "char": 14
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 63,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 63,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 65,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "fib",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "0",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 65,
+                                                    "char": 15
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 65,
+                                                "char": 15
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 65,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 65,
+                                                "char": 18
+                                            }
+                                        ],
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 65,
+                                        "char": 19
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 65,
+                                    "char": 19
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "i",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 65,
+                                        "char": 26
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 65,
+                                    "char": 26
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "n",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 65,
+                                        "char": 34
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 65,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 66,
+                            "char": 7
+                        },
+                        {
+                            "type": "while",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "i",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 66,
+                                    "char": 11
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 66,
+                                    "char": 15
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 66,
+                                "char": 15
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "fib",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "i",
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 67,
+                                                    "char": 13
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "fib",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 67,
+                                                        "char": 20
+                                                    },
+                                                    "right": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 67,
+                                                            "char": 23
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "1",
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 67,
+                                                            "char": 26
+                                                        },
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 67,
+                                                        "char": 26
+                                                    },
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 67,
+                                                    "char": 28
+                                                },
+                                                "right": {
+                                                    "type": "array-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "fib",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 67,
+                                                        "char": 33
+                                                    },
+                                                    "right": {
+                                                        "type": "sub",
+                                                        "left": {
+                                                            "type": "variable",
+                                                            "value": "i",
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 67,
+                                                            "char": 36
+                                                        },
+                                                        "right": {
+                                                            "type": "int",
+                                                            "value": "2",
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 67,
+                                                            "char": 39
+                                                        },
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 67,
+                                                        "char": 39
+                                                    },
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 67,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 67,
+                                                "char": 40
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 67,
+                                            "char": 40
+                                        },
+                                        {
+                                            "assign-type": "incr",
+                                            "variable": "i",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 67,
+                                            "char": 45
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 68,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 70,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "fib",
+                                "file": "stub__fibonnaci.zep",
+                                "line": 70,
+                                "char": 13
+                            },
+                            "file": "stub__fibonnaci.zep",
+                            "line": 71,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 61,
+                    "last-line": 73,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "fibonacciRecursive",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fibonnaci.zep",
+                            "line": 73,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "equals",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 75,
+                                    "char": 9
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 75,
+                                    "char": 13
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 75,
+                                "char": 13
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 76,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 77,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 78,
+                                            "char": 10
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 78,
+                                            "char": 14
+                                        },
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 78,
+                                        "char": 14
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 79,
+                                                "char": 13
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 80,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 81,
+                                                        "char": 17
+                                                    },
+                                                    "name": "fibonacciRecursive",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "sub",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 81,
+                                                                    "char": 39
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 81,
+                                                                    "char": 42
+                                                                },
+                                                                "file": "stub__fibonnaci.zep",
+                                                                "line": 81,
+                                                                "char": 42
+                                                            },
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 81,
+                                                            "char": 42
+                                                        }
+                                                    ],
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 81,
+                                                    "char": 44
+                                                },
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 81,
+                                                        "char": 51
+                                                    },
+                                                    "name": "fibonacciRecursive",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "sub",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 81,
+                                                                    "char": 73
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "2",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 81,
+                                                                    "char": 76
+                                                                },
+                                                                "file": "stub__fibonnaci.zep",
+                                                                "line": 81,
+                                                                "char": 76
+                                                            },
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 81,
+                                                            "char": 76
+                                                        }
+                                                    ],
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 81,
+                                                    "char": 77
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 81,
+                                                "char": 77
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 82,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 83,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 84,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 73,
+                    "last-line": 86,
+                    "char": 17
+                },
+                {
+                    "visibility": [
+                        "private",
+                        "final"
+                    ],
+                    "type": "method",
+                    "name": "fibonacciFinalRecursive",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "n",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fibonnaci.zep",
+                            "line": 86,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "equals",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 88,
+                                    "char": 9
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 88,
+                                    "char": 13
+                                },
+                                "file": "stub__fibonnaci.zep",
+                                "line": 88,
+                                "char": 13
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 89,
+                                        "char": 12
+                                    },
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 90,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "equals",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "n",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 91,
+                                            "char": 10
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 91,
+                                            "char": 14
+                                        },
+                                        "file": "stub__fibonnaci.zep",
+                                        "line": 91,
+                                        "char": 14
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 92,
+                                                "char": 13
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 93,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "add",
+                                                "left": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 94,
+                                                        "char": 17
+                                                    },
+                                                    "name": "fibonacciFinalRecursive",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "sub",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 94,
+                                                                    "char": 44
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "1",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 94,
+                                                                    "char": 47
+                                                                },
+                                                                "file": "stub__fibonnaci.zep",
+                                                                "line": 94,
+                                                                "char": 47
+                                                            },
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 94,
+                                                            "char": 47
+                                                        }
+                                                    ],
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 94,
+                                                    "char": 49
+                                                },
+                                                "right": {
+                                                    "type": "mcall",
+                                                    "variable": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__fibonnaci.zep",
+                                                        "line": 94,
+                                                        "char": 56
+                                                    },
+                                                    "name": "fibonacciFinalRecursive",
+                                                    "call-type": 1,
+                                                    "parameters": [
+                                                        {
+                                                            "parameter": {
+                                                                "type": "sub",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "n",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 94,
+                                                                    "char": 83
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "2",
+                                                                    "file": "stub__fibonnaci.zep",
+                                                                    "line": 94,
+                                                                    "char": 86
+                                                                },
+                                                                "file": "stub__fibonnaci.zep",
+                                                                "line": 94,
+                                                                "char": 86
+                                                            },
+                                                            "file": "stub__fibonnaci.zep",
+                                                            "line": 94,
+                                                            "char": 86
+                                                        }
+                                                    ],
+                                                    "file": "stub__fibonnaci.zep",
+                                                    "line": 94,
+                                                    "char": 87
+                                                },
+                                                "file": "stub__fibonnaci.zep",
+                                                "line": 94,
+                                                "char": 87
+                                            },
+                                            "file": "stub__fibonnaci.zep",
+                                            "line": 95,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fibonnaci.zep",
+                                    "line": 96,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fibonnaci.zep",
+                            "line": 97,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fibonnaci.zep",
+                    "line": 86,
+                    "last-line": 98,
+                    "char": 23
+                }
+            ],
+            "file": "stub__fibonnaci.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__fibonnaci.zep",
+        "line": 4,
+        "char": 5
+    }
+]

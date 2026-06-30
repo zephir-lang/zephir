@@ -1,0 +1,127 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Mcall",
+        "file": "stub__mcall_caller.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Caller",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "start",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "f",
+                            "const": 0,
+                            "data-type": "callable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__mcall_caller.zep",
+                            "line": 5,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "f",
+                                "call-type": 2,
+                                "file": "stub__mcall_caller.zep",
+                                "line": 7,
+                                "char": 15
+                            },
+                            "file": "stub__mcall_caller.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__mcall_caller.zep",
+                                "line": 6,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcall_caller.zep",
+                        "line": 6,
+                        "char": 2
+                    },
+                    "file": "stub__mcall_caller.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "perform",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__METHOD__",
+                                "file": "stub__mcall_caller.zep",
+                                "line": 12,
+                                "char": 20
+                            },
+                            "file": "stub__mcall_caller.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__mcall_caller.zep",
+                                "line": 11,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__mcall_caller.zep",
+                        "line": 11,
+                        "char": 2
+                    },
+                    "file": "stub__mcall_caller.zep",
+                    "line": 10,
+                    "last-line": 14,
+                    "char": 23
+                }
+            ],
+            "file": "stub__mcall_caller.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__mcall_caller.zep",
+        "line": 3,
+        "char": 5
+    }
+]

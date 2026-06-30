@@ -37,6 +37,19 @@ class LetStatement extends StatementAbstract
     {
         $readDetector = new ReadDetector();
         foreach ($this->statement['assignments'] as $assignment) {
+            /**
+             * Nested object-property assignments such as `let a->b->c = expr;`
+             * are represented by the parser with a `property-access` assign-type
+             * whose left-hand side is itself a property-access expression.
+             * Resolve the inner object into a variable and rewrite the
+             * assignment as a regular object-property assignment on it.
+             *
+             * @see https://github.com/zephir-lang/zephir/issues/2532
+             */
+            if ('property-access' === $assignment['assign-type']) {
+                $assignment = $this->resolveNestedObjectProperty($assignment, $compilationContext);
+            }
+
             $variable = $assignment['variable'];
 
             /**
@@ -112,6 +125,44 @@ class LetStatement extends StatementAbstract
                 $readDetector
             );
         }
+    }
+
+    /**
+     * Resolves the inner object of a nested object-property assignment
+     * (e.g. `let a->b->c = expr;`) into a temporary variable and rewrites
+     * the assignment as a regular object-property assignment on it.
+     *
+     * @see https://github.com/zephir-lang/zephir/issues/2532
+     *
+     * @throws Exception
+     * @throws ReflectionException
+     */
+    protected function resolveNestedObjectProperty(
+        array $assignment,
+        CompilationContext $compilationContext
+    ): array {
+        $tempVariable = $compilationContext->symbolTable->getTempVariableForObserveOrNullify(
+            'variable',
+            $compilationContext
+        );
+
+        $leftExpression = new Expression($assignment['left']);
+        $leftExpression->setReadOnly(false);
+        $leftExpression->setExpectReturn(true, $tempVariable);
+        $resolvedLeft = $leftExpression->compile($compilationContext);
+
+        if ('variable' !== $resolvedLeft->getType()) {
+            throw new CompilerException(
+                'Cannot use expression: ' . $resolvedLeft->getType() . ' as an object',
+                $assignment['left']
+            );
+        }
+
+        $assignment['assign-type'] = 'object-property';
+        $assignment['variable']    = $resolvedLeft->getCode();
+        unset($assignment['left']);
+
+        return $assignment;
     }
 
     /**

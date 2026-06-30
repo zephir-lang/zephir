@@ -67,7 +67,7 @@ PHP_METHOD(Stub_Vars, testParam)
 			}
 			ZEPHIR_INIT_NVAR(&v);
 			ZVAL_COPY(&v, _1);
-			ZEPHIR_CALL_FUNCTION(&_4$$3, "realpath", &_5, 80, &v);
+			ZEPHIR_CALL_FUNCTION(&_4$$3, "realpath", &_5, 81, &v);
 			zephir_check_call_status();
 			zephir_array_update_multi(&config, &_4$$3, SL("sz"), 3, SL("dir"), &k);
 		} ZEND_HASH_FOREACH_END();
@@ -91,7 +91,7 @@ PHP_METHOD(Stub_Vars, testParam)
 			zephir_check_call_status();
 			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
 			zephir_check_call_status();
-				ZEPHIR_CALL_FUNCTION(&_8$$4, "realpath", &_5, 80, &v);
+				ZEPHIR_CALL_FUNCTION(&_8$$4, "realpath", &_5, 81, &v);
 				zephir_check_call_status();
 				zephir_array_update_multi(&config, &_8$$4, SL("sz"), 3, SL("dir"), &k);
 		}

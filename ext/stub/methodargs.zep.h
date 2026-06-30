@@ -39,19 +39,19 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalvaluewithdefaultsta
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalstringvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_STRING, 0, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_STRING, 0, "'get'")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionaldoublevaluewithdefaultstaticconstantaccess, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_DOUBLE, 0, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_DOUBLE, 0, "1.32")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalboolvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, _IS_BOOL, 0, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, _IS_BOOL, 0, "true")
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_stub_methodargs_methodoptionalintvaluewithdefaultstaticconstantaccess, 0, 0, 0)
-	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_LONG, 0, "null")
+	ZEND_ARG_TYPE_INFO_WITH_DEFAULT_VALUE(0, parameter, IS_LONG, 0, "12345")
 ZEND_END_ARG_INFO()
 
 ZEPHIR_INIT_FUNCS(stub_methodargs_method_entry) {

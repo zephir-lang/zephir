@@ -1,0 +1,101 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Globals",
+        "file": "stub__globals_post.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Post",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "hasValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_post.zep",
+                            "line": 11,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_POST",
+                                        "file": "stub__globals_post.zep",
+                                        "line": 13,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "name",
+                                        "file": "stub__globals_post.zep",
+                                        "line": 13,
+                                        "char": 26
+                                    },
+                                    "file": "stub__globals_post.zep",
+                                    "line": 13,
+                                    "char": 27
+                                },
+                                "file": "stub__globals_post.zep",
+                                "line": 13,
+                                "char": 27
+                            },
+                            "file": "stub__globals_post.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Tests \"Invalid superglobal for _POST\"\n\t *\n\t * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1623\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__globals_post.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__globals_post.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__globals_post.zep",
+                    "line": 11,
+                    "last-line": 15,
+                    "char": 16
+                }
+            ],
+            "file": "stub__globals_post.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__globals_post.zep",
+        "line": 4,
+        "char": 5
+    }
+]

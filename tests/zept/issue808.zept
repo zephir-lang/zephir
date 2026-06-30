@@ -1,0 +1,65 @@
+--TEST--
+Issue #808: unset(obj->{variable}) and unset(obj->{"literal"}) compile and run (port of tests/Extension/Issue808Test.php)
+--FILE--
+namespace Stub;
+
+class Issue808
+{
+    public function testDynamicUnset(var propertyName) -> bool
+    {
+        var obj;
+        let obj = new \stdClass();
+        let obj->{propertyName} = "value";
+        unset(obj->{propertyName});
+        return isset(obj->{propertyName});
+    }
+
+    public function testDynamicUnsetSelective(var toRemove) -> var
+    {
+        var obj;
+        let obj = new \stdClass();
+        let obj->keep = "keep_value";
+        let obj->remove = "remove_value";
+        unset(obj->{toRemove});
+        return obj;
+    }
+
+    public function testDynamicUnsetStringKey() -> bool
+    {
+        var obj;
+        let obj = new \stdClass();
+        let obj->name = "value";
+        unset(obj->{"name"});
+        return isset(obj->name);
+    }
+
+    public function testDynamicUnsetNonExistentProperty(var propertyName) -> var
+    {
+        var obj;
+        let obj = new \stdClass();
+        let obj->keep = "keep_value";
+        unset(obj->{propertyName});
+        return obj;
+    }
+}
+--USAGE--
+$o = new \Stub\Issue808();
+echo var_export($o->testDynamicUnset('myProp'), true), "\n";
+$r = $o->testDynamicUnsetSelective('remove');
+echo var_export(property_exists($r, 'keep'), true), "\n";
+echo var_export(property_exists($r, 'remove'), true), "\n";
+echo var_export($r->keep, true), "\n";
+echo var_export($o->testDynamicUnsetStringKey(), true), "\n";
+$r2 = $o->testDynamicUnsetNonExistentProperty('nonExistent');
+echo var_export(property_exists($r2, 'keep'), true), "\n";
+echo var_export(property_exists($r2, 'nonExistent'), true), "\n";
+echo var_export($r2->keep, true), "\n";
+--EXPECT--
+false
+true
+false
+'keep_value'
+false
+true
+false
+'keep_value'

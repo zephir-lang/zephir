@@ -1,0 +1,113 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_deprecatedmethods.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "DeprecatedMethods",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "deprecated"
+                    ],
+                    "type": "method",
+                    "name": "publicDeprecated",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__oo_deprecatedmethods.zep",
+                                "line": 7,
+                                "char": 20
+                            },
+                            "file": "stub__oo_deprecatedmethods.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__oo_deprecatedmethods.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 30
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "normalMethod",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_deprecatedmethods.zep",
+                                    "line": 12,
+                                    "char": 21
+                                },
+                                "name": "privateDeprecated",
+                                "call-type": 1,
+                                "file": "stub__oo_deprecatedmethods.zep",
+                                "line": 12,
+                                "char": 41
+                            },
+                            "file": "stub__oo_deprecatedmethods.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__oo_deprecatedmethods.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "private",
+                        "deprecated"
+                    ],
+                    "type": "method",
+                    "name": "privateDeprecated",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__oo_deprecatedmethods.zep",
+                                "line": 17,
+                                "char": 20
+                            },
+                            "file": "stub__oo_deprecatedmethods.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__oo_deprecatedmethods.zep",
+                    "line": 15,
+                    "last-line": 19,
+                    "char": 31
+                }
+            ],
+            "file": "stub__oo_deprecatedmethods.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__oo_deprecatedmethods.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,57 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "for",
+                "expr": {
+                    "type": "variable",
+                    "value": "arr",
+                    "file": "phpt__cf_for.zep",
+                    "line": 2,
+                    "char": 18
+                },
+                "value": "item",
+                "reverse": 0,
+                "file": "phpt__cf_for.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "for",
+                "expr": {
+                    "type": "variable",
+                    "value": "arr",
+                    "file": "phpt__cf_for.zep",
+                    "line": 3,
+                    "char": 24
+                },
+                "key": "key",
+                "value": "value",
+                "reverse": 0,
+                "file": "phpt__cf_for.zep",
+                "line": 4,
+                "char": 4
+            },
+            {
+                "type": "for",
+                "expr": {
+                    "type": "variable",
+                    "value": "arr",
+                    "file": "phpt__cf_for.zep",
+                    "line": 4,
+                    "char": 26
+                },
+                "value": "item",
+                "reverse": 1,
+                "file": "phpt__cf_for.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_for.zep",
+        "line": 1,
+        "char": 9
+    }
+]

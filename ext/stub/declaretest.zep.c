@@ -87,14 +87,14 @@ PHP_METHOD(Stub_DeclareTest, testDeclare5)
 {
 	char a;
 	a = 'A';
-	RETURN_LONG(a);
+	RETURN_LONG((unsigned char) a);
 }
 
 PHP_METHOD(Stub_DeclareTest, testDeclare6)
 {
 	unsigned char a;
 	a = 'A';
-	RETURN_LONG(a);
+	RETURN_LONG((unsigned char) a);
 }
 
 PHP_METHOD(Stub_DeclareTest, testDeclare7)

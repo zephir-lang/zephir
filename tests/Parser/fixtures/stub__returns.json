@@ -1,0 +1,778 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__returns.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Returns",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "stringDefaultNull",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__returns.zep",
+                        "line": 6,
+                        "char": 40
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 7,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "intDefaultNull",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__returns.zep",
+                        "line": 7,
+                        "char": 40
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 8,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "arrayDefaultNull",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__returns.zep",
+                        "line": 8,
+                        "char": 40
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 9,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "doubleDefaultNull",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__returns.zep",
+                        "line": 9,
+                        "char": 40
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 10,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "validString",
+                    "default": {
+                        "type": "string",
+                        "value": "hello",
+                        "file": "stub__returns.zep",
+                        "line": 10,
+                        "char": 41
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 11,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "nullableProperty",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__returns.zep",
+                        "line": 11,
+                        "char": 40
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 13,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReturnCast1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "int",
+                                "right": {
+                                    "type": "double",
+                                    "value": "5.0",
+                                    "file": "stub__returns.zep",
+                                    "line": 15,
+                                    "char": 19
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 15,
+                                "char": 19
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 16,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 14,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 14,
+                        "char": 2
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 13,
+                    "last-line": 18,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReturnCast2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "int",
+                                "right": {
+                                    "type": "bool",
+                                    "value": "true",
+                                    "file": "stub__returns.zep",
+                                    "line": 20,
+                                    "char": 20
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 20,
+                                "char": 20
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 19,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 19,
+                        "char": 2
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 18,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReturnCast3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "int",
+                                "right": {
+                                    "type": "bool",
+                                    "value": "false",
+                                    "file": "stub__returns.zep",
+                                    "line": 25,
+                                    "char": 21
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 25,
+                                "char": 21
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 26,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 24,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 24,
+                        "char": 2
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 23,
+                    "last-line": 28,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReturnCast4",
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__returns.zep",
+                                "line": 30,
+                                "char": 11
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "int",
+                                        "right": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__returns.zep",
+                                            "line": 31,
+                                            "char": 17
+                                        },
+                                        "file": "stub__returns.zep",
+                                        "line": 31,
+                                        "char": 17
+                                    },
+                                    "file": "stub__returns.zep",
+                                    "line": 32,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "int",
+                                        "right": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__returns.zep",
+                                            "line": 33,
+                                            "char": 17
+                                        },
+                                        "file": "stub__returns.zep",
+                                        "line": 33,
+                                        "char": 17
+                                    },
+                                    "file": "stub__returns.zep",
+                                    "line": 34,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__returns.zep",
+                            "line": 35,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 29,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 29,
+                        "char": 2
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 28,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "returnWithParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "parameter",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__returns.zep",
+                            "line": 37,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "Return back",
+                                "file": "stub__returns.zep",
+                                "line": 39,
+                                "char": 21
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 40,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__returns.zep",
+                    "line": 37,
+                    "last-line": 42,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "returnWithoutParameter",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "Return back",
+                                "file": "stub__returns.zep",
+                                "line": 44,
+                                "char": 21
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 45,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__returns.zep",
+                    "line": 42,
+                    "last-line": 49,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnNullOnString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 52,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "stringDefaultNull",
+                                    "file": "stub__returns.zep",
+                                    "line": 52,
+                                    "char": 36
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 52,
+                                "char": 36
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 53,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 51,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 51,
+                        "char": 2
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 50,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnNullOnInt",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 60,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "intDefaultNull",
+                                    "file": "stub__returns.zep",
+                                    "line": 60,
+                                    "char": 36
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 60,
+                                "char": 36
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 61,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 59,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 59,
+                        "char": 5
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 58,
+                    "last-line": 65,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnNullOnArray",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 68,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "arrayDefaultNull",
+                                    "file": "stub__returns.zep",
+                                    "line": 68,
+                                    "char": 38
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 68,
+                                "char": 38
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 69,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 67,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 67,
+                        "char": 5
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 66,
+                    "last-line": 73,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnNullOnDouble",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 76,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "doubleDefaultNull",
+                                    "file": "stub__returns.zep",
+                                    "line": 76,
+                                    "char": 39
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 76,
+                                "char": 39
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 77,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 75,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 75,
+                        "char": 5
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 74,
+                    "last-line": 82,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnValidString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 85,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "validString",
+                                    "file": "stub__returns.zep",
+                                    "line": 85,
+                                    "char": 33
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 85,
+                                "char": 33
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 86,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     * Happy path: the property already holds a string, so no TypeError.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 84,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 84,
+                        "char": 5
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 83,
+                    "last-line": 91,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnNullOnNullableString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__returns.zep",
+                                    "line": 94,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "nullableProperty",
+                                    "file": "stub__returns.zep",
+                                    "line": 94,
+                                    "char": 38
+                                },
+                                "file": "stub__returns.zep",
+                                "line": 94,
+                                "char": 38
+                            },
+                            "file": "stub__returns.zep",
+                            "line": 95,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1991\n     * Nullable return type \u2014 returning null must NOT throw.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 92,
+                                "char": 60
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__returns.zep",
+                                "line": 93,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__returns.zep",
+                        "line": 93,
+                        "char": 5
+                    },
+                    "file": "stub__returns.zep",
+                    "line": 92,
+                    "last-line": 96,
+                    "char": 19
+                }
+            ],
+            "file": "stub__returns.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__returns.zep",
+        "line": 4,
+        "char": 5
+    }
+]

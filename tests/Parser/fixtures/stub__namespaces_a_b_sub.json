@@ -1,0 +1,35 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Namespaces\\A\\B",
+        "file": "stub__namespaces_a_b_sub.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Sub",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "value",
+                    "file": "stub__namespaces_a_b_sub.zep",
+                    "line": 6,
+                    "char": 1
+                }
+            ],
+            "file": "stub__namespaces_a_b_sub.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__namespaces_a_b_sub.zep",
+        "line": 3,
+        "char": 5
+    }
+]

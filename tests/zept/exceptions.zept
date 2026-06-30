@@ -1,0 +1,126 @@
+--TEST--
+Exceptions: throw object/scalar/sprintf/concat, custom Exception subclass, rethrow, catch (port of tests/Extension/ExceptionsTest.php)
+--FILE--
+namespace Stub;
+
+class Exception extends \Exception
+{
+	public function testRuntimePropertyFetch(string! message)
+	{
+		let this->message = message;
+	}
+}
+--FILE--
+namespace Stub;
+
+class Exceptions
+{
+	public function testException1()
+	{
+		throw new Exception("hello1");
+	}
+
+	public function testException2()
+	{
+		var msg;
+		let msg = "hello2";
+		throw new Exception(msg);
+	}
+
+	public function testException5()
+	{
+		var exception;
+		let exception = new Exception("hello5");
+		throw exception;
+	}
+
+	public function testExceptionLiteral(string type)
+	{
+		switch(type) {
+			case "string":
+				throw "Test";
+			case "char":
+				throw 't';
+			case "int":
+				throw 123;
+			case "double":
+				throw 123.123;
+		}
+	}
+
+	public function testExceptionSprintf(string name)
+	{
+		throw sprintf("Hello, %s", name);
+	}
+
+	public function testExceptionConcat(string framework, string language)
+	{
+		throw "Framework " . framework . " written using " . language;
+	}
+
+	public function testExceptionRethrow()
+	{
+		var e;
+		try {
+			this->testException1();
+		}
+		catch \Exception, e {
+			throw e;
+		}
+	}
+
+	public function issue1325()
+	{
+		var e, status;
+
+		try {
+			let status = this->doNoopException();
+		}
+		catch \Exception, e {
+			let status = "woop";
+		}
+
+		return 1;
+	}
+
+	private function doNoopException()
+	{
+		throw new \Exception("I am exception");
+	}
+}
+--USAGE--
+$t = new \Stub\Exceptions();
+
+// Mirrors PHPUnit expectException(): an instanceof check + message, not exact class.
+function show($t, $fn, $expect, ...$args) {
+    try {
+        $t->$fn(...$args);
+        echo "no-throw\n";
+    } catch (\Throwable $e) {
+        echo var_export($e instanceof $expect, true), ' ', $e->getMessage(), "\n";
+    }
+}
+
+show($t, 'testException1', \Stub\Exception::class);
+show($t, 'testException2', \Stub\Exception::class);
+show($t, 'testException5', \Stub\Exception::class);
+show($t, 'testExceptionLiteral', \Exception::class, 'string');
+show($t, 'testExceptionLiteral', \Exception::class, 'char');
+show($t, 'testExceptionLiteral', \Exception::class, 'int');
+show($t, 'testExceptionLiteral', \Exception::class, 'double');
+show($t, 'testExceptionSprintf', \Exception::class, 'Zephir');
+show($t, 'testExceptionConcat', \Exception::class, 'Phalcon', 'Zephir');
+show($t, 'testExceptionRethrow', \Exception::class);
+echo var_export($t->issue1325(), true), "\n";
+--EXPECT--
+true hello1
+true hello2
+true hello5
+true Test
+true t
+true 123
+true 123.123
+true Hello, Zephir
+true Framework Phalcon written using Zephir
+true hello1
+1

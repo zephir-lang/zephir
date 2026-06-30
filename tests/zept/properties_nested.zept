@@ -1,0 +1,62 @@
+--TEST--
+Nested property assignment: let this->bar->data/name = value reaches the target object (port of tests/Extension/Properties/NestedPropertyTest.php, issue #2532)
+--FILE--
+namespace Stub\Properties;
+
+class NestedPropertyTarget
+{
+    public data = 1;
+
+    public name = "initial";
+}
+--FILE--
+namespace Stub\Properties;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/2532
+ */
+class NestedProperty
+{
+    public bar;
+
+    public function __construct()
+    {
+        let this->bar = new NestedPropertyTarget();
+    }
+
+    public function setData(int value = 0) -> void
+    {
+        let this->bar->data = value;
+    }
+
+    public function setName(string value) -> void
+    {
+        let this->bar->name = value;
+    }
+
+    public function getBar() -> <NestedPropertyTarget>
+    {
+        return this->bar;
+    }
+}
+--USAGE--
+// testAssignNestedIntProperty
+$test = new \Stub\Properties\NestedProperty();
+echo var_export($test->getBar()->data, true), "\n";
+$test->setData(42);
+echo var_export($test->getBar()->data, true), "\n";
+echo var_export($test->bar->data, true), "\n";
+
+// testAssignNestedStringProperty
+$test = new \Stub\Properties\NestedProperty();
+echo var_export($test->getBar()->name, true), "\n";
+$test->setName('zephir');
+echo var_export($test->getBar()->name, true), "\n";
+echo var_export($test->bar->name, true), "\n";
+--EXPECT--
+1
+42
+42
+'initial'
+'zephir'
+'zephir'

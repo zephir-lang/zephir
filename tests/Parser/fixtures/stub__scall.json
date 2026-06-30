@@ -1,0 +1,1790 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Static Function calls\n *",
+        "file": "stub__scall.zep",
+        "line": 5,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__scall.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Scall",
+        "abstract": 0,
+        "final": 0,
+        "extends": "ScallParent",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello public",
+                                "file": "stub__scall.zep",
+                                "line": 11,
+                                "char": 22
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 10,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 10,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 9,
+                    "last-line": 14,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethod2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello protected",
+                                "file": "stub__scall.zep",
+                                "line": 16,
+                                "char": 25
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 15,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 15,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 14,
+                    "last-line": 19,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello private",
+                                "file": "stub__scall.zep",
+                                "line": 21,
+                                "char": 23
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 22,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 20,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 20,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 19,
+                    "last-line": 24,
+                    "char": 24
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 24,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 24,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__scall.zep",
+                                    "line": 26,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__scall.zep",
+                                    "line": 26,
+                                    "char": 15
+                                },
+                                "file": "stub__scall.zep",
+                                "line": 26,
+                                "char": 15
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 27,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 24,
+                    "last-line": 29,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethod5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 29,
+                            "char": 45
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 29,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__scall.zep",
+                                    "line": 31,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__scall.zep",
+                                    "line": 31,
+                                    "char": 15
+                                },
+                                "file": "stub__scall.zep",
+                                "line": 31,
+                                "char": 15
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 29,
+                    "last-line": 34,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "testMethod6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 34,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 34,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__scall.zep",
+                                    "line": 36,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__scall.zep",
+                                    "line": 36,
+                                    "char": 15
+                                },
+                                "file": "stub__scall.zep",
+                                "line": 36,
+                                "char": 15
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 34,
+                    "last-line": 39,
+                    "char": 24
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMethod7",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\stdClass",
+                                "dynamic": 0,
+                                "file": "stub__scall.zep",
+                                "line": 41,
+                                "char": 25
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 42,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "\\stdClass",
+                                    "file": "stub__scall.zep",
+                                    "line": 40,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__scall.zep",
+                                "line": 40,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 40,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 39,
+                    "last-line": 44,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod1",
+                                "file": "stub__scall.zep",
+                                "line": 46,
+                                "char": 30
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 47,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 44,
+                    "last-line": 49,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod2",
+                                "file": "stub__scall.zep",
+                                "line": 51,
+                                "char": 30
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 52,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 49,
+                    "last-line": 54,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod3",
+                                "file": "stub__scall.zep",
+                                "line": 56,
+                                "char": 30
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 57,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 54,
+                    "last-line": 59,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 59,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 59,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod4",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 61,
+                                            "char": 30
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 61,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 61,
+                                            "char": 33
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 61,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 61,
+                                "char": 34
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 62,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 59,
+                    "last-line": 64,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 64,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 64,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod5",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 66,
+                                            "char": 30
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 66,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 66,
+                                            "char": 33
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 66,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 66,
+                                "char": 34
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 67,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 64,
+                    "last-line": 69,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 69,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 69,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "Scall",
+                                "dynamic": 0,
+                                "name": "testMethod6",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 71,
+                                            "char": 30
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 71,
+                                        "char": 30
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 71,
+                                            "char": 33
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 71,
+                                        "char": 33
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 71,
+                                "char": 34
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 72,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 69,
+                    "last-line": 74,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall7",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod1",
+                                "file": "stub__scall.zep",
+                                "line": 76,
+                                "char": 29
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 77,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 74,
+                    "last-line": 79,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall8",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod2",
+                                "file": "stub__scall.zep",
+                                "line": 81,
+                                "char": 29
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 82,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 79,
+                    "last-line": 84,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall9",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod3",
+                                "file": "stub__scall.zep",
+                                "line": 86,
+                                "char": 29
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 87,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 84,
+                    "last-line": 89,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall10",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 89,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 89,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod4",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 91,
+                                            "char": 29
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 91,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 91,
+                                            "char": 32
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 91,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 91,
+                                "char": 33
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 92,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 89,
+                    "last-line": 94,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall11",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 94,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 94,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod5",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 96,
+                                            "char": 29
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 96,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 96,
+                                            "char": 32
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 96,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 96,
+                                "char": 33
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 97,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 94,
+                    "last-line": 99,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall12",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 99,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 99,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod6",
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__scall.zep",
+                                            "line": 101,
+                                            "char": 29
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 101,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__scall.zep",
+                                            "line": 101,
+                                            "char": 32
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 101,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 101,
+                                "char": 33
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 102,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 99,
+                    "last-line": 104,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall13",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "parent",
+                                "dynamic": 0,
+                                "name": "testMethod1",
+                                "file": "stub__scall.zep",
+                                "line": 106,
+                                "char": 31
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 107,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 104,
+                    "last-line": 109,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall14",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "parent",
+                                "dynamic": 0,
+                                "name": "testMethod2",
+                                "file": "stub__scall.zep",
+                                "line": 111,
+                                "char": 31
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 112,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 109,
+                    "last-line": 114,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testCall15",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "self",
+                                "dynamic": 0,
+                                "name": "testMethod7",
+                                "file": "stub__scall.zep",
+                                "line": 116,
+                                "char": 29
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 117,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 114,
+                    "last-line": 119,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testMethod16",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 119,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 119,
+                            "char": 52
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__scall.zep",
+                                    "line": 121,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__scall.zep",
+                                    "line": 121,
+                                    "char": 15
+                                },
+                                "file": "stub__scall.zep",
+                                "line": 121,
+                                "char": 15
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 122,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "long",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 120,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 120,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 119,
+                    "last-line": 124,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testCall17",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "k",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 124,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "p",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 124,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__scall.zep",
+                                    "line": 126,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__scall.zep",
+                                        "line": 126,
+                                        "char": 16
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 126,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 127,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__scall.zep",
+                                            "line": 127,
+                                            "char": 19
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 127,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__scall.zep",
+                                            "line": 127,
+                                            "char": 22
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 127,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 127,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "scall",
+                                                "dynamic-class": 0,
+                                                "class": "\\Stub\\ScallExternal",
+                                                "dynamic": 0,
+                                                "name": "testMethod3",
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__scall.zep",
+                                                            "line": 128,
+                                                            "char": 46
+                                                        },
+                                                        "file": "stub__scall.zep",
+                                                        "line": 128,
+                                                        "char": 46
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__scall.zep",
+                                                            "line": 128,
+                                                            "char": 49
+                                                        },
+                                                        "file": "stub__scall.zep",
+                                                        "line": 128,
+                                                        "char": 49
+                                                    }
+                                                ],
+                                                "file": "stub__scall.zep",
+                                                "line": 128,
+                                                "char": 50
+                                            },
+                                            "file": "stub__scall.zep",
+                                            "line": 128,
+                                            "char": 50
+                                        }
+                                    ],
+                                    "file": "stub__scall.zep",
+                                    "line": 129,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 130,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "j",
+                                "file": "stub__scall.zep",
+                                "line": 130,
+                                "char": 11
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 131,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 124,
+                    "last-line": 133,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "testCall18",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "k",
+                            "const": 0,
+                            "data-type": "long",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 133,
+                            "char": 42
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "p",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__scall.zep",
+                            "line": 133,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__scall.zep",
+                                    "line": 135,
+                                    "char": 9
+                                },
+                                {
+                                    "variable": "j",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__scall.zep",
+                                        "line": 135,
+                                        "char": 16
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 135,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 136,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__scall.zep",
+                                            "line": 136,
+                                            "char": 19
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 136,
+                                        "char": 19
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__scall.zep",
+                                            "line": 136,
+                                            "char": 22
+                                        },
+                                        "file": "stub__scall.zep",
+                                        "line": 136,
+                                        "char": 22
+                                    }
+                                ],
+                                "file": "stub__scall.zep",
+                                "line": 136,
+                                "char": 24
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "add-assign",
+                                            "variable": "j",
+                                            "expr": {
+                                                "type": "scall",
+                                                "dynamic-class": 0,
+                                                "class": "self",
+                                                "dynamic": 0,
+                                                "name": "testMethod16",
+                                                "parameters": [
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__scall.zep",
+                                                            "line": 137,
+                                                            "char": 32
+                                                        },
+                                                        "file": "stub__scall.zep",
+                                                        "line": 137,
+                                                        "char": 32
+                                                    },
+                                                    {
+                                                        "parameter": {
+                                                            "type": "variable",
+                                                            "value": "p",
+                                                            "file": "stub__scall.zep",
+                                                            "line": 137,
+                                                            "char": 35
+                                                        },
+                                                        "file": "stub__scall.zep",
+                                                        "line": 137,
+                                                        "char": 35
+                                                    }
+                                                ],
+                                                "file": "stub__scall.zep",
+                                                "line": 137,
+                                                "char": 36
+                                            },
+                                            "file": "stub__scall.zep",
+                                            "line": 137,
+                                            "char": 36
+                                        }
+                                    ],
+                                    "file": "stub__scall.zep",
+                                    "line": 138,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 139,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "j",
+                                "file": "stub__scall.zep",
+                                "line": 139,
+                                "char": 11
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 140,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__scall.zep",
+                    "line": 133,
+                    "last-line": 142,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "testMethodStatic",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "hello Scall",
+                                "file": "stub__scall.zep",
+                                "line": 144,
+                                "char": 21
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 145,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 143,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 143,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 142,
+                    "last-line": 147,
+                    "char": 26
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "interpolatedStaticReturn",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "className",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "Stub\\\\Scall",
+                                        "file": "stub__scall.zep",
+                                        "line": 149,
+                                        "char": 33
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 149,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 150,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "methodName",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "testMethodStatic",
+                                        "file": "stub__scall.zep",
+                                        "line": 150,
+                                        "char": 39
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 150,
+                                    "char": 39
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 152,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 1,
+                                "class": "className",
+                                "dynamic": 1,
+                                "name": "methodName",
+                                "file": "stub__scall.zep",
+                                "line": 152,
+                                "char": 37
+                            },
+                            "file": "stub__scall.zep",
+                            "line": 153,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__scall.zep",
+                                "line": 148,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__scall.zep",
+                        "line": 148,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 147,
+                    "last-line": 155,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "interpolatedStaticEcho",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "className",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "Stub\\\\Scall",
+                                        "file": "stub__scall.zep",
+                                        "line": 157,
+                                        "char": 33
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 157,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 158,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "methodName",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "testMethodStatic",
+                                        "file": "stub__scall.zep",
+                                        "line": 158,
+                                        "char": 39
+                                    },
+                                    "file": "stub__scall.zep",
+                                    "line": 158,
+                                    "char": 39
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 160,
+                            "char": 6
+                        },
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "scall",
+                                    "dynamic-class": 1,
+                                    "class": "className",
+                                    "dynamic": 1,
+                                    "name": "methodName",
+                                    "file": "stub__scall.zep",
+                                    "line": 160,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__scall.zep",
+                            "line": 161,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__scall.zep",
+                        "line": 156,
+                        "char": 2
+                    },
+                    "file": "stub__scall.zep",
+                    "line": 155,
+                    "last-line": 162,
+                    "char": 16
+                }
+            ],
+            "file": "stub__scall.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__scall.zep",
+        "line": 7,
+        "char": 5
+    }
+]

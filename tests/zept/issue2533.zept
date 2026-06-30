@@ -1,0 +1,84 @@
+--TEST--
+Issue #2533: array class constants are readable from PHP and resolvable via self::CONST
+--FILE--
+namespace Stub;
+
+class Issue2533
+{
+    const BAR = [1, 2, 3];
+    const MAP = ["a": 1, "b": 2];
+    const NESTED = [[1, 2], ["k": "v"]];
+    const EMPTY_ARR = [];
+
+    public function bar() -> array
+    {
+        return self::BAR;
+    }
+
+    public function map() -> array
+    {
+        return self::MAP;
+    }
+
+    public function nested() -> array
+    {
+        return self::NESTED;
+    }
+}
+--USAGE--
+use Stub\Issue2533;
+
+// testArrayConstantReadableFromPhp
+echo var_export(Issue2533::BAR, true), "\n";
+echo var_export(Issue2533::MAP, true), "\n";
+echo var_export(Issue2533::NESTED, true), "\n";
+echo var_export(Issue2533::EMPTY_ARR, true), "\n";
+
+// testArrayConstantReturnedFromMethod
+$object = new Issue2533();
+echo var_export($object->bar(), true), "\n";
+echo var_export($object->map(), true), "\n";
+echo var_export($object->nested(), true), "\n";
+--EXPECT--
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  'a' => 1,
+  'b' => 2,
+)
+array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 2,
+  ),
+  1 => 
+  array (
+    'k' => 'v',
+  ),
+)
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+  2 => 3,
+)
+array (
+  'a' => 1,
+  'b' => 2,
+)
+array (
+  0 => 
+  array (
+    0 => 1,
+    1 => 2,
+  ),
+  1 => 
+  array (
+    'k' => 'v',
+  ),
+)

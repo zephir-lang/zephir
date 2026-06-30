@@ -1,0 +1,62 @@
+--TEST--
+String offset read: str[idx] into char/var, negative-free indexing, offset on a string property and on a literal
+--FILE--
+namespace Stub;
+
+class StringOffset
+{
+    protected name = "zephir";
+
+    public function charAt(string s, int i) -> char
+    {
+        char c;
+        let c = s[i];
+        return c;
+    }
+
+    public function asInt(string s, int i) -> int
+    {
+        int c;
+        let c = s[i];
+        return c;
+    }
+
+    public function firstOfProperty() -> char
+    {
+        char c;
+        string n;
+        let n = (string) this->name;
+        let c = n[0];
+        return c;
+    }
+
+    public function offsetOfLiteral(int i) -> char
+    {
+        char c;
+        string s = "ABC";
+        let c = s[i];
+        return c;
+    }
+
+    public function sumOfThree(string s) -> int
+    {
+        int a, b, c;
+        let a = s[0];
+        let b = s[1];
+        let c = s[2];
+        return a + b + c;
+    }
+}
+--USAGE--
+$t = new \Stub\StringOffset();
+echo var_export(chr($t->charAt("hello", 1)), true), "\n";   // 'e'
+echo var_export($t->asInt("hello", 0), true), "\n";          // 104 'h'
+echo var_export(chr($t->firstOfProperty()), true), "\n";     // 'z'
+echo var_export(chr($t->offsetOfLiteral(2)), true), "\n";    // 'C'
+echo var_export($t->sumOfThree("abc"), true), "\n";          // 97+98+99 = 294
+--EXPECT--
+'e'
+104
+'z'
+'C'
+294

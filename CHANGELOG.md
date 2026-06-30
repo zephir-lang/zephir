@@ -6,6 +6,53 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Implemented `.zept` (Zephir Test) format and a `zephir test <path>` command: a single file bundles the Zephir implementation (`--FILE--`, repeatable), the PHP usage (`--USAGE--`) and the expected output (`--EXPECT--`/`--EXPECTF--`). Each case is compiled into a throwaway extension (pure-PHP parser forced) and its output checked, so a `.zept` doubles as an end-to-end parser test. A dependency-free runner (`Zephir\Zept\`) backs both the CLI and the `tests/Zephir/BlackBox/ZeptSuiteTest.php` bridge [#1098](https://github.com/zephir-lang/zephir/issues/1098)
+- Built-in pure-PHP Zephir parser, removing the hard dependency on the `ext-zephir_parser` PECL C extension. The parser produces the **identical** intermediate representation (IR) the compiler already consumes — verified byte-for-byte (`json_encode` equality) against the C extension over the full `stub/` corpus, the extracted `php-zephir-parser` test snippets, and the entire Phalcon framework (930/930 `.zep` files). Building the bundled stub extension with the PHP parser generates a byte-identical C tree and passes the Extension test suite identically to the C-extension build [#2495](https://github.com/zephir-lang/zephir/issues/2495)
+
+### Changed
+- The `ext-zephir_parser` C extension is now **optional**: it is used as a fast path when loaded, otherwise the built-in PHP parser handles parsing. Set the `ZEPHIR_FORCE_PHP_PARSER` environment variable to force the PHP backend even when the extension is present (useful for differential testing and deterministic builds). `Zephir\Parser\Manager::isAvailable()` is now always `true` [#2495](https://github.com/zephir-lang/zephir/issues/2495)
+
+### Deprecated
+- The `!` (strict type) modifier on argument types (e.g. `int! a`) now emits a deprecation notice during `zephir generate`. A future parser will no longer recognize it. Suppress with `-Wdeprecated-strict-type` [#2274](https://github.com/zephir-lang/zephir/issues/2274)
+- `RedisCluster` prototype (in `prototypes/redis.php`), so Zephir code can resolve its methods and constants when ext-redis is not installed
+
+## [0.23.0] - 2026-06-06
+
+### Added
+- Support for array class constants (e.g. `const BAR = [1, 2, 3];`, including nested and keyed arrays). The value is materialized on the class entry as a persistent immutable array (readable from PHP), and `self::CONST` resolves to it in Zephir code [#2533](https://github.com/zephir-lang/zephir/issues/2533)
+- Full union return type support, enforced by the engine just like a hand-written PHP union return type. Any combination of classes and/or scalar types is now emitted into the compiled extension's arginfo (via `ZEND_BEGIN_ARG_WITH_RETURN_TYPE_MASK_EX` / `ZEND_BEGIN_ARG_WITH_RETURN_OBJ_TYPE_MASK_EX`), so `-> <Model> | <Row> | null`, `-> int | string`, `-> <Foo> | int`, etc. are reported by Reflection and enforced at runtime. Previously only `int | false` / `T | null` carried a return type and every other union silently emitted none [#2428](https://github.com/zephir-lang/zephir/issues/2428)
+
+### Changed
+- Cached method/static calls now reuse the resolved function handler instead of repeating the method-table lookup in `populate_fcic()`, shaving ~6–10% off per-call dispatch in hot loops (measured via `tests/Benchmark/CallDispatchBench.php`) [#1510](https://github.com/zephir-lang/zephir/issues/1510)
+- **BC**: methods declared with a multi-type union return now carry an enforced return type in the compiled extension. PHP subclasses that override such a method must declare a compatible (equal or narrower) return type, where previously the missing return type made any override valid [#2428](https://github.com/zephir-lang/zephir/issues/2428)
+
+### Fixed
+- Fixed `let self::prop = "";` (assigning an empty string to a static property) failing to compile. The generated `ZVAL_EMPTY_STRING` was passed the bare variable name instead of its address [#2409](https://github.com/zephir-lang/zephir/issues/2409)
+- Fixed double-quoted string escapes not matching PHP: `\u{XXXX}` Unicode codepoints are now UTF-8 encoded (previously emitted literally), and `\xHH` no longer absorbs following hex digits (e.g. `"\x41BC"` is now `"ABC"`). Out-of-range codepoints (`> U+10FFFF`) and a `\x` with no hex digit are emitted safely instead of producing malformed C [#2030](https://github.com/zephir-lang/zephir/issues/2030)
+- Fixed assigning a non-constant boolean expression to a dynamic property (e.g. `let this->{key} = value > 5;`) failing to compile with a cryptic `?` error; it now branches at runtime like a regular property. The remaining `?` placeholders in `Backend::updateArray()` and PHP-constant resolution were replaced with descriptive messages [#1790](https://github.com/zephir-lang/zephir/issues/1790)
+- Fixed hexadecimal literals (e.g. `0xffffffff << 32`, `0xff + 1`) raising "A non-numeric value encountered" during constant folding. Numeric literals are now decoded to real ints before folding in the bitwise and arithmetical operators [#2014](https://github.com/zephir-lang/zephir/issues/2014)
+- Fixed array writes to a property holding an `ArrayAccess` object converting it to a plain array. `let this->prop[key] = value;` now calls the object's `offsetSet()`, and a chained `let this->prop[a][b] = value;` now mirrors native PHP exactly (fetches `offsetGet()` once and raises the "Indirect modification of overloaded element" notice) instead of replacing the object [#2465](https://github.com/zephir-lang/zephir/issues/2465)
+- Fixed integer arithmetic with a dynamic operand losing int64 precision (e.g. `1000000000000000000 + var` rounded through a `double`). The result of `zephir_get_numberval()` is now cast to `(zend_long)` in integer contexts [#2010](https://github.com/zephir-lang/zephir/issues/2010)
+- Fixed `[ERROR] Unknown char` when a `char`/`uchar` variable is used as an array literal item (e.g. `return [ch1, ch2];`). Such items are now boxed as their byte (integer) value [#1988](https://github.com/zephir-lang/zephir/issues/1988)
+- Fixed a false `Unreachable code` warning on a guard reading a variable that holds a constant before a loop but is reassigned inside the loop body (e.g. `let x = false; for ... { if x { ... } let x = true; }`). The constant-folding unreachability check is now skipped inside loops [#1170](https://github.com/zephir-lang/zephir/issues/1170)
+- Subtraction with a `-` glued to a digit (e.g. `range(0, len-1)`, `arr[0]-1`) no longer raises `Syntax error`; the parser now treats `-` after a value as a binary operator instead of the sign of a negative literal [#2011](https://github.com/zephir-lang/zephir/issues/2011)
+- Fixed `Undefined array key "variable"` when assigning to a nested object property (e.g. `let this->bar->data = value;`). The inner object is now resolved into a temporary and the assignment is handled as a regular object-property write [#2532](https://github.com/zephir-lang/zephir/issues/2532)
+- Fixed the static type-inference pass leaking debug output (`StaticTypeInference=...` / `STI=...`) to stdout during compilation when it met a variable type or expression node it did not enumerate (e.g. reassigning a var holding a `(object)` cast). Such cases now silently degrade the variable to dynamic [#1877](https://github.com/zephir-lang/zephir/issues/1877)
+- Fixed concat-assign (`let this->prop .= value`) on object properties overwriting the property instead of appending to it; the current value is now read and concatenated [#2063](https://github.com/zephir-lang/zephir/issues/2063)
+- Fixed a false `Reached end of the method without returning a valid type` error for a method ending in an exhaustive `switch` (one with a `default` clause that returns/throws on every path) [#1706](https://github.com/zephir-lang/zephir/issues/1706)
+- Fixed `char`/`uchar` return values sign-extending when the byte exceeds 127 (e.g. `0x8A` returned `-118` instead of `138`). Char returns are now cast to `unsigned char` to preserve byte semantics [#1291](https://github.com/zephir-lang/zephir/issues/1291)
+- Fixed external dependency classes (`external-dependencies` in `config.json`) not being found on case-sensitive filesystems. The `.zep` path was lower-cased wholesale, so a PSR-4 class such as `Phalcon\Support\Collection` looked for `support/collection.zep` instead of `Support/Collection.zep`. The path is now resolved using the namespace casing as written, falling back to the lower-cased path for backward compatibility [#2499](https://github.com/zephir-lang/zephir/pull/2499)
+- Fixed `[ERROR] Unknown type: ...` when declaring a local with an expression default value (e.g. `var x = i + 1;`, concat, ternary, method calls). Declaration defaults now infer their type through the same path as `let` assignments [#2394](https://github.com/zephir-lang/zephir/issues/2394)
+- Fixed generated PHP stubs dropping all but the first class in a union return type (e.g. `-> <Model> | <Row> | null` produced `Model|null` instead of `Model|Row|null`) [#2428](https://github.com/zephir-lang/zephir/issues/2428)
+- Fixed capturing a scalar `string`-typed variable in a closure via `use()` emitting `ZVAL_STRING` on a `zend_string *` and failing to compile; it now boxes with `ZVAL_STR` and the captured value is treated as a zval inside the closure body [#2562](https://github.com/zephir-lang/zephir/issues/2562)
+- Fixed default values not being readable through Reflection for parameters that have a class type, such as `<Foo> bar = null`. Before this `getDefaultValue()` threw an error and `isDefaultValueAvailable()` returned `false`. These parameters now use `ZEND_ARG_OBJ_TYPE_MASK`, which keeps the default value, instead of `ZEND_ARG_OBJ_INFO` [#2564](https://github.com/zephir-lang/zephir/issues/2564)
+- Fixed class-constant parameter defaults (e.g. `string cipher = self::DEFAULT_CIPHER`) not being readable through Reflection. The `static-constant-access` default was not folded, so the arg_info stored `"null"` and `getDefaultValue()` returned `null` instead of the constant's value. The constant is now folded to its scalar literal for the arg_info, mirroring how the property declaration and method body already resolve it. Follow-up to [#2566](https://github.com/zephir-lang/zephir/pull/2566) [#2564](https://github.com/zephir-lang/zephir/issues/2564)
+- Fixed `instanceof` not narrowing the type inside the guarded block. Calling a method that exists only on the subtype, as in `if (x instanceof Sub) { x->subMethod(); }`, no longer fails generation with a "does not implement method" error. The narrowed type applies only inside the `if` block [#2565](https://github.com/zephir-lang/zephir/issues/2565)
+- `zephir generate` now fails with a clear error when a concrete class does not implement an abstract method inherited from an abstract parent, instead of letting the engine raise "Cannot instantiate abstract class" only at runtime [#1628](https://github.com/zephir-lang/zephir/issues/1628)
+- Fixed `Unknown type ...` error when a property combines a `{get}`/`{set}` shortcut with a `@var` docblock that includes the variable name (e.g. `@var int $foo`). The generated accessor now uses only the type, dropping the variable name and any description [#2543](https://github.com/zephir-lang/zephir/issues/2543)
+- Fixed a fatal error when a class constant is initialized from a predefined PHP constant (e.g. `const BAR = PHP_VERSION_ID;`). Such constants are now folded to their literal value at compile time instead of crashing on the unavailable runtime resolution path [#2542](https://github.com/zephir-lang/zephir/issues/2542)
+
 ## [0.22.0] - 2026-05-29
 
 ### Added
@@ -691,7 +738,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.22.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.23.0...HEAD
+[0.23.0]: https://github.com/zephir-lang/zephir/compare/0.22.0...0.23.0
 [0.22.0]: https://github.com/zephir-lang/zephir/compare/0.21.0...0.22.0
 [0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
 [0.20.1]: https://github.com/zephir-lang/zephir/compare/0.20.0...0.20.1

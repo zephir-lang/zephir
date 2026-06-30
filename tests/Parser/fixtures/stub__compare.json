@@ -1,0 +1,935 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__compare.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Compare",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "isLessInt",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 7,
+                            "char": 33
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 7,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 9,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__compare.zep",
+                                    "line": 9,
+                                    "char": 15
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 9,
+                                "char": 15
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 10,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 7,
+                    "last-line": 12,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "isGreaterEqual",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 12,
+                            "char": 38
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 12,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "greater-equal",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 14,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__compare.zep",
+                                    "line": 14,
+                                    "char": 15
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 14,
+                                "char": 15
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 15,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 12,
+                    "last-line": 17,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "isLessDouble",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 17,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 17,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 19,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__compare.zep",
+                                    "line": 19,
+                                    "char": 15
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 19,
+                                "char": 15
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 17,
+                    "last-line": 22,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "isLessThenPi",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 22,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 24,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "static-constant-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "self",
+                                        "file": "stub__compare.zep",
+                                        "line": 24,
+                                        "char": 22
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "PI",
+                                        "file": "stub__compare.zep",
+                                        "line": 24,
+                                        "char": 22
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 24,
+                                    "char": 22
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 24,
+                                "char": 22
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 22,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "isMoreThenPi",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 27,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "less",
+                                "left": {
+                                    "type": "static-constant-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "self",
+                                        "file": "stub__compare.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "PI",
+                                        "file": "stub__compare.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 29,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 29,
+                                    "char": 22
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 29,
+                                "char": 22
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 27,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVarWithStringEquals",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 35,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "str",
+                                    "file": "stub__compare.zep",
+                                    "line": 37,
+                                    "char": 12
+                                },
+                                "right": {
+                                    "type": "string",
+                                    "value": "wrong testing",
+                                    "file": "stub__compare.zep",
+                                    "line": 37,
+                                    "char": 28
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 37,
+                                "char": 28
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "str",
+                                            "expr": {
+                                                "type": "string",
+                                                "value": "NOK",
+                                                "file": "stub__compare.zep",
+                                                "line": 38,
+                                                "char": 17
+                                            },
+                                            "file": "stub__compare.zep",
+                                            "line": 38,
+                                            "char": 17
+                                        }
+                                    ],
+                                    "file": "stub__compare.zep",
+                                    "line": 39,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "str",
+                                            "file": "stub__compare.zep",
+                                            "line": 40,
+                                            "char": 13
+                                        },
+                                        "right": {
+                                            "type": "string",
+                                            "value": "another testing",
+                                            "file": "stub__compare.zep",
+                                            "line": 40,
+                                            "char": 31
+                                        },
+                                        "file": "stub__compare.zep",
+                                        "line": 40,
+                                        "char": 31
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "let",
+                                            "assignments": [
+                                                {
+                                                    "assign-type": "variable",
+                                                    "operator": "assign",
+                                                    "variable": "str",
+                                                    "expr": {
+                                                        "type": "string",
+                                                        "value": "NOK",
+                                                        "file": "stub__compare.zep",
+                                                        "line": 41,
+                                                        "char": 18
+                                                    },
+                                                    "file": "stub__compare.zep",
+                                                    "line": 41,
+                                                    "char": 18
+                                                }
+                                            ],
+                                            "file": "stub__compare.zep",
+                                            "line": 42,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "else_statements": [
+                                        {
+                                            "type": "if",
+                                            "expr": {
+                                                "type": "identical",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "str",
+                                                    "file": "stub__compare.zep",
+                                                    "line": 43,
+                                                    "char": 14
+                                                },
+                                                "right": {
+                                                    "type": "string",
+                                                    "value": "testing",
+                                                    "file": "stub__compare.zep",
+                                                    "line": 43,
+                                                    "char": 24
+                                                },
+                                                "file": "stub__compare.zep",
+                                                "line": 43,
+                                                "char": 24
+                                            },
+                                            "statements": [
+                                                {
+                                                    "type": "let",
+                                                    "assignments": [
+                                                        {
+                                                            "assign-type": "variable",
+                                                            "operator": "assign",
+                                                            "variable": "str",
+                                                            "expr": {
+                                                                "type": "string",
+                                                                "value": "OK",
+                                                                "file": "stub__compare.zep",
+                                                                "line": 44,
+                                                                "char": 18
+                                                            },
+                                                            "file": "stub__compare.zep",
+                                                            "line": 44,
+                                                            "char": 18
+                                                        }
+                                                    ],
+                                                    "file": "stub__compare.zep",
+                                                    "line": 45,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "else_statements": [
+                                                {
+                                                    "type": "let",
+                                                    "assignments": [
+                                                        {
+                                                            "assign-type": "variable",
+                                                            "operator": "assign",
+                                                            "variable": "str",
+                                                            "expr": {
+                                                                "type": "string",
+                                                                "value": "NOK",
+                                                                "file": "stub__compare.zep",
+                                                                "line": 46,
+                                                                "char": 19
+                                                            },
+                                                            "file": "stub__compare.zep",
+                                                            "line": 46,
+                                                            "char": 19
+                                                        }
+                                                    ],
+                                                    "file": "stub__compare.zep",
+                                                    "line": 47,
+                                                    "char": 5
+                                                }
+                                            ],
+                                            "file": "stub__compare.zep",
+                                            "line": 48,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__compare.zep",
+                                    "line": 49,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 51,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "str",
+                                "file": "stub__compare.zep",
+                                "line": 51,
+                                "char": 13
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 52,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/411\n\t *",
+                    "file": "stub__compare.zep",
+                    "line": 35,
+                    "last-line": 54,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVarEqualsNull",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 54,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "identical",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__compare.zep",
+                                        "line": 56,
+                                        "char": 11
+                                    },
+                                    "right": {
+                                        "type": "null",
+                                        "file": "stub__compare.zep",
+                                        "line": 56,
+                                        "char": 17
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 56,
+                                    "char": 17
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 56,
+                                "char": 19
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__compare.zep",
+                                        "line": 57,
+                                        "char": 15
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 58,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 60,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__compare.zep",
+                                "line": 60,
+                                "char": 15
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 61,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 54,
+                    "last-line": 63,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNullEqualsVar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__compare.zep",
+                            "line": 63,
+                            "char": 41
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "identical",
+                                    "left": {
+                                        "type": "null",
+                                        "file": "stub__compare.zep",
+                                        "line": 65,
+                                        "char": 14
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__compare.zep",
+                                        "line": 65,
+                                        "char": 17
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 65,
+                                    "char": 17
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 65,
+                                "char": 19
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__compare.zep",
+                                        "line": 66,
+                                        "char": 15
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 67,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 69,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__compare.zep",
+                                "line": 69,
+                                "char": 15
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 70,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 63,
+                    "last-line": 72,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNotIdenticalZeroVar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "5",
+                                        "file": "stub__compare.zep",
+                                        "line": 74,
+                                        "char": 12
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 74,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 76,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "not-equals",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__compare.zep",
+                                    "line": 76,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 76,
+                                    "char": 16
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 76,
+                                "char": 16
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 77,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 72,
+                    "last-line": 79,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNotIdenticalZeroInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "5",
+                                        "file": "stub__compare.zep",
+                                        "line": 81,
+                                        "char": 12
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 81,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 83,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "not-equals",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__compare.zep",
+                                    "line": 83,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 83,
+                                    "char": 16
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 83,
+                                "char": 16
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 84,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 79,
+                    "last-line": 86,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testNotIdenticalZeroLong",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "long",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "5",
+                                        "file": "stub__compare.zep",
+                                        "line": 88,
+                                        "char": 13
+                                    },
+                                    "file": "stub__compare.zep",
+                                    "line": 88,
+                                    "char": 13
+                                }
+                            ],
+                            "file": "stub__compare.zep",
+                            "line": 90,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "not-equals",
+                                "left": {
+                                    "type": "int",
+                                    "value": "0",
+                                    "file": "stub__compare.zep",
+                                    "line": 90,
+                                    "char": 13
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__compare.zep",
+                                    "line": 90,
+                                    "char": 16
+                                },
+                                "file": "stub__compare.zep",
+                                "line": 90,
+                                "char": 16
+                            },
+                            "file": "stub__compare.zep",
+                            "line": 91,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__compare.zep",
+                    "line": 86,
+                    "last-line": 92,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "PI",
+                    "default": {
+                        "type": "double",
+                        "value": "3.14",
+                        "file": "stub__compare.zep",
+                        "line": 5,
+                        "char": 17
+                    },
+                    "file": "stub__compare.zep",
+                    "line": 7,
+                    "char": 7
+                }
+            ],
+            "file": "stub__compare.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__compare.zep",
+        "line": 3,
+        "char": 5
+    }
+]

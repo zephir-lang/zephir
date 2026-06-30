@@ -1,0 +1,26 @@
+--TEST--
+create_array optimizer: pre-sized array allocation has the requested count (port of tests/Extension/Optimizers/CreateArrayTest.php)
+--FILE--
+namespace Stub\Optimizers;
+
+class CreateArray
+{
+	public function createNoSize()
+	{
+		return create_array();
+	}
+
+	public function createSize(int n)
+	{
+		return create_array(n);
+	}
+}
+--USAGE--
+$test = new \Stub\Optimizers\CreateArray();
+echo var_export(count($test->createNoSize()), true), "\n";
+echo var_export(count($test->createSize(3)), true), "\n";
+echo var_export(count($test->createSize(10)), true), "\n";
+--EXPECT--
+0
+3
+10

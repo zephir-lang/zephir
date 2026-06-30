@@ -715,32 +715,15 @@ class BitwiseBaseOperator extends AbstractOperator
         /*
          * Return value will be always int
          */
+        $left  = $this->literalToNumber($expression['left']['value']);
+        $right = $this->literalToNumber($expression['right']['value']);
+
         return match ($this->operator) {
-            '&'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] & $expression['right']['value'],
-                $expression
-            ),
-            '|'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] | $expression['right']['value'],
-                $expression
-            ),
-            '^'     => new CompiledExpression(
-                'int',
-                $expression['left']['value'] ^ $expression['right']['value'],
-                $expression
-            ),
-            '<<'    => new CompiledExpression(
-                'int',
-                $expression['left']['value'] << $expression['right']['value'],
-                $expression
-            ),
-            '>>'    => new CompiledExpression(
-                'int',
-                $expression['left']['value'] >> $expression['right']['value'],
-                $expression
-            ),
+            '&'     => new CompiledExpression('int', $left & $right, $expression),
+            '|'     => new CompiledExpression('int', $left | $right, $expression),
+            '^'     => new CompiledExpression('int', $left ^ $right, $expression),
+            '<<'    => new CompiledExpression('int', $left << $right, $expression),
+            '>>'    => new CompiledExpression('int', $left >> $right, $expression),
             default => null,
         };
     }

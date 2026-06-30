@@ -230,9 +230,14 @@ final class ReturnStatement extends StatementAbstract
                 case Types::T_UINT:
                 case Types::T_LONG:
                 case Types::T_ULONG:
+                    $codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
+                    break;
+
                 case Types::T_CHAR:
                 case Types::T_UCHAR:
-                    $codePrinter->output('RETURN_MM_LONG(' . $resolvedExpr->getCode() . ');');
+                    // Issue #1291: a char holds a single byte. Cast to unsigned
+                    // char to avoid sign extension when the value exceeds 127.
+                    $codePrinter->output('RETURN_MM_LONG((unsigned char) (' . $resolvedExpr->getCode() . '));');
                     break;
 
                 case Types::T_BOOL:
@@ -274,9 +279,15 @@ final class ReturnStatement extends StatementAbstract
                         case Types::T_UINT:
                         case Types::T_LONG:
                         case Types::T_ULONG:
+                            $codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');
+                            break;
+
                         case Types::T_CHAR:
                         case Types::T_UCHAR:
-                            $codePrinter->output('RETURN_MM_LONG(' . $symbolVariable->getName() . ');');
+                            // Issue #1291: a char holds a single byte. Cast to
+                            // unsigned char to avoid sign extension when the
+                            // value exceeds 127.
+                            $codePrinter->output('RETURN_MM_LONG((unsigned char) ' . $symbolVariable->getName() . ');');
                             break;
 
                         case Types::T_DOUBLE:

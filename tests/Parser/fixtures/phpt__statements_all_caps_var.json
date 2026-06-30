@@ -1,0 +1,89 @@
+[
+    {
+        "type": "class",
+        "name": "Foo",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "bar",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "LU",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__statements_all_caps_var.zep",
+                            "line": 3,
+                            "char": 28
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "LU",
+                                    "file": "phpt__statements_all_caps_var.zep",
+                                    "line": 5,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "phpt__statements_all_caps_var.zep",
+                            "line": 6,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "LU",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "phpt__statements_all_caps_var.zep",
+                                        "line": 6,
+                                        "char": 14
+                                    },
+                                    "file": "phpt__statements_all_caps_var.zep",
+                                    "line": 6,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "phpt__statements_all_caps_var.zep",
+                            "line": 7,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "phpt__statements_all_caps_var.zep",
+                        "line": 4,
+                        "char": 2
+                    },
+                    "file": "phpt__statements_all_caps_var.zep",
+                    "line": 3,
+                    "last-line": 8,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__statements_all_caps_var.zep",
+            "line": 1,
+            "char": 6
+        },
+        "file": "phpt__statements_all_caps_var.zep",
+        "line": 1,
+        "char": 6
+    }
+]

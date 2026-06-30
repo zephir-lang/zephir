@@ -1,0 +1,390 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__functions_closures_preg_replace_callback.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Closure",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callback",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "fp",
+                            "const": 0,
+                            "data-type": "resource",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 5,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "filter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 5,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "line",
+                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                    "line": 7,
+                                    "char": 17
+                                },
+                                {
+                                    "variable": "debug",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                        "line": 7,
+                                        "char": 29
+                                    },
+                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                    "line": 7,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 8,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "line",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "fgets",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "fp",
+                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                    "line": 8,
+                                                    "char": 28
+                                                },
+                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                "line": 8,
+                                                "char": 28
+                                            }
+                                        ],
+                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                        "line": 8,
+                                        "char": 29
+                                    },
+                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                    "line": 8,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 10,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "line",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "preg_replace_callback",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "|<p>\\s*\\w|",
+                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                    "line": 11,
+                                                    "char": 23
+                                                },
+                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                "line": 11,
+                                                "char": 23
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "closure",
+                                                    "left": [
+                                                        {
+                                                            "type": "parameter",
+                                                            "name": "matches",
+                                                            "const": 0,
+                                                            "data-type": "variable",
+                                                            "mandatory": 0,
+                                                            "reference": 0,
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 12,
+                                                            "char": 30
+                                                        }
+                                                    ],
+                                                    "right": [
+                                                        {
+                                                            "type": "let",
+                                                            "assignments": [
+                                                                {
+                                                                    "assign-type": "variable",
+                                                                    "operator": "add-assign",
+                                                                    "variable": "debug",
+                                                                    "expr": {
+                                                                        "type": "array",
+                                                                        "left": [
+                                                                            {
+                                                                                "value": {
+                                                                                    "type": "variable",
+                                                                                    "value": "matches",
+                                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                    "line": 13,
+                                                                                    "char": 37
+                                                                                },
+                                                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                "line": 13,
+                                                                                "char": 37
+                                                                            }
+                                                                        ],
+                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                        "line": 13,
+                                                                        "char": 38
+                                                                    },
+                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                    "line": 13,
+                                                                    "char": 38
+                                                                }
+                                                            ],
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 15,
+                                                            "char": 18
+                                                        },
+                                                        {
+                                                            "type": "if",
+                                                            "expr": {
+                                                                "type": "list",
+                                                                "left": {
+                                                                    "type": "not-identical",
+                                                                    "left": {
+                                                                        "type": "array-access",
+                                                                        "left": {
+                                                                            "type": "variable",
+                                                                            "value": "matches",
+                                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                            "line": 15,
+                                                                            "char": 28
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "int",
+                                                                            "value": "0",
+                                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                            "line": 15,
+                                                                            "char": 30
+                                                                        },
+                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                        "line": 15,
+                                                                        "char": 34
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "variable",
+                                                                        "value": "filter",
+                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                        "line": 15,
+                                                                        "char": 42
+                                                                    },
+                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                    "line": 15,
+                                                                    "char": 42
+                                                                },
+                                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                "line": 15,
+                                                                "char": 44
+                                                            },
+                                                            "statements": [
+                                                                {
+                                                                    "type": "return",
+                                                                    "expr": {
+                                                                        "type": "fcall",
+                                                                        "name": "strtolower",
+                                                                        "call-type": 1,
+                                                                        "parameters": [
+                                                                            {
+                                                                                "parameter": {
+                                                                                    "type": "array-access",
+                                                                                    "left": {
+                                                                                        "type": "variable",
+                                                                                        "value": "matches",
+                                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                        "line": 16,
+                                                                                        "char": 46
+                                                                                    },
+                                                                                    "right": {
+                                                                                        "type": "int",
+                                                                                        "value": "0",
+                                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                        "line": 16,
+                                                                                        "char": 48
+                                                                                    },
+                                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                    "line": 16,
+                                                                                    "char": 49
+                                                                                },
+                                                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                                "line": 16,
+                                                                                "char": 49
+                                                                            }
+                                                                        ],
+                                                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                        "line": 16,
+                                                                        "char": 50
+                                                                    },
+                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                    "line": 17,
+                                                                    "char": 17
+                                                                }
+                                                            ],
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 19,
+                                                            "char": 22
+                                                        },
+                                                        {
+                                                            "type": "return",
+                                                            "expr": {
+                                                                "type": "array-access",
+                                                                "left": {
+                                                                    "type": "variable",
+                                                                    "value": "matches",
+                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                    "line": 19,
+                                                                    "char": 31
+                                                                },
+                                                                "right": {
+                                                                    "type": "int",
+                                                                    "value": "0",
+                                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                    "line": 19,
+                                                                    "char": 33
+                                                                },
+                                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                                "line": 19,
+                                                                "char": 34
+                                                            },
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 20,
+                                                            "char": 13
+                                                        }
+                                                    ],
+                                                    "use": [
+                                                        {
+                                                            "type": "parameter",
+                                                            "name": "debug",
+                                                            "const": 0,
+                                                            "data-type": "variable",
+                                                            "mandatory": 0,
+                                                            "reference": 1,
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 12,
+                                                            "char": 45
+                                                        },
+                                                        {
+                                                            "type": "parameter",
+                                                            "name": "filter",
+                                                            "const": 1,
+                                                            "data-type": "variable",
+                                                            "mandatory": 0,
+                                                            "reference": 0,
+                                                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                            "line": 12,
+                                                            "char": 60
+                                                        }
+                                                    ],
+                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                    "line": 20,
+                                                    "char": 14
+                                                },
+                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                "line": 20,
+                                                "char": 14
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "line",
+                                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                    "line": 22,
+                                                    "char": 9
+                                                },
+                                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                                "line": 22,
+                                                "char": 9
+                                            }
+                                        ],
+                                        "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                        "line": 22,
+                                        "char": 10
+                                    },
+                                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                    "line": 22,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 24,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "line",
+                                "file": "phpt__functions_closures_preg_replace_callback.zep",
+                                "line": 24,
+                                "char": 20
+                            },
+                            "file": "phpt__functions_closures_preg_replace_callback.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__functions_closures_preg_replace_callback.zep",
+                    "line": 12,
+                    "last-line": 26,
+                    "char": 20
+                }
+            ],
+            "file": "phpt__functions_closures_preg_replace_callback.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__functions_closures_preg_replace_callback.zep",
+        "line": 3,
+        "char": 5
+    }
+]

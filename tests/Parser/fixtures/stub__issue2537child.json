@@ -1,0 +1,257 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2537child.zep",
+        "line": 13,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Child class that overrides every `<static>`-returning method declared\n * in `Issue2537`. The override is what makes PHP run the arginfo\n * class-name resolution on the child during `MINIT`. See `Issue2537`\n * for the full failure-mode rationale.\n *\n * Also exercises `-> <parent>` and `-> <self>` on a child that actually\n * has a parent class.\n *\n * @see https:\/\/github.com\/zephir-lang\/zephir\/pull\/2537\n *",
+        "file": "stub__issue2537child.zep",
+        "line": 14,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2537Child",
+        "abstract": 0,
+        "final": 0,
+        "extends": "Issue2537",
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "tag",
+                    "default": {
+                        "type": "string",
+                        "value": "child",
+                        "file": "stub__issue2537child.zep",
+                        "line": 16,
+                        "char": 26
+                    },
+                    "file": "stub__issue2537child.zep",
+                    "line": 18,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "make",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__issue2537child.zep",
+                                "line": 20,
+                                "char": 20
+                            },
+                            "file": "stub__issue2537child.zep",
+                            "line": 21,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "static",
+                                    "file": "stub__issue2537child.zep",
+                                    "line": 19,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 19,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2537child.zep",
+                        "line": 19,
+                        "char": 5
+                    },
+                    "file": "stub__issue2537child.zep",
+                    "line": 18,
+                    "last-line": 23,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeNullable",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__issue2537child.zep",
+                                "line": 25,
+                                "char": 20
+                            },
+                            "file": "stub__issue2537child.zep",
+                            "line": 26,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "static",
+                                    "file": "stub__issue2537child.zep",
+                                    "line": 23,
+                                    "char": 48
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 23,
+                                "char": 48
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 24,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2537child.zep",
+                        "line": 24,
+                        "char": 5
+                    },
+                    "file": "stub__issue2537child.zep",
+                    "line": 23,
+                    "last-line": 28,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeViaParent",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "Issue2537",
+                                "dynamic": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 30,
+                                "char": 31
+                            },
+                            "file": "stub__issue2537child.zep",
+                            "line": 31,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "parent",
+                                    "file": "stub__issue2537child.zep",
+                                    "line": 29,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 29,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2537child.zep",
+                        "line": 29,
+                        "char": 5
+                    },
+                    "file": "stub__issue2537child.zep",
+                    "line": 28,
+                    "last-line": 33,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "makeViaSelf",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__issue2537child.zep",
+                                "line": 35,
+                                "char": 20
+                            },
+                            "file": "stub__issue2537child.zep",
+                            "line": 36,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2537child.zep",
+                                    "line": 34,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__issue2537child.zep",
+                                "line": 34,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2537child.zep",
+                        "line": 34,
+                        "char": 5
+                    },
+                    "file": "stub__issue2537child.zep",
+                    "line": 33,
+                    "last-line": 37,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2537child.zep",
+            "line": 14,
+            "char": 5
+        },
+        "file": "stub__issue2537child.zep",
+        "line": 14,
+        "char": 5
+    }
+]

@@ -1,0 +1,35 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "new",
+                            "class": "someClass",
+                            "dynamic": 1,
+                            "file": "phpt__operators_new03.zep",
+                            "line": 2,
+                            "char": 25
+                        },
+                        "file": "phpt__operators_new03.zep",
+                        "line": 2,
+                        "char": 25
+                    }
+                ],
+                "file": "phpt__operators_new03.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_new03.zep",
+        "line": 1,
+        "char": 9
+    }
+]

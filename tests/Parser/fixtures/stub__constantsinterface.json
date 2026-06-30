@@ -1,0 +1,502 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__constantsinterface.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ConstantsInterface",
+        "abstract": 0,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "TestInterface",
+                "file": "stub__constantsinterface.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 8,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C1",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 8,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 8,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 13,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C2",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 13,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 13,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 18,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C3",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 18,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 18,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant4",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 23,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C4",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 23,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 23,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant5",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 28,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C5",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 28,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 28,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 26,
+                    "last-line": 31,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInterfaceConstant6",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "TestInterface",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 33,
+                                    "char": 27
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C6",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 33,
+                                    "char": 27
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 33,
+                                "char": 27
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 34,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 31,
+                    "last-line": 36,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 38,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C1",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 38,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 38,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 36,
+                    "last-line": 41,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 43,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C2",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 43,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 43,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 41,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant3",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 48,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C3",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 48,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 48,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 49,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 46,
+                    "last-line": 51,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant4",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 53,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C4",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 53,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 53,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 54,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 51,
+                    "last-line": 56,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant5",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 58,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C5",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 58,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 58,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 59,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 56,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testReadInheritanceFromInterfaceConstant6",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 63,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "C6",
+                                    "file": "stub__constantsinterface.zep",
+                                    "line": 63,
+                                    "char": 18
+                                },
+                                "file": "stub__constantsinterface.zep",
+                                "line": 63,
+                                "char": 18
+                            },
+                            "file": "stub__constantsinterface.zep",
+                            "line": 64,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__constantsinterface.zep",
+                    "line": 61,
+                    "last-line": 65,
+                    "char": 16
+                }
+            ],
+            "file": "stub__constantsinterface.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__constantsinterface.zep",
+        "line": 4,
+        "char": 5
+    }
+]

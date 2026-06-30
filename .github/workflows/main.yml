@@ -13,7 +13,7 @@ on:
 
 env:
   RE2C_VERSION: 2.2
-  ZEPHIR_PARSER_VERSION: 2.0.2
+  ZEPHIR_PARSER_VERSION: 2.0.4
   PSR_VERSION: 1.2.0
   CACHE_DIR: .cache
 
@@ -22,7 +22,7 @@ jobs:
     name: Static Code Analysis
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -76,7 +76,7 @@ jobs:
           #- { php: '8.2', ts: 'nts', arch: 'x64', name: 'windows2022-vs16', os: 'windows-2022', compiler: 'vs16', toolset: '' }
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 5
 
@@ -155,11 +155,29 @@ jobs:
         env:
           XDEBUG_MODE: coverage
 
+      - name: Parser Golden Parity
+        # Disabled on Windows: the full golden corpus parity run takes 2+ hours
+        # on the Windows runners (and was timing/failing), while the same parity
+        # is already proven on Linux/macOS. Skip it there.
+        if: always() && runner.os != 'Windows'
+        # Byte-identical IR parity of the pure-PHP parser vs the C extension
+        # over the full golden corpus. Run without coverage (it is skipped under
+        # ZEPHIR_FORCE_PHP_PARSER, which the coverage step below sets) and is
+        # fast on its own (~hundreds of fixtures, no Xdebug instrumentation).
+        run: php vendor/bin/phpunit --no-coverage tests/Zephir/Parser
+
       - name: Unit Tests (Zephir)
         if: always()
+        # Force the pure-PHP parser so the compiler suites cover src/Parser/Php
+        # through real use; the standalone golden-corpus parity test skips under
+        # this env (it is prohibitively slow under Xdebug path coverage and is
+        # already run by the step above). The C-extension parse path is covered
+        # by the build + Extension + Black-box steps, and fully by the
+        # build-and-test-php-parser job differentially.
         run: php vendor/bin/phpunit --testsuite Zephir --coverage-php ./tests/output/clover.xml
         env:
           XDEBUG_MODE: coverage
+          ZEPHIR_FORCE_PHP_PARSER: '1'
 
       - name: "Upload coverage file artifact"
         uses: "actions/upload-artifact@v7"
@@ -169,7 +187,106 @@ jobs:
 
       - name: Black-box Testing
         if: always()
-        run: php vendor/bin/phpunit --testsuite BlackBox --no-coverage
+        # The .zept group (@group zept) is excluded here: each case is a full
+        # cold phpize/configure/make and would dominate every matrix leg. It is
+        # run separately, in parallel, on Linux only (the step below).
+        run: php vendor/bin/phpunit --testsuite BlackBox --exclude-group zept --no-coverage
+
+      - name: Zept Suite (parallel)
+        # Linux only: the .zept end-to-end build path is OS-agnostic (per-OS C
+        # behaviour is covered by the Extension suite + main build), and the
+        # Linux runners are the fastest. Sharded across CPUs by the script, so
+        # the ~200 per-case builds run concurrently instead of serially.
+        if: always() && runner.os == 'Linux'
+        run: .ci/run-zept-parallel.sh
+
+  build-and-test-php-parser:
+    name: "PHP-Parser (no ext)-PHP-${{ matrix.php }}"
+
+    # Dual-backend coverage: build the test extension and run the full suites
+    # with the built-in pure-PHP parser instead of the ext-zephir_parser C
+    # extension. The C extension is intentionally NOT installed here, and
+    # ZEPHIR_FORCE_PHP_PARSER is set as a belt-and-suspenders guard, so the
+    # parsing path used by users without the PECL extension is exercised
+    # end-to-end (generate -> compile -> test). Kept to Linux + the min/max
+    # supported PHP to bound CI cost; the parser only affects IR generation,
+    # which the golden parity suite proves identical across the matrix.
+    # See https://github.com/zephir-lang/zephir/issues/2495
+    runs-on: ubuntu-24.04
+
+    env:
+      ZEPHIR_FORCE_PHP_PARSER: '1'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '8.0', '8.5' ]
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 5
+
+      - name: Install PHP ${{ matrix.php }} (without zephir_parser)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '${{ matrix.php }}'
+          extensions: mbstring, fileinfo, gmp, sqlite, pdo_sqlite, psr-${{ env.PSR_VERSION }}, zip, mysqli
+          tools: pecl, phpize, php-config
+          coverage: none
+          ini-values: >-
+            variables_order=EGPCS,
+            enable_dl=On,
+            allow_url_fopen=On,
+            error_reporting=-1,
+            memory_limit=1G,
+            date.timezone=UTC,
+            xdebug.max_nesting_level=256
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Project Dependencies
+        run: composer install --prefer-dist --no-interaction --no-ansi --no-progress
+
+      - name: Assert the C parser extension is absent
+        run: |
+          if php -r 'exit(function_exists("zephir_parse_file") ? 1 : 0);'; then
+            echo "ext-zephir_parser not loaded; the built-in PHP parser is active"
+          else
+            echo "::error::zephir_parser is unexpectedly present in the ext-off job"
+            exit 1
+          fi
+
+      - name: Fast Commands Test
+        run: php zephir --help
+
+      - name: Build Test Extension (PHP parser)
+        uses: ./.github/workflows/build-linux-ext
+        with:
+          compiler: gcc
+          cflags: '-O2 -fvisibility=hidden -flto -DZEPHIR_RELEASE=1'
+
+      - name: Stub Extension Info
+        run: |
+          php --ini
+          php --ri stub
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Unit Tests (Stub Extension)
+        run: php vendor/bin/phpunit -c phpunit.ext.xml --no-coverage
+
+      - name: Unit Tests (Zephir)
+        if: always()
+        run: php vendor/bin/phpunit --testsuite Zephir --no-coverage
+
+      - name: Black-box Testing
+        if: always()
+        # @group zept excluded: this job already forces the pure-PHP parser,
+        # which is exactly what the .zept runner uses, so the zept cases here
+        # would duplicate the Linux build-and-test legs at full build cost.
+        run: php vendor/bin/phpunit --testsuite BlackBox --exclude-group zept --no-coverage
 
   upload-coverage:
     permissions:
@@ -181,7 +298,7 @@ jobs:
       - "build-and-test"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 2
 
@@ -215,7 +332,7 @@ jobs:
         working-directory: reports
 
       - name: "Upload to Codecov"
-        uses: "codecov/codecov-action@v6"
+        uses: "codecov/codecov-action@v7"
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: reports
@@ -261,7 +378,7 @@ jobs:
 
     steps:
       - name: Checkout head
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Need full history so we can switch to the base branch in-place.
           fetch-depth: 0
@@ -273,6 +390,8 @@ jobs:
         run: |
           branch="${GITHUB_REF#refs/heads/}"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          # Artifact names reject '/', so emit a slash-free slug for the upload step.
+          echo "branch_slug=${branch//\//-}" >> "$GITHUB_OUTPUT"
           # Look up the first open PR with this branch as head. Fork PRs are
           # surfaced as `owner:branch`, so we narrow by repo as well.
           pr_json=$(gh pr list \
@@ -399,7 +518,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: benchmark-report-${{ steps.pr.outputs.branch }}
+          name: benchmark-report-${{ steps.pr.outputs.branch_slug }}
           path: |
             .phpbench/report.txt
             .phpbench/comment.md

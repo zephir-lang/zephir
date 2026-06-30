@@ -1,0 +1,47 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__diinterface.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "DiInterface",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getShared",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__diinterface.zep",
+                            "line": 5,
+                            "char": 36
+                        }
+                    ],
+                    "file": "stub__diinterface.zep",
+                    "line": 5,
+                    "last-line": 6,
+                    "char": 19
+                }
+            ],
+            "file": "stub__diinterface.zep",
+            "line": 6,
+            "char": 1
+        },
+        "file": "stub__diinterface.zep",
+        "line": 0,
+        "char": 0
+    }
+]

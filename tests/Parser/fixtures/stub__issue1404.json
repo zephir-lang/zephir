@@ -1,0 +1,1649 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1404.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue1404",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsingInteger70000",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "7",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 8,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 8,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 8,
+                                "char": 27
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsingDouble70100",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "double",
+                                            "value": "7.1",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 13,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 13,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 13,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 12,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 12,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 11,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsingLong70000",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "2147483647",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 18,
+                                            "char": 35
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 18,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 18,
+                                "char": 36
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 19,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 17,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 17,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 16,
+                    "last-line": 21,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsingString70000",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 23,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 23,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 23,
+                                "char": 27
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 22,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 22,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 21,
+                    "last-line": 26,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsingZero",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 28,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 28,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 28,
+                                "char": 27
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 29,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 27,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 27,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 26,
+                    "last-line": 32,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing50000",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "5",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 34,
+                                            "char": 26
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 34,
+                                        "char": 26
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 34,
+                                "char": 27
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 35,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 33,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 33,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 32,
+                    "last-line": 37,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing50500",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "5.5",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 39,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 39,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 39,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 40,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 38,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 38,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 37,
+                    "last-line": 42,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing50600",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "5.6",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 44,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 44,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 44,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 45,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 43,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 43,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 42,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70101",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.1",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 49,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 49,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 49,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 48,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 48,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 47,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70102",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.2",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 54,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 54,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 54,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 55,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 53,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 53,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 52,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70103",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.3",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 59,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 59,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 59,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 60,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 58,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 58,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 57,
+                    "last-line": 62,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70104",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.4",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 64,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 64,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 64,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 65,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 63,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 63,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 62,
+                    "last-line": 67,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70105",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.5",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 69,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 69,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 69,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 70,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 68,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 68,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 67,
+                    "last-line": 72,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70106",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.6",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 74,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 74,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 74,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 75,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 73,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 73,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 72,
+                    "last-line": 77,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70107",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.7",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 79,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 79,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 79,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 80,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 78,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 78,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 77,
+                    "last-line": 82,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70108",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.8",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 84,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 84,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 84,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 85,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 83,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 83,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 82,
+                    "last-line": 87,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70109",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.9",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 89,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 89,
+                                        "char": 30
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 89,
+                                "char": 31
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 90,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 88,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 88,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 87,
+                    "last-line": 92,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70110",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.10",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 94,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 94,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 94,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 95,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 93,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 93,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 92,
+                    "last-line": 97,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70111",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.11",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 99,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 99,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 99,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 100,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 98,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 98,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 97,
+                    "last-line": 102,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70112",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.12",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 104,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 104,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 104,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 105,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 103,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 103,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 102,
+                    "last-line": 107,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70113",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.13",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 109,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 109,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 109,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 110,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 108,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 108,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 107,
+                    "last-line": 112,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70114",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.14",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 114,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 114,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 114,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 115,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 113,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 113,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 112,
+                    "last-line": 117,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70115",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.15",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 119,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 119,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 119,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 120,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 118,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 118,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 117,
+                    "last-line": 122,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70116",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.16",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 124,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 124,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 124,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 125,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 123,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 123,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 122,
+                    "last-line": 127,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70117",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1.17",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 129,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 129,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 129,
+                                "char": 32
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 130,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 128,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 128,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 127,
+                    "last-line": 133,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70100",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.1",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 135,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 135,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 135,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 136,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 134,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 134,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 133,
+                    "last-line": 138,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70200",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.2",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 140,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 140,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 140,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 141,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 139,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 139,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 138,
+                    "last-line": 143,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIsPhpVersionUsing70300",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "is_php_version",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "7.3",
+                                            "file": "stub__issue1404.zep",
+                                            "line": 145,
+                                            "char": 28
+                                        },
+                                        "file": "stub__issue1404.zep",
+                                        "line": 145,
+                                        "char": 28
+                                    }
+                                ],
+                                "file": "stub__issue1404.zep",
+                                "line": 145,
+                                "char": 29
+                            },
+                            "file": "stub__issue1404.zep",
+                            "line": 146,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue1404.zep",
+                                "line": 144,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1404.zep",
+                        "line": 144,
+                        "char": 2
+                    },
+                    "file": "stub__issue1404.zep",
+                    "line": 143,
+                    "last-line": 147,
+                    "char": 16
+                }
+            ],
+            "file": "stub__issue1404.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue1404.zep",
+        "line": 3,
+        "char": 5
+    }
+]

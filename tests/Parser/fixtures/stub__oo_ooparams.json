@@ -1,0 +1,1187 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n *\n *",
+        "file": "stub__oo_ooparams.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_ooparams.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "OoParams",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "createThisClassWithoutWriteCurrentNamespace",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "OoParams",
+                                "dynamic": 0,
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 12,
+                                "char": 24
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "createOtherClassWithoutWriteCurrentNamespace",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "OoDynamicA",
+                                "dynamic": 0,
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 17,
+                                "char": 26
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setAge",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "age",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 20,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "age",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 22,
+                                "char": 13
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setAverage",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "average",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 25,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "average",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 27,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setName",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 30,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "name",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 32,
+                                "char": 14
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setEnabled",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "enabled",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 35,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "enabled",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 37,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setList",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "someList",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 40,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "someList",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 42,
+                                "char": 18
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictAge",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "age",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 45,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "age",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 47,
+                                "char": 13
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 45,
+                    "last-line": 50,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictAverage",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "average",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 50,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "average",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 52,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 53,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 50,
+                    "last-line": 55,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictNameFromZephirLand",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_ooparams.zep",
+                                    "line": 57,
+                                    "char": 15
+                                },
+                                "name": "setStrictName",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "12345",
+                                            "file": "stub__oo_ooparams.zep",
+                                            "line": 57,
+                                            "char": 35
+                                        },
+                                        "file": "stub__oo_ooparams.zep",
+                                        "line": 57,
+                                        "char": 35
+                                    }
+                                ],
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 57,
+                                "char": 36
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 58,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 55,
+                    "last-line": 60,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictName",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 60,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "name",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 62,
+                                "char": 14
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 63,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 61,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_ooparams.zep",
+                        "line": 61,
+                        "char": 2
+                    },
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 60,
+                    "last-line": 65,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictEnabled",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "enabled",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 65,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "enabled",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 67,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 68,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 65,
+                    "last-line": 70,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setStrictList",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "someList",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 1,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 70,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "someList",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 72,
+                                "char": 18
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 73,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 70,
+                    "last-line": 75,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setAgeDefault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "age",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "25",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 75,
+                                "char": 42
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 75,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "age",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 77,
+                                "char": 13
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 78,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 75,
+                    "last-line": 80,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setAverageDefault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "average",
+                            "const": 0,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "25",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 80,
+                                "char": 53
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 80,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "average",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 82,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 83,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 80,
+                    "last-line": 85,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setNameDefault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "string",
+                                "value": "peter",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 85,
+                                "char": 50
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 85,
+                            "char": 50
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "name",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 87,
+                                "char": 14
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 88,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 85,
+                    "last-line": 90,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setEnabledDefault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "enabled",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 90,
+                                "char": 57
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 90,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "enabled",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 92,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 93,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 90,
+                    "last-line": 95,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setListDefault",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "someList",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "int",
+                                            "value": "1",
+                                            "file": "stub__oo_ooparams.zep",
+                                            "line": 95,
+                                            "char": 50
+                                        },
+                                        "file": "stub__oo_ooparams.zep",
+                                        "line": 95,
+                                        "char": 50
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "int",
+                                            "value": "2",
+                                            "file": "stub__oo_ooparams.zep",
+                                            "line": 95,
+                                            "char": 53
+                                        },
+                                        "file": "stub__oo_ooparams.zep",
+                                        "line": 95,
+                                        "char": 53
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "stub__oo_ooparams.zep",
+                                            "line": 95,
+                                            "char": 56
+                                        },
+                                        "file": "stub__oo_ooparams.zep",
+                                        "line": 95,
+                                        "char": 56
+                                    }
+                                ],
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 95,
+                                "char": 57
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 95,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "someList",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 97,
+                                "char": 18
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 98,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 95,
+                    "last-line": 100,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setConstAge",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "age",
+                            "const": 1,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 100,
+                            "char": 43
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "age",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 102,
+                                "char": 13
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 103,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 100,
+                    "last-line": 105,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setConstAverage",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "average",
+                            "const": 1,
+                            "data-type": "double",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 105,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "average",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 107,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 108,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 105,
+                    "last-line": 110,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setObject",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "object",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 110,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 112,
+                                "char": 16
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 113,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 110,
+                    "last-line": 115,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setCallable",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "callable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 115,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 117,
+                                "char": 16
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 118,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 115,
+                    "last-line": 120,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setResource",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "obj",
+                            "const": 0,
+                            "data-type": "resource",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 120,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 122,
+                                "char": 16
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 123,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 120,
+                    "last-line": 125,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setObjectClassCast",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "parameter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Param",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 125,
+                                "char": 53
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 125,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "parameter",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 127,
+                                "char": 19
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 128,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 125,
+                    "last-line": 130,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultParamValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "i",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "0",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 130,
+                                "char": 48
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 130,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "i",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 132,
+                                "char": 14
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 133,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 130,
+                    "last-line": 135,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultParamValue1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "i",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 135,
+                                "char": 49
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 135,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "i",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 137,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 138,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 135,
+                    "last-line": 140,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getDefaultParamValueStr",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "string",
+                                "value": "default",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 140,
+                                "char": 65
+                            },
+                            "reference": 0,
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 140,
+                            "char": 65
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "str",
+                                "file": "stub__oo_ooparams.zep",
+                                "line": 142,
+                                "char": 19
+                            },
+                            "file": "stub__oo_ooparams.zep",
+                            "line": 143,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__oo_ooparams.zep",
+                    "line": 140,
+                    "last-line": 144,
+                    "char": 19
+                }
+            ],
+            "file": "stub__oo_ooparams.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__oo_ooparams.zep",
+        "line": 8,
+        "char": 5
+    }
+]

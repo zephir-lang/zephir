@@ -7,3 +7,11 @@ stub/*                  linguist-vendored
 
 *.xml.dist              text eol=lf linguist-language=XML
 *.json.dist             text eol=lf linguist-language=JSON
+
+# Zephir sources and .zept test cases must keep LF endings on every platform.
+# The .zept --USAGE-- compares against multiline string literals; a CRLF
+# checkout (Windows) would make the runtime values differ from the compiled
+# extension's. Compiled .zep newline escaping is platform-fixed in code, but
+# the source files themselves must stay LF for the expectations to match.
+*.zep                   text eol=lf
+*.zept                  text eol=lf

@@ -1,0 +1,374 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__arraysearch.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ArraySearch",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "simpleSearch",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "needle",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__arraysearch.zep",
+                            "line": 6,
+                            "char": 41
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "haystack",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__arraysearch.zep",
+                            "line": 6,
+                            "char": 57
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "strict",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__arraysearch.zep",
+                                "line": 6,
+                                "char": 78
+                            },
+                            "reference": 0,
+                            "file": "stub__arraysearch.zep",
+                            "line": 6,
+                            "char": 78
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "array_search",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "needle",
+                                            "file": "stub__arraysearch.zep",
+                                            "line": 8,
+                                            "char": 29
+                                        },
+                                        "file": "stub__arraysearch.zep",
+                                        "line": 8,
+                                        "char": 29
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "haystack",
+                                            "file": "stub__arraysearch.zep",
+                                            "line": 8,
+                                            "char": 39
+                                        },
+                                        "file": "stub__arraysearch.zep",
+                                        "line": 8,
+                                        "char": 39
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "strict",
+                                            "file": "stub__arraysearch.zep",
+                                            "line": 8,
+                                            "char": 47
+                                        },
+                                        "file": "stub__arraysearch.zep",
+                                        "line": 8,
+                                        "char": 47
+                                    }
+                                ],
+                                "file": "stub__arraysearch.zep",
+                                "line": 8,
+                                "char": 48
+                            },
+                            "file": "stub__arraysearch.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "** @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1609 *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__arraysearch.zep",
+                                "line": 7,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__arraysearch.zep",
+                        "line": 7,
+                        "char": 2
+                    },
+                    "file": "stub__arraysearch.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "searchUsingArrayInsideZephir",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "itoA64",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": ".",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 20
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\/",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 23
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 23
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "0",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 26
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 26
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "1",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 29
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 29
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "2",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 32
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "3",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 35
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "4",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 38
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 38
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "value",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 45
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "OtherValue",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 14,
+                                                    "char": 57
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 14,
+                                                "char": 57
+                                            }
+                                        ],
+                                        "file": "stub__arraysearch.zep",
+                                        "line": 14,
+                                        "char": 58
+                                    },
+                                    "file": "stub__arraysearch.zep",
+                                    "line": 14,
+                                    "char": 58
+                                }
+                            ],
+                            "file": "stub__arraysearch.zep",
+                            "line": 15,
+                            "char": 5
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "pos",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "array_search",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "value",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 15,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 15,
+                                                "char": 31
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "itoA64",
+                                                    "file": "stub__arraysearch.zep",
+                                                    "line": 15,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__arraysearch.zep",
+                                                "line": 15,
+                                                "char": 39
+                                            }
+                                        ],
+                                        "file": "stub__arraysearch.zep",
+                                        "line": 15,
+                                        "char": 40
+                                    },
+                                    "file": "stub__arraysearch.zep",
+                                    "line": 15,
+                                    "char": 40
+                                }
+                            ],
+                            "file": "stub__arraysearch.zep",
+                            "line": 17,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "pos",
+                                "file": "stub__arraysearch.zep",
+                                "line": 17,
+                                "char": 13
+                            },
+                            "file": "stub__arraysearch.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "** @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/1609 *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__arraysearch.zep",
+                                "line": 13,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__arraysearch.zep",
+                        "line": 13,
+                        "char": 2
+                    },
+                    "file": "stub__arraysearch.zep",
+                    "line": 12,
+                    "last-line": 19,
+                    "char": 16
+                }
+            ],
+            "file": "stub__arraysearch.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__arraysearch.zep",
+        "line": 3,
+        "char": 5
+    }
+]

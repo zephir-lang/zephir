@@ -38,7 +38,7 @@ PHP_METHOD(Stub_Issue2522, inlineClosureIsCallable)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&call);
-	zephir_create_closure_ex(&call, NULL, stub_24__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&call, NULL, stub_25__closure_ce, SL("__invoke"));
 	RETURN_MM_BOOL(zephir_is_callable(&call));
 }
 
@@ -52,7 +52,7 @@ PHP_METHOD(Stub_Issue2522, inlineClosureReturnsClosureInstance)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&call);
-	zephir_create_closure_ex(&call, NULL, stub_25__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&call, NULL, stub_26__closure_ce, SL("__invoke"));
 	RETURN_MM_BOOL((zephir_is_instance_of(&call, SL("Closure"))));
 }
 
@@ -66,7 +66,7 @@ PHP_METHOD(Stub_Issue2522, inlineFnKeywordIsCallable)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&call);
-	zephir_create_closure_ex(&call, NULL, stub_26__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&call, NULL, stub_27__closure_ce, SL("__invoke"));
 	RETURN_MM_BOOL(zephir_is_callable(&call));
 }
 
@@ -80,7 +80,7 @@ PHP_METHOD(Stub_Issue2522, twoStepClosureIsCallable)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZEPHIR_INIT_VAR(&call);
-	zephir_create_closure_ex(&call, NULL, stub_27__closure_ce, SL("__invoke"));
+	zephir_create_closure_ex(&call, NULL, stub_28__closure_ce, SL("__invoke"));
 	RETURN_MM_BOOL(zephir_is_callable(&call));
 }
 

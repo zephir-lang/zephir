@@ -1,0 +1,47 @@
+--TEST--
+Late static binding: get_called_class via parent, parent:: call, self:: parent call, simple static return (#1392 #1372 LSB subset of tests/Extension/Oo/ExtendClassTest.php; PDO/psr extending cases require those extensions and are skipped)
+--FILE--
+namespace Stub\Oo;
+
+abstract class AbstractStatic
+{
+    public static function getCalledClass() -> string
+    {
+        return get_called_class();
+    }
+}
+--FILE--
+namespace Stub\Oo;
+
+class ConcreteStatic extends AbstractStatic
+{
+    public static function parentFunction()
+    {
+        return __METHOD__;
+    }
+
+    public static function childFunction()
+    {
+        return self::parentFunction();
+    }
+
+    public static function callParentFunction() -> string
+    {
+        return parent::getCalledClass();
+    }
+
+    public static function simpleStaticIntReturn() -> int
+    {
+        return 1337;
+    }
+}
+--USAGE--
+echo var_export(\Stub\Oo\ConcreteStatic::getCalledClass() === \Stub\Oo\ConcreteStatic::class, true), "\n";
+echo var_export(\Stub\Oo\ConcreteStatic::parentFunction(), true), "\n";
+echo var_export(\Stub\Oo\ConcreteStatic::callParentFunction() === \Stub\Oo\ConcreteStatic::class, true), "\n";
+echo var_export(\Stub\Oo\ConcreteStatic::simpleStaticIntReturn(), true), "\n";
+--EXPECT--
+true
+'ConcreteStatic:parentFunction'
+true
+1337

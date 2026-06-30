@@ -296,7 +296,16 @@ class Generator
                 $returnTypes[] = 'mixed';
             } else {
                 if (array_key_exists('object', $methodReturnTypes)) {
-                    $returnTypes[] = key($method->getReturnClassTypes()) ?: 'object';
+                    /**
+                     * A return type may union several classes
+                     * (`-> <Model> | <Row> | null`). Emit every class, not just
+                     * the first one — using `key()` dropped all but the first
+                     * and produced an invalid hint such as `Model|null`.
+                     *
+                     * @see https://github.com/zephir-lang/zephir/issues/2428
+                     */
+                    $classTypes = array_keys($method->getReturnClassTypes());
+                    array_push($returnTypes, ...($classTypes ?: ['object']));
                 }
 
                 if ($method->areReturnTypesIntCompatible()) {

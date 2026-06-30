@@ -1,0 +1,465 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__reflection.zep",
+        "line": 4,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "ReflectionClass",
+                "file": "stub__reflection.zep",
+                "line": 4,
+                "char": 20
+            }
+        ],
+        "file": "stub__reflection.zep",
+        "line": 5,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "ReflectionFunction",
+                "file": "stub__reflection.zep",
+                "line": 5,
+                "char": 23
+            }
+        ],
+        "file": "stub__reflection.zep",
+        "line": 6,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "ReflectionParameter",
+                "file": "stub__reflection.zep",
+                "line": 6,
+                "char": 24
+            }
+        ],
+        "file": "stub__reflection.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Reflection",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "reflectionParameter",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__reflection.zep",
+                        "line": 10,
+                        "char": 39
+                    },
+                    "file": "stub__reflection.zep",
+                    "line": 12,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getReflectionClass",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "r",
+                                    "file": "stub__reflection.zep",
+                                    "line": 14,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__reflection.zep",
+                            "line": 15,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "r",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "ReflectionClass",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__reflection.zep",
+                                                    "line": 15,
+                                                    "char": 41
+                                                },
+                                                "file": "stub__reflection.zep",
+                                                "line": 15,
+                                                "char": 41
+                                            }
+                                        ],
+                                        "file": "stub__reflection.zep",
+                                        "line": 15,
+                                        "char": 42
+                                    },
+                                    "file": "stub__reflection.zep",
+                                    "line": 15,
+                                    "char": 42
+                                }
+                            ],
+                            "file": "stub__reflection.zep",
+                            "line": 17,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "r",
+                                "file": "stub__reflection.zep",
+                                "line": 17,
+                                "char": 17
+                            },
+                            "file": "stub__reflection.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "ReflectionClass",
+                                    "file": "stub__reflection.zep",
+                                    "line": 13,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__reflection.zep",
+                                "line": 13,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__reflection.zep",
+                        "line": 13,
+                        "char": 5
+                    },
+                    "file": "stub__reflection.zep",
+                    "line": 12,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getReflectionFunction",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "r",
+                                    "file": "stub__reflection.zep",
+                                    "line": 22,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__reflection.zep",
+                            "line": 23,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "r",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "ReflectionFunction",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "abs",
+                                                    "file": "stub__reflection.zep",
+                                                    "line": 23,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__reflection.zep",
+                                                "line": 23,
+                                                "char": 43
+                                            }
+                                        ],
+                                        "file": "stub__reflection.zep",
+                                        "line": 23,
+                                        "char": 44
+                                    },
+                                    "file": "stub__reflection.zep",
+                                    "line": 23,
+                                    "char": 44
+                                }
+                            ],
+                            "file": "stub__reflection.zep",
+                            "line": 25,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "r",
+                                "file": "stub__reflection.zep",
+                                "line": 25,
+                                "char": 17
+                            },
+                            "file": "stub__reflection.zep",
+                            "line": 26,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "ReflectionFunction",
+                                    "file": "stub__reflection.zep",
+                                    "line": 21,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__reflection.zep",
+                                "line": 21,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__reflection.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__reflection.zep",
+                    "line": 20,
+                    "last-line": 28,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setReflectionParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "parameter",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "ReflectionParameter",
+                                "file": "stub__reflection.zep",
+                                "line": 28,
+                                "char": 74
+                            },
+                            "reference": 0,
+                            "file": "stub__reflection.zep",
+                            "line": 28,
+                            "char": 75
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "reflectionParameter",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "parameter",
+                                        "file": "stub__reflection.zep",
+                                        "line": 30,
+                                        "char": 50
+                                    },
+                                    "file": "stub__reflection.zep",
+                                    "line": 30,
+                                    "char": 50
+                                }
+                            ],
+                            "file": "stub__reflection.zep",
+                            "line": 32,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__reflection.zep",
+                                    "line": 32,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "reflectionParameter",
+                                    "file": "stub__reflection.zep",
+                                    "line": 32,
+                                    "char": 41
+                                },
+                                "file": "stub__reflection.zep",
+                                "line": 32,
+                                "char": 41
+                            },
+                            "file": "stub__reflection.zep",
+                            "line": 33,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "ReflectionParameter",
+                                    "file": "stub__reflection.zep",
+                                    "line": 29,
+                                    "char": 5
+                                },
+                                "collection": 0,
+                                "file": "stub__reflection.zep",
+                                "line": 29,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__reflection.zep",
+                        "line": 29,
+                        "char": 5
+                    },
+                    "file": "stub__reflection.zep",
+                    "line": 28,
+                    "last-line": 35,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getReflectionParameter",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__reflection.zep",
+                                    "line": 37,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "reflectionParameter",
+                                    "file": "stub__reflection.zep",
+                                    "line": 37,
+                                    "char": 41
+                                },
+                                "file": "stub__reflection.zep",
+                                "line": 37,
+                                "char": 41
+                            },
+                            "file": "stub__reflection.zep",
+                            "line": 38,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "ReflectionParameter",
+                                    "file": "stub__reflection.zep",
+                                    "line": 35,
+                                    "char": 71
+                                },
+                                "collection": 0,
+                                "file": "stub__reflection.zep",
+                                "line": 35,
+                                "char": 71
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__reflection.zep",
+                                "line": 36,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__reflection.zep",
+                        "line": 36,
+                        "char": 5
+                    },
+                    "file": "stub__reflection.zep",
+                    "line": 35,
+                    "last-line": 39,
+                    "char": 19
+                }
+            ],
+            "file": "stub__reflection.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__reflection.zep",
+        "line": 8,
+        "char": 5
+    }
+]

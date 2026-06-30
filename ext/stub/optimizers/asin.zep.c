@@ -37,7 +37,7 @@ PHP_METHOD(Stub_Optimizers_ASin, testInt)
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 19, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 20, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -54,7 +54,7 @@ PHP_METHOD(Stub_Optimizers_ASin, testVar)
 
 	a = 1;
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 19, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 20, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -70,7 +70,7 @@ PHP_METHOD(Stub_Optimizers_ASin, testIntValue1)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 
 	ZVAL_LONG(&_0, 0);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 19, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 20, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -89,7 +89,7 @@ PHP_METHOD(Stub_Optimizers_ASin, testIntParameter)
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a_param);
 	ZVAL_LONG(&_0, a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 19, &_0);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 20, &_0);
 	zephir_check_call_status();
 	RETURN_MM();
 }
@@ -107,7 +107,7 @@ PHP_METHOD(Stub_Optimizers_ASin, testVarParameter)
 	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
 	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
 	zephir_fetch_params(1, 1, 0, &a);
-	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 19, a);
+	ZEPHIR_RETURN_CALL_FUNCTION("asin", NULL, 20, a);
 	zephir_check_call_status();
 	RETURN_MM();
 }

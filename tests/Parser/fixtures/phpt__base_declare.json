@@ -1,0 +1,357 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "declare",
+                "data-type": "int",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "int",
+                            "value": "10",
+                            "file": "phpt__base_declare.zep",
+                            "line": 2,
+                            "char": 14
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 2,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 3,
+                "char": 5
+            },
+            {
+                "type": "declare",
+                "data-type": "uint",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "int",
+                            "value": "10",
+                            "file": "phpt__base_declare.zep",
+                            "line": 3,
+                            "char": 15
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 3,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 4,
+                "char": 5
+            },
+            {
+                "type": "declare",
+                "data-type": "long",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "int",
+                            "value": "10",
+                            "file": "phpt__base_declare.zep",
+                            "line": 4,
+                            "char": 15
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 4,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 5,
+                "char": 6
+            },
+            {
+                "type": "declare",
+                "data-type": "ulong",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "int",
+                            "value": "10",
+                            "file": "phpt__base_declare.zep",
+                            "line": 5,
+                            "char": 16
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 5,
+                        "char": 16
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 6,
+                "char": 5
+            },
+            {
+                "type": "declare",
+                "data-type": "char",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "char",
+                            "value": "a",
+                            "file": "phpt__base_declare.zep",
+                            "line": 6,
+                            "char": 15
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 6,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 7,
+                "char": 6
+            },
+            {
+                "type": "declare",
+                "data-type": "uchar",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "char",
+                            "value": "a",
+                            "file": "phpt__base_declare.zep",
+                            "line": 7,
+                            "char": 16
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 7,
+                        "char": 16
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 8,
+                "char": 7
+            },
+            {
+                "type": "declare",
+                "data-type": "double",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "double",
+                            "value": "10.00",
+                            "file": "phpt__base_declare.zep",
+                            "line": 8,
+                            "char": 20
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 8,
+                        "char": 20
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 9,
+                "char": 6
+            },
+            {
+                "type": "declare",
+                "data-type": "double",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "double",
+                            "value": "10.00",
+                            "file": "phpt__base_declare.zep",
+                            "line": 9,
+                            "char": 19
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 9,
+                        "char": 19
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 10,
+                "char": 5
+            },
+            {
+                "type": "declare",
+                "data-type": "bool",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__base_declare.zep",
+                            "line": 10,
+                            "char": 17
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 10,
+                        "char": 17
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 11,
+                "char": 8
+            },
+            {
+                "type": "declare",
+                "data-type": "bool",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__base_declare.zep",
+                            "line": 11,
+                            "char": 20
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 11,
+                        "char": 20
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 12,
+                "char": 7
+            },
+            {
+                "type": "declare",
+                "data-type": "string",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "string",
+                            "value": "foobar",
+                            "file": "phpt__base_declare.zep",
+                            "line": 12,
+                            "char": 21
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 12,
+                        "char": 21
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 13,
+                "char": 6
+            },
+            {
+                "type": "declare",
+                "data-type": "array",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "array",
+                            "left": [
+                                {
+                                    "value": {
+                                        "type": "int",
+                                        "value": "10",
+                                        "file": "phpt__base_declare.zep",
+                                        "line": 13,
+                                        "char": 17
+                                    },
+                                    "file": "phpt__base_declare.zep",
+                                    "line": 13,
+                                    "char": 17
+                                },
+                                {
+                                    "value": {
+                                        "type": "int",
+                                        "value": "20",
+                                        "file": "phpt__base_declare.zep",
+                                        "line": 13,
+                                        "char": 20
+                                    },
+                                    "file": "phpt__base_declare.zep",
+                                    "line": 13,
+                                    "char": 20
+                                },
+                                {
+                                    "value": {
+                                        "type": "int",
+                                        "value": "30",
+                                        "file": "phpt__base_declare.zep",
+                                        "line": 13,
+                                        "char": 23
+                                    },
+                                    "file": "phpt__base_declare.zep",
+                                    "line": 13,
+                                    "char": 23
+                                }
+                            ],
+                            "file": "phpt__base_declare.zep",
+                            "line": 13,
+                            "char": 24
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 13,
+                        "char": 24
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 14,
+                "char": 4
+            },
+            {
+                "type": "declare",
+                "data-type": "variable",
+                "variables": [
+                    {
+                        "variable": "foo",
+                        "expr": {
+                            "type": "int",
+                            "value": "10",
+                            "file": "phpt__base_declare.zep",
+                            "line": 14,
+                            "char": 14
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 14,
+                        "char": 14
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 15,
+                "char": 7
+            },
+            {
+                "type": "declare",
+                "data-type": "object",
+                "variables": [
+                    {
+                        "variable": "obj",
+                        "expr": {
+                            "type": "new",
+                            "class": "stdClass",
+                            "dynamic": 0,
+                            "file": "phpt__base_declare.zep",
+                            "line": 15,
+                            "char": 27
+                        },
+                        "file": "phpt__base_declare.zep",
+                        "line": 15,
+                        "char": 27
+                    }
+                ],
+                "file": "phpt__base_declare.zep",
+                "line": 16,
+                "char": 1
+            }
+        ],
+        "file": "phpt__base_declare.zep",
+        "line": 1,
+        "char": 9
+    }
+]

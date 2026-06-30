@@ -1,0 +1,34 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "int",
+                    "mandatory": 1,
+                    "file": "phpt__functions_definition02.zep",
+                    "line": 1,
+                    "char": 26
+                },
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "string",
+                    "mandatory": 0,
+                    "file": "phpt__functions_definition02.zep",
+                    "line": 1,
+                    "char": 35
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_definition02.zep",
+            "line": 1,
+            "char": 35
+        },
+        "file": "phpt__functions_definition02.zep",
+        "line": 1,
+        "char": 9
+    }
+]

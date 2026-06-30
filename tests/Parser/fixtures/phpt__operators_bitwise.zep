@@ -1,0 +1,8 @@
+function bitwise() {
+    let a = 0x01 << 1;
+    let a = 0xF0 >> 1;
+    let a = 0x01 | 0x02;
+    let a = 0x03 & 0x01;
+    let a = 0x03 ^ 0x02;
+    let a = ~ 0x01;
+}

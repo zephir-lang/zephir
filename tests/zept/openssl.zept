@@ -1,0 +1,49 @@
+--TEST--
+Openssl: openssl_random_pseudo_bytes length, loop count, and openssl_encrypt non-false (port of tests/Extension/OpensslTest.php)
+--SKIPIF--
+<?php if (!extension_loaded('openssl')) echo 'skip openssl not loaded';
+--INI--
+extension=openssl
+--FILE--
+namespace Stub;
+
+class Openssl
+{
+    public function randomPseudoBytes(int length) -> string
+    {
+        return openssl_random_pseudo_bytes(length);
+    }
+
+	public function randomPseudoBytesLoop() -> string
+	{
+	    var arr, i = 0;
+	    let arr = [];
+	    for i in range(1, 10) {
+	        let arr[] = openssl_random_pseudo_bytes(10);
+        }
+
+        return arr;
+	}
+
+	public function opensslEncrypt(string data)
+	{
+	    return openssl_encrypt(data, "AES-256-CBC", "passphrase", OPENSSL_RAW_DATA, "1234567890123456");
+	}
+}
+--USAGE--
+$t = new \Stub\Openssl();
+foreach ([1, 2, 5, 10, 30, 50, 100] as $len) {
+    echo var_export(strlen($t->randomPseudoBytes($len)) === $len, true), "\n";
+}
+echo var_export(count($t->randomPseudoBytesLoop()) === 10, true), "\n";
+echo var_export($t->opensslEncrypt("5") !== false, true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true
+true
+true
+true

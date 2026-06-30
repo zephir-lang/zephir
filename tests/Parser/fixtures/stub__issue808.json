@@ -1,0 +1,701 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue808.zep",
+        "line": 12,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Regression coverage for https:\/\/github.com\/zephir-lang\/zephir\/issues\/808\n *\n * unset(obj->{variable}) was not supported and threw:\n *   CompilerException: Cannot use expression type: property-dynamic-access in \"unset\"\n *\n * Fix: UnsetStatement must resolve the dynamic property name from the symbol\n * table and emit zephir_unset_property_zval() instead of rejecting the node.\n *",
+        "file": "stub__issue808.zep",
+        "line": 13,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue808",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicUnset",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "propertyName",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue808.zep",
+                            "line": 19,
+                            "char": 54
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue808.zep",
+                                    "line": 21,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 22,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\stdClass",
+                                        "dynamic": 0,
+                                        "file": "stub__issue808.zep",
+                                        "line": 22,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 22,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 23,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "propertyName",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "value",
+                                        "file": "stub__issue808.zep",
+                                        "line": 23,
+                                        "char": 40
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 23,
+                                    "char": 40
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 24,
+                            "char": 13
+                        },
+                        {
+                            "type": "unset",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "obj",
+                                        "file": "stub__issue808.zep",
+                                        "line": 24,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "propertyName",
+                                        "file": "stub__issue808.zep",
+                                        "line": 24,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 24,
+                                    "char": 34
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 24,
+                                "char": 35
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 25,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-dynamic-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue808.zep",
+                                            "line": 25,
+                                            "char": 26
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "propertyName",
+                                            "file": "stub__issue808.zep",
+                                            "line": 25,
+                                            "char": 41
+                                        },
+                                        "file": "stub__issue808.zep",
+                                        "line": 25,
+                                        "char": 41
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 25,
+                                    "char": 42
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 25,
+                                "char": 42
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 26,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Unset a stdClass property by a variable holding the property name.\n     * After the unset the property must no longer exist (isset returns false).\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue808.zep",
+                                "line": 20,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue808.zep",
+                        "line": 20,
+                        "char": 5
+                    },
+                    "file": "stub__issue808.zep",
+                    "line": 19,
+                    "last-line": 30,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicUnsetSelective",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "toRemove",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue808.zep",
+                            "line": 31,
+                            "char": 59
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue808.zep",
+                                    "line": 33,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 34,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\stdClass",
+                                        "dynamic": 0,
+                                        "file": "stub__issue808.zep",
+                                        "line": 34,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 34,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 35,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "keep",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "keep_value",
+                                        "file": "stub__issue808.zep",
+                                        "line": 35,
+                                        "char": 35
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 35,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 36,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "remove",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "remove_value",
+                                        "file": "stub__issue808.zep",
+                                        "line": 36,
+                                        "char": 39
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 36,
+                                    "char": 39
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 37,
+                            "char": 13
+                        },
+                        {
+                            "type": "unset",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "obj",
+                                        "file": "stub__issue808.zep",
+                                        "line": 37,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "toRemove",
+                                        "file": "stub__issue808.zep",
+                                        "line": 37,
+                                        "char": 30
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 37,
+                                    "char": 30
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 37,
+                                "char": 31
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 38,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__issue808.zep",
+                                "line": 38,
+                                "char": 19
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 39,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Only the targeted property is removed; others survive.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__issue808.zep",
+                                "line": 32,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue808.zep",
+                        "line": 32,
+                        "char": 5
+                    },
+                    "file": "stub__issue808.zep",
+                    "line": 31,
+                    "last-line": 46,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicUnsetStringKey",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue808.zep",
+                                    "line": 49,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 50,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\stdClass",
+                                        "dynamic": 0,
+                                        "file": "stub__issue808.zep",
+                                        "line": 50,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 50,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 51,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "name",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "value",
+                                        "file": "stub__issue808.zep",
+                                        "line": 51,
+                                        "char": 30
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 51,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 52,
+                            "char": 13
+                        },
+                        {
+                            "type": "unset",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "property-string-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "obj",
+                                        "file": "stub__issue808.zep",
+                                        "line": 52,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "name",
+                                        "file": "stub__issue808.zep",
+                                        "line": 52,
+                                        "char": 26
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 52,
+                                    "char": 26
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 52,
+                                "char": 27
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 53,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__issue808.zep",
+                                            "line": 53,
+                                            "char": 26
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "name",
+                                            "file": "stub__issue808.zep",
+                                            "line": 53,
+                                            "char": 31
+                                        },
+                                        "file": "stub__issue808.zep",
+                                        "line": 53,
+                                        "char": 31
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 53,
+                                    "char": 32
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 53,
+                                "char": 32
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 54,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Unset using a string literal in braces: unset(obj->{\"name\"}).\n     * This exercises property-string-access in UnsetStatement.\n     * The post-unset check uses regular property-access (not brace syntax)\n     * because isset(obj->{\"name\"}) has a separate known limitation.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue808.zep",
+                                "line": 48,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue808.zep",
+                        "line": 48,
+                        "char": 5
+                    },
+                    "file": "stub__issue808.zep",
+                    "line": 47,
+                    "last-line": 61,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDynamicUnsetNonExistentProperty",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "propertyName",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue808.zep",
+                            "line": 62,
+                            "char": 73
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__issue808.zep",
+                                    "line": 64,
+                                    "char": 16
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 65,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\stdClass",
+                                        "dynamic": 0,
+                                        "file": "stub__issue808.zep",
+                                        "line": 65,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 65,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 66,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "property": "keep",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "keep_value",
+                                        "file": "stub__issue808.zep",
+                                        "line": 66,
+                                        "char": 35
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 66,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__issue808.zep",
+                            "line": 67,
+                            "char": 13
+                        },
+                        {
+                            "type": "unset",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "obj",
+                                        "file": "stub__issue808.zep",
+                                        "line": 67,
+                                        "char": 19
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "propertyName",
+                                        "file": "stub__issue808.zep",
+                                        "line": 67,
+                                        "char": 34
+                                    },
+                                    "file": "stub__issue808.zep",
+                                    "line": 67,
+                                    "char": 34
+                                },
+                                "file": "stub__issue808.zep",
+                                "line": 67,
+                                "char": 35
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 68,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "obj",
+                                "file": "stub__issue808.zep",
+                                "line": 68,
+                                "char": 19
+                            },
+                            "file": "stub__issue808.zep",
+                            "line": 69,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Unsetting a property that does not exist on the object must be a\n     * silent no-op \u2014 no error, no warning \u2014 and must leave any other\n     * properties intact. This mirrors PHP's own behaviour:\n     *   unset($obj->nonExistent); \/\/ silent\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__issue808.zep",
+                                "line": 63,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue808.zep",
+                        "line": 63,
+                        "char": 5
+                    },
+                    "file": "stub__issue808.zep",
+                    "line": 62,
+                    "last-line": 70,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue808.zep",
+            "line": 13,
+            "char": 5
+        },
+        "file": "stub__issue808.zep",
+        "line": 13,
+        "char": 5
+    }
+]
