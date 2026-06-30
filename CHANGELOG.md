@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-07-01
+
 ### Added
 - Implemented `.zept` (Zephir Test) format and a `zephir test <path>` command: a single file bundles the Zephir implementation (`--FILE--`, repeatable), the PHP usage (`--USAGE--`) and the expected output (`--EXPECT--`/`--EXPECTF--`). Each case is compiled into a throwaway extension (pure-PHP parser forced) and its output checked, so a `.zept` doubles as an end-to-end parser test. A dependency-free runner (`Zephir\Zept\`) backs both the CLI and the `tests/Zephir/BlackBox/ZeptSuiteTest.php` bridge [#1098](https://github.com/zephir-lang/zephir/issues/1098)
 - Built-in pure-PHP Zephir parser, removing the hard dependency on the `ext-zephir_parser` PECL C extension. The parser produces the **identical** intermediate representation (IR) the compiler already consumes — verified byte-for-byte (`json_encode` equality) against the C extension over the full `stub/` corpus, the extracted `php-zephir-parser` test snippets, and the entire Phalcon framework (930/930 `.zep` files). Building the bundled stub extension with the PHP parser generates a byte-identical C tree and passes the Extension test suite identically to the C-extension build [#2495](https://github.com/zephir-lang/zephir/issues/2495)
@@ -738,7 +740,8 @@ and this project adheres to [Semantic Versioning](https://semver.org).
   [#1524](https://github.com/zephir-lang/zephir/issues/1524)
 
 
-[Unreleased]: https://github.com/zephir-lang/zephir/compare/0.23.0...HEAD
+[Unreleased]: https://github.com/zephir-lang/zephir/compare/1.0.0...HEAD
+[1.0.0]: https://github.com/zephir-lang/zephir/compare/0.23.0...1.0.0
 [0.23.0]: https://github.com/zephir-lang/zephir/compare/0.22.0...0.23.0
 [0.22.0]: https://github.com/zephir-lang/zephir/compare/0.21.0...0.22.0
 [0.21.0]: https://github.com/zephir-lang/zephir/compare/0.20.1...0.21.0
