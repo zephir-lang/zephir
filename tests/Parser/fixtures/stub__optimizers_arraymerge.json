@@ -1,0 +1,103 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_arraymerge.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ArrayMerge",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "mergeTwoRequiredArrays",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "arr1",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_arraymerge.zep",
+                            "line": 6,
+                            "char": 58
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "arr2",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_arraymerge.zep",
+                            "line": 6,
+                            "char": 70
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "array_merge",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "arr1",
+                                            "file": "stub__optimizers_arraymerge.zep",
+                                            "line": 8,
+                                            "char": 26
+                                        },
+                                        "file": "stub__optimizers_arraymerge.zep",
+                                        "line": 8,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "arr2",
+                                            "file": "stub__optimizers_arraymerge.zep",
+                                            "line": 8,
+                                            "char": 32
+                                        },
+                                        "file": "stub__optimizers_arraymerge.zep",
+                                        "line": 8,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__optimizers_arraymerge.zep",
+                                "line": 8,
+                                "char": 33
+                            },
+                            "file": "stub__optimizers_arraymerge.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_arraymerge.zep",
+                    "line": 6,
+                    "last-line": 10,
+                    "char": 23
+                }
+            ],
+            "file": "stub__optimizers_arraymerge.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_arraymerge.zep",
+        "line": 4,
+        "char": 5
+    }
+]

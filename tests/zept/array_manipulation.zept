@@ -1,0 +1,48 @@
+--TEST--
+array manipulation: array_fill of 1M elements + (array) cast of a populated stdClass (port of tests/Extension/ArrayManipulationTest.php, issues #1187/#774)
+--FILE--
+namespace Stub;
+
+class ArrayManipulation
+{
+    protected arrayFillQueue = [];
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/1187
+     */
+    public function arrayFillMany() -> array
+    {
+        let this->arrayFillQueue = array_fill(0, 1000000, "message");
+
+        return this->arrayFillQueue;
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/774
+     */
+    public function issue774() -> array
+    {
+        var obj;
+
+        let
+            obj = new \stdClass(),
+            obj->prop0 = 0,
+            obj->prop1 = 1,
+            obj = (array)obj;
+
+        return obj;
+    }
+}
+--USAGE--
+$class = new \Stub\ArrayManipulation();
+$array = $class->arrayFillMany();
+echo var_export(is_array($array), true), "\n";
+echo var_export(count($array), true), "\n";
+echo var_export($class->issue774(), true), "\n";
+--EXPECT--
+true
+1000000
+array (
+  'prop0' => 0,
+  'prop1' => 1,
+)

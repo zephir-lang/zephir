@@ -1,0 +1,30 @@
+--TEST--
+Multiple --FILE-- sections compile into one extension and can collaborate
+--FILE--
+namespace Zept;
+
+class Adder
+{
+    public function add(int a, int b) -> int
+    {
+        return a + b;
+    }
+}
+--FILE--
+namespace Zept;
+
+class Calculator
+{
+    public function sum(int a, int b) -> int
+    {
+        var adder;
+        let adder = new Adder();
+
+        return adder->add(a, b);
+    }
+}
+--USAGE--
+$c = new Zept\Calculator();
+echo $c->sum(2, 3), "\n";
+--EXPECT--
+5

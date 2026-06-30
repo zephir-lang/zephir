@@ -1,0 +1,82 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Interfaces",
+        "file": "stub__interfaces_interfaceint.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "InterfaceInt",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "set",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__interfaces_interfaceint.zep",
+                            "line": 5,
+                            "char": 32
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__interfaces_interfaceint.zep",
+                        "line": 5,
+                        "char": 41
+                    },
+                    "file": "stub__interfaces_interfaceint.zep",
+                    "line": 5,
+                    "last-line": 7,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "get",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__interfaces_interfaceint.zep",
+                                "line": 7,
+                                "char": 33
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__interfaces_interfaceint.zep",
+                        "line": 7,
+                        "char": 33
+                    },
+                    "file": "stub__interfaces_interfaceint.zep",
+                    "line": 7,
+                    "last-line": 8,
+                    "char": 19
+                }
+            ],
+            "file": "stub__interfaces_interfaceint.zep",
+            "line": 8,
+            "char": 1
+        },
+        "file": "stub__interfaces_interfaceint.zep",
+        "line": 0,
+        "char": 0
+    }
+]

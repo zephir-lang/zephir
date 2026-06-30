@@ -1,0 +1,220 @@
+--TEST--
+Static calls: Class::/self::/parent:: across visibility, plus #1622 interpolated static method (port of tests/Extension/ScallTest.php)
+--FILE--
+namespace Stub;
+
+class ScallParent
+{
+	static public function testMethod1() -> string
+	{
+		return "hello parent public";
+	}
+
+	static protected function testMethod2() -> string
+	{
+		return "hello parent protected";
+	}
+
+	static public function testCallStatic() -> string
+	{
+		return static::testMethodStatic();
+	}
+
+	static protected function testMethodStatic() -> string
+	{
+		return "hello ScallParent";
+	}
+}
+--FILE--
+namespace Stub;
+
+class Scall extends ScallParent
+{
+	static public function testMethod1() -> string
+	{
+		return "hello public";
+	}
+
+	static protected function testMethod2() -> string
+	{
+		return "hello protected";
+	}
+
+	static private function testMethod3() -> string
+	{
+		return "hello private";
+	}
+
+	static public function testMethod4(var a, var b)
+	{
+		return a + b;
+	}
+
+	static protected function testMethod5(var a, var b)
+	{
+		return a + b;
+	}
+
+	static private function testMethod6(var a, var b)
+	{
+		return a + b;
+	}
+
+	static public function testMethod7() -> <\stdClass>
+	{
+		return new \stdClass();
+	}
+
+	public function testCall1()
+	{
+		return Scall::testMethod1();
+	}
+
+	public function testCall2()
+	{
+		return Scall::testMethod2();
+	}
+
+	public function testCall3()
+	{
+		return Scall::testMethod3();
+	}
+
+	public function testCall4(var a, var b)
+	{
+		return Scall::testMethod4(a, b);
+	}
+
+	public function testCall5(var a, var b)
+	{
+		return Scall::testMethod5(a, b);
+	}
+
+	public function testCall6(var a, var b)
+	{
+		return Scall::testMethod6(a, b);
+	}
+
+	public function testCall7()
+	{
+		return self::testMethod1();
+	}
+
+	public function testCall8()
+	{
+		return self::testMethod2();
+	}
+
+	public function testCall9()
+	{
+		return self::testMethod3();
+	}
+
+	public function testCall10(var a, var b)
+	{
+		return self::testMethod4(a, b);
+	}
+
+	public function testCall11(var a, var b)
+	{
+		return self::testMethod5(a, b);
+	}
+
+	public function testCall12(var a, var b)
+	{
+		return self::testMethod6(a, b);
+	}
+
+	public function testCall13()
+	{
+		return parent::testMethod1();
+	}
+
+	public function testCall14()
+	{
+		return parent::testMethod2();
+	}
+
+	public function testCall15()
+	{
+		return self::testMethod7();
+	}
+
+	static protected function testMethodStatic() -> string
+	{
+		return "hello Scall";
+	}
+
+	public function interpolatedStaticReturn() -> string
+	{
+		string className = "Stub\\Scall";
+		string methodName = "testMethodStatic";
+
+		return {className}::{methodName}();
+	}
+
+	public function interpolatedStaticEcho() -> void
+	{
+		string className = "Stub\\Scall";
+		string methodName = "testMethodStatic";
+
+		echo {className}::{methodName}();
+	}
+}
+--USAGE--
+use Stub\Scall;
+
+$test = new Scall();
+
+// testMethod1 reachable as instance->, static::, and Class::
+echo var_export($test->testMethod1(), true), "\n";
+echo var_export($test::testMethod1(), true), "\n";
+echo var_export(Scall::testMethod1(), true), "\n";
+
+// Class:: across visibility
+echo var_export($test->testCall1(), true), "\n";
+echo var_export($test->testCall2(), true), "\n";
+echo var_export($test->testCall3(), true), "\n";
+echo var_export($test->testCall4(2, 3), true), "\n";
+echo var_export($test->testCall5(6, 7), true), "\n";
+echo var_export($test->testCall6(4, 5), true), "\n";
+
+// self::
+echo var_export($test->testCall7(), true), "\n";
+echo var_export($test->testCall8(), true), "\n";
+echo var_export($test->testCall9(), true), "\n";
+echo var_export($test->testCall10(2, 3), true), "\n";
+echo var_export($test->testCall11(6, 7), true), "\n";
+echo var_export($test->testCall12(4, 5), true), "\n";
+
+// parent::
+echo var_export($test->testCall13(), true), "\n";
+echo var_export($test->testCall14(), true), "\n";
+
+// #1622 interpolated static method name
+echo var_export($test->interpolatedStaticReturn(), true), "\n";
+
+ob_start();
+$test->interpolatedStaticEcho();
+$content = ob_get_clean();
+echo var_export($content, true), "\n";
+--EXPECT--
+'hello public'
+'hello public'
+'hello public'
+'hello public'
+'hello protected'
+'hello private'
+5
+13
+9
+'hello public'
+'hello protected'
+'hello private'
+5
+13
+9
+'hello parent public'
+'hello parent protected'
+'hello Scall'
+'hello Scall'

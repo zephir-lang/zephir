@@ -1,0 +1,165 @@
+--TEST--
+Arithmetic: int/double/bool sums, compound assign, shift precedence and int64 precision (port of tests/Extension/ArithmeticTest.php)
+--FILE--
+namespace Stub;
+
+class Arithmetic
+{
+	protected tmp1 = 100;
+
+	public function intSum()
+	{
+		int a, b, c;
+		let a = 1, b = 2, c = a + b;
+		return c;
+	}
+
+	public function doubleSum()
+	{
+		double a, b, c;
+		let a = 1, b = 2, c = a + b;
+		return c;
+	}
+
+	public function boolSum()
+	{
+		boolean a, b, c;
+		let a = 1, b = 2, c = a + b;
+		return c;
+	}
+
+	public function complex4Sum()
+	{
+		var c;
+		let c = 1.0 + true;
+		return c;
+	}
+
+	public function complex5Sum()
+	{
+		var c;
+		let c = 1 + true;
+		return c;
+	}
+
+	public function addSum8b()
+	{
+		double a;
+		let a = 6.3, a += null;
+		return a;
+	}
+
+	public function addSum23()
+	{
+		var a;
+		let a = 1;
+		let a += 1 << 10;
+		return a;
+	}
+
+	public function mul3()
+	{
+		var a = 1;
+		let a *= 1 << 10;
+		return a;
+	}
+
+	public function div1()
+	{
+		var a = 100;
+		return (a - 1) / 4;
+	}
+
+	public function div2()
+	{
+		return (this->tmp1 - 1) / 4;
+	}
+
+	public function less3(var a)
+	{
+		return a < 5;
+	}
+
+	public function greater3(var a)
+	{
+		return a > 5;
+	}
+
+	public function letStatementVarMinus(var b)
+	{
+		var a;
+		let a = -b;
+		return a;
+	}
+
+	public function letStatementBoolMinus(var b)
+	{
+		boolean a;
+		let a = -b;
+		return a;
+	}
+
+	public function longPlusVar(var b)
+	{
+		var n;
+		let n = 1000000000000000000;
+		let n = n + b;
+		return n;
+	}
+
+	public function longLiteralPlusVar(var b) -> long
+	{
+		return 1000000000000000000 + b;
+	}
+
+	public function shiftOrPrecedence(var hmac, int offset) -> int
+	{
+		int code;
+		let code = (hmac[offset + 0] & 0x7F) << 24 | (hmac[offset + 1] & 0xFF) << 16 | (hmac[offset + 2] & 0xFF) << 8 | (hmac[offset + 3] & 0xFF);
+		return code;
+	}
+}
+--USAGE--
+$c = new \Stub\Arithmetic();
+echo var_export($c->intSum(), true), "\n";
+echo var_export($c->doubleSum(), true), "\n";
+echo var_export($c->boolSum(), true), "\n";
+echo var_export($c->complex4Sum(), true), "\n";
+echo var_export($c->complex5Sum(), true), "\n";
+echo var_export($c->addSum8b(), true), "\n";
+echo var_export($c->addSum23(), true), "\n";
+echo var_export($c->mul3(), true), "\n";
+echo var_export($c->div1(), true), "\n";
+echo var_export($c->div2(), true), "\n";
+echo var_export($c->less3(4), true), "\n";
+echo var_export($c->less3(5), true), "\n";
+echo var_export($c->greater3(100), true), "\n";
+echo var_export($c->greater3(5), true), "\n";
+echo var_export($c->letStatementVarMinus(1), true), "\n";
+echo var_export($c->letStatementBoolMinus(1), true), "\n";
+echo var_export($c->letStatementBoolMinus(0), true), "\n";
+echo var_export($c->longPlusVar(12), true), "\n";
+echo var_export($c->longLiteralPlusVar(12), true), "\n";
+$hmac = [195, 27, 216, 98, 57, 79, 54, 206, 194, 54, 232, 46, 121, 107, 161, 141, 244, 185, 154, 78];
+echo var_export($c->shiftOrPrecedence($hmac, 14), true), "\n";
+--EXPECT--
+3
+3.0
+true
+2.0
+2
+6.3
+1025
+1024
+24.75
+24.75
+true
+false
+true
+false
+-1
+true
+false
+1000000000000000012
+1000000000000000012
+562951353

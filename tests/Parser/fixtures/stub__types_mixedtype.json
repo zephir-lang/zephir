@@ -1,0 +1,1469 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Types",
+        "file": "stub__types_mixedtype.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "MixedType",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedObject",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\stdClass",
+                                "dynamic": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 12,
+                                "char": 28
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 13,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n     * Mixed only as return type methods\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 11,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 11,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedArray",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty-array",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 17,
+                                "char": 15
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 16,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 16,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedString",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "mixed string",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 22,
+                                "char": 25
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 21,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 21,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedInt",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 27,
+                                "char": 14
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 26,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 26,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedFloat",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "double",
+                                "value": "3.14",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 32,
+                                "char": 17
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 31,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 31,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedBool",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "true",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 37,
+                                "char": 17
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 36,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 36,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 35,
+                    "last-line": 40,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixedNull",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "null",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 42,
+                                "char": 17
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 43,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 41,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 41,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 40,
+                    "last-line": 45,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMixed74",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "diff",
+                            "const": 0,
+                            "data-type": "bool",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 45,
+                                "char": 49
+                            },
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 45,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "list",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "diff",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 47,
+                                    "char": 14
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 47,
+                                "char": 16
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "string",
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 48,
+                                        "char": 23
+                                    },
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 49,
+                                    "char": 6
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 51,
+                            "char": 11
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "\\stdClass",
+                                "dynamic": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 51,
+                                "char": 28
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 52,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 46,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 46,
+                        "char": 2
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 45,
+                    "last-line": 54,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "returnMultiButAlwaysMixed",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "ZEND_BEGIN_ARG_INFO_EX",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 57,
+                                "char": 38
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 58,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 54,
+                                "char": 58
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 54,
+                                "char": 64
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 55,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 55,
+                        "char": 5
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 54,
+                    "last-line": 62,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "paramMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 64,
+                            "char": 42
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 66,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 67,
+                            "char": 6
+                        }
+                    ],
+                    "docblock": "**\n     * Mixed only as parameter in method\n     *",
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 64,
+                    "last-line": 69,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "paramMixedTwo",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val1",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 69,
+                            "char": 46
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "val2",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 69,
+                            "char": 58
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "val1",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 71,
+                                            "char": 21
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 71,
+                                        "char": 21
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "val2",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 71,
+                                            "char": 27
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 71,
+                                        "char": 27
+                                    }
+                                ],
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 71,
+                                "char": 28
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 72,
+                            "char": 6
+                        }
+                    ],
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 69,
+                    "last-line": 74,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "paramMixedWithMulti",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "intVal",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 74,
+                            "char": 52
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "stringVal",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 74,
+                            "char": 70
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "mixedVal",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 74,
+                            "char": 86
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "intVal",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 76,
+                                            "char": 23
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 76,
+                                        "char": 23
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "stringVal",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 76,
+                                            "char": 34
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 76,
+                                        "char": 34
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "variable",
+                                            "value": "mixedVal",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 76,
+                                            "char": 44
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 76,
+                                        "char": 44
+                                    }
+                                ],
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 76,
+                                "char": 45
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 77,
+                            "char": 6
+                        }
+                    ],
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 74,
+                    "last-line": 81,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "paramAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 83,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 85,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 86,
+                            "char": 6
+                        }
+                    ],
+                    "docblock": "**\n      * Mixed as as parameter and return type in method\n      *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 84,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 84,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 83,
+                    "last-line": 88,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToStringMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 88,
+                            "char": 63
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "string",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 90,
+                                    "char": 27
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 90,
+                                "char": 27
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 91,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 89,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 89,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 88,
+                    "last-line": 93,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToStringInternallyMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 93,
+                            "char": 73
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "val",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "string",
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 95,
+                                            "char": 30
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 95,
+                                        "char": 30
+                                    },
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 95,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 97,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 97,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 98,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 94,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 94,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 93,
+                    "last-line": 100,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToIntMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 100,
+                            "char": 60
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "int",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 102,
+                                    "char": 24
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 102,
+                                "char": 24
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 103,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 101,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 101,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 100,
+                    "last-line": 105,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToIntInternallyMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 105,
+                            "char": 70
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "val",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "int",
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 107,
+                                            "char": 27
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 107,
+                                        "char": 27
+                                    },
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 107,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 109,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 109,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 110,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 106,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 106,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 105,
+                    "last-line": 112,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToBoolMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 112,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "bool",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 114,
+                                    "char": 25
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 114,
+                                "char": 25
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 115,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 113,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 113,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 112,
+                    "last-line": 117,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToBoolInternallyMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 117,
+                            "char": 71
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "val",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "bool",
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 119,
+                                            "char": 28
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 119,
+                                        "char": 28
+                                    },
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 119,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 121,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 121,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 122,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 118,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 118,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 117,
+                    "last-line": 124,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToFloatMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 124,
+                            "char": 62
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "double",
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 126,
+                                    "char": 26
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 126,
+                                "char": 26
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 127,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 125,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 125,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 124,
+                    "last-line": 129,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "castToFloatInternallyMixedAndReturnMixed",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 129,
+                            "char": 72
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "val",
+                                    "expr": {
+                                        "type": "cast",
+                                        "left": "double",
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "val",
+                                            "file": "stub__types_mixedtype.zep",
+                                            "line": 131,
+                                            "char": 29
+                                        },
+                                        "file": "stub__types_mixedtype.zep",
+                                        "line": 131,
+                                        "char": 29
+                                    },
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 131,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 133,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "val",
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 133,
+                                "char": 19
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 134,
+                            "char": 6
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "mixed",
+                                "mandatory": 0,
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 130,
+                                "char": 6
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 130,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 129,
+                    "last-line": 138,
+                    "char": 20
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "mixedInCondition",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "val",
+                            "const": 0,
+                            "data-type": "mixed",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 139,
+                            "char": 48
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 141,
+                                    "char": 25
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 141,
+                                "char": 25
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 145,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 145,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 145,
+                                    "char": 22
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 145,
+                                "char": 22
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 149,
+                            "char": 10
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "identical",
+                                "left": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 149,
+                                    "char": 16
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 149,
+                                    "char": 22
+                                },
+                                "file": "stub__types_mixedtype.zep",
+                                "line": 149,
+                                "char": 22
+                            },
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 153,
+                            "char": 12
+                        },
+                        {
+                            "type": "echo",
+                            "expressions": [
+                                {
+                                    "type": "variable",
+                                    "value": "val",
+                                    "file": "stub__types_mixedtype.zep",
+                                    "line": 153,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__types_mixedtype.zep",
+                            "line": 154,
+                            "char": 6
+                        }
+                    ],
+                    "docblock": "**\n      * Only used during generation\n      *",
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__types_mixedtype.zep",
+                        "line": 140,
+                        "char": 6
+                    },
+                    "file": "stub__types_mixedtype.zep",
+                    "line": 139,
+                    "last-line": 155,
+                    "char": 20
+                }
+            ],
+            "file": "stub__types_mixedtype.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__types_mixedtype.zep",
+        "line": 4,
+        "char": 5
+    }
+]

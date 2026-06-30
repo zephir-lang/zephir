@@ -1,0 +1,32 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "mcall",
+                "expr": {
+                    "type": "mcall",
+                    "variable": {
+                        "type": "variable",
+                        "value": "a",
+                        "file": "phpt__statements_mcall.zep",
+                        "line": 2,
+                        "char": 4
+                    },
+                    "name": "b",
+                    "call-type": 1,
+                    "file": "phpt__statements_mcall.zep",
+                    "line": 2,
+                    "char": 8
+                },
+                "file": "phpt__statements_mcall.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_mcall.zep",
+        "line": 1,
+        "char": 9
+    }
+]

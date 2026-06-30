@@ -1,0 +1,70 @@
+--TEST--
+Dynamic method calls: this->{"name"}(), magic __call, and #1751 closure-with-context (port of tests/Extension/MCallDynamicTest.php)
+--FILE--
+namespace Stub\Mcall;
+
+class Caller
+{
+	public static function start(callable f) -> var
+	{
+		return {f}();
+	}
+
+	public static function perform() -> string
+	{
+		return __METHOD__;
+	}
+}
+--FILE--
+namespace Stub;
+
+use Stub\Mcall\Caller;
+
+class McallDynamic
+{
+	public function testMethod1()
+	{
+		return 1;
+	}
+
+	public function testMagicCall1()
+	{
+		return this->{"method1"}() + this->{"METHOD1"}();
+	}
+
+	public function __call(method, arguments)
+	{
+		var realMethod;
+		let realMethod = "test" . method;
+		return this->{realMethod}();
+	}
+
+	/**
+	 * @link https://github.com/zephir-lang/zephir/issues/1751
+	 */
+	public function testCallAnonymousFunctionWithContext() -> var
+	{
+		var result;
+
+		let result = Caller::start(function () {
+			 return Caller::perform();
+		});
+
+		return result;
+	}
+}
+--USAGE--
+$test = new \Stub\McallDynamic();
+
+// method1() does not exist -> __call("method1") -> testmethod1() -> testMethod1() -> 1
+echo var_export($test->method1(), true), "\n";
+
+// testMagicCall1: this->{"method1"}() + this->{"METHOD1"}() routed via __call -> 1 + 1
+echo var_export($test->testMagicCall1(), true), "\n";
+
+// #1751: closure keeps the Caller context, __METHOD__ resolves
+echo var_export($test->testCallAnonymousFunctionWithContext(), true), "\n";
+--EXPECT--
+1
+2
+'Caller:perform'

@@ -1,0 +1,396 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2533.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2533",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "bar",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 12,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "BAR",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 12,
+                                    "char": 25
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 12,
+                                "char": 25
+                            },
+                            "file": "stub__issue2533.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2533.zep",
+                                "line": 11,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2533.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 10,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "map",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 17,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "MAP",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 17,
+                                    "char": 25
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 17,
+                                "char": 25
+                            },
+                            "file": "stub__issue2533.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2533.zep",
+                                "line": 16,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2533.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "nested",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-constant-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 22,
+                                    "char": 28
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "NESTED",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 22,
+                                    "char": 28
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 22,
+                                "char": 28
+                            },
+                            "file": "stub__issue2533.zep",
+                            "line": 23,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2533.zep",
+                                "line": 21,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2533.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 20,
+                    "last-line": 24,
+                    "char": 19
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "BAR",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 5,
+                                    "char": 19
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 5,
+                                "char": 19
+                            },
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 5,
+                                    "char": 22
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 5,
+                                "char": 22
+                            },
+                            {
+                                "value": {
+                                    "type": "int",
+                                    "value": "3",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 5,
+                                    "char": 25
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 5,
+                                "char": 25
+                            }
+                        ],
+                        "file": "stub__issue2533.zep",
+                        "line": 5,
+                        "char": 26
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 6,
+                    "char": 9
+                },
+                {
+                    "type": "const",
+                    "name": "MAP",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "key": {
+                                    "type": "string",
+                                    "value": "a",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 6,
+                                    "char": 19
+                                },
+                                "value": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 6,
+                                    "char": 22
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 6,
+                                "char": 22
+                            },
+                            {
+                                "key": {
+                                    "type": "string",
+                                    "value": "b",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 6,
+                                    "char": 25
+                                },
+                                "value": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "stub__issue2533.zep",
+                                    "line": 6,
+                                    "char": 28
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 6,
+                                "char": 28
+                            }
+                        ],
+                        "file": "stub__issue2533.zep",
+                        "line": 6,
+                        "char": 29
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 7,
+                    "char": 9
+                },
+                {
+                    "type": "const",
+                    "name": "NESTED",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "value": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__issue2533.zep",
+                                                "line": 7,
+                                                "char": 23
+                                            },
+                                            "file": "stub__issue2533.zep",
+                                            "line": 7,
+                                            "char": 23
+                                        },
+                                        {
+                                            "value": {
+                                                "type": "int",
+                                                "value": "2",
+                                                "file": "stub__issue2533.zep",
+                                                "line": 7,
+                                                "char": 26
+                                            },
+                                            "file": "stub__issue2533.zep",
+                                            "line": 7,
+                                            "char": 26
+                                        }
+                                    ],
+                                    "file": "stub__issue2533.zep",
+                                    "line": 7,
+                                    "char": 27
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 7,
+                                "char": 27
+                            },
+                            {
+                                "value": {
+                                    "type": "array",
+                                    "left": [
+                                        {
+                                            "key": {
+                                                "type": "string",
+                                                "value": "k",
+                                                "file": "stub__issue2533.zep",
+                                                "line": 7,
+                                                "char": 31
+                                            },
+                                            "value": {
+                                                "type": "string",
+                                                "value": "v",
+                                                "file": "stub__issue2533.zep",
+                                                "line": 7,
+                                                "char": 34
+                                            },
+                                            "file": "stub__issue2533.zep",
+                                            "line": 7,
+                                            "char": 34
+                                        }
+                                    ],
+                                    "file": "stub__issue2533.zep",
+                                    "line": 7,
+                                    "char": 35
+                                },
+                                "file": "stub__issue2533.zep",
+                                "line": 7,
+                                "char": 35
+                            }
+                        ],
+                        "file": "stub__issue2533.zep",
+                        "line": 7,
+                        "char": 36
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 8,
+                    "char": 9
+                },
+                {
+                    "type": "const",
+                    "name": "EMPTY_ARR",
+                    "default": {
+                        "type": "empty-array",
+                        "file": "stub__issue2533.zep",
+                        "line": 8,
+                        "char": 25
+                    },
+                    "file": "stub__issue2533.zep",
+                    "line": 10,
+                    "char": 10
+                }
+            ],
+            "file": "stub__issue2533.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__issue2533.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,110 @@
+--TEST--
+Static public property defaults, reference aliasing (#1904) and compound add/sub (#2020) (port of tests/Extension/Properties/StaticPublicPropertiesTest.php)
+--FILE--
+namespace Stub\Properties;
+
+class StaticPublicProperties
+{
+	public static someNull;
+	public static someNullInitial = null;
+	public static someFalse = false;
+	public static someTrue = true;
+	public static someInteger = 10;
+	public static someDouble = 10.25;
+	public static someString = "test";
+
+	public static someAdd = 0;
+	public static someSub = 0;
+
+	public static function setSomeString(val)
+	{
+		let self::someString = val;
+	}
+
+	public static function testAddAndSub()
+	{
+		let self::someAdd += 1;
+		let self::someSub -= 1;
+	}
+
+	public static function testAddAndSub2()
+	{
+		let self::someAdd += "2string";
+		let self::someSub -= "2string";
+	}
+
+	public static function testAddAndSub3()
+	{
+		let self::someAdd += 1.0;
+		let self::someSub -= 1.0;
+	}
+
+	public static function testAddAndSub4()
+	{
+		var v;
+		let v = 1;
+		let self::someAdd += v;
+		let self::someSub -= v;
+	}
+
+	public static function testAddAndSub5()
+	{
+		var v;
+		let v = "1";
+		let self::someAdd += v;
+		let self::someSub -= v;
+	}
+}
+--USAGE--
+use Stub\Properties\StaticPublicProperties;
+
+// testAssertations
+echo var_export(StaticPublicProperties::$someNull, true), "\n";
+echo var_export(StaticPublicProperties::$someNullInitial, true), "\n";
+echo var_export(StaticPublicProperties::$someFalse, true), "\n";
+echo var_export(StaticPublicProperties::$someTrue, true), "\n";
+echo var_export(StaticPublicProperties::$someInteger, true), "\n";
+echo var_export(StaticPublicProperties::$someDouble, true), "\n";
+echo var_export(StaticPublicProperties::$someString, true), "\n";
+
+// testIssues1904 (reference aliasing into a static property)
+$value = &StaticPublicProperties::$someString;
+$value = 'test1';
+echo var_export(StaticPublicProperties::$someString === $value, true), "\n";
+StaticPublicProperties::$someString = 'test2';
+echo var_export(StaticPublicProperties::$someString === $value, true), "\n";
+StaticPublicProperties::setSomeString('test3');
+echo var_export(StaticPublicProperties::$someString === $value, true), "\n";
+
+// testIssues2020 (compound assign on static numeric properties)
+StaticPublicProperties::testAddAndSub();
+echo var_export(StaticPublicProperties::$someAdd, true), "\n";
+echo var_export(StaticPublicProperties::$someSub, true), "\n";
+StaticPublicProperties::testAddAndSub3();
+echo var_export(StaticPublicProperties::$someAdd, true), "\n";
+echo var_export(StaticPublicProperties::$someSub, true), "\n";
+StaticPublicProperties::testAddAndSub4();
+echo var_export(StaticPublicProperties::$someAdd, true), "\n";
+echo var_export(StaticPublicProperties::$someSub, true), "\n";
+StaticPublicProperties::testAddAndSub4();
+echo var_export(StaticPublicProperties::$someAdd, true), "\n";
+echo var_export(StaticPublicProperties::$someSub, true), "\n";
+--EXPECT--
+NULL
+NULL
+false
+true
+10
+10.25
+'test'
+true
+true
+true
+1
+-1
+2.0
+-2.0
+3.0
+-3.0
+4.0
+-4.0

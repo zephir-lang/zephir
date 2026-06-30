@@ -379,6 +379,38 @@ EOT);
 
         break;
 
+    case 'test':
+        if ($showHelp) {
+            fwrite(STDOUT, <<<HELP
+Description:
+  Runs .zept (Zephir Test) files. Each file bundles the Zephir implementation
+  (--FILE--, one or more), the PHP usage that exercises it (--USAGE--) and the
+  expected output (--EXPECT-- or --EXPECTF--). For every file the embedded
+  Zephir is compiled into a throwaway extension, the usage is executed against
+  it, and the output is compared. The pure-PHP parser is used, so each test
+  also validates parsing end-to-end.
+
+Usage:
+  test <path>
+
+Arguments:
+  path   A .zept file, or a directory that is searched for *.zept files
+
+Options:
+  -h, --help     Print this help message
+
+HELP);
+            exit(0);
+        }
+
+        $target = $params[1] ?? null;
+        if ($target === null) {
+            fwrite(STDERR, 'Not enough arguments (missing: "path").' . PHP_EOL);
+            exit(1);
+        }
+
+        exit(runZeptTests($target));
+
     case 'help':
     default:
         $version = explode('-', Zephir::VERSION);
@@ -407,10 +439,75 @@ Available commands:
   init       Initializes a Zephir extension
   install    Installs the extension in the extension directory (may require root password)
   stubs      Generates stubs that can be used in a PHP IDE
+  test       Runs .zept (Zephir Test) files
 
 HELP);
 
         break;
+}
+
+/**
+ * Runs one or more .zept (Zephir Test) files and prints a phpt-style report.
+ *
+ * @param string $path A .zept file, or a directory searched for *.zept files.
+ *
+ * @return int Process exit code: 0 when every test passed, 1 otherwise.
+ */
+function runZeptTests(string $path): int
+{
+    if (is_dir($path)) {
+        $files = glob(rtrim($path, '/') . '/*.zept') ?: [];
+        sort($files);
+    } elseif (is_file($path)) {
+        $files = [$path];
+    } else {
+        fwrite(STDERR, sprintf('No .zept file or directory at "%s".', $path) . PHP_EOL);
+
+        return 1;
+    }
+
+    if ($files === []) {
+        fwrite(STDERR, sprintf('No .zept files found in "%s".', $path) . PHP_EOL);
+
+        return 1;
+    }
+
+    $parser = new \Zephir\Zept\ZeptParser();
+    $runner = new \Zephir\Zept\ZeptRunner(__FILE__);
+
+    $passed = $failed = $skipped = 0;
+
+    foreach ($files as $file) {
+        $name = basename($file);
+        try {
+            $zept   = $parser->parse((string) file_get_contents($file), $file);
+            $result = $runner->run($zept);
+        } catch (\Zephir\Zept\ZeptParseException $e) {
+            $result = \Zephir\Zept\ZeptResult::error($e->getMessage());
+        }
+
+        switch ($result->status) {
+            case \Zephir\Zept\ZeptResult::PASS:
+                $passed++;
+                fwrite(STDOUT, sprintf('PASS  %s', $name) . PHP_EOL);
+                break;
+            case \Zephir\Zept\ZeptResult::SKIP:
+                $skipped++;
+                fwrite(STDOUT, sprintf('SKIP  %s — %s', $name, $result->reason) . PHP_EOL);
+                break;
+            default:
+                $failed++;
+                fwrite(STDOUT, sprintf('FAIL  %s — %s', $name, $result->reason) . PHP_EOL);
+                if ($result->status === \Zephir\Zept\ZeptResult::FAIL) {
+                    fwrite(STDOUT, '  --- expected ---' . PHP_EOL . $result->expected . PHP_EOL);
+                    fwrite(STDOUT, '  --- actual ---' . PHP_EOL . $result->actual . PHP_EOL);
+                }
+        }
+    }
+
+    fwrite(STDOUT, sprintf('%d passed, %d failed, %d skipped', $passed, $failed, $skipped) . PHP_EOL);
+
+    return $failed > 0 ? 1 : 0;
 }
 
 function generate(bool $trace = false): bool

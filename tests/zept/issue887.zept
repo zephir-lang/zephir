@@ -1,0 +1,46 @@
+--TEST--
+Issue #887: a (object) cast in one method must not change the property's array type seen by later calls (port of tests/Extension/Issue887Test.php)
+--FILE--
+namespace Stub;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/887
+ */
+class Issue887
+{
+    public data;
+
+    public function __construct()
+    {
+        let this->data = [];
+    }
+
+    public function add(key, value)
+    {
+        let this->data[key] = value;
+    }
+
+    public function fetch_array()
+    {
+        return this->data;
+    }
+
+    public function fetch_object()
+    {
+        return (object) this->data;
+    }
+}
+--USAGE--
+$class = new \Stub\Issue887();
+
+echo var_export(is_array($class->data), true), "\n";
+echo var_export(is_array($class->fetch_array()), true), "\n";
+echo var_export(is_object($class->fetch_object()), true), "\n";
+echo var_export(is_array($class->fetch_array()), true), "\n";
+echo var_export(is_array($class->data), true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true

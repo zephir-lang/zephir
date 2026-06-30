@@ -1,0 +1,30 @@
+--TEST--
+BuiltIn char methods: toHex on a char literal and over a for-char loop (port of tests/Extension/BuiltIn/CharMethodTest.php)
+--FILE--
+namespace Stub\BuiltIn;
+
+class CharMethods
+{
+    public function getHex()
+    {
+        return 'a'->toHex();
+    }
+
+    public function getHexForString(string str)
+    {
+        var o = "";
+        char ch;
+
+        for ch in str {
+            let o .= ch->toHex();
+        }
+        return o;
+    }
+}
+--USAGE--
+$charm = new \Stub\BuiltIn\CharMethods();
+echo var_export($charm->getHex(), true), "\n";
+echo var_export($charm->getHexForString('hello'), true), "\n";
+--EXPECT--
+'61'
+'68656C6C6F'

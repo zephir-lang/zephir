@@ -1,0 +1,119 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Scopes",
+        "file": "stub__oo_scopes_hasprivatemethod.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "HasPrivateMethod",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callPrivateMethod",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_hasprivatemethod.zep",
+                                    "line": 7,
+                                    "char": 21
+                                },
+                                "name": "isPrivate",
+                                "call-type": 1,
+                                "file": "stub__oo_scopes_hasprivatemethod.zep",
+                                "line": 7,
+                                "char": 33
+                            },
+                            "file": "stub__oo_scopes_hasprivatemethod.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_hasprivatemethod.zep",
+                                "line": 6,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_hasprivatemethod.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_hasprivatemethod.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "method",
+                    "name": "isPrivate",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "constant",
+                                "value": "__FUNCTION__",
+                                "file": "stub__oo_scopes_hasprivatemethod.zep",
+                                "line": 12,
+                                "char": 28
+                            },
+                            "file": "stub__oo_scopes_hasprivatemethod.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_hasprivatemethod.zep",
+                                "line": 11,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_hasprivatemethod.zep",
+                        "line": 11,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_hasprivatemethod.zep",
+                    "line": 10,
+                    "last-line": 14,
+                    "char": 20
+                }
+            ],
+            "file": "stub__oo_scopes_hasprivatemethod.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__oo_scopes_hasprivatemethod.zep",
+        "line": 3,
+        "char": 5
+    }
+]

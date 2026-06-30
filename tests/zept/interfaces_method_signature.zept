@@ -1,0 +1,80 @@
+--TEST--
+Interface used as a method-signature type; int default 0 (#1991), get/set round-trip, TypeError on wrong scalar/interface arg (port of tests/Extension/Interfaces/InterfaceMethodSignatureTest.php)
+--FILE--
+namespace Stub\Interfaces;
+
+interface InterfaceInt
+{
+    public function set(int val) -> void;
+
+    public function get() -> int;
+}
+--FILE--
+namespace Stub\Interfaces;
+
+interface InterfaceIntSignature
+{
+    public function get(<InterfaceInt> obj) -> int;
+}
+--FILE--
+namespace Stub\Interfaces;
+
+class ImplementInt implements InterfaceInt
+{
+    protected val = 0;
+
+    public function set(int val) -> void
+    {
+        let this->val = val;
+    }
+
+    public function get() -> int
+    {
+        return this->val;
+    }
+}
+--FILE--
+namespace Stub\Interfaces;
+
+class ImplementInterface implements InterfaceIntSignature
+{
+    protected obj;
+
+    public function get(<InterfaceInt> obj) -> int
+    {
+        return obj->get();
+    }
+
+    public function getVoid(<InterfaceInt> obj) -> void
+    {
+        let this->obj = obj;
+    }
+
+    public function getObj() -> <InterfaceInt>
+    {
+        return this->obj;
+    }
+}
+--USAGE--
+$class = new \Stub\Interfaces\ImplementInt();
+echo var_export($class->get(), true), "\n";
+$class->set(1);
+echo var_export($class->get(), true), "\n";
+echo var_export((new \Stub\Interfaces\ImplementInterface())->get($class), true), "\n";
+
+// The int-param wrong-type case (set(true)) from the PHPUnit test relies on
+// declare(strict_types=1) at the call site; the throwaway ext is not built under strict
+// mode, so Zephir's int param coerces bool->int silently — that sub-assertion is dropped.
+// The interface-typed param is enforced regardless of strict mode: a bool where an
+// InterfaceInt is required throws a TypeError.
+try {
+    (new \Stub\Interfaces\ImplementInterface())->getVoid(true);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \TypeError, true), "\n";
+}
+--EXPECT--
+0
+1
+1
+true

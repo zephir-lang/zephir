@@ -1,0 +1,228 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "bool",
+                    "value": "true",
+                    "file": "phpt__cf_if.zep",
+                    "line": 2,
+                    "char": 10
+                },
+                "file": "phpt__cf_if.zep",
+                "line": 4,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "bool",
+                    "value": "true",
+                    "file": "phpt__cf_if.zep",
+                    "line": 4,
+                    "char": 10
+                },
+                "statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "assign",
+                                "variable": "a",
+                                "expr": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "phpt__cf_if.zep",
+                                    "line": 5,
+                                    "char": 12
+                                },
+                                "file": "phpt__cf_if.zep",
+                                "line": 5,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 6,
+                        "char": 2
+                    }
+                ],
+                "else_statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "assign",
+                                "variable": "a",
+                                "expr": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "phpt__cf_if.zep",
+                                    "line": 7,
+                                    "char": 12
+                                },
+                                "file": "phpt__cf_if.zep",
+                                "line": 7,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 8,
+                        "char": 2
+                    }
+                ],
+                "file": "phpt__cf_if.zep",
+                "line": 10,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "bool",
+                    "value": "true",
+                    "file": "phpt__cf_if.zep",
+                    "line": 10,
+                    "char": 10
+                },
+                "statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "assign",
+                                "variable": "a",
+                                "expr": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "phpt__cf_if.zep",
+                                    "line": 11,
+                                    "char": 12
+                                },
+                                "file": "phpt__cf_if.zep",
+                                "line": 11,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 12,
+                        "char": 2
+                    }
+                ],
+                "elseif_statements": [
+                    {
+                        "type": "if",
+                        "expr": {
+                            "type": "bool",
+                            "value": "false",
+                            "file": "phpt__cf_if.zep",
+                            "line": 12,
+                            "char": 17
+                        },
+                        "statements": [
+                            {
+                                "type": "let",
+                                "assignments": [
+                                    {
+                                        "assign-type": "variable",
+                                        "operator": "assign",
+                                        "variable": "a",
+                                        "expr": {
+                                            "type": "int",
+                                            "value": "2",
+                                            "file": "phpt__cf_if.zep",
+                                            "line": 13,
+                                            "char": 12
+                                        },
+                                        "file": "phpt__cf_if.zep",
+                                        "line": 13,
+                                        "char": 12
+                                    }
+                                ],
+                                "file": "phpt__cf_if.zep",
+                                "line": 14,
+                                "char": 2
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 14,
+                        "char": 9
+                    },
+                    {
+                        "type": "if",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__cf_if.zep",
+                            "line": 14,
+                            "char": 16
+                        },
+                        "statements": [
+                            {
+                                "type": "let",
+                                "assignments": [
+                                    {
+                                        "assign-type": "variable",
+                                        "operator": "assign",
+                                        "variable": "a",
+                                        "expr": {
+                                            "type": "int",
+                                            "value": "3",
+                                            "file": "phpt__cf_if.zep",
+                                            "line": 15,
+                                            "char": 12
+                                        },
+                                        "file": "phpt__cf_if.zep",
+                                        "line": 15,
+                                        "char": 12
+                                    }
+                                ],
+                                "file": "phpt__cf_if.zep",
+                                "line": 16,
+                                "char": 2
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 16,
+                        "char": 7
+                    }
+                ],
+                "else_statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "assign",
+                                "variable": "a",
+                                "expr": {
+                                    "type": "int",
+                                    "value": "4",
+                                    "file": "phpt__cf_if.zep",
+                                    "line": 17,
+                                    "char": 12
+                                },
+                                "file": "phpt__cf_if.zep",
+                                "line": 17,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_if.zep",
+                        "line": 18,
+                        "char": 2
+                    }
+                ],
+                "file": "phpt__cf_if.zep",
+                "line": 19,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_if.zep",
+        "line": 1,
+        "char": 9
+    }
+]

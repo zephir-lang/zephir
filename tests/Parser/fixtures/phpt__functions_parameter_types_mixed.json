@@ -1,0 +1,22 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "value",
+                "const": 0,
+                "data-type": "mixed",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__functions_parameter_types_mixed.zep",
+                "line": 1,
+                "char": 27
+            }
+        ],
+        "file": "phpt__functions_parameter_types_mixed.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,35 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Interfaces",
+        "file": "stub__interfaces_interfacestaticmethod.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "InterfaceStaticMethod",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "reset",
+                    "file": "stub__interfaces_interfacestaticmethod.zep",
+                    "line": 5,
+                    "last-line": 6,
+                    "char": 26
+                }
+            ],
+            "file": "stub__interfaces_interfacestaticmethod.zep",
+            "line": 6,
+            "char": 1
+        },
+        "file": "stub__interfaces_interfacestaticmethod.zep",
+        "line": 0,
+        "char": 0
+    }
+]

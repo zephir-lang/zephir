@@ -1,0 +1,94 @@
+[
+    {
+        "type": "function",
+        "name": "t",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "destructure",
+                        "operator": "assign",
+                        "variables": [
+                            {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "destructure_basic.zep",
+                                "line": 2,
+                                "char": 8
+                            },
+                            {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "destructure_basic.zep",
+                                "line": 2,
+                                "char": 11
+                            }
+                        ],
+                        "expr": {
+                            "type": "variable",
+                            "value": "c",
+                            "file": "destructure_basic.zep",
+                            "line": 2,
+                            "char": 16
+                        },
+                        "file": "destructure_basic.zep",
+                        "line": 2,
+                        "char": 16
+                    }
+                ],
+                "file": "destructure_basic.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "destructure",
+                        "operator": "assign",
+                        "variables": [
+                            {
+                                "type": "variable",
+                                "value": "x",
+                                "file": "destructure_basic.zep",
+                                "line": 3,
+                                "char": 8
+                            },
+                            {
+                                "type": "variable",
+                                "value": "y",
+                                "file": "destructure_basic.zep",
+                                "line": 3,
+                                "char": 11
+                            },
+                            {
+                                "type": "variable",
+                                "value": "z",
+                                "file": "destructure_basic.zep",
+                                "line": 3,
+                                "char": 14
+                            }
+                        ],
+                        "expr": {
+                            "type": "variable",
+                            "value": "arr",
+                            "file": "destructure_basic.zep",
+                            "line": 3,
+                            "char": 21
+                        },
+                        "file": "destructure_basic.zep",
+                        "line": 3,
+                        "char": 21
+                    }
+                ],
+                "file": "destructure_basic.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "destructure_basic.zep",
+        "line": 1,
+        "char": 9
+    }
+]

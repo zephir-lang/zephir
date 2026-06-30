@@ -1,0 +1,55 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "try-catch",
+                "statements": [
+                    {
+                        "type": "if",
+                        "expr": {
+                            "type": "bool",
+                            "value": "true",
+                            "file": "phpt__cf_try_catch02.zep",
+                            "line": 3,
+                            "char": 11
+                        },
+                        "file": "phpt__cf_try_catch02.zep",
+                        "line": 4,
+                        "char": 2
+                    }
+                ],
+                "catches": [
+                    {
+                        "classes": [
+                            {
+                                "type": "variable",
+                                "value": "\\Exception",
+                                "file": "phpt__cf_try_catch02.zep",
+                                "line": 4,
+                                "char": 20
+                            }
+                        ],
+                        "variable": {
+                            "type": "variable",
+                            "value": "e",
+                            "file": "phpt__cf_try_catch02.zep",
+                            "line": 5,
+                            "char": 1
+                        },
+                        "file": "phpt__cf_try_catch02.zep",
+                        "line": 5,
+                        "char": 1
+                    }
+                ],
+                "file": "phpt__cf_try_catch02.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_try_catch02.zep",
+        "line": 1,
+        "char": 9
+    }
+]

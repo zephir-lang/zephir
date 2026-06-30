@@ -1,0 +1,50 @@
+[
+    {
+        "type": "function",
+        "name": "TRANSFORM",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "A",
+                "const": 0,
+                "data-type": "int",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__functions_all_caps_function.zep",
+                "line": 1,
+                "char": 26
+            },
+            {
+                "type": "parameter",
+                "name": "B",
+                "const": 0,
+                "data-type": "int",
+                "mandatory": 0,
+                "reference": 0,
+                "file": "phpt__functions_all_caps_function.zep",
+                "line": 1,
+                "char": 33
+            }
+        ],
+        "return-type": {
+            "type": "return-type",
+            "list": [
+                {
+                    "type": "return-type-parameter",
+                    "data-type": "int",
+                    "mandatory": 0,
+                    "file": "phpt__functions_all_caps_function.zep",
+                    "line": 2,
+                    "char": 1
+                }
+            ],
+            "void": 0,
+            "file": "phpt__functions_all_caps_function.zep",
+            "line": 2,
+            "char": 1
+        },
+        "file": "phpt__functions_all_caps_function.zep",
+        "line": 1,
+        "char": 9
+    }
+]

@@ -1,0 +1,82 @@
+--TEST--
+isset on array keys and object properties, incl. #2385 private/undefined-property semantics (port of tests/Extension/IssetTest.php)
+--FILE--
+namespace Stub;
+
+class IssetTest
+{
+	public s = ["a": "true"];
+
+	public function testIssetArray1(var a, var b)
+	{
+		return isset a[b];
+	}
+
+	public function testIssetArray2(var a, int b)
+	{
+		return isset a[b];
+	}
+
+	public function testIssetArray3(var a, string b)
+	{
+		return isset a[b];
+	}
+
+	public function testIssetArray4(var a)
+	{
+		return isset a[0];
+	}
+
+	public function testIssetArray5(var a)
+	{
+		return isset a["a"];
+	}
+
+	public function testIssetProperty1(var a)
+	{
+		return isset a->b;
+	}
+
+	public function testIssetProperty2(var a, var b)
+	{
+		return isset a->{b};
+	}
+
+	public function testIssetProperty3(var a)
+	{
+		return isset a->{"b"};
+	}
+}
+--USAGE--
+$test = new \Stub\IssetTest();
+
+$testArray = ['a', 'abc' => 'def', 'gef' => '123'];
+echo var_export($test->testIssetArray1($testArray, 'abc'), true), "\n";
+echo var_export(!$test->testIssetArray2($testArray, 12), true), "\n";
+echo var_export($test->testIssetArray3($testArray, 'gef'), true), "\n";
+echo var_export($test->testIssetArray4($testArray), true), "\n";
+echo var_export(!$test->testIssetArray5($testArray), true), "\n";
+
+// Mirror the shape of the original PHPUnit TestCase $this:
+//   public string $b = 'a'; private $test2; (and no $test3)
+$obj = new class {
+    public string $b = 'a';
+    private $test2;
+};
+
+echo var_export($test->testIssetProperty1($obj), true), "\n";
+// `private $test2` is null until assigned AND inaccessible from foreign
+// scope, both of which make isset() false. `test3` does not exist. (#2385)
+echo var_export($test->testIssetProperty2($obj, 'test2'), true), "\n";
+echo var_export($test->testIssetProperty2($obj, 'test3'), true), "\n";
+echo var_export($test->testIssetProperty3($obj), true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true
+false
+false
+true

@@ -1,0 +1,97 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue1628abstract.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "Issue1628Abstract",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "concrete",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "concrete",
+                                "file": "stub__issue1628abstract.zep",
+                                "line": 7,
+                                "char": 24
+                            },
+                            "file": "stub__issue1628abstract.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1628abstract.zep",
+                                "line": 6,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1628abstract.zep",
+                        "line": 6,
+                        "char": 5
+                    },
+                    "file": "stub__issue1628abstract.zep",
+                    "line": 5,
+                    "last-line": 10,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "abstract",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "mustImplement",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__issue1628abstract.zep",
+                                "line": 10,
+                                "char": 55
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue1628abstract.zep",
+                        "line": 10,
+                        "char": 55
+                    },
+                    "file": "stub__issue1628abstract.zep",
+                    "line": 10,
+                    "last-line": 11,
+                    "char": 28
+                }
+            ],
+            "file": "stub__issue1628abstract.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__issue1628abstract.zep",
+        "line": 3,
+        "char": 14
+    }
+]

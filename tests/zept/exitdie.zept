@@ -1,0 +1,34 @@
+--TEST--
+exit() with a string status message writes it to stdout (partial port of tests/Extension/ExitDieTest.php; exit-code assertions are not expressible in .zept)
+--FILE--
+namespace Stub;
+
+class ExitDie
+{
+	public function testExit(var param = null) -> void
+	{
+		if empty(param) {
+			exit();
+		}
+
+		exit(param);
+	}
+
+	public function testDie(var param = null) -> void
+	{
+		if empty(param) {
+			die();
+		}
+
+		die(param);
+	}
+}
+--USAGE--
+// exit()/die() terminate the process, and .zept compares stdout only (not the
+// exit status). So we can only observe the string-message case, and it must be
+// the final statement because nothing after it runs.
+$test = new \Stub\ExitDie();
+$test->testExit('Hello World');
+echo "unreachable\n";
+--EXPECT--
+Hello World

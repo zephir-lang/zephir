@@ -1,0 +1,105 @@
+--TEST--
+Issue #2546: continue inside for...in over a Traversable advances the iterator (no infinite loop); break still terminates
+--FILE--
+namespace Stub;
+
+class Issue2546
+{
+    public function collectExcluding(var items, var skip) -> array
+    {
+        var item;
+        var result = [];
+
+        for item in items {
+            if item === skip {
+                continue;
+            }
+            let result[] = item;
+        }
+
+        return result;
+    }
+
+    public function collectUntil(var items, var stop) -> array
+    {
+        var item;
+        var result = [];
+
+        for item in items {
+            if item === stop {
+                break;
+            }
+            let result[] = item;
+        }
+
+        return result;
+    }
+
+    public function collectKeysExcluding(var items, var skipKey) -> array
+    {
+        var k, v;
+        var result = [];
+
+        for k, v in items {
+            if k === skipKey {
+                continue;
+            }
+            let result[k] = v;
+        }
+
+        return result;
+    }
+}
+--USAGE--
+$obj = new \Stub\Issue2546();
+
+// testContinueSkipsMatchingElement
+echo var_export(array_values($obj->collectExcluding(new ArrayIterator([1, 2, 3, 4, 5]), 3)), true), "\n";
+
+// testContinueOnFirstElementAdvancesIterator
+echo var_export(array_values($obj->collectExcluding(new ArrayIterator([1, 2, 3]), 1)), true), "\n";
+
+// testContinueOnAllElementsProducesEmptyResult
+echo var_export(array_values($obj->collectExcluding(new ArrayIterator([7, 7, 7]), 7)), true), "\n";
+
+// testBreakStillTerminatesLoop
+echo var_export(array_values($obj->collectUntil(new ArrayIterator([1, 2, 3, 4, 5]), 3)), true), "\n";
+
+// testNormalIterationWithoutContinue
+echo var_export(array_values($obj->collectExcluding(new ArrayIterator([10, 20, 30]), 999)), true), "\n";
+
+// testKeyValueIterationWithContinue
+echo var_export($obj->collectKeysExcluding(new ArrayIterator(['a' => 1, 'b' => 2, 'c' => 3]), 'a'), true), "\n";
+
+// testKeyValueContinueOnFirstKey
+echo var_export($obj->collectKeysExcluding(new ArrayIterator(['x' => 10, 'y' => 20, 'z' => 30]), 'x'), true), "\n";
+--EXPECT--
+array (
+  0 => 1,
+  1 => 2,
+  2 => 4,
+  3 => 5,
+)
+array (
+  0 => 2,
+  1 => 3,
+)
+array (
+)
+array (
+  0 => 1,
+  1 => 2,
+)
+array (
+  0 => 10,
+  1 => 20,
+  2 => 30,
+)
+array (
+  'b' => 2,
+  'c' => 3,
+)
+array (
+  'y' => 20,
+  'z' => 30,
+)

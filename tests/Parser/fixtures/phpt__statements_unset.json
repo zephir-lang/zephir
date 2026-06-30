@@ -1,0 +1,24 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "unset",
+                "expr": {
+                    "type": "variable",
+                    "value": "foo",
+                    "file": "phpt__statements_unset.zep",
+                    "line": 2,
+                    "char": 11
+                },
+                "file": "phpt__statements_unset.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_unset.zep",
+        "line": 1,
+        "char": 9
+    }
+]

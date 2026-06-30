@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 ## [Unreleased]
 
 ### Added
+- Implemented `.zept` (Zephir Test) format and a `zephir test <path>` command: a single file bundles the Zephir implementation (`--FILE--`, repeatable), the PHP usage (`--USAGE--`) and the expected output (`--EXPECT--`/`--EXPECTF--`). Each case is compiled into a throwaway extension (pure-PHP parser forced) and its output checked, so a `.zept` doubles as an end-to-end parser test. A dependency-free runner (`Zephir\Zept\`) backs both the CLI and the `tests/Zephir/BlackBox/ZeptSuiteTest.php` bridge [#1098](https://github.com/zephir-lang/zephir/issues/1098)
+- Built-in pure-PHP Zephir parser, removing the hard dependency on the `ext-zephir_parser` PECL C extension. The parser produces the **identical** intermediate representation (IR) the compiler already consumes — verified byte-for-byte (`json_encode` equality) against the C extension over the full `stub/` corpus, the extracted `php-zephir-parser` test snippets, and the entire Phalcon framework (930/930 `.zep` files). Building the bundled stub extension with the PHP parser generates a byte-identical C tree and passes the Extension test suite identically to the C-extension build [#2495](https://github.com/zephir-lang/zephir/issues/2495)
+
+### Changed
+- The `ext-zephir_parser` C extension is now **optional**: it is used as a fast path when loaded, otherwise the built-in PHP parser handles parsing. Set the `ZEPHIR_FORCE_PHP_PARSER` environment variable to force the PHP backend even when the extension is present (useful for differential testing and deterministic builds). `Zephir\Parser\Manager::isAvailable()` is now always `true` [#2495](https://github.com/zephir-lang/zephir/issues/2495)
+
+### Deprecated
+- The `!` (strict type) modifier on argument types (e.g. `int! a`) now emits a deprecation notice during `zephir generate`. A future parser will no longer recognize it. Suppress with `-Wdeprecated-strict-type` [#2274](https://github.com/zephir-lang/zephir/issues/2274)
 - `RedisCluster` prototype (in `prototypes/redis.php`), so Zephir code can resolve its methods and constants when ext-redis is not installed
 
 ## [0.23.0] - 2026-06-06

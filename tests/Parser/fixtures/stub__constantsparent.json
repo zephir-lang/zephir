@@ -1,0 +1,108 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__constantsparent.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ConstantsParent",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "P1",
+                    "default": {
+                        "type": "null",
+                        "file": "stub__constantsparent.zep",
+                        "line": 6,
+                        "char": 17
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 8,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "P2",
+                    "default": {
+                        "type": "bool",
+                        "value": "false",
+                        "file": "stub__constantsparent.zep",
+                        "line": 8,
+                        "char": 18
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 10,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "P3",
+                    "default": {
+                        "type": "bool",
+                        "value": "true",
+                        "file": "stub__constantsparent.zep",
+                        "line": 10,
+                        "char": 17
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 12,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "P4",
+                    "default": {
+                        "type": "int",
+                        "value": "10",
+                        "file": "stub__constantsparent.zep",
+                        "line": 12,
+                        "char": 15
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 14,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "P5",
+                    "default": {
+                        "type": "double",
+                        "value": "10.25",
+                        "file": "stub__constantsparent.zep",
+                        "line": 14,
+                        "char": 18
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 16,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "P6",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "stub__constantsparent.zep",
+                        "line": 16,
+                        "char": 17
+                    },
+                    "file": "stub__constantsparent.zep",
+                    "line": 17,
+                    "char": 1
+                }
+            ],
+            "file": "stub__constantsparent.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__constantsparent.zep",
+        "line": 4,
+        "char": 5
+    }
+]

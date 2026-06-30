@@ -1,0 +1,47 @@
+--TEST--
+Static private property singleton: App and direct call return the same instance (port of tests/Extension/Properties/StaticPrivatePropertiesTest.php, issue #1530)
+--FILE--
+namespace Stub\Properties;
+
+class StaticPrivateProperties
+{
+	private static instance;
+
+	public static function getInstance() -> <StaticPrivateProperties>
+	{
+		var localInstance;
+		let localInstance = self::instance;
+
+		if unlikely typeof localInstance !== "object" {
+			let localInstance = new self();
+			let self::instance = localInstance;
+		}
+
+		return self::instance;
+	}
+}
+--FILE--
+namespace Stub\Properties;
+
+class App
+{
+	/** @var \Stub\Properties\StaticPrivateProperties  */
+	protected instance { get };
+
+	public function __construct()
+	{
+		let this->instance = StaticPrivateProperties::getInstance();
+	}
+}
+--USAGE--
+use Stub\Properties\App;
+use Stub\Properties\StaticPrivateProperties;
+
+$test = new App();
+echo var_export($test->getInstance() instanceof StaticPrivateProperties, true), "\n";
+echo var_export(StaticPrivateProperties::getInstance() instanceof StaticPrivateProperties, true), "\n";
+echo var_export($test->getInstance() === StaticPrivateProperties::getInstance(), true), "\n";
+--EXPECT--
+true
+true
+true

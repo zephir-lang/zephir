@@ -1,0 +1,685 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Tests for IDE Stubs Generation\n *",
+        "file": "stub__stubs.zep",
+        "line": 4,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__stubs.zep",
+        "line": 8,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Sample Class Description\n *",
+        "file": "stub__stubs.zep",
+        "line": 9,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Stubs",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "propString",
+                    "default": {
+                        "type": "string",
+                        "value": "Zephir public",
+                        "file": "stub__stubs.zep",
+                        "line": 15,
+                        "char": 35
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 17,
+                    "char": 47
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "propIntDeclared",
+                    "default": {
+                        "type": "int",
+                        "value": "100",
+                        "file": "stub__stubs.zep",
+                        "line": 18,
+                        "char": 30
+                    },
+                    "docblock": "** @var integer - declared in Zephir DocBlock *",
+                    "file": "stub__stubs.zep",
+                    "line": 19,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "propStringProtected",
+                    "default": {
+                        "type": "string",
+                        "value": "Zephir protected",
+                        "file": "stub__stubs.zep",
+                        "line": 19,
+                        "char": 50
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 20,
+                    "char": 8
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "propStringPrivate",
+                    "default": {
+                        "type": "string",
+                        "value": "Zephir private",
+                        "file": "stub__stubs.zep",
+                        "line": 20,
+                        "char": 44
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 24,
+                    "char": 3
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDockBlockAndReturnType",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__stubs.zep",
+                                    "line": 27,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "propString",
+                                    "file": "stub__stubs.zep",
+                                    "line": 27,
+                                    "char": 26
+                                },
+                                "file": "stub__stubs.zep",
+                                "line": 27,
+                                "char": 26
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Sample Method Description with Return type -> string\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 26,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 26,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 25,
+                    "last-line": 34,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDocBlockAndReturnTypeDeclared",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__stubs.zep",
+                                    "line": 37,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "propStringProtected",
+                                    "file": "stub__stubs.zep",
+                                    "line": 37,
+                                    "char": 35
+                                },
+                                "file": "stub__stubs.zep",
+                                "line": 37,
+                                "char": 35
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Sample Method Description with Return type -> string\n\t *\n\t * @return string - declared in Zephir DocBlock\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "string",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 36,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 36,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 35,
+                    "last-line": 47,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixedInputParamsDocBlock",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "intOrString",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__stubs.zep",
+                            "line": 48,
+                            "char": 58
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "number",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__stubs.zep",
+                                "line": 48,
+                                "char": 74
+                            },
+                            "reference": 0,
+                            "file": "stub__stubs.zep",
+                            "line": 48,
+                            "char": 74
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "number",
+                                "file": "stub__stubs.zep",
+                                "line": 50,
+                                "char": 16
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 51,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Method with input params, mixed & int\n\t * testMixedInputParamsDocBlock(intOrString, int number = 1)\n\t * int number - not declared into DocBlock\n\t *\n\t * @param int|string $intOrString - declared in Zephir DocBlock\n\t * @return int|null - declared in Zephir DocBlock\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 48,
+                                "char": 83
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 49,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 49,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 48,
+                    "last-line": 61,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMixedInputParamsDocBlockDeclared",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "intOrString",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__stubs.zep",
+                            "line": 62,
+                            "char": 66
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "number",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "default": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "stub__stubs.zep",
+                                "line": 62,
+                                "char": 82
+                            },
+                            "reference": 0,
+                            "file": "stub__stubs.zep",
+                            "line": 62,
+                            "char": 82
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "number",
+                                "file": "stub__stubs.zep",
+                                "line": 64,
+                                "char": 16
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 65,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * Method with input params, mixed & int\n\t * testMixedInputParamsDocBlockDeclared(intOrString, int number = 1)\n\t * all params declared into DocBlock\n\t *\n\t * @param int|string $intOrString - declared in Zephir DocBlock\n\t * @param int $number - declared in Zephir DocBlock\n\t * @return int|null - declared in Zephir DocBlock\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 62,
+                                "char": 91
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "null",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 63,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 63,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 62,
+                    "last-line": 70,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVariableLength",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "data",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__stubs.zep",
+                                        "line": 73,
+                                        "char": 21
+                                    },
+                                    "file": "stub__stubs.zep",
+                                    "line": 73,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__stubs.zep",
+                            "line": 75,
+                            "char": 8
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "data",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "array_merge",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "data",
+                                                    "file": "stub__stubs.zep",
+                                                    "line": 75,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__stubs.zep",
+                                                "line": 75,
+                                                "char": 33
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "fcall",
+                                                    "name": "func_get_args",
+                                                    "call-type": 1,
+                                                    "file": "stub__stubs.zep",
+                                                    "line": 75,
+                                                    "char": 50
+                                                },
+                                                "file": "stub__stubs.zep",
+                                                "line": 75,
+                                                "char": 50
+                                            }
+                                        ],
+                                        "file": "stub__stubs.zep",
+                                        "line": 75,
+                                        "char": 51
+                                    },
+                                    "file": "stub__stubs.zep",
+                                    "line": 75,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "stub__stubs.zep",
+                            "line": 76,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @param string ...$column\n\t * @return void\n\t *",
+                    "return-type": {
+                        "type": "return-type",
+                        "void": 1,
+                        "file": "stub__stubs.zep",
+                        "line": 72,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 71,
+                    "last-line": 78,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMultiReturnTypeWithMixedInDocAndEmptyInSignature1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "empty-array",
+                                "file": "stub__stubs.zep",
+                                "line": 80,
+                                "char": 15
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 81,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 78,
+                                "char": 83
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "object",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 79,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 79,
+                        "char": 2
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 78,
+                    "last-line": 83,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMultiReturnTypeWithMixedInDocAndEmptyInSignature2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__stubs.zep",
+                                "line": 85,
+                                "char": 21
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 86,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 83,
+                                "char": 81
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 84,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 84,
+                        "char": 5
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 83,
+                    "last-line": 88,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testMultiReturnTypeWithBool",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__stubs.zep",
+                                "line": 90,
+                                "char": 21
+                            },
+                            "file": "stub__stubs.zep",
+                            "line": 91,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "Geometry",
+                                    "file": "stub__stubs.zep",
+                                    "line": 88,
+                                    "char": 65
+                                },
+                                "collection": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 88,
+                                "char": 65
+                            },
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__stubs.zep",
+                                "line": 89,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__stubs.zep",
+                        "line": 89,
+                        "char": 5
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 88,
+                    "last-line": 92,
+                    "char": 19
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "INTEGER_CONST",
+                    "default": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "stub__stubs.zep",
+                        "line": 11,
+                        "char": 25
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 12,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "DOUBLE_CONST",
+                    "default": {
+                        "type": "double",
+                        "value": "10.24",
+                        "file": "stub__stubs.zep",
+                        "line": 12,
+                        "char": 28
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 13,
+                    "char": 6
+                },
+                {
+                    "type": "const",
+                    "name": "STRING_CONST",
+                    "default": {
+                        "type": "string",
+                        "value": "Zephir",
+                        "file": "stub__stubs.zep",
+                        "line": 13,
+                        "char": 29
+                    },
+                    "file": "stub__stubs.zep",
+                    "line": 15,
+                    "char": 7
+                }
+            ],
+            "file": "stub__stubs.zep",
+            "line": 9,
+            "char": 5
+        },
+        "file": "stub__stubs.zep",
+        "line": 9,
+        "char": 5
+    }
+]

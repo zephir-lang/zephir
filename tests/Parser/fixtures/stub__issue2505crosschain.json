@@ -1,0 +1,190 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2505crosschain.zep",
+        "line": 21,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Regression coverage for the cross-class chained `<static>` resolution.\n *\n * A method declared `-> <static>` on `Issue2505` is called via a LOCAL\n * variable (not `this`), and the result is immediately chained. Before\n * the fix, `MethodCall.php` resolved `<static>` to the LEXICAL class of\n * the call site (i.e. `Stub\\Issue2505CrossChain`) instead of the\n * receiver's class (`Stub\\Issue2505`). Compile-time method lookup for\n * `checkPrivate()` then ran against `Issue2505CrossChain` \u2014 which has\n * no such method \u2014 and the build aborted with:\n *\n *     Class 'Stub\\Issue2505CrossChain' does not implement method: 'checkPrivate'\n *\n * After the fix, `static`\/`self`\/`parent` resolve against the receiver's\n * class definition (the one already used to look up the called method),\n * so the chained lookup correctly finds `Issue2505::checkPrivate()`.\n *\n * @see https:\/\/github.com\/zephir-lang\/zephir\/issues\/2505\n *",
+        "file": "stub__issue2505crosschain.zep",
+        "line": 22,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2505CrossChain",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "crossClassChain",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "instance",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Issue2505",
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 24,
+                                "char": 56
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2505crosschain.zep",
+                            "line": 24,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "instance",
+                                        "file": "stub__issue2505crosschain.zep",
+                                        "line": 26,
+                                        "char": 25
+                                    },
+                                    "name": "makeStatic",
+                                    "call-type": 1,
+                                    "file": "stub__issue2505crosschain.zep",
+                                    "line": 26,
+                                    "char": 39
+                                },
+                                "name": "checkPrivate",
+                                "call-type": 1,
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 26,
+                                "char": 54
+                            },
+                            "file": "stub__issue2505crosschain.zep",
+                            "line": 27,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 25,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505crosschain.zep",
+                        "line": 25,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505crosschain.zep",
+                    "line": 24,
+                    "last-line": 29,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "crossClassChainSelf",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "instance",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "cast": {
+                                "type": "variable",
+                                "value": "Issue2505",
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 29,
+                                "char": 60
+                            },
+                            "reference": 0,
+                            "file": "stub__issue2505crosschain.zep",
+                            "line": 29,
+                            "char": 61
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "mcall",
+                                    "variable": {
+                                        "type": "variable",
+                                        "value": "instance",
+                                        "file": "stub__issue2505crosschain.zep",
+                                        "line": 31,
+                                        "char": 25
+                                    },
+                                    "name": "makeSelf",
+                                    "call-type": 1,
+                                    "file": "stub__issue2505crosschain.zep",
+                                    "line": 31,
+                                    "char": 37
+                                },
+                                "name": "checkPrivate",
+                                "call-type": 1,
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 31,
+                                "char": 52
+                            },
+                            "file": "stub__issue2505crosschain.zep",
+                            "line": 32,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__issue2505crosschain.zep",
+                                "line": 30,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2505crosschain.zep",
+                        "line": 30,
+                        "char": 5
+                    },
+                    "file": "stub__issue2505crosschain.zep",
+                    "line": 29,
+                    "last-line": 33,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2505crosschain.zep",
+            "line": 22,
+            "char": 5
+        },
+        "file": "stub__issue2505crosschain.zep",
+        "line": 22,
+        "char": 5
+    }
+]

@@ -1,0 +1,41 @@
+--TEST--
+Globals\Post: isset _POST[name] is safe when _POST is unset/empty/populated (issue #1623) (port of tests/Extension/Globals/PostTest.php)
+--FILE--
+namespace Stub\Globals;
+
+class Post
+{
+	/**
+	 * Tests "Invalid superglobal for _POST"
+	 *
+	 * @issue https://github.com/zephir-lang/zephir/issues/1623
+	 */
+	public function hasValue(string name) -> boolean
+	{
+		return isset _POST[name];
+	}
+}
+--USAGE--
+$tester = new \Stub\Globals\Post();
+
+// _POST undefined: must not error, returns false (testShouldNotTriggerAnyErrorIfPostIsUndefined)
+unset($_POST);
+echo var_export(isset($_POST), true), "\n";
+echo var_export($tester->hasValue('issue-1623'), true), "\n";
+
+// _POST empty: variable undefined -> false (testShouldReturnFalseIfVariableIsUndefined)
+$_POST = [];
+echo var_export(isset($_POST), true), "\n";
+echo var_export($tester->hasValue('issue-1623'), true), "\n";
+
+// _POST has the key -> true (testShouldReturnTrueIfVariableIsDefined)
+$_POST = ['issue-1623' => true];
+echo var_export(isset($_POST), true), "\n";
+echo var_export($tester->hasValue('issue-1623'), true), "\n";
+--EXPECT--
+false
+false
+true
+false
+true
+true

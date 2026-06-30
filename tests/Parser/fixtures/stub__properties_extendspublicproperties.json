@@ -1,0 +1,86 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_extendspublicproperties.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ExtendsPublicProperties",
+        "abstract": 0,
+        "final": 0,
+        "extends": "PublicProperties",
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "testPropertyFromClassNameConstantValue",
+                    "default": {
+                        "type": "static-constant-access",
+                        "left": {
+                            "type": "variable",
+                            "value": "PublicProperties",
+                            "file": "stub__properties_extendspublicproperties.zep",
+                            "line": 6,
+                            "char": 78
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "TEST_CONST",
+                            "file": "stub__properties_extendspublicproperties.zep",
+                            "line": 6,
+                            "char": 78
+                        },
+                        "file": "stub__properties_extendspublicproperties.zep",
+                        "line": 6,
+                        "char": 78
+                    },
+                    "file": "stub__properties_extendspublicproperties.zep",
+                    "line": 8,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "someGetterSetterArray",
+                    "default": {
+                        "type": "array",
+                        "left": [
+                            {
+                                "value": {
+                                    "type": "string",
+                                    "value": "holy",
+                                    "file": "stub__properties_extendspublicproperties.zep",
+                                    "line": 8,
+                                    "char": 41
+                                },
+                                "file": "stub__properties_extendspublicproperties.zep",
+                                "line": 8,
+                                "char": 41
+                            }
+                        ],
+                        "file": "stub__properties_extendspublicproperties.zep",
+                        "line": 8,
+                        "char": 42
+                    },
+                    "file": "stub__properties_extendspublicproperties.zep",
+                    "line": 9,
+                    "char": 1
+                }
+            ],
+            "file": "stub__properties_extendspublicproperties.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__properties_extendspublicproperties.zep",
+        "line": 4,
+        "char": 5
+    }
+]

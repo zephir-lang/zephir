@@ -1,0 +1,61 @@
+--TEST--
+empty() on dynamic arrays and strings (port of tests/Extension/EmptyTest.php)
+--FILE--
+namespace Stub;
+
+class EmptyTest
+{
+	public function testDynamicVarArrayEmpty()
+	{
+		var a;
+		let a = [];
+
+		return empty(a);
+	}
+
+	public function testDynamicVarArrayNotEmpty()
+	{
+		var a;
+		let a = [1, 2, 3, 4];
+
+		return empty(a);
+	}
+
+	public function testEmptyString()
+	{
+		var a;
+		let a = "";
+
+		return empty(a);
+	}
+
+	public function testNotEmptyString()
+	{
+		var a;
+		let a = "test string";
+
+		return empty(a);
+	}
+
+	public function testString(string a)
+	{
+		return empty(a);
+	}
+}
+--USAGE--
+$test = new \Stub\EmptyTest();
+echo var_export($test->testDynamicVarArrayEmpty(), true), "\n";
+echo var_export($test->testDynamicVarArrayNotEmpty(), true), "\n";
+echo var_export($test->testEmptyString(), true), "\n";
+echo var_export($test->testNotEmptyString(), true), "\n";
+echo var_export($test->testString(''), true), "\n";
+echo var_export($test->testString('this is a string'), true), "\n";
+echo var_export($test->testString('0'), true), "\n";
+--EXPECT--
+true
+false
+true
+false
+true
+false
+true

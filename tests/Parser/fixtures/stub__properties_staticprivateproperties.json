@@ -1,0 +1,240 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Properties",
+        "file": "stub__properties_staticprivateproperties.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StaticPrivateProperties",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private",
+                        "static"
+                    ],
+                    "type": "property",
+                    "name": "instance",
+                    "file": "stub__properties_staticprivateproperties.zep",
+                    "line": 7,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getInstance",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "localInstance",
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 9,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__properties_staticprivateproperties.zep",
+                            "line": 10,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "localInstance",
+                                    "expr": {
+                                        "type": "static-property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "self",
+                                            "file": "stub__properties_staticprivateproperties.zep",
+                                            "line": 10,
+                                            "char": 37
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "instance",
+                                            "file": "stub__properties_staticprivateproperties.zep",
+                                            "line": 10,
+                                            "char": 37
+                                        },
+                                        "file": "stub__properties_staticprivateproperties.zep",
+                                        "line": 10,
+                                        "char": 37
+                                    },
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 10,
+                                    "char": 37
+                                }
+                            ],
+                            "file": "stub__properties_staticprivateproperties.zep",
+                            "line": 12,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "unlikely",
+                                "left": {
+                                    "type": "not-identical",
+                                    "left": {
+                                        "type": "typeof",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "localInstance",
+                                            "file": "stub__properties_staticprivateproperties.zep",
+                                            "line": 12,
+                                            "char": 38
+                                        },
+                                        "file": "stub__properties_staticprivateproperties.zep",
+                                        "line": 12,
+                                        "char": 38
+                                    },
+                                    "right": {
+                                        "type": "string",
+                                        "value": "object",
+                                        "file": "stub__properties_staticprivateproperties.zep",
+                                        "line": 12,
+                                        "char": 47
+                                    },
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 12,
+                                    "char": 47
+                                },
+                                "file": "stub__properties_staticprivateproperties.zep",
+                                "line": 12,
+                                "char": 47
+                            },
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "localInstance",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "self",
+                                                "dynamic": 0,
+                                                "file": "stub__properties_staticprivateproperties.zep",
+                                                "line": 13,
+                                                "char": 34
+                                            },
+                                            "file": "stub__properties_staticprivateproperties.zep",
+                                            "line": 13,
+                                            "char": 34
+                                        }
+                                    ],
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 14,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "static-property",
+                                            "operator": "assign",
+                                            "variable": "self",
+                                            "property": "instance",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "localInstance",
+                                                "file": "stub__properties_staticprivateproperties.zep",
+                                                "line": 14,
+                                                "char": 38
+                                            },
+                                            "file": "stub__properties_staticprivateproperties.zep",
+                                            "line": 14,
+                                            "char": 38
+                                        }
+                                    ],
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 15,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__properties_staticprivateproperties.zep",
+                            "line": 17,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "static-property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "self",
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 17,
+                                    "char": 24
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "instance",
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 17,
+                                    "char": 24
+                                },
+                                "file": "stub__properties_staticprivateproperties.zep",
+                                "line": 17,
+                                "char": 24
+                            },
+                            "file": "stub__properties_staticprivateproperties.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "cast": {
+                                    "type": "variable",
+                                    "value": "StaticPrivateProperties",
+                                    "file": "stub__properties_staticprivateproperties.zep",
+                                    "line": 8,
+                                    "char": 2
+                                },
+                                "collection": 0,
+                                "file": "stub__properties_staticprivateproperties.zep",
+                                "line": 8,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__properties_staticprivateproperties.zep",
+                        "line": 8,
+                        "char": 2
+                    },
+                    "file": "stub__properties_staticprivateproperties.zep",
+                    "line": 7,
+                    "last-line": 19,
+                    "char": 23
+                }
+            ],
+            "file": "stub__properties_staticprivateproperties.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "stub__properties_staticprivateproperties.zep",
+        "line": 3,
+        "char": 5
+    }
+]

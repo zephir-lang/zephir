@@ -1,0 +1,36 @@
+--TEST--
+filter_var with FILTER_VALIDATE_FLOAT and strict/loose false comparison (port of tests/Extension/FunctionsTest.php)
+--FILE--
+namespace Stub;
+
+class Functions
+{
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/658
+     */
+    public function filterVar1() -> bool
+    {
+        var ret;
+        let ret = "0";
+
+        return false === filter_var(ret, FILTER_VALIDATE_FLOAT, 20480);
+    }
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/658
+     */
+    public function filterVar2() -> bool
+    {
+        var ret;
+        let ret = "0";
+
+        return false == filter_var(ret, FILTER_VALIDATE_FLOAT, 20480);
+    }
+}
+--USAGE--
+$class = new \Stub\Functions();
+echo var_export($class->filterVar1(), true), "\n";
+echo var_export($class->filterVar2(), true), "\n";
+--EXPECT--
+false
+true

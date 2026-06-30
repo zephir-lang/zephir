@@ -1,0 +1,26 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue893.zep",
+        "line": 6,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/893\n *",
+        "file": "stub__issue893.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue893",
+        "abstract": 0,
+        "final": 0,
+        "extends": "\\DOMDocument",
+        "file": "stub__issue893.zep",
+        "line": 7,
+        "char": 5
+    }
+]

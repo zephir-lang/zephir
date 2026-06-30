@@ -1,0 +1,34 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "istring",
+                            "value": "hello",
+                            "file": "phpt__operators_issue23_istring_regression.zep",
+                            "line": 2,
+                            "char": 19
+                        },
+                        "file": "phpt__operators_issue23_istring_regression.zep",
+                        "line": 2,
+                        "char": 19
+                    }
+                ],
+                "file": "phpt__operators_issue23_istring_regression.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_issue23_istring_regression.zep",
+        "line": 1,
+        "char": 9
+    }
+]

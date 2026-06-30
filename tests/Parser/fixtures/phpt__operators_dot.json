@@ -1,0 +1,119 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "concat",
+                            "left": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 2,
+                                "char": 12
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "2",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 2,
+                                "char": 15
+                            },
+                            "file": "phpt__operators_dot.zep",
+                            "line": 2,
+                            "char": 15
+                        },
+                        "file": "phpt__operators_dot.zep",
+                        "line": 2,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__operators_dot.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "concat",
+                            "left": {
+                                "type": "string",
+                                "value": "foo",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 3,
+                                "char": 14
+                            },
+                            "right": {
+                                "type": "string",
+                                "value": "bar",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 3,
+                                "char": 19
+                            },
+                            "file": "phpt__operators_dot.zep",
+                            "line": 3,
+                            "char": 19
+                        },
+                        "file": "phpt__operators_dot.zep",
+                        "line": 3,
+                        "char": 19
+                    }
+                ],
+                "file": "phpt__operators_dot.zep",
+                "line": 4,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "concat",
+                            "left": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 4,
+                                "char": 12
+                            },
+                            "right": {
+                                "type": "variable",
+                                "value": "a",
+                                "file": "phpt__operators_dot.zep",
+                                "line": 4,
+                                "char": 15
+                            },
+                            "file": "phpt__operators_dot.zep",
+                            "line": 4,
+                            "char": 15
+                        },
+                        "file": "phpt__operators_dot.zep",
+                        "line": 4,
+                        "char": 15
+                    }
+                ],
+                "file": "phpt__operators_dot.zep",
+                "line": 5,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_dot.zep",
+        "line": 1,
+        "char": 9
+    }
+]

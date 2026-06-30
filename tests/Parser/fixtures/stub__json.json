@@ -1,0 +1,635 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__json.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Json",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEncodeObject",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "file": "stub__json.zep",
+                                    "line": 8,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 9,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 15
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "hello",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 9,
+                                                "char": 22
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "b",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 25
+                                                },
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "world",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 32
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 9,
+                                                "char": 32
+                                            },
+                                            {
+                                                "key": {
+                                                    "type": "string",
+                                                    "value": "c",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 35
+                                                },
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "128",
+                                                    "file": "stub__json.zep",
+                                                    "line": 9,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 9,
+                                                "char": 40
+                                            }
+                                        ],
+                                        "file": "stub__json.zep",
+                                        "line": 9,
+                                        "char": 41
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 9,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 10,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_encode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__json.zep",
+                                            "line": 10,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 10,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 10,
+                                "char": 26
+                            },
+                            "file": "stub__json.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 6,
+                    "last-line": 13,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEncodeArray",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__json.zep",
+                                    "line": 15,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 16,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__json.zep",
+                                                    "line": 16,
+                                                    "char": 15
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 16,
+                                                "char": 15
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__json.zep",
+                                                    "line": 16,
+                                                    "char": 18
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 16,
+                                                "char": 18
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "int",
+                                                    "value": "3",
+                                                    "file": "stub__json.zep",
+                                                    "line": 16,
+                                                    "char": 21
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 16,
+                                                "char": 21
+                                            }
+                                        ],
+                                        "file": "stub__json.zep",
+                                        "line": 16,
+                                        "char": 22
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 16,
+                                    "char": 22
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 17,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_encode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__json.zep",
+                                            "line": 17,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 17,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 17,
+                                "char": 26
+                            },
+                            "file": "stub__json.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 13,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testEncodeOptions",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__json.zep",
+                                    "line": 22,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 23,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "<foo>",
+                                                    "file": "stub__json.zep",
+                                                    "line": 23,
+                                                    "char": 19
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 23,
+                                                "char": 19
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "'bar'",
+                                                    "file": "stub__json.zep",
+                                                    "line": 23,
+                                                    "char": 26
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 23,
+                                                "char": 26
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "&blong&",
+                                                    "file": "stub__json.zep",
+                                                    "line": 23,
+                                                    "char": 35
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 23,
+                                                "char": 35
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\\xc3\\xa9",
+                                                    "file": "stub__json.zep",
+                                                    "line": 23,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__json.zep",
+                                                "line": 23,
+                                                "char": 45
+                                            }
+                                        ],
+                                        "file": "stub__json.zep",
+                                        "line": 23,
+                                        "char": 46
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 23,
+                                    "char": 46
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 24,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_encode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__json.zep",
+                                            "line": 24,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 24,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "constant",
+                                            "value": "JSON_HEX_TAG",
+                                            "file": "stub__json.zep",
+                                            "line": 24,
+                                            "char": 39
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 24,
+                                        "char": 39
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 24,
+                                "char": 40
+                            },
+                            "file": "stub__json.zep",
+                            "line": 25,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 20,
+                    "last-line": 27,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDecodeObject",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "{\\\"a\\\":\\\"hello\\\",\\\"b\\\":\\\"world\\\",\\\"c\\\":128}",
+                                        "file": "stub__json.zep",
+                                        "line": 29,
+                                        "char": 56
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 29,
+                                    "char": 56
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 30,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_decode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__json.zep",
+                                            "line": 30,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 30,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 30,
+                                "char": 26
+                            },
+                            "file": "stub__json.zep",
+                            "line": 31,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 27,
+                    "last-line": 33,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDecodeObject2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "obj",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "{\\\"a\\\":\\\"hello\\\",\\\"b\\\":\\\"world\\\",\\\"c\\\":128}",
+                                        "file": "stub__json.zep",
+                                        "line": 35,
+                                        "char": 56
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 35,
+                                    "char": 56
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_decode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "obj",
+                                            "file": "stub__json.zep",
+                                            "line": 36,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 36,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "bool",
+                                            "value": "true",
+                                            "file": "stub__json.zep",
+                                            "line": 36,
+                                            "char": 31
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 36,
+                                        "char": 31
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 36,
+                                "char": 32
+                            },
+                            "file": "stub__json.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 33,
+                    "last-line": 39,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testDecodeArray",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "arr",
+                                    "file": "stub__json.zep",
+                                    "line": 41,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 42,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "arr",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "[1,2,3]",
+                                        "file": "stub__json.zep",
+                                        "line": 42,
+                                        "char": 20
+                                    },
+                                    "file": "stub__json.zep",
+                                    "line": 42,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__json.zep",
+                            "line": 43,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "json_decode",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "arr",
+                                            "file": "stub__json.zep",
+                                            "line": 43,
+                                            "char": 25
+                                        },
+                                        "file": "stub__json.zep",
+                                        "line": 43,
+                                        "char": 25
+                                    }
+                                ],
+                                "file": "stub__json.zep",
+                                "line": 43,
+                                "char": 26
+                            },
+                            "file": "stub__json.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__json.zep",
+                    "line": 39,
+                    "last-line": 45,
+                    "char": 16
+                }
+            ],
+            "file": "stub__json.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__json.zep",
+        "line": 4,
+        "char": 5
+    }
+]

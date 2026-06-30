@@ -1,0 +1,264 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo\\Scopes",
+        "file": "stub__oo_scopes_abstractclass.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "AbstractClass",
+        "abstract": 1,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "privateProperty2",
+                    "default": {
+                        "type": "string",
+                        "value": "private2",
+                        "file": "stub__oo_scopes_abstractclass.zep",
+                        "line": 5,
+                        "char": 40
+                    },
+                    "file": "stub__oo_scopes_abstractclass.zep",
+                    "line": 6,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "protectedProperty2",
+                    "default": {
+                        "type": "string",
+                        "value": "protected2",
+                        "file": "stub__oo_scopes_abstractclass.zep",
+                        "line": 6,
+                        "char": 46
+                    },
+                    "file": "stub__oo_scopes_abstractclass.zep",
+                    "line": 8,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "setProperty",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 8,
+                            "char": 44
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 8,
+                            "char": 55
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable-dynamic-object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "name",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__oo_scopes_abstractclass.zep",
+                                        "line": 10,
+                                        "char": 33
+                                    },
+                                    "file": "stub__oo_scopes_abstractclass.zep",
+                                    "line": 10,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 12,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "this",
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 12,
+                                "char": 20
+                            },
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 9,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_abstractclass.zep",
+                        "line": 9,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_abstractclass.zep",
+                    "line": 8,
+                    "last-line": 15,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getPrivateProperty2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_abstractclass.zep",
+                                    "line": 17,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "privateProperty2",
+                                    "file": "stub__oo_scopes_abstractclass.zep",
+                                    "line": 17,
+                                    "char": 38
+                                },
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 17,
+                                "char": 38
+                            },
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 18,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 16,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_abstractclass.zep",
+                        "line": 16,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_abstractclass.zep",
+                    "line": 15,
+                    "last-line": 20,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getProtectedProperty2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_scopes_abstractclass.zep",
+                                    "line": 22,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "protectedProperty2",
+                                    "file": "stub__oo_scopes_abstractclass.zep",
+                                    "line": 22,
+                                    "char": 40
+                                },
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 22,
+                                "char": 40
+                            },
+                            "file": "stub__oo_scopes_abstractclass.zep",
+                            "line": 23,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "variable",
+                                "mandatory": 0,
+                                "file": "stub__oo_scopes_abstractclass.zep",
+                                "line": 21,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo_scopes_abstractclass.zep",
+                        "line": 21,
+                        "char": 5
+                    },
+                    "file": "stub__oo_scopes_abstractclass.zep",
+                    "line": 20,
+                    "last-line": 24,
+                    "char": 19
+                }
+            ],
+            "file": "stub__oo_scopes_abstractclass.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__oo_scopes_abstractclass.zep",
+        "line": 3,
+        "char": 14
+    }
+]

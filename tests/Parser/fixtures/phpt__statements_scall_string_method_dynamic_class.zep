@@ -1,0 +1,3 @@
+function test() {
+	{obj}::{"method"}();
+}

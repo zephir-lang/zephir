@@ -1,0 +1,126 @@
+--TEST--
+Issue #2537 / PR follow-up to #2505: a <static>-returning method overridden by a child loads at MINIT, reflects as static/self/parent, and late-static-binding returns the right class
+--FILE--
+namespace Stub;
+
+class Issue2537
+{
+    protected tag = "parent";
+
+    public function make() -> <static>
+    {
+        return this;
+    }
+
+    public function makeNullable() -> <static> | null
+    {
+        return this;
+    }
+
+    public function getTag() -> string
+    {
+        return this->tag;
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2537Child extends Issue2537
+{
+    protected tag = "child";
+
+    public function make() -> <static>
+    {
+        return this;
+    }
+
+    public function makeNullable() -> <static> | null
+    {
+        return this;
+    }
+
+    public function makeViaParent() -> <parent>
+    {
+        return new Issue2537();
+    }
+
+    public function makeViaSelf() -> <self>
+    {
+        return this;
+    }
+}
+--USAGE--
+use Stub\Issue2537;
+use Stub\Issue2537Child;
+
+// testExtensionLoadsWithStaticReturnOverride
+echo var_export(class_exists(Issue2537Child::class, false), true), "\n";
+
+// testReflectionReportsStaticOnParentMethod
+$rt = (new ReflectionMethod(Issue2537::class, 'make'))->getReturnType();
+echo var_export($rt instanceof ReflectionNamedType, true), "\n";
+echo var_export($rt->getName(), true), "\n";
+echo var_export($rt->allowsNull(), true), "\n";
+
+// testReflectionReportsStaticOnChildOverride
+$rt = (new ReflectionMethod(Issue2537Child::class, 'make'))->getReturnType();
+echo var_export($rt->getName(), true), "\n";
+echo var_export($rt->allowsNull(), true), "\n";
+
+// testReflectionReportsNullableStaticOnParent
+$rt = (new ReflectionMethod(Issue2537::class, 'makeNullable'))->getReturnType();
+echo var_export($rt->getName(), true), "\n";
+echo var_export($rt->allowsNull(), true), "\n";
+
+// testReflectionReportsNullableStaticOnChildOverride
+$rt = (new ReflectionMethod(Issue2537Child::class, 'makeNullable'))->getReturnType();
+echo var_export($rt->getName(), true), "\n";
+echo var_export($rt->allowsNull(), true), "\n";
+
+// testReflectionReportsParentOnChildOnly
+$rt = (new ReflectionMethod(Issue2537Child::class, 'makeViaParent'))->getReturnType();
+echo var_export($rt->getName(), true), "\n";
+
+// testReflectionReportsSelfOnChild
+$rt = (new ReflectionMethod(Issue2537Child::class, 'makeViaSelf'))->getReturnType();
+echo var_export($rt->getName(), true), "\n";
+
+// testLateStaticBindingReturnsBaseClassFromBase
+$sut = new Issue2537();
+echo var_export(get_class($sut->make()) === Issue2537::class, true), "\n";
+echo var_export($sut->getTag(), true), "\n";
+
+// testLateStaticBindingReturnsChildClassFromChild
+$sut = new Issue2537Child();
+echo var_export(get_class($sut->make()) === Issue2537Child::class, true), "\n";
+echo var_export($sut->getTag(), true), "\n";
+
+// testNullableStaticAcceptsObjectReturn
+$sut = new Issue2537Child();
+echo var_export($sut->makeNullable() instanceof Issue2537Child, true), "\n";
+
+// testParentReturnFromChildYieldsParentInstance
+$sut = new Issue2537Child();
+$out = $sut->makeViaParent();
+echo var_export($out instanceof Issue2537, true), "\n";
+echo var_export($out instanceof Issue2537Child, true), "\n";
+--EXPECT--
+true
+true
+'static'
+false
+'static'
+false
+'static'
+true
+'static'
+true
+'parent'
+'self'
+true
+'parent'
+true
+'child'
+true
+true
+false

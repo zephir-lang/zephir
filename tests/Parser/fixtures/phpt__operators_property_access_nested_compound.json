@@ -1,0 +1,204 @@
+[
+    {
+        "type": "namespace",
+        "name": "Debug",
+        "file": "phpt__operators_property_access_nested_compound.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Chain",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "file": "phpt__operators_property_access_nested_compound.zep",
+                    "line": 7,
+                    "char": 10
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "test",
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Chain",
+                                        "dynamic": 0,
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 9,
+                                        "char": 34
+                                    },
+                                    "file": "phpt__operators_property_access_nested_compound.zep",
+                                    "line": 9,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "phpt__operators_property_access_nested_compound.zep",
+                            "line": 10,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "property-access",
+                                    "operator": "add-assign",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 10,
+                                            "char": 21
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 10,
+                                            "char": 21
+                                        },
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 10,
+                                        "char": 21
+                                    },
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "1",
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 10,
+                                        "char": 27
+                                    },
+                                    "file": "phpt__operators_property_access_nested_compound.zep",
+                                    "line": 10,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "phpt__operators_property_access_nested_compound.zep",
+                            "line": 11,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "property-access",
+                                    "operator": "sub-assign",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 11,
+                                            "char": 21
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 11,
+                                            "char": 21
+                                        },
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 11,
+                                        "char": 21
+                                    },
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 11,
+                                        "char": 27
+                                    },
+                                    "file": "phpt__operators_property_access_nested_compound.zep",
+                                    "line": 11,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "phpt__operators_property_access_nested_compound.zep",
+                            "line": 12,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "property-access",
+                                    "operator": "concat-assign",
+                                    "left": {
+                                        "type": "property-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 12,
+                                            "char": 21
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "phpt__operators_property_access_nested_compound.zep",
+                                            "line": 12,
+                                            "char": 21
+                                        },
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 12,
+                                        "char": 21
+                                    },
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "x",
+                                        "file": "phpt__operators_property_access_nested_compound.zep",
+                                        "line": 12,
+                                        "char": 27
+                                    },
+                                    "file": "phpt__operators_property_access_nested_compound.zep",
+                                    "line": 12,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "phpt__operators_property_access_nested_compound.zep",
+                            "line": 13,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__operators_property_access_nested_compound.zep",
+                    "line": 7,
+                    "last-line": 14,
+                    "char": 19
+                }
+            ],
+            "file": "phpt__operators_property_access_nested_compound.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__operators_property_access_nested_compound.zep",
+        "line": 3,
+        "char": 5
+    }
+]

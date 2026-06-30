@@ -1,0 +1,127 @@
+--TEST--
+if/elseif/else chains and issue #544 progress-bar string building (port of tests/Extension/StatementsTest.php)
+--FILE--
+namespace Stub;
+
+class Statements
+{
+    public tmp1 = "test";
+    public tmp2 = "test string";
+
+    /**
+     * @issue https://github.com/zephir-lang/zephir/issues/544
+     */
+    private totalSteps = 100;
+
+    private width = 100;
+
+    private filledChar = "=";
+
+    private unfilledChar = ".";
+
+    private arrow = ">";
+
+    public function testElseIf(int num)
+    {
+        if num > 0 {
+            return "more";
+        } elseif num == 0 {
+            return "equal";
+        } elseif num == -1 {
+            return "-1";
+        } else {
+            return "less";
+        }
+    }
+
+    public function testElseIf1(int num)
+    {
+        var total = 10;
+
+        if (num < total) {
+            return "less";
+        } elseif (num == total) {
+            return "equal";
+        } else {
+            return "else";
+        }
+    }
+
+    public function testElseIf2(int num, total)
+    {
+        if (num < total) {
+            return "less";
+        } elseif (num == total) {
+            return "equal";
+        } else {
+            return "else";
+        }
+    }
+
+    public function test544Issue(int! step)
+    {
+        int filledWidth, unfilledWidth;
+
+        if step < this->totalSteps {
+            let filledWidth = (this->width - 1) / this->totalSteps * step;
+            let unfilledWidth = (this->width - 1) - filledWidth;
+            return str_repeat(this->filledChar, filledWidth).this->arrow.str_repeat(this->unfilledChar, unfilledWidth);
+        } elseif step === this->totalSteps {
+            return str_repeat(this->filledChar, this->width);
+        } else {
+            return str_repeat(this->unfilledChar, this->width);
+        }
+    }
+
+    public function test544IssueWithVariable(int! step)
+    {
+        int filledWidth, unfilledWidth, totalSteps;
+
+        let totalSteps = this->totalSteps;
+
+        if step < totalSteps {
+            let filledWidth = (this->width - 1) / totalSteps * step;
+            let unfilledWidth = (this->width - 1) - filledWidth;
+            return str_repeat(this->filledChar, filledWidth).this->arrow.str_repeat(this->unfilledChar, unfilledWidth);
+        } elseif step === totalSteps {
+            return str_repeat(this->filledChar, this->width);
+        } else {
+            return str_repeat(this->unfilledChar, this->width);
+        }
+    }
+}
+--USAGE--
+$test = new \Stub\Statements();
+
+echo var_export($test->testElseIf(10), true), "\n";
+echo var_export($test->testElseIf(0), true), "\n";
+echo var_export($test->testElseIf(-1), true), "\n";
+echo var_export($test->testElseIf(-10), true), "\n";
+
+echo var_export($test->testElseIf1(10), true), "\n";
+echo var_export($test->testElseIf1(5), true), "\n";
+echo var_export($test->testElseIf1(11), true), "\n";
+
+echo var_export($test->testElseIf2(10, 10), true), "\n";
+echo var_export($test->testElseIf2(5, 10), true), "\n";
+echo var_export($test->testElseIf2(11, 10), true), "\n";
+
+echo var_export($test->test544Issue(5), true), "\n";
+echo var_export($test->test544Issue(100), true), "\n";
+echo var_export($test->test544IssueWithVariable(5), true), "\n";
+echo var_export($test->test544IssueWithVariable(100), true), "\n";
+--EXPECT--
+'more'
+'equal'
+'-1'
+'less'
+'equal'
+'less'
+'else'
+'equal'
+'less'
+'else'
+'====>...............................................................................................'
+'===================================================================================================='
+'====>...............................................................................................'
+'===================================================================================================='

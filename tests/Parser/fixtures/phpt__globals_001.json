@@ -1,0 +1,214 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__globals_001.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Test",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "all",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "get1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_GET",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 7,
+                                        "char": 24
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 7,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 8,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "post1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_POST",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 8,
+                                        "char": 26
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 8,
+                                    "char": 26
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 9,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "request1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_REQUEST",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 9,
+                                        "char": 32
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 9,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 10,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "cookie1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_COOKIE",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 10,
+                                        "char": 30
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 10,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 11,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "server1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_SERVER",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 11,
+                                        "char": 30
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 11,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 12,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "session1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_SESSION",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 12,
+                                        "char": 32
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 12,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 13,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "files1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_FILES",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 13,
+                                        "char": 28
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 13,
+                                    "char": 28
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 14,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "env1",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "_ENV",
+                                        "file": "phpt__globals_001.zep",
+                                        "line": 14,
+                                        "char": 24
+                                    },
+                                    "file": "phpt__globals_001.zep",
+                                    "line": 14,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "phpt__globals_001.zep",
+                            "line": 15,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__globals_001.zep",
+                    "line": 5,
+                    "last-line": 16,
+                    "char": 19
+                }
+            ],
+            "file": "phpt__globals_001.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__globals_001.zep",
+        "line": 3,
+        "char": 5
+    }
+]

@@ -1,0 +1,63 @@
+[
+    {
+        "type": "function",
+        "name": "map",
+        "parameters": [
+            {
+                "type": "parameter",
+                "name": "data",
+                "const": 0,
+                "data-type": "array",
+                "mandatory": 1,
+                "reference": 0,
+                "file": "phpt__functions_closures_closure_arrow.zep",
+                "line": 1,
+                "char": 26
+            }
+        ],
+        "statements": [
+            {
+                "type": "return",
+                "expr": {
+                    "type": "closure-arrow",
+                    "left": {
+                        "type": "variable",
+                        "value": "number",
+                        "file": "phpt__functions_closures_closure_arrow.zep",
+                        "line": 2,
+                        "char": 34
+                    },
+                    "right": {
+                        "type": "mul",
+                        "left": {
+                            "type": "variable",
+                            "value": "number",
+                            "file": "phpt__functions_closures_closure_arrow.zep",
+                            "line": 2,
+                            "char": 26
+                        },
+                        "right": {
+                            "type": "variable",
+                            "value": "number",
+                            "file": "phpt__functions_closures_closure_arrow.zep",
+                            "line": 2,
+                            "char": 34
+                        },
+                        "file": "phpt__functions_closures_closure_arrow.zep",
+                        "line": 2,
+                        "char": 34
+                    },
+                    "file": "phpt__functions_closures_closure_arrow.zep",
+                    "line": 2,
+                    "char": 34
+                },
+                "file": "phpt__functions_closures_closure_arrow.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__functions_closures_closure_arrow.zep",
+        "line": 1,
+        "char": 9
+    }
+]

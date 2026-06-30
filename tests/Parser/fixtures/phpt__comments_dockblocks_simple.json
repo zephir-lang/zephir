@@ -1,0 +1,25 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__comments_dockblocks_simple.zep",
+        "line": 7,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * DocBlockFail\n *\n * @author Paul Scarrone <team@phalcon.io>\n *",
+        "file": "phpt__comments_dockblocks_simple.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "DocBlockTest",
+        "abstract": 0,
+        "final": 0,
+        "file": "phpt__comments_dockblocks_simple.zep",
+        "line": 8,
+        "char": 5
+    }
+]

@@ -1,0 +1,24 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "require_once",
+                "expr": {
+                    "type": "variable",
+                    "value": "foo",
+                    "file": "phpt__statements_require_once.zep",
+                    "line": 2,
+                    "char": 18
+                },
+                "file": "phpt__statements_require_once.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__statements_require_once.zep",
+        "line": 1,
+        "char": 9
+    }
+]

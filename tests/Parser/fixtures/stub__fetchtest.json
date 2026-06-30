@@ -1,0 +1,1180 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Fetch statement tests\n *",
+        "file": "stub__fetchtest.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__fetchtest.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "FetchTest",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "values",
+                    "shortcuts": [
+                        {
+                            "type": "shortcut",
+                            "name": "set",
+                            "file": "stub__fetchtest.zep",
+                            "line": 11,
+                            "char": 24
+                        },
+                        {
+                            "type": "shortcut",
+                            "name": "get",
+                            "file": "stub__fetchtest.zep",
+                            "line": 11,
+                            "char": 30
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 13,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 13,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 13,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 15,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 16,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 16,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 16,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 16,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 16,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 16,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 17,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 13,
+                    "last-line": 19,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 19,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 19,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 21,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 21,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 21,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 21,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 21,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 22,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 19,
+                    "last-line": 24,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray3",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 24,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 24,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 26,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 27,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 27,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 27,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 27,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 27,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 27,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 24,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray4",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 30,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 30,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 32,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 32,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 32,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 32,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 32,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray5",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 35,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 35,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 37,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 38,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 38,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 38,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 38,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 38,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 38,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 35,
+                    "last-line": 41,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchArray6",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 41,
+                            "char": 39
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 41,
+                            "char": 49
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 43,
+                                    "char": 23
+                                },
+                                "right": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 43,
+                                        "char": 20
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 43,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 43,
+                                    "char": 23
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 43,
+                                "char": 23
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 44,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 41,
+                    "last-line": 46,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchObject1",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 46,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 46,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 48,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 49,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 49,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 49,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 49,
+                                        "char": 25
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 49,
+                                    "char": 25
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 49,
+                                "char": 25
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 50,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 46,
+                    "last-line": 52,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchObject2",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 52,
+                            "char": 40
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 52,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fetch",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 54,
+                                    "char": 25
+                                },
+                                "right": {
+                                    "type": "property-dynamic-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 54,
+                                        "char": 21
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 54,
+                                        "char": 25
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 54,
+                                    "char": 25
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 54,
+                                "char": 25
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 55,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 52,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testFetchPost",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 57,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "c",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 59,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 60,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "fetch",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "c",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 60,
+                                        "char": 25
+                                    },
+                                    "right": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "_POST",
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 60,
+                                            "char": 21
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 60,
+                                            "char": 23
+                                        },
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 60,
+                                        "char": 25
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 60,
+                                    "char": 25
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 60,
+                                "char": 25
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "false",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 61,
+                                        "char": 16
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 62,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 64,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "c",
+                                "file": "stub__fetchtest.zep",
+                                "line": 64,
+                                "char": 11
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 65,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 57,
+                    "last-line": 67,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "hasValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 67,
+                            "char": 31
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "isset",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "_POST",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 70,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "variable",
+                                        "value": "name",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 70,
+                                        "char": 22
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 70,
+                                    "char": 24
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 70,
+                                "char": 24
+                            },
+                            "statements": [
+                                {
+                                    "type": "return",
+                                    "expr": {
+                                        "type": "bool",
+                                        "value": "true",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 71,
+                                        "char": 15
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 72,
+                                    "char": 3
+                                }
+                            ],
+                            "else_statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "isset",
+                                        "left": {
+                                            "type": "array-access",
+                                            "left": {
+                                                "type": "property-access",
+                                                "left": {
+                                                    "type": "variable",
+                                                    "value": "this",
+                                                    "file": "stub__fetchtest.zep",
+                                                    "line": 74,
+                                                    "char": 18
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "values",
+                                                    "file": "stub__fetchtest.zep",
+                                                    "line": 74,
+                                                    "char": 25
+                                                },
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 74,
+                                                "char": 25
+                                            },
+                                            "right": {
+                                                "type": "variable",
+                                                "value": "name",
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 74,
+                                                "char": 30
+                                            },
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 74,
+                                            "char": 32
+                                        },
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 74,
+                                        "char": 32
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "bool",
+                                                "value": "true",
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 75,
+                                                "char": 16
+                                            },
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 76,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 77,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 79,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "bool",
+                                "value": "false",
+                                "file": "stub__fetchtest.zep",
+                                "line": 79,
+                                "char": 15
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 80,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "bool",
+                                "mandatory": 0,
+                                "file": "stub__fetchtest.zep",
+                                "line": 68,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__fetchtest.zep",
+                        "line": 68,
+                        "char": 2
+                    },
+                    "file": "stub__fetchtest.zep",
+                    "line": 67,
+                    "last-line": 82,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getValue",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "name",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__fetchtest.zep",
+                            "line": 82,
+                            "char": 31
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "value",
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 84,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 87,
+                            "char": 4
+                        },
+                        {
+                            "type": "if",
+                            "expr": {
+                                "type": "not",
+                                "left": {
+                                    "type": "fetch",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 87,
+                                        "char": 32
+                                    },
+                                    "right": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "_POST",
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 87,
+                                            "char": 25
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "name",
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 87,
+                                            "char": 30
+                                        },
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 87,
+                                        "char": 32
+                                    },
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 87,
+                                    "char": 32
+                                },
+                                "file": "stub__fetchtest.zep",
+                                "line": 87,
+                                "char": 32
+                            },
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "not",
+                                        "left": {
+                                            "type": "fetch",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "value",
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 89,
+                                                "char": 40
+                                            },
+                                            "right": {
+                                                "type": "array-access",
+                                                "left": {
+                                                    "type": "property-access",
+                                                    "left": {
+                                                        "type": "variable",
+                                                        "value": "this",
+                                                        "file": "stub__fetchtest.zep",
+                                                        "line": 89,
+                                                        "char": 26
+                                                    },
+                                                    "right": {
+                                                        "type": "variable",
+                                                        "value": "values",
+                                                        "file": "stub__fetchtest.zep",
+                                                        "line": 89,
+                                                        "char": 33
+                                                    },
+                                                    "file": "stub__fetchtest.zep",
+                                                    "line": 89,
+                                                    "char": 33
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "name",
+                                                    "file": "stub__fetchtest.zep",
+                                                    "line": 89,
+                                                    "char": 38
+                                                },
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 89,
+                                                "char": 40
+                                            },
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 89,
+                                            "char": 40
+                                        },
+                                        "file": "stub__fetchtest.zep",
+                                        "line": 89,
+                                        "char": 40
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "return",
+                                            "expr": {
+                                                "type": "null",
+                                                "file": "stub__fetchtest.zep",
+                                                "line": 90,
+                                                "char": 16
+                                            },
+                                            "file": "stub__fetchtest.zep",
+                                            "line": 91,
+                                            "char": 4
+                                        }
+                                    ],
+                                    "file": "stub__fetchtest.zep",
+                                    "line": 92,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__fetchtest.zep",
+                            "line": 94,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "value",
+                                "file": "stub__fetchtest.zep",
+                                "line": 94,
+                                "char": 15
+                            },
+                            "file": "stub__fetchtest.zep",
+                            "line": 95,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__fetchtest.zep",
+                    "line": 82,
+                    "last-line": 96,
+                    "char": 16
+                }
+            ],
+            "file": "stub__fetchtest.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__fetchtest.zep",
+        "line": 8,
+        "char": 5
+    }
+]

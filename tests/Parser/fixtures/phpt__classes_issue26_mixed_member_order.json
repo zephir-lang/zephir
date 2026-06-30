@@ -1,0 +1,133 @@
+[
+    {
+        "type": "namespace",
+        "name": "Bugreport",
+        "file": "phpt__classes_issue26_mixed_member_order.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ExampleAction",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "createMyAction",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "payload",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__classes_issue26_mixed_member_order.zep",
+                            "line": 6,
+                            "char": 46
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "payload",
+                                "file": "phpt__classes_issue26_mixed_member_order.zep",
+                                "line": 7,
+                                "char": 17
+                            },
+                            "file": "phpt__classes_issue26_mixed_member_order.zep",
+                            "line": 8,
+                            "char": 2
+                        }
+                    ],
+                    "file": "phpt__classes_issue26_mixed_member_order.zep",
+                    "line": 6,
+                    "last-line": 10,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "createMyOtherAction",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "payload",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "phpt__classes_issue26_mixed_member_order.zep",
+                            "line": 12,
+                            "char": 51
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "payload",
+                                "file": "phpt__classes_issue26_mixed_member_order.zep",
+                                "line": 13,
+                                "char": 17
+                            },
+                            "file": "phpt__classes_issue26_mixed_member_order.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "phpt__classes_issue26_mixed_member_order.zep",
+                    "line": 12,
+                    "last-line": 15,
+                    "char": 16
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "MY_ACTION_NAME",
+                    "default": {
+                        "type": "string",
+                        "value": "MY_ACTION_NAME",
+                        "file": "phpt__classes_issue26_mixed_member_order.zep",
+                        "line": 4,
+                        "char": 39
+                    },
+                    "file": "phpt__classes_issue26_mixed_member_order.zep",
+                    "line": 6,
+                    "char": 7
+                },
+                {
+                    "type": "const",
+                    "name": "MY_OTHER_ACTION_NAME",
+                    "default": {
+                        "type": "string",
+                        "value": "MY_OTHER_ACTION_NAME",
+                        "file": "phpt__classes_issue26_mixed_member_order.zep",
+                        "line": 10,
+                        "char": 51
+                    },
+                    "file": "phpt__classes_issue26_mixed_member_order.zep",
+                    "line": 12,
+                    "char": 7
+                }
+            ],
+            "file": "phpt__classes_issue26_mixed_member_order.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__classes_issue26_mixed_member_order.zep",
+        "line": 3,
+        "char": 5
+    }
+]

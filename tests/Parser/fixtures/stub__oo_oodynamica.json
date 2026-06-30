@@ -1,0 +1,253 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Class with dynamic new\n *",
+        "file": "stub__oo_oodynamica.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_oodynamica.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "OoDynamicA",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "getNew",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "className",
+                                    "file": "stub__oo_oodynamica.zep",
+                                    "line": 12,
+                                    "char": 16
+                                },
+                                {
+                                    "variable": "fullClassName",
+                                    "file": "stub__oo_oodynamica.zep",
+                                    "line": 12,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 13,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "className",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "get_called_class",
+                                        "call-type": 1,
+                                        "file": "stub__oo_oodynamica.zep",
+                                        "line": 13,
+                                        "char": 37
+                                    },
+                                    "file": "stub__oo_oodynamica.zep",
+                                    "line": 13,
+                                    "char": 37
+                                }
+                            ],
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 14,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "fullClassName",
+                                    "expr": {
+                                        "type": "concat",
+                                        "left": {
+                                            "type": "string",
+                                            "value": "\\\\",
+                                            "file": "stub__oo_oodynamica.zep",
+                                            "line": 14,
+                                            "char": 26
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "className",
+                                            "file": "stub__oo_oodynamica.zep",
+                                            "line": 14,
+                                            "char": 37
+                                        },
+                                        "file": "stub__oo_oodynamica.zep",
+                                        "line": 14,
+                                        "char": 37
+                                    },
+                                    "file": "stub__oo_oodynamica.zep",
+                                    "line": 14,
+                                    "char": 37
+                                }
+                            ],
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 15,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "new",
+                                "class": "fullClassName",
+                                "dynamic": 1,
+                                "file": "stub__oo_oodynamica.zep",
+                                "line": 15,
+                                "char": 31
+                            },
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 16,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_oodynamica.zep",
+                    "line": 10,
+                    "last-line": 18,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "call2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "\\Stub\\Oo\\OoDynamicA",
+                                "dynamic": 0,
+                                "name": "getNew",
+                                "file": "stub__oo_oodynamica.zep",
+                                "line": 19,
+                                "char": 39
+                            },
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_oodynamica.zep",
+                    "line": 18,
+                    "last-line": 22,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "call1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "scall",
+                                "dynamic-class": 0,
+                                "class": "\\Stub\\Oo\\OoDynamicA",
+                                "dynamic": 0,
+                                "name": "call2",
+                                "file": "stub__oo_oodynamica.zep",
+                                "line": 23,
+                                "char": 38
+                            },
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 24,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_oodynamica.zep",
+                    "line": 22,
+                    "last-line": 26,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "execute",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "A",
+                                "file": "stub__oo_oodynamica.zep",
+                                "line": 27,
+                                "char": 11
+                            },
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_oodynamica.zep",
+                    "line": 26,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "execute2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "string",
+                                "value": "AA",
+                                "file": "stub__oo_oodynamica.zep",
+                                "line": 31,
+                                "char": 12
+                            },
+                            "file": "stub__oo_oodynamica.zep",
+                            "line": 32,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_oodynamica.zep",
+                    "line": 30,
+                    "last-line": 33,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_oodynamica.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__oo_oodynamica.zep",
+        "line": 8,
+        "char": 5
+    }
+]

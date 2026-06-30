@@ -1,0 +1,60 @@
+--TEST--
+Issue #2564: constructor default values (string, bool, and nullable-object) are exposed via Reflection without throwing
+--FILE--
+namespace Stub;
+
+class Issue2564PadFactory
+{
+}
+--FILE--
+namespace Stub;
+
+class Issue2564
+{
+    protected cipher;
+    protected useSigning;
+    protected padFactory;
+
+    public function __construct(
+        string cipher = "aes-256-cfb",
+        bool useSigning = true,
+        <Issue2564PadFactory> padFactory = null
+    ) {
+        let this->cipher = cipher;
+        let this->useSigning = useSigning;
+        let this->padFactory = padFactory;
+    }
+
+    public function getCipher() -> string
+    {
+        return this->cipher;
+    }
+}
+--USAGE--
+use Stub\Issue2564;
+
+$ctor = (new ReflectionClass(Issue2564::class))->getConstructor();
+
+$params = [];
+foreach ($ctor->getParameters() as $p) {
+    $params[$p->getName()] = $p;
+}
+
+// string default
+echo var_export($params['cipher']->isDefaultValueAvailable(), true), "\n";
+echo var_export($params['cipher']->getDefaultValue(), true), "\n";
+
+// bool default
+echo var_export($params['useSigning']->isDefaultValueAvailable(), true), "\n";
+echo var_export($params['useSigning']->getDefaultValue(), true), "\n";
+
+// nullable object default (the real bug): available and returns null
+echo var_export($params['padFactory']->isDefaultValueAvailable(), true), "\n";
+echo var_export($params['padFactory']->getDefaultValue(), true), "\n";
+--EXPECT--
+true
+'aes-256-cfb'
+true
+true
+true
+NULL

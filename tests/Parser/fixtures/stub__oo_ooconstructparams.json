@@ -1,0 +1,209 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * Class with constructor + params\n *",
+        "file": "stub__oo_ooconstructparams.zep",
+        "line": 6,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub\\Oo",
+        "file": "stub__oo_ooconstructparams.zep",
+        "line": 8,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "OoConstructParams",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "a",
+                    "file": "stub__oo_ooconstructparams.zep",
+                    "line": 12,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "b",
+                    "file": "stub__oo_ooconstructparams.zep",
+                    "line": 14,
+                    "char": 7
+                }
+            ],
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__construct",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooconstructparams.zep",
+                            "line": 14,
+                            "char": 31
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "b",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__oo_ooconstructparams.zep",
+                            "line": 14,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "a",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__oo_ooconstructparams.zep",
+                                        "line": 16,
+                                        "char": 18
+                                    },
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 16,
+                                    "char": 18
+                                },
+                                {
+                                    "assign-type": "object-property",
+                                    "operator": "assign",
+                                    "variable": "this",
+                                    "property": "b",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "b",
+                                        "file": "stub__oo_ooconstructparams.zep",
+                                        "line": 17,
+                                        "char": 15
+                                    },
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 17,
+                                    "char": 15
+                                }
+                            ],
+                            "file": "stub__oo_ooconstructparams.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooconstructparams.zep",
+                    "line": 14,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getA",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 22,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 22,
+                                    "char": 17
+                                },
+                                "file": "stub__oo_ooconstructparams.zep",
+                                "line": 22,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooconstructparams.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooconstructparams.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getB",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "property-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 27,
+                                    "char": 15
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "stub__oo_ooconstructparams.zep",
+                                    "line": 27,
+                                    "char": 17
+                                },
+                                "file": "stub__oo_ooconstructparams.zep",
+                                "line": 27,
+                                "char": 17
+                            },
+                            "file": "stub__oo_ooconstructparams.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo_ooconstructparams.zep",
+                    "line": 25,
+                    "last-line": 29,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo_ooconstructparams.zep",
+            "line": 8,
+            "char": 5
+        },
+        "file": "stub__oo_ooconstructparams.zep",
+        "line": 8,
+        "char": 5
+    }
+]

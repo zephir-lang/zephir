@@ -1,0 +1,60 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "r",
+                        "expr": {
+                            "type": "equals",
+                            "left": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "phpt__operators_instanceof_comparison.zep",
+                                    "line": 2,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "phpt__operators_instanceof_comparison.zep",
+                                    "line": 2,
+                                    "char": 26
+                                },
+                                "file": "phpt__operators_instanceof_comparison.zep",
+                                "line": 2,
+                                "char": 26
+                            },
+                            "right": {
+                                "type": "variable",
+                                "value": "c",
+                                "file": "phpt__operators_instanceof_comparison.zep",
+                                "line": 2,
+                                "char": 29
+                            },
+                            "file": "phpt__operators_instanceof_comparison.zep",
+                            "line": 2,
+                            "char": 29
+                        },
+                        "file": "phpt__operators_instanceof_comparison.zep",
+                        "line": 2,
+                        "char": 29
+                    }
+                ],
+                "file": "phpt__operators_instanceof_comparison.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_instanceof_comparison.zep",
+        "line": 1,
+        "char": 9
+    }
+]

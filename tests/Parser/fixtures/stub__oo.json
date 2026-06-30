@@ -1,0 +1,1271 @@
+[
+    {
+        "type": "comment",
+        "value": "**\n * OO operations\n *",
+        "file": "stub__oo.zep",
+        "line": 5,
+        "char": 9
+    },
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__oo.zep",
+        "line": 7,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Oo",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance1",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 11,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 12,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "\\stdClass",
+                                        "dynamic": 0,
+                                        "file": "stub__oo.zep",
+                                        "line": 12,
+                                        "char": 24
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 12,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 13,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 13,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 14,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 9,
+                    "last-line": 16,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance2",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 18,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 19,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstruct",
+                                        "dynamic": 0,
+                                        "file": "stub__oo.zep",
+                                        "line": 19,
+                                        "char": 29
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 19,
+                                    "char": 29
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 20,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 20,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 16,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance3",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 25,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 27,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoNoConstruct",
+                                        "dynamic": 0,
+                                        "file": "stub__oo.zep",
+                                        "line": 27,
+                                        "char": 31
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 27,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 29,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 29,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 23,
+                    "last-line": 32,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance4",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 34,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "a",
+                                    "file": "stub__oo.zep",
+                                    "line": 34,
+                                    "char": 11
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "stub__oo.zep",
+                                    "line": 34,
+                                    "char": 14
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 36,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "a",
+                                        "file": "stub__oo.zep",
+                                        "line": 36,
+                                        "char": 12
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 36,
+                                    "char": 12
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "b",
+                                        "file": "stub__oo.zep",
+                                        "line": 37,
+                                        "char": 9
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 37,
+                                    "char": 9
+                                },
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "a",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 38,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 38,
+                                                "char": 34
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "b",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 38,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 38,
+                                                "char": 37
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 38,
+                                        "char": 38
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 38,
+                                    "char": 38
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 40,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 40,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 41,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 32,
+                    "last-line": 43,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance5",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 45,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 46,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "a",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 46,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 46,
+                                                "char": 37
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "b",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 46,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 46,
+                                                "char": 40
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 46,
+                                        "char": 41
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 46,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 47,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 47,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 48,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 43,
+                    "last-line": 50,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance6",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 52,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 53,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 53,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 53,
+                                                "char": 37
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 53,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 53,
+                                                "char": 40
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 53,
+                                        "char": 41
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 53,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 54,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 54,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 55,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 50,
+                    "last-line": 57,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance7",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 59,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 60,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "bool",
+                                                    "value": "false",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 60,
+                                                    "char": 41
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 60,
+                                                "char": 41
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "bool",
+                                                    "value": "true",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 60,
+                                                    "char": 47
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 60,
+                                                "char": 47
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 60,
+                                        "char": 48
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 60,
+                                    "char": 48
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 61,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 61,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 62,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 57,
+                    "last-line": 64,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance8",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 66,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 67,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "double",
+                                                    "value": "1.2",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 67,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 67,
+                                                "char": 39
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "double",
+                                                    "value": "7.30",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 67,
+                                                    "char": 45
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 67,
+                                                "char": 45
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 67,
+                                        "char": 46
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 67,
+                                    "char": 46
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 68,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 68,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 69,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 64,
+                    "last-line": 71,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance9",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 73,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 74,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "scall",
+                                        "dynamic-class": 0,
+                                        "class": "Oo\\OoDynamicA",
+                                        "dynamic": 0,
+                                        "name": "getNew",
+                                        "file": "stub__oo.zep",
+                                        "line": 74,
+                                        "char": 34
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 74,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 75,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 75,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 76,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 71,
+                    "last-line": 78,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance10",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 80,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 81,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "scall",
+                                        "dynamic-class": 0,
+                                        "class": "Oo\\OoDynamicB",
+                                        "dynamic": 0,
+                                        "name": "getNew",
+                                        "file": "stub__oo.zep",
+                                        "line": 81,
+                                        "char": 34
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 81,
+                                    "char": 34
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 82,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 82,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 83,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 78,
+                    "last-line": 85,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance11",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 87,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 88,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "new",
+                                        "class": "Oo\\OoConstructParams",
+                                        "dynamic": 0,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "1",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 88,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 88,
+                                                "char": 37
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "int",
+                                                    "value": "2",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 88,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 88,
+                                                "char": 40
+                                            }
+                                        ],
+                                        "file": "stub__oo.zep",
+                                        "line": 88,
+                                        "char": 41
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 88,
+                                    "char": 41
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 89,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 89,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 90,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 85,
+                    "last-line": 92,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInstance12",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "file": "stub__oo.zep",
+                                    "line": 94,
+                                    "char": 8
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 95,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "scall",
+                                        "dynamic-class": 0,
+                                        "class": "Oo\\OoDynamicA",
+                                        "dynamic": 0,
+                                        "name": "call1",
+                                        "file": "stub__oo.zep",
+                                        "line": 95,
+                                        "char": 33
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 95,
+                                    "char": 33
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 96,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__oo.zep",
+                                "line": 96,
+                                "char": 11
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 97,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__oo.zep",
+                    "line": 92,
+                    "last-line": 99,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "createInstancesInLoop",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "className",
+                                    "file": "stub__oo.zep",
+                                    "line": 101,
+                                    "char": 16
+                                },
+                                {
+                                    "variable": "instance",
+                                    "file": "stub__oo.zep",
+                                    "line": 101,
+                                    "char": 26
+                                },
+                                {
+                                    "variable": "fqcn",
+                                    "file": "stub__oo.zep",
+                                    "line": 101,
+                                    "char": 32
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 102,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__oo.zep",
+                                        "line": 102,
+                                        "char": 20
+                                    },
+                                    "file": "stub__oo.zep",
+                                    "line": 102,
+                                    "char": 20
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 104,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "array",
+                                "left": [
+                                    {
+                                        "value": {
+                                            "type": "string",
+                                            "value": "OoDynamicA",
+                                            "file": "stub__oo.zep",
+                                            "line": 104,
+                                            "char": 31
+                                        },
+                                        "file": "stub__oo.zep",
+                                        "line": 104,
+                                        "char": 31
+                                    },
+                                    {
+                                        "value": {
+                                            "type": "string",
+                                            "value": "OoDynamicB",
+                                            "file": "stub__oo.zep",
+                                            "line": 104,
+                                            "char": 43
+                                        },
+                                        "file": "stub__oo.zep",
+                                        "line": 104,
+                                        "char": 43
+                                    }
+                                ],
+                                "file": "stub__oo.zep",
+                                "line": 104,
+                                "char": 45
+                            },
+                            "value": "className",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "fqcn",
+                                            "expr": {
+                                                "type": "concat",
+                                                "left": {
+                                                    "type": "string",
+                                                    "value": "Stub\\\\Oo\\\\",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 105,
+                                                    "char": 26
+                                                },
+                                                "right": {
+                                                    "type": "variable",
+                                                    "value": "className",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 105,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__oo.zep",
+                                                "line": 105,
+                                                "char": 37
+                                            },
+                                            "file": "stub__oo.zep",
+                                            "line": 105,
+                                            "char": 37
+                                        }
+                                    ],
+                                    "file": "stub__oo.zep",
+                                    "line": 106,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "assign",
+                                            "variable": "instance",
+                                            "expr": {
+                                                "type": "new",
+                                                "class": "fqcn",
+                                                "dynamic": 1,
+                                                "file": "stub__oo.zep",
+                                                "line": 106,
+                                                "char": 31
+                                            },
+                                            "file": "stub__oo.zep",
+                                            "line": 106,
+                                            "char": 31
+                                        }
+                                    ],
+                                    "file": "stub__oo.zep",
+                                    "line": 108,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "instance",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 108,
+                                                    "char": 28
+                                                },
+                                                "name": "execute",
+                                                "call-type": 1,
+                                                "file": "stub__oo.zep",
+                                                "line": 108,
+                                                "char": 38
+                                            },
+                                            "file": "stub__oo.zep",
+                                            "line": 108,
+                                            "char": 38
+                                        }
+                                    ],
+                                    "file": "stub__oo.zep",
+                                    "line": 109,
+                                    "char": 6
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "instance",
+                                                    "file": "stub__oo.zep",
+                                                    "line": 109,
+                                                    "char": 28
+                                                },
+                                                "name": "execute2",
+                                                "call-type": 1,
+                                                "file": "stub__oo.zep",
+                                                "line": 109,
+                                                "char": 39
+                                            },
+                                            "file": "stub__oo.zep",
+                                            "line": 109,
+                                            "char": 39
+                                        }
+                                    ],
+                                    "file": "stub__oo.zep",
+                                    "line": 110,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__oo.zep",
+                            "line": 112,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__oo.zep",
+                                "line": 112,
+                                "char": 16
+                            },
+                            "file": "stub__oo.zep",
+                            "line": 113,
+                            "char": 2
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__oo.zep",
+                                "line": 100,
+                                "char": 2
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__oo.zep",
+                        "line": 100,
+                        "char": 2
+                    },
+                    "file": "stub__oo.zep",
+                    "line": 99,
+                    "last-line": 114,
+                    "char": 16
+                }
+            ],
+            "file": "stub__oo.zep",
+            "line": 7,
+            "char": 5
+        },
+        "file": "stub__oo.zep",
+        "line": 7,
+        "char": 5
+    }
+]

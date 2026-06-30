@@ -1,0 +1,100 @@
+--TEST--
+Returns: static/instance return, TypeError on null vs declared scalar/array, nullable return, error message format (port of tests/Extension/ReturnsTest.php)
+--FILE--
+namespace Stub;
+
+class Returns
+{
+    protected stringDefaultNull  = null;
+    protected intDefaultNull     = null;
+    protected arrayDefaultNull   = null;
+    protected doubleDefaultNull  = null;
+    protected validString        = "hello";
+    protected nullableProperty   = null;
+
+	public static function returnWithParameter(string parameter)
+	{
+		return "Return back";
+	}
+
+	public static function returnWithoutParameter()
+	{
+		return "Return back";
+	}
+
+	public function returnNullOnString() -> string
+	{
+	    return this->stringDefaultNull;
+	}
+
+    public function returnNullOnInt() -> int
+    {
+        return this->intDefaultNull;
+    }
+
+    public function returnNullOnArray() -> array
+    {
+        return this->arrayDefaultNull;
+    }
+
+    public function returnNullOnDouble() -> double
+    {
+        return this->doubleDefaultNull;
+    }
+
+    public function returnValidString() -> string
+    {
+        return this->validString;
+    }
+
+    public function returnNullOnNullableString() -> string | null
+    {
+        return this->nullableProperty;
+    }
+}
+--USAGE--
+$t = new \Stub\Returns();
+
+// static + instance returns
+echo var_export($t->returnWithParameter('Hello World!'), true), "\n";
+echo var_export(\Stub\Returns::returnWithParameter('Hello World!'), true), "\n";
+echo var_export($t->returnWithoutParameter(), true), "\n";
+echo var_export(\Stub\Returns::returnWithoutParameter(), true), "\n";
+
+// returning null against a non-nullable declared type throws TypeError
+function throws($fn) {
+    try {
+        $fn();
+        echo "no-throw\n";
+    } catch (\Throwable $e) {
+        echo var_export($e instanceof \TypeError, true), "\n";
+    }
+}
+throws(fn() => $t->returnNullOnString());
+throws(fn() => $t->returnNullOnInt());
+throws(fn() => $t->returnNullOnArray());
+throws(fn() => $t->returnNullOnDouble());
+
+// happy path + nullable return do NOT throw
+echo var_export($t->returnValidString(), true), "\n";
+echo var_export($t->returnNullOnNullableString(), true), "\n";
+
+// TypeError message mirrors PHP's native format
+try {
+    $t->returnNullOnString();
+    echo "no-throw\n";
+} catch (\TypeError $e) {
+    echo $e->getMessage(), "\n";
+}
+--EXPECT--
+'Return back'
+'Return back'
+'Return back'
+'Return back'
+true
+true
+true
+true
+'hello'
+NULL
+Stub\Returns::returnNullOnString(): Return value must be of type string, null returned

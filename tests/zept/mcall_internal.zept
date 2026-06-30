@@ -1,0 +1,45 @@
+--TEST--
+Issue #1956: an internal method returning $this yields the same instance, and chains (port of tests/Extension/McallInternalTest.php)
+--FILE--
+namespace Stub;
+
+class McallInternal
+{
+	internal function a()
+	{
+		return strlen("hello");
+	}
+
+	internal function c(long a, long b)
+	{
+		return a + b;
+	}
+
+	public function e()
+	{
+		return strlen("hello");
+	}
+
+	internal function test1956() -> <McallInternal>
+	{
+		return this;
+	}
+
+	public function issue1956() -> <McallInternal>
+	{
+		return this->test1956();
+	}
+}
+--USAGE--
+$test = new \Stub\McallInternal();
+$returned = $test->issue1956();
+
+echo var_export($returned instanceof \Stub\McallInternal, true), "\n";
+echo var_export(get_class($returned), true), "\n";
+echo var_export($returned === $test, true), "\n";
+echo var_export($returned->issue1956() === $test, true), "\n";
+--EXPECT--
+true
+'Stub\\McallInternal'
+true
+true

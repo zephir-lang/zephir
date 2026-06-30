@@ -1,0 +1,135 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "x",
+                        "expr": {
+                            "type": "and",
+                            "left": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 2,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 2,
+                                    "char": 26
+                                },
+                                "file": "phpt__operators_instanceof_logical.zep",
+                                "line": 2,
+                                "char": 26
+                            },
+                            "right": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 2,
+                                    "char": 39
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "d",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 2,
+                                    "char": 42
+                                },
+                                "file": "phpt__operators_instanceof_logical.zep",
+                                "line": 2,
+                                "char": 42
+                            },
+                            "file": "phpt__operators_instanceof_logical.zep",
+                            "line": 2,
+                            "char": 42
+                        },
+                        "file": "phpt__operators_instanceof_logical.zep",
+                        "line": 2,
+                        "char": 42
+                    }
+                ],
+                "file": "phpt__operators_instanceof_logical.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "y",
+                        "expr": {
+                            "type": "or",
+                            "left": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 3,
+                                    "char": 21
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "b",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 3,
+                                    "char": 26
+                                },
+                                "file": "phpt__operators_instanceof_logical.zep",
+                                "line": 3,
+                                "char": 26
+                            },
+                            "right": {
+                                "type": "instanceof",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "c",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 3,
+                                    "char": 39
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "d",
+                                    "file": "phpt__operators_instanceof_logical.zep",
+                                    "line": 3,
+                                    "char": 42
+                                },
+                                "file": "phpt__operators_instanceof_logical.zep",
+                                "line": 3,
+                                "char": 42
+                            },
+                            "file": "phpt__operators_instanceof_logical.zep",
+                            "line": 3,
+                            "char": 42
+                        },
+                        "file": "phpt__operators_instanceof_logical.zep",
+                        "line": 3,
+                        "char": 42
+                    }
+                ],
+                "file": "phpt__operators_instanceof_logical.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_instanceof_logical.zep",
+        "line": 1,
+        "char": 9
+    }
+]

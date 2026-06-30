@@ -1,0 +1,25 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\OoImpl",
+        "file": "stub__ooimpl_abeginning.zep",
+        "line": 3,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "ABeginning",
+        "extends": [
+            {
+                "type": "variable",
+                "value": "ZBeginning",
+                "file": "stub__ooimpl_abeginning.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "stub__ooimpl_abeginning.zep",
+        "line": 0,
+        "char": 0
+    }
+]

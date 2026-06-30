@@ -1,0 +1,245 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "equals",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 2,
+                        "char": 8
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 2,
+                        "char": 12
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 2,
+                    "char": 12
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 3,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "identical",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 3,
+                        "char": 9
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 3,
+                        "char": 13
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 3,
+                    "char": 13
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 4,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "not-equals",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 4,
+                        "char": 8
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 4,
+                        "char": 12
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 4,
+                    "char": 12
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 5,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "not-equals",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 5,
+                        "char": 8
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 5,
+                        "char": 12
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 5,
+                    "char": 12
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 6,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "not-identical",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 6,
+                        "char": 9
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 6,
+                        "char": 13
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 6,
+                    "char": 13
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 7,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "less",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 7,
+                        "char": 7
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 7,
+                        "char": 11
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 7,
+                    "char": 11
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 8,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "greater",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 8,
+                        "char": 7
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 8,
+                        "char": 11
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 8,
+                    "char": 11
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 9,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "less-equal",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 9,
+                        "char": 7
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 9,
+                        "char": 11
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 9,
+                    "char": 11
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 10,
+                "char": 3
+            },
+            {
+                "type": "if",
+                "expr": {
+                    "type": "greater-equal",
+                    "left": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 10,
+                        "char": 7
+                    },
+                    "right": {
+                        "type": "int",
+                        "value": "1",
+                        "file": "phpt__operators_comparison.zep",
+                        "line": 10,
+                        "char": 11
+                    },
+                    "file": "phpt__operators_comparison.zep",
+                    "line": 10,
+                    "char": 11
+                },
+                "file": "phpt__operators_comparison.zep",
+                "line": 11,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_comparison.zep",
+        "line": 1,
+        "char": 9
+    }
+]

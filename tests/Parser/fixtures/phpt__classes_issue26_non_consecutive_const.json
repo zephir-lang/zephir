@@ -1,0 +1,65 @@
+[
+    {
+        "type": "namespace",
+        "name": "Bugreport",
+        "file": "phpt__classes_issue26_non_consecutive_const.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "ConstOrder",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "myProperty",
+                    "file": "phpt__classes_issue26_non_consecutive_const.zep",
+                    "line": 8,
+                    "char": 6
+                }
+            ],
+            "constants": [
+                {
+                    "type": "const",
+                    "name": "MY_FIRST_CONST",
+                    "default": {
+                        "type": "string",
+                        "value": "test",
+                        "file": "phpt__classes_issue26_non_consecutive_const.zep",
+                        "line": 4,
+                        "char": 29
+                    },
+                    "file": "phpt__classes_issue26_non_consecutive_const.zep",
+                    "line": 6,
+                    "char": 8
+                },
+                {
+                    "type": "const",
+                    "name": "MY_SECOND_CONST",
+                    "default": {
+                        "type": "string",
+                        "value": "test2",
+                        "file": "phpt__classes_issue26_non_consecutive_const.zep",
+                        "line": 8,
+                        "char": 31
+                    },
+                    "file": "phpt__classes_issue26_non_consecutive_const.zep",
+                    "line": 9,
+                    "char": 1
+                }
+            ],
+            "file": "phpt__classes_issue26_non_consecutive_const.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__classes_issue26_non_consecutive_const.zep",
+        "line": 3,
+        "char": 5
+    }
+]

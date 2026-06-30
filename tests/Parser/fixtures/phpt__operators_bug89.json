@@ -1,0 +1,60 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "t",
+                        "expr": {
+                            "type": "bitwise_and",
+                            "left": {
+                                "type": "variable",
+                                "value": "u",
+                                "file": "phpt__operators_bug89.zep",
+                                "line": 2,
+                                "char": 15
+                            },
+                            "right": {
+                                "type": "bitwise_shiftleft",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "v",
+                                    "file": "phpt__operators_bug89.zep",
+                                    "line": 2,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "7",
+                                    "file": "phpt__operators_bug89.zep",
+                                    "line": 2,
+                                    "char": 23
+                                },
+                                "file": "phpt__operators_bug89.zep",
+                                "line": 2,
+                                "char": 23
+                            },
+                            "file": "phpt__operators_bug89.zep",
+                            "line": 2,
+                            "char": 23
+                        },
+                        "file": "phpt__operators_bug89.zep",
+                        "line": 2,
+                        "char": 23
+                    }
+                ],
+                "file": "phpt__operators_bug89.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_bug89.zep",
+        "line": 1,
+        "char": 9
+    }
+]

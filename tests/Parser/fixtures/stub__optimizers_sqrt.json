@@ -1,0 +1,341 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_sqrt.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Sqrt",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInt",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "int",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "4",
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 8,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_sqrt.zep",
+                                    "line": 8,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 10,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 10,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 10,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 10,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 6,
+                    "last-line": 13,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVar",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "4",
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 15,
+                                        "char": 12
+                                    },
+                                    "file": "stub__optimizers_sqrt.zep",
+                                    "line": 15,
+                                    "char": 12
+                                }
+                            ],
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 17,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 17,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 17,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 17,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 18,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 13,
+                    "last-line": 20,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntValue1",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "4",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 22,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 22,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 22,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 23,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 20,
+                    "last-line": 25,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntValue2",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "16",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 27,
+                                            "char": 17
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 27,
+                                        "char": 17
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 27,
+                                "char": 18
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 28,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 25,
+                    "last-line": 30,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testIntParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 30,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 32,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 32,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 32,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 33,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 30,
+                    "last-line": 35,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testVarParameter",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 35,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "sqrt",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__optimizers_sqrt.zep",
+                                            "line": 37,
+                                            "char": 16
+                                        },
+                                        "file": "stub__optimizers_sqrt.zep",
+                                        "line": 37,
+                                        "char": 16
+                                    }
+                                ],
+                                "file": "stub__optimizers_sqrt.zep",
+                                "line": 37,
+                                "char": 17
+                            },
+                            "file": "stub__optimizers_sqrt.zep",
+                            "line": 38,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_sqrt.zep",
+                    "line": 35,
+                    "last-line": 39,
+                    "char": 16
+                }
+            ],
+            "file": "stub__optimizers_sqrt.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_sqrt.zep",
+        "line": 4,
+        "char": 5
+    }
+]

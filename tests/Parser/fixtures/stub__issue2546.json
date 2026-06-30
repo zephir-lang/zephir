@@ -1,0 +1,582 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__issue2546.zep",
+        "line": 10,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * Regression coverage for https:\/\/github.com\/zephir-lang\/zephir\/issues\/2546\n *\n * `continue` inside a `for ... in` loop over a PHP Iterator\/Traversable was\n * not calling next() on the iterator. The generated while(1) placed next()\n * after the user body, so C `continue` jumped past it, producing an infinite\n * loop on any element that triggered the continue.\n *",
+        "file": "stub__issue2546.zep",
+        "line": 11,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Issue2546",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "collectExcluding",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "items",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 17,
+                            "char": 47
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "skip",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 17,
+                            "char": 57
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "item",
+                                    "file": "stub__issue2546.zep",
+                                    "line": 19,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 20,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue2546.zep",
+                                        "line": 20,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2546.zep",
+                                    "line": 20,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 22,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "items",
+                                "file": "stub__issue2546.zep",
+                                "line": 22,
+                                "char": 27
+                            },
+                            "value": "item",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "item",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 23,
+                                            "char": 23
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "skip",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 23,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue2546.zep",
+                                        "line": 23,
+                                        "char": 30
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "continue",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 25,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 26,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "item",
+                                                "file": "stub__issue2546.zep",
+                                                "line": 26,
+                                                "char": 32
+                                            },
+                                            "file": "stub__issue2546.zep",
+                                            "line": 26,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 27,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 29,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__issue2546.zep",
+                                "line": 29,
+                                "char": 22
+                            },
+                            "file": "stub__issue2546.zep",
+                            "line": 30,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Collect items from a Traversable, skipping any equal to `skip`.\n     * `continue` must advance the iterator; without the fix it loops forever.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2546.zep",
+                                "line": 18,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2546.zep",
+                        "line": 18,
+                        "char": 5
+                    },
+                    "file": "stub__issue2546.zep",
+                    "line": 17,
+                    "last-line": 34,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "collectUntil",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "items",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 35,
+                            "char": 43
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "stop",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 35,
+                            "char": 53
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "item",
+                                    "file": "stub__issue2546.zep",
+                                    "line": 37,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 38,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue2546.zep",
+                                        "line": 38,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2546.zep",
+                                    "line": 38,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 40,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "items",
+                                "file": "stub__issue2546.zep",
+                                "line": 40,
+                                "char": 27
+                            },
+                            "value": "item",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "item",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 41,
+                                            "char": 23
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "stop",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 41,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue2546.zep",
+                                        "line": 41,
+                                        "char": 30
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "break",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 43,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 44,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "item",
+                                                "file": "stub__issue2546.zep",
+                                                "line": 44,
+                                                "char": 32
+                                            },
+                                            "file": "stub__issue2546.zep",
+                                            "line": 44,
+                                            "char": 32
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 45,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 47,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__issue2546.zep",
+                                "line": 47,
+                                "char": 22
+                            },
+                            "file": "stub__issue2546.zep",
+                            "line": 48,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Collect items until `stop` is encountered; verifies `break` still works.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2546.zep",
+                                "line": 36,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2546.zep",
+                        "line": 36,
+                        "char": 5
+                    },
+                    "file": "stub__issue2546.zep",
+                    "line": 35,
+                    "last-line": 53,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "collectKeysExcluding",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "items",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 54,
+                            "char": 51
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "skipKey",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__issue2546.zep",
+                            "line": 54,
+                            "char": 64
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "k",
+                                    "file": "stub__issue2546.zep",
+                                    "line": 56,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "v",
+                                    "file": "stub__issue2546.zep",
+                                    "line": 56,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 57,
+                            "char": 11
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "result",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__issue2546.zep",
+                                        "line": 57,
+                                        "char": 24
+                                    },
+                                    "file": "stub__issue2546.zep",
+                                    "line": 57,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 59,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "items",
+                                "file": "stub__issue2546.zep",
+                                "line": 59,
+                                "char": 27
+                            },
+                            "key": "k",
+                            "value": "v",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "if",
+                                    "expr": {
+                                        "type": "identical",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "k",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 60,
+                                            "char": 20
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "skipKey",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 60,
+                                            "char": 30
+                                        },
+                                        "file": "stub__issue2546.zep",
+                                        "line": 60,
+                                        "char": 30
+                                    },
+                                    "statements": [
+                                        {
+                                            "type": "continue",
+                                            "file": "stub__issue2546.zep",
+                                            "line": 62,
+                                            "char": 13
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 63,
+                                    "char": 15
+                                },
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "array-index",
+                                            "operator": "assign",
+                                            "variable": "result",
+                                            "index-expr": [
+                                                {
+                                                    "type": "variable",
+                                                    "value": "k",
+                                                    "file": "stub__issue2546.zep",
+                                                    "line": 63,
+                                                    "char": 25
+                                                }
+                                            ],
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "v",
+                                                "file": "stub__issue2546.zep",
+                                                "line": 63,
+                                                "char": 30
+                                            },
+                                            "file": "stub__issue2546.zep",
+                                            "line": 63,
+                                            "char": 30
+                                        }
+                                    ],
+                                    "file": "stub__issue2546.zep",
+                                    "line": 64,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__issue2546.zep",
+                            "line": 66,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "result",
+                                "file": "stub__issue2546.zep",
+                                "line": 66,
+                                "char": 22
+                            },
+                            "file": "stub__issue2546.zep",
+                            "line": 67,
+                            "char": 5
+                        }
+                    ],
+                    "docblock": "**\n     * Collect key-value pairs, skipping those whose key equals `skipKey`.\n     * Exercises the key+value path with continue.\n     *",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__issue2546.zep",
+                                "line": 55,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__issue2546.zep",
+                        "line": 55,
+                        "char": 5
+                    },
+                    "file": "stub__issue2546.zep",
+                    "line": 54,
+                    "last-line": 68,
+                    "char": 19
+                }
+            ],
+            "file": "stub__issue2546.zep",
+            "line": 11,
+            "char": 5
+        },
+        "file": "stub__issue2546.zep",
+        "line": 11,
+        "char": 5
+    }
+]

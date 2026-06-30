@@ -1,0 +1,84 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_not",
+                            "left": {
+                                "type": "fcall",
+                                "name": "umask",
+                                "call-type": 1,
+                                "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                                "line": 2,
+                                "char": 21
+                            },
+                            "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                            "line": 2,
+                            "char": 21
+                        },
+                        "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                        "line": 2,
+                        "char": 21
+                    }
+                ],
+                "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                "line": 3,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "b",
+                        "expr": {
+                            "type": "bitwise_and",
+                            "left": {
+                                "type": "int",
+                                "value": "0666",
+                                "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                                "line": 3,
+                                "char": 18
+                            },
+                            "right": {
+                                "type": "bitwise_not",
+                                "left": {
+                                    "type": "fcall",
+                                    "name": "umask",
+                                    "call-type": 1,
+                                    "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                                    "line": 3,
+                                    "char": 28
+                                },
+                                "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                                "line": 3,
+                                "char": 28
+                            },
+                            "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                            "line": 3,
+                            "char": 28
+                        },
+                        "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                        "line": 3,
+                        "char": 28
+                    }
+                ],
+                "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_issue23_bitwise_not_fcall.zep",
+        "line": 1,
+        "char": 9
+    }
+]

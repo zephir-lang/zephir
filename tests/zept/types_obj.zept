@@ -1,0 +1,31 @@
+--TEST--
+Types object: `object | null` returns null/stdClass, `object` returns stdClass (port of tests/Extension/Types/ObjTypeTest.php)
+--FILE--
+namespace Stub\Types;
+
+class Obj
+{
+    public function nullableObjectReturnNull() -> object | null
+    {
+        return null;
+    }
+
+    public function nullableObjectReturnObj() -> object | null
+    {
+        return new \stdClass();
+    }
+
+    public function objectReturn() -> object
+    {
+        return new \stdClass();
+    }
+}
+--USAGE--
+$class = new \Stub\Types\Obj();
+echo var_export($class->nullableObjectReturnNull(), true), "\n";
+echo var_export($class->nullableObjectReturnObj() instanceof \stdClass, true), "\n";
+echo var_export($class->objectReturn() instanceof \stdClass, true), "\n";
+--EXPECT--
+NULL
+true
+true

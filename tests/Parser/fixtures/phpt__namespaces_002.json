@@ -1,0 +1,39 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__namespaces_002.zep",
+        "line": 3,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Foo",
+                "alias": "Baz",
+                "file": "phpt__namespaces_002.zep",
+                "line": 3,
+                "char": 15
+            }
+        ],
+        "file": "phpt__namespaces_002.zep",
+        "line": 4,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Bar",
+                "alias": "Buz",
+                "file": "phpt__namespaces_002.zep",
+                "line": 4,
+                "char": 15
+            }
+        ],
+        "file": "phpt__namespaces_002.zep",
+        "line": 4,
+        "char": 15
+    }
+]

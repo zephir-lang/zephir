@@ -1,0 +1,183 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\BuiltIn",
+        "file": "stub__builtin_charmethods.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "CharMethods",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getHex",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "char",
+                                    "value": "a",
+                                    "file": "stub__builtin_charmethods.zep",
+                                    "line": 8,
+                                    "char": 13
+                                },
+                                "name": "toHex",
+                                "call-type": 1,
+                                "file": "stub__builtin_charmethods.zep",
+                                "line": 8,
+                                "char": 21
+                            },
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 9,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_charmethods.zep",
+                    "line": 6,
+                    "last-line": 11,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "getHexForString",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "str",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 11,
+                            "char": 44
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "o",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "",
+                                        "file": "stub__builtin_charmethods.zep",
+                                        "line": 13,
+                                        "char": 11
+                                    },
+                                    "file": "stub__builtin_charmethods.zep",
+                                    "line": 13,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 14,
+                            "char": 6
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "char",
+                            "variables": [
+                                {
+                                    "variable": "ch",
+                                    "file": "stub__builtin_charmethods.zep",
+                                    "line": 14,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 16,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "str",
+                                "file": "stub__builtin_charmethods.zep",
+                                "line": 16,
+                                "char": 17
+                            },
+                            "value": "ch",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable",
+                                            "operator": "concat-assign",
+                                            "variable": "o",
+                                            "expr": {
+                                                "type": "mcall",
+                                                "variable": {
+                                                    "type": "variable",
+                                                    "value": "ch",
+                                                    "file": "stub__builtin_charmethods.zep",
+                                                    "line": 17,
+                                                    "char": 15
+                                                },
+                                                "name": "toHex",
+                                                "call-type": 1,
+                                                "file": "stub__builtin_charmethods.zep",
+                                                "line": 17,
+                                                "char": 23
+                                            },
+                                            "file": "stub__builtin_charmethods.zep",
+                                            "line": 17,
+                                            "char": 23
+                                        }
+                                    ],
+                                    "file": "stub__builtin_charmethods.zep",
+                                    "line": 18,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 19,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "o",
+                                "file": "stub__builtin_charmethods.zep",
+                                "line": 19,
+                                "char": 11
+                            },
+                            "file": "stub__builtin_charmethods.zep",
+                            "line": 20,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__builtin_charmethods.zep",
+                    "line": 11,
+                    "last-line": 21,
+                    "char": 16
+                }
+            ],
+            "file": "stub__builtin_charmethods.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__builtin_charmethods.zep",
+        "line": 4,
+        "char": 5
+    }
+]

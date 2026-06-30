@@ -1,0 +1,220 @@
+[
+    {
+        "type": "function",
+        "name": "bitwise",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_shiftleft",
+                            "left": {
+                                "type": "int",
+                                "value": "0x01",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 2,
+                                "char": 19
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 2,
+                                "char": 22
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 2,
+                            "char": 22
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 2,
+                        "char": 22
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 3,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_shiftright",
+                            "left": {
+                                "type": "int",
+                                "value": "0xF0",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 3,
+                                "char": 19
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "1",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 3,
+                                "char": 22
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 3,
+                            "char": 22
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 3,
+                        "char": 22
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 4,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_or",
+                            "left": {
+                                "type": "int",
+                                "value": "0x01",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 4,
+                                "char": 18
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "0x02",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 4,
+                                "char": 24
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 4,
+                            "char": 24
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 4,
+                        "char": 24
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 5,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_and",
+                            "left": {
+                                "type": "int",
+                                "value": "0x03",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 5,
+                                "char": 18
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "0x01",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 5,
+                                "char": 24
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 5,
+                            "char": 24
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 5,
+                        "char": 24
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 6,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_xor",
+                            "left": {
+                                "type": "int",
+                                "value": "0x03",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 6,
+                                "char": 18
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "0x02",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 6,
+                                "char": 24
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 6,
+                            "char": 24
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 6,
+                        "char": 24
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 7,
+                "char": 7
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "a",
+                        "expr": {
+                            "type": "bitwise_not",
+                            "left": {
+                                "type": "int",
+                                "value": "0x01",
+                                "file": "phpt__operators_bitwise.zep",
+                                "line": 7,
+                                "char": 19
+                            },
+                            "file": "phpt__operators_bitwise.zep",
+                            "line": 7,
+                            "char": 19
+                        },
+                        "file": "phpt__operators_bitwise.zep",
+                        "line": 7,
+                        "char": 19
+                    }
+                ],
+                "file": "phpt__operators_bitwise.zep",
+                "line": 8,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_bitwise.zep",
+        "line": 1,
+        "char": 9
+    }
+]

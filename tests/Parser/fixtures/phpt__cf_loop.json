@@ -1,0 +1,140 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "variable",
+                        "operator": "assign",
+                        "variable": "n",
+                        "expr": {
+                            "type": "int",
+                            "value": "40",
+                            "file": "phpt__cf_loop.zep",
+                            "line": 2,
+                            "char": 12
+                        },
+                        "file": "phpt__cf_loop.zep",
+                        "line": 2,
+                        "char": 12
+                    }
+                ],
+                "file": "phpt__cf_loop.zep",
+                "line": 4,
+                "char": 5
+            },
+            {
+                "type": "loop",
+                "file": "phpt__cf_loop.zep",
+                "line": 6,
+                "char": 5
+            },
+            {
+                "type": "loop",
+                "statements": [
+                    {
+                        "type": "let",
+                        "assignments": [
+                            {
+                                "assign-type": "variable",
+                                "operator": "sub-assign",
+                                "variable": "n",
+                                "expr": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "phpt__cf_loop.zep",
+                                    "line": 7,
+                                    "char": 12
+                                },
+                                "file": "phpt__cf_loop.zep",
+                                "line": 7,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_loop.zep",
+                        "line": 8,
+                        "char": 4
+                    },
+                    {
+                        "type": "if",
+                        "expr": {
+                            "type": "equals",
+                            "left": {
+                                "type": "mod",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "n",
+                                    "file": "phpt__cf_loop.zep",
+                                    "line": 8,
+                                    "char": 8
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "5",
+                                    "file": "phpt__cf_loop.zep",
+                                    "line": 8,
+                                    "char": 13
+                                },
+                                "file": "phpt__cf_loop.zep",
+                                "line": 8,
+                                "char": 13
+                            },
+                            "right": {
+                                "type": "int",
+                                "value": "0",
+                                "file": "phpt__cf_loop.zep",
+                                "line": 8,
+                                "char": 17
+                            },
+                            "file": "phpt__cf_loop.zep",
+                            "line": 8,
+                            "char": 17
+                        },
+                        "statements": [
+                            {
+                                "type": "break",
+                                "file": "phpt__cf_loop.zep",
+                                "line": 8,
+                                "char": 26
+                            }
+                        ],
+                        "file": "phpt__cf_loop.zep",
+                        "line": 9,
+                        "char": 6
+                    },
+                    {
+                        "type": "echo",
+                        "expressions": [
+                            {
+                                "type": "variable",
+                                "value": "x",
+                                "file": "phpt__cf_loop.zep",
+                                "line": 9,
+                                "char": 9
+                            },
+                            {
+                                "type": "string",
+                                "value": "\n",
+                                "file": "phpt__cf_loop.zep",
+                                "line": 9,
+                                "char": 12
+                            }
+                        ],
+                        "file": "phpt__cf_loop.zep",
+                        "line": 10,
+                        "char": 2
+                    }
+                ],
+                "file": "phpt__cf_loop.zep",
+                "line": 11,
+                "char": 1
+            }
+        ],
+        "file": "phpt__cf_loop.zep",
+        "line": 1,
+        "char": 9
+    }
+]

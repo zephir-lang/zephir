@@ -1,0 +1,68 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__methodabstract.zep",
+        "line": 3,
+        "char": 8
+    },
+    {
+        "type": "class",
+        "name": "MethodAbstract",
+        "abstract": 1,
+        "final": 0,
+        "implements": [
+            {
+                "type": "variable",
+                "value": "MethodInterface",
+                "file": "stub__methodabstract.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "testInterfaceMetho",
+                    "statements": [
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__methodabstract.zep",
+                                    "line": 7,
+                                    "char": 14
+                                },
+                                "name": "testMethod",
+                                "call-type": 1,
+                                "file": "stub__methodabstract.zep",
+                                "line": 7,
+                                "char": 27
+                            },
+                            "file": "stub__methodabstract.zep",
+                            "line": 8,
+                            "char": 5
+                        }
+                    ],
+                    "file": "stub__methodabstract.zep",
+                    "line": 5,
+                    "last-line": 9,
+                    "char": 19
+                }
+            ],
+            "file": "stub__methodabstract.zep",
+            "line": 3,
+            "char": 14
+        },
+        "file": "stub__methodabstract.zep",
+        "line": 3,
+        "char": 14
+    }
+]

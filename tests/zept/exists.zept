@@ -1,0 +1,59 @@
+--TEST--
+class_exists / interface_exists / method_exists / file_exists wrappers (port of tests/Extension/ExistsTest.php)
+--FILE--
+namespace Stub;
+
+class Exists
+{
+	public function testClassExists(var className, bool autoload=true) -> bool
+	{
+		return class_exists(className, autoload);
+	}
+
+	public function testInterfaceExists(var interfaceName, bool autoload=true) -> bool
+	{
+		return interface_exists(interfaceName, autoload);
+	}
+
+	public function testMethodExists(var obj, var methodName) -> bool
+	{
+		return method_exists(obj, methodName);
+	}
+
+	public function testFileExists(var fileName) -> bool
+	{
+		return file_exists(fileName);
+	}
+}
+--USAGE--
+// The original test relies on two global symbols and a fixture file; define
+// equivalents here so the check is self-contained.
+class TestExClass {}
+interface TestExInterface {}
+
+$test = new \Stub\Exists();
+
+echo var_export($test->testClassExists(\TestExClass::class), true), "\n";
+echo var_export($test->testClassExists('TestExClassx'), true), "\n";
+echo var_export($test->testClassExists(\TestExInterface::class), true), "\n";
+echo var_export($test->testClassExists(\Stub\Exists::class), true), "\n";
+
+echo var_export($test->testInterfaceExists(\TestExClass::class), true), "\n";
+echo var_export($test->testInterfaceExists(\TestExInterface::class), true), "\n";
+echo var_export($test->testInterfaceExists('TestExInterfacex'), true), "\n";
+
+echo var_export($test->testMethodExists($test, 'testMethodExists'), true), "\n";
+
+echo var_export($test->testFileExists(__FILE__), true), "\n";
+echo var_export($test->testFileExists(__DIR__.'/does-not-exist-xxxx.php'), true), "\n";
+--EXPECT--
+true
+false
+false
+true
+false
+true
+false
+true
+true
+false

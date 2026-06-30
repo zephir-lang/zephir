@@ -1,0 +1,28 @@
+--TEST--
+Issue #1803: an old-style (class-named) method is not treated as a constructor on PHP >= 8.0; only an explicit call mutates the property
+--FILE--
+namespace Stub\Constructors;
+
+/**
+ * @issue https://github.com/zephir-lang/zephir/issues/1803
+ */
+class Issue1803
+{
+    public value = "Original value";
+
+    public function Issue1803()
+    {
+        let this->value = "Value that won't be updated on class init";
+    }
+}
+--USAGE--
+$class = new \Stub\Constructors\Issue1803();
+echo var_export($class instanceof \Stub\Constructors\Issue1803, true), "\n";
+// PHP >= 8.0: old-style ctor is not invoked on init, so the default stands.
+echo var_export($class->value, true), "\n";
+$class->Issue1803();
+echo var_export($class->value, true), "\n";
+--EXPECT--
+true
+'Original value'
+'Value that won\'t be updated on class init'

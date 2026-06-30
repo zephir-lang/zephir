@@ -1,0 +1,85 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__functions_closures_empty_closure.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Closure",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "callback",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "abc",
+                                    "expr": {
+                                        "type": "int",
+                                        "value": "42",
+                                        "file": "phpt__functions_closures_empty_closure.zep",
+                                        "line": 7,
+                                        "char": 21
+                                    },
+                                    "file": "phpt__functions_closures_empty_closure.zep",
+                                    "line": 7,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "phpt__functions_closures_empty_closure.zep",
+                            "line": 9,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "closure",
+                                "use": [
+                                    {
+                                        "type": "parameter",
+                                        "name": "abc",
+                                        "const": 0,
+                                        "data-type": "variable",
+                                        "mandatory": 0,
+                                        "reference": 0,
+                                        "file": "phpt__functions_closures_empty_closure.zep",
+                                        "line": 9,
+                                        "char": 36
+                                    }
+                                ],
+                                "file": "phpt__functions_closures_empty_closure.zep",
+                                "line": 9,
+                                "char": 41
+                            },
+                            "file": "phpt__functions_closures_empty_closure.zep",
+                            "line": 10,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__functions_closures_empty_closure.zep",
+                    "line": 9,
+                    "last-line": 11,
+                    "char": 23
+                }
+            ],
+            "file": "phpt__functions_closures_empty_closure.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__functions_closures_empty_closure.zep",
+        "line": 3,
+        "char": 5
+    }
+]

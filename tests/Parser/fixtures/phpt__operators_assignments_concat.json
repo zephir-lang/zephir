@@ -1,0 +1,142 @@
+[
+    {
+        "type": "namespace",
+        "name": "ExtTest",
+        "file": "phpt__operators_assignments_concat.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Test",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public",
+                        "static"
+                    ],
+                    "type": "method",
+                    "name": "test",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "phpt__operators_assignments_concat.zep",
+                                    "line": 7,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "phpt__operators_assignments_concat.zep",
+                                    "line": 7,
+                                    "char": 17
+                                }
+                            ],
+                            "file": "phpt__operators_assignments_concat.zep",
+                            "line": 8,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "a",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "1",
+                                        "file": "phpt__operators_assignments_concat.zep",
+                                        "line": 8,
+                                        "char": 18
+                                    },
+                                    "file": "phpt__operators_assignments_concat.zep",
+                                    "line": 8,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "phpt__operators_assignments_concat.zep",
+                            "line": 9,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "2",
+                                        "file": "phpt__operators_assignments_concat.zep",
+                                        "line": 9,
+                                        "char": 18
+                                    },
+                                    "file": "phpt__operators_assignments_concat.zep",
+                                    "line": 9,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "phpt__operators_assignments_concat.zep",
+                            "line": 10,
+                            "char": 11
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "concat-assign",
+                                    "variable": "b",
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "phpt__operators_assignments_concat.zep",
+                                        "line": 10,
+                                        "char": 18
+                                    },
+                                    "file": "phpt__operators_assignments_concat.zep",
+                                    "line": 10,
+                                    "char": 18
+                                }
+                            ],
+                            "file": "phpt__operators_assignments_concat.zep",
+                            "line": 11,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "b",
+                                "file": "phpt__operators_assignments_concat.zep",
+                                "line": 11,
+                                "char": 17
+                            },
+                            "file": "phpt__operators_assignments_concat.zep",
+                            "line": 12,
+                            "char": 5
+                        }
+                    ],
+                    "file": "phpt__operators_assignments_concat.zep",
+                    "line": 5,
+                    "last-line": 13,
+                    "char": 26
+                }
+            ],
+            "file": "phpt__operators_assignments_concat.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__operators_assignments_concat.zep",
+        "line": 3,
+        "char": 5
+    }
+]

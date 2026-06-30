@@ -1,0 +1,97 @@
+--TEST--
+Issue #2505: -> <self> / -> <static> return types are seen by the engine as the reserved keywords (Reflection), <static> does LSB at runtime, and chained/cross-class <static> resolves to the receiver (port of tests/Extension/Issue2505Test.php)
+--FILE--
+namespace Stub;
+
+class Issue2505
+{
+    public function makeSelf() -> <self>
+    {
+        return new self();
+    }
+
+    public static function makeSelfStatic() -> <self>
+    {
+        return new self();
+    }
+
+    public function makeStatic() -> <static>
+    {
+        return new static();
+    }
+
+    public static function makeStaticFromStatic() -> <static>
+    {
+        return new static();
+    }
+
+    public function chainedStatic() -> bool
+    {
+        return this->makeStatic()->checkPrivate();
+    }
+
+    public function chainedSelf() -> bool
+    {
+        return this->makeSelf()->checkPrivate();
+    }
+
+    public function checkPrivate() -> bool
+    {
+        return true;
+    }
+}
+--FILE--
+namespace Stub;
+
+class Issue2505Extended extends Issue2505
+{
+}
+--FILE--
+namespace Stub;
+
+class Issue2505CrossChain
+{
+    public function crossClassChain(<Issue2505> instance) -> bool
+    {
+        return instance->makeStatic()->checkPrivate();
+    }
+
+    public function crossClassChainSelf(<Issue2505> instance) -> bool
+    {
+        return instance->makeSelf()->checkPrivate();
+    }
+}
+--USAGE--
+// Reflection sees the reserved self/static keywords.
+echo var_export((new \ReflectionMethod(\Stub\Issue2505::class, 'makeSelf'))->getReturnType()->getName(), true), "\n";
+echo var_export((new \ReflectionMethod(\Stub\Issue2505::class, 'makeSelfStatic'))->getReturnType()->getName(), true), "\n";
+echo var_export((new \ReflectionMethod(\Stub\Issue2505::class, 'makeStatic'))->getReturnType()->getName(), true), "\n";
+echo var_export((new \ReflectionMethod(\Stub\Issue2505::class, 'makeStaticFromStatic'))->getReturnType()->getName(), true), "\n";
+
+// Runtime LSB.
+$sut = new \Stub\Issue2505();
+echo var_export($sut->makeSelf() instanceof \Stub\Issue2505, true), "\n";
+echo var_export(get_class($sut->makeStatic()) === \Stub\Issue2505::class, true), "\n";
+$ext = new \Stub\Issue2505Extended();
+echo var_export(get_class($ext->makeStatic()) === \Stub\Issue2505Extended::class, true), "\n";
+echo var_export(get_class($ext->makeSelf()) === \Stub\Issue2505::class, true), "\n";
+
+// Chained / cross-class static resolution.
+echo var_export(method_exists(\Stub\Issue2505::class, 'chainedStatic'), true), "\n";
+echo var_export(method_exists(\Stub\Issue2505::class, 'chainedSelf'), true), "\n";
+$cc = new \Stub\Issue2505CrossChain();
+echo var_export($cc->crossClassChain(new \Stub\Issue2505()), true), "\n";
+echo var_export($cc->crossClassChainSelf(new \Stub\Issue2505()), true), "\n";
+--EXPECT--
+'self'
+'self'
+'static'
+'static'
+true
+true
+true
+true
+true
+true
+true
+true

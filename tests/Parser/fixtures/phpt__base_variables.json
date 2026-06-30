@@ -1,0 +1,125 @@
+[
+    {
+        "type": "namespace",
+        "name": "Example",
+        "file": "phpt__base_variables.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Foo\\Bar\\Bas",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "properties": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "foo",
+                    "file": "phpt__base_variables.zep",
+                    "line": 6,
+                    "char": 13
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "property",
+                    "name": "bar",
+                    "file": "phpt__base_variables.zep",
+                    "line": 7,
+                    "char": 11
+                },
+                {
+                    "visibility": [
+                        "private"
+                    ],
+                    "type": "property",
+                    "name": "baz",
+                    "file": "phpt__base_variables.zep",
+                    "line": 9,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "aaa",
+                    "file": "phpt__base_variables.zep",
+                    "line": 10,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "\\bbb",
+                    "file": "phpt__base_variables.zep",
+                    "line": 11,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "_ccc",
+                    "file": "phpt__base_variables.zep",
+                    "line": 13,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "_abc",
+                    "file": "phpt__base_variables.zep",
+                    "line": 14,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "\\_cde",
+                    "file": "phpt__base_variables.zep",
+                    "line": 15,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "__edc",
+                    "file": "phpt__base_variables.zep",
+                    "line": 16,
+                    "char": 10
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "property",
+                    "name": "______",
+                    "file": "phpt__base_variables.zep",
+                    "line": 17,
+                    "char": 1
+                }
+            ],
+            "file": "phpt__base_variables.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "phpt__base_variables.zep",
+        "line": 3,
+        "char": 5
+    }
+]

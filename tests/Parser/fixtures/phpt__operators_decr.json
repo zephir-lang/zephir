@@ -1,0 +1,42 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "decr",
+                        "variable": "a",
+                        "file": "phpt__operators_decr.zep",
+                        "line": 2,
+                        "char": 9
+                    }
+                ],
+                "file": "phpt__operators_decr.zep",
+                "line": 3,
+                "char": 4
+            },
+            {
+                "type": "let",
+                "assignments": [
+                    {
+                        "assign-type": "object-property-decr",
+                        "variable": "b",
+                        "property": "a",
+                        "file": "phpt__operators_decr.zep",
+                        "line": 3,
+                        "char": 12
+                    }
+                ],
+                "file": "phpt__operators_decr.zep",
+                "line": 4,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_decr.zep",
+        "line": 1,
+        "char": 9
+    }
+]

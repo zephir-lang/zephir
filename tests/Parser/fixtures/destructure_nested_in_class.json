@@ -1,0 +1,105 @@
+[
+    {
+        "type": "namespace",
+        "name": "Foo",
+        "file": "destructure_nested_in_class.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Bar",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "baz",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "a",
+                                    "file": "destructure_nested_in_class.zep",
+                                    "line": 5,
+                                    "char": 8
+                                },
+                                {
+                                    "variable": "b",
+                                    "file": "destructure_nested_in_class.zep",
+                                    "line": 5,
+                                    "char": 11
+                                }
+                            ],
+                            "file": "destructure_nested_in_class.zep",
+                            "line": 6,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "destructure",
+                                    "operator": "assign",
+                                    "variables": [
+                                        {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "destructure_nested_in_class.zep",
+                                            "line": 6,
+                                            "char": 9
+                                        },
+                                        {
+                                            "type": "variable",
+                                            "value": "b",
+                                            "file": "destructure_nested_in_class.zep",
+                                            "line": 6,
+                                            "char": 12
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "mcall",
+                                        "variable": {
+                                            "type": "variable",
+                                            "value": "this",
+                                            "file": "destructure_nested_in_class.zep",
+                                            "line": 6,
+                                            "char": 21
+                                        },
+                                        "name": "getPair",
+                                        "call-type": 1,
+                                        "file": "destructure_nested_in_class.zep",
+                                        "line": 6,
+                                        "char": 31
+                                    },
+                                    "file": "destructure_nested_in_class.zep",
+                                    "line": 6,
+                                    "char": 31
+                                }
+                            ],
+                            "file": "destructure_nested_in_class.zep",
+                            "line": 7,
+                            "char": 2
+                        }
+                    ],
+                    "file": "destructure_nested_in_class.zep",
+                    "line": 4,
+                    "last-line": 8,
+                    "char": 16
+                }
+            ],
+            "file": "destructure_nested_in_class.zep",
+            "line": 3,
+            "char": 5
+        },
+        "file": "destructure_nested_in_class.zep",
+        "line": 3,
+        "char": 5
+    }
+]

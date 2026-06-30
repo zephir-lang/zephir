@@ -1,0 +1,831 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Optimizers",
+        "file": "stub__optimizers_strreplace.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "StrReplace",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1055",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "str_replace",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "array",
+                                            "left": [
+                                                {
+                                                    "value": {
+                                                        "type": "string",
+                                                        "value": "aa",
+                                                        "file": "stub__optimizers_strreplace.zep",
+                                                        "line": 11,
+                                                        "char": 25
+                                                    },
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 11,
+                                                    "char": 25
+                                                }
+                                            ],
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 11,
+                                            "char": 26
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 11,
+                                        "char": 26
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "array",
+                                            "left": [
+                                                {
+                                                    "value": {
+                                                        "type": "string",
+                                                        "value": "aaa",
+                                                        "file": "stub__optimizers_strreplace.zep",
+                                                        "line": 11,
+                                                        "char": 32
+                                                    },
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 11,
+                                                    "char": 32
+                                                }
+                                            ],
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 11,
+                                            "char": 33
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 11,
+                                        "char": 33
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "string",
+                                            "value": "bla bla aa aaa askks",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 11,
+                                            "char": 55
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 11,
+                                        "char": 55
+                                    }
+                                ],
+                                "file": "stub__optimizers_strreplace.zep",
+                                "line": 11,
+                                "char": 56
+                            },
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 12,
+                            "char": 2
+                        }
+                    ],
+                    "docblock": "**\n\t * @link https:\/\/github.com\/zephir-lang\/zephir\/issues\/1055\n\t *",
+                    "file": "stub__optimizers_strreplace.zep",
+                    "line": 9,
+                    "last-line": 14,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue1087",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "filtered",
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 16,
+                                    "char": 15
+                                },
+                                {
+                                    "variable": "sanitize",
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 16,
+                                    "char": 25
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 17,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "filtered",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "test_test",
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 17,
+                                        "char": 27
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 17,
+                                    "char": 27
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 18,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "sanitize",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\/",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 20
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 20
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "'",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 23
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 23
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\\\"",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 27
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 27
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "?",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "!",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 33
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "%",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 36
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 36
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "$",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 39
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 39
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "&",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 18,
+                                                    "char": 42
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 18,
+                                                "char": 42
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 18,
+                                        "char": 43
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 18,
+                                    "char": 43
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 19,
+                            "char": 5
+                        },
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "variable",
+                                    "operator": "assign",
+                                    "variable": "filtered",
+                                    "expr": {
+                                        "type": "fcall",
+                                        "name": "str_replace",
+                                        "call-type": 1,
+                                        "parameters": [
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "sanitize",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 19,
+                                                    "char": 38
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 19,
+                                                "char": 38
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "string",
+                                                    "value": "",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 19,
+                                                    "char": 40
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 19,
+                                                "char": 40
+                                            },
+                                            {
+                                                "parameter": {
+                                                    "type": "variable",
+                                                    "value": "filtered",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 19,
+                                                    "char": 50
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 19,
+                                                "char": 50
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 19,
+                                        "char": 51
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 19,
+                                    "char": 51
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 20,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "filtered",
+                                "file": "stub__optimizers_strreplace.zep",
+                                "line": 20,
+                                "char": 18
+                            },
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_strreplace.zep",
+                    "line": 14,
+                    "last-line": 23,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue732A",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "search",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "A",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 25,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 25,
+                                                "char": 22
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "B",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 25,
+                                                    "char": 25
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 25,
+                                                "char": 25
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "C",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 25,
+                                                    "char": 28
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 25,
+                                                "char": 28
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "D",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 25,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 25,
+                                                "char": 31
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "E",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 25,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 25,
+                                                "char": 34
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 25,
+                                        "char": 35
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 25,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 26,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "replace",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "B",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 26,
+                                                    "char": 22
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 26,
+                                                "char": 22
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "C",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 26,
+                                                    "char": 25
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 26,
+                                                "char": 25
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "D",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 26,
+                                                    "char": 28
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 26,
+                                                "char": 28
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "E",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 26,
+                                                    "char": 31
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 26,
+                                                "char": 31
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "F",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 26,
+                                                    "char": 34
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 26,
+                                                "char": 34
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 26,
+                                        "char": 35
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 26,
+                                    "char": 35
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 27,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "subject",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "A",
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 27,
+                                        "char": 21
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 27,
+                                    "char": 21
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 29,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "str_replace",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "search",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 29,
+                                            "char": 28
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 29,
+                                        "char": 28
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "replace",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 29,
+                                            "char": 37
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 29,
+                                        "char": 37
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "subject",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 29,
+                                            "char": 46
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 29,
+                                        "char": 46
+                                    }
+                                ],
+                                "file": "stub__optimizers_strreplace.zep",
+                                "line": 29,
+                                "char": 47
+                            },
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 30,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_strreplace.zep",
+                    "line": 23,
+                    "last-line": 32,
+                    "char": 23
+                },
+                {
+                    "visibility": [
+                        "static",
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "issue732B",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "patterns",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\/quick\/",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 34,
+                                                    "char": 33
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 34,
+                                                "char": 33
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\/brown\/",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 34,
+                                                    "char": 42
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 34,
+                                                "char": 42
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "\/fox\/",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 34,
+                                                    "char": 49
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 34,
+                                                "char": 49
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 34,
+                                        "char": 50
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 34,
+                                    "char": 50
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 35,
+                            "char": 7
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "array",
+                            "variables": [
+                                {
+                                    "variable": "replacements",
+                                    "expr": {
+                                        "type": "array",
+                                        "left": [
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "bear",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 35,
+                                                    "char": 30
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 35,
+                                                "char": 30
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "black",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 35,
+                                                    "char": 37
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 35,
+                                                "char": 37
+                                            },
+                                            {
+                                                "value": {
+                                                    "type": "string",
+                                                    "value": "slow",
+                                                    "file": "stub__optimizers_strreplace.zep",
+                                                    "line": 35,
+                                                    "char": 43
+                                                },
+                                                "file": "stub__optimizers_strreplace.zep",
+                                                "line": 35,
+                                                "char": 43
+                                            }
+                                        ],
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 35,
+                                        "char": 44
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 35,
+                                    "char": 44
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "declare",
+                            "data-type": "string",
+                            "variables": [
+                                {
+                                    "variable": "subject",
+                                    "expr": {
+                                        "type": "string",
+                                        "value": "The quick brown fox jumped over the lazy dog.",
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 36,
+                                        "char": 70
+                                    },
+                                    "file": "stub__optimizers_strreplace.zep",
+                                    "line": 36,
+                                    "char": 70
+                                }
+                            ],
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 38,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "preg_replace",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "patterns",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 38,
+                                            "char": 31
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 38,
+                                        "char": 31
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "replacements",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 38,
+                                            "char": 45
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 38,
+                                        "char": 45
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "subject",
+                                            "file": "stub__optimizers_strreplace.zep",
+                                            "line": 38,
+                                            "char": 54
+                                        },
+                                        "file": "stub__optimizers_strreplace.zep",
+                                        "line": 38,
+                                        "char": 54
+                                    }
+                                ],
+                                "file": "stub__optimizers_strreplace.zep",
+                                "line": 38,
+                                "char": 55
+                            },
+                            "file": "stub__optimizers_strreplace.zep",
+                            "line": 39,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__optimizers_strreplace.zep",
+                    "line": 32,
+                    "last-line": 40,
+                    "char": 23
+                }
+            ],
+            "file": "stub__optimizers_strreplace.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__optimizers_strreplace.zep",
+        "line": 4,
+        "char": 5
+    }
+]

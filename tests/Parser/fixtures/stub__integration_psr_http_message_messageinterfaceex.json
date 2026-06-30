@@ -1,0 +1,39 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Integration\\Psr\\Http\\Message",
+        "file": "stub__integration_psr_http_message_messageinterfaceex.zep",
+        "line": 3,
+        "char": 3
+    },
+    {
+        "type": "use",
+        "aliases": [
+            {
+                "name": "Psr\\Http\\Message\\MessageInterface",
+                "file": "stub__integration_psr_http_message_messageinterfaceex.zep",
+                "line": 3,
+                "char": 38
+            }
+        ],
+        "file": "stub__integration_psr_http_message_messageinterfaceex.zep",
+        "line": 5,
+        "char": 9
+    },
+    {
+        "type": "interface",
+        "name": "MessageInterfaceEx",
+        "extends": [
+            {
+                "type": "variable",
+                "value": "MessageInterface",
+                "file": "stub__integration_psr_http_message_messageinterfaceex.zep",
+                "line": 6,
+                "char": 1
+            }
+        ],
+        "file": "stub__integration_psr_http_message_messageinterfaceex.zep",
+        "line": 0,
+        "char": 0
+    }
+]

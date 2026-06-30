@@ -1,0 +1,27 @@
+--TEST--
+Issue #1521: string-keyed array literal preserves string values (incl. "0") exactly (port of tests/Extension/Issue1521Test.php)
+--FILE--
+namespace Stub;
+
+class Issue1521
+{
+	public params;
+
+	public function test()
+	{
+		let this->params = [
+			"merchantNumber":"0818217122",
+			"zero":"0"
+		];
+
+		return this->params;
+	}
+}
+--USAGE--
+$test = new \Stub\Issue1521();
+$actual = $test->test();
+echo var_export('0' === $actual['zero'], true), "\n";
+echo var_export('0818217122' === $actual['merchantNumber'], true), "\n";
+--EXPECT--
+true
+true

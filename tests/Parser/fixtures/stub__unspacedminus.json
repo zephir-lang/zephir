@@ -1,0 +1,898 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub",
+        "file": "stub__unspacedminus.zep",
+        "line": 5,
+        "char": 2
+    },
+    {
+        "type": "comment",
+        "value": "**\n * @issue https:\/\/github.com\/zephir-lang\/zephir\/issues\/2011\n *",
+        "file": "stub__unspacedminus.zep",
+        "line": 6,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "UnspacedMinus",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "rangeLen",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "len",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 8,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "i",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 10,
+                                    "char": 14
+                                },
+                                {
+                                    "variable": "out",
+                                    "expr": {
+                                        "type": "empty-array",
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 10,
+                                        "char": 24
+                                    },
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 10,
+                                    "char": 24
+                                }
+                            ],
+                            "file": "stub__unspacedminus.zep",
+                            "line": 11,
+                            "char": 11
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "fcall",
+                                "name": "range",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "int",
+                                            "value": "0",
+                                            "file": "stub__unspacedminus.zep",
+                                            "line": 11,
+                                            "char": 25
+                                        },
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 11,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "sub",
+                                            "left": {
+                                                "type": "variable",
+                                                "value": "len",
+                                                "file": "stub__unspacedminus.zep",
+                                                "line": 11,
+                                                "char": 30
+                                            },
+                                            "right": {
+                                                "type": "int",
+                                                "value": "1",
+                                                "file": "stub__unspacedminus.zep",
+                                                "line": 11,
+                                                "char": 32
+                                            },
+                                            "file": "stub__unspacedminus.zep",
+                                            "line": 11,
+                                            "char": 32
+                                        },
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 11,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__unspacedminus.zep",
+                                "line": 11,
+                                "char": 34
+                            },
+                            "value": "i",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "let",
+                                    "assignments": [
+                                        {
+                                            "assign-type": "variable-append",
+                                            "operator": "assign",
+                                            "variable": "out",
+                                            "expr": {
+                                                "type": "variable",
+                                                "value": "i",
+                                                "file": "stub__unspacedminus.zep",
+                                                "line": 12,
+                                                "char": 26
+                                            },
+                                            "file": "stub__unspacedminus.zep",
+                                            "line": 12,
+                                            "char": 26
+                                        }
+                                    ],
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 13,
+                                    "char": 9
+                                }
+                            ],
+                            "file": "stub__unspacedminus.zep",
+                            "line": 14,
+                            "char": 14
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "out",
+                                "file": "stub__unspacedminus.zep",
+                                "line": 14,
+                                "char": 19
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 15,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "array",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 9,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 9,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 8,
+                    "last-line": 17,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "glued",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 17,
+                            "char": 32
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "sub",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 19,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 19,
+                                    "char": 19
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 19,
+                                "char": 19
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 20,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 18,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 18,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 17,
+                    "last-line": 22,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "spaceBefore",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 22,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "sub",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 24,
+                                    "char": 18
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 24,
+                                    "char": 20
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 24,
+                                "char": 20
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 25,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 23,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 23,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 22,
+                    "last-line": 27,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "arrayIndex",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "array",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 27,
+                            "char": 39
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "sub",
+                                "left": {
+                                    "type": "array-access",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 29,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "0",
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 29,
+                                        "char": 19
+                                    },
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 29,
+                                    "char": 20
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 29,
+                                    "char": 22
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 29,
+                                "char": 22
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 30,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 28,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 28,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 27,
+                    "last-line": 32,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "negativeLiteral",
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "int",
+                                "value": "-1",
+                                "file": "stub__unspacedminus.zep",
+                                "line": 34,
+                                "char": 18
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 35,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 33,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 33,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 32,
+                    "last-line": 37,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gluedAdd",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 37,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "add",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 39,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 39,
+                                    "char": 19
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 39,
+                                "char": 19
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 40,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 38,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 38,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 37,
+                    "last-line": 42,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gluedMul",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 42,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mul",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 44,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 44,
+                                    "char": 19
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 44,
+                                "char": 19
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 45,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 43,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 43,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 42,
+                    "last-line": 47,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gluedDiv",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 47,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "div",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 49,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "2",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 49,
+                                    "char": 19
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 49,
+                                "char": 19
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 50,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "double",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 48,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 48,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 47,
+                    "last-line": 52,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "gluedMod",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 52,
+                            "char": 35
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "cast",
+                                "left": "int",
+                                "right": {
+                                    "type": "list",
+                                    "left": {
+                                        "type": "mod",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "a",
+                                            "file": "stub__unspacedminus.zep",
+                                            "line": 54,
+                                            "char": 24
+                                        },
+                                        "right": {
+                                            "type": "int",
+                                            "value": "5",
+                                            "file": "stub__unspacedminus.zep",
+                                            "line": 54,
+                                            "char": 26
+                                        },
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 54,
+                                        "char": 26
+                                    },
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 54,
+                                    "char": 27
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 54,
+                                "char": 27
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 55,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 53,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 53,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 52,
+                    "last-line": 57,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "mulByNegative",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 57,
+                            "char": 40
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mul",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "a",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 59,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "-1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 59,
+                                    "char": 20
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 59,
+                                "char": 20
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 60,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 58,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 58,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 57,
+                    "last-line": 62,
+                    "char": 19
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "chained",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "a",
+                            "const": 0,
+                            "data-type": "int",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__unspacedminus.zep",
+                            "line": 62,
+                            "char": 34
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "sub",
+                                "left": {
+                                    "type": "mul",
+                                    "left": {
+                                        "type": "variable",
+                                        "value": "a",
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 64,
+                                        "char": 17
+                                    },
+                                    "right": {
+                                        "type": "int",
+                                        "value": "2",
+                                        "file": "stub__unspacedminus.zep",
+                                        "line": 64,
+                                        "char": 19
+                                    },
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 64,
+                                    "char": 19
+                                },
+                                "right": {
+                                    "type": "int",
+                                    "value": "1",
+                                    "file": "stub__unspacedminus.zep",
+                                    "line": 64,
+                                    "char": 21
+                                },
+                                "file": "stub__unspacedminus.zep",
+                                "line": 64,
+                                "char": 21
+                            },
+                            "file": "stub__unspacedminus.zep",
+                            "line": 65,
+                            "char": 5
+                        }
+                    ],
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "stub__unspacedminus.zep",
+                                "line": 63,
+                                "char": 5
+                            }
+                        ],
+                        "void": 0,
+                        "file": "stub__unspacedminus.zep",
+                        "line": 63,
+                        "char": 5
+                    },
+                    "file": "stub__unspacedminus.zep",
+                    "line": 62,
+                    "last-line": 66,
+                    "char": 19
+                }
+            ],
+            "file": "stub__unspacedminus.zep",
+            "line": 6,
+            "char": 5
+        },
+        "file": "stub__unspacedminus.zep",
+        "line": 6,
+        "char": 5
+    }
+]

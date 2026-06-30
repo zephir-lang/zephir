@@ -42,6 +42,9 @@
         "psr/log": "1.1.*",
         "squizlabs/php_codesniffer": "^4.0"
     },
+    "suggest": {
+        "ext-zephir_parser": "Optional native parser used as a fast path; the built-in pure-PHP parser is used when it is absent"
+    },
     "config": {
         "optimize-autoloader": true,
         "platform": {},

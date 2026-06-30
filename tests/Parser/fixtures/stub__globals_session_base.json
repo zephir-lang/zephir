@@ -1,0 +1,389 @@
+[
+    {
+        "type": "namespace",
+        "name": "Stub\\Globals\\Session",
+        "file": "stub__globals_session_base.zep",
+        "line": 4,
+        "char": 5
+    },
+    {
+        "type": "class",
+        "name": "Base",
+        "abstract": 0,
+        "final": 0,
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "set",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "index",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 6,
+                            "char": 34
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 6,
+                            "char": 45
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "let",
+                            "assignments": [
+                                {
+                                    "assign-type": "array-index",
+                                    "operator": "assign",
+                                    "variable": "_SESSION",
+                                    "index-expr": [
+                                        {
+                                            "type": "variable",
+                                            "value": "index",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 8,
+                                            "char": 21
+                                        }
+                                    ],
+                                    "expr": {
+                                        "type": "variable",
+                                        "value": "value",
+                                        "file": "stub__globals_session_base.zep",
+                                        "line": 8,
+                                        "char": 30
+                                    },
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 8,
+                                    "char": 30
+                                }
+                            ],
+                            "file": "stub__globals_session_base.zep",
+                            "line": 10,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "_SESSION",
+                                "file": "stub__globals_session_base.zep",
+                                "line": 10,
+                                "char": 18
+                            },
+                            "file": "stub__globals_session_base.zep",
+                            "line": 11,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__globals_session_base.zep",
+                    "line": 6,
+                    "last-line": 13,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "remove",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "index",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 13,
+                            "char": 37
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "unset",
+                            "expr": {
+                                "type": "array-access",
+                                "left": {
+                                    "type": "variable",
+                                    "value": "_SESSION",
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 15,
+                                    "char": 17
+                                },
+                                "right": {
+                                    "type": "variable",
+                                    "value": "index",
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 15,
+                                    "char": 23
+                                },
+                                "file": "stub__globals_session_base.zep",
+                                "line": 15,
+                                "char": 24
+                            },
+                            "file": "stub__globals_session_base.zep",
+                            "line": 16,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__globals_session_base.zep",
+                    "line": 13,
+                    "last-line": 18,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__set",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "index",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 18,
+                            "char": 36
+                        },
+                        {
+                            "type": "parameter",
+                            "name": "value",
+                            "const": 0,
+                            "data-type": "variable",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 18,
+                            "char": 47
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 20,
+                                    "char": 15
+                                },
+                                "name": "set",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "index",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 20,
+                                            "char": 25
+                                        },
+                                        "file": "stub__globals_session_base.zep",
+                                        "line": 20,
+                                        "char": 25
+                                    },
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "value",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 20,
+                                            "char": 32
+                                        },
+                                        "file": "stub__globals_session_base.zep",
+                                        "line": 20,
+                                        "char": 32
+                                    }
+                                ],
+                                "file": "stub__globals_session_base.zep",
+                                "line": 20,
+                                "char": 33
+                            },
+                            "file": "stub__globals_session_base.zep",
+                            "line": 21,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__globals_session_base.zep",
+                    "line": 18,
+                    "last-line": 23,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "__unset",
+                    "parameters": [
+                        {
+                            "type": "parameter",
+                            "name": "index",
+                            "const": 0,
+                            "data-type": "string",
+                            "mandatory": 0,
+                            "reference": 0,
+                            "file": "stub__globals_session_base.zep",
+                            "line": 23,
+                            "char": 38
+                        }
+                    ],
+                    "statements": [
+                        {
+                            "type": "mcall",
+                            "expr": {
+                                "type": "mcall",
+                                "variable": {
+                                    "type": "variable",
+                                    "value": "this",
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 25,
+                                    "char": 8
+                                },
+                                "name": "remove",
+                                "call-type": 1,
+                                "parameters": [
+                                    {
+                                        "parameter": {
+                                            "type": "variable",
+                                            "value": "index",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 25,
+                                            "char": 21
+                                        },
+                                        "file": "stub__globals_session_base.zep",
+                                        "line": 25,
+                                        "char": 21
+                                    }
+                                ],
+                                "file": "stub__globals_session_base.zep",
+                                "line": 25,
+                                "char": 22
+                            },
+                            "file": "stub__globals_session_base.zep",
+                            "line": 26,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__globals_session_base.zep",
+                    "line": 23,
+                    "last-line": 28,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "protected"
+                    ],
+                    "type": "method",
+                    "name": "removeSessionData",
+                    "statements": [
+                        {
+                            "type": "declare",
+                            "data-type": "variable",
+                            "variables": [
+                                {
+                                    "variable": "key",
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 30,
+                                    "char": 10
+                                }
+                            ],
+                            "file": "stub__globals_session_base.zep",
+                            "line": 32,
+                            "char": 5
+                        },
+                        {
+                            "type": "for",
+                            "expr": {
+                                "type": "variable",
+                                "value": "_SESSION",
+                                "file": "stub__globals_session_base.zep",
+                                "line": 32,
+                                "char": 26
+                            },
+                            "key": "key",
+                            "value": "_",
+                            "reverse": 0,
+                            "statements": [
+                                {
+                                    "type": "unset",
+                                    "expr": {
+                                        "type": "array-access",
+                                        "left": {
+                                            "type": "variable",
+                                            "value": "_SESSION",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 33,
+                                            "char": 18
+                                        },
+                                        "right": {
+                                            "type": "variable",
+                                            "value": "key",
+                                            "file": "stub__globals_session_base.zep",
+                                            "line": 33,
+                                            "char": 22
+                                        },
+                                        "file": "stub__globals_session_base.zep",
+                                        "line": 33,
+                                        "char": 23
+                                    },
+                                    "file": "stub__globals_session_base.zep",
+                                    "line": 34,
+                                    "char": 3
+                                }
+                            ],
+                            "file": "stub__globals_session_base.zep",
+                            "line": 36,
+                            "char": 8
+                        },
+                        {
+                            "type": "return",
+                            "expr": {
+                                "type": "variable",
+                                "value": "_SESSION",
+                                "file": "stub__globals_session_base.zep",
+                                "line": 36,
+                                "char": 18
+                            },
+                            "file": "stub__globals_session_base.zep",
+                            "line": 37,
+                            "char": 2
+                        }
+                    ],
+                    "file": "stub__globals_session_base.zep",
+                    "line": 28,
+                    "last-line": 38,
+                    "char": 19
+                }
+            ],
+            "file": "stub__globals_session_base.zep",
+            "line": 4,
+            "char": 5
+        },
+        "file": "stub__globals_session_base.zep",
+        "line": 4,
+        "char": 5
+    }
+]

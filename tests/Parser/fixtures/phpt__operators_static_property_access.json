@@ -1,0 +1,37 @@
+[
+    {
+        "type": "function",
+        "name": "test",
+        "statements": [
+            {
+                "type": "if",
+                "expr": {
+                    "type": "static-property-access",
+                    "left": {
+                        "type": "variable",
+                        "value": "MyClass",
+                        "file": "phpt__operators_static_property_access.zep",
+                        "line": 2,
+                        "char": 27
+                    },
+                    "right": {
+                        "type": "variable",
+                        "value": "propertyName",
+                        "file": "phpt__operators_static_property_access.zep",
+                        "line": 2,
+                        "char": 27
+                    },
+                    "file": "phpt__operators_static_property_access.zep",
+                    "line": 2,
+                    "char": 27
+                },
+                "file": "phpt__operators_static_property_access.zep",
+                "line": 3,
+                "char": 1
+            }
+        ],
+        "file": "phpt__operators_static_property_access.zep",
+        "line": 1,
+        "char": 9
+    }
+]

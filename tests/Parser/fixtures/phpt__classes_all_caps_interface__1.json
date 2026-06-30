@@ -1,0 +1,55 @@
+[
+    {
+        "type": "interface",
+        "name": "IFACE",
+        "definition": {
+            "methods": [
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "COMPUTE",
+                    "file": "phpt__classes_all_caps_interface__1.zep",
+                    "line": 2,
+                    "last-line": 3,
+                    "char": 16
+                },
+                {
+                    "visibility": [
+                        "public"
+                    ],
+                    "type": "method",
+                    "name": "GET",
+                    "return-type": {
+                        "type": "return-type",
+                        "list": [
+                            {
+                                "type": "return-type-parameter",
+                                "data-type": "int",
+                                "mandatory": 0,
+                                "file": "phpt__classes_all_caps_interface__1.zep",
+                                "line": 3,
+                                "char": 30
+                            }
+                        ],
+                        "void": 0,
+                        "file": "phpt__classes_all_caps_interface__1.zep",
+                        "line": 3,
+                        "char": 30
+                    },
+                    "file": "phpt__classes_all_caps_interface__1.zep",
+                    "line": 3,
+                    "last-line": 4,
+                    "char": 16
+                }
+            ],
+            "file": "phpt__classes_all_caps_interface__1.zep",
+            "line": 4,
+            "char": 1
+        },
+        "file": "phpt__classes_all_caps_interface__1.zep",
+        "line": 0,
+        "char": 0
+    }
+]

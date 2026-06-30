@@ -1,0 +1,133 @@
+--TEST--
+MethodArgs: callable/object/resource typed params (lax + strict), strict type-error throws, and static-constant default values (port of tests/Extension/MethodArgsTest.php)
+--FILE--
+namespace Stub;
+
+class MethodArgs
+{
+	const GET = "get";
+
+	const MY_DOUBLE = 1.32;
+
+	const MY_BOOL = true;
+
+	const MY_INT = 12345;
+
+	public a;
+
+	public function setCallable(callable a)
+	{
+		let this->a = a;
+	}
+
+	public function setObject(object a)
+	{
+		let this->a = a;
+	}
+
+	public function setCallableStrict(callable! a)
+	{
+		let this->a = a;
+	}
+
+	public function setObjectStrict(object! a)
+	{
+		let this->a = a;
+	}
+
+	public function setResourceStrict(resource! a)
+	{
+		let this->a = a;
+	}
+
+	public function methodOptionalValueWithDefaultStaticConstantAccess(var method = self::GET)
+	{
+		return method;
+	}
+
+	public function methodOptionalStringValueWithDefaultStaticConstantAccess(string parameter = self::GET)
+	{
+		return parameter;
+	}
+
+	public function methodOptionalDoubleValueWithDefaultStaticConstantAccess(double parameter = self::MY_DOUBLE)
+	{
+		return parameter;
+	}
+
+	public function methodOptionalBoolValueWithDefaultStaticConstantAccess(bool parameter = self::MY_BOOL)
+	{
+		return parameter;
+	}
+
+	public function methodOptionalIntValueWithDefaultStaticConstantAccess(int parameter = self::MY_INT)
+	{
+		return parameter;
+	}
+}
+--USAGE--
+$test = new \Stub\MethodArgs();
+
+$callback = function (): void {};
+
+// callable arg (lax + strict) stores the value unchanged
+$test->setCallable($callback);
+echo var_export($test->a === $callback, true), "\n";
+$test->setCallableStrict($callback);
+echo var_export($test->a === $callback, true), "\n";
+
+// strict callable rejects a bool
+try {
+    $test->setCallableStrict(true);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Throwable, true), "\n";
+}
+
+// object arg (lax + strict) stores the value unchanged
+$obj = new \stdClass();
+$test->setObject($obj);
+echo var_export($test->a === $obj, true), "\n";
+$test->setObjectStrict($obj);
+echo var_export($test->a === $obj, true), "\n";
+
+// strict object rejects a bool
+try {
+    $test->setObjectStrict(true);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Throwable, true), "\n";
+}
+
+// strict resource accepts STDIN, rejects a bool
+$test->setResourceStrict(STDIN);
+echo var_export($test->a === STDIN, true), "\n";
+try {
+    $test->setResourceStrict(true);
+    echo "no-throw\n";
+} catch (\Throwable $e) {
+    echo var_export($e instanceof \Throwable, true), "\n";
+}
+
+// static-constant default values resolve
+echo var_export($test->methodOptionalValueWithDefaultStaticConstantAccess('test'), true), "\n";
+echo var_export($test->methodOptionalValueWithDefaultStaticConstantAccess(), true), "\n";
+echo var_export($test->methodOptionalStringValueWithDefaultStaticConstantAccess(), true), "\n";
+echo var_export($test->methodOptionalDoubleValueWithDefaultStaticConstantAccess(), true), "\n";
+echo var_export($test->methodOptionalBoolValueWithDefaultStaticConstantAccess(), true), "\n";
+echo var_export($test->methodOptionalIntValueWithDefaultStaticConstantAccess(), true), "\n";
+--EXPECT--
+true
+true
+true
+true
+true
+true
+true
+true
+'test'
+'get'
+'get'
+1.32
+true
+12345
