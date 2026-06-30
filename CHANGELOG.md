@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ### Deprecated
 - The `!` (strict type) modifier on argument types (e.g. `int! a`) now emits a deprecation notice during `zephir generate`. A future parser will no longer recognize it. Suppress with `-Wdeprecated-strict-type` [#2274](https://github.com/zephir-lang/zephir/issues/2274)
+- `RedisCluster` prototype (in `prototypes/redis.php`), so Zephir code can resolve its methods and constants when ext-redis is not installed
 
 ## [0.23.0] - 2026-06-06
 
