@@ -223,7 +223,7 @@ jobs:
         php: [ '8.0', '8.5' ]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 5
 
