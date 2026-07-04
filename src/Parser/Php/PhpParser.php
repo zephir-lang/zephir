@@ -28,10 +28,10 @@ use function strspn;
  * moment the node is built. `class`/`interface`/`method`/`function` instead use
  * their own keyword token's position; `method` also records `last-line`.
  *
- * This is an in-progress vertical slice (namespace/use/class/method/property/
- * const/let/return/echo/calls + full expression grammar). Constructs outside
- * the slice raise {@see SyntaxError} via unsupported(); such inputs are not yet
- * part of the byte-identical golden corpus.
+ * This is an in-progress vertical slice (namespace/use/class/trait/method/
+ * property/const/let/return/echo/calls + full expression grammar). Constructs
+ * outside the slice raise {@see SyntaxError} via unsupported(); such inputs
+ * are not yet part of the byte-identical golden corpus.
  */
 final class PhpParser
 {
@@ -337,6 +337,8 @@ final class PhpParser
                 return $this->parseFunction();
             case TokenType::T_INTERFACE:
                 return $this->parseInterface();
+            case TokenType::T_TRAIT:
+                return $this->parseTrait();
             default:
                 break;
         }
@@ -477,6 +479,33 @@ final class PhpParser
     }
 
     /**
+     * Parse a trait definition: `trait Name { members }` (xx_ret_trait).
+     * Traits take no modifiers and cannot extends/implements, as in PHP.
+     * The node is stamped from the saved class_* state set by the `trait`
+     * keyword, exactly like `class`.
+     */
+    private function parseTrait(): array
+    {
+        $this->expect(TokenType::T_TRAIT);
+        $name = $this->expectNameToken();
+
+        $definition = $this->parseClassBody();
+
+        $node = [
+            'type' => 'trait',
+            'name' => $this->remap((string) $name->value),
+        ];
+        if ($definition !== null) {
+            $node['definition'] = $definition;
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->classLine();
+        $node['char'] = $this->classChar();
+
+        return $node;
+    }
+
+    /**
      * Parse `{ members }` and bucket members into properties/methods/constants
      * (xx_ret_class_definition_from_list). The definition node uses the saved
      * class_* state at its reduce (lookahead = the closing `}`).
@@ -501,6 +530,7 @@ final class PhpParser
         $properties = [];
         $methods    = [];
         $constants  = [];
+        $uses       = [];
         foreach ($members as $m) {
             switch ($m['type']) {
                 case 'property':
@@ -511,6 +541,9 @@ final class PhpParser
                     break;
                 case 'const':
                     $constants[] = $m;
+                    break;
+                case 'use-trait':
+                    $uses[] = $m;
                     break;
                 default:
                     break;
@@ -526,6 +559,9 @@ final class PhpParser
         }
         if ($constants !== []) {
             $def['constants'] = $constants;
+        }
+        if ($uses !== []) {
+            $def['uses'] = $uses;
         }
         $def['file'] = $this->file;
         $def['line'] = $defLine;
@@ -545,6 +581,10 @@ final class PhpParser
             return $this->parseClassConst($docblock);
         }
 
+        if ($this->check(TokenType::T_USE)) {
+            return $this->parseUseTrait($docblock);
+        }
+
         $visibility = $this->parseVisibilityList();
 
         if ($this->check(TokenType::T_FUNCTION)) {
@@ -552,6 +592,34 @@ final class PhpParser
         }
 
         return $this->parseProperty($visibility, $docblock);
+    }
+
+    /**
+     * In-class trait use: `use A;` / `use A, B;` (xx_ret_use_trait). The name
+     * list reuses the implements-item literal shape. Stamped at reduce time
+     * (lookahead after the closing `;`), matching the C grammar.
+     */
+    private function parseUseTrait(?Token $docblock): array
+    {
+        $this->expect(TokenType::T_USE);
+        $traits = [$this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken())];
+        while ($this->accept(TokenType::T_COMMA)) {
+            $traits[] = $this->literalFromToken(TokenType::T_IDENTIFIER, $this->expectNameToken());
+        }
+        $this->expect(TokenType::T_DOTCOMMA);
+
+        $node = [
+            'type'   => 'use-trait',
+            'traits' => $traits,
+        ];
+        if ($docblock !== null) {
+            $node['docblock'] = $this->remap((string) $docblock->value);
+        }
+        $node['file'] = $this->file;
+        $node['line'] = $this->line();
+        $node['char'] = $this->char();
+
+        return $node;
     }
 
     /**

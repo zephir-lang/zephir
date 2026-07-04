@@ -26,6 +26,7 @@ use Zephir\Operators\AbstractOperator;
 use Zephir\Variable\Variable;
 
 use function count;
+use function sprintf;
 
 /**
  * Creates a new instance of a class
@@ -86,6 +87,17 @@ class NewInstanceOperator extends AbstractOperator
 
         if (!$className) {
             throw new CompilerException('A class name is required to instantiate the object', $expression);
+        }
+
+        /**
+         * Traits cannot be instantiated (as in PHP); this also covers
+         * `new self()` inside a trait body, where `self` is the trait itself.
+         */
+        if (!$dynamic && $compilationContext->compiler->isTrait($className)) {
+            throw new CompilerException(
+                sprintf('Cannot instantiate trait "%s"', $className),
+                $expression
+            );
         }
 
         /**

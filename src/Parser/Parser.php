@@ -67,8 +67,10 @@ class Parser
      *
      * Backend selection: the pure-PHP parser is used when forced via
      * {@see FORCE_PHP_ENV}; otherwise the C extension is used as a fast path
-     * when loaded; otherwise the pure-PHP parser is the always-available
-     * fallback. All backends produce the identical IR.
+     * when loaded AND recent enough ({@see Manager::isExtensionUsable()} —
+     * older extensions silently drop trait members); otherwise the pure-PHP
+     * parser is the always-available fallback. All backends produce the
+     * identical IR.
      *
      * @param string $filePath Absolute path to the *.zep file
      *
@@ -89,7 +91,11 @@ class Parser
             throw new ParseException('Unable to read source file to parse.');
         }
 
-        if (!getenv(self::FORCE_PHP_ENV) && function_exists('zephir_parse_file')) {
+        if (
+            !getenv(self::FORCE_PHP_ENV)
+            && function_exists('zephir_parse_file')
+            && Manager::isExtensionUsable($this->getVersion())
+        ) {
             return zephir_parse_file($content, $filePath);
         }
 

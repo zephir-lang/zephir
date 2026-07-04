@@ -1,0 +1,16 @@
+[
+    {
+        "type": "namespace",
+        "name": "Test",
+        "file": "phpt__classes_trait_all_caps__1.zep",
+        "line": 3,
+        "char": 5
+    },
+    {
+        "type": "trait",
+        "name": "Empty1",
+        "file": "phpt__classes_trait_all_caps__1.zep",
+        "line": 3,
+        "char": 5
+    }
+]

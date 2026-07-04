@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org).
 
 ## [Unreleased]
 
+### Added
+- Added trait support: `trait Name { }` and import inside classes/traits. Zephir traits compile to real `ZEND_ACC_TRAIT` class entries, so PHP userland can `use` them [#504](https://github.com/zephir-lang/zephir/issues/504)
+
 ## [1.0.0] - 2026-07-01
 
 ### Added

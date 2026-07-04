@@ -24,6 +24,7 @@ use Zephir\Backend\Backend;
 use Zephir\Backend\FcallManagerInterface;
 use Zephir\Backend\StringsManager;
 use Zephir\Class\Definition\Definition;
+use Zephir\Class\Definition\TraitMerger;
 use Zephir\Code\ArgInfoDefinition;
 use Zephir\Code\Builder\Struct;
 use Zephir\Code\Printer;
@@ -632,6 +633,7 @@ final class Compiler
                     . $classDefinition->getName()
                     . ');';
             } else {
+                /* Interfaces AND traits: both must register before any class init */
                 $interfaceEntries[$dependencyRank][] = 'zend_class_entry *' . $classDefinition->getClassEntry() . ';';
                 $interfaceInits[$dependencyRank][]   = 'ZEPHIR_INIT('
                     . $classDefinition->getCNamespace()
@@ -934,6 +936,25 @@ final class Compiler
          */
         foreach ($this->files as $compileFile) {
             $compileFile->checkDependencies($this);
+        }
+
+        /**
+         * Round 2.5. Copy trait members into every definition that uses them.
+         * All definitions exist and trait names are resolved, but nothing has
+         * consumed member tables yet — the only safe point to merge (#504).
+         */
+        $traitMergeContext           = new CompilationContext();
+        $traitMergeContext->compiler = $this;
+        $traitMergeContext->config   = $this->config;
+        $traitMergeContext->logger   = $this->logger;
+        $traitMergeContext->backend  = $this->backend;
+
+        $traitMerger = new TraitMerger($this->files, $traitMergeContext);
+        foreach ($this->files as $compileFile) {
+            $classDefinition = $compileFile->getClassDefinition();
+            if ($classDefinition !== null) {
+                $traitMerger->merge($classDefinition);
+            }
         }
 
         /**
@@ -1461,6 +1482,20 @@ final class Compiler
         foreach ($this->externalDependencies as $namespace => $location) {
             if (preg_match('#^' . $namespace . '\\\\#i', $className)) {
                 return $this->loadExternalClass($className, $location);
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Allows checking if a trait is part of the compiled extension.
+     */
+    public function isTrait(string $className): bool
+    {
+        foreach ($this->definitions as $key => $value) {
+            if (!strcasecmp($key, $className) && Definition::TYPE_TRAIT === $value->getType()) {
+                return true;
             }
         }
 
