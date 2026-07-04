@@ -1,0 +1,35 @@
+--TEST--
+Generators (#1849): static generator method (no bound this) with typed parameters and locals (int/double/bool/string) surviving suspension.
+--FILE--
+namespace Zept;
+
+class Stat
+{
+    public static function seq(int n, double step, bool tail, string label)
+    {
+        int i = 1;
+        double acc = 0.0;
+        while i <= n {
+            let acc = acc + step;
+            yield acc;
+            let i = i + 1;
+        }
+        if tail {
+            yield label;
+        }
+    }
+}
+--USAGE--
+foreach (Zept\Stat::seq(3, 0.5, true, "end") as $k => $v) {
+    echo $k, ": ";
+    var_dump($v);
+}
+foreach (Zept\Stat::seq(1, 2.5, false, "unused") as $v) {
+    var_dump($v);
+}
+--EXPECT--
+0: float(0.5)
+1: float(1)
+2: float(1.5)
+3: string(3) "end"
+float(2.5)

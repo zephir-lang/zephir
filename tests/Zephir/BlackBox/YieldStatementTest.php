@@ -16,12 +16,11 @@ namespace Zephir\Test\BlackBox;
 use PHPUnit\Framework\TestCase;
 
 /**
- * The parser accepts the three `yield` forms (bare, expression, key+value),
- * but the Zephir compiler does not yet generate generator bodies. The
- * statement-level handler must surface a precise, located diagnostic
- * naming the unimplemented feature and pointing at the issue. The
- * previous behavior was a cryptic `Unsupported statement: yield` plus
- * side-pass debug echoes that landed before the real error.
+ * Generator methods (`yield`) compile since issue #1849 landed: the parser
+ * accepts the three forms (bare, expression, key+value) and the compiler
+ * splits each generator method into a visible creator plus a hidden internal
+ * step method resumed by the kernel <Ns>\Generator runtime. `zephir generate`
+ * must succeed and emit the split, with no side-pass debug echoes.
  *
  * @see https://github.com/zephir-lang/zephir/issues/1849
  */
@@ -45,7 +44,7 @@ final class YieldStatementTest extends TestCase
         $this->tearDownZephirRunner();
     }
 
-    public function testYieldExpressionReportsUnimplementedDiagnostic(): void
+    public function testYieldExpressionInRangeLoopGenerates(): void
     {
         $this->writeZep('counter.zep', <<<'ZEP'
 namespace Stub;
@@ -64,26 +63,24 @@ ZEP);
 
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
 
-        $this->assertNotSame(0, $result['exitCode']);
         $output = $result['stdout'] . $result['stderr'];
+        $this->assertSame(0, $result['exitCode'], $output);
 
-        $this->assertStringContainsString(
-            "'yield' is parsed but code generation for generator methods is not yet implemented",
-            $output
-        );
-        $this->assertStringContainsString(
-            'https://github.com/zephir-lang/zephir/issues/1849',
-            $output
-        );
-        $this->assertStringContainsString('counter.zep', $output);
+        $generated = $this->projectDir . '/ext/stub/counter.zep.c';
+        $this->assertFileExists($generated);
+        $code = (string)file_get_contents($generated);
+
+        $this->assertStringContainsString('zephir_generator_create(return_value', $code);
+        $this->assertStringContainsString('void zep_Stub_Counter_zephir_gen_step_range(', $code);
+        $this->assertStringContainsString('zephir_yield_resume_1:;', $code);
 
         $this->assertStringNotContainsString('Statement=yield', $output, 'side-pass debug echo must not surface');
         $this->assertStringNotContainsString('SSTI=yield', $output, 'side-pass debug echo must not surface');
         $this->assertStringNotContainsString('SCGP=yield', $output, 'side-pass debug echo must not surface');
-        $this->assertStringNotContainsString('Unsupported statement: yield', $output, 'must hit YieldStatement, not factory default');
+        $this->assertStringNotContainsString('Unsupported statement: yield', $output);
     }
 
-    public function testBareYieldReportsUnimplementedDiagnostic(): void
+    public function testBareYieldGenerates(): void
     {
         $this->writeZep('bare.zep', <<<'ZEP'
 namespace Stub;
@@ -99,16 +96,14 @@ ZEP);
 
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
 
-        $this->assertNotSame(0, $result['exitCode']);
         $output = $result['stdout'] . $result['stderr'];
+        $this->assertSame(0, $result['exitCode'], $output);
 
-        $this->assertStringContainsString(
-            "'yield' is parsed but code generation for generator methods is not yet implemented",
-            $output
-        );
+        $code = (string)file_get_contents($this->projectDir . '/ext/stub/bare.zep.c');
+        $this->assertStringContainsString('zephir_generator_yield(zephir_gen, NULL, NULL, 1);', $code);
     }
 
-    public function testKeyValueYieldReportsUnimplementedDiagnostic(): void
+    public function testKeyValueYieldGenerates(): void
     {
         $this->writeZep('kv.zep', <<<'ZEP'
 namespace Stub;
@@ -124,13 +119,12 @@ ZEP);
 
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
 
-        $this->assertNotSame(0, $result['exitCode']);
         $output = $result['stdout'] . $result['stderr'];
+        $this->assertSame(0, $result['exitCode'], $output);
 
-        $this->assertStringContainsString(
-            "'yield' is parsed but code generation for generator methods is not yet implemented",
-            $output
-        );
+        $code = (string)file_get_contents($this->projectDir . '/ext/stub/kv.zep.c');
+        $this->assertStringContainsString('zephir_generator_yield(zephir_gen, ', $code);
+        $this->assertStringNotContainsString('zephir_generator_yield(zephir_gen, NULL', $code, 'key must be passed');
     }
 
     public function testSiblingMethodWithoutYieldCompilesCleanly(): void
@@ -150,6 +144,13 @@ ZEP);
         $result = $this->runZephir('generate --no-ansi', $this->projectDir);
 
         $this->assertSame(0, $result['exitCode'], $result['stdout'] . $result['stderr']);
+
+        $code = (string)file_get_contents($this->projectDir . '/ext/stub/plain.zep.c');
+        $this->assertStringNotContainsString(
+            'zephir_generator_create',
+            $code,
+            'non-generator methods must not be split'
+        );
     }
 
     private function setUpZephirProject(): void

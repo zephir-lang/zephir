@@ -248,4 +248,65 @@ class Bench
         }
         return sum;
     }
+
+    /**
+     * Generator (yield) workloads — issue #1849. Each producer is paired
+     * with an array producer of identical shape so the benchmarks compare
+     * lazy suspension against eager materialization, plus an Iterator relay.
+     */
+    public function generatorRange(long n)
+    {
+        long i = 1;
+        while i <= n {
+            yield i;
+            let i = i + 1;
+        }
+    }
+
+    public function arrayRange(long n) -> array
+    {
+        array result = [];
+        long i = 1;
+        while i <= n {
+            let result[] = i;
+            let i = i + 1;
+        }
+        return result;
+    }
+
+    /**
+     * Generator relaying an array: exercises the suspension-safe
+     * HashPosition/snapshot for-in codegen (one suspension per element).
+     */
+    public function generatorOverArray(array items)
+    {
+        var v;
+        for v in items {
+            yield v;
+        }
+    }
+
+    /**
+     * Produce and consume entirely inside the extension: the C-to-C cost of
+     * one suspension+resume per element, no PHP userland in the loop.
+     */
+    public function sumViaGenerator(long n) -> long
+    {
+        var v;
+        long total = 0;
+        for v in this->generatorRange(n) {
+            let total += (long) v;
+        }
+        return total;
+    }
+
+    public function sumViaArray(long n) -> long
+    {
+        var v;
+        long total = 0;
+        for v in this->arrayRange(n) {
+            let total += (long) v;
+        }
+        return total;
+    }
 }

@@ -2073,7 +2073,11 @@ final class PhpParser
                     $left = $this->parseTernary($left);
                     continue;
                 }
-                if ($type === TokenType::T_DOUBLEARROW && $minBp < 40) {
+                // The grammar's closure-arrow rule is `IDENTIFIER DOUBLEARROW
+                // xx_common_expr` — a bare identifier only. Any other left
+                // operand (literal, list, call, ...) must fall through so the
+                // dangling `=>` produces the same syntax error the C parser emits.
+                if ($type === TokenType::T_DOUBLEARROW && $minBp < 40 && 'variable' === ($left['type'] ?? null)) {
                     $left = $this->parseClosureArrow($left);
                     continue;
                 }

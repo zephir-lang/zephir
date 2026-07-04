@@ -136,6 +136,12 @@ final class Compiler
      */
     private array          $internalInitializers = [];
     private static bool    $loadedPrototypes     = false;
+    /**
+     * Proper-case root namespace of the first generator method found, or null
+     * when the project contains no `yield`. Enables the kernel generator
+     * runtime (ZEPHIR_GENERATOR_ENABLED) and names the <Ns>\Generator class.
+     */
+    private ?string        $generatorNamespace   = null;
     private ?string        $optimizersPath;
     private ?string        $prototypesPath;
     private StringsManager $stringManager;
@@ -167,6 +173,24 @@ final class Compiler
     {
         $this->definitions[$classDefinition->getCompleteName()]    = $classDefinition;
         $this->anonymousFiles[$classDefinition->getCompleteName()] = $file;
+    }
+
+    /**
+     * Records that the project contains at least one generator method, so the
+     * kernel <Ns>\Generator runtime must be compiled in and registered.
+     *
+     * @param string $properCaseNamespace root namespace in source case, e.g. "Stub"
+     */
+    public function markGeneratorsInUse(string $properCaseNamespace): void
+    {
+        if (null === $this->generatorNamespace) {
+            $this->generatorNamespace = $properCaseNamespace;
+        }
+    }
+
+    public function getGeneratorNamespace(): ?string
+    {
+        return $this->generatorNamespace;
     }
 
     /**
@@ -877,6 +901,7 @@ final class Compiler
             '%PROJECT_ZEPVERSION%'       => Zephir::VERSION,
             '%EXTENSION_GLOBALS%'        => $globalCode,
             '%EXTENSION_STRUCT_GLOBALS%' => $globalStruct,
+            '%GENERATOR_DEFINES%'        => $this->generatorDefines(),
         ];
 
         foreach ($toReplace as $mark => $replace) {
@@ -887,6 +912,31 @@ final class Compiler
         unset($content);
 
         return $needConfigure;
+    }
+
+    /**
+     * Emits the defines enabling the kernel generator runtime when the
+     * project contains generator methods; empty otherwise (the runtime is
+     * then compiled out entirely).
+     */
+    private function generatorDefines(): string
+    {
+        if (null === $this->generatorNamespace) {
+            return '';
+        }
+
+        $generatorClass = strtolower($this->generatorNamespace . '\\Generator');
+        foreach ($this->definitions as $completeName => $definition) {
+            if (strtolower((string)$completeName) === $generatorClass) {
+                throw new CompilerException(
+                    'Class "' . $completeName . '" collides with the compiler-provided generator '
+                    . 'runtime class registered for `yield` support. Rename the class.'
+                );
+            }
+        }
+
+        return '#define ZEPHIR_GENERATOR_ENABLED 1' . PHP_EOL
+            . '#define ZEPHIR_GENERATOR_NAMESPACE "' . addslashes($this->generatorNamespace) . '"';
     }
 
     /**

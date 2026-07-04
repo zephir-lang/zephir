@@ -1317,6 +1317,14 @@ final class Definition extends AbstractDefinition
         $this->compiler = $compilationContext->compiler;
 
         /**
+         * Split generator methods (containing `yield`) into creator + hidden
+         * step method before the pass pipeline runs. See issue #1849.
+         */
+        if (!$this->isInterface()) {
+            (new GeneratorTransformer())->transform($this, $compilationContext);
+        }
+
+        /**
          * Pre-Compile methods
          */
         foreach ($this->methods as $method) {

@@ -17,6 +17,9 @@
 #define PHP_STUB_ZEPVERSION  "0.23.0-$Id$"
 #define PHP_STUB_DESCRIPTION "Description <b>test</b> for<br/>Test Extension."
 
+#define ZEPHIR_GENERATOR_ENABLED 1
+#define ZEPHIR_GENERATOR_NAMESPACE "Stub"
+
 typedef struct _zephir_struct_db { 
 	zend_bool my_setting_1;
 	int my_setting_2;

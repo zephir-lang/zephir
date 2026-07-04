@@ -1,0 +1,7 @@
+{
+    "type": "error",
+    "message": "Syntax error",
+    "file": "phpt__statements_yield_yield_key_value_arrow.zep",
+    "line": 2,
+    "char": 14
+}

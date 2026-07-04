@@ -1,0 +1,51 @@
+--TEST--
+Generators (#1849): lazy start, values-only yield in while, independent instances, exhaustion
+--FILE--
+namespace Zept;
+
+class Gen
+{
+    public sideEffects = 0;
+
+    public function countTo(int n)
+    {
+        int i = 1;
+        let this->sideEffects = this->sideEffects + 1;
+        while i <= n {
+            yield i;
+            let i = i + 1;
+        }
+    }
+}
+--USAGE--
+$g = new Zept\Gen();
+
+$it = $g->countTo(3);
+var_dump($it instanceof \Iterator);
+var_dump($g->sideEffects);
+var_dump($it->valid());
+var_dump($g->sideEffects);
+
+$out = [];
+foreach ($it as $k => $v) {
+    $out[] = $k . "=>" . $v;
+}
+echo implode(",", $out), "\n";
+var_dump($it->valid());
+var_dump($it->current());
+
+$a = $g->countTo(2);
+$b = $g->countTo(2);
+echo $a->current(), $b->current(), "\n";
+$a->next();
+echo $a->current(), $b->current(), "\n";
+--EXPECT--
+bool(true)
+int(0)
+bool(true)
+int(1)
+0=>1,1=>2,2=>3
+bool(false)
+NULL
+11
+21

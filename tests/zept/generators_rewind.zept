@@ -1,0 +1,52 @@
+--TEST--
+Generators (#1849): rewind rules, traversal of closed generators and exception-closes-generator, PHP-identical messages. EXPECT produced by the equivalent PHP generators.
+--FILE--
+namespace Zept;
+
+class Rew
+{
+    public function two()
+    {
+        yield 1;
+        yield 2;
+    }
+
+    public function boom()
+    {
+        yield 1;
+        throw new \RuntimeException("boom");
+    }
+}
+--USAGE--
+$r = new Zept\Rew();
+
+$g = $r->two();
+$g->rewind();
+echo $g->current(), "\n";
+$g->rewind();
+echo "second rewind ok\n";
+$g->next();
+try { $g->rewind(); } catch (\Exception $e) { echo get_class($e), ": ", $e->getMessage(), "\n"; }
+
+$g2 = $r->two();
+foreach ($g2 as $v) {}
+try { foreach ($g2 as $v) {} } catch (\Exception $e) { echo get_class($e), ": ", $e->getMessage(), "\n"; }
+try { $g2->rewind(); } catch (\Exception $e) { echo "rewind-closed ", get_class($e), ": ", $e->getMessage(), "\n"; }
+
+$g3 = $r->boom();
+echo $g3->current(), "\n";
+try { $g3->next(); } catch (\RuntimeException $e) { echo "caught ", $e->getMessage(), "\n"; }
+var_dump($g3->valid());
+try { foreach ($g3 as $v) {} } catch (\Exception $e) { echo get_class($e), ": ", $e->getMessage(), "\n"; }
+try { $g3->getReturn(); } catch (\Exception $e) { echo get_class($e), ": ", $e->getMessage(), "\n"; }
+--EXPECT--
+1
+second rewind ok
+Exception: Cannot rewind a generator that was already run
+Exception: Cannot traverse an already closed generator
+rewind-closed Exception: Cannot rewind a generator that was already run
+1
+caught boom
+bool(false)
+Exception: Cannot traverse an already closed generator
+Exception: Cannot get return value of a generator that hasn't returned
