@@ -9,7 +9,7 @@ if test "$PHP_STUB" = "yes"; then
 	fi
 
 	AC_DEFINE(HAVE_STUB, 1, [Whether you have Stub])
-	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c stub/invokes/abstractprotected.zep.c
+	stub_sources="stub.c kernel/main.c kernel/memory.c kernel/exception.c kernel/debug.c kernel/backtrace.c kernel/object.c kernel/array.c kernel/string.c kernel/fcall.c kernel/require.c kernel/file.c kernel/operators.c kernel/math.c kernel/concat.c kernel/variables.c kernel/filter.c kernel/iterator.c kernel/time.c kernel/exit.c kernel/generator.c stub/invokes/abstractprotected.zep.c
 	stub/testinterface.zep.c
 	stub/oo/extend/exception.zep.c
 	stub/issue2165/issueextendinterface.zep.c
@@ -90,6 +90,7 @@ if test "$PHP_STUB" = "yes"; then
 	stub/functional.zep.c
 	stub/functionexists.zep.c
 	stub/functions.zep.c
+	stub/generators.zep.c
 	stub/geometry.zep.c
 	stub/globals.zep.c
 	stub/globals/env.zep.c

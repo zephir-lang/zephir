@@ -22,6 +22,7 @@
 #include "kernel/array.h"
 #include "kernel/concat.h"
 #include "kernel/main.h"
+#include "kernel/generator.h"
 
 
 /**
@@ -794,5 +795,285 @@ PHP_METHOD(Stub_Bench, staticDispatchLoop)
 		i++;
 	}
 	RETURN_MM_LONG(sum);
+}
+
+/**
+ * Generator (yield) workloads — issue #1849. Each producer is paired
+ * with an array producer of identical shape so the benchmarks compare
+ * lazy suspension against eager materialization, plus an Iterator relay.
+ */
+PHP_METHOD(Stub_Bench, generatorRange)
+{
+	zval *n_param = NULL;
+	long n;
+	zval *this_ptr = getThis();
+
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	zephir_fetch_params_without_memory_grow(1, 0, &n_param);
+	zephir_generator_create(return_value, this_ptr, stub_bench_ce, zep_Stub_Bench_zephir_gen_step_generatorRange, 1);
+	zephir_generator_slot_set_long(return_value, 0, (zend_long) n);
+	return;
+}
+
+PHP_METHOD(Stub_Bench, arrayRange)
+{
+	zval result;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *n_param = NULL, _0$$3;
+	long n, i;
+
+	ZVAL_UNDEF(&_0$$3);
+	ZVAL_UNDEF(&result);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	ZEPHIR_INIT_VAR(&result);
+	array_init(&result);
+	i = 1;
+	while (1) {
+		if (!(i <= n)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(&_0$$3);
+		ZVAL_LONG(&_0$$3, i);
+		zephir_array_append(&result, &_0$$3, PH_SEPARATE, "stub/bench.zep", 271);
+		i = (i + 1);
+	}
+	RETURN_CTOR(&result);
+}
+
+/**
+ * Generator relaying an array: exercises the suspension-safe
+ * HashPosition/snapshot for-in codegen (one suspension per element).
+ */
+PHP_METHOD(Stub_Bench, generatorOverArray)
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *items_param = NULL;
+	zval items;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&items);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		ZEPHIR_Z_PARAM_ARRAY(items, items_param)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &items_param);
+	zephir_get_arrval(&items, items_param);
+	zephir_generator_create(return_value, this_ptr, stub_bench_ce, zep_Stub_Bench_zephir_gen_step_generatorOverArray, 1);
+	zephir_generator_slot_set(return_value, 0, &items);
+	ZEPHIR_MM_RESTORE();
+	return;
+}
+
+/**
+ * Produce and consume entirely inside the extension: the C-to-C cost of
+ * one suspension+resume per element, no PHP userland in the loop.
+ */
+PHP_METHOD(Stub_Bench, sumViaGenerator)
+{
+	zend_bool _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, v, _0, _1, *_2, _3;
+	long n, total;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	total = 0;
+	ZVAL_LONG(&_1, n);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "generatorrange", NULL, 0, &_1);
+	zephir_check_call_status();
+	zephir_is_iterable(&_0, 0, "stub/bench.zep", 300);
+	if (Z_TYPE_P(&_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _2);
+			total += zephir_get_intval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_4 = 1;
+		while (1) {
+			if (_4) {
+				_4 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_3)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			zephir_check_call_status();
+				total += zephir_get_intval(&v);
+		}
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	RETURN_MM_LONG(total);
+}
+
+PHP_METHOD(Stub_Bench, sumViaArray)
+{
+	zend_bool _4;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *n_param = NULL, v, _0, _1, *_2, _3;
+	long n, total;
+	zval *this_ptr = getThis();
+
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_0);
+	ZVAL_UNDEF(&_1);
+	ZVAL_UNDEF(&_3);
+	ZEND_PARSE_PARAMETERS_START(1, 1)
+		Z_PARAM_LONG(n)
+	ZEND_PARSE_PARAMETERS_END();
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_fetch_params(1, 1, 0, &n_param);
+	total = 0;
+	ZVAL_LONG(&_1, n);
+	ZEPHIR_CALL_METHOD(&_0, this_ptr, "arrayrange", NULL, 0, &_1);
+	zephir_check_call_status();
+	zephir_is_iterable(&_0, 0, "stub/bench.zep", 310);
+	if (Z_TYPE_P(&_0) == IS_ARRAY) {
+		ZEND_HASH_FOREACH_VAL(Z_ARRVAL_P(&_0), _2)
+		{
+			ZEPHIR_INIT_NVAR(&v);
+			ZVAL_COPY(&v, _2);
+			total += zephir_get_intval(&v);
+		} ZEND_HASH_FOREACH_END();
+	} else {
+		ZEPHIR_CALL_METHOD(NULL, &_0, "rewind", NULL, 0);
+		zephir_check_call_status();
+		_4 = 1;
+		while (1) {
+			if (_4) {
+				_4 = 0;
+			} else {
+				ZEPHIR_CALL_METHOD(NULL, &_0, "next", NULL, 0);
+				zephir_check_call_status();
+			}
+			ZEPHIR_CALL_METHOD(&_3, &_0, "valid", NULL, 0);
+			zephir_check_call_status();
+			if (!zend_is_true(&_3)) {
+				break;
+			}
+			ZEPHIR_CALL_METHOD(&v, &_0, "current", NULL, 0);
+			zephir_check_call_status();
+				total += zephir_get_intval(&v);
+		}
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	RETURN_MM_LONG(total);
+}
+
+void zep_Stub_Bench_zephir_gen_step_generatorRange(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
+{
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zval *zephir_gen, zephir_gen_sub, _0$$3;
+	long n, i;
+		ZVAL_UNDEF(&zephir_gen_sub);
+	ZVAL_UNDEF(&_0$$3);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_gen = zephir_gen_ext;
+	/* Generator resume dispatch (issue #1849) */
+	zephir_generator_slots_ensure(zephir_gen, 3);
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 0)) != IS_UNDEF) { n = (long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 0)); }
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 1, &_0$$3);
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 2)) != IS_UNDEF) { i = (long) Z_LVAL_P(zephir_generator_slot(zephir_gen, 2)); }
+	switch (zephir_generator_get_state(zephir_gen)) {
+		case 1: goto zephir_yield_resume_1;
+		default: break;
+	}
+	i = 1;
+	while (1) {
+		if (!(i <= n)) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(&_0$$3);
+		ZVAL_LONG(&_0$$3, i);
+		zephir_generator_yield(zephir_gen, NULL, &_0$$3, 1);
+		zephir_generator_slot_set_long(zephir_gen, 0, (zend_long) n);
+		zephir_generator_slot_set(zephir_gen, 1, &_0$$3);
+		zephir_generator_slot_set_long(zephir_gen, 2, (zend_long) i);
+		ZEPHIR_MM_RESTORE();
+		return;
+		zephir_yield_resume_1:;
+		i = (i + 1);
+	}
+	zephir_generator_finish(zephir_gen, NULL);
+	ZEPHIR_MM_RESTORE();
+}
+
+void zep_Stub_Bench_zephir_gen_step_generatorOverArray(int ht, zend_execute_data *execute_data, zval *return_value, zval *this_ptr, int return_value_used, zval *zephir_gen_ext )
+{
+	HashPosition _1;
+	zephir_method_globals *ZEPHIR_METHOD_GLOBALS_PTR = NULL;
+	zend_long ZEPHIR_LAST_CALL_STATUS;
+	zval *zephir_gen, zephir_gen_sub, v, _0, *_2;
+	zval items;
+		ZVAL_UNDEF(&items);
+	ZVAL_UNDEF(&zephir_gen_sub);
+	ZVAL_UNDEF(&v);
+	ZVAL_UNDEF(&_0);
+	ZEPHIR_METHOD_GLOBALS_PTR = pecalloc(1, sizeof(zephir_method_globals), 0);
+	zephir_memory_grow_stack(ZEPHIR_METHOD_GLOBALS_PTR, __func__);
+	zephir_gen = zephir_gen_ext;
+	/* Generator resume dispatch (issue #1849) */
+	zephir_generator_slots_ensure(zephir_gen, 4);
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 0, &items);
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 1, &_0);
+	if (Z_TYPE_P(zephir_generator_slot(zephir_gen, 2)) != IS_UNDEF) { _1 = (HashPosition) Z_LVAL_P(zephir_generator_slot(zephir_gen, 2)); }
+	ZEPHIR_GEN_RESTORE_ZVAL(zephir_gen, 3, &v);
+	switch (zephir_generator_get_state(zephir_gen)) {
+		case 1: goto zephir_yield_resume_1;
+		default: break;
+	}
+	zephir_is_iterable(&items, 0, "stub/bench.zep", 287);
+	ZEPHIR_INIT_NVAR(&_0);
+	ZVAL_COPY(&_0, &items);
+	zend_hash_internal_pointer_reset_ex(Z_ARRVAL_P(&_0), &_1);
+	while (1) {
+		_2 = zend_hash_get_current_data_ex(Z_ARRVAL_P(&_0), &_1);
+		if (_2 == NULL) {
+			break;
+		}
+		ZEPHIR_INIT_NVAR(&v);
+		ZVAL_COPY(&v, _2);
+		zend_hash_move_forward_ex(Z_ARRVAL_P(&_0), &_1);
+			zephir_generator_yield(zephir_gen, NULL, &v, 1);
+			zephir_generator_slot_set(zephir_gen, 0, &items);
+		zephir_generator_slot_set(zephir_gen, 1, &_0);
+		zephir_generator_slot_set_long(zephir_gen, 2, (zend_long) _1);
+		zephir_generator_slot_set(zephir_gen, 3, &v);
+			ZEPHIR_MM_RESTORE();
+			return;
+			zephir_yield_resume_1:;
+	}
+	ZEPHIR_INIT_NVAR(&v);
+	zephir_generator_finish(zephir_gen, NULL);
+	ZEPHIR_MM_RESTORE();
 }
 

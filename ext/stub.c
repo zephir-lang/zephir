@@ -140,6 +140,7 @@ zend_class_entry *stub_fortytwo_ce;
 zend_class_entry *stub_functional_ce;
 zend_class_entry *stub_functionexists_ce;
 zend_class_entry *stub_functions_ce;
+zend_class_entry *stub_generators_ce;
 zend_class_entry *stub_geometry_ce;
 zend_class_entry *stub_globals_ce;
 zend_class_entry *stub_globals_env_ce;
@@ -418,6 +419,7 @@ static PHP_MINIT_FUNCTION(stub)
 	ZEPHIR_INIT(Stub_FunctionExists);
 	ZEPHIR_INIT(Stub_Functional);
 	ZEPHIR_INIT(Stub_Functions);
+	ZEPHIR_INIT(Stub_Generators);
 	ZEPHIR_INIT(Stub_Geometry);
 	ZEPHIR_INIT(Stub_Globals);
 	ZEPHIR_INIT(Stub_Globals_Env);
